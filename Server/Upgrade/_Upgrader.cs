@@ -30,15 +30,7 @@ public class Upgrader
                     }
                 }
             }
-
-            if (currentVersion < new Version(0, 5, 3))
-                new Upgrade_0_5_3().Run();
-            if (currentVersion < new Version(0, 6, 0))
-                new Upgrade_0_6_0().Run();
-            if (currentVersion < new Version(0, 6, 1))
-                new Upgrade_0_6_1().Run(settings);
-            if (currentVersion < new Version(0, 7, 0))
-                new Upgrade_0_7_0().Run(settings);
+            
             if (currentVersion < new Version(0, 8, 0))
                 new Upgrade_0_8_0().Run(settings);
             if (currentVersion < new Version(0, 8, 1))
@@ -65,6 +57,8 @@ public class Upgrader
                 new Upgrade_1_0_9().Run(settings);
             if (currentVersion < new Version(1, 0, 10))  
                 new Upgrade_1_0_10().Run(settings);
+            if (currentVersion < new Version(1, 1, 0, 2246))  
+                new Upgrade_1_1_0().Run(settings);
         }
 
         // save the settings

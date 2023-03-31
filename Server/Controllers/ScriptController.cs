@@ -31,8 +31,6 @@ public class ScriptController : Controller
         var taskScriptsFlow = GetAll(ScriptType.Flow);
         var taskScriptsSystem = GetAll(ScriptType.System);
         var taskScriptsShared = GetAll(ScriptType.Shared);
-        var taskFlows = new FlowController().GetAll();
-        var taskTasks = new TaskController().GetAll();
 
         FileFlowsRepository repo = new FileFlowsRepository();
         try
@@ -68,7 +66,7 @@ public class ScriptController : Controller
         
         scripts = scripts.DistinctBy(x => x.Name).ToList();
         var dictScripts = scripts.ToDictionary(x => x.Name.ToLower(), x => x);
-        var flows = taskFlows.Result;
+        var flows = new FlowController().GetAll();
         string flowTypeName = typeof(Flow).FullName ?? string.Empty;
         foreach (var flow in flows ?? new Flow[] {})
         {
@@ -94,9 +92,9 @@ public class ScriptController : Controller
             }
         }
 
-        var tasks = taskTasks.Result;
+        var tasks = new TaskController().GetAll();
         string taskTypeName = typeof(FileFlowsTask).FullName ?? string.Empty;
-        foreach (var task in tasks ?? new FileFlowsTask[] { })
+        foreach (var task in tasks)
         {
             if (dictScripts.ContainsKey(task.Script.ToLower()) == false)
                 continue;
@@ -110,7 +108,7 @@ public class ScriptController : Controller
             });
         }
 
-        return scripts.OrderBy(x => x.Name);
+        return scripts.OrderBy(x => x.Name.ToLowerInvariant());
     }
 
     /// <summary>
@@ -319,7 +317,7 @@ public class ScriptController : Controller
         {
             if (DeleteScript(script.Uid, script.Type))
             {
-                _ = UpdateScriptReferences(script.Uid, script.Name);
+                UpdateScriptReferences(script.Uid, script.Name);
             }
             script.Uid = script.Name;
         }
@@ -337,10 +335,10 @@ public class ScriptController : Controller
         var service = new SettingsService();
         _ = service.RevisionIncrement();
     }
-    private async Task UpdateScriptReferences(string oldName, string newName)
+    private void UpdateScriptReferences(string oldName, string newName)
     {
-        var controller = new FlowController();
-        var flows = await controller.GetAll();
+        var service = new FlowService();
+        var flows = service.GetAll();
         foreach (var flow in flows)
         {
             if (flow.Parts?.Any() != true)
@@ -356,18 +354,18 @@ public class ScriptController : Controller
             }
             if(changed)
             {
-                await controller.Update(flow);
+                service.Update(flow);
             }
         }
 
-        var taskController = new TaskController();
-        var tasks = await taskController.GetAll();
+        var taskService = new TaskService();
+        var tasks = taskService.GetAll();
         foreach (var task in tasks)
         {
             if (task.Script != oldName)
                 continue;
             task.Script = newName;
-            await taskController.Update(task);
+            taskService.Update(task);
         }
     }
 

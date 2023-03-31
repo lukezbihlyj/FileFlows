@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using FileFlows.Server.Helpers;
 using FileFlows.Shared.Models;
 using System.Text.RegularExpressions;
-using FileFlows.ServerShared.Services;
+using FileFlows.Server.Services;
 
 namespace FileFlows.Server.Controllers;
 
@@ -11,20 +11,8 @@ namespace FileFlows.Server.Controllers;
 /// Library controller
 /// </summary>
 [Route("/api/library")]
-public class LibraryController : ControllerStore<Library>
+public class LibraryController : Controller
 {
-    protected override bool AutoIncrementRevision => true;
-        
-    internal override async Task<IEnumerable<Library>> GetDataList(bool? useCache = null)
-    {
-        return (await GetData()).Values.Select(x =>
-        {
-            if (string.IsNullOrEmpty(x.Schedule))
-                x.Schedule = new string('1', 672);
-            return x;
-        }).ToList();
-    }
-    
     private static bool? _HasLibraries;
     /// <summary>
     /// Gets if there are any libraries
@@ -34,22 +22,21 @@ public class LibraryController : ControllerStore<Library>
         get
         {
             if (_HasLibraries == null)
-                UpdateHasLibraries().Wait();
+                UpdateHasLibraries();
             return _HasLibraries == true;
         }
         private set => _HasLibraries = value;
     }
-    private static async Task UpdateHasLibraries()
-    {
-        _HasLibraries = await DbHelper.HasAny<Flow>();
-    }
+    private static void UpdateHasLibraries()
+        => _HasLibraries = new LibraryService().GetAll().Count > 0;
 
     /// <summary>
     /// Gets all libraries in the system
     /// </summary>
     /// <returns>a list of all libraries</returns>
     [HttpGet]
-    public async Task<IEnumerable<Library>> GetAll() => (await GetDataList()).OrderBy(x => x.Name);
+    public IEnumerable<Library> GetAll() 
+        => new LibraryService().GetAll().OrderBy(x => x.Name.ToLowerInvariant());
 
 
     /// <summary>
@@ -58,7 +45,8 @@ public class LibraryController : ControllerStore<Library>
     /// <param name="uid">The UID of the library</param>
     /// <returns>the library instance</returns>
     [HttpGet("{uid}")]
-    public Task<Library> Get(Guid uid) => GetByUid(uid);
+    public Library Get(Guid uid) =>
+        new LibraryService().GetByUid(uid);
 
     /// <summary>
     /// Saves a library
@@ -66,7 +54,7 @@ public class LibraryController : ControllerStore<Library>
     /// <param name="library">The library to save</param>
     /// <returns>the saved library instance</returns>
     [HttpPost]
-    public async Task<Library> Save([FromBody] Library library)
+    public Library Save([FromBody] Library library)
     {
         if (library?.Flow == null)
             throw new Exception("ErrorMessages.NoFlowSpecified");
@@ -75,25 +63,39 @@ public class LibraryController : ControllerStore<Library>
         if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
             library.Schedule = new string('1', 672);
 
+        var service = new LibraryService();
         bool nameUpdated = false;
         if (library.Uid != Guid.Empty)
         {
             // existing, check for name change
-            var existing = await GetByUid(library.Uid);
+            var existing = service.GetByUid(library.Uid);
             nameUpdated = existing != null && existing.Name != library.Name;
         }
         
-        bool newLib = library.Uid == Guid.Empty; 
-        var result = await base.Update(library, checkDuplicateName: true);
-        if(nameUpdated)
-            _ = new ObjectReferenceUpdater().RunAsync();
+        bool newLib = library.Uid == Guid.Empty;
+        service.Update(library);
+
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(1);
+            if (nameUpdated)
+                await new ObjectReferenceUpdater().RunAsync();
+
+            RefreshCaches();
+
+            if (newLib)
+                Rescan(new() { Uids = new[] { library.Uid } });
+        });
         
-        if (newLib && result != null)
-            await Rescan(new() { Uids = new[] { result.Uid } });
-        
+        return library;
+    }
+
+    /// <summary>
+    /// Refresh the caches where libraries are stored in memory
+    /// </summary>
+    private void RefreshCaches()
+    {
         LibraryWorker.UpdateLibraries();
-        
-        return result;
     }
 
     /// <summary>
@@ -103,17 +105,18 @@ public class LibraryController : ControllerStore<Library>
     /// <param name="enable">true if enabled, otherwise false</param>
     /// <returns>the updated library instance</returns>
     [HttpPut("state/{uid}")]
-    public async Task<Library> SetState([FromRoute] Guid uid, [FromQuery] bool enable)
+    public Library SetState([FromRoute] Guid uid, [FromQuery] bool enable)
     {
-        var library = await GetByUid(uid);
+        var service = new LibraryService();
+        var library = service.GetByUid(uid);
         if (library == null)
             throw new Exception("Library not found.");
+        
         if (library.Enabled != enable)
         {
             library.Enabled = enable;
-            return await Update(library);
+            service.Update(library);
         }
-            LibraryWorker.UpdateLibraries();
         return library;
     }
 
@@ -128,14 +131,14 @@ public class LibraryController : ControllerStore<Library>
     {
         if (model?.Uids?.Any() != true)
             return;
-        await DeleteAll(model);
+        await new LibraryService().Delete(model.Uids);
         if (deleteLibraryFiles)
         {
-            await new Server.Services.LibraryFileService().DeleteFromLibraries(model.Uids);
+            await new LibraryFileService().DeleteFromLibraries(model.Uids);
         }
 
-        await UpdateHasLibraries();
-        LibraryWorker.UpdateLibraries();
+        UpdateHasLibraries();
+        RefreshCaches();
     }
 
     /// <summary>
@@ -144,46 +147,50 @@ public class LibraryController : ControllerStore<Library>
     /// <param name="model">A reference model containing UIDs to rescan</param>
     /// <returns>an awaited task</returns>
     [HttpPut("rescan")]
-    public async Task Rescan([FromBody] ReferenceModel<Guid> model)
+    public void Rescan([FromBody] ReferenceModel<Guid> model)
     {
+        var service = new LibraryService();
         foreach(var uid in model.Uids)
         {
-            var item = await GetByUid(uid);
+            var item = service.GetByUid(uid);
             if (item == null)
                 continue;
             item.LastScanned = DateTime.MinValue;
-            await Update(item);
+            service.Update(item);
         }
 
         _ = Task.Run(async () =>
         {
             await Task.Delay(1);
-            LibraryWorker.UpdateLibraries();
+            RefreshCaches();
             LibraryWorker.ScanNow();
         });
     }
 
-    internal async Task UpdateFlowName(Guid uid, string name)
+    internal void UpdateFlowName(Guid uid, string name)
     {
-        var libraries = await GetDataList();
+        var service = new LibraryService();
+        var libraries = service.GetAll();
         foreach (var lib in libraries.Where(x => x.Flow?.Uid == uid))
         {
             lib.Flow.Name = name;
-            await Update(lib);
+            service.Update(lib);
         }
     }
 
-    internal async Task UpdateLastScanned(Guid uid)
+    internal void UpdateLastScanned(Guid uid)
     {
-        var lib = await GetByUid(uid);
+        var service = new LibraryService();
+        var lib = service.GetByUid(uid);
         if (lib == null)
             return;
         lib.LastScanned = DateTime.Now;
-        await Update(lib, dontIncremetnConfigRevision: true);
+        service.Update(lib, dontIncrementConfigRevision: true);
     }
 
 
-    private FileInfo[] GetTemplateFiles() => new System.IO.DirectoryInfo(DirectoryHelper.TemplateDirectoryLibrary).GetFiles("*.json", SearchOption.AllDirectories);
+    private FileInfo[] GetTemplateFiles() 
+        => new DirectoryInfo(DirectoryHelper.TemplateDirectoryLibrary).GetFiles("*.json", SearchOption.AllDirectories);
 
     /// <summary>
     /// Gets a list of library templates
@@ -200,7 +207,7 @@ public class LibraryController : ControllerStore<Library>
             {
                 string json = string.Join("\n", System.IO.File.ReadAllText(tf.FullName).Split('\n').Skip(1)); // remove the //path comment
                 json = TemplateHelper.ReplaceWindowsPathIfWindows(json);
-                var jst = System.Text.Json.JsonSerializer.Deserialize<LibraryTemplate>(json, new System.Text.Json.JsonSerializerOptions
+                var jst =JsonSerializer.Deserialize<LibraryTemplate>(json, new JsonSerializerOptions
                 {
                     AllowTrailingCommas = true,
                     PropertyNameCaseInsensitive = true
@@ -247,31 +254,10 @@ public class LibraryController : ControllerStore<Library>
     /// Rescans enabled libraries and waits for them to be scanned
     /// </summary>
     [HttpPost("rescan-enabled")]
-    public async Task RescanEnabled()
+    public void RescanEnabled()
     {
-        var libs = (await GetAll()).Where(x => x.Enabled).ToList();
-        foreach (var lib in libs)
-        {
-            lib.LastScanned = DateTime.MinValue;
-            await Update(lib);
-        }
-        LibraryWorker.ScanNow();
-
-        var uids = libs.Select(x => x.Uid).ToList();
-
-        int count = 0;
-        do
-        {
-            await Task.Delay(1000);
-            for (int i = uids.Count() - 1; i >= 0; i--)
-            {
-                var lib = await GetByUid(uids[i]);
-                if (lib.LastScanned != DateTime.MinValue)
-                {
-                    uids.RemoveAt(i);
-                }
-            }
-            ++count;
-        } while (uids.Count() > 0 && count < 30);
+        var service = new LibraryService();
+        var libs = service.GetAll().Where(x => x.Enabled).Select(x => x.Uid).ToArray();
+        Rescan(new ReferenceModel<Guid> { Uids = libs });
     }
 }

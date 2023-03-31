@@ -1,3 +1,6 @@
+using FileFlows.Server.Services;
+using FileFlows.ServerShared.Services;
+
 namespace FileFlows.Server.Controllers;
 
 using System.ComponentModel;
@@ -15,7 +18,7 @@ using System.Text.Json;
 /// Plugin Controller
 /// </summary>
 [Route("/api/plugin")]
-public class PluginController : ControllerStore<PluginInfo>
+public class PluginController : Controller
 {
     internal const string PLUGIN_BASE_URL = "https://fileflows.com/api/plugin";
 
@@ -27,7 +30,8 @@ public class PluginController : ControllerStore<PluginInfo>
     [HttpGet]
     public async Task<IEnumerable<PluginInfoModel>> GetAll(bool includeElements = true)
     {
-        var plugins = (await GetDataList()).Where(x => x.Deleted == false);
+        var plugins = new Services.PluginService().GetAll()
+            .Where(x => x.Deleted == false);
         List<PluginInfoModel> pims = new List<PluginInfoModel>();
         var packages = await GetPluginPackages();
 
@@ -62,7 +66,7 @@ public class PluginController : ControllerStore<PluginInfo>
         }
 
         string flowTypeName = typeof(Flow).FullName ?? string.Empty;
-        var flows = await new FlowController().GetAll();
+        var flows = new Services.FlowService().GetAll();
         foreach (var flow in flows)
         {
             foreach (var p in flow.Parts)
@@ -81,7 +85,7 @@ public class PluginController : ControllerStore<PluginInfo>
                 });
             }
         }
-        return pims.OrderBy(x => x.Name);
+        return pims.OrderBy(x => x.Name.ToLowerInvariant());
     }
 
     /// <summary>
@@ -90,11 +94,8 @@ public class PluginController : ControllerStore<PluginInfo>
     /// <param name="uid">The uid of the plugin</param>
     /// <returns>The plugin info for the plugin</returns>
     [HttpGet("{uid}")]
-    public async Task<PluginInfo> Get([FromRoute] Guid uid)
-    {
-        var pi = await GetByUid(uid);
-        return pi ?? new();
-    }
+    public PluginInfo Get([FromRoute] Guid uid)
+        => new Services.PluginService().GetByUid(uid) ?? new();
 
     /// <summary>
     /// Get the plugin info for a specific plugin by package name
@@ -102,11 +103,8 @@ public class PluginController : ControllerStore<PluginInfo>
     /// <param name="name">The package name of the plugin</param>
     /// <returns>The plugin info for the plugin</returns>
     [HttpGet("by-package-name/{name}")]
-    public async Task<PluginInfo> GetByPackageName([FromRoute] string name)
-    {
-        var pi = (await GetDataList()).Where(x => x.PackageName == name).FirstOrDefault();  
-        return pi ?? new();
-    }
+    public PluginInfo GetByPackageName([FromRoute] string name)
+        => new Services.PluginService().GetByPackageName(name);
 
     /// <summary>
     /// Get the plugins translation file
@@ -115,9 +113,7 @@ public class PluginController : ControllerStore<PluginInfo>
     /// <returns>The json plugin translation file</returns>
     [HttpGet("language/{langCode}.json")]
     public IActionResult LanguageFile([FromQuery] string langCode = "en")
-    {
-        return File("i18n/plugins.en.json", "text/json");
-    }
+        => File("i18n/plugins.en.json", "text/json");
 
     /// <summary>
     /// Get the available plugin packages 
@@ -161,7 +157,8 @@ public class PluginController : ControllerStore<PluginInfo>
         if (missing)
         {
             // remove plugins already installed
-            var installed = (await GetDataList()).Where(x => x.Deleted != true).Select(x => x.PackageName).ToList();
+            var installed = new Services.PluginService().GetAll()
+                .Where(x => x.Deleted != true).Select(x => x.PackageName).ToList();
             return data.Where(x => installed.Contains(x.Package) == false);
         }
 
@@ -182,7 +179,7 @@ public class PluginController : ControllerStore<PluginInfo>
         var pluginDownloader = new PluginDownloader(this.GetRepositories());
         foreach (var uid in model?.Uids ?? new Guid[] { })
         {
-            var plugin = await Get(uid);
+            var plugin = new Services.PluginService().GetByUid(uid);
             if (plugin == null)
                 continue;
 
@@ -217,8 +214,6 @@ public class PluginController : ControllerStore<PluginInfo>
 
             updated |= success;
         }
-        if(updated)
-            IncrementConfigurationRevision();
         
         return updated;
     }
@@ -229,24 +224,8 @@ public class PluginController : ControllerStore<PluginInfo>
     /// <param name="model">A reference model containing UIDs to delete</param>
     /// <returns>an awaited task</returns>
     [HttpDelete]
-    public async Task Delete([FromBody] ReferenceModel<Guid> model)
-    {
-        if (model == null || model.Uids?.Any() != true)
-            return; // nothing to delete
-
-        var items = await GetDataList();
-        var deleting = items.Where(x => model.Uids.Contains(x.Uid));
-        await DeleteAll(model);
-        foreach(var item in deleting)
-        {
-            PluginScanner.Delete(item.PackageName);
-            // delete the plugin settings
-            await DbHelper.Execute( $"delete from DbObject where Type = '{typeof(PluginSettingsModel).FullName}' and Name = 'PluginSettings_{item.PackageName}'");
-        }
-
-
-        IncrementConfigurationRevision();
-    }
+    public Task Delete([FromBody] ReferenceModel<Guid> model)
+        => new Services.PluginService().Delete(model.Uids);
 
     /// <summary>
     /// Download plugins into the FileFlows system
@@ -260,7 +239,6 @@ public class PluginController : ControllerStore<PluginInfo>
             return; // nothing to delete
 
         var pluginDownloader = new PluginDownloader(GetRepositories());
-        bool downloaded = false;
         foreach(var package in model.Packages)
         {
             try
@@ -269,7 +247,6 @@ public class PluginController : ControllerStore<PluginInfo>
                 if (dlResult.Success)
                 {
                     PluginScanner.UpdatePlugin(package, dlResult.Data);
-                    downloaded = true;
                 }
             }
             catch (Exception ex)
@@ -277,8 +254,6 @@ public class PluginController : ControllerStore<PluginInfo>
                 Logger.Instance?.ELog($"Failed downloading plugin package: '{package}' => {ex.Message}");
             }
         }
-        if(downloaded)
-            IncrementConfigurationRevision();
     }
 
     /// <summary>
@@ -329,91 +304,8 @@ public class PluginController : ControllerStore<PluginInfo>
     /// <param name="packageName">The full plugin name</param>
     /// <returns>the plugin settings json</returns>
     [HttpGet("{packageName}/settings")]
-    public async Task<string> GetPluginSettings([FromRoute]string packageName)
-    {
-        var obj = await DbHelper.SingleByName<Models.PluginSettingsModel>("PluginSettings_" + packageName);
-        if (obj == null)
-            return string.Empty;
-
-        // need to decode any passwords
-        if (string.IsNullOrEmpty(obj.Json) == false)
-            obj.Json = await DecryptPluginJson(packageName, obj.Json);
-
-        return obj.Json ?? string.Empty;
-    }
-
-    /// <summary>
-    /// Gets all plugin settings with and the plugin settings
-    /// </summary>
-    /// <returns>all plugin settings with and the plugin settings</returns>
-    internal async Task<Dictionary<string, string>> GetAllPluginSettings()
-    {
-        string sqlPluginSettings = "select Name, " +
-                                   SqlHelper.JsonValue("Data", "Json") +
-                                   " from DbObject where Type = 'FileFlows.Server.Models.PluginSettingsModel'";
-        var plugins = (await DbHelper.GetDbManager()
-                .Fetch<(string Name, string Json)>(sqlPluginSettings))
-            .DistinctBy(x => x.Name.Replace("PluginSettings_", string.Empty))
-            .ToDictionary(x => x.Name.Replace("PluginSettings_", string.Empty), x => x.Json);
-        foreach (var plg in plugins)
-        {
-            if (string.IsNullOrEmpty(plg.Value))
-                continue;
-            plugins[plg.Key] = await DecryptPluginJson(plg.Key, plg.Value);
-        }
-
-        return plugins;
-    }
-
-    private async Task<string> DecryptPluginJson(string packageName, string json)
-    {
-        
-        try
-        {
-            var plugin = await GetByPackageName(packageName);
-            if (string.IsNullOrEmpty(plugin?.Name))
-                return json;
-            
-            bool updated = false;
-
-            json = json.Replace("\\u0022", "\"");
-            if (json.StartsWith("\"") && json.EndsWith("\""))
-                json = json[1..^1];
-
-            IDictionary<string, object> dict = JsonSerializer.Deserialize<ExpandoObject>(json) as IDictionary<string, object> ?? new Dictionary<string, object>();
-            foreach (var key in dict.Keys.ToArray())
-            {
-                if (plugin.Settings.Any(x => x.Name == key && x.InputType == Plugin.FormInputType.Password))
-                {
-                    // its a password, decrypt 
-                    string text = string.Empty;
-                    if (dict[key] is JsonElement je)
-                    {
-                        text = je.GetString() ?? String.Empty;
-                    }
-                    else if (dict[key] is string str)
-                    {
-                        text = str;
-                    }
-
-                    if (string.IsNullOrEmpty(text))
-                        continue;
-
-                    dict[key] = Helpers.Decrypter.Decrypt(text);
-                    updated = true;
-                }
-            }
-            if (updated)
-                return JsonSerializer.Serialize(dict);
-            return json;
-        }
-        catch (Exception ex)
-        {
-            Logger.Instance.WLog("Failed to decrypt passwords in plugin settings: " + ex.Message + Environment.NewLine + json);
-        }
-
-        return json;
-    }
+    public Task<string> GetPluginSettings([FromRoute] string packageName)
+        => new Services.PluginService().GetSettingsJson(packageName);
 
     /// <summary>
     /// Sets the json plugin settings for a plugin
@@ -429,7 +321,7 @@ public class PluginController : ControllerStore<PluginInfo>
         {
             try
             {
-                var plugin = await GetByPackageName(packageName);
+                var plugin = GetByPackageName(packageName);
                 if (string.IsNullOrEmpty(plugin?.Name) == false)
                 {
                     bool updated = false;
@@ -470,10 +362,14 @@ public class PluginController : ControllerStore<PluginInfo>
         var obj = await DbHelper.SingleByName<Models.PluginSettingsModel>("PluginSettings_" + packageName);
         obj ??= new Models.PluginSettingsModel();
         obj.Name = "PluginSettings_" + packageName;
-        obj.Json = json ?? String.Empty;
-        await DbHelper.Update(obj);
-        
-        IncrementConfigurationRevision();
+        var newJson = json ?? string.Empty;
+        if (newJson != obj.Json)
+        {
+            obj.Json = json ?? String.Empty;
+            await DbHelper.Update(obj);
+            // need to increment the revision increment so these plugin settings are pushed to the nodes
+            await new Services.SettingsService().RevisionIncrement();
+        }
     }
 
     
@@ -486,15 +382,17 @@ public class PluginController : ControllerStore<PluginInfo>
     [HttpPut("state/{uid}")]
     public async Task<PluginInfo> SetState([FromRoute] Guid uid, [FromQuery] bool? enable)
     {
-        var node = await GetByUid(uid, useCache:true);
-        if (node == null)
+        var service = new Services.PluginService();
+        var plugin = service.GetByUid(uid);
+        if (plugin == null)
             throw new Exception("Node not found.");
-        if (enable != null)
+        if (enable != null && plugin.Enabled != enable.Value)
         {
-            node.Enabled = enable.Value;
-            await DbHelper.Update(node);
+            plugin.Enabled = enable.Value;
+            await service.Update(plugin);
         }
-        return await GetByUid(uid, useCache:true);;
+
+        return plugin;
     }
     
     /// <summary>

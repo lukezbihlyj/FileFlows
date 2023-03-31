@@ -39,6 +39,7 @@ public class Program
             string tempPath = GetArgument(args, "--tempPath");
             if (string.IsNullOrEmpty(tempPath) || Directory.Exists(tempPath) == false)
                 throw new Exception("Temp path doesnt exist: " + tempPath);
+            LogInfo("Temp Path: " + tempPath);
             
             string cfgPath = GetArgument(args, "--cfgPath");
             if (string.IsNullOrEmpty(cfgPath) || Directory.Exists(cfgPath) == false)
@@ -52,9 +53,9 @@ public class Program
             string cfgKey = GetArgument(args, "--cfgKey");
             if (string.IsNullOrEmpty(cfgKey))
                 throw new Exception("Configuration Key not set");
-            bool noEnrypt = cfgKey == "NO_ENCRYPT";
+            bool noEncrypt = cfgKey == "NO_ENCRYPT";
             string cfgJson;
-            if (noEnrypt)
+            if (noEncrypt)
             {
                 LogInfo("No Encryption for Node configuration");
                 cfgJson = File.ReadAllText(cfgFile);
@@ -82,7 +83,21 @@ public class Program
 
             string workingDir = Path.Combine(tempPath, "Runner-" + uid);
             LogInfo("Working Directory: " + workingDir);
-            Directory.CreateDirectory(workingDir);
+            try
+            {
+                Directory.CreateDirectory(workingDir);
+            }
+            catch (Exception ex) when (Globals.IsDocker)
+            {
+                // this can throw if mapping inside a docker container is not valid, or the mapped location has become unavailable
+                LogError("==========================================================================================");
+                LogError("Failed to create working directory, this is likely caused by the mapped '/temp' directory is missing or has become unavailable from the host machine");
+                LogError(ex.Message);
+                LogError("==========================================================================================");
+                exitCode = 1;
+                return;
+            }
+
             LogInfo("Created Directory: " + workingDir);
 
             var libfileUid = Guid.Parse(GetArgument(args, "--libfile"));
@@ -136,11 +151,7 @@ public class Program
         {
             string address = args.IsServer ? "INTERNAL_NODE" : args.Hostname;
             LogInfo("Address: "+ address);
-            var nodeTask = nodeService.GetByAddress(address);
-            LogInfo("Waiting on node task");
-            nodeTask.Wait();
-            LogInfo("Completed node task");
-            node = nodeTask.Result;
+            node = nodeService.GetByAddressAsync(address).Result;
             if (node == null)
                 throw new Exception("Failed to load node!!!!");
             LogInfo("Node SignalrUrl: " + node.SignalrUrl);
@@ -151,7 +162,12 @@ public class Program
             throw;
         }
 
-        FlowRunnerCommunicator.SignalrUrl = node.SignalrUrl;
+        if (node.SignalrUrl == "flow" && string.IsNullOrEmpty(Service.ServiceBaseUrl) == false)
+            FlowRunnerCommunicator.SignalrUrl = Service.ServiceBaseUrl.EndsWith("/")
+                ? Service.ServiceBaseUrl + "flow"
+                : Service.ServiceBaseUrl + "/flow";
+        else
+            FlowRunnerCommunicator.SignalrUrl = node.SignalrUrl;
 
         var libFileService = LibraryFileService.Load();
         var libFile = libFileService.Get(args.LibraryFileUid).Result;

@@ -10,7 +10,7 @@ public class Globals
     /// <summary>
     /// Gets the version of FileFlows
     /// </summary>
-    public static Version Version = new Version("1.0.10.0");
+    public static Version Version = new Version("1.1.0.2247");
 
     /// <summary>
     /// The minimum supported node version
@@ -51,7 +51,16 @@ public class Globals
     /// </summary>
     public static bool IsSystemd { get; set; }
     
-    
+    /// <summary>
+    /// Gets or sets if unit testing
+    /// </summary>
+    #if(DEBUG)
+    public static bool IsUnitTesting { get; set; }
+    #else
+    public static bool IsUnitTesting => false;
+    #endif
+
+
 
     /// <summary>
     /// The name of the internal processing node

@@ -1,4 +1,5 @@
 using FileFlows.Server.Controllers;
+using FileFlows.ServerShared.Services;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
 
@@ -82,8 +83,7 @@ public class LibraryWorker : Worker
     private void UpdateLibrariesInstance()
     {
         Logger.Instance.DLog("LibraryWorker: Updating Libraries");
-        var libController = new LibraryController();
-        var libraries = libController.GetAll().Result.ToArray();
+        var libraries = new Services.LibraryService().GetAll();
         var libraryUids = libraries.Select(x => x.Uid + ":" + x.Path).ToList();            
 
         Watch(libraries.Where(x => WatchedLibraries.ContainsKey(x.Uid + ":" + x.Path) == false).ToArray());
@@ -141,7 +141,11 @@ public class LibraryWorker : Worker
                                  $"(last scanned: {library.LastScannedAgo}) " +
                                  $"(Full Scan interval: {library.FullScanIntervalMinutes})");
 
-            libwatcher.Scan();
+            Task.Run(async () =>
+            {
+                await Task.Delay(1);
+                libwatcher.Scan();
+            });
         }
     }
 

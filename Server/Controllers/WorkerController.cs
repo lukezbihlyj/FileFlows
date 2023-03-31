@@ -60,11 +60,12 @@ public class WorkerController : Controller
             var lf = info.LibraryFile;
             if (lf.OriginalSize > 0)
                 _ = new LibraryFileService().UpdateOriginalSize(lf.Uid, lf.OriginalSize);
-            _ = Task.Run(async () =>
+            if (lf.LibraryUid != null)
             {
-                var library = await new LibraryController().Get(lf.Uid);
-                SystemEvents.TriggerLibraryFileProcessingStarted(lf, library);
-            });
+                var library = new LibraryService().GetByUid(lf.LibraryUid.Value);
+                if (library != null)
+                    SystemEvents.TriggerLibraryFileProcessingStarted(lf, library);
+            }
         }
         return info;
     }
@@ -117,11 +118,11 @@ public class WorkerController : Controller
 
         if (info.LibraryFile != null)
         {
-            var libfileController = new LibraryFileController();
-            var libfile = await libfileController.Get(info.LibraryFile.Uid);
+            var lfService= new LibraryFileService();
+            var libfile = lfService.GetByUid(info.LibraryFile.Uid);
             if (libfile != null)
             {
-                info.LibraryFile.OutputPath = info.LibraryFile.OutputPath?.EmptyAsNull() ?? libfile.OutputPath;
+                libfile.OutputPath = info.LibraryFile.OutputPath?.EmptyAsNull() ?? libfile.OutputPath;
                 Logger.Instance.ILog($"Recording final size for '{info.LibraryFile.FinalSize}' for '{info.LibraryFile.Name}' status: {info.LibraryFile.Status}");
                 if(info.LibraryFile.FinalSize > 0)
                     libfile.FinalSize = info.LibraryFile.FinalSize;
@@ -158,9 +159,9 @@ public class WorkerController : Controller
                     libfile.ProcessingEnded = info.LibraryFile.ProcessingEnded;
                 if (libfile.ProcessingEnded < new DateTime(2020, 1, 1))
                     libfile.ProcessingEnded = DateTime.Now; // this avoid a "2022 years ago" issue
-                var updated = await libfileController.Update(libfile);
-                var library = await new LibraryController().Get(updated.Library.Uid);
-                if (updated.Status == FileStatus.ProcessingFailed)
+                await lfService.Update(libfile);
+                var library = new LibraryService().GetByUid(libfile.Library.Uid);
+                if (libfile.Status == FileStatus.ProcessingFailed)
                     SystemEvents.TriggerLibraryFileProcessedFailed(libfile, library);
                 else
                     SystemEvents.TriggerLibraryFileProcessedSuccess(libfile, library);
@@ -183,26 +184,27 @@ public class WorkerController : Controller
         if (info.LibraryFile != null)
         {
             var libfileService = new LibraryFileService();
-            var dbStatus = libfileService.GetFileStatus(info.Library.Uid).Result;
-
+            var libFile = libfileService.GetByUid(info.LibraryFile.Uid);
             
-            if (info.LibraryFile.Status != FileStatus.Processing)
+            if (libFile.Status != FileStatus.Processing)
             {
                 Logger.Instance.DLog(
                     $"Updating non-processing library file [{info.LibraryFile.Status}]: {info.LibraryFile.Name}");
             }
 
-            if (dbStatus == FileStatus.Unprocessed)
+            if (libFile.Status == FileStatus.Unprocessed)
             {
+                libFile.Status = info.LibraryFile.Status;
                 // this can happen if the server is restarted but the node is still processing, update the status
-                await libfileService.Update(info.LibraryFile);
+                await libfileService.Update(libFile);
             }
-            else if (await LibraryFileHasChanged(info.LibraryFile))
-            {
-                await libfileService.UpdateWork(info.LibraryFile);
-            }
+            // now using memory cache, we dont need to save this info constantly, can save it for the end
+            // else if (await LibraryFileHasChanged(libFile))
+            // {
+            //     await libfileService.UpdateWork(libFile);
+            // }
 
-            if (info.LibraryFile.Status == FileStatus.ProcessingFailed || info.LibraryFile.Status == FileStatus.Processed)
+            if (libFile.Status == FileStatus.ProcessingFailed || info.LibraryFile.Status == FileStatus.Processed)
             {
                 lock (Executors)
                 {
@@ -227,7 +229,7 @@ public class WorkerController : Controller
         }
     }
 
-    private async Task<bool> LibraryFileHasChanged(LibraryFile file)
+    private bool LibraryFileHasChanged(LibraryFile file)
     {
         var cached = LibraryFileCacheStore.Get<LibraryFileRecord>(file.Uid);
         LibraryFileCacheStore.Store(file.Uid, new LibraryFileRecord
@@ -242,7 +244,7 @@ public class WorkerController : Controller
         });
         if (cached == null)
             return true;
-        var dbStatus = await new LibraryFileService().GetFileStatus(file.Uid);
+        var dbStatus = new LibraryFileService().GetFileStatus(file.Uid);
         if (dbStatus != file.Status)
             return true;
         if (file.Status != cached.Status)
@@ -518,7 +520,7 @@ public class WorkerController : Controller
             if (info.LibraryFile != null)
             {
                 var service = new LibraryFileService();
-                var current = service.GetFileStatus(info.LibraryFile.Uid).Result;
+                var current = service.GetFileStatus(info.LibraryFile.Uid);
                 if (current == FileStatus.Unprocessed)
                 {
                     // can happen if server was restarted
@@ -563,6 +565,7 @@ public class WorkerController : Controller
     /// </summary>
     /// <returns>UIDs of executing library files</returns>
     internal static Guid[] ExecutingLibraryFiles()
-        => Executors?.Select(x => x.Value?.LibraryFile?.Uid)?.Where(x => x != null)?.Select(x => x.Value)?.ToArray() ??
+        => Executors?.Select(x => x.Value?.LibraryFile?.Uid)?
+               .Where(x => x != null)?.Select(x => x!.Value)?.ToArray() ??
            new Guid[] { };
 }

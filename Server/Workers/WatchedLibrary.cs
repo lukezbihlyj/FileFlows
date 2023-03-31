@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
+using FileFlows.Server.Helpers;
+using FileHelper = FileFlows.ServerShared.Helpers.FileHelper;
 
 namespace FileFlows.Server.Workers;
 
@@ -25,7 +27,7 @@ public class WatchedLibrary:IDisposable
     private Queue<string> QueuedFiles = new Queue<string>();
 
     //private BackgroundWorker worker;
-    private System.Timers.Timer QueueTimer;
+    //private System.Timers.Timer QueueTimer;
 
     /// <summary>
     /// Constructs a instance of a Watched Library
@@ -48,15 +50,15 @@ public class WatchedLibrary:IDisposable
         // worker = new BackgroundWorker();
         // worker.DoWork += Worker_DoWork;
         // worker.RunWorkerAsync();
-        QueueTimer = new();
-        QueueTimer.Elapsed += QueueTimerOnElapsed;
-        QueueTimer.AutoReset = false;
-        QueueTimer.Interval = 1;
-        QueueTimer.Start();
+        // QueueTimer = new();
+        // QueueTimer.Elapsed += QueueTimerOnElapsed;
+        // QueueTimer.AutoReset = false;
+        // QueueTimer.Interval = 1;
+        // QueueTimer.Start();
     }
 
 
-    private void LogQueueMessage(string message, Settings settings = null)
+    private void LogQueueMessage(string message, Settings? settings = null)
     {
         if (settings == null)
             settings = new SettingsController().Get().Result;
@@ -80,9 +82,34 @@ public class WatchedLibrary:IDisposable
         {
             if (Disposed == false && QueuedHasItems())
             {
-                QueueTimer.Start();
+                Thread.Sleep(1000);
+                // QueueTimer.Start();
             }
         }
+    }
+
+    private SemaphoreSlim processorLock= new (1);
+    private void ProcessQueue()
+    {
+        if (processorLock.Wait(1000) == false)
+            return;
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(100);
+            try
+            {
+                if (QueuedFiles.Any())
+                    ProcessQueuedItem();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                processorLock.Release();
+            }
+        });
     }
 
     private void Worker_DoWork(object? sender, DoWorkEventArgs e)
@@ -254,20 +281,33 @@ public class WatchedLibrary:IDisposable
     {
         FileSystemInfo info = this.Library.Folders ? new DirectoryInfo(fullpath) : new FileInfo(fullpath);
         long size = this.Library.Folders ? Helpers.FileHelper.GetDirectorySize(fullpath) : ((FileInfo)info).Length;
-        
-        if(MatchesValue((int)DateTime.Now.Subtract(info.CreationTime).TotalMinutes, Library.DetectFileCreation, Library.DetectFileCreationLower, Library.DetectFileCreationUpper) == false)
+
+        return MatchesDetection(Library, info, size);
+    }
+
+    /// <summary>
+    /// Tests if a file in a library matches the detection settings for hte library
+    /// </summary>
+    /// <param name="library">the library to test</param>
+    /// <param name="info">the info for the file or folder to test</param>
+    /// <param name="size">the size of the file or folder in bytes</param>
+    /// <returns>true if matches detection, otherwise false</returns>
+    public static bool MatchesDetection(Library library, FileSystemInfo info, long size)
+    {
+        if(MatchesValue((int)DateTime.Now.Subtract(info.CreationTime).TotalMinutes, library.DetectFileCreation, library.DetectFileCreationLower, library.DetectFileCreationUpper) == false)
             return false;
 
-        if(MatchesValue((int)DateTime.Now.Subtract(info.LastWriteTime).TotalMinutes, Library.DetectFileLastWritten, Library.DetectFileLastWrittenLower, Library.DetectFileLastWrittenUpper) == false)
+        if(MatchesValue((int)DateTime.Now.Subtract(info.LastWriteTime).TotalMinutes, library.DetectFileLastWritten, library.DetectFileLastWrittenLower, library.DetectFileLastWrittenUpper) == false)
             return false;
         
-        if(MatchesValue(size, Library.DetectFileSize, Library.DetectFileSizeLower, Library.DetectFileSizeUpper) == false)
+        if(MatchesValue(size, library.DetectFileSize, library.DetectFileSizeLower, library.DetectFileSizeUpper) == false)
             return false;
         
         return true;
+        
     }
     
-    private bool MatchesValue(long value, MatchRange range, long low, long high)
+    private static bool MatchesValue(long value, MatchRange range, long low, long high)
     {
         if (range == MatchRange.Any)
             return true;
@@ -283,7 +323,7 @@ public class WatchedLibrary:IDisposable
     private (bool known, string? fingerprint, ObjectReference? duplicate) IsKnownFile(string fullpath, FileSystemInfo fsInfo)
     {
         var service = new Server.Services.LibraryFileService();
-        var knownFile = service.GetFileIfKnown(fullpath).Result;
+        var knownFile = service.GetFileIfKnown(fullpath);
         string? fingerprint = null;
         if (knownFile != null)
         {
@@ -340,7 +380,7 @@ public class WatchedLibrary:IDisposable
             fingerprint = ServerShared.Helpers.FileHelper.CalculateFingerprint(fullpath);
             if (string.IsNullOrEmpty(fingerprint) == false)
             {
-                knownFile = service.GetFileByFingerprint(fingerprint).Result;
+                knownFile = service.GetFileByFingerprint(fingerprint);
                 if (knownFile != null)
                 {
                     if (knownFile.Name != fullpath && Library.UpdateMovedFiles && knownFile.LibraryUid == Library.Uid)
@@ -420,7 +460,7 @@ public class WatchedLibrary:IDisposable
         Disposed = true;            
         DisposeWatcher();
         //worker.Dispose();
-        QueueTimer?.Dispose();
+        //QueueTimer?.Dispose();
     }
 
     void SetupWatcher()
@@ -606,7 +646,7 @@ public class WatchedLibrary:IDisposable
             else
             {
                 var service = new Server.Services.LibraryFileService();
-                var knownFiles = service.GetKnownLibraryFilesWithCreationTimes().Result;
+                var knownFiles = service.GetKnownLibraryFilesWithCreationTimes();
 
                 var files = GetFiles(new DirectoryInfo(Library.Path));
                 var settings = new SettingsController().Get().Result;
@@ -620,16 +660,8 @@ public class WatchedLibrary:IDisposable
                 
                     if (knownFiles.ContainsKey(file.FullName.ToLowerInvariant()))
                     {
-                        var knownFile = knownFiles[file.FullName.ToLower()];
-                        
-                        var creationDiff = Math.Abs(file.CreationTime.Subtract(knownFile.CreationTime).TotalSeconds);
-                        var writeDiff = Math.Abs(file.LastWriteTime.Subtract(knownFile.LastWriteTime).TotalSeconds);
-                        //if (Library.ReprocessRecreatedFiles == false ||
-                        //    Math.Abs((file.CreationTime - knownFile).TotalSeconds) < 2)
-                        if(creationDiff < 5 && writeDiff < 5)
-                        {
-                            continue; // known file that hasn't changed, skip it
-                        }
+                        if (DatesAreSame(file, knownFiles[file.FullName.ToLowerInvariant()]))
+                            continue;
                     }
 
 
@@ -646,7 +678,7 @@ public class WatchedLibrary:IDisposable
             ScanComplete = true;
             
             Library.LastScanned = DateTime.Now;
-            new LibraryController().UpdateLastScanned(Library.Uid).Wait();
+            new LibraryController().UpdateLastScanned(Library.Uid);
         }
         catch(Exception ex)
         {
@@ -659,6 +691,33 @@ public class WatchedLibrary:IDisposable
         finally
         {
             ScanMutex.ReleaseMutex();
+        }
+    }
+
+    private bool DatesAreSame(FileInfo file, (DateTime CreationTime, DateTime LastWriteTime) knownFile)
+    {
+        if (datesSame(
+                file.CreationTime, knownFile.CreationTime,
+                file.LastWriteTime, knownFile.LastWriteTime
+            ))
+            return true;
+        
+        if (datesSame(
+                file.CreationTimeUtc, knownFile.CreationTime,
+                file.LastWriteTimeUtc, knownFile.LastWriteTime
+            ))
+            return true;
+        
+        return false;
+
+        bool datesSame(DateTime create1, DateTime create2, DateTime write1, DateTime write2)
+        {
+            var createDiff = (int) Math.Abs(create1.Subtract(create2).TotalSeconds);
+            var writeDiff = (int)Math.Abs(write1.Subtract(write2).TotalSeconds);
+            
+            bool create = createDiff < 5;
+            bool write = writeDiff < 5;
+            return create && write;
         }
     }
 
@@ -777,7 +836,8 @@ public class WatchedLibrary:IDisposable
         {
             QueuedFiles.Enqueue(fullPath);
         }
-        QueueTimer.Start();
+
+        ProcessQueue();
     }
 
     /// <summary>
