@@ -1,4 +1,5 @@
 using System.Dynamic;
+using System.Text;
 using System.Text.RegularExpressions;
 using Esprima;
 using FileFlows.Managers;
@@ -125,64 +126,129 @@ public class ScriptService
     public Task<Script?> GetByName(string name)
         => new ScriptManager().GetByName(name);
     
-    
     /// <summary>
-    /// Validates a script has valid code
-    /// </summary>
-    /// <param name="code">the code to validate</param>
-    public Result<bool> ValidateScript(string code)
+/// Validates a script has valid code
+/// </summary>
+/// <param name="code">The code to validate</param>
+public Result<bool> ValidateScript(string code)
+{
+    string codeToValidate = code;
+    try
     {
-        string codeToValidate = code;
-        try
+        bool inString = false;
+        bool inSingleLineComment = false;
+        bool inMultiLineComment = false;
+        char stringDelimiter = '\0';
+
+        // Use a StringBuilder for more efficient string manipulations
+        StringBuilder sanitizedCode = new StringBuilder();
+
+        for (int i = 0; i < codeToValidate.Length; i++)
         {
-            // Replace single-line comments with whitespace
-            codeToValidate = Regex.Replace(codeToValidate, @"//.*$", match => new string(' ', match.Length), RegexOptions.Multiline);
-            
-            // Replace multi-line comments with spaces while preserving line breaks
-            codeToValidate = Regex.Replace(codeToValidate, @"/\*[\s\S]*?\*/", match =>
+            char currentChar = codeToValidate[i];
+            char nextChar = i + 1 < codeToValidate.Length ? codeToValidate[i + 1] : '\0';
+
+            if (inSingleLineComment)
             {
-                var replacement = new char[match.Length];
-                for (int i = 0; i < match.Length; i++)
+                if (currentChar == '\n')
                 {
-                    replacement[i] = match.Value[i] == '\n' ? '\n' : ' ';
+                    inSingleLineComment = false;
+                    sanitizedCode.Append(currentChar);
                 }
-                return new string(replacement);
-            });
-
-            // Split code into lines
-            var lines = codeToValidate.Replace("\r\n", "\n").Split(new[] { '\n' }, StringSplitOptions.None);
-
-
-            bool inFunction = false;
-            // Detect top-level return statements and wrap them
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i].Trim();
-                if (line.StartsWith("function"))
-                    inFunction = true;
-                
-                if (line.StartsWith("export class"))
-                    lines[i] = lines[i].Replace("export class", "class");
-                else if (line.StartsWith("import "))
-                    lines[i] = "";
-                else if (inFunction == false && line.StartsWith("return"))
+                else
                 {
-                    lines[i] = "(function() { " + line + " })();";
+                    sanitizedCode.Append(' ');
                 }
             }
-
-            // Join lines back into a single string
-            codeToValidate = string.Join("\n", lines);
-
-            var parser = new JavaScriptParser();
-            parser.ParseScript(codeToValidate);
-            return true;
+            else if (inMultiLineComment)
+            {
+                if (currentChar == '*' && nextChar == '/')
+                {
+                    inMultiLineComment = false;
+                    sanitizedCode.Append("  ");
+                    i++;
+                }
+                else
+                {
+                    sanitizedCode.Append(currentChar == '\n' ? '\n' : ' ');
+                }
+            }
+            else if (inString)
+            {
+                sanitizedCode.Append(currentChar);
+                if (currentChar == stringDelimiter && codeToValidate[i - 1] != '\\')
+                {
+                    inString = false;
+                }
+            }
+            else
+            {
+                if (currentChar == '/' && nextChar == '/')
+                {
+                    inSingleLineComment = true;
+                    sanitizedCode.Append("  ");
+                    i++;
+                }
+                else if (currentChar == '/' && nextChar == '*')
+                {
+                    inMultiLineComment = true;
+                    sanitizedCode.Append("  ");
+                    i++;
+                }
+                else if (currentChar == '\'' || currentChar == '"' || currentChar == '`')
+                {
+                    inString = true;
+                    stringDelimiter = currentChar;
+                    sanitizedCode.Append(currentChar);
+                }
+                else
+                {
+                    sanitizedCode.Append(currentChar);
+                }
+            }
         }
-        catch (ParserException ex)
+
+        // Check if still in a multi-line comment
+        if (inMultiLineComment)
         {
-            return Result<bool>.Fail(ex.Message);
+            return Result<bool>.Fail("Unterminated multi-line comment");
         }
+
+        // Split code into lines
+        var lines = sanitizedCode.ToString().Replace("\r\n", "\n").Split(new[] { '\n' }, StringSplitOptions.None);
+
+        bool inFunction = false;
+        // Detect top-level return statements and wrap them
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string line = lines[i].Trim();
+            if (line.StartsWith("function"))
+                inFunction = true;
+
+            if (line.StartsWith("export class"))
+                lines[i] = lines[i].Replace("export class", "class");
+            else if (line.StartsWith("import "))
+                lines[i] = "";
+            else if (!inFunction && line.StartsWith("return"))
+            {
+                lines[i] = "(function() { " + line + " })();";
+            }
+        }
+
+        // Join lines back into a single string
+        codeToValidate = string.Join("\n", lines);
+
+        var parser = new JavaScriptParser();
+        parser.ParseScript(codeToValidate);
+        return Result<bool>.Success(true);
     }
+    catch (ParserException ex)
+    {
+        return Result<bool>.Fail(ex.Message);
+    }
+}
+
+    
     
     /// <summary>
     /// Validates a script has valid code
