@@ -449,10 +449,12 @@ public class LibraryFileService
     private async Task<bool> HigherPriorityWaiting(ProcessingNode node, LibraryFile file, List<Library> allLibraries)
     {
         var allNodes = (await ServiceLoader.Load<NodeService>().GetAllAsync()).Where(x => 
-            x.Uid != node.Uid && x.Priority >= node.Priority && x.Enabled);
+            x.Uid != node.Uid && x.Enabled);
         var allLibrariesUids = allLibraries.Select(x => x.Uid).ToList();
         var executors = FlowRunnerService.Executors.Values.GroupBy(x => x.NodeUid)
             .ToDictionary(x => x.Key, x => x.Count());
+
+        int nodePriority = GetCalculatedNodePriority(node);
         
         foreach (var other in allNodes)
         {
@@ -495,11 +497,15 @@ public class LibraryFileService
                     // this can throw
                 }
 
-                Logger.Instance.ILog("Higher priority node is offline: " + other.Name + ", last seen: " + lastSeen);
+                Logger.Instance.ILog("Other node is offline: " + other.Name + ", last seen: " + lastSeen);
                 continue; // 10 minute cut off, give it some grace period
             }
 
-            if (other.Priority == node.Priority)
+            int otherPriority = GetCalculatedNodePriority(other);
+            if (otherPriority < nodePriority)
+                continue; // other node is lower priority, so does not block this node
+                
+            if (otherPriority == nodePriority)
             {
                 // now check for load balance, the other node can process this, but so can this node.
                 var otherRunners = executors.GetValueOrDefault(other.Uid, 0);
@@ -513,13 +519,21 @@ public class LibraryFileService
                 return true;
             }
             
-            // the "other" node is higher priority, its not maxed out, its in-schedule, so we dont want the "node"
+            // the "other" node is higher priority, its not maxed out, its in-schedule, so we don't want the "node"
             // processing this file
             Logger.Instance.ILog($"Higher priority node '{other.Name}' can process file, skipping node: '{node.Name}': {file.Name}");
             return true;
         }
         // no other node is higher priority, this node can process this file
         return false;
+
+        int GetCalculatedNodePriority(ProcessingNode node)
+        {
+            int priority = node.Priority;
+            if (executors.TryGetValue(node.Uid, out var count))
+                priority -= count;
+            return priority;
+        }
     }
 
     /// <summary>
