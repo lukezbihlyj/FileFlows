@@ -123,7 +123,7 @@ public class ExecuteFlow : Node
                     
                     // happens when canceled or when the node failed to load
                     args.FailureReason = part.Name == "FileFlows.VideoNodes.VideoFile"
-                        ? "Video Nodes Plugin missing, download the from the Plugins page"
+                        ? "Video Plugin missing, download the from the Plugins page"
                         : lfeError?.EmptyAsNull() ?? "Failed to load flow element: " + part.Name +
                           "\nEnsure you have the required plugins installed.";
 
@@ -171,9 +171,15 @@ public class ExecuteFlow : Node
                 nodeStartTime = DateTime.UtcNow;
 
                 // clear the failure reason, if this isn't a failure flow, if it is, we already have the reason for failure
-                if(Flow.Type != FlowType.Failure &&  part.FlowElementUid?.EndsWith("." + nameof(ExecuteFlow)) == false)
+                if (Flow.Type != FlowType.Failure &&
+                    part.FlowElementUid?.EndsWith("." + nameof(ExecuteFlow)) == false &&
+                    string.IsNullOrWhiteSpace(args.FailureReason) == false)
+                {
+                    args.Logger?.ILog("Current Flow Part: " + currentFlowElement.Name);
+                    args.Logger?.ILog("Clearing failure reason: " + args.FailureReason);
                     args.FailureReason = null;
-                
+                }
+
                 if (currentFlowElement.PreExecute(args) == false)
                     throw new Exception("PreExecute failed");
                 int output = currentFlowElement.Execute(args);
