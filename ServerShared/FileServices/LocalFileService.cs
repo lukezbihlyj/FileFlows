@@ -567,7 +567,7 @@ public class LocalFileService : IFileService
     /// </summary>
     /// <param name="path">the path to check</param>
     /// <returns>true if accessible, otherwise false</returns>
-    private bool IsProtectedPath(ref string path)
+    public bool IsProtectedPath(ref string path)
     {
         if (CheckProtectivePaths == false)
             return false;

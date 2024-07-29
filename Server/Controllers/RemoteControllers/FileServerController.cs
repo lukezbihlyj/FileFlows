@@ -357,6 +357,24 @@ public class FileServerController : Controller
     }
 
     /// <summary>
+    /// Checks if a path can be written to
+    /// </summary>
+    /// <param name="path">the path to check</param>
+    /// <returns>if it can be written to</returns>
+    [HttpPost("can-write-to")]
+    public IActionResult CanWriteTo([FromBody] PathRequest path)
+    {
+        if (ValidateRequest(out string message) == false)
+            return StatusCode(503, message?.EmptyAsNull() ?? "File service is currently disabled.");
+        string _path = path.Path ?? string.Empty;
+        Logger.ILog("Check can write to path: " + _path);
+        if(string.IsNullOrWhiteSpace(_path))
+            return StatusCode(503, "Bade Data: Path not set");
+        bool isProtected = _localFileService.IsProtectedPath(ref _path);
+        return Ok(isProtected ? "false" : "true");
+    }
+
+    /// <summary>
     /// Retrieves the size of a file in bytes.
     /// </summary>
     /// <param name="path">The file path.</param>

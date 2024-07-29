@@ -69,6 +69,56 @@ public class FileUploader
         _client = new HttpClient(handler);
         _client.Timeout = Timeout.InfiniteTimeSpan;
     }
+
+    /// <summary>
+    /// Checks if the server path can be written to
+    /// </summary>
+    /// <param name="serverPath">the path on the server</param>
+    /// <returns>true if can be written to, otherwise false</returns>
+    private async Task<Result<bool>> CanWriteToPath(string serverPath)
+    {
+        Func<string, Result<bool>> error = (errorMessage) =>
+        {
+            logger?.WLog(errorMessage);
+            return Result<bool>.Fail(errorMessage);
+        };
+        
+        try
+        {
+            string url = serverUrl;
+            if (url.EndsWith("/") == false)
+                url += "/";
+            url += "remote/file-server/can-write-to";
+            
+            string json = JsonSerializer.Serialize(new
+            {
+                Path = serverPath
+            });
+            
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Add("x-executor", executorUid.ToString());
+            if(string.IsNullOrWhiteSpace(_accessToken) == false)
+                request.Headers.Add("x-token", _accessToken);
+            request.Headers.Add("x-node", RemoteNodeUid.ToString());
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");;
+            var response = await _client.SendAsync(request);
+
+            string body = await response.Content.ReadAsStringAsync();
+            
+            if (response.IsSuccessStatusCode == false)
+                return error((int)response.StatusCode == 503
+                    ? "Failed to check can write to on server"
+                    : $"Failed to check can write to with status code: {response.StatusCode}");
+
+            if (body.ToLowerInvariant() == "true")
+                return true;
+            return Result<bool>.Fail("Not allowed to write to path: " + serverPath);
+        }
+        catch (Exception ex)
+        {
+            return error($"An error occurred while attempting to checking path access: {ex.Message}");
+        }
+    }
     
     /// <summary>
     /// Uploads a file to the specified URL, along with its hash for integrity verification.
@@ -88,6 +138,12 @@ public class FileUploader
         {
             if (File.Exists(filePath) == false)
                 return error($"File does not exist: '{filePath}");
+
+            if ((await CanWriteToPath(serverPath)).Failed(out var errorString))
+            {
+                logger.ILog(errorString);
+                return (false, errorString);
+            }
             
             if(serverPath.Length > 2 && serverPath[1] != ':')
                 serverPath = serverPath.Replace("\\", "/");
