@@ -7,9 +7,7 @@ using System.Timers;
 using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
-using FileFlows.ServerShared.Services;
 using FileHelper = FileFlows.ServerShared.Helpers.FileHelper;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace FileFlows.Server.Workers;
 
@@ -211,7 +209,7 @@ public class WatchedLibrary:IDisposable
                 DirectoryInfo di = (DirectoryInfo)fsInfo;
                 try
                 {
-                    var files = di.GetFiles("*.*", SearchOption.AllDirectories);
+                    var files = di.GetFiles("*.*", Library.TopLevelOnly ? SearchOption.TopDirectoryOnly: SearchOption.AllDirectories);
                     if (files.Any())
                     {
                         var lastWriteTime = files.Select(x => x.LastWriteTimeUtc).Max();
@@ -616,7 +614,7 @@ public class WatchedLibrary:IDisposable
         {
             if (Library.Folders == false && Directory.Exists(e.FullPath))
             {
-                foreach (var file in Directory.GetFiles(e.FullPath, "*.*", SearchOption.AllDirectories))
+                foreach (var file in Directory.GetFiles(e.FullPath, "*.*", Library.TopLevelOnly? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories))
                 {
                     FileChangeEvent(file);
                 }

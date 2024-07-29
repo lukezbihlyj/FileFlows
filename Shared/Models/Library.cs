@@ -201,4 +201,10 @@ public class Library : FileFlowObject
     /// Gets or sets the maximum concurrent files that can be processed at one time in this library
     /// </summary>
     public int MaxRunners { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if only the top level folder should be searched and no sub folders.
+    /// If false, then all sub folders will also be searched
+    /// </summary>
+    public bool TopLevelOnly { get; set; }
 }

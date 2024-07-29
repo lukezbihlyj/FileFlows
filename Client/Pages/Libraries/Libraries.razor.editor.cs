@@ -259,7 +259,15 @@ public partial class Libraries : ListPage<Guid, Library>
             {
                 new (efFolders, library.Folders, value: false)
             }
-            
+        });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Switch,
+            Name = nameof(library.TopLevelOnly),
+            Conditions = new List<Condition>
+            {
+                new (efFolders, library.Folders, value: false)
+            }
         });
         var efFingerprinting = new ElementField
         {
