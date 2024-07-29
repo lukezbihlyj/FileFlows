@@ -463,8 +463,8 @@ public class LibraryFileService
                 continue;
             
             // check if this node is maxed out
-            if (executors.ContainsKey(other.Uid) && executors[other.Uid] >= other.FlowRunners)
-                continue; // its maxed out
+            if (executors.TryGetValue(other.Uid, out int value) && value >= other.FlowRunners)
+                continue; // it's maxed out
 
             if (Version.TryParse(other.Version, out Version? otherVersion) == false || otherVersion == null ||
                 otherVersion < Globals.MinimumNodeVersion)
@@ -519,7 +519,7 @@ public class LibraryFileService
                 return true;
             }
             
-            // the "other" node is higher priority, its not maxed out, its in-schedule, so we don't want the "node"
+            // the "other" node is higher priority, it's not maxed out, it's in-schedule, so we don't want the "node"
             // processing this file
             Logger.Instance.ILog($"Higher priority node '{other.Name}' can process file, skipping node: '{node.Name}': {file.Name}");
             return true;

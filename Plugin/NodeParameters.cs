@@ -641,14 +641,13 @@ public class NodeParameters
         if (Parameters.TryAdd(name, value) == false)
             Parameters.Add(name, value);
     }
-
     
     /// <summary>
     /// Moves the working file
     /// </summary>
     /// <param name="destination">the destination to move the file</param>
     /// <returns>true if successfully moved</returns>
-    public bool MoveFile(string destination)
+    public Result<bool> MoveFile(string destination)
     {
         if (Fake) return true;
         
@@ -656,11 +655,9 @@ public class NodeParameters
         Logger?.ILog("Destination: " + destination);
 
         var result = FileService.FileMove(WorkingFile, destination, true);
-        if (result.IsFailed)
-        {
-            Logger?.ELog("Failed to move file: " + result.Error);
-            return false;
-        }
+        if (result.Failed(out var error))
+            return Result<bool>.Fail(error);
+        
         Logger?.ILog("File moved to: " + destination);
         this.WorkingFile = destination;
         try
@@ -680,28 +677,21 @@ public class NodeParameters
     /// <param name="source">the source file</param>
     /// <param name="destination">the destination file</param>
     /// <param name="updateWorkingFile"></param>
-    /// <returns>whether or not the file was copied successfully</returns>
-    public bool CopyFile(string source, string destination, bool updateWorkingFile = false)
+    /// <returns>whether the file was copied successfully</returns>
+    public Result<bool> CopyFile(string source, string destination, bool updateWorkingFile = false)
     {
         if (Fake) return true;
 
         if (string.IsNullOrWhiteSpace(source))
-        {
-            Logger?.WLog("CopyFile.Source was not supplied");
-            return false;
-        }
+            return Result<bool>.Fail("CopyFile.Source was not supplied");
+        
         if (string.IsNullOrWhiteSpace(destination))
-        {
-            Logger?.WLog("CopyFile.Destination was not supplied");
-            return false;
-        }
+            return Result<bool>.Fail("CopyFile.Destination was not supplied");
 
         var result = FileService.FileCopy(source, destination, true);
-        if (result.IsFailed)
-        {
-            Logger?.WLog("Failed to copy file: " + result.Error);
-            return false;
-        }
+        if (result.Failed(out var error))
+            return Result<bool>.Fail(error);
+        
         if(updateWorkingFile)
         {
             this.WorkingFile = destination;
