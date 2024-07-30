@@ -164,6 +164,7 @@ public class ExecuteFlow : Node
                         $"Executing Flow Element {(Runner.Info.LibraryFile.ExecutedNodes.Count + 1)}: {part.Label?.EmptyAsNull() ?? part.Name?.EmptyAsNull() ?? currentFlowElement.Name} [{currentFlowElement.GetType().FullName}]");
                     args.Logger?.ILog(new string('=', 70));
                     args.Logger?.ILog("Working File: " + args.WorkingFile);
+                    args.Logger?.ILog("Failure Reason: " + (args.FailureReason?.EmptyAsNull() ?? "not set"));
                     loadFELogger.WriteToLog(args.Logger);
                     loadFELogger = null;
                 }
