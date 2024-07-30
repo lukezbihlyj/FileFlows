@@ -210,6 +210,7 @@ public class FlowRunnerService : IFlowRunnerService
             existing.ProcessingEnded = updated.ProcessingEnded;
             existing.Fingerprint = updated.Fingerprint;
             existing.FinalFingerprint = updated.FinalFingerprint;
+            existing.FailureReason = updated.FailureReason;
             existing.ExecutedNodes = updated.ExecutedNodes ?? new List<ExecutedNode>();
             Logger.Instance.DLog("FinishWork: Executed flow elements: " +
                                  string.Join(", ", existing.ExecutedNodes.Select(x => x.NodeUid)));
