@@ -273,6 +273,8 @@ public class Runner
         Info.LibraryFile.OutputPath = Node.UnMap(nodeParameters.WorkingFile);
         nodeParameters?.Logger?.ILog("Output Path: " + Info.LibraryFile.OutputPath);
         nodeParameters?.Logger?.ILog("Final Status: " + Info.LibraryFile.Status);
+        nodeParameters?.Logger?.ILog("Final Failure Reason: " + nodeParameters.FailureReason);
+        Info.LibraryFile.FailureReason = nodeParameters.FailureReason;
     }
 
     /// <summary>
