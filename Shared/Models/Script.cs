@@ -23,6 +23,11 @@ public class Script: FileFlowObject, IInUse
     /// Gets or sets the type of script
     /// </summary>
     public ScriptType Type { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Language of script
+    /// </summary>
+    public ScriptLanguage Language { get; set; }
     
     /// <summary>
     /// Gets or sets the revision of the script

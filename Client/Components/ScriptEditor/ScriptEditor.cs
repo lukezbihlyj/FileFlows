@@ -53,7 +53,10 @@ public class ScriptEditor
 
         if (string.IsNullOrEmpty(item.Code))
         {
-            item.Code = flowScript ? @"
+            if (item.Language == ScriptLanguage.JavaScript)
+            {
+                item.Code = flowScript
+                    ? @"
 /**
  * @description The description of this script
  * @param {int} NumberParameter Description of this input
@@ -64,13 +67,75 @@ function Script(NumberParameter)
 {
     return 1;
 }
-" : @"
+"
+                    : @"
 import { FileFlowsApi } from 'Shared/FileFlowsApi';
 
 let ffApi = new FileFlowsApi();
 ";
+            }
+            else if (item.Language == ScriptLanguage.Batch)
+            {
+                item.Code = @"
+REM This is a template batch file
+
+REM Replace {file.FullName} and {file.Orig.FullName} with actual values
+SET WorkingFile={file.FullName}
+SET OriginalFile={file.Orig.FullName}
+
+REM Example commands using the variables
+echo Working on file: %WorkingFile%
+echo Original file location: %OriginalFile%
+
+REM Add your actual batch commands below
+REM Example: Copy the working file to a backup location
+REM copy ""%WorkingFile%"" ""C:\Backup\%~nxWorkingFile%""
+
+REM Set the exit code to 0
+EXIT /B 0".Trim();
+            }
+            else if (item.Language == ScriptLanguage.PowerShell)
+            {
+                item.Code = @"
+# This is a template PowerShell script
+
+# Replace {WorkingFile} and {OriginalFile} with actual values
+$WorkingFile = '{WorkingFile}'
+$OriginalFile = '{OriginalFile}'
+
+# Example commands using the variables
+Write-Output ""Working on file: $WorkingFile""
+Write-Output ""Original file location: $OriginalFile""
+
+# Add your actual PowerShell commands below
+# Example: Copy the working file to a backup location
+# Copy-Item -Path $WorkingFile -Destination ""C:\Backup\$([System.IO.Path]::GetFileName($WorkingFile))""
+
+# Set the exit code to 0
+exit 0".Trim();
+            }
+            else if (item.Language == ScriptLanguage.Shell)
+            {
+                item.Code = @"
+# This is a template shell script
+
+# Replace {file.FullName} and {file.Orig.FullName} with actual values
+WorkingFile=""{file.FullName}""
+OriginalFile=""{file.Orig.FullName}""
+
+# Example commands using the variables
+echo ""Working on file: $WorkingFile""
+echo ""Original file location: $OriginalFile""
+
+# Add your actual shell commands below
+# Example: Copy the working file to a backup location
+# cp ""$WorkingFile"" ""/path/to/backup/$(basename \""$WorkingFile\"")""
+
+# Set the exit code to 0
+exit 0".Trim();
+            }
         }
-        else
+        else if(item.Language == ScriptLanguage.JavaScript)
         {
             item.Code = ScriptParser.GetCodeWithCommentBlock(item, true);
         }
@@ -78,11 +143,11 @@ let ffApi = new FileFlowsApi();
         item.Code = item.Code.Replace("\r\n", "\n").Trim();
 
         bool readOnly = item.Repository;
-        string title = "Pages.Script.Title";
+        string title = Translater.Instant("Pages.Script.LanguageTitle", new { Language = item.Language.ToString()}) ;
 
         if (readOnly)
         {
-            title = Translater.Instant("Pages.Script.Title") + ": " + item.Name;
+            title += ": " + item.Name;
         }
         else
         {
@@ -90,10 +155,16 @@ let ffApi = new FileFlowsApi();
             {
                 InputType = FormInputType.Text,
                 Name = nameof(item.Name),
-                Validators = flowScript ? new List<FileFlows.Shared.Validators.Validator>
-                {
-                    new FileFlows.Shared.Validators.Required()
-                } : new ()
+                Validators = flowScript ? [ new Required() ] : []
+            });
+        }
+
+        if (item.Language != ScriptLanguage.JavaScript)
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.TextArea,
+                Name = "Description"
             });
         }
 
@@ -101,6 +172,10 @@ let ffApi = new FileFlowsApi();
         {
             InputType = FormInputType.Code,
             Name = "Code",
+            Parameters = new ()
+            {
+                { nameof(InputCode.Language), item.Language.ToString().ToLowerInvariant()}
+            },
             Validators = item.Type == ScriptType.Flow ? new List<Validator>
             {
                 new ScriptValidator()
@@ -109,9 +184,11 @@ let ffApi = new FileFlowsApi();
 
         var result = await Editor.Open(new()
         {
-            TypeName = "Pages.Script", Title = title, Fields = fields, Model = item, Large = true, ReadOnly = readOnly,
+            TypeName = "Pages.Script", Title = title, Fields = fields, Model = item, 
+            Large = true,
+            ReadOnly = readOnly,
             SaveCallback = SaveCallback ?? Save, HelpUrl = "https://fileflows.com/docs/webconsole/extensions/scripts",
-            AdditionalButtons = readOnly ? null : new ActionButton[]
+            AdditionalButtons = readOnly || item.Language != ScriptLanguage.JavaScript ? null : new ActionButton[]
             {
                 new ()
                 {

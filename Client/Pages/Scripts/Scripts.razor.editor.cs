@@ -53,6 +53,7 @@ public partial class Scripts
         destination.Code = source.Code;
         destination.Author = source.Author;
         destination.Type = source.Type;
+        destination.Language = source.Language;
         destination.Outputs =
             source.Outputs?.Select(x => new ScriptOutput() { Description = x.Description, Index = x.Index })
                 ?.ToList() ?? [];

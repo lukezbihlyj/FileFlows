@@ -316,8 +316,7 @@ public Result<bool> ValidateScript(string code)
     /// <returns>the saved script instance</returns>
     public async Task<Result<Script>> Save(Script script, AuditDetails auditDetails)
     {
-        //ValidateScript(script.Code, false, new Dictionary<string, object>());
-        if (ValidateScript(script.Code).Failed(out var error))
+        if (script.Language == ScriptLanguage.JavaScript && ValidateScript(script.Code).Failed(out var error))
             return Result<Script>.Fail(error);
 
         var manager = new ScriptManager();
@@ -330,7 +329,7 @@ public Result<bool> ValidateScript(string code)
         if(old != null && old.Name != script.Name)
             await UpdateScriptReferences(old.Name, script.Name, auditDetails);
 
-        if(script.Name == Globals.FileDisplayNameScript)
+        if(script.Language == ScriptLanguage.JavaScript && script.Name == Globals.FileDisplayNameScript)
             ServiceLoader.Load<FileDisplayNameService>().Reinitialize();
 
         return script;

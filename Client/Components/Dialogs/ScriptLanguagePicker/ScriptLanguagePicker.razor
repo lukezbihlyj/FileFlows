@@ -1,0 +1,43 @@
+@using FileFlows.Plugin
+@namespace FileFlows.Client.Components.Dialogs
+
+<Modal Title="@Title" Visible="Visible">
+
+    <Body>
+    <ul>
+        <li>
+            <label>
+                <input type="radio" name="language" value="JavaScript" checked="@((Language == ScriptLanguage.JavaScript) ? "checked" : null)" @onchange="SetLanguage" />
+                <span class="title">JavaScript</span>
+                <span class="description">@lblJavaScriptDescription</span>
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="language" value="Batch" checked="@((Language == ScriptLanguage.Batch) ? "checked" : null)" @onchange="SetLanguage" />
+                <span class="title">Batch (.bat)</span>
+                <span class="description">@lblBatchDescription</span>
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="language" value="PowerShell" checked="@((Language == ScriptLanguage.PowerShell) ? "checked" : null)" @onchange="SetLanguage" />
+                <span class="title">PowerShell (.ps1)</span>
+                <span class="description">@lblPowerShellDescription</span>
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="language" value="Shell" checked="@((Language == ScriptLanguage.Shell) ? "checked" : null)" @onchange="SetLanguage" />
+                <span class="title">Shell (.sh)</span>
+                <span class="description">@lblShellDescription</span>
+            </label>
+        </li>
+    </ul>
+    
+    </Body>
+    <Footer>
+        <button @onclick=@Next>@lblNext</button>
+        <button @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

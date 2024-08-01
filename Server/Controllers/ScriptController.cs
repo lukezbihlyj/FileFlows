@@ -110,11 +110,21 @@ public class ScriptController : BaseController
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] Script script)
     {
-        var scriptResult = Script.FromCode(script.Name, script.Code, script.Type);
-        if (scriptResult.Failed(out string error))
-            return BadRequest(error);
+        Script? actualScript;
+        string? error;
+        if (script.Language == ScriptLanguage.JavaScript)
+        {
+            var scriptResult = Script.FromCode(script.Name, script.Code, script.Type);
+            if (scriptResult.Failed(out error))
+                return BadRequest(error);
 
-        var actualScript = scriptResult.Value;
+            actualScript = scriptResult.Value;
+        }
+        else
+        {
+            actualScript = script;
+        }
+
         actualScript.Uid = script.Uid;
         
         var result = await ServiceLoader.Load<ScriptService>().Save(actualScript, await GetAuditDetails());

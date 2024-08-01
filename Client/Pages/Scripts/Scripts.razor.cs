@@ -38,6 +38,11 @@ public partial class Scripts : ListPage<Guid, Script>
     /// </summary>
     private RepositoryBrowser ScriptBrowser { get; set; }
 
+    /// <summary>
+    /// The language picker dalog
+    /// </summary>
+    private Components.Dialogs.ScriptLanguagePicker LanguagePicker;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -51,9 +56,14 @@ public partial class Scripts : ListPage<Guid, Script>
 
     private async Task Add()
     {
+        var result = await LanguagePicker.Show();
+        if (result.IsFailed)
+            return;
+        
         await Edit(new Script()
         {
-            Type = SelectedType
+            Type = SelectedType,
+            Language = result.Value
         });
     }
 
@@ -329,6 +339,13 @@ public partial class Scripts : ListPage<Guid, Script>
             if (nameLower.StartsWith(icon))
                 return $"/icons/{icon}.svg";
         }
+        
+        if(item.Language is ScriptLanguage.Batch)
+            return $"/icons/bat.svg";
+        if(item.Language is ScriptLanguage.PowerShell)
+            return $"/icons/ps1.svg";
+        if(item.Language is ScriptLanguage.Shell)
+            return $"/icons/sh.svg";
 
         return "fas fa-scroll";
 

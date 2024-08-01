@@ -209,3 +209,29 @@ public enum ScriptType
     /// </summary>
     Webhook = 4
 }
+
+/// <summary>
+/// Specifies the scripting languages supported by the application.
+/// </summary>
+public enum ScriptLanguage
+{
+    /// <summary>
+    /// JavaScript scripting language.
+    /// </summary>
+    JavaScript = 0,
+
+    /// <summary>
+    /// Shell scripting language (Bash or SH).
+    /// </summary>
+    Shell = 1,
+
+    /// <summary>
+    /// Batch scripting language for .bat files.
+    /// </summary>
+    Batch = 2,
+
+    /// <summary>
+    /// PowerShell scripting language.
+    /// </summary>
+    PowerShell = 3
+}

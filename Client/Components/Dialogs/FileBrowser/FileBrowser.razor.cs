@@ -31,6 +31,10 @@ public partial class FileBrowser : ComponentBase, IDisposable
     /// Gets or sets the profile service
     /// </summary>
     [Inject] private ProfileService ProfileService { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this dialog is visible
+    /// </summary>
     private bool Visible { get; set; }
 
     /// <summary>
@@ -101,6 +105,9 @@ public partial class FileBrowser : ComponentBase, IDisposable
         await Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Cancels the dialog
+    /// </summary>
     private async void Cancel()
     {
         this.Visible = false;
@@ -152,6 +159,9 @@ public partial class FileBrowser : ComponentBase, IDisposable
         string.Join("", Extensions?.Select(x => "&extensions=" + Uri.EscapeDataString(x))?.ToArray() ?? new string[] { }));
     }
 
+    /// <summary>
+    /// Disposes of the component
+    /// </summary>
     public void Dispose()
     {
         App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
