@@ -35,8 +35,8 @@ public static class ScriptIconHelper
             return "fas fa-comments";
         var icons = new[]
         {
-            "apple", "apprise", "audio", "basic", "comic", "database", "docker", "emby", "folder", "gotify", "gz",
-            "image", "intel", "linux", "nvidia", "plex", "pushbullet", "pushover", "radarr", "sabnzbd", "sonarr",
+            "apple", "apprise", "audio", "basic", "bat", "comic", "database", "docker", "emby", "folder", "gotify", "gz",
+            "image", "intel", "linux", "nvidia", "plex", "pushbullet", "pushover", "ps1", "radarr", "sabnzbd", "sh", "sonarr",
             "video", "windows"
         };
         foreach (var icon in icons)

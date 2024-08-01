@@ -23,12 +23,18 @@ public partial class InputCode : Input<string>, IDisposable
     
     private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
     {
+        var language = Language?.EmptyAsNull() ?? "javascript";
+        if (language?.ToLowerInvariant() == "js")
+            language = "javascript";
+        else if (language?.ToLowerInvariant() == "sh")
+            language = "shell";
+        
         return new StandaloneEditorConstructionOptions
         {
             AutomaticLayout = true,
             Minimap = new EditorMinimapOptions { Enabled = false },
             Theme = "vs-dark",
-            Language = Language?.EmptyAsNull() ?? "javascript",
+            Language = language,
             Value = this.Value?.Trim() ?? "",
             ReadOnly = this.Editor.ReadOnly
         };

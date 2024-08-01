@@ -1,10 +1,14 @@
-namespace FileFlows.Plugin.Attributes
-{
-    using System;
-    using System.Collections.Generic;
+namespace FileFlows.Plugin.Attributes;
 
-    public class CodeAttribute : FormInputAttribute
-    {
-        public CodeAttribute(int order) : base(FormInputType.Code, order) { }
-    }
+/// <summary>
+/// Attribute to indicate a field is for code
+/// </summary>
+/// <param name="order">the order it appears</param>
+/// <param name="language">The language for the code</param>
+public class CodeAttribute(int order, string language = "js") : FormInputAttribute(FormInputType.Code, order)
+{
+    /// <summary>
+    /// Gets the language of the code
+    /// </summary>
+    public string Language => language;
 }

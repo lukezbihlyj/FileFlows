@@ -52,11 +52,10 @@ public class FlowElement
     /// <returns>the formatted name</returns>
     public static string FormatName(string name)
     {
-        string translated = Translater.Instant($"Flow.Parts.{name}.Label", suppressWarnings: false);
-        if (string.IsNullOrEmpty(translated) == false && translated != "Label")
-            return translated;
+        if (Translater.CanTranslate($"Flow.Parts.{name}.Label", out var translation))
+            return translation;
 
-        name = name[(name.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
+        name = name[(name.LastIndexOf('.') + 1)..];
         string dn = name.Replace("_", " ");
         dn = rgxFormatLabel.Replace(dn, " ");
         return dn;
