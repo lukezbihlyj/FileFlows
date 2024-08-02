@@ -12,7 +12,9 @@
 @(Input?.Field?.FlexGrow == true ? "flex-grow" : "") 
 @(Input?.HideLabel == true ? "hide-label" : "") 
 @(Input?.Disabled == true ? "disabled" : "")
-@(Error ? "error-input" : "")
+     @(Error ? "error-input" : "")
+@(Input?.Field?.ColSpan != null ? $"col-span-{Input.Field.ColSpan.Value}" : "")
+@(Input?.Field?.RowSpan != null ? $"row-span-{Input.Field.RowSpan.Value}" : "")
 ">
     @if (Input?.HideLabel != true && Input?.Field?.HideLabel != true)
     {

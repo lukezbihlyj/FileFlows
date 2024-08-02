@@ -19,7 +19,7 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         this.EditingItem = node;
 
         Dictionary<Guid, string> scripts;
-        var tabs = new Dictionary<string, List<ElementField>>();
+        var tabs = new Dictionary<string, List<IFlowField>>();
         Blocker.Show();
         try
         {
@@ -52,9 +52,9 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return false;
     }
 
-    private List<ElementField> TabGeneral(ProcessingNode node, bool isServerProcessingNode, Dictionary<Guid, string> scripts)
+    private List<IFlowField> TabGeneral(ProcessingNode node, bool isServerProcessingNode, Dictionary<Guid, string> scripts)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         if (isServerProcessingNode)
         {
@@ -146,9 +146,9 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return fields;
     }
 
-    private List<ElementField> TabSchedule(ProcessingNode node, bool isServerProcessingNode)
+    private List<IFlowField> TabSchedule(ProcessingNode node, bool isServerProcessingNode)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -167,9 +167,9 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return fields;
 
     }
-    private List<ElementField> TabMappings(ProcessingNode node)
+    private List<IFlowField> TabMappings(ProcessingNode node)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -230,7 +230,7 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
     }
     
     
-    private async Task<List<ElementField>> TabProcessing(ProcessingNode node)
+    private async Task<List<IFlowField>> TabProcessing(ProcessingNode node)
     {
         var librariesResult = await HttpHelper.Get<Dictionary<Guid, string>>("/api/library/basic-list");
         var libraries = librariesResult?.Data?.Select(x => new ListOption
@@ -243,7 +243,7 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
                 Type = typeof(Library)?.FullName ?? string.Empty
             }
         })?.OrderBy(x => x.Label)?.ToList() ?? new List<ListOption>();
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -294,9 +294,9 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return fields;
     }
 
-    private List<ElementField> TabAdvanced(ProcessingNode node)
+    private List<IFlowField> TabAdvanced(ProcessingNode node)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Switch,
@@ -356,9 +356,9 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
     /// </summary>
     /// <param name="node">the processing node</param>
     /// <returns>a list of element fields</returns>
-    private List<ElementField> TabVariables(ProcessingNode node)
+    private List<IFlowField> TabVariables(ProcessingNode node)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,

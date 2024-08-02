@@ -1,1 +1,155 @@
-﻿
+.input-label {
+  margin-bottom: 2rem;
+  white-space: pre-wrap;
+}
+
+.input-horizontal-rule {
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: solid 1px var(--input-background);
+}
+
+.fp-columns {
+  display: grid;
+  gap: 0.5rem;
+  grid-auto-rows: min-content;
+  width: 100%;
+  min-width: 100%;
+  padding: 0;
+  grid-auto-rows: fit-content(100%); /* Rows will fit the content */
+}
+.fp-columns.fp-col-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.fp-columns.fp-col-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.fp-columns.fp-col-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.fp-columns.fp-col-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+.fp-columns.fp-col-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+.fp-columns.fp-col-7 {
+  grid-template-columns: repeat(7, 1fr);
+}
+.fp-columns.fp-col-8 {
+  grid-template-columns: repeat(8, 1fr);
+}
+.fp-columns.fp-col-9 {
+  grid-template-columns: repeat(9, 1fr);
+}
+.fp-columns.fp-col-10 {
+  grid-template-columns: repeat(10, 1fr);
+}
+.fp-columns > ::deep .row {
+  margin-top: 0 !important;
+  height: fit-content;
+}
+.fp-columns > ::deep .row > .input-label {
+  min-width: 9rem !important;
+  width: 9rem !important;
+  height: fit-content;
+}
+.fp-columns > ::deep .row > .input-value {
+  height: fit-content;
+}
+.fp-columns > ::deep .row.col-span-1 {
+  grid-column: span 1;
+}
+.fp-columns > ::deep .row.col-span-1 textarea, .fp-columns > ::deep .row.col-span-1 input[type=text], .fp-columns > ::deep .row.col-span-1 input[type=number], .fp-columns > ::deep .row.col-span-1 input[type=email], .fp-columns > ::deep .row.col-span-1 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-2 {
+  grid-column: span 2;
+}
+.fp-columns > ::deep .row.col-span-2 textarea, .fp-columns > ::deep .row.col-span-2 input[type=text], .fp-columns > ::deep .row.col-span-2 input[type=number], .fp-columns > ::deep .row.col-span-2 input[type=email], .fp-columns > ::deep .row.col-span-2 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-3 {
+  grid-column: span 3;
+}
+.fp-columns > ::deep .row.col-span-3 textarea, .fp-columns > ::deep .row.col-span-3 input[type=text], .fp-columns > ::deep .row.col-span-3 input[type=number], .fp-columns > ::deep .row.col-span-3 input[type=email], .fp-columns > ::deep .row.col-span-3 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-4 {
+  grid-column: span 4;
+}
+.fp-columns > ::deep .row.col-span-4 textarea, .fp-columns > ::deep .row.col-span-4 input[type=text], .fp-columns > ::deep .row.col-span-4 input[type=number], .fp-columns > ::deep .row.col-span-4 input[type=email], .fp-columns > ::deep .row.col-span-4 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-5 {
+  grid-column: span 5;
+}
+.fp-columns > ::deep .row.col-span-5 textarea, .fp-columns > ::deep .row.col-span-5 input[type=text], .fp-columns > ::deep .row.col-span-5 input[type=number], .fp-columns > ::deep .row.col-span-5 input[type=email], .fp-columns > ::deep .row.col-span-5 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-6 {
+  grid-column: span 6;
+}
+.fp-columns > ::deep .row.col-span-6 textarea, .fp-columns > ::deep .row.col-span-6 input[type=text], .fp-columns > ::deep .row.col-span-6 input[type=number], .fp-columns > ::deep .row.col-span-6 input[type=email], .fp-columns > ::deep .row.col-span-6 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-7 {
+  grid-column: span 7;
+}
+.fp-columns > ::deep .row.col-span-7 textarea, .fp-columns > ::deep .row.col-span-7 input[type=text], .fp-columns > ::deep .row.col-span-7 input[type=number], .fp-columns > ::deep .row.col-span-7 input[type=email], .fp-columns > ::deep .row.col-span-7 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-8 {
+  grid-column: span 8;
+}
+.fp-columns > ::deep .row.col-span-8 textarea, .fp-columns > ::deep .row.col-span-8 input[type=text], .fp-columns > ::deep .row.col-span-8 input[type=number], .fp-columns > ::deep .row.col-span-8 input[type=email], .fp-columns > ::deep .row.col-span-8 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-9 {
+  grid-column: span 9;
+}
+.fp-columns > ::deep .row.col-span-9 textarea, .fp-columns > ::deep .row.col-span-9 input[type=text], .fp-columns > ::deep .row.col-span-9 input[type=number], .fp-columns > ::deep .row.col-span-9 input[type=email], .fp-columns > ::deep .row.col-span-9 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.col-span-10 {
+  grid-column: span 10;
+}
+.fp-columns > ::deep .row.col-span-10 textarea, .fp-columns > ::deep .row.col-span-10 input[type=text], .fp-columns > ::deep .row.col-span-10 input[type=number], .fp-columns > ::deep .row.col-span-10 input[type=email], .fp-columns > ::deep .row.col-span-10 select {
+  max-width: unset;
+}
+.fp-columns > ::deep .row.row-span-1 {
+  grid-row: span 1;
+}
+.fp-columns > ::deep .row.row-span-2 {
+  grid-row: span 2;
+}
+.fp-columns > ::deep .row.row-span-3 {
+  grid-row: span 3;
+}
+.fp-columns > ::deep .row.row-span-4 {
+  grid-row: span 4;
+}
+.fp-columns > ::deep .row.row-span-5 {
+  grid-row: span 5;
+}
+.fp-columns > ::deep .row.row-span-6 {
+  grid-row: span 6;
+}
+.fp-columns > ::deep .row.row-span-7 {
+  grid-row: span 7;
+}
+.fp-columns > ::deep .row.row-span-8 {
+  grid-row: span 8;
+}
+.fp-columns > ::deep .row.row-span-9 {
+  grid-row: span 9;
+}
+.fp-columns > ::deep .row.row-span-10 {
+  grid-row: span 10;
+}
+.fp-columns ::deep .row.flex-grow {
+  height: calc(100% - 4.1rem);
+}
+.fp-columns ::deep .row.flex-grow textarea {
+  height: 100%;
+}

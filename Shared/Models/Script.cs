@@ -57,7 +57,8 @@ public class Script: FileFlowObject, IInUse
     /// <summary>
     /// Gets or sets a list of outputs for the script
     /// </summary>
-    public List<ScriptOutput> Outputs { get; set; } = new List<ScriptOutput>();
+    public List<KeyValuePair<int, string>> Outputs { get; set; } = new ();
+    //public List<ScriptOutput> Outputs { get; set; } = new List<ScriptOutput>();
 
     /// <summary>
     /// Gets or sets parameters for the script
@@ -132,21 +133,21 @@ public class Script: FileFlowObject, IInUse
     }
 }
 
-/// <summary>
-/// Definition of a script output node
-/// </summary>
-public class ScriptOutput
-{
-    /// <summary>
-    /// Gets or sets the output index
-    /// </summary>
-    public int Index { get; set; }
-
-    /// <summary>
-    /// Gets or sets the description of the output
-    /// </summary>
-    public string Description { get; set; } = string.Empty;
-}
+// /// <summary>
+// /// Definition of a script output node
+// /// </summary>
+// public class ScriptOutput
+// {
+//     /// <summary>
+//     /// Gets or sets the output index
+//     /// </summary>
+//     public int Index { get; set; }
+//
+//     /// <summary>
+//     /// Gets or sets the description of the output
+//     /// </summary>
+//     public string Description { get; set; } = string.Empty;
+// }
 
 /// <summary>
 /// A parameter passed into a script

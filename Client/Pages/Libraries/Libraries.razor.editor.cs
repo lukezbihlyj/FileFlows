@@ -21,7 +21,7 @@ public partial class Libraries : ListPage<Guid, Library>
             .Select(x => new ListOption { Value = new ObjectReference { Name = x.Value, Uid = x.Key, Type = typeof(Flow).FullName! }, Label = x.Value });
         efTemplate = null;
 
-        var tabs = new Dictionary<string, List<ElementField>>();
+        var tabs = new Dictionary<string, List<IFlowField>>();
         
         var efFolders = new ElementField
         {
@@ -49,9 +49,9 @@ public partial class Libraries : ListPage<Guid, Library>
     }
 
 
-    private async Task<List<ElementField>> TabGeneral(Library library, IEnumerable<ListOption> flowOptions, ElementField efFolders)
+    private async Task<List<IFlowField>> TabGeneral(Library library, IEnumerable<ListOption> flowOptions, ElementField efFolders)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         if (library == null || library.Uid == Guid.Empty)
         {
             // adding
@@ -202,9 +202,9 @@ public partial class Libraries : ListPage<Guid, Library>
         return fields;
     }
 
-    private List<ElementField> TabSchedule(Library library)
+    private List<IFlowField> TabSchedule(Library library)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -232,9 +232,9 @@ public partial class Libraries : ListPage<Guid, Library>
         return fields;
     }
 
-    private List<ElementField> TabAdvanced(Library library, ElementField efFolders)
+    private List<IFlowField> TabAdvanced(Library library, ElementField efFolders)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Text,
@@ -310,10 +310,10 @@ public partial class Libraries : ListPage<Guid, Library>
         return fields;
     }
 
-    private List<ElementField> TabDetection(Library library)
+    private List<IFlowField> TabDetection(Library library)
     {
-        List<ElementField> fields = new List<ElementField>();
-        fields.Add(new ()
+        List<IFlowField> fields = new ();
+        fields.Add(new ElementField()
         {
             InputType = FormInputType.Label,
             Name = "DetectionDescription"
@@ -394,9 +394,9 @@ public partial class Libraries : ListPage<Guid, Library>
     }
     
     
-    private List<ElementField> TabScan(Library library)
+    private List<IFlowField> TabScan(Library library)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         
         var fieldScan = new ElementField
         {

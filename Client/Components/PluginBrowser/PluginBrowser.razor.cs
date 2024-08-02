@@ -167,7 +167,7 @@ public partial class PluginBrowser : ComponentBase
     /// <param name="plugin">the item</param>
     private async Task View(PluginPackageInfo plugin)
     {
-        await Editor.Open(new () { TypeName = "Pages.Plugins", Title = plugin.Name, Fields = new List<ElementField>
+        await Editor.Open(new () { TypeName = "Pages.Plugins", Title = plugin.Name, Fields = new List<IFlowField>
         {
             new ElementField
             {

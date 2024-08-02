@@ -8,7 +8,7 @@ namespace FileFlows.Shared.Models;
 public class FlowExecutorInfo
 {
     /// <summary>
-    /// Gets or sets the UID of the flow
+    /// Gets or sets the UID of the runner, which is the library file UID
     /// </summary>
     public Guid Uid { get; set; }
     

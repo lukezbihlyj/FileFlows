@@ -194,7 +194,7 @@ public partial class CustomDashboard : IDisposable
             Blocker.Hide();
         }
 
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.LogView,

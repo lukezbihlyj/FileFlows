@@ -54,9 +54,8 @@ public partial class Scripts
         destination.Author = source.Author;
         destination.Type = source.Type;
         destination.Language = source.Language;
-        destination.Outputs =
-            source.Outputs?.Select(x => new ScriptOutput() { Description = x.Description, Index = x.Index })
-                ?.ToList() ?? [];
+        //destination.Outputs =  source.Outputs?.Select(x => new ScriptOutput() { Description = x.Description, Index = x.Index })?.ToList() ?? [];
+        destination.Outputs =  source.Outputs?.Select(x => new KeyValuePair<int, string>(x.Key, x.Value))?.ToList() ?? [];
         destination.Parameters = source.Parameters?.Select(x => new ScriptParameter()
             { Name = x.Name, Type = x.Type, Description = x.Description })?.ToList() ?? [];
         destination.Path = source.Path;

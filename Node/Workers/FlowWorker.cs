@@ -262,8 +262,7 @@ public class FlowWorker : Worker
         var libFile = libFileResult.File;
 
         bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-        Guid processUid = libFile.Uid; // making this the library file UID.  Guid.NewGuid();
-        AddExecutingRunner(processUid);
+        AddExecutingRunner(libFile.Uid);
         var node2 = node;
         Task.Run(() =>
         {
@@ -273,7 +272,7 @@ public class FlowWorker : Worker
             try
             {
                 var runnerParameters = new RunnerParameters();
-                runnerParameters.Uid = processUid;
+                runnerParameters.Uid = libFile.Uid;
                 runnerParameters.NodeUid = node2!.Uid;
                 runnerParameters.LibraryFile = libFile.Uid;
                 runnerParameters.TempPath = tempPath;
@@ -290,7 +289,7 @@ public class FlowWorker : Worker
                     .Select(s => s[new Random().Next(s.Length)]).ToArray());
                 string encrypted = Decrypter.Encrypt(json, "hVYjHrWvtEq8huShjTkA" + randomString + "oZf4GW3jJtjuNHlMNpl9");
                 var parameters = new[] { encrypted, randomString };
-                string workingDir = Path.Combine(tempPath, "Runner-" + processUid);
+                string workingDir = Path.Combine(tempPath, "Runner-" + libFile.Uid);
 #pragma warning restore CS8601 // Possible null reference assignment.
 
                 try
@@ -362,23 +361,23 @@ public class FlowWorker : Worker
                         libFile.Status = FileStatus.ProcessingFailed;
                         Logger.Instance?.ILog("Invalid exit code, setting file as failed");
                     }
-                    FinishWork(processUid, node2, libFile);
+                    FinishWork(libFile.Uid, node2, libFile);
                 }
                 catch (Exception ex)
                 {
                     AppendToCompleteLog(completeLog, "Error executing runner: " + ex.Message + Environment.NewLine + ex.StackTrace, type: "ERR");
                     libFile.Status = FileStatus.ProcessingFailed;
-                    FinishWork(processUid, node2, libFile);
+                    FinishWork(libFile.Uid, node2, libFile);
                     exitCode = (int)FileStatus.ProcessingFailed;
                 }
             }
             finally
             {
-                RemoveExecutingRunner(processUid);
+                RemoveExecutingRunner(libFile.Uid);
 
                 try
                 {
-                    string dir = Path.Combine(tempPath, "Runner-" + processUid);
+                    string dir = Path.Combine(tempPath, "Runner-" + libFile.Uid);
                     if (keepFiles == false || CurrentConfigurationKeepFailedFlowFiles == false)
                     {
                         if (Directory.Exists(dir))

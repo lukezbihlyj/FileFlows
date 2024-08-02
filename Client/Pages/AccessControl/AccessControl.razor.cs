@@ -63,7 +63,7 @@ public partial class AccessControl: ListPage<Guid, AccessControlEntry>
     {
         Blocker.Show();
         
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         fields.Add(new ElementField
         {

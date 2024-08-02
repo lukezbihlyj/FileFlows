@@ -1,13 +1,8 @@
-namespace FileFlows.Shared;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Jeffijoe.MessageFormat;
-using FileFlows.Plugin;
 using System.Text.Json;
 using System.Dynamic;
+
+namespace FileFlows.Shared;
 
 /// <summary>
 /// Translater is responsible for language translations
@@ -15,8 +10,8 @@ using System.Dynamic;
 public class Translater
 {
     private static MessageFormatter Formatter;
-    private static Dictionary<string, string> Language { get; set; } = new Dictionary<string, string>();
-    private static Regex rgxNeedsTranslating = new Regex(@"^([\w\d_\-]+\.)+[\w\d_\-]+$");
+    private static Dictionary<string, string> Language { get; set; } = new ();
+    private static Regex rgxNeedsTranslating = new (@"^([\w\d_\-]+\.)+[\w\d_\-]+$");
 
 
     /// <summary>

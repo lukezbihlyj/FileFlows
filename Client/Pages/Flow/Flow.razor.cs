@@ -655,7 +655,7 @@ public partial class Flow : ComponentBase, IDisposable
         EditorVariables = variables;
         var result = await Editor.Open(new()
         {
-            TypeName = "Flow.Parts." + typeName, Title = title, Fields = fields, Model = model,
+            TypeName = "Flow.Parts." + typeName, Title = title, Fields = fields.Select(x => (IFlowField)x).ToList(), Model = model,
             Description = typeDescription,
             Large = fields.Count > 1, HelpUrl = flowElement.HelpUrl,
             SaveCallback = isFunctionNode ? FunctionSaveCallback : null

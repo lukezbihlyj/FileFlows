@@ -12,8 +12,8 @@ public partial class DockerMods
     
     private async Task<bool> OpenEditor(DockerMod item)
     {
-        var fields = new List<ElementField>();
-        fields.Add(new ()
+        var fields = new List<IFlowField>();
+        fields.Add(new ElementField()
         {
             Name = nameof(item.Name),
             InputType = FormInputType.Text,
@@ -22,7 +22,7 @@ public partial class DockerMods
                 { nameof(InputCode.ReadOnly), item.Repository}
             }
         });
-        fields.Add(new ()
+        fields.Add(new ElementField()
         {
             Name = nameof(item.Description),
             InputType = FormInputType.TextArea,
@@ -32,7 +32,7 @@ public partial class DockerMods
                 { nameof(InputCode.ReadOnly), item.Repository}
             }
         });
-        fields.Add(new ()
+        fields.Add(new ElementField()
         {
             Name = nameof(item.Icon),
             InputType = FormInputType.IconPicker,
@@ -41,11 +41,11 @@ public partial class DockerMods
                 { nameof(InputCode.ReadOnly), item.Repository}
             }
         });
-        fields.Add(new ()
+        fields.Add(new ElementField()
         {
             InputType = FormInputType.HorizontalRule
         });
-        fields.Add(new ()
+        fields.Add(new ElementField()
         {
             Name = nameof(item.Code),
             InputType = FormInputType.Code,

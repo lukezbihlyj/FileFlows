@@ -14,6 +14,11 @@ namespace FileFlows.Client.Components.Inputs;
 /// </summary>
 public partial class InputKeyValueInt : Input<List<KeyValuePair<int, string>>>
 {
+    /// <summary>
+    /// Gets or sets if the key value labels should be hidden
+    /// </summary>
+    [Parameter] public bool HideKeyValueLabels { get; set; }
+    
     private int NewKey;
     private string NewValue = string.Empty;
     /// <summary>
@@ -36,13 +41,20 @@ public partial class InputKeyValueInt : Input<List<KeyValuePair<int, string>>>
     /// </summary>
     protected override void OnInitialized()
     {
-        lblKey = Translater.Instant(this.LabelOriginal + "Key");
-        lblValue = Translater.Instant(this.LabelOriginal + "Value");
+        if (HideKeyValueLabels == false)
+        {
+            lblKey = Translater.Instant(this.LabelOriginal + "Key");
+            lblValue = Translater.Instant(this.LabelOriginal + "Value");
+        }
+
         base.OnInitialized();
         if (Value == null)
             Value = new List<KeyValuePair<int, string>>();
 
-        this.Data = Value.Select(x => new KeyValue {  Key = x.Key, Value = x.Value }).ToList();
+        if (Value.Count > 0)
+            NewKey = Value.Max(x => x.Key) + 1;
+
+        this.Data = Value.Select(x => new KeyValue { Key = x.Key, Value = x.Value }).ToList();
         if(Field != null)
             this.Field.ValueChanged += FieldOnValueChanged2;
     }

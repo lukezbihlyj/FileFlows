@@ -45,7 +45,7 @@ public partial class Editor : EditorBase, IDisposable
 
     protected string lblSave, lblSaving, lblNext, lblCancel, lblClose, lblHelp, lblDownloadButton;
 
-    protected Dictionary<string, List<ElementField>> Tabs { get; set; }
+    protected Dictionary<string, List<IFlowField>> Tabs { get; set; }
 
     TaskCompletionSource<(bool Success, ExpandoObject? Model)> OpenTask;
 

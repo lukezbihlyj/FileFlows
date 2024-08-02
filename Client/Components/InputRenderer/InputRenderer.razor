@@ -162,6 +162,7 @@
             }
             <InputNumber TItem="float" Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
                          Validators=@field.Validators Placeholder="@field.Placeholder" Min="@((float)min)" Max="@((float)max)" 
+                         @* ReSharper disable CSharpWarnings::CS8619 *@
                          HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
         }
             break;
@@ -171,7 +172,7 @@
                 var listOnly = GetParameter<bool>(field, "ListOnly");
                 var options = GetParameter<List<ListOption>>(field, nameof(InputChecklist.Options));
                 <InputChecklist Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-    Validators=@field.Validators Options="@options" HideLabel=@hideLabel ListOnly=@listOnly OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                                Validators=@field.Validators Options="@options" HideLabel=@hideLabel ListOnly=@listOnly OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
             break;
         case FormInputType.MultiSelect:
@@ -180,9 +181,11 @@
             var options = GetParameter<List<ListOption>>(field, nameof(InputMultiSelect.Options));;
             var labelAny = GetParameter<string>(field, nameof(InputMultiSelect.LabelAny));
             var anyOrAll = GetParameter<bool>(field, "AnyOrAll");
+            @* ReSharper disable once CSharpWarnings::CS8619 *@
             <InputMultiSelect Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))" 
                               AnyOrAll="anyOrAll" LabelAny="@labelAny"
-                            Validators=@field.Validators Options="@options" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                              Validators=@field.Validators Options="@options" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+            @* ReSharper restore CSharpWarnings::CS8619 *@
         }
             break;
         case FormInputType.Slider:
@@ -278,6 +281,16 @@
                                Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel Options="@options" AllowDuplicates="@allowDuplicates"
                                Variables=@field.Variables ShowVariables=@showVariables OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
+            break;
+        case FormInputType.KeyValueInt:
+        {
+            var value = GetValue<List<KeyValuePair<int, string>>>(field.Name);
+            hideLabel = hideLabel || string.IsNullOrEmpty(Translater.Instant(label));
+            var hideKeyValueLabels = GetParameter<bool>(field, nameof(InputKeyValueInt.HideKeyValueLabels));
+            <InputKeyValueInt Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                              Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel HideKeyValueLabels="@hideKeyValueLabels"
+                              OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
             break;
         case FormInputType.TextLabel:
             {

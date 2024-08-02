@@ -138,7 +138,7 @@ public partial class Tasks : ListPage<Guid, FileFlowsTask>
     /// <inheritdoc />
     public override async Task<bool> Edit(FileFlowsTask item)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         // var scriptResponse = await HttpHelper.Get<Dictionary<string, string>>("/api/script/basic-list?type=system");
         // if (scriptResponse.Success == false)
@@ -416,8 +416,8 @@ public partial class Tasks : ListPage<Guid, FileFlowsTask>
     /// <param name="task">the task to show the history</param>
     async Task TaskHistory(FileFlowsTask task)
     {
-        List<ElementField> fields = new List<ElementField>();
-        fields.Add(new ()
+        List<IFlowField> fields = new ();
+        fields.Add(new ElementField()
         {
             InputType = FormInputType.Table,
             Name = nameof(task.RunHistory),
@@ -453,7 +453,7 @@ public partial class Tasks : ListPage<Guid, FileFlowsTask>
 
     async Task TaskRun(FileFlowsTaskRun fileFlowsTaskRun)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         fields.Add(new ElementField
         {

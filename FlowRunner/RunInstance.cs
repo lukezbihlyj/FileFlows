@@ -82,10 +82,12 @@ public class RunInstance
             string cfgPath = parameters.ConfigPath;
             if (string.IsNullOrEmpty(cfgPath) || Directory.Exists(cfgPath) == false)
                 throw new Exception("Configuration Path doesnt exist: " + cfgPath);
+            LogInfo("Configuration Path: " + cfgPath);
 
             string cfgFile = Path.Combine(cfgPath, "config.json");
             if (File.Exists(cfgFile) == false)
                 throw new Exception("Configuration file doesnt exist: " + cfgFile);
+            LogInfo("Configuration File: " + cfgFile);
 
             string cfgKey = parameters.ConfigKey;
             if (string.IsNullOrEmpty(cfgKey))

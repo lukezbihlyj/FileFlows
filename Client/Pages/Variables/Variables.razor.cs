@@ -17,7 +17,7 @@ public partial class Variables : ListPage<Guid, Variable>
     public override async Task<bool> Edit(Variable variable)
     {
         this.EditingItem = variable;
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FileFlows.Plugin.FormInputType.Text,

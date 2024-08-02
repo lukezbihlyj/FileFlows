@@ -48,7 +48,7 @@ public class ScriptEditor
     /// <returns>true if the script was saved, otherwise false</returns>
     public async Task<bool> Open(Script item)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new();
         bool flowScript = item.Type == ScriptType.Flow;
 
         if (string.IsNullOrEmpty(item.Code))
@@ -149,7 +149,7 @@ exit 0".Trim();
         {
             title += ": " + item.Name;
         }
-        else
+        else if(item.Language == ScriptLanguage.JavaScript)
         {
             fields.Add(new ElementField
             {
@@ -158,9 +158,53 @@ exit 0".Trim();
                 Validators = flowScript ? [ new Required() ] : []
             });
         }
-
-        if (item.Language != ScriptLanguage.JavaScript)
+        else if(item.Type == ScriptType.Flow)
         {
+            var panel = new ElementPanel()
+            {
+                Columns = 2
+            };
+            fields.Add(panel);
+
+            var leftPanel = new ElementPanel();
+            var rightPanel = new ElementPanel();
+            panel.Fields.Add(leftPanel);
+            panel.Fields.Add(rightPanel);
+                
+            leftPanel.Fields.Add(new ElementField
+            {
+                InputType = FormInputType.Text,
+                Name = nameof(item.Name),
+                Validators = flowScript ? [ new Required() ] : []
+            });
+            rightPanel.Fields.Add(new ElementField
+            {
+                InputType = FormInputType.KeyValueInt,
+                Name = nameof(item.Outputs),
+                RowSpan = 2,
+                HideLabel = true,
+                Parameters = new ()
+                {
+                    { nameof(InputKeyValueInt.HideKeyValueLabels), true }
+                }
+            });
+            leftPanel.Fields.Add(new ElementField
+            {
+                InputType = FormInputType.TextArea,
+                Name = "Description",
+                ColSpan = 1,
+                FlexGrow = true
+            });
+        }
+        else
+        {
+            // non-js/non flow script       
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Text,
+                Name = nameof(item.Name),
+                Validators = flowScript ? [ new Required() ] : []
+            });
             fields.Add(new ElementField
             {
                 InputType = FormInputType.TextArea,

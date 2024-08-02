@@ -66,13 +66,13 @@ public class LibraryFileEditor
         if(new[] { FileStatus.Unprocessed, FileStatus.Disabled, FileStatus.Duplicate, FileStatus.OutOfSchedule }.Contains(model.Status) == false)
         {
             // show tabs
-            var tabs = new Dictionary<string, List<ElementField>>();
+            var tabs = new Dictionary<string, List<IFlowField>>();
 
             tabs.Add("Info", GetInfoTab(model));
 
-            tabs.Add("Log", new List<ElementField>
+            tabs.Add("Log", new List<IFlowField>
             {
-                new ()
+                new ElementField()
                 {
                     InputType = FormInputType.LogView,
                     Name = "Log",
@@ -85,9 +85,9 @@ public class LibraryFileEditor
 
             if (model.OriginalMetadata?.Any() == true)
             {
-                tabs.Add("Pages.LibraryFile.Tabs.OriginalMetadata", new List<ElementField>
+                tabs.Add("Pages.LibraryFile.Tabs.OriginalMetadata", new List<IFlowField>
                 {
-                    new ()
+                    new ElementField()
                     {
                         InputType = FormInputType.Metadata,
                         Name = nameof(model.OriginalMetadata)
@@ -96,9 +96,9 @@ public class LibraryFileEditor
             }
             if (model.FinalMetadata?.Any() == true)
             {
-                tabs.Add("Pages.LibraryFile.Tabs.FinalMetadata", new List<ElementField>
+                tabs.Add("Pages.LibraryFile.Tabs.FinalMetadata", new List<IFlowField>
                 {
-                    new ()
+                    new ElementField()
                     {
                         InputType = FormInputType.Metadata,
                         Name = nameof(model.FinalMetadata)
@@ -200,9 +200,9 @@ public class LibraryFileEditor
         
     }
 
-    private static List<ElementField> GetInfoTab(LibraryFileModel item)
+    private static List<IFlowField> GetInfoTab(LibraryFileModel item)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         fields.Add(new ElementField
         {

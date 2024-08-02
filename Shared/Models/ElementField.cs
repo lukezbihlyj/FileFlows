@@ -10,7 +10,7 @@ using FileFlows.Plugin;
 /// <summary>
 /// An element field is a UI component that is displayed in the web browser
 /// </summary>
-public class ElementField
+public class ElementField : IFlowField
 {
     /// <summary>
     /// Gets or sets a value that makes this field read-only
@@ -74,6 +74,16 @@ public class ElementField
     /// Gets or sets if this should hide the label
     /// </summary>
     public bool HideLabel { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional column span to use if this is used inside a Panel
+    /// </summary>
+    public int? ColSpan { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional row span to use if this is used inside a Panel
+    /// </summary>
+    public int? RowSpan { get; set; }
 
     /// <summary>
     /// Gets or sets the input type of this field

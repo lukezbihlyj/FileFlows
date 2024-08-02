@@ -115,7 +115,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
         this.EditingPlugin = plugin;
 
         // clone the fields as they get wiped
-        var fields = plugin.Settings.ToList();
+        var fields = plugin.Settings.Select(x => (IFlowField)x).ToList();
 
         await Editor.Open(new()
         {
@@ -145,7 +145,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
     {
         await Editor.Open(new()
         {
-            TypeName = "Pages.Plugins", Title = plugin.Name, HelpUrl = GetPluginHelpUrl(plugin), Fields = new List<ElementField>
+            TypeName = "Pages.Plugins", Title = plugin.Name, HelpUrl = GetPluginHelpUrl(plugin), Fields = new List<IFlowField>
             {
                 new ElementField
                 {

@@ -134,9 +134,9 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
         }
     }
     
-    private (List<ElementField> fields, object model) GetFieldsAndModel(ScheduledReport item)
+    private (List<IFlowField> fields, object model) GetFieldsAndModel(ScheduledReport item)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         int dayOfMonth = Math.Clamp(item.Schedule == ReportSchedule.Monthly ? item.ScheduleInterval : 1, 1, 31);
         int dayOfWeek = Math.Clamp(item.Schedule == ReportSchedule.Weekly ? item.ScheduleInterval : 0, 0, 6);

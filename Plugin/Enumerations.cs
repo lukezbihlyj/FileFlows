@@ -179,7 +179,11 @@ public enum FormInputType
     /// <summary>
     /// Date compare
     /// </summary>
-    DateCompare = 40
+    DateCompare = 40,
+    /// <summary>
+    /// Key Value Int
+    /// </summary>
+    KeyValueInt = 41
 }
 
 
@@ -233,5 +237,10 @@ public enum ScriptLanguage
     /// <summary>
     /// PowerShell scripting language.
     /// </summary>
-    PowerShell = 3
+    PowerShell = 3,
+    
+    /// <summary>
+    /// CSharp Language
+    /// </summary>
+    CSharp = 4
 }

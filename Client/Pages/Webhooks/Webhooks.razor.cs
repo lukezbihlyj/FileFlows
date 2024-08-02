@@ -76,7 +76,7 @@ public partial class Webhooks : ListPage<Guid, Webhook>
     public override async Task<bool> Edit(Webhook Webhook)
     {
         this.EditingItem = Webhook;
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Text,

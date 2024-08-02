@@ -39,7 +39,7 @@ public partial class InlineEditor : EditorBase
     /// Gets or sets the fields
     /// </summary>
     [Parameter]
-    public new List<ElementField> Fields
+    public new List<IFlowField> Fields
     {
         get => base.Fields;
         set => base.Fields = value;

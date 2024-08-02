@@ -41,7 +41,7 @@ public partial class Report : ComponentBase
     /// <summary>
     /// Gets or sets the element fields
     /// </summary>
-    public List<ElementField> Fields { get; set; }
+    public List<IFlowField> Fields { get; set; }
     
     /// <summary>
     /// Reference to JS Report class
@@ -129,7 +129,7 @@ public partial class Report : ComponentBase
         HelpUrl = $"https://fileflows.com/docs/webconsole/admin/reporting/{rd.Name.Kebaberize()}";
 
         // clone the fields as they get wiped
-        var fields = new List<ElementField>();
+        var fields = new List<IFlowField>();
         Blocker.Show();
         this.StateHasChanged();
 
@@ -352,7 +352,7 @@ public partial class Report : ComponentBase
     /// <param name="fields">the fields to update</param>
     /// <param name="model">the model to update</param>
     private void AddSelectField(string title, Dictionary<Guid, string> list, ReportSelection selection,
-        ref List<ElementField> fields, IDictionary<string, object> model)
+        ref List<IFlowField> fields, IDictionary<string, object> model)
     {
         var listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();

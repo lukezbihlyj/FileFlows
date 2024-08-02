@@ -1067,6 +1067,9 @@
         "Name": "Name",
         "Description": "Description",
         "Code": "Code",
+        "Outputs": "Outputs",
+        "OutputsKey": "Output",
+        "OutputsValue": "Description"
       }
     },
     "Settings": {

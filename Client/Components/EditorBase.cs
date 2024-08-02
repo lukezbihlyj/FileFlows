@@ -23,7 +23,7 @@ public abstract class EditorBase : InputRegister
     /// <summary>
     /// Gets or sets the elemetn fields
     /// </summary>
-    protected virtual List<ElementField> Fields { get; set; }
+    protected virtual List<IFlowField> Fields { get; set; }
 
     /// <summary>
     /// Finds a field by its name
@@ -32,7 +32,7 @@ public abstract class EditorBase : InputRegister
     /// <returns>the field if found, otherwise null</returns>
     internal ElementField? FindField(string name)
     {
-        var field = this.Fields?.Where(x => x.Name == name)?.FirstOrDefault();
+        var field = this.Fields?.FirstOrDefault(x => x is ElementField ef && ef.Name == name) as ElementField;
         return field;
     }
 
@@ -353,7 +353,7 @@ public class EditorOpenArgs
     /// <summary>
     /// Gets or sets the main fields to show in the editor
     /// </summary>
-    public List<ElementField> Fields { get; set; }
+    public List<IFlowField> Fields { get; set; }
     /// <summary>
     /// Gets or sets a callback that is called when the editor is saved
     /// </summary>
@@ -387,7 +387,7 @@ public class EditorOpenArgs
     /// <summary>
     /// Gets or sets the tabs for the editor
     /// </summary>
-    public Dictionary<string, List<ElementField>> Tabs { get; set; }
+    public Dictionary<string, List<IFlowField>> Tabs { get; set; }
     /// <summary>
     /// Gets or sets the URL for the help button
     /// </summary>

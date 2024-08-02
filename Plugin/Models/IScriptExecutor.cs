@@ -10,7 +10,7 @@ public interface IScriptExecutor
     /// </summary>
     /// <param name="args">the arguments of the script</param>
     /// <returns>the output node</returns>
-    int Execute(ScriptExecutionArgs args);
+    Result<int> Execute(ScriptExecutionArgs args);
 }
 
 /// <summary>
@@ -22,6 +22,16 @@ public class ScriptExecutionArgs
     /// Gets or sets the code to execute
     /// </summary>
     public string Code { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the language of the script being executed
+    /// </summary>
+    public ScriptLanguage Language { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the temp path to run this script if it needs to be run as a file
+    /// </summary>
+    public string TempPath { get; set; }
 
     /// <summary>
     /// Gets or sets the type of script being executed

@@ -562,8 +562,25 @@ public class FlowController : BaseController
             FlowElement ele = new FlowElement();
             ele.Name = script.Name;
             ele.Uid = $"Script:{script.Uid}";
-            ele.Icon = "fas fa-scroll";
-            
+            switch (script.Language)
+            {
+                case ScriptLanguage.Batch:
+                    ele.Icon = "svg:bat";
+                    break;
+                case ScriptLanguage.CSharp:
+                    ele.Icon = "svg:cs";
+                    break;
+                case ScriptLanguage.PowerShell:
+                    ele.Icon = "svg:ps1";
+                    break;
+                case ScriptLanguage.Shell:
+                    ele.Icon = "svg:sh";
+                    break;
+                default:
+                    ele.Icon = "fas fa-scroll";
+                    break;
+            }
+
             int index = script.Name.IndexOf(" - ", StringComparison.InvariantCulture);
             if (index > 0)
                 ele.Group = ele.Name[..(index)];
@@ -572,7 +589,8 @@ public class FlowController : BaseController
             
             ele.Inputs = 1;
             ele.Description = script.Description;
-            ele.OutputLabels = script.Outputs.Select(x => x.Description).ToList();
+            //ele.OutputLabels = script.Outputs.Select(x => x.Description).ToList();
+            ele.OutputLabels = script.Outputs.Select(x => x.Value).ToList();
             int count = 0;
             IDictionary<string, object> model = new ExpandoObject()!;
             ele.Fields = script.Parameters.Select(x =>

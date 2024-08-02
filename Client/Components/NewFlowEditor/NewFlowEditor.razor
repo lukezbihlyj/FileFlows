@@ -40,7 +40,14 @@
                             {
                                 @foreach (var field in Fields)
                                 {
-                                    <InputRenderer field="field" OnSubmit=@OnSubmit OnClose=@OnClose />
+                                    if (field is ElementField ef)
+                                    {
+                                        <InputRenderer field="ef" OnSubmit=@OnSubmit OnClose=@OnClose />
+                                    }
+                                    else if (field is ElementPanel ep)
+                                    {
+                                        <FlowPanel Fields="@ep.Fields" Columns="@ep.Columns" OnSubmit=@OnSubmit OnClose=@OnClose />
+                                    }
                                 }
                                 <div class="empty"></div>
                             }

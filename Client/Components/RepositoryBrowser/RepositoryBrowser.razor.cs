@@ -192,14 +192,14 @@ public partial class RepositoryBrowser : ComponentBase
     private async Task View(RepositoryObject item)
     {
         Blocker.Show();
-        List<ElementField> fields;
+        List<IFlowField> fields;
         object model;
         try
         {
             var result = await HttpHelper.Post<FormFieldsModel>($"/api/repository/{Type}/fields", item);
             if (result.Success == false)
                 return;
-            fields = result.Data.Fields;
+            fields = result.Data.Fields.Select(x => (IFlowField)x).ToList();
             model = result.Data.Model;
         }
         finally

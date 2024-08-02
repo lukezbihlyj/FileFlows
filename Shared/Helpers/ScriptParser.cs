@@ -93,11 +93,12 @@ public class ScriptParser
             {
                 for (int i = 1; i <= outputs; i++)
                 {
-                    model.Outputs.Add(new ()
-                    {
-                        Index = i,
-                        Description = "Output " + i
-                    });
+                    model.Outputs.Add(new(i, "Output " + i));
+                    // model.Outputs.Add(new ()
+                    // {
+                    //     Index = i,
+                    //     Description = "Output " + i
+                    // });
                 }
             }
         }
@@ -158,10 +159,13 @@ public class ScriptParser
         var match = rgxOutput.Match(line);
         if (match.Success == false)
             return false;
-        ScriptOutput output = new ();
-        output.Index = model.Outputs.Count + 1;
-        output.Description = match.Value;
-        model.Outputs.Add(output);
+        int index = model.Outputs.Count + 1;
+        string description = match.Value;
+        // ScriptOutput output = new ();
+        // output.Index = index;
+        // output.Description = match.Value;
+        // model.Outputs.Add(output);
+        model.Outputs.Add(new (index, description));
         return true;
     }
     
@@ -227,10 +231,14 @@ public class ScriptParser
 
         if (script.Outputs?.Any() == true)
         {
-            foreach (var output in script.Outputs.OrderBy(x => x.Index))
+            foreach (var output in script.Outputs.OrderBy(x => x.Key))
             {
-                header.AppendLine($" * @output {(string.IsNullOrWhiteSpace(output.Description) ? $"Output {output.Index}" : output.Description)}");
+                header.AppendLine($" * @output {(string.IsNullOrWhiteSpace(output.Value) ? $"Output {output.Key}" : output.Value)}");
             }
+            // foreach (var output in script.Outputs.OrderBy(x => x.Index))
+            // {
+            //     header.AppendLine($" * @output {(string.IsNullOrWhiteSpace(output.Description) ? $"Output {output.Index}" : output.Description)}");
+            // }
         }
 
         header.Append(" */");

@@ -9,3 +9,56 @@
     margin-bottom: 1rem;
     border-bottom: solid 1px var(--input-background);
 }
+
+$min-columns: 2;
+$max-columns: 10;
+$max-rows: 10;
+
+.fp-columns {
+    display: grid;
+    gap: 0.5rem;
+    grid-auto-rows: min-content;
+    width: 100%;
+    min-width: 100%;
+    padding:0;
+    grid-auto-rows: fit-content(100%); /* Rows will fit the content */
+
+    @for $i from $min-columns through $max-columns {
+        &.fp-col-#{$i} {
+            grid-template-columns: repeat(#{$i}, 1fr);
+        }        
+    }
+    > ::deep .row {
+        margin-top:0 !important;
+        height:fit-content;
+        > .input-label {
+            min-width: 9rem !important;
+            width: 9rem !important;
+            height:fit-content;
+        }
+        > .input-value {
+            height:fit-content;
+        }
+        
+        @for $i from 1 through $max-columns {
+            &.col-span-#{$i} {
+                grid-column: span #{$i};
+                textarea, input[type=text], input[type=number], input[type=email], select {
+                    max-width: unset;
+                }
+            }
+        }
+        @for $i from 1 through $max-rows {
+            &.row-span-#{$i} {
+                grid-row: span #{$i};
+            }
+        }
+    }
+    
+    ::deep .row.flex-grow {
+        height: calc(100% - 4.1rem);
+        textarea {
+            height:100%;
+        }
+    }
+}

@@ -50,7 +50,7 @@ public partial class Users: ListPage<Guid, User>
 
         var isUser = item.Uid == Profile.Uid;
         
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         var model = new UserEditModel()
         {

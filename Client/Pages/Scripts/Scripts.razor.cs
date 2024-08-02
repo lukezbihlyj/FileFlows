@@ -39,9 +39,9 @@ public partial class Scripts : ListPage<Guid, Script>
     private RepositoryBrowser ScriptBrowser { get; set; }
 
     /// <summary>
-    /// The language picker dalog
+    /// The language picker dialog
     /// </summary>
-    private Components.Dialogs.ScriptLanguagePicker LanguagePicker;
+    private ScriptLanguagePicker LanguagePicker;
 
     protected override void OnInitialized()
     {
@@ -56,14 +56,23 @@ public partial class Scripts : ListPage<Guid, Script>
 
     private async Task Add()
     {
-        var result = await LanguagePicker.Show();
-        if (result.IsFailed)
-            return;
-        
+        ScriptLanguage language;
+        if (SelectedType == ScriptType.Shared)
+            language = ScriptLanguage.JavaScript;
+        else
+        {
+            var result = await LanguagePicker.Show();
+            if (result.IsFailed)
+                return;
+            language = result.Value;
+        }
+
         await Edit(new Script()
         {
             Type = SelectedType,
-            Language = result.Value
+            Language = language,
+            Outputs = language is ScriptLanguage.JavaScript || SelectedType != ScriptType.Flow ? null :
+                [new (1, "Truthy"), new (2, "Falsy") ]
         });
     }
 

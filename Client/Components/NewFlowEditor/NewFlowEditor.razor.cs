@@ -67,7 +67,7 @@ public partial class NewFlowEditor : Editor
                 this.Model = new ExpandoObject();
             }
 
-            var fields = new List<ElementField>();
+            var fields = new List<IFlowField>();
             fields.Add(new ElementField
             {
                 InputType = FormInputType.Text,

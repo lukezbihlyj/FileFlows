@@ -1,9 +1,7 @@
 using System.Text.Json;
-using FileFlows.ScriptExecution;
 using Logger = FileFlows.Shared.Logger;
 using FileFlows.Plugin;
 using System.Dynamic;
-using FileFlows.Shared.Helpers;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Server;
@@ -43,8 +41,58 @@ public class ScriptNode:Node
             args.Logger?.ELog(args.FailureReason);
             return -1;
         }
+
+        switch (Script.Language)
+        {
+            case ScriptLanguage.JavaScript:
+                return ExecuteJavaScript(args);
+            default:
+                args.Logger?.ILog($"Executing {Script.Language} Script");
+                return ExecuteScript(args);
+        }
+    }
+
+    /// <summary>
+    /// Executes a script
+    /// </summary>
+    /// <param name="args">the NodeParameters passed into this from the flow runner</param>
+    /// <returns>the output node to call next</returns>
+    private int ExecuteScript(NodeParameters args)
+    {
+        var result = args.ScriptExecutor.Execute(new()
+        {
+            Args = args,
+            ScriptType = ScriptType.Flow,
+            TempPath = args.TempPath,
+            Code = args.ReplaceVariables(Script!.Code),
+            Language = Script.Language
+        });
+        if (result.Failed(out var error))
+        {
+            args.FailureReason = error;
+            args.Logger?.ELog(error);
+            return -1;
+        }
+
+        if (result.Value > Script.Outputs.Count)
+        {
+            args.FailureReason = "Unexpected output: " + result.Value;
+            args.Logger?.ELog(args.FailureReason);
+            return -1;
+        }
+
+        return result.Value;
+    }
+
+    /// <summary>
+    /// Executes a JavaScript script
+    /// </summary>
+    /// <param name="args">the NodeParameters passed into this from the flow runner</param>
+    /// <returns>the output node to call next</returns>
+    private int ExecuteJavaScript(NodeParameters args)
+    {
         // build up the entry point
-        string epParams = string.Join(", ", Script.Parameters?.Select(x => x.Name)?.ToArray() ?? []);
+        string epParams = string.Join(", ", Script!.Parameters?.Select(x => x.Name)?.ToArray() ?? []);
         // all scripts must contain the "Script" method we then add this to call that 
         //string entryPoint = $"Script({epParams});";
         string entryPoint = $"var scriptResult = Script({epParams});\nexport const result = scriptResult;";

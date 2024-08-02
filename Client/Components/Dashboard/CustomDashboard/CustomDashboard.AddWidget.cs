@@ -17,7 +17,7 @@ public partial class CustomDashboard
 
     private async Task AddWidgetDialog()
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         if (DoesntHaveWidget(FileFlows.Shared.Widgets.CpuUsage.WD_UID))
         {
