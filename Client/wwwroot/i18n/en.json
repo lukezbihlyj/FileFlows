@@ -222,9 +222,10 @@
       "Title": "Script Language",
       "Labels": {
         "JavaScriptDescription": "JavaScript scripts are executed within the FileFlows runner, allowing you to read and write variables and access all helper functions within FileFlows.",
-        "BatchDescription": "Batch files can only be run on Windows systems. They can read basic variables but cannot update or access FileFlows objects during execution. Use exit codes of 0 for success and non-zero for failure (output 2 if used in a Flow).",
-        "PowerShellDescription": "PowerShell scripts can only be run on Windows systems. They can read basic variables but cannot update or access FileFlows objects during execution. Use exit codes of 0 for success and non-zero for failure (output 2 if used in a Flow).",
-        "ShellDescription": "Shell scripts are typically run on Unix-based systems. They can read basic variables but cannot update or access FileFlows objects during execution. Use exit codes of 0 for success and non-zero for failure (output 2 if used in a Flow)."
+        "BatchDescription": "Batch files can only be run on Windows systems. They can read basic variables but cannot update or access FileFlows objects during execution.",
+        "CSharpDescription": "C# scripts can interact with more parts of FileFlows and are the most powerful. Using the same language as FileFlows, they allow greater system interaction.",
+        "PowerShellDescription": "PowerShell scripts can only be run on Windows systems. They can read basic variables but cannot update or access FileFlows objects during execution.",
+        "ShellDescription": "Shell scripts are run on Unix-based systems (Linux, MacOS, Docker). They can read basic variables but cannot update or access FileFlows objects during execution."
       }
     },
     "FlowTemplatePicker": {

@@ -436,6 +436,33 @@ public class FlowWorker : Worker
 
     private bool PreExecuteScriptTest(ProcessingNode node)
     {
+        var script = CurrentConfig?.SystemScripts?.FirstOrDefault(x => node.PreExecuteScript!.Value == x.Uid);
+        if (script != null && script.Language != ScriptLanguage.JavaScript)
+        {
+            StringLogger logger = new();
+            var seResult = new ScriptExecutor().Execute(new()
+            {
+                Code = script.Code,
+                TempPath = Path.GetTempPath(),
+                Language = script.Language,
+                Logger = logger,
+                ScriptType = ScriptType.System
+            });
+            if (seResult.Failed(out var error))
+            {
+                _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Warning,
+                    $"Failed executing pre-execute script '{script.Name}'",
+                    $"Failed to execute on node '{node.Name}': {error}");
+                Logger.Instance.WLog("Failed running pre-execute script: " + error + "\n" + logger);
+                return false;
+            }
+            else
+            {
+                Logger.Instance.ILog("Pre-Execute Script Successful:\n" + logger);
+            }
+
+            return true;
+        }
         string scriptDir = Path.Combine(GetConfigurationDirectory(), "Scripts");
         string sharedDir = Path.Combine(scriptDir, "Shared");
         string jsFile = Path.Combine(scriptDir, "System", node.PreExecuteScript + ".js");

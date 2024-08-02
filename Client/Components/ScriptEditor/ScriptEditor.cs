@@ -134,6 +134,24 @@ echo ""Original file location: $OriginalFile""
 # Set the exit code to 0
 exit 0".Trim();
             }
+            else if (item.Language == ScriptLanguage.CSharp)
+            {
+                item.Code = @"
+// A C# script will have full access to the executing flow.
+// Return the output to call next
+
+// Replace these variables with actual values
+string workingFile = Variables.file.FullName;
+string originalFile = Variables.file.Orig.FullName;
+
+// Example code using the variables
+Console.WriteLine($""Working on file: {workingFile}"");
+Console.WriteLine($""Original file location: {originalFile}"");
+
+// Add your actual C# code below
+return 1;
+".Trim();
+            }
         }
         else if(item.Language == ScriptLanguage.JavaScript)
         {

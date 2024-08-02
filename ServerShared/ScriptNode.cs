@@ -62,6 +62,7 @@ public class ScriptNode:Node
         var result = args.ScriptExecutor.Execute(new()
         {
             Args = args,
+            Logger = args.Logger!,
             ScriptType = ScriptType.Flow,
             TempPath = args.TempPath,
             Code = args.ReplaceVariables(Script!.Code),
@@ -101,6 +102,7 @@ public class ScriptNode:Node
         {
             Args = args,
             ScriptType = ScriptType.Flow,
+            Logger = args.Logger!,
             Code = (Script.Code + "\n\n" + entryPoint).Replace("\t", "   ").Trim(),
             AdditionalArguments = new ()
         };

@@ -76,9 +76,9 @@ public class ScriptExecutor:IScriptExecutor
             var code = args.Code;
             if (args.Args != null)
                 code = args.Args.ReplaceVariables(code);
-            args.Args?.Logger?.ILog("Executing code: \n" + code);
+            args.Logger?.ILog("Executing code: \n" + code);
             File.WriteAllText(ps1File, code);
-            args.Args?.Logger?.ILog($"Temporary PowerShell file created: {ps1File}");
+            args.Logger?.ILog($"Temporary PowerShell file created: {ps1File}");
 
             var processStartInfo = new ProcessStartInfo
             {
@@ -101,10 +101,10 @@ public class ScriptExecutor:IScriptExecutor
             int exitCode = process.ExitCode;
             
             if(string.IsNullOrWhiteSpace(standardOutput) == false)
-                args.Args?.Logger?.ILog($"Standard Output:\n{standardOutput}");
+                args.Logger?.ILog($"Standard Output:\n{standardOutput}");
             if(string.IsNullOrWhiteSpace(standardError) == false)
-                args.Args?.Logger?.WLog($"Standard Error:\n{standardError}");
-            args.Args?.Logger?.ILog($"Exit Code: {exitCode}");
+                args.Logger?.WLog($"Standard Error:\n{standardError}");
+            args.Logger?.ILog($"Exit Code: {exitCode}");
 
             return exitCode;
         }
@@ -133,9 +133,9 @@ public class ScriptExecutor:IScriptExecutor
             var code = "@echo off" + Environment.NewLine + args.Code;
             if (args.Args != null)
                 code = args.Args.ReplaceVariables(code);
-            args.Args?.Logger?.ILog("Executing code: \n" + code);
+            args.Logger?.ILog("Executing code: \n" + code);
             File.WriteAllText(batFile, code);
-            args.Args?.Logger?.ILog($"Temporary bat file created: {batFile}");
+            args.Logger?.ILog($"Temporary bat file created: {batFile}");
             
             var processStartInfo = new ProcessStartInfo
             {
@@ -157,10 +157,10 @@ public class ScriptExecutor:IScriptExecutor
             int exitCode = process.ExitCode;
             
             if(string.IsNullOrWhiteSpace(standardOutput) == false)
-                args.Args?.Logger?.ILog($"Standard Output:\n{standardOutput}");
+                args.Logger?.ILog($"Standard Output:\n{standardOutput}");
             if(string.IsNullOrWhiteSpace(standardError) == false)
-                args.Args?.Logger?.WLog($"Standard Error:\n{standardError}");
-            args.Args?.Logger?.ILog($"Exit Code: {exitCode}");
+                args.Logger?.WLog($"Standard Error:\n{standardError}");
+            args.Logger?.ILog($"Exit Code: {exitCode}");
 
             return exitCode;
         }
@@ -187,9 +187,9 @@ public class ScriptExecutor:IScriptExecutor
             var code = args.Code;
             if (args.Args != null)
                 code = args.Args.ReplaceVariables(code);
-            args.Args?.Logger?.ILog("Executing code: \n" + code);
+            args.Logger?.ILog("Executing code: \n" + code);
             File.WriteAllText(shFile, code);
-            args.Args?.Logger?.ILog($"Temporary SH file created: {shFile}");
+            args.Logger?.ILog($"Temporary SH file created: {shFile}");
 
             var processStartInfo = new ProcessStartInfo
             {
@@ -212,10 +212,10 @@ public class ScriptExecutor:IScriptExecutor
             int exitCode = process.ExitCode;
 
             if (!string.IsNullOrWhiteSpace(standardOutput))
-                args.Args?.Logger?.ILog($"Standard Output:\n{standardOutput}");
+                args.Logger?.ILog($"Standard Output:\n{standardOutput}");
             if (!string.IsNullOrWhiteSpace(standardError))
-                args.Args?.Logger?.WLog($"Standard Error:\n{standardError}");
-            args.Args?.Logger?.ILog($"Exit Code: {exitCode}");
+                args.Logger?.WLog($"Standard Error:\n{standardError}");
+            args.Logger?.ILog($"Exit Code: {exitCode}");
 
             return exitCode;
         }
@@ -239,10 +239,10 @@ public class ScriptExecutor:IScriptExecutor
         
         Executor executor = new();
         executor.Logger = new ScriptExecution.Logger();
-        executor.Logger.ELogAction = (largs) => args.Logger?.ELog(largs);
-        executor.Logger.WLogAction = (largs) => args.Logger?.WLog(largs);
-        executor.Logger.ILogAction = (largs) => args.Logger?.ILog(largs);
-        executor.Logger.DLogAction = (largs) => args.Logger?.DLog(largs);
+        executor.Logger.ELogAction = (largs) => execArgs.Logger?.ELog(largs);
+        executor.Logger.WLogAction = (largs) => execArgs.Logger?.WLog(largs);
+        executor.Logger.ILogAction = (largs) => execArgs.Logger?.ILog(largs);
+        executor.Logger.DLogAction = (largs) => execArgs.Logger?.DLog(largs);
         executor.HttpClient = httpClient;
         if (string.IsNullOrWhiteSpace(FileFlowsUrl) == false)
             args.Variables["FileFlows.Url"] = FileFlowsUrl;
@@ -292,7 +292,7 @@ public class ScriptExecutor:IScriptExecutor
         
         // Get only the assemblies that are not dynamically generated
         var staticAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-            .Where(assembly => !assembly.IsDynamic)
+            .Where(assembly => !assembly.IsDynamic && assembly.FullName?.Contains('-') != true)
             .ToArray();
         
         // Configure script options
@@ -304,6 +304,7 @@ public class ScriptExecutor:IScriptExecutor
                 "System.Collections.Generic", // Generic collections like List, Dictionary
                 "System.Text", // String manipulation
                 "System.Text.RegularExpressions", // Regular expressions
+                "System.Diagnostics", // Processes
                 "System.IO", // File and stream operations
                 "System.Globalization", // Culture-specific operations
                 "FileFlows.Plugin"
@@ -314,14 +315,12 @@ public class ScriptExecutor:IScriptExecutor
             // Execute the script with the provided logger
             var result =CSharpScript.RunAsync(execArgs.Code, scriptOptions, new Globals
             {
-                Logger = execArgs.Args.Logger!,
+                Logger = execArgs.Logger,
                 Flow = execArgs.Args,
-                Variables = execArgs.Args.Variables
-                
+                Variables = execArgs.Args?.Variables ?? new ()
             }).Result;
             if (result.ReturnValue is int iOutput)
                 return iOutput;
-            execArgs.Args.Logger?.ILog("Unexpected output: " + (result.ReturnValue == null ? "null" : result.ReturnValue.ToString()));
             return -1;
         }
         catch (CompilationErrorException e)

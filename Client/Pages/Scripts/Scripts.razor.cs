@@ -350,13 +350,16 @@ public partial class Scripts : ListPage<Guid, Script>
         }
         
         if(item.Language is ScriptLanguage.Batch)
-            return $"/icons/bat.svg";
+            return $"/icons/dos.svg";
         if(item.Language is ScriptLanguage.PowerShell)
-            return $"/icons/ps1.svg";
+            return $"/icons/powershell.svg";
         if(item.Language is ScriptLanguage.Shell)
-            return $"/icons/sh.svg";
+            return $"/icons/bash.svg";
+        if(item.Language is ScriptLanguage.CSharp)
+            return $"/icons/csharp.svg";
 
-        return "fas fa-scroll";
+        return "/icons/javascript.svg";
+        //return "fas fa-scroll";
 
     }
 }

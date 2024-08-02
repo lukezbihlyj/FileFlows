@@ -24,6 +24,7 @@ public abstract class ScriptTest
         var result = new ScriptExecutor().Execute(new()
         {
             Args = args,
+            Logger = logger,
             ScriptType = ScriptType.Flow,
             Code = code,
             AdditionalArguments = parameters

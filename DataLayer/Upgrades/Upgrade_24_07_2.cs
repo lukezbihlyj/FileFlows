@@ -28,7 +28,14 @@ public class Upgrade_24_07_2
         var connector = DatabaseConnectorLoader.LoadConnector(logger, dbType, connectionString);
         using var db = connector.GetDb(true).Result;
 
-        db.Db.Execute($"drop table {connector.WrapFieldName("DbLogMessage")}");
+        try
+        {
+            db.Db.Execute($"drop table {connector.WrapFieldName("DbLogMessage")}");
+        }
+        catch (Exception)
+        {
+            // Ignore, if the table doesn't exist, who cares 
+        }
 
         return true;
     }

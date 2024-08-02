@@ -42,6 +42,11 @@ public class ScriptExecutionArgs
     /// Gets or sets teh NodeParameters
     /// </summary>
     public NodeParameters Args { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the logger to use
+    /// </summary>
+    public ILogger Logger { get; set; }
 
     /// <summary>
     /// Gets a collection of additional arguments to be passed to the javascript executor

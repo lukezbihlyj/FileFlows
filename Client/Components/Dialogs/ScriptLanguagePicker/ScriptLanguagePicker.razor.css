@@ -1,18 +1,16 @@
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+table {
+  margin: 0 1rem;
+  width: calc(100% - 2rem);
 }
-
-.title {
-  font-weight: var(--bold, 600);
+table tr {
+  border-left: solid 1px var(--border-color);
 }
-
-.description {
-  display: block;
-  margin: 0 0 1rem 1.2rem;
+table tr td {
+  width: 100%;
 }
-
-input {
-  outline: none;
+table tr:hover {
+  background: unset !important;
+}
+table tr:hover:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.03) !important;
 }

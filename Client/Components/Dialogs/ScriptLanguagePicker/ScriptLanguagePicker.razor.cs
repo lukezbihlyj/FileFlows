@@ -8,7 +8,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// </summary>
 public partial class ScriptLanguagePicker : ComponentBase, IDisposable
 {
-    private string lblNext, lblCancel, lblJavaScriptDescription, lblBatchDescription, lblPowerShellDescription, lblShellDescription;
+    private string lblNext, lblCancel, lblJavaScriptDescription, lblBatchDescription, lblCSharpDescription, lblPowerShellDescription, lblShellDescription;
     private string Title;
     TaskCompletionSource<Result<ScriptLanguage>> ShowTask;
     
@@ -29,6 +29,7 @@ public partial class ScriptLanguagePicker : ComponentBase, IDisposable
         lblCancel = Translater.Instant("Labels.Cancel");
         lblJavaScriptDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.JavaScriptDescription");
         lblBatchDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.BatchDescription");
+        lblCSharpDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.CSharpDescription");
         lblPowerShellDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.PowerShellDescription");
         lblShellDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.ShellDescription");
         Title = Translater.Instant("Dialogs.ScriptLanguage.Title");
@@ -91,11 +92,10 @@ public partial class ScriptLanguagePicker : ComponentBase, IDisposable
     }
     
     
-    private void SetLanguage(ChangeEventArgs e)
+    private void SetLanguage(ScriptLanguage language, bool close = false)
     {
-        if (Enum.TryParse<ScriptLanguage>(e.Value.ToString(), out var language))
-        {
-            Language = language;
-        }
+        Language = language;
+        if(close)
+            Next();
     }
 }

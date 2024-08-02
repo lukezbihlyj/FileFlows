@@ -1183,6 +1183,13 @@ input[type=file]{
                 }
             }
         }
+        
+        &.with-desc
+        {
+            .name {
+                font-weight: var(--bold, 600);
+            }
+        }
     }
 
     .right {
