@@ -49,4 +49,13 @@ public interface ILibraryFileService
     /// <param name="uid">The UID of the library file</param>
     /// <returns>True if it exists on the server, otherwise false</returns>
     Task<bool> ExistsOnServer(Guid uid);
+
+    /// <summary>
+    /// Tells the server not to check this node for number of seconds when checking for load balancing as it will
+    /// be unavailable for this amount of time
+    /// </summary>
+    /// <param name="nodeUid">the UID of the node</param>
+    /// <param name="forSeconds">the time in seconds</param>
+    /// <returns>a task to await</returns>
+    Task NodeCannotRun(Guid nodeUid, int forSeconds);
 }

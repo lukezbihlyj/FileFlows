@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using FileFlows.Managers;
 using FileFlows.Plugin;
 using FileFlows.Server.Helpers;
@@ -6,6 +7,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
 using Humanizer;
+using ILogger = FileFlows.Plugin.ILogger;
 
 namespace FileFlows.Server.Services;
 
@@ -89,6 +91,17 @@ public class LibraryFileService
         var allLibraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
         return await new LibraryFileManager().GetTotalMatchingItems(filter);
     }
+
+    private ConcurrentDictionary<Guid, DateTime> nodesThatCannotRun = new();
+
+    /// <summary>
+    /// Tells the server not to check this node for number of seconds when checking for load balancing as it will
+    /// be unavailable for this amount of time
+    /// </summary>
+    /// <param name="nodeUid">the UID of the node</param>
+    /// <param name="forSeconds">the time in seconds</param>
+    public void NodeCannotRun(Guid nodeUid, int forSeconds)
+        => nodesThatCannotRun[nodeUid] = DateTime.Now.AddSeconds(forSeconds);
 
     /// <summary>
     /// Gets the next file to process
@@ -415,7 +428,7 @@ public class LibraryFileService
         if (nextFile == null)
             return nextFile;
 
-        if (waitingForReprocess == null && await HigherPriorityWaiting(node, nextFile, allLibraries))
+        if (waitingForReprocess == null && await HigherPriorityWaiting(logger, node, nextFile, allLibraries))
         {
             logger.ILog("Higher priority node waiting to process file");
             return null; // a higher priority node should process this file
@@ -442,11 +455,12 @@ public class LibraryFileService
     /// Checks if another enabled processing node is enabled, in-schedule and not all runners are in use.
     /// If so, then will return false, so another higher priority node can processing a file
     /// </summary>
+    /// <param name="logger">the logger to use</param>
     /// <param name="node">the node to check</param>
     /// <param name="file">the next file that should be processed</param>
     /// <param name="allLibraries">all the libraries in the system</param>
     /// <returns>true if another higher priority node should be used instead</returns>
-    private async Task<bool> HigherPriorityWaiting(ProcessingNode node, LibraryFile file, List<Library> allLibraries)
+    private async Task<bool> HigherPriorityWaiting(ILogger logger, ProcessingNode node, LibraryFile file, List<Library> allLibraries)
     {
         var allNodes = (await ServiceLoader.Load<NodeService>().GetAllAsync()).Where(x => 
             x.Uid != node.Uid && x.Enabled);
@@ -458,6 +472,13 @@ public class LibraryFileService
         
         foreach (var other in allNodes)
         {
+            if (nodesThatCannotRun.TryGetValue(other.Uid, out var cannotRunUntil) &&
+                cannotRunUntil > DateTime.Now)
+            {
+                logger.ILog($"Other node '{other.Name}' cannot run until: {cannotRunUntil}");
+                continue;
+            }
+
             // first check if its in schedule
             if (TimeHelper.InSchedule(other.Schedule) == false)
                 continue;
@@ -480,7 +501,7 @@ public class LibraryFileService
             };
             if (allowedLibraries.Contains(file.LibraryUid!.Value) == false)
             {
-                Logger.Instance.DLog($"Node '{other.Name}' cannot process the file due to library restrictions: {file.Name}");
+                logger.DLog($"Node '{other.Name}' cannot process the file due to library restrictions: {file.Name}");
                 continue;
             }
 
@@ -497,7 +518,7 @@ public class LibraryFileService
                     // this can throw
                 }
 
-                Logger.Instance.ILog("Other node is offline: " + other.Name + ", last seen: " + lastSeen);
+                logger.ILog("Other node is offline: " + other.Name + ", last seen: " + lastSeen);
                 continue; // 10 minute cut off, give it some grace period
             }
 
@@ -515,13 +536,13 @@ public class LibraryFileService
                     // this node has less than or equal number of runners
                     continue;
                 }
-                Logger.Instance.ILog($"Load balancing '{other.Name}' can process file and is processing less '{otherRunners}', skipping node: '{node.Name}': {file.Name}");
+                logger.ILog($"Load balancing '{other.Name}' can process file and is processing less '{otherRunners}', skipping node: '{node.Name}': {file.Name}");
                 return true;
             }
             
             // the "other" node is higher priority, it's not maxed out, it's in-schedule, so we don't want the "node"
             // processing this file
-            Logger.Instance.ILog($"Higher priority node '{other.Name}' can process file, skipping node: '{node.Name}': {file.Name}");
+            logger.ILog($"Higher priority node '{other.Name}' can process file, skipping node: '{node.Name}': {file.Name}");
             return true;
         }
         // no other node is higher priority, this node can process this file

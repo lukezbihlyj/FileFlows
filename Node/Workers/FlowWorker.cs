@@ -168,7 +168,6 @@ public class FlowWorker : Worker
         if (IsEnabledCheck?.Invoke() == false)
             return false;
         
-        
         var nodeService = ServiceLoader.Load<INodeService>();
         if (nodeService.GetSystemIsRunning().Result != true)
         {
@@ -244,13 +243,17 @@ public class FlowWorker : Worker
             }
         }
 
+        
+        var libFileService = ServiceLoader.Load<ILibraryFileService>();
         if (isLicensed && node?.PreExecuteScript != null)
         {
             if (PreExecuteScriptTest(node) == false)
+            {
+                // tell the server, so if this is a higher priority node, it doesn't block processing
+                libFileService.NodeCannotRun(node.Uid, node.ProcessFileCheckInterval).Wait();
                 return false;
+            }
         }
-        
-        var libFileService = ServiceLoader.Load<ILibraryFileService>();
         var libFileResult = libFileService.GetNext(node?.Name ?? string.Empty, node?.Uid ?? Guid.Empty,node?.Version ?? string.Empty, Uid).Result;
         if (libFileResult?.Status != NextLibraryFileStatus.Success)
         {

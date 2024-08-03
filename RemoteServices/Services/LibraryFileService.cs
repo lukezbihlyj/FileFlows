@@ -39,6 +39,19 @@ public class LibraryFileService : RemoteService, ILibraryFileService
         }
     }
 
+    /// <inheritdoc />
+    public async Task NodeCannotRun(Guid nodeUid, int forSeconds)
+    {
+        try
+        {
+            await HttpHelper.Post($"{ServiceBaseUrl}/remote/library-file/node-cannot-run/{nodeUid}/{forSeconds}"); 
+        }
+        catch (Exception)
+        {
+            // Ignored
+        }
+    }
+
     /// <summary>
     /// Gets a library file by its UID
     /// </summary>
