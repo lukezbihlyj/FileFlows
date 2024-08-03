@@ -91,8 +91,8 @@ REM Add your actual batch commands below
 REM Example: Copy the working file to a backup location
 REM copy ""%WorkingFile%"" ""C:\Backup\%~nxWorkingFile%""
 
-REM Set the exit code to 0
-EXIT /B 0".Trim();
+REM Set the exit code to 1
+EXIT /B 1".Trim();
             }
             else if (item.Language == ScriptLanguage.PowerShell)
             {
@@ -111,8 +111,8 @@ Write-Output ""Original file location: $OriginalFile""
 # Example: Copy the working file to a backup location
 # Copy-Item -Path $WorkingFile -Destination ""C:\Backup\$([System.IO.Path]::GetFileName($WorkingFile))""
 
-# Set the exit code to 0
-exit 0".Trim();
+# Set the exit code to 1
+exit 1".Trim();
             }
             else if (item.Language == ScriptLanguage.Shell)
             {
@@ -131,8 +131,8 @@ echo ""Original file location: $OriginalFile""
 # Example: Copy the working file to a backup location
 # cp ""$WorkingFile"" ""/path/to/backup/$(basename \""$WorkingFile\"")""
 
-# Set the exit code to 0
-exit 0".Trim();
+# Set the exit code to 1
+exit 1".Trim();
             }
             else if (item.Language == ScriptLanguage.CSharp)
             {

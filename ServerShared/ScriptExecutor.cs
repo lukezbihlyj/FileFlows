@@ -3,7 +3,6 @@ using System.Text;
 using FileFlows.Plugin;
 using FileFlows.Plugin.Models;
 using FileFlows.ScriptExecution;
-using FileFlows.ServerShared.Services;
 using FileFlows.Shared.Models;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;

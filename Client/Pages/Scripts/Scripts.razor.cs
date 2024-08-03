@@ -123,12 +123,21 @@ public partial class Scripts : ListPage<Guid, Script>
             return;
         }
 
-        await jsRuntime.InvokeVoidAsync("ff.saveTextAsFile", item.Name + ".js", result.Body);
+        var extension = item.Language switch
+        {
+            ScriptLanguage.Batch => ".bat",
+            ScriptLanguage.Shell => ".sh",
+            ScriptLanguage.CSharp => ".cs",
+            ScriptLanguage.PowerShell => ".ps1",
+            _ => ".js"
+        };
+
+        await jsRuntime.InvokeVoidAsync("ff.saveTextAsFile", item.Name + extension, result.Body);
     }
 
     private async Task Import()
     {
-        var idResult = await ImportDialog.Show("js");
+        var idResult = await ImportDialog.Show("js");//, "ps1", "cs", "bat", "sh");
         string js = idResult.content;
         if (string.IsNullOrEmpty(js))
             return;
