@@ -469,7 +469,7 @@ public class FlowWorker : Worker
                 Logger.Instance.ILog("Pre-Execute Script Successful:\n" + logger);
             }
 
-            return true;
+            return seResult.Value == 1;
         }
         string scriptDir = Path.Combine(GetConfigurationDirectory(), "Scripts");
         string sharedDir = Path.Combine(scriptDir, "Shared");

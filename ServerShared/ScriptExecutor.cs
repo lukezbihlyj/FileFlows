@@ -322,6 +322,8 @@ public class ScriptExecutor:IScriptExecutor
             }).Result;
             if (result.ReturnValue is int iOutput)
                 return iOutput;
+            if (result.ReturnValue is bool bValue)
+                return bValue ? 1 : 0;
             return -1;
         }
         catch (CompilationErrorException e)
