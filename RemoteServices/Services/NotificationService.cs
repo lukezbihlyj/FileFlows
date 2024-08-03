@@ -3,14 +3,9 @@ namespace FileFlows.RemoteServices;
 /// <summary>
 /// Service for sending a notification to the server
 /// </summary>
-public class NotificationService : RemoteService
+public class NotificationService : RemoteService, INotificationService
 {
-    /// <summary>
-    /// Records a new notification with the specified severity, title, and message.
-    /// </summary>
-    /// <param name="severity">The severity level of the notification.</param>
-    /// <param name="title">The title of the notification.</param>
-    /// <param name="message">The message content of the notification.</param>
+    /// <inheritdoc />
     public async Task Record(NotificationSeverity severity, string title, string? message = null)
     {
         try

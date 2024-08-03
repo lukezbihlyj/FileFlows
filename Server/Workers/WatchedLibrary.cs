@@ -242,7 +242,7 @@ public class WatchedLibrary:IDisposable
                 Logger.WLog($"Failed access checks for file: " + fullpath +"\n" +
                                      "These checks can be disabled in library settings, but ensure the flow can read and write to the library.");
 
-                _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Information,
+                _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Information,
                     $"'{Library.Name}' failed access checks for file", fullpath);
                 
                 return;
@@ -778,7 +778,7 @@ public class WatchedLibrary:IDisposable
 
             Logger.ELog("Failed scanning for files: " + ex.Message + Environment.NewLine + ex.StackTrace);
 
-            _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Warning,
+            _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
                 $"'{Library.Name}' failed scanning for files",
                 ex.Message);
         }

@@ -183,7 +183,7 @@ public class PluginScanner
                 {
                     if (piVersion.Major < 23)
                     {
-                        _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Critical,
+                        _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Critical,
                             $"'{plugin.Name}' is very old and should be upgraded or deleted",
                             "This plugin is very old and needs upgrading or it has been deprecated and should " +
                             "be removed.\nUsing it will cause unexpected issues");
@@ -202,7 +202,7 @@ public class PluginScanner
 
                         if (old)
                         {
-                            _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Warning,
+                            _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
                                 $"'{plugin.Name}' should be upgraded or deleted",
                                 "This plugin is either old and needs upgrading or it has been deprecated and should " +
                                 "be removed.\nUsing it may cause unexpected issues");

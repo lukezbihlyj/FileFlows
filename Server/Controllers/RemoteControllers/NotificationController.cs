@@ -20,7 +20,7 @@ public class NotificationController
     [HttpPost("record")]
     public async Task Record([FromBody] NotificationModel notification)
     {
-        var service = ServiceLoader.Load<NotificationService>();
+        var service = ServiceLoader.Load<INotificationService>();
         await service.Record(notification.Severity, notification.Title, notification.Message);
     }
 

@@ -1,5 +1,3 @@
-using FileFlows.ServerShared.Services;
-
 namespace FileFlows.Server.Services;
 
 /// <summary>
@@ -43,7 +41,7 @@ public static class ServiceLoader
             .AddSingleton<AuditService>()
             .AddSingleton<DockerModService>()
             .AddSingleton<RepositoryService>()
-            .AddSingleton<NotificationService>()
+            .AddSingleton<INotificationService, NotificationService>()
             .AddSingleton<ScheduledReportService>()
             .AddSingleton<FileDisplayNameService>()
             .BuildServiceProvider(); // Build the service provider

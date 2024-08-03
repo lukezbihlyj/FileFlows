@@ -42,7 +42,7 @@ public class ExceptionMiddleware
             {
                 if (WebServer.FullyStarted)
                 {
-                    _ = ServiceLoader.Load<NotificationService>().RecordDatabaseOffline();
+                    _ = ((NotificationService)ServiceLoader.Load<INotificationService>()).RecordDatabaseOffline();
                     Logger.Instance.ELog("ExceptionMiddleware: Database is offline");
                 }
 

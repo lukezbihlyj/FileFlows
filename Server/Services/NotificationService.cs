@@ -7,19 +7,14 @@ namespace FileFlows.Server.Services;
 /// <summary>
 /// Service for notifications
 /// </summary>
-public class NotificationService
+public class NotificationService : INotificationService
 {
-    List<Notification> _Notifications = new List<Notification>();
+    List<Notification> _Notifications = new ();
     private readonly Queue<Notification> _LowNotifications = new();
     private FairSemaphore _semaphore = new(1);
-    private DateTime? dbOfflineRecordedAt = null; 
+    private DateTime? dbOfflineRecordedAt; 
 
-    /// <summary>
-    /// Records a new notification with the specified severity, title, and message.
-    /// </summary>
-    /// <param name="severity">The severity level of the notification.</param>
-    /// <param name="title">The title of the notification.</param>
-    /// <param name="message">The message content of the notification.</param>
+    /// <inheritdoc />
     public async Task Record(NotificationSeverity severity, string title, string? message = null)
     {
         await _semaphore.WaitAsync();

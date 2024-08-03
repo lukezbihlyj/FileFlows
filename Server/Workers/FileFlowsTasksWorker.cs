@@ -139,14 +139,14 @@ public class FileFlowsTasksWorker: ServerWorker
             Logger.ILog($"Task '{task.Name}' completed in: " + (DateTime.UtcNow.Subtract(dtStart)) + "\n" +
                                  result.Log);
 
-            _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Information,
+            _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Information,
                 $"Task executed successfully '{task.Name}'");
         }
         else
         {
             Logger.ELog($"Error executing task '{task.Name}: " + result.ReturnValue + "\n" + result.Log);
             
-            _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Warning,
+            _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
                 $"Error executing task '{task.Name}': " + result.ReturnValue, result.Log);
         }
 

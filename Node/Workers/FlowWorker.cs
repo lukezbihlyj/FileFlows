@@ -446,11 +446,16 @@ public class FlowWorker : Worker
                 TempPath = Path.GetTempPath(),
                 Language = script.Language,
                 Logger = logger,
-                ScriptType = ScriptType.System
+                ScriptType = ScriptType.System,
+                NotificationCallback = (severity, title, message) =>
+                {
+                    _ = ServiceLoader.Load<INotificationService>()
+                        .Record((NotificationSeverity)severity, title, message);
+                } 
             });
             if (seResult.Failed(out var error))
             {
-                _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Warning,
+                _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
                     $"Failed executing pre-execute script '{script.Name}'",
                     $"Failed to execute on node '{node.Name}': {error}");
                 Logger.Instance.WLog("Failed running pre-execute script: " + error + "\n" + logger);
@@ -807,7 +812,7 @@ public class FlowWorker : Worker
             var result = DockerModHelper.Execute(mod).Result;
             if (result.Failed(out string error))
             {
-                _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Critical,
+                _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Critical,
                     $"Docker Mod '{mod.Name}' Failed on '{nodeName}'",
                     error);
                 return false;

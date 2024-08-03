@@ -47,6 +47,19 @@ public class ScriptExecutionArgs
     /// Gets or sets the logger to use
     /// </summary>
     public ILogger Logger { get; set; }
+    
+    /// <summary>
+    /// Delegate for handling notifications.
+    /// </summary>
+    /// <param name="severity">The severity level of the notification.</param>
+    /// <param name="title">The title of the notification.</param>
+    /// <param name="message">The message of the notification. This parameter can be null.</param>
+    public delegate void NotificationDelegate(object severity, string title, string? message);
+
+    /// <summary>
+    /// Gets or sets the callback for notifications.
+    /// </summary>
+    public NotificationDelegate NotificationCallback { get; set; }
 
     /// <summary>
     /// Gets a collection of additional arguments to be passed to the javascript executor

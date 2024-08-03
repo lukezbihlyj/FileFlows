@@ -314,7 +314,7 @@ public class WebServer
         // else
         // {
         //     Task.Run(() => OnStatusUpdate?.Invoke(WebServerState.Listening, "Web server listening", serverUrl));
-        //     _ = ServiceLoader.Load<NotificationService>().Record(NotificationSeverity.Information, "Server Started");
+        //     _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Information, "Server Started");
         // }
 
         task.Wait();

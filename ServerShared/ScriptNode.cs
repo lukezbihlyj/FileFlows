@@ -2,6 +2,7 @@ using System.Text.Json;
 using Logger = FileFlows.Shared.Logger;
 using FileFlows.Plugin;
 using System.Dynamic;
+using FileFlows.ServerShared.Services;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Server;
@@ -104,7 +105,12 @@ public class ScriptNode:Node
             ScriptType = ScriptType.Flow,
             Logger = args.Logger!,
             Code = (Script.Code + "\n\n" + entryPoint).Replace("\t", "   ").Trim(),
-            AdditionalArguments = new ()
+            AdditionalArguments = new (),
+            NotificationCallback = (severity, title, message) =>
+            {
+                var service = ServiceLoader.Load<INotificationService>();
+                _ = service.Record((NotificationSeverity)severity, title, message);
+            }
         };
 
         if (Script.Parameters?.Any() == true)

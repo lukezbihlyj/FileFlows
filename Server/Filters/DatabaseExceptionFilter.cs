@@ -42,6 +42,6 @@ public class DatabaseExceptionFilter : IExceptionFilter
         context.HttpContext.Response.ContentType = "text/plain";
         context.HttpContext.Response.WriteAsync("/database-offline");
         context.ExceptionHandled = true; // Ensure the exception is handled
-        _ = ServiceLoader.Load<NotificationService>().RecordDatabaseOffline();
+        _ = ((NotificationService)ServiceLoader.Load<INotificationService>()).RecordDatabaseOffline();
     }
 }

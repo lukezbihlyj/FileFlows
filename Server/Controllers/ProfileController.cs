@@ -66,7 +66,7 @@ public class ProfileController : Controller
         }
 
         if (profile.IsAdmin)
-            profile.UnreadNotifications = await ServiceLoader.Load<NotificationService>().GetUnreadNotificationsCount();
+            profile.UnreadNotifications = await ((NotificationService)ServiceLoader.Load<INotificationService>()).GetUnreadNotificationsCount();
 
         if (Globals.IsDocker)
             profile.HasDockerInstances = true;

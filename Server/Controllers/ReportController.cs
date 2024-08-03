@@ -75,14 +75,14 @@ public class ReportController : BaseController
                 var result = await new ReportManager().Generate(uid, emailing, model);
                 if (result.Failed(out var rError))
                 {
-                    _ = ServiceLoader.Load<NotificationService>()
+                    _ = ServiceLoader.Load<INotificationService>()
                         .Record(NotificationSeverity.Warning, $"Report '{name}' failed to generate", rError);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(result.Value))
                 {
-                    _ = ServiceLoader.Load<NotificationService>()
+                    _ = ServiceLoader.Load<INotificationService>()
                         .Record(NotificationSeverity.Warning, $"Report '{name}' had not matching data", rError);
                     return;
                 }

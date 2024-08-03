@@ -113,7 +113,7 @@ public class ScheduledReportWorker:ServerWorker
                 var result = manager.Generate(report.Report.Uid, true, model).Result;
                 if (result.Failed(out var rError))
                 {
-                    _ = ServiceLoader.Load<NotificationService>()
+                    _ = ServiceLoader.Load<INotificationService>()
                         .Record(NotificationSeverity.Warning, $"Scheduled Report '{report.Name}' failed to generate",
                             rError);
                     continue;
@@ -121,7 +121,7 @@ public class ScheduledReportWorker:ServerWorker
 
                 if (string.IsNullOrWhiteSpace(result.Value))
                 {
-                    _ = ServiceLoader.Load<NotificationService>()
+                    _ = ServiceLoader.Load<INotificationService>()
                         .Record(NotificationSeverity.Information,
                             $"Scheduled Report '{report.Name}' had not matching data", rError);
                     return;

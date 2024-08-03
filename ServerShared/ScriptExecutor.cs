@@ -3,6 +3,7 @@ using System.Text;
 using FileFlows.Plugin;
 using FileFlows.Plugin.Models;
 using FileFlows.ScriptExecution;
+using FileFlows.ServerShared.Services;
 using FileFlows.Shared.Models;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -313,11 +314,12 @@ public class ScriptExecutor:IScriptExecutor
         try
         {
             // Execute the script with the provided logger
-            var result =CSharpScript.RunAsync(execArgs.Code, scriptOptions, new Globals
+            var result = CSharpScript.RunAsync(execArgs.Code, scriptOptions, new Globals
             {
                 Logger = execArgs.Logger,
                 Flow = execArgs.Args,
-                Variables = execArgs.Args?.Variables ?? new ()
+                Variables = execArgs.Args?.Variables ?? new (),
+                NotificationDelegate = execArgs.NotificationCallback 
             }).Result;
             if (result.ReturnValue is int iOutput)
                 return iOutput;
@@ -350,6 +352,30 @@ public class ScriptExecutor:IScriptExecutor
         /// Gets or sets the flow
         /// </summary>
         public NodeParameters Flow { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets the notification delegate
+        /// </summary>
+        public ScriptExecutionArgs.NotificationDelegate NotificationDelegate { get; set; } = null!;
+
+        /// <summary>
+        /// Sends a notification
+        /// </summary>
+        /// <param name="severity">the string notification severity</param>
+        /// <param name="title">the title of the notification</param>
+        /// <param name="message">the message of the notification</param>
+        public void SendNotification(string severity, string title, string? message = null)
+        {
+            NotificationSeverity ns = severity.ToLowerInvariant() switch
+            {
+                "critical" => NotificationSeverity.Critical,
+                "error" => NotificationSeverity.Error,
+                "warning" => NotificationSeverity.Warning,
+                _ => NotificationSeverity.Information
+            };
+
+            NotificationDelegate?.Invoke(ns, title, message);
+        }
     }
     
 

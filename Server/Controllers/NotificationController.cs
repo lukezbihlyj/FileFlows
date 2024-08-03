@@ -18,5 +18,5 @@ public class NotificationController : Controller
     /// <returns>the notifications</returns>
     [HttpGet]
     public Task<IEnumerable<Notification>> Get()
-        => ServiceLoader.Load<NotificationService>().GetAll(markAsRead: true);
+        => ((NotificationService)ServiceLoader.Load<INotificationService>()).GetAll(markAsRead: true);
 }
