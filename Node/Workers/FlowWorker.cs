@@ -249,8 +249,15 @@ public class FlowWorker : Worker
         {
             if (PreExecuteScriptTest(node) == false)
             {
+                int interval = node.ProcessFileCheckInterval;
+                if (interval < 1)
+                {
+                    var settingsService = ServiceLoader.Load<IFlowRunnerService>();
+                    interval = settingsService.GetFileCheckInterval().Result;
+                }
+                interval = Math.Max(10, interval);
                 // tell the server, so if this is a higher priority node, it doesn't block processing
-                libFileService.NodeCannotRun(node.Uid, node.ProcessFileCheckInterval).Wait();
+                libFileService.NodeCannotRun(node.Uid, interval).Wait();
                 return false;
             }
         }
