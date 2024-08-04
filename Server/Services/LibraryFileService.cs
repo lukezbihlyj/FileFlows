@@ -103,7 +103,7 @@ public class LibraryFileService
     public void NodeCannotRun(Guid nodeUid, int forSeconds)
     {
         var date = DateTime.Now.AddSeconds(forSeconds);
-        NextFileLogger.ILog($"Node '{nodeUid}' cannot run until {date}");
+        NextFileLogger?.ILog($"Node '{nodeUid}' cannot run until {date}");
         nodesThatCannotRun[nodeUid] = date;
     }
 

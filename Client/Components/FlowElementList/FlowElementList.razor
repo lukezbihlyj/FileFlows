@@ -20,7 +20,12 @@
     <div class="flow-elements-middle">
             @if (Filtered != null)
             {
-                var groups = Filtered.GroupBy(x => x.Group).ToArray();
+                var groups = Filtered.GroupBy(x =>
+                {
+                    if (GroupIndexRegex.TryMatch(x.Group, out var match))
+                        return match.Groups[1].Value;
+                    return x.Group;
+                }).ToArray();
                 bool accordion = groups.Length > 1; //string.IsNullOrWhiteSpace(txtFilter) && groups.Length > 1;
                 <div class="@(accordion ? "accordion" : "ul")">
                     @foreach (var grp in groups.OrderByDescending(x => x.Key == DefaultGroup)
@@ -45,6 +50,8 @@
                                 @foreach (var ele in grp
                                               .OrderBy(x =>
                                               {
+                                                  if (GroupIndexRegex.TryMatch(x.Group, out var match))
+                                                      return int.Parse(match.Groups[2].Value);
                                                   if (grp.Key != "FfmpegBuilderNodes")
                                                       return (int)x.Type;
                                                   if (x.Type == FlowElementType.BuildStart)

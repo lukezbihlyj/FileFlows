@@ -41,11 +41,12 @@ public class ScriptController : BaseController
     /// <summary>
     /// Get script templates for the function editor
     /// </summary>
+    /// <param name="language">the language to get the templates for</param>
     /// <returns>a list of script templates</returns>
     [HttpGet("templates")]
     [FileFlowsAuthorize(UserRole.Scripts | UserRole.Flows)]
-    public IEnumerable<Script> GetTemplates() 
-        => ServiceLoader.Load<ScriptService>().GetFunctionTemplates();
+    public IEnumerable<Script> GetTemplates([FromQuery] string language = "javascript") 
+        => ServiceLoader.Load<ScriptService>().GetFunctionTemplates(language);
     
     /// <summary>
     /// Returns a list of scripts

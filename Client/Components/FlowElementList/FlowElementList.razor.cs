@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -69,7 +70,6 @@ public partial class FlowElementList : ComponentBase
     /// Gets or sets the icon to open the browser
     /// </summary>
     [Parameter] public string OpenBrowserIcon { get; set; }
-
     
     /// <summary>
     /// Gets or sets the event to close the element list when viewed on mobile
@@ -85,6 +85,11 @@ public partial class FlowElementList : ComponentBase
     /// Gets or sets the event callback for the drag start event.
     /// </summary>
     [Parameter] public EventCallback<(DragEventArgs, FlowElement)> OnDragStart { get; set; }
+
+    /// <summary>
+    /// Regex used to check if a group specifies indexes for order
+    /// </summary>
+    private Regex GroupIndexRegex = new Regex("(.*?):([\\d]+)$");
 
     /// <summary>
     /// Handles the key down event for filtering.

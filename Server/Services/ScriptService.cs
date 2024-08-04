@@ -452,17 +452,20 @@ public Result<bool> ValidateScript(string code)
         }
     }
 
-    private List<Script>? FunctionTemplates;
+    private Dictionary<string, List<Script>>? FunctionTemplates;
 
     /// <summary>
     /// Gets the function tempaltes
     /// </summary>
+    /// <param name="language">the language to get the templates for</param>
     /// <returns>the function templates</returns>
-    public IEnumerable<Script> GetFunctionTemplates()
+    public IEnumerable<Script> GetFunctionTemplates(string language = "javascript")
     {
         if(FunctionTemplates == null)
             RescanFunctionTemplates();
-        return FunctionTemplates ?? [];
+        if (FunctionTemplates.TryGetValue(language, out var templates))
+            return templates ?? [];
+        return [];
     }
 
     /// <summary>
@@ -478,12 +481,25 @@ public Result<bool> ValidateScript(string code)
         }
 
         FunctionTemplates = new();
-        foreach (var js in new DirectoryInfo(dir).GetFiles("*.js", SearchOption.AllDirectories))
+        foreach (var file in new DirectoryInfo(dir).GetFiles("*.*", SearchOption.AllDirectories))
         {
-            FunctionTemplates.Add(new ()
+            var language = file.Extension?.ToLowerInvariant() switch
             {
-                Name = js.Name[..^3], // remove the .js
-                Code = File.ReadAllText(js.FullName)
+                ".js" => "javascript",
+                ".bat" => "batch",
+                ".cs" => "csharp",
+                ".ps1" => "powershell",
+                ".sh" => "shell",
+                _ => null
+            };
+            if (language == null)
+                continue;
+
+            FunctionTemplates.TryAdd(language, new());
+            FunctionTemplates[language].Add(new ()
+            {
+                Name = file.Name[..^(file.Extension.Length)],
+                Code = File.ReadAllText(file.FullName)
             });
         }
     }

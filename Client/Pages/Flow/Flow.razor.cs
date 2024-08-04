@@ -8,6 +8,7 @@ using FileFlows.Client.Components.Dialogs;
 using System.Text.Json;
 using FileFlows.Plugin;
 using System.Text.RegularExpressions;
+using System.Web;
 using BlazorContextMenu;
 using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components.Web;
@@ -513,12 +514,22 @@ public partial class Flow : ComponentBase, IDisposable
             });
         }
 
-        bool isFunctionNode = flowElement.Uid == "FileFlows.BasicNodes.Functions.Function";
+        bool isFunctionNode = flowElement.Uid == "FileFlows.BasicNodes.Functions.Function" || 
+                              flowElement.Uid.StartsWith("FileFlows.BasicNodes.Scripting.");
+        string? functionLanguage = null;
 
         if (isFunctionNode)
         {
             // special case
-            await FunctionNode(fields);
+            functionLanguage = flowElement.Uid.Split('.').Last().ToLowerInvariant() switch
+            {
+                var s when s.StartsWith("bat") => "bat",
+                var s when s.StartsWith("csharp") => "csharp",
+                var s when s.StartsWith("powershell") => "powershell",
+                var s when s.StartsWith("shell") => "shell",
+                _ => "javascript"
+            };
+            await FunctionNode(fields, functionLanguage);
         }
 
 
@@ -658,7 +669,7 @@ public partial class Flow : ComponentBase, IDisposable
             TypeName = "Flow.Parts." + typeName, Title = title, Fields = fields.Select(x => (IFlowField)x).ToList(), Model = model,
             Description = typeDescription,
             Large = fields.Count > 1, HelpUrl = flowElement.HelpUrl,
-            SaveCallback = isFunctionNode ? FunctionSaveCallback : null
+            SaveCallback = isFunctionNode && functionLanguage == "javascript" ? FunctionSaveCallback : null
         });
         EditorOpen = false;
         StateHasChanged();
@@ -711,9 +722,16 @@ public partial class Flow : ComponentBase, IDisposable
         return false;
     }
 
-    private async Task FunctionNode(List<ElementField> fields)
+    /// <summary>
+    /// Creates a function node
+    /// </summary>
+    /// <param name="fields">the fields</param>
+    /// <param name="language">the language of the function</param>
+    private async Task FunctionNode(List<ElementField> fields, string language)
     {
-        var templates = await GetCodeTemplates();
+        var templates = await GetCodeTemplates(language);
+        if (templates.Count == 0)
+            return;
         var templatesOptions = templates.Select(x => new ListOption()
         {
             Label = x.Name,
@@ -766,9 +784,9 @@ public partial class Flow : ComponentBase, IDisposable
         fields.Insert(2, efTemplate);
     }
 
-    private async Task<List<CodeTemplate>> GetCodeTemplates()
+    private async Task<List<CodeTemplate>> GetCodeTemplates(string language)
     {
-        var templateResponse = await HttpHelper.Get<List<Script>>("/api/script/templates");
+        var templateResponse = await HttpHelper.Get<List<Script>>($"/api/script/templates?language={HttpUtility.UrlEncode(language)}");
         if (templateResponse.Success == false || templateResponse.Data?.Any() != true)
             return new List<CodeTemplate>();
 
@@ -785,8 +803,6 @@ public partial class Flow : ComponentBase, IDisposable
                 continue;
 
             string code = template.Code;
-            if (code.StartsWith("// path:"))
-                code = string.Join("\n", code.Split('\n').Skip(1));
             code = code.Replace(commentBlock.Value, string.Empty).Trim();
 
             var ct = new CodeTemplate
