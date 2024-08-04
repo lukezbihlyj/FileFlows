@@ -464,12 +464,14 @@ public class FlowWorker : Worker
                 Logger.Instance.WLog("Failed running pre-execute script: " + error + "\n" + logger);
                 return false;
             }
+            bool preExecuteResult = seResult.Value == 1;
+            
+            if(preExecuteResult == false)
+                Logger.Instance.ILog("Pre-Execute Script Returned False:\n" + logger);
             else
-            {
                 Logger.Instance.ILog("Pre-Execute Script Successful:\n" + logger);
-            }
-
-            return seResult.Value == 1;
+            
+            return preExecuteResult;
         }
         string scriptDir = Path.Combine(GetConfigurationDirectory(), "Scripts");
         string sharedDir = Path.Combine(scriptDir, "Shared");
