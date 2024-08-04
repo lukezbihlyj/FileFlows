@@ -92,7 +92,7 @@ public class LibraryFileService
         return await new LibraryFileManager().GetTotalMatchingItems(filter);
     }
 
-    private ConcurrentDictionary<Guid, DateTime> nodesThatCannotRun = new();
+    private readonly ConcurrentDictionary<Guid, DateTime> nodesThatCannotRun = new();
 
     /// <summary>
     /// Tells the server not to check this node for number of seconds when checking for load balancing as it will
@@ -101,7 +101,11 @@ public class LibraryFileService
     /// <param name="nodeUid">the UID of the node</param>
     /// <param name="forSeconds">the time in seconds</param>
     public void NodeCannotRun(Guid nodeUid, int forSeconds)
-        => nodesThatCannotRun[nodeUid] = DateTime.Now.AddSeconds(forSeconds);
+    {
+        var date = DateTime.Now.AddSeconds(forSeconds);
+        NextFileLogger.ILog($"Node '{nodeUid}' cannot run until {date}");
+        nodesThatCannotRun[nodeUid] = date;
+    }
 
     /// <summary>
     /// Gets the next file to process
