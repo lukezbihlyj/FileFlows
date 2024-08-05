@@ -803,6 +803,8 @@ public partial class Flow : ComponentBase, IDisposable
                 continue;
 
             string code = template.Code;
+            if (code.StartsWith("// path:"))
+                code = string.Join("\n", code.Split('\n').Skip(1));
             code = code.Replace(commentBlock.Value, string.Empty).Trim();
 
             var ct = new CodeTemplate

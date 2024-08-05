@@ -480,7 +480,8 @@ public class FlowController : BaseController
         }
         p.Icon = element.Icon;
         p.Inputs = element.Inputs;
-        if((element.Uid.EndsWith(".Random") || element.Uid.EndsWith(".IfString") || element.Uid.EndsWith(".Function") ) == false)
+        if((element.Uid.EndsWith(".Random") || element.Uid.EndsWith(".IfString") || element.Uid.EndsWith(".Function") 
+            || element.Uid.StartsWith("FileFlows.BasicNodes.Scripting.")   ) == false)
             p.Outputs = element.Outputs;
         
     }

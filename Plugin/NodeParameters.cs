@@ -134,6 +134,11 @@ public class NodeParameters
     /// Gets or sets the action that records additional info
     /// </summary>
     public Action<string, object, int, TimeSpan?>? AdditionalInfoRecorder { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the notification callback
+    /// </summary>
+    public ScriptExecutionArgs.NotificationDelegate NotificationCallback { get; set; }
 
     /// <summary>
     /// Gets or sets the function responsible for getting plugin settings JSON configuration

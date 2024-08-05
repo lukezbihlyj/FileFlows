@@ -454,6 +454,10 @@ public class Runner
             LibraryFileName = Info.LibraryFile.Name,
             IsRemote = Info.IsRemote,
             LogImageActual = logger.Image,
+            NotificationCallback = (severity, title, message) =>
+            {
+                ServiceLoader.Load<INotificationService>().Record((NotificationSeverity)severity, title, message);
+            }
         };
         
         nodeParameters.Variables["library.Name"] = Info.Library.Name;

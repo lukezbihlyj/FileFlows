@@ -141,6 +141,7 @@ public class DirectoryIterator : Node
             IsRemote = args.IsRemote,
             LogImageActual = args.LogImageActual, //newLogger.Image,
             ImageHelper = args.ImageHelper,
+            NotificationCallback = args.NotificationCallback
         };
         newArgs.ArchiveHelper = new ArchiveHelper(newArgs);
 
