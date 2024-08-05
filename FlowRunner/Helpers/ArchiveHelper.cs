@@ -199,6 +199,13 @@ public partial class ArchiveHelper : IArchiveHelper
                 return ExtractMultipartRar(archivePath, destinationPath);
             }
 
+            if (Regex.IsMatch(archivePath, @"\.(iso|cue|img|dmg)$",
+                    RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
+            {
+                Logger.ILog("Extracting disk image using 7-zip");
+                return sevenHelper.Extract(archivePath, destinationPath, percentCallback);
+            }
+
             var result = ExtractSharpCompress(archivePath, destinationPath, percentCallback);
             if (result.IsFailed == false)
                 return result;
