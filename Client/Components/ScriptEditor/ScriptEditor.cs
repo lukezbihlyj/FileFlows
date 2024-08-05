@@ -51,6 +51,8 @@ public class ScriptEditor
         List<IFlowField> fields = new();
         bool flowScript = item.Type == ScriptType.Flow;
 
+        string editorLanguage = item.Language.ToString().ToLowerInvariant();
+
         if (string.IsNullOrEmpty(item.Code))
         {
             if (item.Language == ScriptLanguage.JavaScript)
@@ -76,6 +78,7 @@ let ffApi = new FileFlowsApi();
             }
             else if (item.Language == ScriptLanguage.Batch)
             {
+                editorLanguage = "bat";
                 item.Code = @"
 REM This is a template batch file
 
@@ -236,7 +239,7 @@ return 1;
             Name = "Code",
             Parameters = new ()
             {
-                { nameof(InputCode.Language), item.Language.ToString().ToLowerInvariant()}
+                { nameof(InputCode.Language), editorLanguage }
             },
             Validators = item.Type == ScriptType.Flow ? new List<Validator>
             {
