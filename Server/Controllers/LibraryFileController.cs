@@ -24,7 +24,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     private static CacheStore CacheStore = new();
 
     /// <summary>
-    /// Lists all of the library files, only intended for the UI
+    /// Lists all the library files, only intended for the UI
     /// </summary>
     /// <param name="status">The status to list</param>
     /// <param name="page">The page to get</param>
@@ -435,5 +435,64 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
         {
             return BadRequest(ex.Message);
         }
+    }
+
+    
+    /// <summary>
+    /// Manually adds items for processing
+    /// </summary>
+    /// <param name="flowUid">the UID of the flow to run for this these items</param>
+    /// <param name="paths">the paths to add</param>
+    /// <returns>the response</returns>
+    [HttpPost("manually-add/{flowUid}")]
+    public async Task<IActionResult> ManuallyAdd([FromRoute] Guid flowUid, [FromBody] List<string> paths)
+    {
+        if (paths?.Any() != true)
+            return BadRequest("No items");
+
+        var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(flowUid);
+        if (flow == null)
+            return BadRequest("Unknown flow");
+
+        var service = ServiceLoader.Load<LibraryFileService>();
+        var newFiles = paths.Distinct().Select(x =>
+        {
+            var lf = new LibraryFile()
+            {
+                Status = FileStatus.Unprocessed,
+                Name = x,
+                LibraryUid = Globals.ManualLibraryUid,
+                Flow = new()
+                {
+                    Name = flow.Name,
+                    Type = flow.GetType().FullName,
+                    Uid = flow.Uid
+                },
+                Library = new()
+                {
+                    Name = Globals.ManualLibrary,
+                    Uid = Globals.ManualLibraryUid,
+                    Type = typeof(Library).FullName
+                }
+            };
+            try
+            {
+                var fileInfo = new FileInfo(x);
+                if (fileInfo.Exists)
+                {
+                    lf.CreationTime = fileInfo.CreationTimeUtc;
+                    lf.LastWriteTime = fileInfo.LastWriteTimeUtc;
+                    lf.OriginalSize = fileInfo.Length;
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return lf;
+        }).ToArray();
+        await service.Insert(newFiles);
+        return Ok();
     }
 }

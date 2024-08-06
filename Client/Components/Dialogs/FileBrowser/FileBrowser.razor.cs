@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using FileFlows.Shared;
 using FileFlows.Shared.Helpers;
 using System.Linq;
+using FileFlows.Plugin;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Client.Components.Dialogs;
@@ -74,6 +75,13 @@ public partial class FileBrowser : ComponentBase, IDisposable
         }
     }
 
+    /// <summary>
+    /// Shows the file browser
+    /// </summary>
+    /// <param name="start">the start location</param>
+    /// <param name="directory">if only allowing directories</param>
+    /// <param name="extensions">the allowed extensions</param>
+    /// <returns>the result of the show</returns>
     public static Task<string> Show(string start, bool directory = false, string[] extensions = null)
     {
         if (Instance == null)

@@ -1,0 +1,56 @@
+@namespace FileFlows.Client.Components.Dialogs
+
+
+<Modal Title="@lblTitle" Visible="Visible" Styling="width: min(650px, 90vw);">
+
+    <Body>
+    <p>@lblDescription</p>
+    <div class="select-field">
+        <label>
+            <span>@lblMode</span>
+            <select @onchange="ModeChanged">
+                <option selected="@(Mode == 0)" value="0">@lblList</option>
+                <option selected="@(Mode == 1)" value="1">@lblRaw</option>
+            </select>
+        </label>
+    </div>
+    <div class="select-field">
+        <label>
+            <span>@lblFlow</span>
+            <select @bind="FlowUid">
+                @foreach (var flow in Flows)
+                {
+                    <option value="@flow.Key">@flow.Value</option>
+                }
+            </select>
+        </label>
+    </div>
+    @if (Mode == 0)
+    {
+        <div class="list">
+            @for (int i = 0; i < Files.Count; i++)
+            {
+                int index = i;
+                var key = index + ":" + Files[index];
+                <div class="item" @key="@key">
+                    <input type="text" @bind="Files[index]"/>
+                    <button class="delete" @onclick="() => Remove(index)"><i class="fas fa-trash"></i></button>
+                </div>
+            }
+            <div class="item new-item">
+                <input type="text" @bind="NewItem" placeholder="Add new item"/>
+                <button class="browse" @onclick="() => Browse(-1)">...</button>
+                <button class="add" @onclick="Add"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <textarea @bind="TextList"></textarea>
+    }
+    </Body>
+    <Footer>
+        <button @onclick=@Save disabled="@(Mode == 0 ? (Files.Any() ? null : "") : string.IsNullOrWhiteSpace(TextList) ? "" : null)">@lblAdd</button>
+        <button @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

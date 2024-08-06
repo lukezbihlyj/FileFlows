@@ -23,8 +23,19 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     /// </summary>
     [Inject] private ClientService ClientService { get; set; }
     
+    /// <summary>
+    /// Gets or sets the JavaScript runtime
+    /// </summary>
     [Inject] private IJSRuntime jsRuntime { get; set; }
 
+    /// <summary>
+    /// Gets or sets the add file dialog
+    /// </summary>
+    public AddFileDialog AddDialog { get; set; }
+
+    /// <summary>
+    /// The skybox to select the current file status
+    /// </summary>
     private FlowSkyBox<FileStatus> Skybox;
 
     private FileFlows.Shared.Models.FileStatus SelectedStatus;
@@ -693,5 +704,25 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         else
             SelectedFlow = flow as Guid?;
         _ = Refresh();
+    }
+
+    /// <summary>
+    /// THe manual add button was clicked
+    /// </summary>
+    private async Task Add()
+    {
+        var result = await AddDialog.Show(Flows);
+        if (result.Files?.Any() != true)
+            return;
+        Blocker.Show();
+        try
+        {
+            await HttpHelper.Post(ApiUrl + $"/manually-add/{result.FlowUid}", result.Files);
+        }
+        finally
+        {
+            Blocker.Hide();
+        }
+        await Refresh();
     }
 }

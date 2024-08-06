@@ -183,6 +183,16 @@
         "Field": "Field"
       }
     },
+    "AddFile": {
+      "Title": "Add File",
+      "Description": "Manually add files or URLs for processing.",
+      "Fields": {
+        "Mode": "Input Mode",
+        "Flow": "Flow",
+        "List": "List",
+        "Raw": "Bulk Input (Text Block)"
+      }
+    },
     "ChangePassword": {
       "Title": "Change Password",
       "PasswordMismatch": "Passwords don't match.",

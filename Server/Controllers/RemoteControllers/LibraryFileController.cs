@@ -1,4 +1,3 @@
-using FileFlows.Plugin;
 using FileFlows.Server.Authentication;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
