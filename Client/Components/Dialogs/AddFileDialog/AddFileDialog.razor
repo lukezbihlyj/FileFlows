@@ -5,26 +5,15 @@
 
     <Body>
     <p>@lblDescription</p>
-    <div class="select-field">
-        <label>
-            <span>@lblMode</span>
-            <select @onchange="ModeChanged">
-                <option selected="@(Mode == 0)" value="0">@lblList</option>
-                <option selected="@(Mode == 1)" value="1">@lblRaw</option>
-            </select>
-        </label>
+    <div class="dialog-fields">
+        <InputSelect @bind-Value="@BoundFlowUid" AllowClear="false" Options=@FlowOptions Label="@lblFlow" />
+        @if (NodeOptions.Count > 2)
+        { // greater than 2, cos the first option is any, so if 2 theres really only one node in the system
+            <InputSelect @bind-Value="@BoundNodeUid" AllowClear="false" Options=@NodeOptions Label="@lblNode"/>
+        }
+        <InputSelect @bind-Value="@BoundMode"    AllowClear="false" Options=@ModeOptions Label="@lblMode" />
     </div>
-    <div class="select-field">
-        <label>
-            <span>@lblFlow</span>
-            <select @bind="FlowUid">
-                @foreach (var flow in Flows)
-                {
-                    <option value="@flow.Key">@flow.Value</option>
-                }
-            </select>
-        </label>
-    </div>
+    
     @if (Mode == 0)
     {
         <div class="list">

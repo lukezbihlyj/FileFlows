@@ -36,8 +36,9 @@ public class FlowHelper
     /// </summary>
     /// <param name="isRemote">if this is a remote flow and the file needs downloading</param>
     /// <param name="initialFlow">the initial flow to run after startup</param>
+    /// <param name="workingFile">the path of the working file</param>
     /// <returns>the startup flow</returns>
-    internal Flow GetStartupFlow(bool isRemote, Flow initialFlow)
+    internal Flow GetStartupFlow(bool isRemote, Flow initialFlow, string workingFile)
     {
         FlowInstances[initialFlow.Uid] = initialFlow;
 
@@ -52,7 +53,7 @@ public class FlowHelper
         };
         flow.Parts.Add(partStartup);
 
-        if (isRemote)
+        if (isRemote && Regex.IsMatch(workingFile, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) == false)
         {
             var partDownload = new FlowPart()
             {
@@ -241,6 +242,8 @@ public class FlowHelper
 
         if (part.FlowElementUid.EndsWith(".DirectoryIterator"))
             return DirectoryIterator.Load(part, runner);
+        if (part.FlowElementUid.EndsWith(".ListIterator"))
+            return ListIterator.Load(part, runner);
         
         var nt = GetFlowElementType(part.FlowElementUid);
         if (nt == null)

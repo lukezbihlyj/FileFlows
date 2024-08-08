@@ -12,6 +12,7 @@ using FileFlows.RemoteServices;
 using FileFlows.ServerShared.FileServices;
 using FileFlows.Shared;
 using Humanizer;
+using Microsoft.VisualBasic;
 
 namespace FileFlows.FlowRunner;
 
@@ -582,7 +583,7 @@ public class Runner
             _ = statService.RecordAverage(name, value);
         nodeParameters.AdditionalInfoRecorder = RecordAdditionalInfo;
 
-        var flow = new FlowHelper(runInstance).GetStartupFlow(Info.IsRemote, Flow);
+        var flow = new FlowHelper(runInstance).GetStartupFlow(Info.IsRemote, Flow, Info.WorkingFile);
 
         var flowExecutor = new ExecuteFlow()
         {

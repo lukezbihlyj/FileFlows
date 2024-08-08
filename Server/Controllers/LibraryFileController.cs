@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+using FileFlows.Plugin;
 using FileFlows.Server.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using FileFlows.Server.Helpers;
@@ -441,27 +443,34 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     /// <summary>
     /// Manually adds items for processing
     /// </summary>
-    /// <param name="flowUid">the UID of the flow to run for this these items</param>
-    /// <param name="paths">the paths to add</param>
+    /// <param name="model">the model</param>
     /// <returns>the response</returns>
-    [HttpPost("manually-add/{flowUid}")]
-    public async Task<IActionResult> ManuallyAdd([FromRoute] Guid flowUid, [FromBody] List<string> paths)
+    [HttpPost("manually-add")]
+    public async Task<IActionResult> ManuallyAdd([FromBody] AddFileModel model)
     {
-        if (paths?.Any() != true)
+        if (model?.Files?.Any() != true)
             return BadRequest("No items");
 
-        var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(flowUid);
+        var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(model.FlowUid);
         if (flow == null)
             return BadRequest("Unknown flow");
 
+        if (model.NodeUid != Guid.Empty)
+        {
+            var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(model.NodeUid);
+            if (node == null)
+                return BadRequest("Unknown node");
+        }
+        
         var service = ServiceLoader.Load<LibraryFileService>();
-        var newFiles = paths.Distinct().Select(x =>
+        var newFiles = model.Files.Distinct().Select(x =>
         {
             var lf = new LibraryFile()
             {
                 Status = FileStatus.Unprocessed,
                 Name = x,
                 LibraryUid = Globals.ManualLibraryUid,
+                FlowUid = flow.Uid,
                 Flow = new()
                 {
                     Name = flow.Name,
@@ -473,8 +482,15 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
                     Name = Globals.ManualLibrary,
                     Uid = Globals.ManualLibraryUid,
                     Type = typeof(Library).FullName
-                }
+                },
+                ProcessOnNodeUid = model.NodeUid == Guid.Empty ? null : model.NodeUid
             };
+            if (Regex.IsMatch(x, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
+            {
+                // get rest of url without domain,
+                // get the path, replace query strings with / 
+                // ie i want to fake a path for a url so http://mysite.com/a/b/c?ts=123 would be a/b/c/ts-123
+            }
             try
             {
                 var fileInfo = new FileInfo(x);

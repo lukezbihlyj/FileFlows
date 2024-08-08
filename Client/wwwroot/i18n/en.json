@@ -189,6 +189,8 @@
       "Fields": {
         "Mode": "Input Mode",
         "Flow": "Flow",
+        "Node": "Node",
+        "AnyNode": "Any Node",
         "List": "List",
         "Raw": "Bulk Input (Text Block)"
       }

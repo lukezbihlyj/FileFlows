@@ -56,6 +56,7 @@ public abstract class Formatter
             new NumberFormatter(),
             new SizeFormatter(),
             new FileFormatter(),
+            new UrlRelativePathFormatter(),
             _dateFormatter
         };
     }

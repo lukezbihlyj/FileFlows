@@ -1,17 +1,7 @@
-.select-field {
-  label {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
-  margin-bottom:1rem;
-  span {
-    margin-right:0.5rem;
-    width:10rem;
-  }
-  select {
-    flex-grow:1;
-    height:var(--line-height);
+.dialog-fields
+{
+  ::deep .row {
+    margin: 0.5rem 0;
   }
 }
 

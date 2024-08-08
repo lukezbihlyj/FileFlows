@@ -167,7 +167,7 @@
                                 else if(item.OriginalSize != null)
                                 {
                                     <div class="right-inner">
-                                        <span class="file-size">@FileSizeHelper.Humanize(item.OriginalSize.Value)</span>
+                                        <span class="file-size">@(item.OriginalSize.Value > 0 ? FileSizeHelper.Humanize(item.OriginalSize.Value) : "")</span>
                                     </div>
                                 }
                             </div>

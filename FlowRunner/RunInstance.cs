@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using FileFlows.ServerShared.Services;
 using FileFlows.Shared.Helpers;
@@ -207,7 +208,16 @@ public class RunInstance
         string workingFile = libFile.Name;
 
         var libfileService = ServiceLoader.Load<ILibraryFileService>();
-        var lib = args.Config.Libraries.FirstOrDefault(x => x.Uid == libFile.Library.Uid);
+        var lib = args.Config.Libraries.FirstOrDefault(x => x.Uid == libFile.LibraryUid);
+        if (lib == null && libFile.LibraryUid == Globals.ManualLibraryUid)
+        {
+            lib = new()
+            {
+                Uid = Globals.ManualLibraryUid, Name = Globals.ManualLibrary, Enabled = true,
+                Schedule = new string('1', 672)
+            };
+        }
+
         if (lib == null)
         {
             LogInfo("Library was not found, deleting library file");
@@ -217,20 +227,11 @@ public class RunInstance
             return (true, false);
         }
 
-        FileSystemInfo file = lib.Folders ? new DirectoryInfo(workingFile) : new FileInfo(workingFile);
-        bool fileExists = file.Exists; // set to variable so we can set this to false in debugging easily
-        bool remoteFile = false;
 
-        #if(DEBUG)
-        if(args.IsServer == false)
-            fileExists = false;
-        #endif
-        
-
-        var flow = args.Config.Flows.FirstOrDefault(x => x.Uid == (lib.Flow?.Uid ?? Guid.Empty));
+        var flow = args.Config.Flows.FirstOrDefault(x => x.Uid == (libFile.LibraryUid == Globals.ManualLibraryUid ? libFile.FlowUid : lib.Flow?.Uid ?? Guid.Empty));
         if (flow == null || flow.Uid == Guid.Empty)
         {
-            LogInfo("Flow not found, cannot process file: " + file.FullName);
+            LogInfo("Flow not found, cannot process file: " + workingFile);
             libFile.Status = FileStatus.FlowNotFound;
             FinishEarly(libFile);
             return (true, false);
@@ -247,68 +248,99 @@ public class RunInstance
             };
             // libfileService.Update(libFile).Wait();
         }
-        
-        
+
+
         IFileService _fileService;
-        if (fileExists)
+        bool remoteFile = false;
+        long initialSize = 0;
+
+        if (Regex.IsMatch(workingFile, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
         {
-            _fileService = args.IsServer
-                ? new LocalFileService { Logger = Logger }
-                : new MappedFileService(node, Logger);
-        }
-        else if (args.IsServer || libfileService.ExistsOnServer(libFile.Uid).Result == false)
-        {
-            // doesnt exist
-            libFile.Status = FileStatus.Processed;
-            LogInfo("Library file does not exist, deleting from library files: " + file.FullName);
-            FinishEarly(libFile);
-            libfileService.Delete(libFile.Uid).Wait();
-            return (true, false);
+            // url
+            remoteFile = true;
+            if (args.IsServer)
+                _fileService = new LocalFileService();
+            else if (args.Config.AllowRemote)
+                _fileService = new RemoteFileService(Uid, RemoteService.ServiceBaseUrl, args.WorkingDirectory,
+                    Logger,
+                    libFile.Name.Contains('/') ? '/' : '\\', RemoteService.AccessToken, RemoteService.NodeUid);
+            else
+                _fileService = new MappedFileService(node, Logger);
         }
         else
         {
-            _fileService = new MappedFileService(node, Logger);
-            bool exists = lib.Folders
-                ? _fileService.DirectoryExists(workingFile)
-                : _fileService.FileExists(workingFile);
-            
-            if (exists == false)
-            {
-                // need to try a remote
-                if (args.Config.AllowRemote == false)
-                {
-                    string mappedPath = _fileService.GetLocalPath(workingFile);
-                    libFile.FailureReason =
-                        "Library file exists but is not accessible from node: " + mappedPath;
-                    LogInfo("Mapped Path: " + mappedPath);
-                    LogError(libFile.FailureReason);
-                    libFile.Status = FileStatus.MappingIssue;
-                    libFile.ExecutedNodes = new List<ExecutedNode>();
-                    FinishEarly(libFile);
-                    return (true, false);
-                }
+            FileSystemInfo file = lib.Folders ? new DirectoryInfo(workingFile) : new FileInfo(workingFile);
+            bool fileExists = file.Exists; // set to variable so we can set this to false in debugging easily
 
-                if (lib.Folders)
-                {
-                    libFile.Status = FileStatus.MappingIssue;
-                    libFile.FailureReason =
-                        "Library folder exists, but remote file server is not available for folders: " + file.FullName;
-                    LogError(libFile.FailureReason);
-                    libFile.ExecutedNodes = new List<ExecutedNode>();
-                    FinishEarly(libFile);
-                    return (true, false);
-                }
-            
-                remoteFile = true;
-                _fileService = new RemoteFileService(Uid, RemoteService.ServiceBaseUrl, args.WorkingDirectory, Logger,
-                    libFile.Name.Contains('/') ? '/' : '\\', RemoteService.AccessToken, RemoteService.NodeUid);
+#if(DEBUG)
+            if (args.IsServer == false)
+                fileExists = false;
+#endif
+            if (fileExists)
+            {
+                _fileService = args.IsServer
+                    ? new LocalFileService { Logger = Logger }
+                    : new MappedFileService(node, Logger);
             }
+            else if (args.IsServer || libfileService.ExistsOnServer(libFile.Uid).Result == false)
+            {
+                // doesnt exist
+                libFile.Status = FileStatus.Processed;
+                LogInfo("Library file does not exist, deleting from library files: " + file.FullName);
+                FinishEarly(libFile);
+                libfileService.Delete(libFile.Uid).Wait();
+                return (true, false);
+            }
+            else
+            {
+                _fileService = new MappedFileService(node, Logger);
+                bool exists = lib.Folders
+                    ? _fileService.DirectoryExists(workingFile)
+                    : _fileService.FileExists(workingFile);
+
+                if (exists == false)
+                {
+                    // need to try a remote
+                    if (args.Config.AllowRemote == false)
+                    {
+                        string mappedPath = _fileService.GetLocalPath(workingFile);
+                        libFile.FailureReason =
+                            "Library file exists but is not accessible from node: " + mappedPath;
+                        LogInfo("Mapped Path: " + mappedPath);
+                        LogError(libFile.FailureReason);
+                        libFile.Status = FileStatus.MappingIssue;
+                        libFile.ExecutedNodes = new List<ExecutedNode>();
+                        FinishEarly(libFile);
+                        return (true, false);
+                    }
+
+                    if (lib.Folders)
+                    {
+                        libFile.Status = FileStatus.MappingIssue;
+                        libFile.FailureReason =
+                            "Library folder exists, but remote file server is not available for folders: " +
+                            file.FullName;
+                        LogError(libFile.FailureReason);
+                        libFile.ExecutedNodes = new List<ExecutedNode>();
+                        FinishEarly(libFile);
+                        return (true, false);
+                    }
+
+                    remoteFile = true;
+                    _fileService = new RemoteFileService(Uid, RemoteService.ServiceBaseUrl, args.WorkingDirectory,
+                        Logger,
+                        libFile.Name.Contains('/') ? '/' : '\\', RemoteService.AccessToken, RemoteService.NodeUid);
+                }
+            }
+
+            initialSize = lib.Folders
+                ? GetDirectorySize(workingFile)
+                : _fileService.FileSize(workingFile).ValueOrDefault;
         }
 
         FileService.Instance = _fileService;
 
         libFile.Status = FileStatus.Processing;
-        
 
         libFile.ProcessingStarted = DateTime.UtcNow;
         // libfileService.Update(libFile).Wait();
@@ -334,7 +366,7 @@ public class RunInstance
             IsDirectory = lib.Folders,
             LibraryPath = lib.Path, 
             Fingerprint = lib.UseFingerprinting,
-            InitialSize = lib.Folders ? GetDirectorySize(workingFile) : _fileService.FileSize(workingFile).ValueOrDefault,
+            InitialSize = initialSize,
             AdditionalInfos = new ()
         };
 

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Timers;
 using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components;
@@ -620,6 +621,8 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 #endif
         
         string extension = path[(index + 1)..].ToLowerInvariant();
+        if (Regex.IsMatch(path, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
+            extension = "url";
         return $"{prefix}/{extension}.svg";
     }
 
@@ -711,13 +714,14 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     /// </summary>
     private async Task Add()
     {
-        var result = await AddDialog.Show(Flows);
+        var nodes = Nodes.ToDictionary(x => x.Value.Uid, x => x.Value.Name);
+        var result = await AddDialog.Show(Flows, nodes);
         if (result.Files?.Any() != true)
             return;
         Blocker.Show();
         try
         {
-            await HttpHelper.Post(ApiUrl + $"/manually-add/{result.FlowUid}", result.Files);
+            await HttpHelper.Post(ApiUrl + $"/manually-add", result);
         }
         finally
         {

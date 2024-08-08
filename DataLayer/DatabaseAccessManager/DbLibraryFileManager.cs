@@ -1021,7 +1021,7 @@ internal class DbLibraryFileManager : BaseManager
             
 
             sql = $"select {Wrap(nameof(LibraryFile))}.* from {Wrap(nameof(LibraryFile))} " +
-                  $" inner join {Wrap(nameof(DbObject))} on " +
+                  $" left outer join {Wrap(nameof(DbObject))} on " +
                   $" {Wrap(nameof(DbObject))}.{Wrap(nameof(DbObject.Type))} = '{typeof(Library).FullName}' and " +
                   $" {Wrap(nameof(DbObject))}.{Wrap(nameof(DbObject.Uid))} = " +
                   (DbType != DatabaseType.Postgres

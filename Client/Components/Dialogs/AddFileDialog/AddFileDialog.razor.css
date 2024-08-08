@@ -1,18 +1,5 @@
-.select-field {
-  margin-bottom: 1rem;
-}
-.select-field label {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-}
-.select-field span {
-  margin-right: 0.5rem;
-  width: 10rem;
-}
-.select-field select {
-  flex-grow: 1;
-  height: var(--line-height);
+.dialog-fields ::deep .row {
+  margin: 0.5rem 0;
 }
 
 textarea {

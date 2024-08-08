@@ -260,7 +260,9 @@ public class LibraryFileService
         file.ExecutedNodes = new();
         file.FinalMetadata = new();
         file.OriginalMetadata= new();
-        await new LibraryFileManager().ResetFileInfoForProcessing(file.Uid, library?.Flow?.Uid, library?.Flow?.Name);
+        await new LibraryFileManager().ResetFileInfoForProcessing(file.Uid, 
+            file.LibraryUid == Globals.ManualLibraryUid ? file.FlowUid : library?.Flow?.Uid, 
+            file.LibraryUid == Globals.ManualLibraryUid ? file.FlowName : library?.Flow?.Name);
         #endregion
         logger.ILog($"File found to process: {file.Name}");
         
@@ -383,6 +385,16 @@ public class LibraryFileService
         var outOfSchedule = TimeHelper.InSchedule(node.Schedule) == false;
 
         var allLibraries = (await ServiceLoader.Load<LibraryService>().GetAllAsync());
+        if (allLibraries.Any(x => x.Uid == Globals.ManualLibraryUid) == false)
+        {
+            allLibraries.Add(new()
+            {
+                Uid = Globals.ManualLibraryUid,
+                Name = Globals.ManualLibrary,
+                Enabled = true,
+                Schedule = new string ('1', 672)
+            });
+        }
 
         bool processingOrderLicensed = LicenseHelper.IsLicensed(LicenseFlags.ProcessingOrder);
         var sysInfo = new LibraryFilterSystemInfo()
