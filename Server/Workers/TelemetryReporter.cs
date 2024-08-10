@@ -42,7 +42,7 @@ public class TelemetryReporter : ServerWorker
                 OS = x.OperatingSystem,
                 Architecture = x.Architecture,
                 Runners = x.FlowRunners,
-                Internal = x.Uid == Globals.InternalNodeUid || x.Name == Globals.InternalNodeName
+                Internal = x.Uid == CommonVariables.InternalNodeUid || x.Name == CommonVariables.InternalNodeName
             }).ToList();
             data.Architecture = RuntimeInformation.ProcessArchitecture.ToString();
             data.OS = isDocker ? "Docker" :

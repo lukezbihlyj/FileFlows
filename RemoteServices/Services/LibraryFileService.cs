@@ -90,7 +90,7 @@ public class LibraryFileService : RemoteService, ILibraryFileService
                 NodeName = nodeName,
                 NodeUid = nodeUid,
                 WorkerUid = workerUid,
-                NodeVersion = Globals.Version.ToString()
+                NodeVersion = ServerShared.Globals.Version.ToString()
             });
             if (result.Success == false)
                 return null; 

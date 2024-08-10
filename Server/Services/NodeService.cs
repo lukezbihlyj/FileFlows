@@ -21,7 +21,7 @@ public class NodeService //: INodeService
             return;
 
         var manager = new NodeManager();
-        var internalNode = manager.GetByUid(Globals.InternalNodeUid).Result;
+        var internalNode = manager.GetByUid(CommonVariables.InternalNodeUid).Result;
         if (internalNode != null)
         {
             bool update = false;
@@ -64,7 +64,7 @@ public class NodeService //: INodeService
     public async Task<ProcessingNode> GetServerNodeAsync()
     {
         var manager = new NodeManager();
-        var node = await manager.GetByUid(Globals.InternalNodeUid);
+        var node = await manager.GetByUid(CommonVariables.InternalNodeUid);
         if (node != null)
             return node;
         
@@ -72,9 +72,9 @@ public class NodeService //: INodeService
         bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);                
         node = await manager.Update(new ProcessingNode
         {
-            Uid = Globals.InternalNodeUid,
-            Name = Globals.InternalNodeName,
-            Address = Globals.InternalNodeName,
+            Uid = CommonVariables.InternalNodeUid,
+            Name = CommonVariables.InternalNodeName,
+            Address = CommonVariables.InternalNodeName,
             Schedule = new string('1', 672),
             Enabled = true,
             FlowRunners = 1,

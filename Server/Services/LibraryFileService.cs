@@ -152,7 +152,7 @@ public class LibraryFileService
                     LibraryFile = result.File,
                     NodeName = nodeName,
                     NodeUid = nodeUid,
-                    IsRemote = nodeUid != Globals.InternalNodeUid,
+                    IsRemote = nodeUid != CommonVariables.InternalNodeUid,
                     RelativeFile = result.File.RelativePath,
                     Library = result.File.Library,
                     IsDirectory = result.File.IsDirectory,
@@ -203,7 +203,7 @@ public class LibraryFileService
             await nodeService.UpdateVersion(node.Uid, nodeVersion);
         }
         
-        if (nodeUid != Globals.InternalNodeUid) // dont test version number for internal processing node
+        if (nodeUid != CommonVariables.InternalNodeUid) // dont test version number for internal processing node
         {
             if (Version.TryParse(nodeVersion, out var nVersion) == false)
             {
@@ -261,8 +261,8 @@ public class LibraryFileService
         file.FinalMetadata = new();
         file.OriginalMetadata= new();
         await new LibraryFileManager().ResetFileInfoForProcessing(file.Uid, 
-            file.LibraryUid == Globals.ManualLibraryUid ? file.FlowUid : library?.Flow?.Uid, 
-            file.LibraryUid == Globals.ManualLibraryUid ? file.FlowName : library?.Flow?.Name);
+            file.LibraryUid == CommonVariables.ManualLibraryUid ? file.FlowUid : library?.Flow?.Uid, 
+            file.LibraryUid == CommonVariables.ManualLibraryUid ? file.FlowName : library?.Flow?.Name);
         #endregion
         logger.ILog($"File found to process: {file.Name}");
         
@@ -385,12 +385,12 @@ public class LibraryFileService
         var outOfSchedule = TimeHelper.InSchedule(node.Schedule) == false;
 
         var allLibraries = (await ServiceLoader.Load<LibraryService>().GetAllAsync());
-        if (allLibraries.Any(x => x.Uid == Globals.ManualLibraryUid) == false)
+        if (allLibraries.Any(x => x.Uid == CommonVariables.ManualLibraryUid) == false)
         {
             allLibraries.Add(new()
             {
-                Uid = Globals.ManualLibraryUid,
-                Name = Globals.ManualLibrary,
+                Uid = CommonVariables.ManualLibraryUid,
+                Name = CommonVariables.ManualLibrary,
                 Enabled = true,
                 Schedule = new string ('1', 672)
             });

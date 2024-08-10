@@ -544,6 +544,7 @@ public partial class Flow : ComponentBase, IDisposable
 
         List<ListOption>? flowOptions = null;
         List<ListOption>? nodeOptions = null;
+        List<ListOption>? libraryOptions = null;
         List<ListOption>? variableOptions = null;
 
         foreach (var field in fields)
@@ -633,25 +634,51 @@ public partial class Flow : ComponentBase, IDisposable
                             if (nodeOptions == null)
                             {
                                 nodeOptions = new List<ListOption>();
-                                var flowsResult = await HttpHelper.Get<ProcessingNode[]>($"/api/node");
-                                if (flowsResult.Success)
+                                var nodesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/node/basic-list?enabled=true");
+                                if (nodesResult.Success)
                                 {
-                                    nodeOptions = flowsResult.Data?.Where(x => x.Enabled)?.OrderBy(x => x.Name)?.Select(
+                                    nodeOptions = nodesResult.Data.OrderBy(x => x.Value.ToLowerInvariant()).Select(
                                         x => new ListOption
                                         {
-                                            Label = x.Name == "FileFlowsServer" ? "Internal Processing Node" : x.Name,
+                                            Label = x.Value == "FileFlowsServer" ? "Internal Processing Node" : x.Value,
                                             Value = new ObjectReference
                                             {
-                                                Name = x.Name,
-                                                Uid = x.Uid,
-                                                Type = x.GetType().FullName
+                                                Name = x.Value,
+                                                Uid = x.Key,
+                                                Type = typeof(FileFlows.Shared.Models.ProcessingNode).FullName
                                             }
                                         })?.ToList() ?? new List<ListOption>();
                                 }
-
                             }
 
                             field.Parameters["Options"] = nodeOptions;
+                        }
+                        else if (optp == "LIBRARY_LIST")
+                        {
+                            if (libraryOptions == null)
+                            {
+                                libraryOptions = new List<ListOption>();
+                                var librariesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/library/basic-list");
+                                if (librariesResult.Success)
+                                {
+                                    if (librariesResult.Data.ContainsKey(CommonVariables.ManualLibraryUid) == false)
+                                        librariesResult.Data[CommonVariables.ManualLibraryUid] =
+                                            CommonVariables.ManualLibrary;
+                                    libraryOptions = librariesResult.Data.OrderBy(x => x.Value.ToLowerInvariant()).Select(
+                                        x => new ListOption
+                                        {
+                                            Label = x.Value,
+                                            Value = new ObjectReference
+                                            {
+                                                Name = x.Value,
+                                                Uid = x.Key,
+                                                Type = typeof(FileFlows.Shared.Models.ProcessingNode).FullName
+                                            }
+                                        })?.ToList() ?? new List<ListOption>();
+                                }
+                            }
+
+                            field.Parameters["Options"] = libraryOptions;
                         }
                     }
                 }

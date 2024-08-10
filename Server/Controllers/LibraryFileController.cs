@@ -469,7 +469,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
             {
                 Status = FileStatus.Unprocessed,
                 Name = x,
-                LibraryUid = Globals.ManualLibraryUid,
+                LibraryUid = CommonVariables.ManualLibraryUid,
                 FlowUid = flow.Uid,
                 CustomVariables = model.CustomVariables,
                 Flow = new()
@@ -480,8 +480,8 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
                 },
                 Library = new()
                 {
-                    Name = Globals.ManualLibrary,
-                    Uid = Globals.ManualLibraryUid,
+                    Name = CommonVariables.ManualLibrary,
+                    Uid = CommonVariables.ManualLibraryUid,
                     Type = typeof(Library).FullName
                 },
                 ProcessOnNodeUid = model.NodeUid == Guid.Empty ? null : model.NodeUid

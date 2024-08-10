@@ -178,6 +178,6 @@ public class LibraryWorker : ServerWorker
     internal static void ResetProcessing(bool internalOnly = true)
     {
         var service = new Server.Services.LibraryFileService();
-        service.ResetProcessingStatus(internalOnly ? Globals.InternalNodeUid : null).Wait();
+        service.ResetProcessingStatus(internalOnly ? CommonVariables.InternalNodeUid : null).Wait();
     }
 }

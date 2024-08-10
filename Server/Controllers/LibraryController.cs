@@ -47,7 +47,7 @@ public class LibraryController : BaseController
     /// </summary>
     /// <returns>library list</returns>
     [HttpGet("basic-list")]
-    [FileFlowsAuthorize(UserRole.Files | UserRole.Nodes | UserRole.Reports)]
+    [FileFlowsAuthorize(UserRole.Files | UserRole.Nodes | UserRole.Reports | UserRole.Flows)]
     public async Task<Dictionary<Guid, string>> GetLibraryList()
     {
         var items = await new LibraryService().GetAllAsync();

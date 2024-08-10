@@ -89,6 +89,11 @@ public class NodeParameters
     /// Gets the processing node this is running on
     /// </summary>
     public ObjectReference Node { get; init; }
+    
+    /// <summary>
+    /// Gets or sets the library this file is from
+    /// </summary>
+    public ObjectReference Library { get; init; }
 
     /// <summary>
     /// Gets or sets the parameters used in the flow execution

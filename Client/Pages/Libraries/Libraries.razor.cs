@@ -298,6 +298,8 @@ public partial class Libraries : ListPage<Guid, Library>
     /// <inheritdoc />
     public override Task PostLoad()
     {
+        Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
+        
         if (initialSortOrder == null)
         {
             Data = Data?.OrderByDescending(x => x.Enabled)?.ThenBy(x => x.Name)

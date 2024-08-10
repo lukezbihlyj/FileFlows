@@ -209,11 +209,11 @@ public class RunInstance
 
         var libfileService = ServiceLoader.Load<ILibraryFileService>();
         var lib = args.Config.Libraries.FirstOrDefault(x => x.Uid == libFile.LibraryUid);
-        if (lib == null && libFile.LibraryUid == Globals.ManualLibraryUid)
+        if (lib == null && libFile.LibraryUid == CommonVariables.ManualLibraryUid)
         {
             lib = new()
             {
-                Uid = Globals.ManualLibraryUid, Name = Globals.ManualLibrary, Enabled = true,
+                Uid = CommonVariables.ManualLibraryUid, Name = CommonVariables.ManualLibrary, Enabled = true,
                 Schedule = new string('1', 672)
             };
         }
@@ -228,7 +228,7 @@ public class RunInstance
         }
 
 
-        var flow = args.Config.Flows.FirstOrDefault(x => x.Uid == (libFile.LibraryUid == Globals.ManualLibraryUid ? libFile.FlowUid : lib.Flow?.Uid ?? Guid.Empty));
+        var flow = args.Config.Flows.FirstOrDefault(x => x.Uid == (libFile.LibraryUid == CommonVariables.ManualLibraryUid ? libFile.FlowUid : lib.Flow?.Uid ?? Guid.Empty));
         if (flow == null || flow.Uid == Guid.Empty)
         {
             LogInfo("Flow not found, cannot process file: " + workingFile);

@@ -102,7 +102,7 @@ public class FlowRunnerService : IFlowRunnerService
             else
             {
                 await service.ResetFileInfoForProcessing(info.LibraryFile.Uid, 
-                    info.LibraryFile.LibraryUid == Globals.ManualLibraryUid ? info.LibraryFile.FlowUid : null, 
+                    info.LibraryFile.LibraryUid == CommonVariables.ManualLibraryUid ? info.LibraryFile.FlowUid : null, 
                     string.Empty);
             }
         }

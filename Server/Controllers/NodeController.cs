@@ -23,12 +23,12 @@ public class NodeController : BaseController
     {
         var service = ServiceLoader.Load<NodeService>();
         var nodes = (await service.GetAllAsync())
-            .OrderBy(x => x.Address == Globals.InternalNodeName ? 0 : 1)
+            .OrderBy(x => x.Address == CommonVariables.InternalNodeName ? 0 : 1)
             .ThenBy(x => x.Name)
             .ToList();
         
 #if (DEBUG)
-        var internalNode = nodes.FirstOrDefault(x => x.Uid == Globals.InternalNodeUid);
+        var internalNode = nodes.FirstOrDefault(x => x.Uid == CommonVariables.InternalNodeUid);
         // set this to linux so we can test the full UI
         if (internalNode != null)
             internalNode.OperatingSystem = OperatingSystemType.Linux;
@@ -44,9 +44,9 @@ public class NodeController : BaseController
                 node.Status = ProcessingNodeStatus.Disabled;
             else if (TimeHelper.InSchedule(node.Schedule) == false)
                 node.Status = ProcessingNodeStatus.OutOfSchedule;
-            else if (node.Version != Globals.Version && node.Uid != Globals.InternalNodeUid)
+            else if (node.Version != Globals.Version && node.Uid != CommonVariables.InternalNodeUid)
                 node.Status = ProcessingNodeStatus.VersionMismatch;
-            else if (node.LastSeen < DateTime.UtcNow.AddMinutes(-5) && node.Uid != Globals.InternalNodeUid)
+            else if (node.LastSeen < DateTime.UtcNow.AddMinutes(-5) && node.Uid != CommonVariables.InternalNodeUid)
                 node.Status = ProcessingNodeStatus.Offline;
             else if (FlowRunnerService.Executors.Any(x => x.Value.NodeUid == node.Uid))
                 node.Status = ProcessingNodeStatus.Processing;
@@ -77,13 +77,16 @@ public class NodeController : BaseController
     /// <summary>
     /// Basic flow list
     /// </summary>
+    /// <param name="enabled">if the nodes should be enabled, otherwise all are returned</param>
     /// <returns>flow list</returns>
     [HttpGet("basic-list")]
-    [FileFlowsAuthorize(UserRole.Nodes | UserRole.Admin | UserRole.Reports)]
-    public async Task<Dictionary<Guid, string>> GetNodeList()
+    [FileFlowsAuthorize(UserRole.Nodes | UserRole.Admin | UserRole.Reports | UserRole.Flows)]
+    public async Task<Dictionary<Guid, string>> GetNodeList([FromQuery] bool? enabled = null)
     {
         var items = await new NodeService().GetAllAsync();
-        return items.ToDictionary(x => x.Uid, x => x.Name == Globals.InternalNodeName ? "Internal Processing Node" : x.Name);
+        if (enabled == true)
+            items = items.Where(x => x.Enabled).ToList();
+        return items.ToDictionary(x => x.Uid, x => x.Name == CommonVariables.InternalNodeName ? "Internal Processing Node" : x.Name);
     }
 
     /// <summary>
@@ -96,11 +99,11 @@ public class NodeController : BaseController
         var data = (await GetAll())
             .OrderBy(x => x.Enabled ? 1 : 2)
             .ThenByDescending(x => x.Priority)
-            .ThenBy(x => x.Uid == Globals.InternalNodeUid ? 1 : 2)
+            .ThenBy(x => x.Uid == CommonVariables.InternalNodeUid ? 1 : 2)
             .ThenBy(x => x.Name)
             .Select(x => new
             {
-                Name = x.Uid == Globals.InternalNodeUid ? "Internal" : x.Name,
+                Name = x.Uid == CommonVariables.InternalNodeUid ? "Internal" : x.Name,
                 Status = (int) x.Status,
                 StatusText = $"Enums.{nameof(ProcessingNodeStatus)}.{x.Status}"
             });
@@ -142,10 +145,10 @@ public class NodeController : BaseController
         }
         
 
-        if(node.Uid == Globals.InternalNodeUid)
+        if(node.Uid == CommonVariables.InternalNodeUid)
         {
             Logger.Instance.ILog("Updating internal processing node");
-            var internalNode = (await GetAll()).FirstOrDefault(x => x.Uid == Globals.InternalNodeUid);
+            var internalNode = (await GetAll()).FirstOrDefault(x => x.Uid == CommonVariables.InternalNodeUid);
             if(internalNode != null)
             {
                 internalNode.Schedule = node.Schedule;
@@ -173,8 +176,8 @@ public class NodeController : BaseController
             
             // internal but doesnt exist
             Logger.Instance.ILog("Internal processing node does not exist, creating.");
-            node.Address = Globals.InternalNodeName;
-            node.Name = Globals.InternalNodeName;
+            node.Address = CommonVariables.InternalNodeName;
+            node.Name = CommonVariables.InternalNodeName;
             node.AllLibraries = ProcessingLibraries.All;
             node.Mappings = null; // no mappings for internal
             node.Variables ??= new();
@@ -214,7 +217,7 @@ public class NodeController : BaseController
     public async Task Delete([FromBody] ReferenceModel<Guid> model)
     {
         var internalNode =  (await GetAll())
-            .FirstOrDefault(x => x.Address == Globals.InternalNodeName)?.Uid ?? Guid.Empty;
+            .FirstOrDefault(x => x.Address == CommonVariables.InternalNodeName)?.Uid ?? Guid.Empty;
         if (model.Uids.Contains(internalNode))
             throw new Exception("ErrorMessages.CannotDeleteInternalNode");
         await ServiceLoader.Load<NodeService>().Delete(model.Uids, await GetAuditDetails());
@@ -297,7 +300,7 @@ public class NodeController : BaseController
 
         // doesnt exist, register a new node.
         var variables = await ServiceLoader.Load<VariableService>().GetAllAsync();
-        bool isSystem = address == Globals.InternalNodeName;
+        bool isSystem = address == CommonVariables.InternalNodeName;
         var node = new ProcessingNode
         {
             Name = address,

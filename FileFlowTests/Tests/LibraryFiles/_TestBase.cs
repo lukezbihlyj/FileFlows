@@ -47,8 +47,8 @@
 //         };
 //         InternalNode = new()
 //         {
-//             Uid = Globals.InternalNodeUid,
-//             Name = Globals.InternalNodeName,
+//             Uid = CommonVariables.InternalNodeUid,
+//             Name = CommonVariables.InternalNodeName,
 //             Enabled = true,
 //             Version = Globals.Version.ToString(),
 //             AllLibraries = ProcessingLibraries.All
@@ -60,7 +60,7 @@
 //         });
 //         // moq.Setup(x => x.GetByUidAsync(It.Is<Guid>(y => y == Node.Uid)))
 //         //     .Returns(() => Task.FromResult(Node));
-//         // moq.Setup(x => x.GetByUidAsync(It.Is<Guid>(y => y == Globals.InternalNodeUid)))
+//         // moq.Setup(x => x.GetByUidAsync(It.Is<Guid>(y => y == CommonVariables.InternalNodeUid)))
 //         //     .Returns(() => Task.FromResult(InternalNode));
 //     }
 //

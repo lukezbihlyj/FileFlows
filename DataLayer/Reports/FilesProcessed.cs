@@ -1,6 +1,7 @@
 using FileFlows.DataLayer.Reports.Helpers;
 using FileFlows.Plugin;
 using FileFlows.ServerShared;
+using FileFlows.Shared;
 using FileFlows.Shared.Formatters;
 using FileFlows.Shared.Models;
 using Humanizer;
@@ -98,7 +99,7 @@ public class FilesProcessed : Report
         builder.StartChartTableRow();
         builder.AddRowItem(DateBasedChartHelper.Generate(minDateUtc.Value, maxDateUtc.Value, dataCount, emailing, generateTable: false));
         builder.AddRowItem(TableGenerator.GenerateMinimumTable("Most Files", ["Node", "Count"],
-            files.GroupBy(x => x.NodeName).Select(x => new { Node = x.Key == Globals.InternalNodeName ? "Internal Processing Node" : x.Key, Count = x.Count()})
+            files.GroupBy(x => x.NodeName).Select(x => new { Node = x.Key == CommonVariables.InternalNodeName ? "Internal Processing Node" : x.Key, Count = x.Count()})
                 .OrderByDescending(x => x.Count)
                 .Select(x => new object[] { x.Node, x.Count})
                 .Take(TableGenerator.MIN_TABLE_ROWS).ToArray()
@@ -111,7 +112,7 @@ public class FilesProcessed : Report
         builder.AddRowItem(TableGenerator.GenerateMinimumTable("Largest Files", ["Name", "Node", "Size"],
             files.OrderByDescending(x => x.OriginalSize).Select(x => new object[] { 
                     FileNameFormatter.Format(x.Name), 
-                    x.NodeName == Globals.InternalNodeName ? "Internal Node" : x.NodeName,
+                    x.NodeName == CommonVariables.InternalNodeName ? "Internal Node" : x.NodeName,
                     FileSizeFormatter.Format(x.OriginalSize)})
                 .Take(TableGenerator.MIN_TABLE_ROWS).ToArray()
             , widths: ["", "10rem", ""], emailing: emailing));
@@ -124,7 +125,7 @@ public class FilesProcessed : Report
             files.OrderByDescending(x => x.OriginalSize).Select(x => new object[]
                 {
                     FileNameFormatter.Format(x.Name), 
-                    x.NodeName == Globals.InternalNodeName ? "Internal Node" : x.NodeName,
+                    x.NodeName == CommonVariables.InternalNodeName ? "Internal Node" : x.NodeName,
                     FileSizeFormatter.Format(x.OriginalSize)
                 })
                 .Take(TableGenerator.MIN_TABLE_ROWS).ToArray()

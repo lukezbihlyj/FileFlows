@@ -31,8 +31,8 @@ public class AuditDetails
     public static AuditDetails ForServer()
         => new ()
         {
-            UserName = Globals.OperatorFileFlowsServerName,
-            UserUid = Globals.OperatorFileFlowsServerUid,
+            UserName = CommonVariables.OperatorFileFlowsServerName,
+            UserUid = CommonVariables.OperatorFileFlowsServerUid,
             OperatorType = OperatorType.System,
             IPAddress = ""
         };

@@ -7,8 +7,8 @@
 //     public void Basic()
 //     {
 //         var service = new FileFlows.Server.Services.LibraryFileService();
-//         var nextResult = service.GetNext(Globals.InternalNodeName, 
-//             Globals.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
+//         var nextResult = service.GetNext(CommonVariables.InternalNodeName, 
+//             CommonVariables.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
 //         Assert.IsNotNull(nextResult);
 //         Assert.AreEqual(NextLibraryFileStatus.Success, nextResult.Status);
 //         Assert.IsNotNull(nextResult.File);
@@ -25,8 +25,8 @@
 //         InternalNode.AllLibraries = ProcessingLibraries.Only;
 //         
 //         var service = new FileFlows.Server.Services.LibraryFileService();
-//         var nextResult = service.GetNext(Globals.InternalNodeName, 
-//             Globals.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
+//         var nextResult = service.GetNext(CommonVariables.InternalNodeName, 
+//             CommonVariables.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
 //         Assert.IsNotNull(nextResult);
 //         Assert.AreEqual(NextLibraryFileStatus.Success, nextResult.Status);
 //         Assert.IsNotNull(nextResult.File);
@@ -45,8 +45,8 @@
 //         InternalNode.AllLibraries = ProcessingLibraries.AllExcept;
 //         
 //         var service = new FileFlows.Server.Services.LibraryFileService();
-//         var nextResult = service.GetNext(Globals.InternalNodeName, 
-//             Globals.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
+//         var nextResult = service.GetNext(CommonVariables.InternalNodeName, 
+//             CommonVariables.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
 //         Assert.IsNotNull(nextResult);
 //         Assert.AreEqual(NextLibraryFileStatus.Success, nextResult.Status);
 //         Assert.IsNotNull(nextResult.File);
@@ -239,8 +239,8 @@
 //     private NextLibraryFileResult GetNextFile()
 //     {
 //         var service = new FileFlows.Server.Services.LibraryFileService();
-//         var nextResult = service.GetNext(Globals.InternalNodeName, 
-//             Globals.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
+//         var nextResult = service.GetNext(CommonVariables.InternalNodeName, 
+//             CommonVariables.InternalNodeUid, Globals.Version.ToString(), Guid.NewGuid()).Result;
 //         return nextResult;
 //     }
 //

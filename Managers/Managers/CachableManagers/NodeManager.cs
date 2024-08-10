@@ -42,7 +42,7 @@ public class NodeManager : CachedManager<ProcessingNode>
     public async Task<ProcessingNode?> GetByAddress(string address)
     {
         if (address == "INTERNAL_NODE")
-            return await GetByUid(Globals.InternalNodeUid);
+            return await GetByUid(CommonVariables.InternalNodeUid);
         address = address.Trim().ToLowerInvariant();
         var all = await GetAll();
         return all.FirstOrDefault(x => x.Address.ToLowerInvariant() == address);
@@ -68,7 +68,7 @@ public class NodeManager : CachedManager<ProcessingNode>
         try
         {
             var manager = DatabaseAccessManager.Instance.FileFlowsObjectManager;
-            var node = await manager.Single<ProcessingNode>(Globals.InternalNodeUid);
+            var node = await manager.Single<ProcessingNode>(CommonVariables.InternalNodeUid);
             if (node.Failed(out string error))
                 return Result<bool>.Fail(error);
             if (node.Value == null)
@@ -84,9 +84,9 @@ public class NodeManager : CachedManager<ProcessingNode>
 
                 node = new ProcessingNode
                 {
-                    Uid = Globals.InternalNodeUid,
-                    Name = Globals.InternalNodeName,
-                    Address = Globals.InternalNodeName,
+                    Uid = CommonVariables.InternalNodeUid,
+                    Name = CommonVariables.InternalNodeName,
+                    Address = CommonVariables.InternalNodeName,
                     AllLibraries = ProcessingLibraries.All,
                     OperatingSystem = Globals.IsDocker ? OperatingSystemType.Docker :
                         Globals.IsWindows ? OperatingSystemType.Windows :

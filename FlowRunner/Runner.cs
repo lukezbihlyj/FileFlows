@@ -453,6 +453,10 @@ public class Runner
             Info.IsDirectory, Info.LibraryPath, fileService: FileService.Instance)
         {
             Node = new () { Uid = Node.Uid, Name = Node.Name, Type = Node.Address },
+            Library = Info.LibraryFile.Library ?? new () { Uid = Info.LibraryFile.LibraryUid!.Value, 
+                Name = Info.LibraryFile.Name, 
+                Type = typeof(Library).FullName
+            },
             Enterprise = runInstance.Config.Enterprise,
             LibraryFileName = Info.LibraryFile.Name,
             IsRemote = Info.IsRemote,
