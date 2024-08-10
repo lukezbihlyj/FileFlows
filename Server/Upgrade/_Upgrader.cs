@@ -194,7 +194,7 @@ public class Upgrader
             }
         }
         
-        if (currentVersion < new Version(24, 8, 1, 3450))
+        if (currentVersion < new Version(24, 8, 1, 3448))
         {
             statusCallback("Running 24.08.1 upgrade");
             Logger.Instance.ILog("Running 24.08.1 upgrade");
