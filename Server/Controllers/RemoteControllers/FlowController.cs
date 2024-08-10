@@ -27,12 +27,12 @@ public class FlowController : Controller
     /// </summary>
     /// <returns>flow list</returns>
     [HttpGet("basic-list")]
-    public async Task<Dictionary<Guid, string>> GetFlowList([FromQuery] FlowType? type = null)
+    public async Task<Dictionary<Guid, string>> GetFlowList([FromQuery] FlowType? type = FlowType.Standard)
     {
         IEnumerable<Flow> items = await new FlowService().GetAllAsync();
         if (type != null)
             items = items.Where(x => x.Type == type.Value);
-        return items.ToDictionary(x => x.Uid, x => x.Name);
+        return items.OrderBy(x => x.Name.ToLowerInvariant()).ToDictionary(x => x.Uid, x => x.Name);
     }
     
     /// <summary>
