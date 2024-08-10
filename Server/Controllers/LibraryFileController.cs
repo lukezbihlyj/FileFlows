@@ -10,6 +10,7 @@ using FileFlows.Server.Workers;
 using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Helpers;
 using Humanizer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using LibraryFileService = FileFlows.Server.Services.LibraryFileService;
 using LibraryService = FileFlows.Server.Services.LibraryService;
 using NodeService = FileFlows.Server.Services.NodeService;
@@ -439,7 +440,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
         }
     }
 
-    
+
     /// <summary>
     /// Manually adds items for processing
     /// </summary>
@@ -448,68 +449,8 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     [HttpPost("manually-add")]
     public async Task<IActionResult> ManuallyAdd([FromBody] AddFileModel model)
     {
-        if (model?.Files?.Any() != true)
-            return BadRequest("No items");
-
-        var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(model.FlowUid);
-        if (flow == null)
-            return BadRequest("Unknown flow");
-
-        if (model.NodeUid != Guid.Empty)
-        {
-            var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(model.NodeUid);
-            if (node == null)
-                return BadRequest("Unknown node");
-        }
-        
-        var service = ServiceLoader.Load<LibraryFileService>();
-        var newFiles = model.Files.Distinct().Select(x =>
-        {
-            var lf = new LibraryFile()
-            {
-                Status = FileStatus.Unprocessed,
-                Name = x,
-                LibraryUid = CommonVariables.ManualLibraryUid,
-                FlowUid = flow.Uid,
-                CustomVariables = model.CustomVariables,
-                Flow = new()
-                {
-                    Name = flow.Name,
-                    Type = flow.GetType().FullName,
-                    Uid = flow.Uid
-                },
-                Library = new()
-                {
-                    Name = CommonVariables.ManualLibrary,
-                    Uid = CommonVariables.ManualLibraryUid,
-                    Type = typeof(Library).FullName
-                },
-                ProcessOnNodeUid = model.NodeUid == Guid.Empty ? null : model.NodeUid
-            };
-            if (Regex.IsMatch(x, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
-            {
-                // get rest of url without domain,
-                // get the path, replace query strings with / 
-                // ie i want to fake a path for a url so http://mysite.com/a/b/c?ts=123 would be a/b/c/ts-123
-            }
-            try
-            {
-                var fileInfo = new FileInfo(x);
-                if (fileInfo.Exists)
-                {
-                    lf.CreationTime = fileInfo.CreationTimeUtc;
-                    lf.LastWriteTime = fileInfo.LastWriteTimeUtc;
-                    lf.OriginalSize = fileInfo.Length;
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            return lf;
-        }).ToArray();
-        await service.Insert(newFiles);
+        if ((await ServiceLoader.Load<LibraryFileService>().ManuallyAdd(model)).Failed(out var error))
+            return BadRequest(error);
         return Ok();
     }
 }

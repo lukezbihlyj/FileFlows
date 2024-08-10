@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 using FileFlows.Managers;
 using FileFlows.Plugin;
 using FileFlows.Server.Helpers;
@@ -7,6 +8,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
 using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using ILogger = FileFlows.Plugin.ILogger;
 
 namespace FileFlows.Server.Services;
@@ -792,4 +794,75 @@ public class LibraryFileService
     /// <returns>the matching files</returns>
     public Task<List<LibraryFile>> Search(LibraryFileSearchModel filter)
         => new LibraryFileManager().Search(filter);
+
+    /// <summary>
+    /// Manually adds items for processing
+    /// </summary>
+    /// <param name="model">the model</param>
+    /// <returns>true if succesful, otherwise false</returns>
+    public async Task<Result<bool>> ManuallyAdd(AddFileModel model)
+    {
+        if (model?.Files?.Any() != true)
+            return Result<bool>.Fail("No items");
+
+        var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(model.FlowUid);
+        if (flow == null)
+            return Result<bool>.Fail("Unknown flow");
+
+        if (model.NodeUid != Guid.Empty)
+        {
+            var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(model.NodeUid);
+            if (node == null)
+                return Result<bool>.Fail("Unknown node");
+        }
+        
+        var newFiles = model.Files.Distinct().Select(x =>
+        {
+            var lf = new LibraryFile()
+            {
+                Status = FileStatus.Unprocessed,
+                Name = x,
+                LibraryUid = CommonVariables.ManualLibraryUid,
+                FlowUid = flow.Uid,
+                CustomVariables = model.CustomVariables,
+                Flow = new()
+                {
+                    Name = flow.Name,
+                    Type = flow.GetType().FullName,
+                    Uid = flow.Uid
+                },
+                Library = new()
+                {
+                    Name = CommonVariables.ManualLibrary,
+                    Uid = CommonVariables.ManualLibraryUid,
+                    Type = typeof(Library).FullName
+                },
+                ProcessOnNodeUid = model.NodeUid == Guid.Empty ? null : model.NodeUid
+            };
+            if (Regex.IsMatch(x, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
+            {
+                // get rest of url without domain,
+                // get the path, replace query strings with / 
+                // ie i want to fake a path for a url so http://mysite.com/a/b/c?ts=123 would be a/b/c/ts-123
+            }
+            try
+            {
+                var fileInfo = new FileInfo(x);
+                if (fileInfo.Exists)
+                {
+                    lf.CreationTime = fileInfo.CreationTimeUtc;
+                    lf.LastWriteTime = fileInfo.LastWriteTimeUtc;
+                    lf.OriginalSize = fileInfo.Length;
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return lf;
+        }).ToArray();
+        await Insert(newFiles);
+        return true;
+    }
 }

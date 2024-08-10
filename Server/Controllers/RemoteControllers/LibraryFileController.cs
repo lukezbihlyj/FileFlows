@@ -15,6 +15,19 @@ namespace FileFlows.Server.Controllers.RemoteControllers;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class LibraryFileController : Controller
 {
+
+    /// <summary>
+    /// Manually adds items for processing
+    /// </summary>
+    /// <param name="model">the model</param>
+    /// <returns>the response</returns>
+    [HttpPost("manually-add")]
+    public async Task<IActionResult> ManuallyAdd([FromBody] AddFileModel model)
+    {
+        if ((await ServiceLoader.Load<LibraryFileService>().ManuallyAdd(model)).Failed(out var error))
+            return BadRequest(error);
+        return Ok(new { Added = true });
+    }
     
     /// <summary>
     /// Get a specific library file
