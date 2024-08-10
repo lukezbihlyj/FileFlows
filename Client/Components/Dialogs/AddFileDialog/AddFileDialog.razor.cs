@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
 
@@ -145,6 +146,7 @@ public partial class AddFileDialog : ComponentBase, IDisposable
     {
         Files = new ();
         TextList = string.Empty;
+        CustomVariables = new();
         Visible = true;
         FlowOptions = flows.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption { Label = x.Value, Value = x.Key }).ToList();
@@ -177,10 +179,29 @@ public partial class AddFileDialog : ComponentBase, IDisposable
     private async void Save()
     {
         this.Visible = false;
+
+        var dict = new Dictionary<string, object>();
+        foreach (var kv in CustomVariables)
+        {
+            if (dict.Keys.Any(x => x.Equals(kv.Key, StringComparison.InvariantCultureIgnoreCase)))
+                continue;
+            object v = kv.Value;
+            if (kv.Value.ToLowerInvariant() == "true")
+                v = true;
+            else if (kv.Value.ToLowerInvariant() == "false")
+                v = false;
+            else if (Regex.IsMatch(kv.Value, "^[\\d]+$"))
+                v = int.Parse(kv.Value);
+            else if (Regex.IsMatch(kv.Value, "^[\\d]+\\.[\\d]+$"))
+                v = float.Parse(kv.Value);
+            dict[kv.Key] = v;
+        }
+        
         ShowTask.TrySetResult(new AddFileModel()
         {
             FlowUid = FlowUid,
             NodeUid = NodeUid,
+            CustomVariables = dict,
             Files = Mode == 0 ? Files : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList()
         });
         await Task.CompletedTask;
@@ -244,4 +265,9 @@ public partial class AddFileDialog : ComponentBase, IDisposable
                 NodeUid = uid;
         }
     }
+
+    /// <summary>
+    /// Gets or sets the custom variables
+    /// </summary>
+    private List<KeyValuePair<string, string>> CustomVariables { get; set; } = new();
 }

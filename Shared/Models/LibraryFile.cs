@@ -281,6 +281,12 @@ public class LibraryFile : FileFlowObject
     /// </summary>
     [Column]
     public Dictionary<string, object> FinalMetadata { get; set; }
+    
+    /// <summary>
+    /// Gets or sets custom variables to use with this file
+    /// </summary>
+    [Column]
+    public Dictionary<string, object> CustomVariables { get; set; }
 
 }
 

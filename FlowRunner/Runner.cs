@@ -11,8 +11,10 @@ using FileFlows.Plugin.Services;
 using FileFlows.RemoteServices;
 using FileFlows.ServerShared.FileServices;
 using FileFlows.Shared;
+using FileFlows.Shared.Helpers;
 using Humanizer;
 using Microsoft.VisualBasic;
+using FlowHelper = FileFlows.FlowRunner.Helpers.FlowHelper;
 
 namespace FileFlows.FlowRunner;
 
@@ -463,6 +465,19 @@ public class Runner
         
         nodeParameters.Variables["library.Name"] = Info.Library.Name;
         nodeParameters.Variables["library.Path"] = Info.LibraryPath;
+
+        if (Info.LibraryFile.CustomVariables?.Any() == true)
+        {
+            foreach (var kv in Info.LibraryFile.CustomVariables)
+            {
+                var kvValue = kv.Value;
+                if (kvValue is JsonElement je)
+                    kvValue = ObjectHelper.JsonElementToObject(je);
+                
+                nodeParameters.Logger.ILog($"Adding Custom Variable: {kv.Key} = {kvValue}");
+                nodeParameters.Variables[kv.Key] = kvValue;
+            }
+        }
 
         // set the method to replace variables
         // this way any path can have variables and will just automatically get replaced

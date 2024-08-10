@@ -17,4 +17,8 @@ public class AddFileModel
     /// Gets or sets the files
     /// </summary>
     public List<string> Files { get; set; }
+    /// <summary>
+    /// Gets or sets the custom variables
+    /// </summary>
+    public Dictionary<string, object> CustomVariables { get; set; }
 }

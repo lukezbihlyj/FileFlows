@@ -80,6 +80,7 @@ internal class DbLibraryFileManager : BaseManager
         string strOriginalMetadata = JsonEncode(file.OriginalMetadata);
         string strFinalMetadata = JsonEncode(file.FinalMetadata);
         string strExecutedNodes = JsonEncode(file.ExecutedNodes);
+        string strCustomVariables= JsonEncode(file.CustomVariables);
         string sql =
             $"update {Wrap(nameof(LibraryFile))} set " +
             $" {Wrap(nameof(LibraryFile.Name))} = @0, " +
@@ -102,7 +103,8 @@ internal class DbLibraryFileManager : BaseManager
             $" {Wrap(nameof(LibraryFile.OriginalMetadata))}=@17, " +
             $" {Wrap(nameof(LibraryFile.FinalMetadata))}=@18, " +
             $" {Wrap(nameof(LibraryFile.ExecutedNodes))}=@19, " +
-            $" {Wrap(nameof(LibraryFile.FailureReason))}=@20, " +
+            $" {Wrap(nameof(LibraryFile.CustomVariables))}=@20, " +
+            $" {Wrap(nameof(LibraryFile.FailureReason))}=@21, " +
             $" {Wrap("ProcessingOrder")}={file.Order}, " + // special case, since Order is reserved in sql
             $" {Wrap(nameof(LibraryFile.Status))} = {(int)file.Status}, " +
             $" {Wrap(nameof(LibraryFile.Flags))} = {(int)file.Flags}, " +
@@ -143,6 +145,7 @@ internal class DbLibraryFileManager : BaseManager
                 strOriginalMetadata,
                 strFinalMetadata,
                 strExecutedNodes,
+                strCustomVariables,
                 file.FailureReason
             );
             //Logger.Instance.DLog("File: " + file.Name + "\nExecuted nodes: " + strExecutedNodes);
@@ -212,6 +215,7 @@ internal class DbLibraryFileManager : BaseManager
                              $"{Wrap(nameof(LibraryFile.OriginalMetadata))}, " +
                              $"{Wrap(nameof(LibraryFile.FinalMetadata))}, " +
                              $"{Wrap(nameof(LibraryFile.ExecutedNodes))}, " +
+                             $"{Wrap(nameof(LibraryFile.CustomVariables))}, " +
                              $"{Wrap(nameof(LibraryFile.FailureReason))} " +
                              " )" +
                              $" values (@{offset++},@{offset++}," +
@@ -236,7 +240,7 @@ internal class DbLibraryFileManager : BaseManager
                              DbConnector.FormatDateQuoted(file.ProcessingEnded) + ", " +
                              $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
                              $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
-                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++});\n";
+                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++});\n";
 
                 parameters.Add(DbType is DatabaseType.Sqlite ? file.Uid.ToString() : file.Uid);
                 parameters.Add(file.Name);
@@ -259,6 +263,7 @@ internal class DbLibraryFileManager : BaseManager
                 parameters.Add(JsonEncode(file.OriginalMetadata));
                 parameters.Add(JsonEncode(file.FinalMetadata));
                 parameters.Add(JsonEncode(file.ExecutedNodes));
+                parameters.Add(JsonEncode(file.CustomVariables));
                 parameters.Add(file.FailureReason ?? string.Empty);
                 await db.Db.ExecuteAsync(sql, parameters.ToArray());
             }

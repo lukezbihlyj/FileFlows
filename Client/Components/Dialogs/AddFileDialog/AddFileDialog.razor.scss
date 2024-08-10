@@ -5,9 +5,23 @@
   }
 }
 
+.add-dialog-tabs ::deep
+{
+  .tb-CustomVariables {
+    width:12rem;
+  }
+  .flow-tabs-content {
+    height: min(20rem, 50vw);
+  }
+  .input-keyvalue-wrapper {
+    margin: 0 1rem;
+    width: calc(100% - 1.5rem);
+  }
+}
+
 textarea {
   width: 100%;
-  height: min(20rem, 70vh);
+  height: 100%;
 }
 
 .list {

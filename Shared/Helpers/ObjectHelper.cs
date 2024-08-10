@@ -108,4 +108,24 @@ public class ObjectHelper
         // If not enumerable, return 0
         return 0;
     }
+
+    /// <summary>
+    /// Converts a JsonElement to the underlying object
+    /// </summary>
+    /// <param name="je">the JsonElement to convert</param>
+    /// <returns>the underlying object</returns>
+    public static object JsonElementToObject(JsonElement je)
+    {
+        if (je.ValueKind == JsonValueKind.String)
+            return je.GetString();
+        if (je.ValueKind == JsonValueKind.Number)
+            return  je.GetInt32();
+        if (je.ValueKind == JsonValueKind.False)
+            return false;
+        if (je.ValueKind == JsonValueKind.True)
+            return true;
+        if (je.ValueKind == JsonValueKind.Null)
+            return null;
+        return je;
+    }
 }

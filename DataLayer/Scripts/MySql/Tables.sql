@@ -84,7 +84,8 @@ CREATE TABLE LibraryFile
     -- json data
     OriginalMetadata    TEXT               COLLATE utf8_unicode_ci      NOT NULL,
     FinalMetadata       TEXT               COLLATE utf8_unicode_ci      NOT NULL,
-    ExecutedNodes       TEXT               COLLATE utf8_unicode_ci      NOT NULL
+    ExecutedNodes       TEXT               COLLATE utf8_unicode_ci      NOT NULL,
+    CustomVariables     TEXT               COLLATE utf8_unicode_ci      NOT NULL
 );
 
 ALTER TABLE LibraryFile ADD INDEX (Status);

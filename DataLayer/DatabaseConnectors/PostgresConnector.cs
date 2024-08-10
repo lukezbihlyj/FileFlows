@@ -130,5 +130,7 @@ public class PostgresConnector : IDatabaseConnector
         string sql = $@"ALTER TABLE {WrapFieldName(table)} ADD COLUMN {WrapFieldName(column)} {type}" + (string.IsNullOrWhiteSpace(defaultValue) ? "" : $" DEFAULT {defaultValue}");
         using var db = await GetDb(false);
         await db.Db.ExecuteAsync(sql);
+        if (type?.ToLowerInvariant() == "text" && defaultValue == string.Empty)
+            await db.Db.ExecuteAsync($"update {WrapFieldName(table)} set {WrapFieldName(column)} = ''");
     }
 }

@@ -142,6 +142,12 @@ public class UpgradeManager
         => new Upgrade_24_07_2().Run(logger, dbType, connectionString);
     
     /// <summary>
+    /// Run upgrade from 24.08.1
+    /// </summary>
+    public Result<bool> Run_Upgrade_24_08_1(ILogger logger, DatabaseType dbType, string connectionString)
+        => new Upgrade_24_08_1().Run(logger, dbType, connectionString);
+    
+    /// <summary>
     /// Legacy settings which has the version in the settings model
     /// </summary>
     class LegacySettings

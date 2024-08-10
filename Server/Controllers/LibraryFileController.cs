@@ -471,6 +471,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
                 Name = x,
                 LibraryUid = Globals.ManualLibraryUid,
                 FlowUid = flow.Uid,
+                CustomVariables = model.CustomVariables,
                 Flow = new()
                 {
                     Name = flow.Name,

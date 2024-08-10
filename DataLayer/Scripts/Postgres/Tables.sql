@@ -84,7 +84,8 @@ CREATE TABLE "LibraryFile"
     -- json data
     "OriginalMetadata"    TEXT                NOT NULL,
     "FinalMetadata"       TEXT                NOT NULL,
-    "ExecutedNodes"       TEXT                NOT NULL
+    "ExecutedNodes"       TEXT                NOT NULL,
+    "CustomVariables"     TEXT                NOT NULL
 );
 
 CREATE INDEX ON "LibraryFile" ("Status");

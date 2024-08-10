@@ -125,6 +125,9 @@ public class SQLiteConnector : IDatabaseConnector
         string sql = $@"ALTER TABLE {table} ADD COLUMN {column} {type}" + (string.IsNullOrWhiteSpace(defaultValue) ? "" : $" DEFAULT {defaultValue}");
         using var db = await GetDb(false);
         await db.Db.ExecuteAsync(sql);
+
+        if (type?.ToLowerInvariant() == "text" && defaultValue == string.Empty)
+            await db.Db.ExecuteAsync($"update {table} set {column} = ''");
     }
     
     /// <summary>

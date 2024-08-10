@@ -118,8 +118,13 @@ public class SqlServerConnector : IDatabaseConnector
     /// <inheritdoc />
     public async Task CreateColumn(string table, string column, string type, string defaultValue)
     {
+        if (type.ToLowerInvariant() == "text")
+            type = "NVARCHAR(MAX)";
+        
         string sql = $@"ALTER TABLE {table} ADD {column} {type}" + (string.IsNullOrWhiteSpace(defaultValue) ? "" : $" DEFAULT {defaultValue}");
         using var db = await GetDb(false);
         await db.Db.ExecuteAsync(sql);
+        if (type?.ToLowerInvariant() == "NVARCHAR(MAX)" && defaultValue == string.Empty)
+            await db.Db.ExecuteAsync($"update {table} set {column} = ''");
     }
 }
