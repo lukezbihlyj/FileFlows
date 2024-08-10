@@ -55,7 +55,6 @@ public class NodeController : BaseController
     /// </summary>
     /// <returns>flow list</returns>
     [HttpGet("basic-list")]
-    [DisableCors]
     public async Task<Dictionary<Guid, string>> GetNodeList()
     {
         var items = await new NodeService().GetAllAsync();
