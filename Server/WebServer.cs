@@ -260,6 +260,8 @@ public class WebServer
 
         if (Globals.IsDevelopment)
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("*"));
+        else
+            app.UseMiddleware<RemoteCorsMiddleware>();
 
         // this will allow refreshing from a SPA url to load the index.html file
         // app.MapWhen(context => FullyStarted, builder =>
