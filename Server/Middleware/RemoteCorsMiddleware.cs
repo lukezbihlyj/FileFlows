@@ -27,14 +27,20 @@ public class RemoteCorsMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         // Check if the request path starts with /remote
-        if (context.Request.Path.StartsWithSegments("/remote"))
+        if (context.Request.Path.StartsWithSegments("/remote") == false)
         {
-            // Apply CORS policy for /remote routes
-            context.Response.Headers.AccessControlAllowOrigin = "*";
-            context.Response.Headers.AccessControlAllowMethods = "GET, POST, PUT, DELETE, OPTIONS";
-            context.Response.Headers.AccessControlAllowHeaders = "Content-Type, Authorization";
+            await _next(context);
+            return;
         }
 
-        await _next(context);
+        // Apply CORS policy for /remote routes
+        context.Response.Headers.AccessControlAllowOrigin = "*";
+        context.Response.Headers.AccessControlAllowMethods = "GET, POST, PUT, DELETE, OPTIONS";
+        context.Response.Headers.AccessControlAllowHeaders = "Content-Type, Authorization";
+        
+        if (context.Request.Method == HttpMethods.Options)
+            context.Response.StatusCode = StatusCodes.Status200OK; // No content needed
+        else
+            await _next(context);
     }
 }
