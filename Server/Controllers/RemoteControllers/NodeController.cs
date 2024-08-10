@@ -50,6 +50,17 @@ public class NodeController : BaseController
     }
 
     /// <summary>
+    /// Basic flow list
+    /// </summary>
+    /// <returns>flow list</returns>
+    [HttpGet("basic-list")]
+    public async Task<Dictionary<Guid, string>> GetNodeList()
+    {
+        var items = await new NodeService().GetAllAsync();
+        return items.Where(x => x.Enabled).ToDictionary(x => x.Uid, x => x.Name == CommonVariables.InternalNodeName ? "Internal Processing Node" : x.Name);
+    }
+    
+    /// <summary>
     /// Get processing node
     /// </summary>
     /// <param name="uid">The UID of the processing node</param>
