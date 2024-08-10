@@ -36,7 +36,7 @@ public class RemoteCorsMiddleware
         // Apply CORS policy for /remote routes
         context.Response.Headers.AccessControlAllowOrigin = "*";
         context.Response.Headers.AccessControlAllowMethods = "GET, POST, PUT, DELETE, OPTIONS";
-        context.Response.Headers.AccessControlAllowHeaders = "Content-Type, Authorization";
+        context.Response.Headers.AccessControlAllowHeaders = "Content-Type, Authorization, x-token";
         
         if (context.Request.Method == HttpMethods.Options)
             context.Response.StatusCode = StatusCodes.Status200OK; // No content needed
