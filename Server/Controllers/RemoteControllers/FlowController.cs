@@ -1,6 +1,7 @@
 using FileFlows.Server.Authentication;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileFlows.Server.Controllers.RemoteControllers;
@@ -27,6 +28,7 @@ public class FlowController : Controller
     /// </summary>
     /// <returns>flow list</returns>
     [HttpGet("basic-list")]
+    [DisableCors]
     public async Task<Dictionary<Guid, string>> GetFlowList([FromQuery] FlowType? type = FlowType.Standard)
     {
         IEnumerable<Flow> items = await new FlowService().GetAllAsync();

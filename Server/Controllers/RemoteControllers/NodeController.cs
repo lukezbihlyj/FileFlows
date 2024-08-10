@@ -5,6 +5,7 @@ using FileFlows.Server.Services;
 using FileFlows.Server.Workers;
 using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileFlows.Server.Controllers.RemoteControllers;
@@ -54,6 +55,7 @@ public class NodeController : BaseController
     /// </summary>
     /// <returns>flow list</returns>
     [HttpGet("basic-list")]
+    [DisableCors]
     public async Task<Dictionary<Guid, string>> GetNodeList()
     {
         var items = await new NodeService().GetAllAsync();
