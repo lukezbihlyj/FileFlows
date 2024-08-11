@@ -89,7 +89,7 @@ public class FileDisplayNameService
         {
             lock (jsGetDisplayName)
             {
-                return jsGetDisplayName.Invoke("getDisplayName", name, relativePath, libraryName)?.ToString() ?? name;
+                return jsGetDisplayName.Invoke("getDisplayName", name, relativePath, libraryName)?.ToString()?.EmptyAsNull() ?? name;
             }
         }
         catch (Exception ex)
