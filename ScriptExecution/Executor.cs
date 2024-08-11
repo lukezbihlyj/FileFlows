@@ -233,8 +233,8 @@ public class Executor
                 engine.SetValue(arg.Key, arg.Value);
             }
 
-            if(DontLogCode == false)
-                Logger.DLog("Executing code: \n\n" + tcode + "\n\n" + new string('-', 30));
+            // if(DontLogCode == false)
+            //     Logger.DLog("Executing code: \n\n" + tcode + "\n\n" + new string('-', 30));
             engine.Modules.Add("Script", tcode);
             var ns = engine.Modules.Import("Script");
             var result = ns.Get("result");

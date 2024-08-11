@@ -249,7 +249,6 @@ public class ScriptExecutor:IScriptExecutor
 
         executor.Variables = args.Variables;
         executor.SharedDirectory = SharedDirectory;
-
         
         executor.Code = execArgs.Code;
         if (execArgs.ScriptType == ScriptType.Flow && executor.Code.IndexOf("function Script", StringComparison.Ordinal) < 0)
