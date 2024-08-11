@@ -12,7 +12,7 @@ public class AddFileModel
     /// <summary>
     /// Gets or sets the UID of the node
     /// </summary>
-    public Guid NodeUid { get; set; }
+    public Guid? NodeUid { get; set; }
     /// <summary>
     /// Gets or sets the files
     /// </summary>

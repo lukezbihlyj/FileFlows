@@ -812,9 +812,9 @@ public class LibraryFileService
         if (flow == null)
             return Result<bool>.Fail("Unknown flow");
 
-        if (model.NodeUid != Guid.Empty)
+        if (model.NodeUid != null && model.NodeUid != Guid.Empty)
         {
-            var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(model.NodeUid);
+            var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(model.NodeUid.Value);
             if (node == null)
                 return Result<bool>.Fail("Unknown node");
         }
