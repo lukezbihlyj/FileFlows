@@ -805,6 +805,7 @@ public class LibraryFileService
     {
         if (model?.Files?.Any() != true)
             return Result<bool>.Fail("No items");
+        Logger.Instance.ILog("Manually Adding: \n" + JsonSerializer.Serialize(model));
 
         var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(model.FlowUid);
         if (flow == null)
