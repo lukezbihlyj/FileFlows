@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using Esprima.Ast;
 using FileFlows.Managers;
 using FileFlows.Plugin;
 using FileFlows.Server.Helpers;
@@ -804,6 +805,7 @@ public class LibraryFileService
     {
         if (model?.Files?.Any() != true)
             return Result<bool>.Fail("No items");
+        Logger.Instance.ILog("Manually Adding: \n" + JsonSerializer.Serialize(model));
 
         var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(model.FlowUid);
         if (flow == null)
@@ -818,6 +820,9 @@ public class LibraryFileService
         
         var newFiles = model.Files.Distinct().Select(x =>
         {
+            if (string.IsNullOrWhiteSpace(x))
+                return null;
+            
             var lf = new LibraryFile()
             {
                 Status = FileStatus.Unprocessed,
@@ -861,7 +866,7 @@ public class LibraryFileService
             }
 
             return lf;
-        }).ToArray();
+        }).Where(x => x != null).Select(x => x!).ToArray();
         await Insert(newFiles);
         return true;
     }
