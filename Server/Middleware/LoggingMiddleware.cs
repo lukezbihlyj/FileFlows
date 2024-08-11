@@ -59,11 +59,11 @@ public class LoggingMiddleware
         {
             try
             {
-                if (WebServer.FullyStarted)
+                if (WebServer.FullyStarted && context.Request != null)
                 {   
                     LogType logType = LogType.Info;
                     int statusCode = context.Response?.StatusCode ?? 0;
-
+                    
                     if (context.Request.Path.Value?.Contains("remote/library-file/manually-add") == true)
                         logType = LogType.Debug;
                     if (statusCode is >= 300 and < 400)
@@ -75,48 +75,37 @@ public class LoggingMiddleware
                     
                     if (logType != LogType.Info || SettingsService.Get().Result.LogEveryRequest)
                     {
-                        if (logType == LogType.Debug)
-                        {
-                            // Enable buffering so the request can be read multiple times
-                            context.Request.EnableBuffering();
-
-                            // Read the request body
-                            string requestBody = await ReadRequestBodyAsync(context.Request);
-                            _ = RequestLogger.Log(logType,
-                                $"REQUEST [{context.Request?.Method}] [{context.Response?.StatusCode}]: {context.Request?.Path.Value}\n" + 
-                                requestBody);
-
-                            // Reset the request body stream position so the next middleware can read it
-                            context.Request.Body.Position = 0;
-                            
-                        }
-                        else
-                        {
-                            _ = RequestLogger.Log(logType,
-                                $"REQUEST [{context.Request?.Method}] [{context.Response?.StatusCode}]: {context.Request?.Path.Value}");
-                        }
+                        _ = RequestLogger.Log(logType,
+                            $"[{VerbPad(context.Request.Method, 7)}] [{context.Response?.StatusCode}]: {context.Request?.Path.Value}");
                     }
                 }
             }
             catch (Exception)
             {
+                // Ignored
             }
         }
     }
-        
     /// <summary>
-    /// Reads the entire request body from the <see cref="HttpRequest"/> stream asynchronously.
+    /// Pads the HTTP method to a fixed width, centering it with spaces.
     /// </summary>
-    /// <param name="request">The <see cref="HttpRequest"/> from which to read the body.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the request body as a string.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="request"/> is <c>null</c>.</exception>
-    private async Task<string> ReadRequestBodyAsync(HttpRequest request)
+    /// <param name="method">The HTTP method (e.g., GET, POST).</param>
+    /// <param name="width">The total width to which the method should be padded.</param>
+    /// <returns>A string representing the padded HTTP method.</returns>
+    public static string VerbPad(string method, int width)
     {
-        // Read the request body stream
-        using (var reader = new StreamReader(request.Body, Encoding.UTF8, leaveOpen: true))
+        if (width < method.Length)
         {
-            string body = await reader.ReadToEndAsync();
-            return body;
+            throw new ArgumentException("Width must be greater than or equal to the length of the method.");
         }
+
+        // Calculate the padding required on each side
+        int totalPadding = width - method.Length;
+        int leftPadding = totalPadding / 2;
+        int rightPadding = totalPadding - leftPadding;
+
+        // Create the padded method
+        string paddedMethod = new string(' ', leftPadding) + method + new string(' ', rightPadding);
+        return paddedMethod;
     }
 }
