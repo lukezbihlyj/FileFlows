@@ -1520,6 +1520,6 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
             $"select {Wrap(nameof(LibraryFile.Uid))} from {Wrap(nameof(LibraryFile))} where {Wrap(nameof(LibraryFile.Name))} = @0";
         
         using var db = await DbConnector.GetDb();
-        return db.Db.ExecuteScalar<Guid?>(sql) != null;
+        return db.Db.ExecuteScalar<Guid?>(sql, name) != null;
     }
 }

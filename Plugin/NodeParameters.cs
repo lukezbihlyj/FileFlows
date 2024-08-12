@@ -606,7 +606,8 @@ public class NodeParameters
             dontDelete = this.WorkingFile.ToLowerInvariant().StartsWith(TempPath.ToLowerInvariant()) == false;
         }
 
-        if (isDirectory == false && this.WorkingFile != this.FileName)
+        if (isDirectory == false && this.WorkingFile != this.FileName
+            && FileHelper.IsUrl(this.WorkingFile) == false)
         {
             string fileToDelete = this.WorkingFile;
             if (dontDelete == false)

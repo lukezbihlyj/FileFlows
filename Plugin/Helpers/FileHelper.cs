@@ -591,4 +591,20 @@ public class FileHelper
         return result;
     }
 
+    /// <summary>
+    /// Checks if the file is actually a URL
+    /// </summary>
+    /// <param name="path">the file to check</param>
+    /// <returns>true if a URL, otherwise false</returns>
+    public static bool IsUrl(string path)
+    {
+        try
+        {
+            return Regex.IsMatch(path ?? string.Empty, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 }
