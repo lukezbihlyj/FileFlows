@@ -68,11 +68,11 @@ public class SettingsService : ISettingsService
             cfg.Flows = await ServiceLoader.Load<FlowService>().GetAllAsync();
             cfg.Libraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
             cfg.Enterprise = LicenseHelper.IsLicensed(LicenseFlags.Enterprise);
+            cfg.Licensed = LicenseHelper.IsLicensed();
             cfg.AllowRemote = settings.FileServerDisabled == false && LicenseHelper.IsLicensed(LicenseFlags.FileServer);
             cfg.PluginSettings = await new PluginService().GetAllPluginSettings();
             cfg.MaxNodes = LicenseHelper.IsLicensed() ? 250 : 30;
             cfg.KeepFailedFlowTempFiles = settings.KeepFailedFlowTempFiles;
-            cfg.Enterprise = LicenseHelper.IsLicensed(LicenseFlags.Enterprise);
             var pluginInfos = (await ServiceLoader.Load<PluginService>().GetPluginInfoModels(true))
                 .Where(x => x.Enabled)
                 .ToDictionary(x => x.PackageName + ".ffplugin", x => x);

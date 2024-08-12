@@ -26,6 +26,11 @@ public class ConfigurationRevision
     public bool Enterprise { get; set; }
     
     /// <summary>
+    /// Gets or sets if this is a licensed instance
+    /// </summary>
+    public bool Licensed { get; set; }
+    
+    /// <summary>
     /// Gets or sets if remote files are allowed
     /// </summary>
     public bool AllowRemote { get; set; }

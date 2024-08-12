@@ -458,6 +458,7 @@ public class Runner
                 Type = typeof(Library).FullName
             },
             Enterprise = runInstance.Config.Enterprise,
+            Licensed = runInstance.Config.Licensed,
             LibraryFileName = Info.LibraryFile.Name,
             IsRemote = Info.IsRemote,
             LogImageActual = logger.Image,

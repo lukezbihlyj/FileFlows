@@ -281,6 +281,11 @@ public class NodeParameters
     /// Gets if this is a enterprise user
     /// </summary>
     public bool Enterprise { get; init; }
+    
+    /// <summary>
+    /// Gets if this is licensed
+    /// </summary>
+    public bool Licensed { get; init; }
 
     /// <summary>
     /// Sets the metadata for the file
