@@ -278,4 +278,12 @@ public class LibraryFileManager
     /// <returns>the matching files</returns>
     public Task<List<LibraryFile>> Search(LibraryFileSearchModel filter)
         => DatabaseAccessManager.Instance.LibraryFileManager.Search(filter);
+
+    /// <summary>
+    /// Gets if a file exists
+    /// </summary>
+    /// <param name="name">the name of the file</param>
+    /// <returns>true if exists, otherwise false</returns>
+    public Task<bool> FileExists(string name)
+        => DatabaseAccessManager.Instance.LibraryFileManager.FileExists(name);
 }

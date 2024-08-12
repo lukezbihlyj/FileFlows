@@ -1507,4 +1507,19 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
         return result.Where(x => x.NodeUid != Guid.Empty).DistinctBy(x => x.NodeUid)
             .ToDictionary(x => x.NodeUid, x => x.FileCount);
     }
+
+    
+    /// <summary>
+    /// Gets if a file exists
+    /// </summary>
+    /// <param name="name">the name of the file</param>
+    /// <returns>true if exists, otherwise false</returns>
+    public async Task<bool> FileExists(string name)
+    {
+        string sql =
+            $"select {Wrap(nameof(LibraryFile.Uid))} from {Wrap(nameof(LibraryFile))} where {Wrap(nameof(LibraryFile.Name))} = @0";
+        
+        using var db = await DbConnector.GetDb();
+        return db.Db.ExecuteScalar<Guid?>(sql) != null;
+    }
 }

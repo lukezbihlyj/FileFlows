@@ -797,6 +797,14 @@ public class LibraryFileService
         => new LibraryFileManager().Search(filter);
 
     /// <summary>
+    /// Gets if a file exists
+    /// </summary>
+    /// <param name="name">the name of the file</param>
+    /// <returns>true if exists, otherwise false</returns>
+    public Task<bool> FileExists(string name)
+        => new LibraryFileManager().FileExists(name);
+
+    /// <summary>
     /// Manually adds items for processing
     /// </summary>
     /// <param name="model">the model</param>
@@ -818,12 +826,15 @@ public class LibraryFileService
             if (node == null)
                 return Result<bool>.Fail("Unknown node");
         }
-        
-        var newFiles = model.Files.Distinct().Select(x =>
+
+        var newFiles = await Task.WhenAll(model.Files.Distinct().Select(async x =>
         {
             if (string.IsNullOrWhiteSpace(x))
                 return null;
-            
+
+            if (await FileExists(x))
+                return null; // it already exists
+
             var lf = new LibraryFile()
             {
                 Status = FileStatus.Unprocessed,
@@ -851,6 +862,7 @@ public class LibraryFileService
                 // get the path, replace query strings with / 
                 // ie i want to fake a path for a url so http://mysite.com/a/b/c?ts=123 would be a/b/c/ts-123
             }
+
             try
             {
                 var fileInfo = new FileInfo(x);
@@ -867,8 +879,9 @@ public class LibraryFileService
             }
 
             return lf;
-        }).Where(x => x != null).Select(x => x!).ToArray();
-        await Insert(newFiles);
+        }));
+        var files = newFiles.Where(x => x != null).Select(x => x!).ToArray();
+        await Insert(files);
         return true;
     }
 }
