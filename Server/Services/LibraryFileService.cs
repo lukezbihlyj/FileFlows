@@ -808,23 +808,23 @@ public class LibraryFileService
     /// Manually adds items for processing
     /// </summary>
     /// <param name="model">the model</param>
-    /// <returns>true if succesful, otherwise false</returns>
-    public async Task<Result<bool>> ManuallyAdd(AddFileModel model)
+    /// <returns>the files that were added</returns>
+    public async Task<Result<string[]>> ManuallyAdd(AddFileModel model)
     {
         Logger.Instance.ILog("Manually Adding: \n" + JsonSerializer.Serialize(model));
         
         if (model?.Files?.Any() != true)
-            return Result<bool>.Fail("No items");
+            return Result<string[]>.Fail("No items");
 
         var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(model.FlowUid);
         if (flow == null)
-            return Result<bool>.Fail("Unknown flow");
+            return Result<string[]>.Fail("Unknown flow");
 
         if (model.NodeUid != null && model.NodeUid != Guid.Empty)
         {
             var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(model.NodeUid.Value);
             if (node == null)
-                return Result<bool>.Fail("Unknown node");
+                return Result<string[]>.Fail("Unknown node");
         }
 
         var newFiles = await Task.WhenAll(model.Files.Distinct().Select(async x =>
@@ -882,6 +882,6 @@ public class LibraryFileService
         }));
         var files = newFiles.Where(x => x != null).Select(x => x!).ToArray();
         await Insert(files);
-        return true;
+        return files.Select(x => x.Name).ToArray();
     }
 }

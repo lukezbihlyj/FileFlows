@@ -24,9 +24,10 @@ public class LibraryFileController : Controller
     [HttpPost("manually-add")]
     public async Task<IActionResult> ManuallyAdd([FromBody] AddFileModel model)
     {
-        if ((await ServiceLoader.Load<LibraryFileService>().ManuallyAdd(model)).Failed(out var error))
+        var result =(await ServiceLoader.Load<LibraryFileService>().ManuallyAdd(model));
+        if(result.Failed(out var error))
             return BadRequest(error);
-        return Ok(new { Added = true });
+        return Ok(new { Files = result });
     }
     
     /// <summary>
