@@ -278,14 +278,9 @@ public class NodeParameters
     public Dictionary<string, object> Metadata { get; private set; }
     
     /// <summary>
-    /// Gets if this is a enterprise user
+    /// Gets if the license level of this instance
     /// </summary>
-    public bool Enterprise { get; init; }
-    
-    /// <summary>
-    /// Gets if this is licensed
-    /// </summary>
-    public bool Licensed { get; init; }
+    public LicenseLevel LicenseLevel { get; init; }
 
     /// <summary>
     /// Sets the metadata for the file

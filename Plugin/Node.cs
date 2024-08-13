@@ -11,6 +11,11 @@ public class Node
     public virtual FlowElementType Type { get; }
 
     /// <summary>
+    /// Gets the license level required for this plugin
+    /// </summary>
+    public virtual LicenseLevel LicenseLevel => LicenseLevel.Free;
+
+    /// <summary>
     /// Gets if this node is obsolete and should be phased out
     /// </summary>
     public virtual bool Obsolete => false;
@@ -19,12 +24,7 @@ public class Node
     /// Gets a message to show when the user tries to use this obsolete node
     /// </summary>
     public virtual string ObsoleteMessage => null;
-
-    /// <summary>
-    /// Gets if this is a Enterprise only flow element
-    /// </summary>
-    public virtual bool Enterprise => false;
-
+    
     /// <summary>
     /// Gets the number of inputs this node has
     /// </summary>

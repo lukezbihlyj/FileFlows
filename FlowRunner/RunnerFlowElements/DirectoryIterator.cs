@@ -136,7 +136,7 @@ public class DirectoryIterator : Node
         var newArgs = new NodeParameters(file, newLogger, false, args.LibraryPath, args.FileService)
         {
             Node = args.Node,
-            Enterprise = args.Enterprise,
+            LicenseLevel = args.LicenseLevel,
             LibraryFileName = args.LibraryFileName,
             IsRemote = args.IsRemote,
             LogImageActual = args.LogImageActual, //newLogger.Image,

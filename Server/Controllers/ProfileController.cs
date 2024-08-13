@@ -60,6 +60,7 @@ public class ProfileController : Controller
         if (license?.Status == LicenseStatus.Valid)
         {
             profile.License = license.Flags;
+            profile.LicenseLevel = license.Level;
             profile.UsersEnabled = (license.Flags & LicenseFlags.UserSecurity) == LicenseFlags.UserSecurity &&
                                    ServiceLoader.Load<AppSettingsService>().Settings.Security != SecurityMode.Off && 
                                    await ServiceLoader.Load<UserService>().HasAny();

@@ -1,3 +1,5 @@
+using FileFlows.Plugin;
+
 namespace FileFlows.Shared.Models;
 
 /// <summary>
@@ -30,6 +32,11 @@ public class Profile
     /// Gets or sets the license
     /// </summary>
     public LicenseFlags License { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the license level
+    /// </summary>
+    public LicenseLevel LicenseLevel { get; set; }
     
     /// <summary>
     /// Gets or sets if in a webview

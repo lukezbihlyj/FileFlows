@@ -1,3 +1,5 @@
+using FileFlows.Plugin;
+
 namespace FileFlows.Shared.Models;
 
 /// <summary>
@@ -24,6 +26,10 @@ public class SettingsUiModel:Settings
     /// Gets the license flags for the user
     /// </summary>
     public LicenseFlags LicenseFlags { get; set; }
+    /// <summary>
+    /// Gets the license level for the user
+    /// </summary>
+    public LicenseLevel LicenseLevel { get; set; }
     /// <summary>
     /// Gets the license expiry date for the user
     /// </summary>

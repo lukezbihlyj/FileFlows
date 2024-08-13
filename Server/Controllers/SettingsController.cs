@@ -133,6 +133,7 @@ public class SettingsController : BaseController
         settings.LicenseFiles = license == null ? string.Empty :
             license.Files >= 1_000_000_000 ? "Unlimited" : license.Files.ToString();
         settings.LicenseFlags = license == null ? 0 : license.Flags;
+        settings.LicenseLevel = license == null ? 0 : license.Level;
         settings.LicenseProcessingNodes = LicenseHelper.GetLicensedProcessingNodes();
         settings.LicenseExpiryDate = license == null ? DateTime.MinValue : license.ExpirationDateUtc.ToLocalTime();
         settings.LicenseStatus = (license == null ? LicenseStatus.Unlicensed : license.Status).ToString();

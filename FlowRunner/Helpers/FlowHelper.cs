@@ -251,7 +251,13 @@ public class FlowHelper
             return Result<Node>.Fail("Failed to load flow element: " + part.FlowElementUid);
         }
 
-        return CreateFlowElementInstance(logger, part, nt, variables);
+        var instance = CreateFlowElementInstance(logger, part, nt, variables);
+        if (instance == null)
+            return instance;
+        if (instance.LicenseLevel > runner.runInstance.Config.LicenseLevel)
+            return Result<Node>.Fail(
+                $"The flow element {instance.GetType().Name} requires a {instance.LicenseLevel} license.");
+        return instance;
 
     }
 

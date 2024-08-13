@@ -1,3 +1,5 @@
+using FileFlows.Plugin;
+
 namespace FileFlows.Shared.Models;
 
 /// <summary>
@@ -21,14 +23,9 @@ public class ConfigurationRevision
     public int MaxNodes { get; set; }
     
     /// <summary>
-    /// Gets or sets if this is a enterprise user
+    /// Gets or sets if this is a license level
     /// </summary>
-    public bool Enterprise { get; set; }
-    
-    /// <summary>
-    /// Gets or sets if this is a licensed instance
-    /// </summary>
-    public bool Licensed { get; set; }
+    public LicenseLevel LicenseLevel { get; set; }
     
     /// <summary>
     /// Gets or sets if remote files are allowed

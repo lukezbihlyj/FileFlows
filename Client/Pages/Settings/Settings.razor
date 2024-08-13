@@ -1,4 +1,5 @@
 @namespace FileFlows.Client.Pages
+@using Humanizer
 @using Globals = FileFlows.ServerShared.Globals
 @inherits InputRegister
 
@@ -148,6 +149,7 @@
                         <InputText @bind-Value=@Model.LicenseKey Label="Pages.Settings.Fields.License.Key" />
                         <hr/>
                         <InputText @bind-Value=@Model.LicenseStatus Label="Pages.Settings.Fields.License.Status" ReadOnly="true" />
+                        <InputText Value=@Model.LicenseLevel.Humanize() Label="Pages.Settings.Fields.License.Level" ReadOnly="true" />
                         <InputText Value=@Model.LicenseProcessingNodes.ToString() Label="Pages.Settings.Fields.License.ProcessingNodes" ReadOnly="true" />
                         @if (IsLicensed)
                         {

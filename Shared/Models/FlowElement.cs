@@ -130,9 +130,10 @@ public class FlowElement
     public virtual string ObsoleteMessage { get; set; }
     
     /// <summary>
-    /// Gets or sets if this is a Enterprise only flow element
+    /// Gets or sets if the license required by this flow element
     /// </summary>
-    public virtual bool Enterprise { get; set; }
+    public virtual LicenseLevel LicenseLevel { get; set; }
+    
     /// <summary>
     /// Gets an optional custom color to show
     /// </summary>

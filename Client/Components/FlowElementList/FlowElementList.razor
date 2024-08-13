@@ -64,7 +64,8 @@
                                               }).ThenBy(x => x.DisplayName[(x.DisplayName.IndexOf(":", StringComparison.Ordinal) + 1)..]))
                                 {
                                     <div id="@ele.Uid" draggable="true" class="flow-element draggable @ele.Type 
-                                    @(ele.Obsolete ? "obsolete" : "") @(ele.Enterprise ? "enterprise" : "")
+                                    @(ele.Obsolete ? "obsolete" : "") @(ele.LicenseLevel == LicenseLevel.Enterprise  ? "enterprise" : "") 
+                                    ll-@(ele.LicenseLevel.ToString().ToLowerInvariant())
                                      @(App.Instance.IsMobile && SelectedElement == ele.Uid ? "selected" : "") "
                                          style="@GetElementStyling(ele)"
                                         @ondragstart="(e) => DragStart(e, ele)" @onclick="@(() => SelectPart(ele.Uid))">
@@ -86,9 +87,9 @@
                                             {
                                                 ribbonTT = ele.ObsoleteMessage?.EmptyAsNull() ?? lblObsoleteMessage;
                                             }
-                                            else if (ele.Enterprise)
+                                            else if (ele.LicenseLevel != LicenseLevel.Basic)
                                             {
-                                                ribbonTT = "Enterprise Flow Element";
+                                                ribbonTT = $"{ele.LicenseLevel} Flow Element";
                                             }
                                         }
 

@@ -169,9 +169,9 @@ public class FlowEditor : IDisposable
                 return null;
         }
 
-        if (element.Enterprise && Profile.LicensedFor(LicenseFlags.Enterprise) == false)
+        if (element.LicenseLevel > Profile.LicenseLevel)
         {
-            await MessageBox.Show("Unlicensed", "You must have an Enterprise license to use this flow element.");
+            await MessageBox.Show("Unlicensed", $"You must have an {element.LicenseLevel} license to use this flow element.");
             return null;
         }
 

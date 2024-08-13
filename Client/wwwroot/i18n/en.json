@@ -1203,6 +1203,7 @@
           "Key": "License Key",
           "Email": "License Email",
           "Status": "Status",
+          "Level": "Level",
           "ProcessingNodes":"Processing Nodes",
           "Flags":"Features",
           "ExpiryDate":"Expiry Date",
