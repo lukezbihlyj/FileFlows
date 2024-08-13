@@ -714,10 +714,10 @@ a.btn {
 .flow-element .label {
   flex-grow: 1;
 }
-.flow-element.obsolete .ribbon, .flow-element.enterprise .ribbon {
+.flow-element.obsolete .ribbon, .flow-element.enterprise .ribbon, .flow-element.ll-basic .ribbon, .flow-element.ll-standard .ribbon, .flow-element.premium .ribbon, .flow-element.ll-professional .ribbon {
   display: unset;
 }
-.flow-element.obsolete .ribbon-content::before, .flow-element.enterprise .ribbon-content::before {
+.flow-element.obsolete .ribbon-content::before, .flow-element.enterprise .ribbon-content::before, .flow-element.ll-basic .ribbon-content::before, .flow-element.ll-standard .ribbon-content::before, .flow-element.premium .ribbon-content::before, .flow-element.ll-professional .ribbon-content::before {
   font-style: normal;
   font-variant: normal;
   text-rendering: auto;
@@ -2551,6 +2551,34 @@ a.btn {
   background: #12a901 linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
 }
 .enterprise:not(.obsolete) .ribbon > .ribbon-content::before {
+  content: "\f19c";
+}
+
+.ll-basic:not(.obsolete) .ribbon > .ribbon-content {
+  background: #01a97c linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
+}
+.ll-basic:not(.obsolete) .ribbon > .ribbon-content::before {
+  content: "\f19c";
+}
+
+.ll-standard:not(.obsolete) .ribbon > .ribbon-content {
+  background: #0174a9 linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
+}
+.ll-standard:not(.obsolete) .ribbon > .ribbon-content::before {
+  content: "\f19c";
+}
+
+.ll-premium:not(.obsolete) .ribbon > .ribbon-content {
+  background: #ad14e2 linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
+}
+.ll-premium:not(.obsolete) .ribbon > .ribbon-content::before {
+  content: "\f19c";
+}
+
+.ll-professional:not(.obsolete) .ribbon > .ribbon-content {
+  background: #e79900 linear-gradient(45deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
+}
+.ll-professional:not(.obsolete) .ribbon > .ribbon-content::before {
   content: "\f19c";
 }
 

@@ -183,7 +183,8 @@ $lineHeight: $fontSize * 1.2;
     flex-grow: 1;
   }
 
-  &.obsolete, &.enterprise {
+  &.obsolete, &.enterprise, 
+  &.ll-basic, &.ll-standard, &.premium, &.ll-professional {
     .ribbon {
       display: unset;
     }
@@ -367,3 +368,36 @@ $lineHeight: $fontSize * 1.2;
     }
   }
 }
+.ll-basic:not(.obsolete) .ribbon {
+  > .ribbon-content {
+    background: #01a97c linear-gradient(45deg, rgba(black, 0) 0%, rgba(white, 0.25) 100%);
+    &::before {
+      content: '\f19c';
+    }
+  }
+}
+.ll-standard:not(.obsolete) .ribbon {
+  > .ribbon-content {
+    background: #0174a9 linear-gradient(45deg, rgba(black, 0) 0%, rgba(white, 0.25) 100%);
+    &::before {
+      content: '\f19c';
+    }
+  }
+}
+.ll-premium:not(.obsolete) .ribbon {
+  > .ribbon-content {
+    background: #ad14e2 linear-gradient(45deg, rgba(black, 0) 0%, rgba(white, 0.25) 100%);
+    &::before {
+      content: '\f19c';
+    }
+  }
+}
+.ll-professional:not(.obsolete) .ribbon {
+  > .ribbon-content {
+    background: #e79900 linear-gradient(45deg, rgba(black, 0) 0%, rgba(white, 0.25) 100%);
+    &::before {
+      content: '\f19c';
+    }
+  }
+}
+

@@ -25,9 +25,17 @@ public class FormHelper
         var fields = new List<ElementField>();
         foreach (var prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
         {
-            var attribute = prop.GetCustomAttributes(typeof(FormInputAttribute), false).FirstOrDefault() as FormInputAttribute;
-            if (attribute == null)
+            FormInputAttribute? attribute = null;
+            try
+            {
+                attribute = prop.GetCustomAttributes(typeof(FormInputAttribute), false).FirstOrDefault() as FormInputAttribute;
+                if (attribute == null)
+                    continue;
+            }
+            catch (Exception)
+            {
                 continue;
+            }
 
             var ef = new ElementField
             {
