@@ -164,7 +164,12 @@ return 1;
         item.Code = item.Code.Replace("\r\n", "\n").Trim();
 
         bool readOnly = item.Repository;
-        string title = Translater.Instant("Pages.Script.LanguageTitle", new { Language = item.Language.ToString()}) ;
+        string langTitle = item.Language switch
+        {
+            ScriptLanguage.CSharp => "C#",
+            _ => item.Language.ToString()
+        };
+        string title = Translater.Instant("Pages.Script.LanguageTitle", new { Language = langTitle });
 
         if (readOnly)
         {
