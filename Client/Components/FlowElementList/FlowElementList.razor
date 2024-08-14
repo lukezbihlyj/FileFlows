@@ -87,9 +87,13 @@
                                             {
                                                 ribbonTT = ele.ObsoleteMessage?.EmptyAsNull() ?? lblObsoleteMessage;
                                             }
+                                            else if (ele.LicenseLevel == LicenseLevel.Enterprise)
+                                            {
+                                                ribbonTT = $"{ele.LicenseLevel} license required";
+                                            }
                                             else if (ele.LicenseLevel != LicenseLevel.Basic)
                                             {
-                                                ribbonTT = $"{ele.LicenseLevel} Flow Element";
+                                                ribbonTT = $"{ele.LicenseLevel} or higher license required";
                                             }
                                         }
 

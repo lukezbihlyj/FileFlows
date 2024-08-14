@@ -118,7 +118,7 @@ public partial class FlowElementList : ComponentBase
         {
             Filtering = true;
             Filtered = Items
-                .Where(x => x.Name.ToLowerInvariant().Replace(" ", "").Contains(filter)
+                .Where(x => x.DisplayName.ToLowerInvariant().Replace(" ", "").Contains(filter)
                             || x.Group.ToLowerInvariant().Replace(" ", "").Contains(filter)
                 )
                 .ToArray();
