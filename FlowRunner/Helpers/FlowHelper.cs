@@ -240,8 +240,8 @@ public class FlowHelper
             };
         }
 
-        if (part.FlowElementUid.EndsWith(".DirectoryIterator"))
-            return DirectoryIterator.Load(part, runner);
+        if (part.FlowElementUid.EndsWith(".FolderIterator"))
+            return FolderIterator.Load(part, runner);
         if (part.FlowElementUid.EndsWith(".ListIterator"))
             return ListIterator.Load(part, runner);
         

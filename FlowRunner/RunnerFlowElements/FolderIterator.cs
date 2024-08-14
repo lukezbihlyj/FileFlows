@@ -10,9 +10,9 @@ using Humanizer;
 namespace FileFlows.FlowRunner.RunnerFlowElements;
 
 /// <summary>
-/// A special flow element that iterates all files in a directory and process them through a sub flow
+/// A special flow element that iterates all files in a folder and process them through a sub flow
 /// </summary>
-public class DirectoryIterator : Node
+public class FolderIterator : Node
 {
     /// <summary>
     /// Gets or sets the flow to execute
@@ -25,9 +25,9 @@ public class DirectoryIterator : Node
     private Runner Runner { get; init; }
     
     /// <summary>
-    /// Gets or sets the directory to iterate
+    /// Gets or sets the folder to iterate
     /// </summary>
-    public string? Directory { get; set; }
+    public string? Folder { get; set; }
     
     /// <summary>
     /// Gets or set the pattern to iterate over
@@ -35,21 +35,21 @@ public class DirectoryIterator : Node
     public string? Pattern { get; set; }
 
     /// <summary>
-    /// Gets or sets if all files or just the top directory files should be iterated over
+    /// Gets or sets if all files or just the top folder files should be iterated over
     /// </summary>
     public bool Recursive { get; set; }
     
     /// <inheritdoc />
     public override int Execute(NodeParameters args)
     {
-        if (string.IsNullOrWhiteSpace(Directory))
+        if (string.IsNullOrWhiteSpace(Folder))
         {
-            args.FailureReason = "No directory given";
+            args.FailureReason = "No folder given";
             args.Logger?.ELog(args.FailureReason);
             return -1;
         }
 
-        var localPathResult = args.FileService.GetLocalPath(args.ReplaceVariables(Directory, stripMissing: true));
+        var localPathResult = args.FileService.GetLocalPath(args.ReplaceVariables(Folder, stripMissing: true));
         if (localPathResult.Failed(out string error))
         {
             args.FailureReason = error;
@@ -60,7 +60,7 @@ public class DirectoryIterator : Node
         var localPath = localPathResult.Value;
         if (System.IO.Directory.Exists(localPath) == false)
         {
-            args.FailureReason = "Directory does not exist: " + localPath;
+            args.FailureReason = "Folder does not exist: " + localPath;
             args.Logger?.ELog(args.FailureReason);
             return -1;
         }
@@ -181,20 +181,20 @@ public class DirectoryIterator : Node
     }
 
     /// <summary>
-    /// Loads a directory iterator from a part
+    /// Loads a folder iterator from a part
     /// </summary>
     /// <param name="part">the part to load it from</param>
     /// <param name="runner">the runner being used</param>
-    /// <returns>the Directory iterator instance</returns>
+    /// <returns>the folder iterator instance</returns>
     public static Result<Node> Load(FlowPart part, Runner runner)
     {
         // special case, don't use the BasicNodes execution of this, use the runners execution,
         // we have more control and can load it as a sub flow
         if (part.Model is IDictionary<string, object> dictModel == false)
-            return Result<Node>.Fail("Failed to load model for Directory Iterator flow element.");
+            return Result<Node>.Fail("Failed to load model for Folder Iterator flow element.");
 
         if (dictModel.TryGetValue("Flow", out object? oFlow) == false || oFlow == null)
-            return Result<Node>.Fail("Failed to get flow from Directory Iterator model.");
+            return Result<Node>.Fail("Failed to get flow from Folder Iterator model.");
         ObjectReference? orFlow;
         string json = JsonSerializer.Serialize(oFlow);
         try
@@ -206,29 +206,29 @@ public class DirectoryIterator : Node
         }
         catch (Exception)
         {
-            return Result<Node>.Fail("Failed to load Directory Iterator model from: " + json);
+            return Result<Node>.Fail("Failed to load Folder Iterator model from: " + json);
         }
 
         if (orFlow == null)
-            return Result<Node>.Fail("Failed to load Directory Iterator model from: " + json);
+            return Result<Node>.Fail("Failed to load Folder Iterator model from: " + json);
 
 
         var flow = runner.runInstance.Config.Flows.FirstOrDefault(x => x.Uid == orFlow.Uid);
         if (flow == null)
-            return Result<Node>.Fail("Failed to locate Flow defined in the Directory Iterator flow element.");
-        var directoryIterator = new DirectoryIterator()
+            return Result<Node>.Fail("Failed to locate Flow defined in the Folder Iterator flow element.");
+        var folderIterator = new FolderIterator()
         {
             Flow = flow,
             Runner = runner
         };
-        if (dictModel.TryGetValue(nameof(Directory), out var oDirectory) && oDirectory != null)
-            directoryIterator.Directory = oDirectory.ToString();
+        if (dictModel.TryGetValue(nameof(Folder), out var oFolder) && oFolder != null)
+            folderIterator.Folder = oFolder.ToString();
         if (dictModel.TryGetValue(nameof(Pattern), out var oPattern) && oPattern != null)
-            directoryIterator.Pattern = oPattern.ToString();
+            folderIterator.Pattern = oPattern.ToString();
         if (dictModel.TryGetValue(nameof(Recursive), out var oAllFiles) && oAllFiles != null)
-            directoryIterator.Recursive = oAllFiles.ToString().Equals("true", StringComparison.InvariantCultureIgnoreCase);
+            folderIterator.Recursive = oAllFiles.ToString().Equals("true", StringComparison.InvariantCultureIgnoreCase);
 
-        return directoryIterator;
+        return folderIterator;
     }
 
     /// <summary>
