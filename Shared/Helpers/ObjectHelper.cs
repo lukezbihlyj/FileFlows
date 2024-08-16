@@ -161,6 +161,16 @@ public class ObjectHelper
         if (dictionaries == null || dictionaries.Count == 0)
             return new Dictionary<string, object>();
 
+        foreach (var dict in dictionaries)
+        {
+            foreach (var key in dict.Keys)
+            {
+                var obj = dict[key];
+                if (obj is JsonElement je)
+                    dict[key] = JsonElementToObject(je);
+            }
+        }
+
         // Initialize the common variables with the variables of the first dictionary
         var commonVariables = new Dictionary<string, object>(dictionaries[0]);
 
@@ -169,8 +179,19 @@ public class ObjectHelper
         {
             // Get the keys that are not in the current dictionary or have different values
             var keysToRemove = commonVariables.Keys
-                .Where(key => !dict.ContainsKey(key) || 
-                              !dict[key].Equals(commonVariables[key]))
+                .Where(key =>
+                {
+                    if (dict.TryGetValue(key, out var value) == false)
+                        return true;
+                    var other = commonVariables[key];
+                    if (value == null && other == null)
+                        return false; // both null, dont remove
+                    if (value == null || other == null)
+                        return true; // one null, one is not, remove
+                    if(value.Equals(other) == false)
+                        return true;
+                    return false;
+                })
                 .ToList();
 
             // Remove those keys from the common variables dictionary

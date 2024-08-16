@@ -51,7 +51,7 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
         lblReprocessTitle, lblReprocessDescription,
         lblProcessOptionsTitle, lblProcessOptionsDescription, 
         lblFlow, lblNode, lblPosition, lblCustomVariablesMode, lblTopOfQueue, 
-        lblBottomOfQueue, lblAnyNode, lblSameFlow, lblReprocess, lblCancel, lblMerge, lblOriginal, lblReplace;
+        lblBottomOfQueue, lblAnyNode, lblSameFlow, lblSave, lblReprocess, lblCancel, lblMerge, lblOriginal, lblReplace;
     /// <summary>
     /// The API URL for library files
     /// </summary>
@@ -91,6 +91,7 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
         lblReplace = Translater.Instant("Dialogs.ReprocessDialog.Fields.Replace");
         lblTopOfQueue = Translater.Instant("Dialogs.ReprocessDialog.Fields.TopOfQueue");
         lblReprocess = Translater.Instant("Labels.Reprocess");
+        lblSave = Translater.Instant("Labels.Save");
         lblCancel = Translater.Instant("Labels.Cancel");
         PositionOptions =
         [
@@ -182,7 +183,7 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
         Blocker.Show();
         try
         {
-            var result = await HttpHelper.Post(ApiUrl + "/reprocess", new ReprocessModel
+            var result = await HttpHelper.Post(ApiUrl + (ProcessOptionsMode ? "/set-process-options" : "/reprocess"), new ReprocessModel
             {
                 Uids = Files.Select(x => x.Uid).ToList(),
                 Node = NodeUid == Guid.Empty ? null : new () { Uid = NodeUid },

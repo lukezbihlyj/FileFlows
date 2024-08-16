@@ -364,6 +364,9 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         await Refresh();
     }
     
+    /// <summary>
+    /// Reprocess the selected files
+    /// </summary>
     public async Task Reprocess()
     {
         var selected = Table.GetSelected().ToList();
@@ -371,8 +374,10 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         if (uids.Length == 0)
             return; // nothing to reprocess
 
+        bool processOptions = SelectedStatus is FileStatus.Unprocessed or FileStatus.OnHold or FileStatus.Duplicate;
+
         var nodes = Nodes.ToDictionary(x => x.Value.Uid, x => x.Value.Name);
-        var result = await ReprocessDialog.Show(Flows, nodes, selected);
+        var result = await ReprocessDialog.Show(Flows, nodes, selected, processOptions);
         if(result)
             await Refresh();
     }

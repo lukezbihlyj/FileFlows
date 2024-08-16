@@ -23,7 +23,7 @@
     </div>
     </Body>
     <Footer>
-        <button @onclick=@Save>@lblReprocess</button>
+        <button @onclick=@Save>@(ProcessOptionsMode ? lblSave : lblReprocess)</button>
         <button @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

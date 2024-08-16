@@ -227,7 +227,7 @@
     "ReprocessDialog": {
       "Title": "Reprocess",
       "Description": "Reprocess the selected file(s) using the follow parameters",
-      "Process": {
+      "ProcessOptions": {
         "Title": "Process Options",
         "Description": "Modify the processing parameters for the selected file(s)"
       },
@@ -243,6 +243,7 @@
         "Original": "Use original custom variables",
         "Merge": "Merge custom variables with original",
         "Replace": "Replace original custom variables",
+        "CustomVariables": "Custom Variables",
         "CustomVariablesKey": "Custom Variable",
         "CustomVariablesValue":"Value"
       }
@@ -851,6 +852,7 @@
       "Buttons": {
         "Ignore": "Ignore",
         "Process": "Process",
+        "ProcessOptions": "Process Options",
         "View": "View",
         "MoveToTop": "Move To Top",
         "Reprocess": "Reprocess",
