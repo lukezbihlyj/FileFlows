@@ -31,7 +31,8 @@ public class LibaryFileListModelHelper
                 RelativePath = x.RelativePath,
                 Name = x.Name,
                 OriginalSize = x.OriginalSize,
-                Forced = (x.Flags & LibraryFileFlags.ForceProcessing) == LibraryFileFlags.ForceProcessing
+                Forced = (x.Flags & LibraryFileFlags.ForceProcessing) == LibraryFileFlags.ForceProcessing,
+                CustomVariables = x.CustomVariables
             };
 
             if (status == FileStatus.Unprocessed || status == FileStatus.OutOfSchedule || status == FileStatus.Disabled)
@@ -68,7 +69,9 @@ public class LibaryFileListModelHelper
                 item.Duplicate = x.Duplicate?.Name;
 
             if (status == FileStatus.MissingLibrary)
+            {
                 item.Status = x.Status;
+            }
 
             if (status == FileStatus.Processed)
             {

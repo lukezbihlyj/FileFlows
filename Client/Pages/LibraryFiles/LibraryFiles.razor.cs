@@ -15,6 +15,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 {
     private string filter = string.Empty;
     private FileStatus? filterStatus;
+    /// <inheritdoc />
     public override string ApiUrl => "/api/library-file";
     [Inject] private INavigationService NavigationService { get; set; }
     [Inject] private FFLocalStorageService LocalStorage { get; set; }
@@ -32,7 +33,12 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     /// <summary>
     /// Gets or sets the add file dialog
     /// </summary>
-    public AddFileDialog AddDialog { get; set; }
+    private AddFileDialog AddDialog { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the reprocess dialog
+    /// </summary>
+    private ReprocessDialog ReprocessDialog { get; set; }
 
     /// <summary>
     /// The skybox to select the current file status
@@ -360,21 +366,15 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     
     public async Task Reprocess()
     {
-        var selected = Table.GetSelected();
+        var selected = Table.GetSelected().ToList();
         var uids = selected.Select(x => x.Uid)?.ToArray() ?? new Guid[] { };
         if (uids.Length == 0)
             return; // nothing to reprocess
 
-        Blocker.Show();
-        try
-        {
-            await HttpHelper.Post(ApiUrl + "/reprocess", new ReferenceModel<Guid> { Uids = uids });
-        }
-        finally
-        {
-            Blocker.Hide();
-        }
-        await Refresh();
+        var nodes = Nodes.ToDictionary(x => x.Value.Uid, x => x.Value.Name);
+        var result = await ReprocessDialog.Show(Flows, nodes, selected);
+        if(result)
+            await Refresh();
     }
 
     protected override async Task<RequestResult<List<LibaryFileListModel>>> FetchData()

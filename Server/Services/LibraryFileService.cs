@@ -704,6 +704,32 @@ public class LibraryFileService
     }
 
     /// <summary>
+    /// Reset processing for the files
+    /// </summary>
+    /// <param name="model">the reprocess model</param>
+    /// <returns>true if successful, otherwise a failure reason</returns>
+    public async Task<Result<bool>> Reprocess(ReprocessModel model)
+    {
+        if (model.Flow != null)
+        {
+            var flow = await new FlowService().GetByUidAsync(model.Flow.Uid);
+            if (flow == null)
+                return Result<bool>.Fail("Flow not found");
+            model.Flow.Name = flow.Name;
+        }
+        if (model.Node != null)
+        {
+            var node = await new NodeService().GetByUidAsync(model.Node.Uid);
+            if (node == null)
+                return Result<bool>.Fail("Node not found");
+            model.Node.Name = node.Name;
+        }
+        await new LibraryFileManager().Reprocess(model);
+        await ClientServiceManager.Instance.UpdateFileStatus();
+        return true;
+    }
+
+    /// <summary>
     /// Toggles a flag on files
     /// </summary>
     /// <param name="uids">the UIDs of the files</param>

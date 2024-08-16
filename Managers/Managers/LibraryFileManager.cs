@@ -286,4 +286,11 @@ public class LibraryFileManager
     /// <returns>true if exists, otherwise false</returns>
     public Task<bool> FileExists(string name)
         => DatabaseAccessManager.Instance.LibraryFileManager.FileExists(name);
+
+    /// <summary>
+    /// Reset processing for the files
+    /// </summary>
+    /// <param name="model">the reprocess model</param>
+    public Task Reprocess(ReprocessModel model)
+        => DatabaseAccessManager.Instance.LibraryFileManager.Reprocess(model);
 }

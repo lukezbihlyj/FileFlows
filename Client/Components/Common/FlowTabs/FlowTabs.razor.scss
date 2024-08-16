@@ -3,6 +3,9 @@
     display:flex;
     flex-direction:column;
     flex-grow:1;
+    &.not-visible {
+        display:none;
+    }
 }
 
 .flow-tabs.contain-tabs {

@@ -1522,4 +1522,46 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
         using var db = await DbConnector.GetDb();
         return db.Db.ExecuteScalar<Guid?>(sql, name) != null;
     }
+
+    /// <summary>
+    /// Reset processing for the files
+    /// </summary>
+    /// <param name="model">the reprocess model</param>
+    public async Task Reprocess(ReprocessModel model)
+    {
+        foreach (var uid in model.Uids)
+        {
+            var file = await Get(uid);
+            if (file == null)
+                continue;
+
+            file.DateModified = DateTime.UtcNow;
+            file.Status = FileStatus.Unprocessed;
+            if (model.BottomOfQueue)
+                file.DateCreated = DateTime.UtcNow;
+            if (model.Mode == ReprocessModel.CustomVariablesMode.Replace)
+                file.CustomVariables = model.CustomVariables ?? new ();
+            else if (model.Mode == ReprocessModel.CustomVariablesMode.Merge && model.CustomVariables?.Any() == true)
+            {
+                file.CustomVariables ??= new();
+                foreach (var kv in model.CustomVariables)
+                {
+                    file.CustomVariables[kv.Key] = kv.Value;
+                }
+            }
+
+            if (model.Flow != null)
+            {
+                file.FlowUid = model.Flow.Uid;
+                file.FlowName = model.Flow.Name;
+            }
+            if (model.Node != null)
+            {
+                file.NodeUid = model.Node.Uid;
+                file.NodeName = model.Node.Name;
+            }
+
+            await Update(file);
+        }
+    }
 }

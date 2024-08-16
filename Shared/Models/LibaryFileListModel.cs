@@ -82,4 +82,9 @@ public class LibaryFileListModel: IUniqueObject<Guid>
     /// Gets or sets if this file has been marked force processing
     /// </summary>
     public bool Forced { get; set; }
+    
+    /// <summary>
+    /// Gets or sets custom variables to use with this file
+    /// </summary>
+    public Dictionary<string, object> CustomVariables { get; set; }
 }

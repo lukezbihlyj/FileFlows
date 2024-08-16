@@ -224,6 +224,29 @@
       "Title":"Pause Processing",
       "Message":"Select the amount of time to pause processing for.\nNote: The current flows will continue to execute, but no other flows will be executed until his time is up."
     },
+    "ReprocessDialog": {
+      "Title": "Reprocess",
+      "Description": "Reprocess the selected file(s) using the follow parameters",
+      "Process": {
+        "Title": "Process Options",
+        "Description": "Modify the processing parameters for the selected file(s)"
+      },
+      "Fields": {
+        "Flow": "Flow",
+        "Node": "Node",
+        "AnyNode": "Any Node",
+        "SameFlow": "Same flow as original processed",
+        "Position": "Position",
+        "BottomOfQueue": "Bottom of queue",
+        "TopOfQueue": "Top of queue",
+        "CustomVariablesMode": "Custom Variables",
+        "Original": "Use original custom variables",
+        "Merge": "Merge custom variables with original",
+        "Replace": "Replace original custom variables",
+        "CustomVariablesKey": "Custom Variable",
+        "CustomVariablesValue":"Value"
+      }
+    },
     "ResumeDialog":
     {
       "Title":"Resume Processing",
@@ -799,7 +822,8 @@
     "LibraryFile": {
       "Tabs":{
         "OriginalMetadata": "Input",
-        "FinalMetadata": "Output"
+        "FinalMetadata": "Output",
+        "CustomVariables": "Custom Variables"
       },
       "Fields": {
         "Name": "Original File",

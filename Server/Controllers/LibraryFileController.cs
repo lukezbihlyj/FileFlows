@@ -308,8 +308,8 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     /// <param name="model">A reference model containing UIDs to reprocess</param>
     /// <returns>an awaited task</returns>
     [HttpPost("reprocess")]
-    public Task Reprocess([FromBody] ReferenceModel<Guid> model)
-        => ServiceLoader.Load<LibraryFileService>().Reprocess(model.Uids);
+    public Task Reprocess([FromBody] ReprocessModel model)
+        => ServiceLoader.Load<LibraryFileService>().Reprocess(model);
 
     /// <summary>
     /// Unhold library files

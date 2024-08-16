@@ -1,0 +1,29 @@
+@namespace FileFlows.Client.Components.Dialogs
+
+
+<Modal Title="@lblTitle" Visible="Visible" Styling="width: min(650px, 90vw);">
+
+    <Body>
+    <p>@lblDescription</p>
+    <div class="dialog-fields">
+        <InputSelect @bind-Value="@BoundFlowUid" AllowClear="false" Options=@FlowOptions Label="@lblFlow" />
+        @if (NodeOptions.Count > 2)
+        { // greater than 2, cos the first option is any, so if 2 theres really only one node in the system
+            <InputSelect @bind-Value="@BoundNodeUid" AllowClear="false" Options=@NodeOptions Label="@lblNode"/>
+        }
+        @if (ProcessOptionsMode == false)
+        {
+            <InputSelect @bind-Value="@BoundPosition" AllowClear="false" Options=@PositionOptions Label="@lblPosition"/>
+        }
+        <InputSelect @bind-Value="@BoundVariablesMode" AllowClear="false" Options=@CustomVariableModeOptions Label="@lblCustomVariablesMode"/>
+    </div>
+
+    <div class="custom-variables @(VariablesMode != ReprocessModel.CustomVariablesMode.Original ? "" : "not-visible")">
+        <InputKeyValue @bind-Value="CustomVariables" HideLabel="true" Label="Dialogs.ReprocessDialog.Fields.CustomVariables"></InputKeyValue>
+    </div>
+    </Body>
+    <Footer>
+        <button @onclick=@Save>@lblReprocess</button>
+        <button @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

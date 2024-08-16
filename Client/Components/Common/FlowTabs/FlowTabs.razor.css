@@ -3,6 +3,9 @@
   flex-direction: column;
   flex-grow: 1;
 }
+.flow-tabs.not-visible {
+  display: none;
+}
 
 .flow-tabs.contain-tabs {
   max-height: 100%;
@@ -74,5 +77,3 @@
 .flow-tabs-content {
   flex-grow: 1;
 }
-
-/*# sourceMappingURL=FlowTabs.razor.css.map */

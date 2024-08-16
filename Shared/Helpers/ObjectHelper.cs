@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.Shared.Helpers;
 
@@ -127,5 +128,58 @@ public class ObjectHelper
         if (je.ValueKind == JsonValueKind.Null)
             return null;
         return je;
+    }
+
+    /// <summary>
+    /// Converts a string to the proper object, eg "true" to true, "123" to 123
+    /// </summary>
+    /// <param name="str">the string</param>
+    /// <returns>the value</returns>
+    public static object StringToObject(string str)
+    {
+        if (str == null)
+            return str;
+        if (str.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            return true;
+        if (str.Equals("false", StringComparison.InvariantCultureIgnoreCase))
+            return false;
+        if (Regex.IsMatch(str, "^[\\d]+$"))
+            return int.Parse(str);
+        if (Regex.IsMatch(str, "^[\\d]+\\.[\\d]+$"))
+            return float.Parse(str);
+        
+        return str;
+    }
+    
+    /// <summary>
+    /// Gets the common custom variables that are present and have the same value in all dictionaries.
+    /// </summary>
+    /// <param name="dictionaries">The list of dictionaries containing custom variables.</param>
+    /// <returns>A dictionary of common custom variables.</returns>
+    public static Dictionary<string, object> GetCommonCustomVariables(List<Dictionary<string, object>> dictionaries)
+    {
+        if (dictionaries == null || dictionaries.Count == 0)
+            return new Dictionary<string, object>();
+
+        // Initialize the common variables with the variables of the first dictionary
+        var commonVariables = new Dictionary<string, object>(dictionaries[0]);
+
+        // Iterate through the rest of the dictionaries
+        foreach (var dict in dictionaries.Skip(1))
+        {
+            // Get the keys that are not in the current dictionary or have different values
+            var keysToRemove = commonVariables.Keys
+                .Where(key => !dict.ContainsKey(key) || 
+                              !dict[key].Equals(commonVariables[key]))
+                .ToList();
+
+            // Remove those keys from the common variables dictionary
+            foreach (var key in keysToRemove)
+            {
+                commonVariables.Remove(key);
+            }
+        }
+
+        return commonVariables;
     }
 }

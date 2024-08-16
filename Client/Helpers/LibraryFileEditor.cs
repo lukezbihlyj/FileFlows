@@ -106,6 +106,18 @@ public class LibraryFileEditor
                 });
             }
 
+            if (model.CustomVariables?.Any() == true)
+            {
+                tabs.Add("Pages.LibraryFile.Tabs.CustomVariables", new List<IFlowField>
+                {
+                    new ElementField()
+                    {
+                        InputType = FormInputType.KeyValue,
+                        Name = nameof(model.CustomVariables)
+                    }
+                });
+            }
+
             var additionalButtons = new ActionButton[]
             {
                 model.Status is FileStatus.Processed or FileStatus.MappingIssue or FileStatus.MissingLibrary

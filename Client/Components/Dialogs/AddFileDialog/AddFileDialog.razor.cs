@@ -185,16 +185,7 @@ public partial class AddFileDialog : ComponentBase, IDisposable
         {
             if (dict.Keys.Any(x => x.Equals(kv.Key, StringComparison.InvariantCultureIgnoreCase)))
                 continue;
-            object v = kv.Value;
-            if (kv.Value.ToLowerInvariant() == "true")
-                v = true;
-            else if (kv.Value.ToLowerInvariant() == "false")
-                v = false;
-            else if (Regex.IsMatch(kv.Value, "^[\\d]+$"))
-                v = int.Parse(kv.Value);
-            else if (Regex.IsMatch(kv.Value, "^[\\d]+\\.[\\d]+$"))
-                v = float.Parse(kv.Value);
-            dict[kv.Key] = v;
+            dict[kv.Key] = ObjectHelper.StringToObject(kv.Value);
         }
         
         ShowTask.TrySetResult(new AddFileModel()
