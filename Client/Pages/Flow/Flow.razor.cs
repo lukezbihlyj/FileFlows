@@ -473,6 +473,9 @@ public partial class Flow : ComponentBase, IDisposable
                 Translater.TranslateIfHasTranslation($"Flow.Parts.{typeName}.Label", FlowHelper.FormatLabel(typeName));
         }
 
+        if (typeDisplayName.ToLowerInvariant().StartsWith("ffmpeg builder: "))
+            typeDisplayName = typeDisplayName["ffmpeg builder: ".Length..];
+
         var fields = flowElement.Fields == null
             ? new()
             : ObjectCloner.Clone(flowElement.Fields).Select(x =>
