@@ -3,9 +3,6 @@
   flex-direction: column;
   flex-grow: 1;
 }
-.flow-tabs.not-visible {
-  display: none;
-}
 
 .flow-tabs.contain-tabs {
   max-height: 100%;

@@ -44,3 +44,7 @@
 .flow-element-editor .editor ::deep .input-label:hover i.fa-clipboard {
   display: unset;
 }
+.flow-element-editor .editor ::deep div[x-id=TrackSelectionOptions] {
+  padding-bottom: 1rem;
+  border-bottom: solid 1px var(--input-background);
+}

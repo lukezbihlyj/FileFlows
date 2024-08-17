@@ -42,13 +42,19 @@
     right: unset;
     height: 100%;
 
-    ::deep .input-label {
-      i.fa-clipboard {
-        display: none;
-      }
+    ::deep {
+      .input-label {
+        i.fa-clipboard {
+          display: none;
+        }
 
-      &:hover i.fa-clipboard {
-        display: unset;
+        &:hover i.fa-clipboard {
+          display: unset;
+        }
+      }
+      div[x-id='TrackSelectionOptions'] {
+        padding-bottom:1rem;
+        border-bottom:solid 1px var(--input-background);
       }
     }
   }

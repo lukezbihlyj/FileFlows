@@ -303,6 +303,11 @@ public class NodeParameters
     /// Gets the math helper 
     /// </summary>
     public MathHelper MathHelper { get; init; }
+    
+    /// <summary>
+    /// Gets the string helper 
+    /// </summary>
+    public StringHelper StringHelper { get; init; }
 
     /// <summary>
     /// Constructs a node parameters instance used by the flow runner
@@ -321,6 +326,7 @@ public class NodeParameters
         this.WorkingFile = filename;
         this.FileService = fileService;
         this.MathHelper = new(logger);
+        this.StringHelper = new(logger);
         if (Fake == false)
         {
             try

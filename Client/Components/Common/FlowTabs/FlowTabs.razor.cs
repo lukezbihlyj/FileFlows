@@ -16,11 +16,6 @@ public partial class FlowTabs : ComponentBase
     /// Gets or set the active tab
     /// </summary>
     public FlowTab ActiveTab { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the tab pages should be visible.
-    /// </summary>
-    [Parameter] public bool Visible { get; set; }
     
     /// <summary>
     /// Gets or sets if the title should only be shown on the active tab

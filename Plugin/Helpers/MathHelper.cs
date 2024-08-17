@@ -6,6 +6,7 @@ namespace FileFlows.Plugin.Helpers;
 /// <summary>
 /// Helper for math operations
 /// </summary>
+/// <param name="_logger">the logger to use</param>
 public class MathHelper(ILogger _logger)
 {
     
