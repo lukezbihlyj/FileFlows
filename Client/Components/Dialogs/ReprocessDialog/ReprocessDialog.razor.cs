@@ -137,11 +137,12 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
         CustomVariables = ObjectHelper.GetCommonCustomVariables(files.Select(file => file.CustomVariables).ToList())
             .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToList();
 
-        Visible = true;
         FlowOptions = flows.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption { Label = x.Value, Value = x.Key }).ToList();
         FlowOptions.Insert(0, new() { Label = lblSameFlow, Value = Guid.Empty });
         FlowUid = Guid.Empty;
+        VariablesMode = ReprocessModel.CustomVariablesMode.Original;
+        BottomOfQueue = false;
         Files = files;
         
         NodeOptions = nodes.OrderBy(x => x.Value.ToLowerInvariant())
@@ -149,6 +150,7 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
 
         NodeOptions.Insert(0, new() { Label = lblAnyNode, Value = Guid.Empty });
         NodeUid = Guid.Empty;
+        Visible = true;
         StateHasChanged();
 
         ShowTask = new TaskCompletionSource<bool>();

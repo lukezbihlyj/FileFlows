@@ -235,7 +235,7 @@
         "Flow": "Flow",
         "Node": "Node",
         "AnyNode": "Any Node",
-        "SameFlow": "Same flow as original processed",
+        "SameFlow": "No change",
         "Position": "Position",
         "BottomOfQueue": "Bottom of queue",
         "TopOfQueue": "Top of queue",
