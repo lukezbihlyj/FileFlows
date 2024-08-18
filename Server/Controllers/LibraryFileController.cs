@@ -305,11 +305,22 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     /// <summary>
     /// Reprocess library files
     /// </summary>
-    /// <param name="model">A reference model containing UIDs to reprocess</param>
+    /// <param name="model">the model</param>
     /// <returns>an awaited task</returns>
     [HttpPost("reprocess")]
     public Task Reprocess([FromBody] ReprocessModel model)
-        => ServiceLoader.Load<LibraryFileService>().Reprocess(model);
+        => ServiceLoader.Load<LibraryFileService>().Reprocess(model, onlySetProcessInfo: false);
+    
+    /// <summary>
+    /// Set the process options for library files
+    /// </summary>
+    /// <param name="model">the model</param>
+    /// <returns>an awaited task</returns>
+    [HttpPost("set-process-options")]
+    public Task SetProcessOptions([FromBody] ReprocessModel model)
+        => ServiceLoader.Load<LibraryFileService>().Reprocess(model, onlySetProcessInfo: true);
+    
+   
 
     /// <summary>
     /// Unhold library files

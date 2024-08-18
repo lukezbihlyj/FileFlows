@@ -909,6 +909,9 @@ internal class DbLibraryFileManager : BaseManager
                 if (args.NodeUid != null)
                     sql += $" and {Wrap(nameof(LibraryFile.NodeUid))} = '{args.NodeUid.Value}'";
                 
+                if(args.ProcessingNodeUid != null)
+                    sql += $" and ( {Wrap(nameof(LibraryFile.NodeUid))} = '{args.ProcessingNodeUid.Value}' or {Wrap(nameof(LibraryFile.NodeUid))} = '')";
+                
                 if (args.FlowUid != null)
                     sql += $" and {Wrap(nameof(LibraryFile.FlowUid))} = '{args.FlowUid.Value}'";
 
@@ -1527,7 +1530,8 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
     /// Reset processing for the files
     /// </summary>
     /// <param name="model">the reprocess model</param>
-    public async Task Reprocess(ReprocessModel model)
+    /// <param name="onlySetProcessInfo">if only the process information should be set, ie these are unprocessed files</param>
+    public async Task Reprocess(ReprocessModel model, bool onlySetProcessInfo = false)
     {
         foreach (var uid in model.Uids)
         {
@@ -1535,10 +1539,15 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
             if (file == null)
                 continue;
 
-            file.DateModified = DateTime.UtcNow;
-            file.Status = FileStatus.Unprocessed;
-            if (model.BottomOfQueue)
-                file.DateCreated = DateTime.UtcNow;
+            if (onlySetProcessInfo == false)
+            {
+                file.DateModified = DateTime.UtcNow;
+                file.Status = FileStatus.Unprocessed;
+
+                if (model.BottomOfQueue)
+                    file.DateCreated = DateTime.UtcNow;
+            }
+
             if (model.Mode == ReprocessModel.CustomVariablesMode.Replace)
                 file.CustomVariables = model.CustomVariables ?? new ();
             else if (model.Mode == ReprocessModel.CustomVariablesMode.Merge && model.CustomVariables?.Any() == true)
@@ -1555,10 +1564,20 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
                 file.FlowUid = model.Flow.Uid;
                 file.FlowName = model.Flow.Name;
             }
+            else if(onlySetProcessInfo == false)
+            {
+                file.FlowUid = null;
+                file.FlowName = string.Empty;
+            }
             if (model.Node != null)
             {
                 file.NodeUid = model.Node.Uid;
                 file.NodeName = model.Node.Name;
+            }
+            else if (onlySetProcessInfo == false)
+            {
+                file.NodeUid = null;
+                file.NodeName = string.Empty;
             }
 
             await Update(file);

@@ -57,6 +57,11 @@ public class LibraryFileFilter
     public Guid? NodeUid { get; set; }
     
     /// <summary>
+    /// Gets or sets a Node UID of the processing node requesting this file
+    /// </summary>
+    public Guid? ProcessingNodeUid { get; set; }
+    
+    /// <summary>
     /// Gets or sets a Library UID to filter by
     /// </summary>
     public Guid? LibraryUid { get; set; }

@@ -291,6 +291,7 @@ public class LibraryFileManager
     /// Reset processing for the files
     /// </summary>
     /// <param name="model">the reprocess model</param>
-    public Task Reprocess(ReprocessModel model)
-        => DatabaseAccessManager.Instance.LibraryFileManager.Reprocess(model);
+    /// <param name="onlySetProcessInfo">if only the process information should be set, ie these are unprocessed files</param>
+    public Task Reprocess(ReprocessModel model, bool onlySetProcessInfo)
+        => DatabaseAccessManager.Instance.LibraryFileManager.Reprocess(model, onlySetProcessInfo);
 }

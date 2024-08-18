@@ -264,8 +264,8 @@ public class LibraryFileService
         file.FinalMetadata = new();
         file.OriginalMetadata= new();
         await new LibraryFileManager().ResetFileInfoForProcessing(file.Uid, 
-            file.LibraryUid == CommonVariables.ManualLibraryUid ? file.FlowUid : library?.Flow?.Uid, 
-            file.LibraryUid == CommonVariables.ManualLibraryUid ? file.FlowName : library?.Flow?.Name);
+            file.FlowUid != null && file.FlowUid != Guid.Empty ? file.FlowUid : library?.Flow?.Uid, 
+            file.FlowUid != null && file.FlowUid != Guid.Empty ? file.FlowName : library?.Flow?.Name);
         #endregion
         logger.ILog($"File found to process: {file.Name}");
         
@@ -440,6 +440,7 @@ public class LibraryFileService
             {
                 Status = FileStatus.Unprocessed, Skip = 0, Rows = 1, AllowedLibraries = canProcess,
                 MaxSizeMBs = node.MaxFileSizeMb, ExclusionUids = executing, ForcedOnly = outOfSchedule,
+                ProcessingNodeUid = node.Uid,
                 SysInfo = sysInfo
             }
         )).FirstOrDefault();
@@ -481,6 +482,9 @@ public class LibraryFileService
     /// <returns>true if another higher priority node should be used instead</returns>
     private async Task<bool> HigherPriorityWaiting(ILogger logger, ProcessingNode node, LibraryFile file, List<Library> allLibraries)
     {
+        if (file.NodeUid == node.Uid)
+            return false; // forced to process on this node
+        
         var allNodes = (await ServiceLoader.Load<NodeService>().GetAllAsync()).Where(x => 
             x.Uid != node.Uid && x.Enabled);
         var allLibrariesUids = allLibraries.Select(x => x.Uid).ToList();
@@ -707,8 +711,9 @@ public class LibraryFileService
     /// Reset processing for the files
     /// </summary>
     /// <param name="model">the reprocess model</param>
+    /// <param name="onlySetProcessInfo">if only the process information should be set, ie these are unprocessed files</param>
     /// <returns>true if successful, otherwise a failure reason</returns>
-    public async Task<Result<bool>> Reprocess(ReprocessModel model)
+    public async Task<Result<bool>> Reprocess(ReprocessModel model, bool onlySetProcessInfo)
     {
         if (model.Flow != null)
         {
@@ -724,7 +729,7 @@ public class LibraryFileService
                 return Result<bool>.Fail("Node not found");
             model.Node.Name = node.Name;
         }
-        await new LibraryFileManager().Reprocess(model);
+        await new LibraryFileManager().Reprocess(model, onlySetProcessInfo);
         await ClientServiceManager.Instance.UpdateFileStatus();
         return true;
     }

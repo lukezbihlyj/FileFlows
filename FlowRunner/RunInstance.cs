@@ -228,7 +228,8 @@ public class RunInstance
         }
 
 
-        var flow = args.Config.Flows.FirstOrDefault(x => x.Uid == (libFile.LibraryUid == CommonVariables.ManualLibraryUid ? libFile.FlowUid : lib.Flow?.Uid ?? Guid.Empty));
+        var flow = args.Config.Flows.FirstOrDefault(x => 
+            x.Uid == (libFile.FlowUid != null && libFile.FlowUid != Guid.Empty ? libFile.FlowUid : lib.Flow?.Uid ?? Guid.Empty));
         if (flow == null || flow.Uid == Guid.Empty)
         {
             LogInfo("Flow not found, cannot process file: " + workingFile);
