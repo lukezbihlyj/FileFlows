@@ -103,11 +103,12 @@ export class InputTextArea {
             }else if (event.key.length === 1) {
                 // Check if adding the typed key forms a valid variable
                 const potentialVariable = this.currentVariable + event.key;
-                if (this.isValidVariable(potentialVariable)) {
+                //if (this.isValidVariable(potentialVariable)) { 
+                // ^^ allow them to write this character regardless, in case a variable is there just not in the list
                     // Update currentVariable and filter variables based on the typed key
                     this.updateVariableText(potentialVariable); // Call updateVariableText method
                     this.selectItem(0);
-                }
+                //}
             }
             event.preventDefault();
         }
