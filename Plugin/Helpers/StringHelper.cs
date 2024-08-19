@@ -9,6 +9,16 @@ namespace FileFlows.Plugin.Helpers;
 public class StringHelper(ILogger _logger)
 {
     /// <summary>
+    /// Checks if the input string represents a regular expression.
+    /// </summary>
+    /// <param name="input">The input string to check.</param>
+    /// <returns>True if the input is a regular expression, otherwise false.</returns>
+    public static bool IsRegex(string input)
+    {
+        return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
+    }
+    
+    /// <summary>
     /// Checks if a value matches a specified match expression.
     /// </summary>
     /// <param name="matchExpression">
@@ -83,6 +93,9 @@ public class StringHelper(ILogger _logger)
         _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
         return invert ? !endsWith : endsWith;
     }
+    
+    if (IsRegex(matchExpression) == false)
+        return invert;
     
     // Handle regex
     try
