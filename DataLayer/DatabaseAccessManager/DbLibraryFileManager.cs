@@ -795,7 +795,7 @@ internal class DbLibraryFileManager : BaseManager
 
             string sql;
             List<string> orderBys = new();
-
+            
             string ReturnWithOrderBy()
             {
 #if(DEBUG)
@@ -966,6 +966,8 @@ internal class DbLibraryFileManager : BaseManager
             var maxedOutLibraries = args.GettingFileForProcess
                 ? args.SysInfo.AllLibraries.Where(lib =>
                 {
+                    if(args.SysInfo.LicensedForProcessingOrder == false)
+                        return false;
                     if (lib.Value.MaxRunners < 1)
                         return false; // no limit
                     int count = args.SysInfo.Executors.Count(exe => exe.Library.Uid == lib.Value.Uid);
