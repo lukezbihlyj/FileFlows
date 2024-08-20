@@ -1,6 +1,9 @@
 using System.Text.RegularExpressions;
+using FileFlows.DataLayer.Converters;
 using FileFlows.Plugin;
 using FileFlows.ServerShared.Helpers;
+using Microsoft.Data.SqlClient;
+using NPoco;
 using NPoco.DatabaseTypes;
 using DatabaseType = FileFlows.Shared.Models.DatabaseType;
 
@@ -9,10 +12,17 @@ namespace FileFlows.DataLayer.DatabaseConnectors;
 /// <summary>
 /// Connector for SQLite
 /// </summary>
-public class SQLiteConnectorOld : IDatabaseConnector
+public class SQLiteConnector : IDatabaseConnector
 {
-    private DatabaseConnection dbConnectionWrite;
-    private FairSemaphore writeSemaphore = new(1);
+    /// <summary>
+    /// The connection string to the database
+    /// </summary>
+    private string ConnectionString { get; init; }
+    /// <summary>
+    /// Pool of database connections
+    /// </summary>
+    private readonly DatabaseConnectionPool connectionPool;
+    //private FairSemaphore writeSemaphore = new(1);
     
     /// <summary>
     /// Logger used for logging
@@ -35,12 +45,13 @@ public class SQLiteConnectorOld : IDatabaseConnector
     
     /// <inheritdoc />
     public int GetOpenedConnections()
-        => writeSemaphore.CurrentInUse;
+        => connectionPool.OpenedConnections;
     
     
-    public SQLiteConnectorOld(ILogger logger, string connectionString)
+    public SQLiteConnector(ILogger logger, string connectionString)
     {
         Logger = logger;
+        connectionPool = new(CreateConnection, 20, connectionLifetime: new TimeSpan(0, 10, 0));
 
         if (string.IsNullOrWhiteSpace(DirectoryHelper.DatabaseDirectory) == false)
         {
@@ -49,47 +60,33 @@ public class SQLiteConnectorOld : IDatabaseConnector
             connectionString = connectionString.Replace($"Data Source=FileFlows.sqlite",
                 $"Data Source={Path.Combine(DirectoryHelper.DatabaseDirectory, "FileFlows.sqlite")}");
         }
-
-        dbConnectionWrite = CreateConnection(connectionString);
-        dbConnectionWrite.OnDispose += Dispose;
-        // readPool = new(() => CreateConnection(connectionString), 5);
+        ConnectionString = connectionString;
     }
 
-    private void Dispose(object? sender, EventArgs e)
+    /// <summary>
+    /// Create a new database connection
+    /// </summary>
+    /// <returns>the new connection</returns>
+    private DatabaseConnection CreateConnection()
     {
-        writeSemaphore.Release();
-    }
-
-    private DatabaseConnection CreateConnection(string connectionString)
-    {
-        var db = new NPoco.Database(connectionString, new SQLiteDatabaseType(),
+        var db = new NPoco.Database(ConnectionString, new SQLiteDatabaseType(),
             PlatformHelper.IsArm ? Microsoft.Data.Sqlite.SqliteFactory.Instance : System.Data.SQLite.SQLiteFactory.Instance);
-
         db.Mappers = new()
         {
             Converters.GuidConverter.UseInstance(),
             Converters.CustomDbMapper.UseInstance(),
             // Converters.UtcDateConverter.UseInstance()
         };
-
-        var connection = new DatabaseConnection(db, false);
-        
-        // Set the synchronous mode to FULL
-        connection.Db.Execute("PRAGMA synchronous=FULL;");
-        
-        return connection;
+        db.Execute("PRAGMA synchronous=FULL;");
+        return new DatabaseConnection(db, false);
     }
-
-
+    
     /// <inheritdoc />
     public DatabaseType Type => DatabaseType.Sqlite;
 
     /// <inheritdoc />
-    public async Task<DatabaseConnection> GetDb(bool write)
-    {
-        await writeSemaphore.WaitAsync();
-        return dbConnectionWrite;
-    }
+    public Task<DatabaseConnection> GetDb(bool write)
+        => connectionPool.AcquireConnectionAsync();
 
     /// <inheritdoc />
     public string WrapFieldName(string name) => name;
