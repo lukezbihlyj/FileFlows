@@ -347,7 +347,7 @@ public class HttpHelper
                     return true;
                 if (url.StartsWith("https://192.168") || url.StartsWith("https://localhost"))
                     return true;
-                if (Environment.GetEnvironmentVariable("FileFlowsIgnoreCertErrors") == "1")
+                if (Environment.GetEnvironmentVariable("FF_IGNORE_CERT_ERRORS") == "1")
                     return true;
                 return cert.Verify();
             };
