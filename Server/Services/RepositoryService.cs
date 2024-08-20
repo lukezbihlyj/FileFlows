@@ -11,7 +11,7 @@ namespace FileFlows.Server.Services;
 /// </summary>
 class RepositoryService
 {
-    private FileFlowsRepository repo;
+    private FileFlowsRepository? repo;
     const string BASE_URL = "https://raw.githubusercontent.com/revenz/FileFlowsRepository/master/";
     private DateTime lastFetched = DateTime.MinValue;
 
@@ -28,7 +28,7 @@ class RepositoryService
     internal async Task<FileFlowsRepository> GetRepository()
     {
         if (repo != null && lastFetched > DateTime.UtcNow.AddMinutes(-5))
-                return repo;
+            return repo;
         string url = BASE_URL + "repo.json?ts=" + DateTime.UtcNow.ToFileTimeUtc();
         try
         {
@@ -42,7 +42,7 @@ class RepositoryService
         catch (Exception ex)
         {
             Logger.Instance.WLog("Error getting repository: " + ex.Message);
-            return new FileFlowsRepository()
+            repo = new FileFlowsRepository()
             {
                 FlowScripts = new(),
                 FlowTemplates = new(),
@@ -54,6 +54,7 @@ class RepositoryService
                 SubFlows = new (),
                 DockerMods = new ()
             };
+            return repo;
         }
     }
 
@@ -153,7 +154,7 @@ class RepositoryService
     /// </summary>
     /// <returns>a task to await</returns>
     internal Task DownloadFunctionScripts(bool force = false)
-        => DownloadObjects(repo.FunctionScripts, DirectoryHelper.ScriptsDirectoryFunction, force);
+        => DownloadObjects(repo?.FunctionScripts ?? [], DirectoryHelper.ScriptsDirectoryFunction, force);
     
     /// <summary>
     /// Downloads the library templates from the repository
@@ -161,7 +162,7 @@ class RepositoryService
     /// </summary>
     /// <returns>a task to await</returns>
     internal Task DownloadLibraryTemplates(bool force = false)
-        => DownloadObjects(repo.LibraryTemplates, DirectoryHelper.TemplateDirectoryLibrary, force);
+        => DownloadObjects(repo?.LibraryTemplates ?? [], DirectoryHelper.TemplateDirectoryLibrary, force);
     
 
     /// <summary>
