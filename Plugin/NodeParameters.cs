@@ -260,7 +260,7 @@ public class NodeParameters
     /// <summary>
     /// Gets or sets the process helper
     /// </summary>
-    public ProcessHelper Process { get; set; }
+    public IProcessHelper Process { get; set; }
 
     /// <summary>
     /// if this is af faked instance

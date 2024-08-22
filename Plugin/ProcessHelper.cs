@@ -123,7 +123,25 @@ public class ExecuteArgs
 /// <summary>
 /// A helper class that handles executing processes and reading their output
 /// </summary>
-public class ProcessHelper
+public interface IProcessHelper
+{
+    /// <summary>
+    /// Cancels the running process
+    /// </summary>
+    void Cancel();
+
+    /// <summary>
+    /// Executes a shell command
+    /// </summary>
+    /// <param name="args">the arguments of the shell command</param>
+    /// <returns>the processing result of the executed command</returns>
+    Task<ProcessResult> ExecuteShellCommand(ExecuteArgs args);
+}
+
+/// <summary>
+/// A helper class that handles executing processes and reading their output
+/// </summary>
+public class ProcessHelper : IProcessHelper
 {
     private Process process;
     private readonly ILogger Logger;
