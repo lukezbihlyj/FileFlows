@@ -480,7 +480,7 @@ public class NodeParameters
                 {
                     { "ext", fi.Extension },
                     { "file.Name", fi.Name ?? "" },
-                    { "file.NameNoExtension", string.IsNullOrEmpty(fi.Extension) == false ? fi.Name[..^(fi.Extension.Length)] : fi.Name ?? string.Empty },
+                    { "file.NameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fi.FullName) ?? string.Empty },
                     { "file.FullName", fi.FullName ?? "" },
                     { "file.Extension", fi.Extension ?? "" },
                     { "file.Size", fi.Length },
@@ -511,8 +511,8 @@ public class NodeParameters
                         { "file.Orig.Extension", fiOriginal.Extension ?? string.Empty },
                         { "file.Orig.FileName", fiOriginal.Name ?? string.Empty },
                         { "file.Orig.Name", fiOriginal.Name ?? string.Empty },
-                        { "file.Orig.FileNameNoExtension",  string.IsNullOrEmpty(fiOriginal.Extension) == false ? fiOriginal.Name[..^(fi.Extension.Length)] : fiOriginal.Name ?? string.Empty },
-                        { "file.Orig.NameNoExtension",  string.IsNullOrEmpty(fiOriginal.Extension) == false ? fiOriginal.Name[..^(fi.Extension.Length)] : fiOriginal.Name ?? string.Empty },
+                        { "file.Orig.FileNameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
+                        { "file.Orig.NameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
                         { "file.Orig.FullName", fiOriginal.FullName ?? string.Empty },
                         { "file.Orig.Size", fiOriginal.Length },
 
