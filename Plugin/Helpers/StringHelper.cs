@@ -17,7 +17,7 @@ public class StringHelper(ILogger _logger)
     {
         return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
     }
-    
+
     /// <summary>
     /// Checks if a value matches a specified match expression.
     /// </summary>
@@ -51,65 +51,65 @@ public class StringHelper(ILogger _logger)
     /// </code>
     /// </example>
     public bool Matches(string matchExpression, string value)
-{
-    matchExpression = matchExpression?.Trim() ?? string.Empty;
-    value = value?.Trim() ?? string.Empty;
-    
-    bool invert = false;
-    
-    if (matchExpression.StartsWith('!'))
     {
-        invert = true;
-        matchExpression = matchExpression[1..];
-    }
-    
-    // Handle exact match
-    if (string.Equals(matchExpression, value, StringComparison.InvariantCultureIgnoreCase))
-    {
-        _logger?.ILog($"Match found: '{value}' equals '{matchExpression}'" + (invert ? " (negated)" : ""));
-        return !invert;
-    }
-    
-    // Handle contains
-    if (matchExpression.StartsWith('*') && matchExpression.EndsWith('*'))
-    {
-        bool contains = value.Contains(matchExpression[1..^1], StringComparison.InvariantCultureIgnoreCase);
-        _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
-        return invert ? !contains : contains;
-    }
-    
-    // Handle starts with
-    if (matchExpression.EndsWith('*'))
-    {
-        bool startsWith = value.StartsWith(matchExpression[..^1], StringComparison.InvariantCultureIgnoreCase);
-        _logger?.ILog($"Match found: '{value}' starts with '{matchExpression}'" + (invert ? " (negated)" : ""));
-        return invert ? !startsWith : startsWith;
-    }
-    
-    // Handle ends with
-    if (matchExpression.StartsWith('*'))
-    {
-        bool endsWith = value.EndsWith(matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
-        _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
-        return invert ? !endsWith : endsWith;
-    }
-    
-    if (IsRegex(matchExpression) == false)
-        return invert;
-    
-    // Handle regex
-    try
-    {
-        var rgx = new Regex(matchExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-        bool matchesRegex = rgx.IsMatch(value);
-        _logger?.ILog($"Match found: '{value}' matches pattern '{matchExpression}'" + (invert ? " (negated)" : ""));
-        return invert ? !matchesRegex : matchesRegex;
-    }
-    catch (Exception)
-    {
-        // Ignored
-    }
+        matchExpression = matchExpression?.Trim() ?? string.Empty;
+        value = value?.Trim() ?? string.Empty;
 
-    return invert;
-}
+        bool invert = false;
+
+        if (matchExpression.StartsWith('!'))
+        {
+            invert = true;
+            matchExpression = matchExpression[1..];
+        }
+
+        // Handle exact match
+        if (string.Equals(matchExpression, value, StringComparison.InvariantCultureIgnoreCase))
+        {
+            _logger?.ILog($"Match found: '{value}' equals '{matchExpression}'" + (invert ? " (negated)" : ""));
+            return !invert;
+        }
+
+        // Handle contains
+        if (matchExpression.StartsWith('*') && matchExpression.EndsWith('*'))
+        {
+            bool contains = value.Contains(matchExpression[1..^1], StringComparison.InvariantCultureIgnoreCase);
+            _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
+            return invert ? !contains : contains;
+        }
+
+        // Handle starts with
+        if (matchExpression.EndsWith('*'))
+        {
+            bool startsWith = value.StartsWith(matchExpression[..^1], StringComparison.InvariantCultureIgnoreCase);
+            _logger?.ILog($"Match found: '{value}' starts with '{matchExpression}'" + (invert ? " (negated)" : ""));
+            return invert ? !startsWith : startsWith;
+        }
+
+        // Handle ends with
+        if (matchExpression.StartsWith('*'))
+        {
+            bool endsWith = value.EndsWith(matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
+            _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
+            return invert ? !endsWith : endsWith;
+        }
+
+        if (IsRegex(matchExpression) == false)
+            return invert;
+
+        // Handle regex
+        try
+        {
+            var rgx = new Regex(matchExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+            bool matchesRegex = rgx.IsMatch(value);
+            _logger?.ILog($"Match found: '{value}' matches pattern '{matchExpression}'" + (invert ? " (negated)" : ""));
+            return invert ? !matchesRegex : matchesRegex;
+        }
+        catch (Exception)
+        {
+            // Ignored
+        }
+
+        return invert;
+    }
 }

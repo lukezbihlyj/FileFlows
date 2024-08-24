@@ -64,4 +64,12 @@ public class VariablesTest
         variables["value"] = "this !:\\/ is #%^&*!~@?%$ not a safe name!..";
         Assert.AreEqual("Test this ! is #%^&!~@%$ not a safe name!", VariablesHelper.ReplaceVariables("Test {value|file}", variables, stripMissing: true));
     }
+
+    [TestMethod]
+    public void MissingVariables()
+    {
+        var variables = new Dictionary<string, object>();
+        variables["movie.Name"] = "Batman";
+        Assert.AreEqual("/movies/Batman .mkv", VariablesHelper.ReplaceVariables("/movies/{movie.Name} {movie.Year}.mkv", variables, stripMissing: true));
+    }
 }

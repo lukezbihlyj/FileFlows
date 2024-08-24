@@ -59,6 +59,7 @@ public class StartupService
 
             if (CanConnectToDatabase().Failed(out error))
             {
+                error = "Database Connection Error: " + error;
                 UpdateStatus(error);
                 return Result<bool>.Fail(error);
             }
@@ -67,24 +68,28 @@ public class StartupService
             {
                 if (Upgrade().Failed(out error))
                 {
+                    error = "Database Upgrade Error: " + error;
                     UpdateStatus(error);
                     return Result<bool>.Fail(error);
                 }
             }
             else if (CreateDatabase().Failed(out error))
             {
+                error = "Create Database Error: " + error;
                 UpdateStatus(error);
                 return Result<bool>.Fail(error);
             }
 
             if (PrepareDatabase().Failed(out error))
             {
+                error = "Prepare Database Error: " + error;
                 UpdateStatus(error);
                 return Result<bool>.Fail(error);
             }
 
             if (SetVersion().Failed(out error))
             {
+                error = "Set Version Error: " + error;
                 UpdateStatus(error);
                 return Result<bool>.Fail(error);
             }
