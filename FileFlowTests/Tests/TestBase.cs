@@ -26,6 +26,13 @@ public class TestBase
     public void TestStarted()
     {
         Logger.Writer = (message) => TestContext.WriteLine(message);
+
+        TestStarting();
+    }
+
+    protected virtual void TestStarting()
+    {
+
     }
 
     /// <summary>

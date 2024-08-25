@@ -116,7 +116,7 @@ public class Executor
                 if (k.StartsWith("file.") || k.StartsWith("folder."))
                 {
                     // FF-301: special case, these are readonly, need to make these easier to use
-                    if (Regex.IsMatch(k, @"\.(Create|Modified)$"))
+                    if (Regex.IsMatch(k, @"\.(Date|Create|Modified)$"))
                         continue; // dates
                     if (Regex.IsMatch(k, @"\.(Year|Day|Month|Size)$"))
                         replacement = "Number(" + replacement + ")";
@@ -235,6 +235,9 @@ public class Executor
 
             // if(DontLogCode == false)
             //     Logger.DLog("Executing code: \n\n" + tcode + "\n\n" + new string('-', 30));
+            #if(DEBUG)
+            Logger.ILog("TCode:\n" + tcode);
+            #endif
             engine.Modules.Add("Script", tcode);
             var ns = engine.Modules.Import("Script");
             var result = ns.Get("result");
