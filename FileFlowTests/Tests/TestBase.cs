@@ -37,6 +37,11 @@ public class TestBase
     /// The directory with the test files
     /// </summary>
     protected readonly string TestFilesDir = "/home/john/src/ff-files/test-files";
+    
+    /// <summary>
+    /// The resources test file directory
+    /// </summary>
+    protected readonly string ResourcesTestFilesDir = "Resources/TestFiles";
 
     /// <summary>
     /// The temp path to use during testing

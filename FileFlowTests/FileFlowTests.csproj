@@ -20,4 +20,9 @@
     <ProjectReference Include="..\Server\Server.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\TestFiles\**\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

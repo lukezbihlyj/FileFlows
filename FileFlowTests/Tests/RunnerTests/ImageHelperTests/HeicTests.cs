@@ -15,7 +15,7 @@ public class HeicTests : TestBase
     [TestMethod]
     public void ConvertToJpeg()
     {
-        string file = $"{TestFilesDir}/images/heic1.heic";
+        string file = $"{ResourcesTestFilesDir}/Images/heic1.heic";
         var magick = new ImageMagickHelper(Logger, "convert", "identify");
         var result = magick.ConvertImage(file, $"{TempPath}/heic.jpg", new ()
         {
@@ -31,7 +31,7 @@ public class HeicTests : TestBase
     [TestMethod]
     public void GetInfo()
     {
-        string file = $"{TestFilesDir}/images/heic1.heic";
+        string file = $"{ResourcesTestFilesDir}/Images/heic1.heic";
         var helper = new ImageHelper(Logger, "convert", "identify");
         var result = helper.GetInfo(file);
         if(result.Failed(out var error))
