@@ -366,8 +366,9 @@ public partial class ArchiveHelper : IArchiveHelper
     private bool IsMultipartRarExtension(string filePath)
     {
         var extension = Path.GetExtension(filePath).ToLower();
-        return extension == ".rar" || Regex.IsMatch(extension, @"\.r[\d]{2,}$",
-            RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        return extension == ".rar" || Regex.IsMatch(extension, @"\.(r)?[\d]{2,}$",
+            RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) || 
+               Regex.IsMatch(filePath, @"\.part[\d]+\.rar$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
     }
 
     /// <summary>

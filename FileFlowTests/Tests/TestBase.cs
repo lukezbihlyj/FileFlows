@@ -41,5 +41,5 @@ public class TestBase
     /// <summary>
     /// The temp path to use during testing
     /// </summary>
-    protected readonly string TempPath = "/home/john/src/ff-files/temp";
+    protected readonly string TempPath = System.IO.Path.GetTempPath().TrimEnd('/');
 }
