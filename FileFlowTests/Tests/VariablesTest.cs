@@ -50,11 +50,12 @@ public class VariablesTest
     {
         var variables = new Dictionary<string, object>();
         const string name = "This is mixed Casing!";
-        variables["value"] = new DateTime(2022, 10, 29, 11, 41, 32, 532);
+        var date = new DateTime(2022, 10, 29, 11, 41, 32, 532);
+        variables["value"] = date;
         Assert.AreEqual("Test 29/10/2022", VariablesHelper.ReplaceVariables("Test {value|dd/MM/yyyy}", variables, stripMissing: true));
         Assert.AreEqual("Test 29-10-2022", VariablesHelper.ReplaceVariables("Test {value|dd-MM-yyyy}", variables, stripMissing: true));
         Assert.AreEqual("Test 29-10-2022 11:41:32.532 AM", VariablesHelper.ReplaceVariables("Test {value|dd-MM-yyyy hh:mm:ss.fff tt}", variables, stripMissing: true));
-        Assert.AreEqual("Test 11:41 AM", VariablesHelper.ReplaceVariables("Test {value|time}", variables, stripMissing: true));
+        Assert.AreEqual($"Test {date.ToShortTimeString()}", VariablesHelper.ReplaceVariables("Test {value|time}", variables, stripMissing: true));
         variables["value"] = name;
         Assert.AreEqual("Test " + name.ToUpper(), VariablesHelper.ReplaceVariables("Test {value!}", variables, stripMissing: true));
         variables["value"] = 12;

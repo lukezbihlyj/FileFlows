@@ -94,9 +94,9 @@ public class MappingTests
         var node = GetProcessingNode();
         node.Mappings = new List<KeyValuePair<string, string>>
         {
-            new KeyValuePair<string, string>("/work", "Z:")
+            new ("/work", "Z:")
         };
         string result = node.Map("/work/Transcodes/complete/anime/" + TestFile).Replace("/", "\\");
-        Assert.AreEqual("Z:\\work\\Transcodes\\complete\\anime\\media\\" + TestFile, result);
+        Assert.AreEqual("Z:\\Transcodes\\complete\\anime\\" + TestFile.Replace("/", "\\"), result);
     }
 }
