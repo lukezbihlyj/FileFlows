@@ -19,6 +19,9 @@ public partial class Confirm : ComponentBase, IDisposable
     /// The default value of the button to focus when shown, true for yes, false for no
     /// </summary>
     private bool DefaultValue;
+    /// <summary>
+    /// The task the show method is awaiting
+    /// </summary>
     TaskCompletionSource<bool> ShowTask;
     TaskCompletionSource<(bool, bool)> ShowSwitchTask;
     private bool ShowSwitch;

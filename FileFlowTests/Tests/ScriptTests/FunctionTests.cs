@@ -11,13 +11,12 @@ public class FunctionTests : TestBase
 
     protected Mock<IFileService> MockFileService = new();
 
-    private string TempFile, TempPath;
+    private string TempFile;
 
     protected override void TestStarting()
     {
         Args = new FileFlows.Plugin.NodeParameters(@"c:\test\testfile.mkv", Logger, false, string.Empty, MockFileService.Object);
         Args.ScriptExecutor = new ScriptExecutor();
-        TempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), Guid.NewGuid().ToString());
         TempFile = System.IO.Path.Combine(TempPath, Guid.NewGuid() + ".txt");
         System.IO.Directory.CreateDirectory(TempPath);
         System.IO.File.WriteAllText(TempFile, "this is a test file");

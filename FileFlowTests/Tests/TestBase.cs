@@ -26,8 +26,23 @@ public class TestBase
     public void TestStarted()
     {
         Logger.Writer = (message) => TestContext.WriteLine(message);
+        var tempPath = Environment.GetEnvironmentVariable("FF_TEMP_PATH");
+        if (string.IsNullOrWhiteSpace(tempPath))
+            tempPath = System.IO.Path.GetTempPath();
+        TempPath = System.IO.Path.Combine(tempPath, "tests", Guid.NewGuid().ToString());
+        System.IO.Directory.CreateDirectory(TempPath);
 
         TestStarting();
+    }
+
+    /// <summary>
+    /// Cleans up after the tests
+    /// </summary>
+    [TestCleanup]
+    public void TestCleanUp()
+    {
+        if (System.IO.Directory.Exists(TempPath))
+            System.IO.Directory.Delete(TempPath, true);
     }
 
     protected virtual void TestStarting()
@@ -39,11 +54,6 @@ public class TestBase
     /// The test logger
     /// </summary>
     public readonly TestLogger Logger = new ();
-
-    /// <summary>
-    /// The directory with the test files
-    /// </summary>
-    protected readonly string TestFilesDir = "/home/john/src/ff-files/test-files";
     
     /// <summary>
     /// The resources test file directory
@@ -51,7 +61,14 @@ public class TestBase
     protected readonly string ResourcesTestFilesDir = "Resources/TestFiles";
 
     /// <summary>
-    /// The temp path to use during testing
+    /// A path in the temp directory created for the test
     /// </summary>
-    protected readonly string TempPath = System.IO.Path.GetTempPath().TrimEnd('/');
+    public string TempPath { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets a temporary file name
+    /// </summary>
+    /// <returns>the temp filename</returns>
+    public string GetTempFileName()
+        => System.IO.Path.Combine(TempPath, Guid.NewGuid().ToString());
 }

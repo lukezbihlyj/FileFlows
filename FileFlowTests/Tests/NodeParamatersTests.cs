@@ -8,17 +8,17 @@ namespace FileFlowTests.Tests;
 /// Tests for NodeParameters
 /// </summary>
 [TestClass]
-public class NodeParamatersTests
+public class NodeParamatersTests: TestBase
 {
     [TestMethod]
     public void InitFileTests()
     {
-        var original = Path.Combine(Path.GetTempPath(), "original.mkv");
+        var original = Path.Combine(TempPath, "original.mkv");
         File.WriteAllText(original, "test");
         
-        var nodeParameters = new NodeParameters(original, null, false, @"C:\media", new LocalFileService());
+        var nodeParameters = new NodeParameters(original, Logger, false, @"C:\media", new LocalFileService());
 
-        var file = Path.Combine(Path.GetTempPath(), "somefile.mp4");
+        var file = Path.Combine(TempPath, "somefile.mp4");
         File.WriteAllText(file, "test");
         
         nodeParameters.InitFile(file);

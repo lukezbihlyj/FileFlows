@@ -5,13 +5,13 @@ namespace FileFlowTests.Tests.Libraries;
 
 
 [TestClass]
-public class DetectionTests
+public class DetectionTests : TestBase
 {
     [TestMethod]
     public void FileCreation()
     {
         var lib = new Library();
-        var info = new FileInfo(Path.GetTempFileName());
+        var info = new FileInfo(GetTempFileName());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileCreation = range;
@@ -76,7 +76,7 @@ public class DetectionTests
     public void FileLastWritten()
     {
         var lib = new Library();
-        var info = new FileInfo(Path.GetTempFileName());
+        var info = new FileInfo(GetTempFileName());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileLastWritten = range;
@@ -142,7 +142,7 @@ public class DetectionTests
     public void FileSize()
     {
         var lib = new Library();
-        var info = new FileInfo(Path.GetTempFileName());
+        var info = new FileInfo(GetTempFileName());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileSize = range;

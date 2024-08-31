@@ -6,16 +6,9 @@ using FileFlows.ServerShared.FileServices;
 namespace FileFlowTests.Tests;
 
 [TestClass]
-public class ScribanTests
+public class ScribanTests : TestBase
 {
-    private TestContext testContextInstance;
 
-    public TestContext TestContext
-    {
-        get { return testContextInstance; }
-        set { testContextInstance = value; }
-    }
-    
     [TestMethod]
     public void ScribanTest()
     {
@@ -30,7 +23,7 @@ Extension: {{Variables.ext}}
     Size is {{Variables.file.Orig.Size}}
 {{- end -}}
 ";
-        var tempFile = Path.GetTempFileName();
+        var tempFile = GetTempFileName();
         System.IO.File.WriteAllText(tempFile, string.Join("\n", Enumerable.Range(0, 10000).Select(x => Guid.NewGuid().ToString())));
         var logger = new TestLogger();
         var args = new NodeParameters(tempFile, logger, false, string.Empty, new LocalFileService());
@@ -60,14 +53,14 @@ File grew in size: {{ difference | math.abs | file_size }}
 File shrunk in size by: {{ difference | file_size }} / {{ percent }}%
 {{ end }}
 ".Trim();
-        var tempFile = Path.GetTempFileName();
+        var tempFile = GetTempFileName();
         var random = new Random(DateTime.UtcNow.Millisecond);
         File.WriteAllText(tempFile, string.Join("\n", Enumerable.Range(0, random.Next(1000, 100000)).Select(x => Guid.NewGuid().ToString())));
         var logger = new TestLogger();
         var args = new NodeParameters(tempFile, logger, false, string.Empty, new LocalFileService());
         args.InitFile(tempFile);
         
-        var tempFile2 = Path.GetTempFileName();
+        var tempFile2 = GetTempFileName();
         File.WriteAllText(tempFile2, string.Join("\n", Enumerable.Range(0, random.Next(1000, 100000)).Select(x => Guid.NewGuid().ToString())));
         args.SetWorkingFile(tempFile2);
         
