@@ -11,7 +11,7 @@ public class DetectionTests : TestBase
     public void FileCreation()
     {
         var lib = new Library();
-        var info = new FileInfo(GetTempFileName());
+        var info = new FileInfo(CreateTempFile());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileCreation = range;
@@ -76,7 +76,7 @@ public class DetectionTests : TestBase
     public void FileLastWritten()
     {
         var lib = new Library();
-        var info = new FileInfo(GetTempFileName());
+        var info = new FileInfo(CreateTempFile());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileLastWritten = range;

@@ -71,4 +71,15 @@ public class TestBase
     /// <returns>the temp filename</returns>
     public string GetTempFileName()
         => System.IO.Path.Combine(TempPath, Guid.NewGuid().ToString());
+
+    /// <summary>
+    /// Creates a temporary file name
+    /// </summary>
+    /// <returns>the temp filename</returns>
+    public string CreateTempFile()
+    {
+        var filename = System.IO.Path.Combine(TempPath, Guid.NewGuid() + ".txt");
+        System.IO.File.WriteAllText(filename, "this is a test files");
+        return filename;
+    }
 }
