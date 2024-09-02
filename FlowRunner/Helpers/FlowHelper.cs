@@ -316,7 +316,7 @@ public class FlowHelper
                             value = je.ToString();
                     }
                     else 
-                        value = Converter.ConvertObject(prop.PropertyType, dict[k]);
+                        value = Converter.ConvertObject(prop.PropertyType, dict[k], Logger.Instance);
                     if (value != null)
                         prop.SetValue(node, value);
                 }
@@ -369,7 +369,7 @@ public class FlowHelper
             logger?.ILog(strongName + " => Type Is: " + varValue.GetType().FullName);
             try
             {
-                var value = Converter.ConvertObject(prop.PropertyType, varValue);
+                var value = Converter.ConvertObject(prop.PropertyType, varValue, Logger.Instance);
                 if (value != null)
                     prop.SetValue(node, value);
             }

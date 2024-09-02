@@ -15,8 +15,9 @@ public class Converter
     /// </summary>
     /// <param name="type">The type to convert to</param>
     /// <param name="value">The object to convert</param>
+    /// <param name="logger">Optional logger to use for logging</param>
     /// <returns>The converted object</returns>
-    public static object ConvertObject(Type type, object? value)
+    public static object ConvertObject(Type type, object? value, Plugin.ILogger? logger = null)
     {
         if (value == null)
             return Activator.CreateInstance(type)!;
@@ -24,11 +25,20 @@ public class Converter
         if (value is JsonElement je)
         {
             string json = je.GetRawText();
-            var options = new JsonSerializerOptions
+            if (type.IsEnum && int.TryParse(json, out int result))
+                return result;
+            try
             {
-                PropertyNameCaseInsensitive = true
-            };
-            return JsonSerializer.Deserialize(json, type, options)!;
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                return JsonSerializer.Deserialize(json, type, options)!;
+            }
+            catch (Exception)
+            {
+                logger?.ELog("Failed deserializing JsonElement Value: " + json);
+            }
         }
         if (valueType == type)
             return value;

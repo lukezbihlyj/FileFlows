@@ -131,7 +131,7 @@ public class PluginHelper
                     if (dict[k] == null)
                         continue;
 
-                    var value = FileFlows.Shared.Converter.ConvertObject(prop.PropertyType, dict[k]);
+                    var value = Converter.ConvertObject(prop.PropertyType, dict[k], Logger.Instance);
                     if (value != null)
                         prop.SetValue(node, value);
                 }
