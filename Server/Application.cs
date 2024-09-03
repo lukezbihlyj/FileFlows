@@ -193,6 +193,19 @@ public class Application
 
     private void WriteLogHeader(string[] args)
     {
+        if (Globals.IsDocker && File.Exists("/app/startup.log"))
+        {
+            Logger.Instance.ILog(new string('=', 100));
+            string startup = File.ReadAllText("/app/startup.log");
+            Logger.Instance.ILog(" Startup.log" + Environment.NewLine + startup);
+            try
+            {
+                File.Delete("/app/startup.log");
+            }
+            catch (Exception)
+            {
+            }
+        }
         Logger.Instance.ILog(new string('=', 100));
         Logger.Instance.ILog("Starting FileFlows " + Globals.Version);
         if (Docker)
@@ -211,11 +224,12 @@ public class Application
     }
 
 
+    /// <summary>
+    /// Initialise the loggers
+    /// </summary>
     private void InitializeLoggers()
     {
         new ServerShared.FileLogger(DirectoryHelper.LoggingDirectory, "FileFlows");
         new ConsoleLogger();
     }
-
-
 }
