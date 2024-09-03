@@ -62,13 +62,19 @@ public readonly struct Result<TValue>
     /// </summary>
     /// <param name="value">The value to be converted.</param>
     public static implicit operator Result<TValue>(TValue value) => new(false, value, null);
-    
+
     /// <summary>
     /// Implicitly converts a value into a Result of TValue.
     /// </summary>
     /// <param name="value">The value to be converted.</param>
-    public static implicit operator TValue(Result<TValue> value) 
-        => value.IsFailed ? throw new InvalidOperationException("Cannot cast an error Result to TValue.") : value.Value;
+    public static implicit operator TValue(Result<TValue> value)
+    {
+        if (value.IsFailed == false)
+            return value.Value;
+        if (string.IsNullOrEmpty(value._error) == false)
+            throw new Exception(value._error);
+        throw new InvalidOperationException("Cannot cast an error Result to TValue.");
+    }
 
     /// <summary>
     /// Matches the result and applies the provided functions based on whether it's a value or an error.

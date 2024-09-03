@@ -214,10 +214,8 @@ internal class DbMigrator
                 return SqlServerDatabaseCreator.DatabaseExists(connectionString);
             case DatabaseType.Postgres:
                 return PostgresDatabaseCreator.DatabaseExists(connectionString);
-            case DatabaseType.Sqlite:
+            default:
                 return SQLiteDatabaseCreator.DatabaseExists(connectionString);
         }
-
-        return Result<bool>.Fail("Unsupported database type");
     }
 }

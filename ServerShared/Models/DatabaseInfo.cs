@@ -60,9 +60,8 @@ public class DbConnectionInfo
                 return $"Server={Server};Port={Port};Database={Name};User Id={User};Password={Password};";
             case DatabaseType.SqlServer:
                 return $"Server={Server},{Port};Database={Name};User Id={User};Password={Password};";
-            case DatabaseType.Sqlite:
+            default:
                 return SqliteHelper.GetConnectionString("FileFlows.sqlite");
         }
-        return Type.ToString();
     }
 }

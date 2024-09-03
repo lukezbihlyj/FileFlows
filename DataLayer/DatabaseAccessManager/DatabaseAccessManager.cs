@@ -97,6 +97,8 @@ internal  class DatabaseAccessManager
                 return new DatabaseAccessManager(logger, DatabaseType.Postgres, connectionString);
             case DatabaseType.SqlServer:
                 return new DatabaseAccessManager(logger, DatabaseType.SqlServer, connectionString);
+            case DatabaseType.SqliteNewConnection:
+                return new DatabaseAccessManager(logger, DatabaseType.SqliteNewConnection, connectionString);
             default: 
                 return new DatabaseAccessManager(logger, DatabaseType.Sqlite, connectionString);
         }
@@ -140,11 +142,9 @@ internal  class DatabaseAccessManager
                     return MySqlDatabaseCreator.DatabaseExists(connectionString);
                 case DatabaseType.Postgres:
                     return PostgresDatabaseCreator.DatabaseExists(connectionString);
-                case DatabaseType.Sqlite:
-                case DatabaseType.SqliteNewConnection:
+                default:
                     return SQLiteDatabaseCreator.DatabaseExists(connectionString);
             }
-            return Result<bool>.Fail("Unsupported database type");
         }
         catch (Exception ex)
         {

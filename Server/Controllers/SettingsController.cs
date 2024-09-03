@@ -218,10 +218,15 @@ public class SettingsController : BaseController
              Settings.DatabaseMigrateConnection = newConnectionString;
              Settings.DatabaseMigrateType = model.DbType;
         }
+        else if (Settings.DatabaseType != model.DbType)
+        {
+            // if switching from SQLite new connection 
+            Settings.DatabaseType = model.DbType;
+        }
 
         Settings.RecreateDatabase = model.RecreateDatabase;
         Settings.DockerModsOnServer = model.DockerModsOnServer;
-        Settings.DontBackupOnUpgrade = model.DbType != DatabaseType.Sqlite && model.DontBackupOnUpgrade;
+        Settings.DontBackupOnUpgrade = model.DbType != DatabaseType.Sqlite && model.DbType != DatabaseType.SqliteNewConnection && model.DontBackupOnUpgrade;
         // save AppSettings with updated license and db migration if set
         SettingsService.Save();
     }
@@ -239,7 +244,16 @@ public class SettingsController : BaseController
         var service = (SettingsService)ServiceLoader.Load<ISettingsService>();
         await service.Save(model, auditDetails);
     }
-
+    
+    /// <summary>
+    /// Determines if the new connection string is the same as the original connection string.
+    /// </summary>
+    /// <param name="original">The original connection string.</param>
+    /// <param name="newConnection">The new connection string to compare against the original.</param>
+    /// <returns>
+    /// <c>true</c> if both connection strings are for SQLite or if they are exactly the same;
+    /// otherwise, <c>false</c>.
+    /// </returns>
     private bool IsConnectionSame(string original, string newConnection)
     {
         if (IsSqliteConnection(original) && IsSqliteConnection(newConnection))
@@ -247,13 +261,27 @@ public class SettingsController : BaseController
         return original == newConnection;
     }
 
+    /// <summary>
+    /// Determines if the provided connection string is an SQLite connection.
+    /// </summary>
+    /// <param name="connString">The connection string to evaluate.</param>
+    /// <returns>
+    /// <c>true</c> if the connection string is for an SQLite database or if it is null or whitespace;
+    /// otherwise, <c>false</c>.
+    /// </returns>
     private bool IsSqliteConnection(string connString)
     {
         if (string.IsNullOrWhiteSpace(connString))
             return true;
-        return connString.IndexOf("FileFlows.sqlite") > 0;
+        return connString.IndexOf("FileFlows.sqlite", StringComparison.Ordinal) > 0;
     }
 
+    /// <summary>
+    /// Retrieves the connection string based on the provided settings and database type.
+    /// </summary>
+    /// <param name="settings">The settings containing the connection details.</param>
+    /// <param name="dbType">The type of the database.</param>
+    /// <returns>The connection string for the specified database type.</returns>
     private string GetConnectionString(SettingsUiModel settings, DatabaseType dbType)
     {
         return new DbConnectionInfo()
