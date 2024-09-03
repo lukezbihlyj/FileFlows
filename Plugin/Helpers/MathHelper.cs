@@ -82,70 +82,76 @@ public class MathHelper(ILogger _logger)
             _logger.ILog($"NotBetween: {value} is{(notBetween ? " NOT" : "")} between {low} and {high}");
             return notBetween;
         }
-
+        
         const double tolerance = 0.05;
 
-        switch (operation[..2])
+        if (operation.Length > 2)
         {
-            case "<=":
+            switch (operation[..2])
             {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
-                var result = value <= comparison + tolerance;
-                _logger.ILog(
-                    $"LessOrEqual: {value} is{(result ? "" : " NOT")} less or equal to {comparison} with tolerance {tolerance}");
-                return result;
-            }
-            case ">=":
-            {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
-                var result = value >= comparison - tolerance;
-                _logger.ILog(
-                    $"GreaterOrEqual: {value} is{(result ? "" : " NOT")} greater or equal to {comparison} with tolerance {tolerance}");
-                return result;
-            }
-            case "==":
-            {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
-                var result = Math.Abs(value - comparison) < tolerance;
-                _logger.ILog(
-                    $"Equal: {value} is{(result ? "" : " NOT")} equal to {comparison} with tolerance {tolerance}");
-                return result;
-            }
-            case "!=":
-            {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
-                var result = Math.Abs(value - comparison) > tolerance;
-                _logger.ILog(
-                    $"NotEqual: {value} is{(result ? " NOT" : "")} equal to {comparison} with tolerance {tolerance}");
-                return result;
+                case "<=":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
+                    var result = value <= comparison + tolerance;
+                    _logger.ILog(
+                        $"LessOrEqual: {value} is{(result ? "" : " NOT")} less or equal to {comparison} with tolerance {tolerance}");
+                    return result;
+                }
+                case ">=":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
+                    var result = value >= comparison - tolerance;
+                    _logger.ILog(
+                        $"GreaterOrEqual: {value} is{(result ? "" : " NOT")} greater or equal to {comparison} with tolerance {tolerance}");
+                    return result;
+                }
+                case "==":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
+                    var result = Math.Abs(value - comparison) < tolerance;
+                    _logger.ILog(
+                        $"Equal: {value} is{(result ? "" : " NOT")} equal to {comparison} with tolerance {tolerance}");
+                    return result;
+                }
+                case "!=":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
+                    var result = Math.Abs(value - comparison) > tolerance;
+                    _logger.ILog(
+                        $"NotEqual: {value} is{(result ? " NOT" : "")} equal to {comparison} with tolerance {tolerance}");
+                    return result;
+                }
             }
         }
 
-        switch (operation[..1])
+        if (operation.Length > 1)
         {
-            case "<":
+            switch (operation[..1])
             {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
-                var result = value < comparison + tolerance;
-                _logger.ILog(
-                    $"LessThan: {value} is{(result ? "" : " NOT")} less than {comparison} with tolerance {tolerance}");
-                return result;
-            }
-            case ">":
-            {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
-                var result = value > comparison - tolerance;
-                _logger.ILog(
-                    $"GreaterThan: {value} is{(result ? "" : " NOT")} greater than {comparison} with tolerance {tolerance}");
-                return result;
-            }
-            case "=":
-            {
-                var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
-                var result = Math.Abs(value - comparison) < tolerance;
-                _logger.ILog(
-                    $"Equal: {value} is{(result ? "" : " NOT")} equal to {comparison} with tolerance {tolerance}");
-                return result;
+                case "<":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
+                    var result = value < comparison + tolerance;
+                    _logger.ILog(
+                        $"LessThan: {value} is{(result ? "" : " NOT")} less than {comparison} with tolerance {tolerance}");
+                    return result;
+                }
+                case ">":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
+                    var result = value > comparison - tolerance;
+                    _logger.ILog(
+                        $"GreaterThan: {value} is{(result ? "" : " NOT")} greater than {comparison} with tolerance {tolerance}");
+                    return result;
+                }
+                case "=":
+                {
+                    var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
+                    var result = Math.Abs(value - comparison) < tolerance;
+                    _logger.ILog(
+                        $"Equal: {value} is{(result ? "" : " NOT")} equal to {comparison} with tolerance {tolerance}");
+                    return result;
+                }
             }
         }
 
