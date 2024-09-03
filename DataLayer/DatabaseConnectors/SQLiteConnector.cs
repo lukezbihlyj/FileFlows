@@ -9,7 +9,7 @@ namespace FileFlows.DataLayer.DatabaseConnectors;
 /// <summary>
 /// Connector for SQLite
 /// </summary>
-public class SQLiteConnectorOld : IDatabaseConnector
+public class SQLiteConnector : IDatabaseConnector
 {
     private DatabaseConnection dbConnectionWrite;
     private FairSemaphore writeSemaphore = new(1);
@@ -38,9 +38,15 @@ public class SQLiteConnectorOld : IDatabaseConnector
         => writeSemaphore.CurrentInUse;
     
     
-    public SQLiteConnectorOld(ILogger logger, string connectionString)
+    /// <summary>
+    /// Initialise a new SQLite Connector
+    /// </summary>
+    /// <param name="logger">the logger to use</param>
+    /// <param name="connectionString">the connection string</param>
+    public SQLiteConnector(ILogger logger, string connectionString)
     {
         Logger = logger;
+        logger.ILog("Using SQLite Connector");
 
         if (string.IsNullOrWhiteSpace(DirectoryHelper.DatabaseDirectory) == false)
         {

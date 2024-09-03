@@ -10,9 +10,9 @@ using DatabaseType = FileFlows.Shared.Models.DatabaseType;
 namespace FileFlows.DataLayer.DatabaseConnectors;
 
 /// <summary>
-/// Connector for SQLite
+/// Connector for SQLite that creates a new connection for every query
 /// </summary>
-public class SQLiteConnector : IDatabaseConnector
+public class SQLiteConnectorNewConnection : IDatabaseConnector
 {
     /// <summary>
     /// The connection string to the database
@@ -47,10 +47,15 @@ public class SQLiteConnector : IDatabaseConnector
     public int GetOpenedConnections()
         => connectionPool.OpenedConnections;
     
-    
-    public SQLiteConnector(ILogger logger, string connectionString)
+    /// <summary>
+    /// Initialise a new connector
+    /// </summary>
+    /// <param name="logger">the logger to use</param>
+    /// <param name="connectionString">the connection string</param>
+    public SQLiteConnectorNewConnection(ILogger logger, string connectionString)
     {
         Logger = logger;
+        logger.ILog("Using SQLite Connector New Connection");
         connectionPool = new(CreateConnection, 20, connectionLifetime: new TimeSpan(0, 10, 0));
 
         if (string.IsNullOrWhiteSpace(DirectoryHelper.DatabaseDirectory) == false)

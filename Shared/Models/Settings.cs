@@ -238,7 +238,11 @@ public enum DatabaseType
     /// <summary>
     /// Microsoft SQL Server
     /// </summary>
-    SqlServer = 3
+    SqlServer = 3,
+    /// <summary>
+    /// SQLite but with a new connection each time
+    /// </summary>
+    SqliteNewConnection = 10,
 }
 
 /// <summary>

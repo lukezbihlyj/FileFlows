@@ -25,6 +25,8 @@ internal static class DatabaseConnectorLoader
                 return new SqlServerConnector(logger, connectionString);
             case DatabaseType.Postgres:
                 return new PostgresConnector(logger, connectionString);
+            case DatabaseType.SqliteNewConnection:
+                return new SQLiteConnectorNewConnection(logger, connectionString);
             default:
                 return new SQLiteConnector(logger, connectionString);
         }

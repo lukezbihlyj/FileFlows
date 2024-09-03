@@ -44,8 +44,6 @@ public partial class Settings : InputRegister
     /// </summary>
     protected Profile Profile { get; private set; }
 
-    private bool ShowExternalDatabase => LicensedFor(LicenseFlags.ExternalDatabase);
-
     private bool IsSaving { get; set; }
 
     private string lblSave, lblSaving, lblHelp, lblEmail, lblAdvanced, lblDatabase, lblLogging, 
@@ -68,13 +66,7 @@ public partial class Settings : InputRegister
     /// <summary>
     /// The database types
     /// </summary>
-    private readonly List<ListOption> DbTypes = new()
-    {
-        new() { Label = "SQLite", Value = DatabaseType.Sqlite },
-        new() { Label = "MySQL", Value = DatabaseType.MySql },
-        new() { Label = "Postgres", Value = DatabaseType.Postgres }, 
-        new() { Label = "SQL Server", Value = DatabaseType.SqlServer }, 
-    };
+    private List<ListOption> DbTypes = [];
 
     /// <summary>
     /// the SMTP security types
@@ -186,6 +178,26 @@ public partial class Settings : InputRegister
         lblFileServer = Translater.Instant("Pages.Settings.Labels.FileServer");
         lblFileServerDescription = Translater.Instant("Pages.Settings.Fields.FileServer.Description");
         mdSecurityDescription = RenderMarkdown("Pages.Settings.Fields.Security.Description");
+        
+        if(LicensedFor(LicenseFlags.ExternalDatabase))
+        {
+            DbTypes =
+            [
+                new() { Label = "SQLite", Value = DatabaseType.Sqlite },
+                new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
+                new() { Label = "MySQL", Value = DatabaseType.MySql },
+                new() { Label = "Postgres", Value = DatabaseType.Postgres },
+                new() { Label = "SQL Server", Value = DatabaseType.SqlServer }
+            ];
+        }
+        else
+        {
+            DbTypes =
+            [
+                new() { Label = "SQLite", Value = DatabaseType.Sqlite },
+                new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection }
+            ];
+        }
         InitSecurityModes();
         Blocker.Show("Loading Settings");
         try

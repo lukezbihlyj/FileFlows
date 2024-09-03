@@ -245,7 +245,7 @@ public class StartupService
     /// </summary>
     private void BackupSqlite()
     {
-        if (appSettingsService.Settings.DatabaseType != DatabaseType.Sqlite)
+        if (appSettingsService.Settings.DatabaseType is DatabaseType.Sqlite or DatabaseType.SqliteNewConnection == false)
             return;
         if (appSettingsService.Settings.DatabaseMigrateType != null)
             return;
