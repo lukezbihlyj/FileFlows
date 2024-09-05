@@ -186,6 +186,11 @@ public class NodeParameters
     public bool IsDirectory { get; set; }
     
     /// <summary>
+    /// Gets or sets if the original file that started this is a directory instead of a file
+    /// </summary>
+    public bool OriginalIsDirectory { get; }
+    
+    /// <summary>
     /// Gets or sets the path to the library this library file belongs to
     /// </summary>
     public string LibraryPath { get; set; }
@@ -321,6 +326,7 @@ public class NodeParameters
     {
         Fake = string.IsNullOrEmpty(filename);
         this.IsDirectory = isDirectory;
+        this.OriginalIsDirectory = isDirectory;
         this.FileName = filename;
         this.LibraryPath = libraryPath;
         this.WorkingFile = filename;
