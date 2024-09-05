@@ -2,7 +2,7 @@
   color:var(--color);
   font-size: 0.9rem;
   thead > tr {
-    font-weight: 600;
+    font-weight: var(--bold, 600);
     background: rgba(var(--input-background-rgb), 0.3);
   }
   th, td {
@@ -21,5 +21,21 @@
   {
     background:rgba(var(--accent-rgb), 0.3);
     cursor:pointer;
+  }
+  
+  &.alt-rows
+  {
+    tr:nth-child(odd) {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+  &.selectable
+  {
+    tr td:first-child {
+      border-left:solid 0.25rem transparent !important;
+    }
+    tr.selected td {
+      border-color:var(--accent) !important;
+    }
   }
 }

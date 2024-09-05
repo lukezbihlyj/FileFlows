@@ -1,51 +1,79 @@
 using Microsoft.AspNetCore.Components;
-using ffElement = FileFlows.Shared.Models.FlowElement;
 using FileFlows.Client.Components.Inputs;
 using FileFlows.Plugin;
 using FileFlows.Client.Components.Common;
 
 namespace FileFlows.Client.Components;
 
+/// <summary>
+/// Browser for Plugins
+/// </summary>
 public partial class PluginBrowser : ComponentBase
 {
+    /// <summary>
+    /// The URL to get the Plugins
+    /// </summary>
     const string ApiUrl = "/api/plugin";
+    /// <summary>
+    /// Gets or sets the blocker
+    /// </summary>
     [CascadingParameter] public Blocker Blocker { get; set; }
+    /// <summary>
+    /// Gets or sets the editor
+    /// </summary>
     [CascadingParameter] public Editor Editor { get; set; }
-
+    /// <summary>
+    /// Gets or sets the table
+    /// </summary>
     public FlowTable<PluginPackageInfo> Table { get; set; }
-
+    /// <summary>
+    /// Gets or sets if this is visible
+    /// </summary>
     public bool Visible { get; set; }
-
+    /// <summary>
+    /// If this has been updated
+    /// </summary>
     private bool Updated;
-
+    /// <summary>
+    /// The translated labels
+    /// </summary>
     private string lblTitle, lblClose;
 
+    /// <summary>
+    /// The open task to complete when closing
+    /// </summary>
     TaskCompletionSource<bool> OpenTask;
-
+    /// <summary>
+    /// If the components needs rendering
+    /// </summary>
     private bool _needsRendering = false;
 
-    private bool Loading = false;
-
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         lblClose = Translater.Instant("Labels.Close");
         lblTitle = Translater.Instant("Pages.Plugins.Labels.PluginBrowser");
     }
 
+    /// <summary>
+    /// Opens the plugin browser
+    /// </summary>
+    /// <returns>returns true if one or more plugins were downloaded</returns>
     internal Task<bool> Open()
     {
         this.Visible = true;
-        this.Loading = true;
-        this.Table.Data = new List<PluginPackageInfo>();
+        this.Table.SetData(new List<PluginPackageInfo>());
         OpenTask = new TaskCompletionSource<bool>();
         _ = LoadData();
         this.StateHasChanged();
         return OpenTask.Task;
     }
 
+    /// <summary>
+    /// Loads the plugins
+    /// </summary>
     private async Task LoadData()
     {
-        this.Loading = true;
         Blocker.Show();
         this.StateHasChanged();
         try
@@ -53,12 +81,13 @@ public partial class PluginBrowser : ComponentBase
             var result = await HttpHelper.Get<List<PluginPackageInfo>>(ApiUrl + "/plugin-packages?missing=true");
             if (result.Success == false)
             {
+                Toast.ShowError(result.Body, duration: 15_000);
                 // close this and show message
                 this.Close();
                 return;
             }
-            this.Table.Data = result.Data;
-            this.Loading = false;
+
+            this.Table.SetData(result.Data);
         }
         finally
         {
@@ -67,6 +96,9 @@ public partial class PluginBrowser : ComponentBase
         }
     }
 
+    /// <summary>
+    /// Waits for the component to render
+    /// </summary>
     private async Task WaitForRender()
     {
         _needsRendering = true;
@@ -77,17 +109,22 @@ public partial class PluginBrowser : ComponentBase
         }
     }
 
+    /// <summary>
+    /// Closes the component
+    /// </summary>
     private void Close()
     {
         OpenTask.TrySetResult(Updated);
         this.Visible = false;
     }
 
+    /// <summary>
+    /// Downloads the selected plugins
+    /// </summary>
     private async Task Download()
     {
-#if (!DEMO)
         var selected = Table.GetSelected().ToArray();
-        var items = selected.Select(x => x.Package).ToList();
+        var items = selected;
         if (items.Any() == false)
             return;
         this.Blocker.Show();
@@ -112,9 +149,11 @@ public partial class PluginBrowser : ComponentBase
             this.StateHasChanged();
         }
         await LoadData();
-#endif
     }
 
+    /// <summary>
+    /// When the view button is clicked
+    /// </summary>
     private async Task ViewAction()
     {
         var item = Table.GetSelected().FirstOrDefault();
@@ -122,9 +161,13 @@ public partial class PluginBrowser : ComponentBase
             await View(item);
     }
 
+    /// <summary>
+    /// Views the item
+    /// </summary>
+    /// <param name="plugin">the item</param>
     private async Task View(PluginPackageInfo plugin)
     {
-        await Editor.Open(new () { TypeName = "Pages.Plugins", Title = plugin.Name, Fields = new List<ElementField>
+        await Editor.Open(new () { TypeName = "Pages.Plugins", Title = plugin.Name, Fields = new List<IFlowField>
         {
             new ElementField
             {

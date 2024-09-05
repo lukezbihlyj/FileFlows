@@ -1,5 +1,7 @@
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Dialogs;
+using FileFlows.Client.Shared;
+using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Pages;
 
@@ -9,50 +11,46 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private Library EditingItem = null;
 
+    private string lblLastScanned, lblFlow, lblSavings;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        lblLastScanned = Translater.Instant("Labels.LastScanned");
+        lblFlow = Translater.Instant("Labels.Flow");
+        lblSavings = Translater.Instant("Labels.Savings");
+    }
+
     private async Task Add()
     {
         await Edit(new ()
-        {
+        {  
             Enabled = true, 
             ScanInterval = 60, 
             FileSizeDetectionInterval = 5,
-            UseFingerprinting = true,
+            UseFingerprinting = false,
             UpdateMovedFiles = true,
-            Schedule = new String('1', 672)
+            Schedule = new string('1', 672)
         });
     }
-#if (DEMO)
-    public override async Task Load(Guid? selectedUid = null)
-    {
-        this.Data = Enumerable.Range(1, 5).Select(x => new Library
-        {
-            Enabled = true,
-            Flow = new ObjectReference
-            {
-                Name = "Flow",
-                Uid = Guid.NewGuid()
-            },
-            Path = "/media/library" + x,                
-            Name = "Demo Library " + x,
-            Uid = Guid.NewGuid(),
-            Filter = "\\.(mkv|mp4|avi|mov|divx)$"
-        }).ToList();
-    }
-#endif
 
-    private async Task<RequestResult<FileFlows.Shared.Models.Flow[]>> GetFlows()
+    private Task<RequestResult<Dictionary<Guid, string>>> GetFlows()
+        => HttpHelper.Get<Dictionary<Guid, string>>("/api/flow/basic-list?type=Standard");
+
+    private Dictionary<string, StorageSavedData> StorageSaved = new ();
+
+    /// <inheritdoc />
+    protected override async Task<RequestResult<List<Library>>> FetchData()
     {
-#if (DEMO)
-        var results = Enumerable.Range(1, 5).Select(x => new FileFlows.Shared.Models.Flow { Name = "Flow " + x, Uid = System.Guid.NewGuid() }).ToArray();
-        return new RequestResult<FileFlows.Shared.Models.Flow[]> { Success = true, Data = results };
-#endif
-        return await HttpHelper.Get<FileFlows.Shared.Models.Flow[]>("/api/flow");
+        StorageSaved =
+            (await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw"))
+            .Data?.ToDictionary(x => x.Library, x => x) ?? new ();
+        return await base.FetchData();
     }
 
     public override async Task<bool> Edit(Library library)
     {
         this.EditingItem = library;
-
         return await OpenEditor(library);
     }
 
@@ -60,41 +58,39 @@ public partial class Libraries : ListPage<Guid, Library>
     {
         if (value == null)
             return;
-        Library template = value as Library;
+        var template = value as Library;
         if (template == null)
             return;
-        Editor editor = sender as Editor;
+        var editor = sender as Editor;
         if (editor == null)
             return;
         if (editor.Model == null)
             editor.Model = new ExpandoObject();
-        IDictionary<string, object> model = editor.Model;
+        IDictionary<string, object> model = editor.Model!;
         
         SetModelProperty(nameof(template.Name), template.Name);
         SetModelProperty(nameof(template.Template), template.Name);
         SetModelProperty(nameof(template.FileSizeDetectionInterval), template.FileSizeDetectionInterval);
         SetModelProperty(nameof(template.Filter), template.Filter);
+        SetModelProperty(nameof(template.Extensions), template.Extensions?.ToArray() ?? new string[] { });
+        SetModelProperty(nameof(template.UseFingerprinting), template.UseFingerprinting);
         SetModelProperty(nameof(template.ExclusionFilter), template.ExclusionFilter);
         SetModelProperty(nameof(template.Path), template.Path);
         SetModelProperty(nameof(template.Priority), template.Priority);
         SetModelProperty(nameof(template.ScanInterval), template.ScanInterval);
         SetModelProperty(nameof(template.ReprocessRecreatedFiles), template.ReprocessRecreatedFiles);
-        SetModelProperty(nameof(Library.Folders), false);
+        SetModelProperty(nameof(template.Folders), template.Folders);
+        SetModelProperty(nameof(template.UpdateMovedFiles), template.UpdateMovedFiles);
 
+        editor.TriggerStateHasChanged();
         void SetModelProperty(string property, object value)
         {
-            if(model.ContainsKey(property))
-                model[property] = value;
-            else
-                model.Add(property, value);
+            model[property] = value;
         }
     }
 
     async Task<bool> Save(ExpandoObject model)
     {
-#if (DEMO)
-        return true;
-#else
         Blocker.Show();
         this.StateHasChanged();
 
@@ -103,14 +99,14 @@ public partial class Libraries : ListPage<Guid, Library>
             var saveResult = await HttpHelper.Post<Library>($"{ApiUrl}", model);
             if (saveResult.Success == false)
             {
-                Toast.ShowError( Translater.TranslateIfNeeded(saveResult.Body?.EmptyAsNull() ?? "ErrorMessages.SaveFailed"));
+                Toast.ShowEditorError( Translater.TranslateIfNeeded(saveResult.Body?.EmptyAsNull() ?? "ErrorMessages.SaveFailed"));
                 return false;
             }
-            if ((App.Instance.FileFlowsSystem.ConfigurationStatus & ConfigurationStatus.Libraries) !=
+            if ((Profile.ConfigurationStatus & ConfigurationStatus.Libraries) !=
                 ConfigurationStatus.Libraries)
             {
                 // refresh the app configuration status
-                await App.Instance.LoadAppInfo();
+                await ProfileService.Refresh();
             }
 
             int index = this.Data.FindIndex(x => x.Uid == saveResult.Data.Uid);
@@ -128,7 +124,6 @@ public partial class Libraries : ListPage<Guid, Library>
             Blocker.Hide();
             this.StateHasChanged();
         }
-#endif
     }
 
 
@@ -158,11 +153,66 @@ public partial class Libraries : ListPage<Guid, Library>
 
         try
         {
-#if (!DEMO)
-            var deleteResult = await HttpHelper.Put($"{ApiUrl}/rescan", new ReferenceModel<Guid> { Uids = uids });
-            if (deleteResult.Success == false)
+            var result = await HttpHelper.Put($"{ApiUrl}/rescan", new ReferenceModel<Guid> { Uids = uids });
+            if (result.Success == false)
                 return;
-#endif
+        }
+        finally
+        {
+            Blocker.Hide();
+            this.StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Reprocess all files in a library
+    /// </summary>
+    private async Task Reprocess()
+    {
+        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        if (uids.Length == 0)
+            return; // nothing to rescan
+
+        if (await Confirm.Show("Pages.Libraries.Messages.Reprocess.Title",
+                "Pages.Libraries.Messages.Reprocess.Message", defaultValue: false) == false)
+            return;
+
+        Blocker.Show();
+        this.StateHasChanged();
+
+        try
+        {
+            var result = await HttpHelper.Put($"{ApiUrl}/reprocess", new ReferenceModel<Guid> { Uids = uids });
+            if (result.Success == false)
+                return;
+        }
+        finally
+        {
+            Blocker.Hide();
+            this.StateHasChanged();
+        }
+    }
+    /// <summary>
+    /// Reset all files in a library
+    /// </summary>
+    private async Task Reset()
+    {
+        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        if (uids.Length == 0)
+            return; // nothing to rescan
+
+        if (await Confirm.Show("Pages.Libraries.Messages.Reset.Title",
+                "Pages.Libraries.Messages.Reset.Message", defaultValue: false) == false)
+            return;
+
+        Blocker.Show();
+        this.StateHasChanged();
+
+        try
+        {
+            var result = await HttpHelper.Put($"{ApiUrl}/reset", new ReferenceModel<Guid> { Uids = uids });
+            if (result.Success == false)
+                return;
         }
         finally
         {
@@ -173,16 +223,13 @@ public partial class Libraries : ListPage<Guid, Library>
 
     public override async Task Delete()
     {
-#if (!DEMO)
         var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to delete
         var confirmResult = await Confirm.Show("Labels.Delete",
-            Translater.Instant("Pages.Libraries.Messages.DeleteConfirm", new { count = uids.Length }),
-            "Pages.Libraries.Messages.KeepLibraryFiles",
-            false
+            Translater.Instant("Pages.Libraries.Messages.DeleteConfirm", new { count = uids.Length })
         );
-        if (confirmResult.Confirmed == false)
+        if (confirmResult == false)
             return; // rejected the confirm
 
         Blocker.Show();
@@ -190,7 +237,7 @@ public partial class Libraries : ListPage<Guid, Library>
 
         try
         {
-            var deleteResult = await HttpHelper.Delete($"{ApiUrl}?deleteLibraryFiles={(confirmResult.SwitchState == false)}", new ReferenceModel<Guid> { Uids = uids });
+            var deleteResult = await HttpHelper.Delete(ApiUrl, new ReferenceModel<Guid> { Uids = uids });
             if (deleteResult.Success == false)
             {
                 if(Translater.NeedsTranslating(deleteResult.Body))
@@ -209,7 +256,75 @@ public partial class Libraries : ListPage<Guid, Library>
             Blocker.Hide();
             this.StateHasChanged();
         }
-#endif
+    }
+
+    /// <summary>
+    /// Get priority icon
+    /// </summary>
+    /// <param name="library">the library</param>
+    /// <returns>the priority icon class</returns>
+    private string GetPriorityIcon(Library library)
+    {
+        switch (library.Priority)
+        {
+            case ProcessingPriority.Highest:
+                return "fas fa-angle-double-up";
+            case ProcessingPriority.High:
+                return "fas fa-angle-up";
+            case ProcessingPriority.Low:
+                return "fas fa-angle-down";
+            case ProcessingPriority.Lowest:
+                return "fas fa-angle-double-down";
+            default:
+                return "fas fa-folder";
+        }
+    }
+
+    /// <summary>
+    /// Gets the storage saved
+    /// </summary>
+    /// <param name="libraryName">the name of the library</param>
+    /// <param name="storageSavedData">the savings if found</param>
+    /// <returns>if the storage savings were in the dictionary</returns>
+    private bool GetStorageSaved(string libraryName, out StorageSavedData storageSavedData)
+        => StorageSaved.TryGetValue(libraryName, out storageSavedData);
+    
+    
+    /// <summary>
+    /// we only want to do the sort the first time, otherwise the list will jump around for the user
+    /// </summary>
+    private List<Guid> initialSortOrder;
+    
+    /// <inheritdoc />
+    public override Task PostLoad()
+    {
+        Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
+        
+        if (initialSortOrder == null)
+        {
+            Data = Data?.OrderByDescending(x => x.Enabled)?.ThenBy(x => x.Name)
+                ?.ToList();
+            initialSortOrder = Data?.Select(x => x.Uid)?.ToList();
+        }
+        else
+        {
+            Data = Data?.OrderBy(x => initialSortOrder.Contains(x.Uid) ? initialSortOrder.IndexOf(x.Uid) : 1000000)
+                .ThenBy(x => x.Name)
+                ?.ToList();
+        }
+        return base.PostLoad();
+    }
+
+    /// <summary>
+    /// Opens the flow in the editor
+    /// </summary>
+    /// <param name="flowUid">the UID of the flow</param>
+    private void OpenFlow(Guid? flowUid)
+    {
+        if (flowUid == null || Profile.HasRole(UserRole.Flows) == false)
+            return;
+
+        NavigationManager.NavigateTo($"/flows/{flowUid}");
     }
 }
 

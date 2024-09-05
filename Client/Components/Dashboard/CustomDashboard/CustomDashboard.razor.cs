@@ -1,4 +1,6 @@
+using System.Runtime.InteropServices.JavaScript;
 using FileFlows.Client.Components.Dialogs;
+using FileFlows.Client.Helpers;
 using FileFlows.Plugin;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
@@ -16,10 +18,28 @@ public partial class CustomDashboard : IDisposable
     [CascadingParameter] public Blocker Blocker { get; set; }
     [CascadingParameter] Editor Editor { get; set; }
     [CascadingParameter] private Pages.Dashboard Dashboard { get; set; }
-    
+    /// <summary>
+    /// Gets or sets the client service
+    /// </summary>
+    [Inject]public ClientService ClientService { get; set; }
+    /// <summary>
+    /// Gets or sets the profile service
+    /// </summary>
+    [Inject] public ProfileService ProfileService { get; set; }
+    /// <summary>
+    /// The users profile
+    /// </summary>
+    private Profile Profile;
+
+    /// <summary>
+    /// Register callbacks in javascript for events
+    /// </summary>
+    private readonly Dictionary<string, Action<object>> JsCallbacks = new();
+
     private Guid _ActiveDashboardUid;
     private bool needsLoading = false;
 
+#pragma warning disable BL0007
     [Parameter]
     public Guid ActiveDashboardUid
     {
@@ -43,6 +63,7 @@ public partial class CustomDashboard : IDisposable
             });
         }
     }
+#pragma warning restore BL0007
 
     /// <summary>
     /// Gets if the active dashboard is the default dashboard
@@ -56,8 +77,10 @@ public partial class CustomDashboard : IDisposable
     
     protected override async Task OnInitializedAsync()
     {
-        jsCharts = await jSRuntime.InvokeAsync<IJSObjectReference>("import", $"./scripts/Charts/FFChart.js");
+        jsCharts = await jSRuntime.InvokeAsync<IJSObjectReference>("import", $"./scripts/Charts/FFCharts.js?v=" + Globals.Version);
         Dashboard.AddWidgetEvent = (sender, args) => _ = AddWidgetDialog();
+
+        Profile = await ProfileService.Get();
 
         if (needsLoading)
         {
@@ -67,8 +90,20 @@ public partial class CustomDashboard : IDisposable
             await jsCharts.InvokeVoidAsync($"destroyDashboard",  this.Widgets, dotNetObjRef);
             await this.LoadDashboard();
         }
+        
+        ClientService.ExecutorsUpdated += ClientServiceOnExecutorsUpdated;
     }
-    
+
+    /// <summary>
+    /// Called when the client service executors get an update
+    /// </summary>
+    /// <param name="data">the update data</param>
+    private void ClientServiceOnExecutorsUpdated(List<FlowExecutorInfoMinified> data)
+    {
+        if(JsCallbacks.TryGetValue("FlowExecutorInfo", out var callback))
+            callback.Invoke(data);
+    }
+
     private async Task LoadDashboard()
     {
         var WidgetsResponse = await HttpHelper.Get<List<WidgetUiModel>>("/api/dashboard/" + ActiveDashboardUid + "/Widgets");
@@ -84,6 +119,7 @@ public partial class CustomDashboard : IDisposable
     public void Dispose()
     {
         _ = jsCharts?.InvokeVoidAsync("disposeAll");
+        ClientService.ExecutorsUpdated -= ClientServiceOnExecutorsUpdated;
     }
     
     
@@ -96,30 +132,42 @@ public partial class CustomDashboard : IDisposable
     {
         await Helpers.LibraryFileEditor.Open(Blocker, Editor, libraryFileUid);
     }
-    
+
     /// <summary>
-    /// Gets recently finished library files
+    /// Registers a event callback
     /// </summary>
+    /// <param name="eventName">the event name</param>
+    /// <param name="callback">the callback</param>
     [JSInvokable]
-    public async Task<List<object>> FetchRecentlyFinished()
+    public void RegisterCallback(string eventName, Action<object> callback)
     {
-        var result = await HttpHelper.Get<List<LibraryFile>>("/api/library-file/recently-finished");
-        if (!result.Success || result.Data?.Any() != true)
-            return new List<object>();
-        return result.Data.Select(x =>
-        {
-            string when = x.ProcessingEnded.Humanize(false, DateTime.Now);
-            return (object)new
-            {
-                x.Uid,
-                x.RelativePath,
-                When = when,
-                x.OriginalSize,
-                x.FinalSize,
-            };
-        }).ToList();
+        if (string.IsNullOrWhiteSpace(eventName) || callback == null)
+            return;
+        JsCallbacks[eventName] = callback;
     }
-    
+
+    /// <summary>
+    /// Translates a string
+    /// </summary>
+    /// <param name="key">the string key to translate</param>
+    /// <returns>the translated string</returns>
+    [JSInvokable]
+    public string Translate(string key)
+        => Translater.Instant(key);
+
+    /// <summary>
+    /// Translates an array of strings
+    /// </summary>
+    /// <param name="keys">the string keys to translate</param>
+    /// <returns>the translated strings</returns>
+    [JSInvokable]
+    public string[] TranslateAll(string[] keys)
+    {
+        for (int i = 0; i < keys.Length; i++)
+            keys[i] = Translater.Instant(keys[i]);
+        return keys;
+    }
+
     /// <summary>
     /// Opens a log for a executing library file
     /// </summary>
@@ -146,7 +194,7 @@ public partial class CustomDashboard : IDisposable
             Blocker.Hide();
         }
 
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.LogView,
@@ -166,27 +214,6 @@ public partial class CustomDashboard : IDisposable
 
     private async Task<RequestResult<string>> GetLog(string url)
     {
-#if (DEMO)
-        return new RequestResult<string>
-        {
-            Success = true,
-            Data = @"2021-11-27 11:46:15.0658 - Debug -> Executing part:
-2021-11-27 11:46:15.1414 - Debug -> node: VideoFile
-2021-11-27 11:46:15.8442 - Info -> Video Information:
-ffmpeg version 4.1.8 Copyright (c) 2000-2021 the FFmpeg developers
-built with gcc 9 (Ubuntu 9.3.0-17ubuntu1~20.04)
-configuration: --disable-debug --disable-doc --disable-ffplay --enable-shared --enable-avresample --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-gpl --enable-libass --enable-fontconfig --enable-libfreetype --enable-libvidstab --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libxcb --enable-libx265 --enable-libxvid --enable-libx264 --enable-nonfree --enable-openssl --enable-libfdk_aac --enable-postproc --enable-small --enable-version3 --enable-libbluray --enable-libzmq --extra-libs=-ldl --prefix=/opt/ffmpeg --enable-libopenjpeg --enable-libkvazaar --enable-libaom --extra-libs=-lpthread --enable-libsrt --enable-nvenc --enable-cuda --enable-cuvid --enable-libnpp --extra-cflags='-I/opt/ffmpeg/include -I/opt/ffmpeg/include/ffnvcodec -I/usr/local/cuda/include/' --extra-ldflags='-L/opt/ffmpeg/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib32/'
-libavutil      56. 22.100 / 56. 22.100
-libavcodec     58. 35.100 / 58. 35.100
-libavformat    58. 20.100 / 58. 20.100
-libavdevice    58.  5.100 / 58.  5.100
-libavfilter     7. 40.101 /  7. 40.101
-libavresample   4.  0.  0 /  4.  0.  0
-libswscale      5.  3.100 /  5.  3.100
-libswresample   3.  3.100 /  3.  3.100
-libpostproc    55.  3.100 / 55.  3.100"
-        };
-#endif
         return await HttpHelper.Get<string>(url);
     }
 
@@ -256,7 +283,7 @@ libpostproc    55.  3.100 / 55.  3.100"
     }
 
     /// <summary>
-    /// Humanzies a step name
+    /// Humanizes a step name
     /// </summary>
     /// <param name="step">The unhumanized step name</param>
     /// <returns>the humanized step name</returns>

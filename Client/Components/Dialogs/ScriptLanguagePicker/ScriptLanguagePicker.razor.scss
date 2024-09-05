@@ -1,0 +1,16 @@
+table {
+  margin: 0 1rem;
+  width: calc(100% - 2rem);
+  tr{
+    border-left: solid 1px var(--border-color);
+    td {
+      width:100%;
+    }
+  }
+  tr:hover {
+    background:unset !important;
+    &:nth-child(odd) {
+      background: rgba(255, 255, 255, 0.03)  !important;
+    }
+  }
+}

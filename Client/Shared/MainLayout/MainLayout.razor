@@ -43,12 +43,16 @@
 @if (Blocker != null)
 {
     <CascadingValue Value="Blocker" IsFixed="true">
-        <RevisionExplorer/>
+        <RevisionExplorer />
+        <AuditHistory />
+        <AuditEntryViewer />
     </CascadingValue>
 }
 
 <FileFlows.Client.Components.Dialogs.Confirm />
+<FileFlows.Client.Components.Dialogs.MessageBox />
 <FileFlows.Client.Components.Dialogs.Prompt />
+<FileFlows.Client.Components.Dialogs.SelectDialog />
 <FileFlows.Client.Components.Dialogs.PausePrompt />
 <FileFlows.Client.Components.Dialogs.FileBrowser />
 <FileFlows.Client.Components.Dialogs.ImportDialog />
@@ -56,3 +60,5 @@
 <FileFlows.Client.Components.Toast />
 
 <VersionUpdateChecker />
+
+<Blocker @ref="DisconnectedBlocker"></Blocker>

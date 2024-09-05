@@ -1,8 +1,36 @@
 ﻿@namespace FileFlows.Client.Components
 
-@using FileFlows.Plugin
-
-@foreach (var field in Fields?.OrderBy(x => x.Order)?.ToList() ?? new List<ElementField>())
+@if (Columns > 1)
 {
-    <InputRenderer field="field" OnSubmit=@OnSubmit OnClose=@OnClose />
+    <div class="fp-columns fp-col-@Columns">
+        @foreach (var field in Fields?.OrderBy(x => x.Order)?.ToList() ?? new())
+        {
+            @if (field is ElementField ef)
+            {
+                <InputRenderer field="ef" OnSubmit=@OnSubmit OnClose=@OnClose/>
+            }
+            else if (field is ElementPanel ep)
+            {
+                <div class="flow-panel">
+                    <FlowPanel fields="@ep.Fields" Columns="@ep.Columns" OnSubmit=@OnSubmit OnClose=@OnClose/>
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    @foreach (var field in Fields?.OrderBy(x => x.Order)?.ToList() ?? new())
+    {
+        @if (field is ElementField ef)
+        {
+            <InputRenderer field="ef" OnSubmit=@OnSubmit OnClose=@OnClose/>
+        }
+        else if (field is ElementPanel ep)
+        {
+            <div class="flow-panel">
+                <FlowPanel fields="@ep.Fields" Columns="@ep.Columns" OnSubmit=@OnSubmit OnClose=@OnClose/>
+            </div>
+        }
+    }
 }

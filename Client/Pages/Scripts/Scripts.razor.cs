@@ -13,7 +13,7 @@ using FileFlows.Client.Components;
 /// <summary>
 /// Page for processing nodes
 /// </summary>
-public partial class Scripts : ListPage<string, Script>
+public partial class Scripts : ListPage<Guid, Script>
 {
     public override string ApiUrl => "/api/script";
 
@@ -31,32 +31,54 @@ public partial class Scripts : ListPage<string, Script>
     private List<Script> DataShared = new();
     private ScriptType SelectedType = ScriptType.Flow;
 
-    private string lblUpdateScripts, lblUpdatingScripts;
+    private string lblUpdateScripts, lblUpdatingScripts, lblInUse, lblReadOnly, lblUpdateAvailable;
 
-    private ScriptBrowser ScriptBrowser { get; set; }
+    /// <summary>
+    /// Gets or sets the instance of the ScriptBrowser
+    /// </summary>
+    private RepositoryBrowser ScriptBrowser { get; set; }
+
+    /// <summary>
+    /// The language picker dialog
+    /// </summary>
+    private ScriptLanguagePicker LanguagePicker;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         this.lblUpdateScripts = Translater.Instant("Pages.Scripts.Buttons.UpdateAllScripts");
         this.lblUpdatingScripts = Translater.Instant("Pages.Scripts.Labels.UpdatingScripts");
+        lblInUse = Translater.Instant("Labels.InUse");
+        lblReadOnly = Translater.Instant("Labels.ReadOnly");
+        lblUpdateAvailable = Translater.Instant("Pages.Scripts.Labels.UpdateAvailable");
     }
 
 
     private async Task Add()
     {
+        ScriptLanguage language;
+        if (SelectedType == ScriptType.Shared)
+            language = ScriptLanguage.JavaScript;
+        else
+        {
+            var result = await LanguagePicker.Show();
+            if (result.IsFailed)
+                return;
+            language = result.Value;
+        }
+
         await Edit(new Script()
         {
-            Type = SelectedType
+            Type = SelectedType,
+            Language = language,
+            Outputs = language is ScriptLanguage.JavaScript || SelectedType != ScriptType.Flow ? null :
+                [new (1, "Truthy"), new (2, "Falsy") ]
         });
     }
 
 
     async Task<bool> Save(ExpandoObject model)
     {
-#if (DEMO)
-        return true;
-#else
         Blocker.Show();
         this.StateHasChanged();
 
@@ -65,7 +87,7 @@ public partial class Scripts : ListPage<string, Script>
             var saveResult = await HttpHelper.Post<Script>($"{ApiUrl}", model);
             if (saveResult.Success == false)
             {
-                Toast.ShowError(saveResult.Body?.EmptyAsNull() ?? Translater.Instant("ErrorMessages.SaveFailed"));
+                Toast.ShowEditorError(saveResult.Body?.EmptyAsNull() ?? Translater.Instant("ErrorMessages.SaveFailed"));
                 return false;
             }
 
@@ -83,7 +105,6 @@ public partial class Scripts : ListPage<string, Script>
             Blocker.Hide();
             this.StateHasChanged();
         }
-#endif
     }
 
     private async Task Export()
@@ -95,12 +116,28 @@ public partial class Scripts : ListPage<string, Script>
 #if (DEBUG)
         url = "http://localhost:6868" + url;
 #endif
-        await jsRuntime.InvokeVoidAsync("ff.downloadFile", new object[] { url, item.Name + ".js" });
+        var result = await HttpHelper.Get<string>(url);
+        if (result.Success == false)
+        {
+            Toast.ShowError(Translater.Instant("Pages.Script.Messages.FailedToExport"));
+            return;
+        }
+
+        var extension = item.Language switch
+        {
+            ScriptLanguage.Batch => ".bat",
+            ScriptLanguage.Shell => ".sh",
+            ScriptLanguage.CSharp => ".cs",
+            ScriptLanguage.PowerShell => ".ps1",
+            _ => ".js"
+        };
+
+        await jsRuntime.InvokeVoidAsync("ff.saveTextAsFile", item.Name + extension, result.Body);
     }
 
     private async Task Import()
     {
-        var idResult = await ImportDialog.Show("js");
+        var idResult = await ImportDialog.Show("js");//, "ps1", "cs", "bat", "sh");
         string js = idResult.content;
         if (string.IsNullOrEmpty(js))
             return;
@@ -108,7 +145,7 @@ public partial class Scripts : ListPage<string, Script>
         Blocker.Show();
         try
         {
-            var newItem = await HttpHelper.Post<Script>("/api/script/import?filename=" + UrlEncoder.Create().Encode(idResult.filename), js);
+            var newItem = await HttpHelper.Post<Script>("/api/script/import?filename=" + UrlEncoder.Create().Encode(idResult.filename) + "&type=" + SelectedType, js);
             if (newItem != null && newItem.Success)
             {
                 await this.Refresh();
@@ -180,6 +217,14 @@ public partial class Scripts : ListPage<string, Script>
             return;
         await UsedByDialog.Show(item.UsedBy);
     }
+    /// <summary>
+    /// Opens the used by dialog
+    /// </summary>
+    /// <param name="item">the item to open used by for</param>
+    /// <returns>a task to await</returns>
+    private Task OpenUsedBy(Script item)
+        => UsedByDialog.Show(item.UsedBy);
+
     
     
     public override Task PostLoad()
@@ -207,7 +252,7 @@ public partial class Scripts : ListPage<string, Script>
                 Count = this.DataFlow.Count,
                 Value = ScriptType.Flow
             },
-            App.Instance.FileFlowsSystem.Licensed ? new ()
+            Profile.LicensedFor(LicenseFlags.Tasks) ? new ()
             {
                 Name = "System Scripts",
                 Icon = "fas fa-laptop-code",
@@ -226,15 +271,15 @@ public partial class Scripts : ListPage<string, Script>
     
     async Task Browser()
     {
-        bool result = await ScriptBrowser.Open(this.SelectedType);
+        bool result = await ScriptBrowser.Open();//this.SelectedType);
         if (result)
             await this.Refresh();
     }
 
     async Task Update()
     {
-        var scripts = Table.GetSelected()?.Where(x => string.IsNullOrEmpty(x.Path) == false)?.Select(x => x.Path)?.ToArray() ?? new string[] { };
-        if (scripts?.Any() != true)
+        var uids = Table.GetSelected()?.Where(x => string.IsNullOrEmpty(x.Path) == false)?.Select(x => x.Uid)?.ToArray() ?? new Guid[] { };
+        if (uids?.Any() != true)
         {
             Toast.ShowWarning("Pages.Scripts.Messages.NoRepositoryScriptsToUpdate");
             return;
@@ -245,7 +290,7 @@ public partial class Scripts : ListPage<string, Script>
         Data.Clear();
         try
         {
-            var result = await HttpHelper.Post($"/api/repository/update-specific-scripts", new ReferenceModel<string> { Uids = scripts });
+            var result = await HttpHelper.Post($"/api/repository/update-specific-scripts", new ReferenceModel<Guid> { Uids = uids });
             if (result.Success)
                 await Refresh();
         }
@@ -270,12 +315,60 @@ public partial class Scripts : ListPage<string, Script>
         this.Blocker.Show(lblUpdatingScripts);
         try
         {
-            await HttpHelper.Post("/api/repository/update");
+            await HttpHelper.Post("/api/repository/update-scripts");
             await Refresh();
         }
         finally
         {
             this.Blocker.Hide();
         }
+    }
+
+    private string GetIcon(Script item)
+    {
+        string url = "";
+#if (DEBUG)
+        url = "http://localhost:6868" + url;
+#endif
+        string nameLower = item.Name.ToLowerInvariant();
+        if (nameLower.StartsWith("video"))
+            return "/icons/video.svg";
+        if (item.Name == "FILE_DISPLAY_NAME")
+            return "fas fa-signature";
+        if (nameLower.StartsWith("fileflows"))
+            return "/favicon.svg";
+        if (nameLower.StartsWith("image"))
+            return "/icons/image.svg";
+        if (nameLower.StartsWith("folder"))
+            return "/icons/filetypes/folder.svg";
+        if (nameLower.StartsWith("file"))
+            return url + "/icon/filetype/file.svg";
+        if (nameLower.StartsWith("7zip"))
+            return url + "/icon/filetype/7z.svg";
+        if (nameLower.StartsWith("language"))
+            return "fas fa-comments";
+        var icons = new[]
+        {
+            "apple", "apprise", "audio", "basic", "comic", "database", "docker", "emby", "folder", "gotify", "gz",
+            "image", "intel", "linux", "nvidia", "plex", "pushbullet", "pushover", "radarr", "sabnzbd", "sonarr", "video", "windows"
+        };
+        foreach (var icon in icons)
+        {
+            if (nameLower.StartsWith(icon))
+                return $"/icons/{icon}.svg";
+        }
+        
+        if(item.Language is ScriptLanguage.Batch)
+            return $"/icons/dos.svg";
+        if(item.Language is ScriptLanguage.PowerShell)
+            return $"/icons/powershell.svg";
+        if(item.Language is ScriptLanguage.Shell)
+            return $"/icons/bash.svg";
+        if(item.Language is ScriptLanguage.CSharp)
+            return $"/icons/csharp.svg";
+
+        return "/icons/javascript.svg";
+        //return "fas fa-scroll";
+
     }
 }

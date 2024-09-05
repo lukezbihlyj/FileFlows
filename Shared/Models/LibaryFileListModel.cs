@@ -12,6 +12,11 @@ public class LibaryFileListModel: IUniqueObject<Guid>
     public Guid Uid { get; set; }
     
     /// <summary>
+    /// Gets or sets a display name for the file
+    /// </summary>
+    public string DisplayName { get; set; }
+    
+    /// <summary>
     /// Gets or sets the name of the library file
     /// </summary>
     public string Name { get; set; }
@@ -72,4 +77,14 @@ public class LibaryFileListModel: IUniqueObject<Guid>
     /// Gets or sets the status of the file
     /// </summary>
     public FileStatus? Status { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this file has been marked force processing
+    /// </summary>
+    public bool Forced { get; set; }
+    
+    /// <summary>
+    /// Gets or sets custom variables to use with this file
+    /// </summary>
+    public Dictionary<string, object> CustomVariables { get; set; }
 }

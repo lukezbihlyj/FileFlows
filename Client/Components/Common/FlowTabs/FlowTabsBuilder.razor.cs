@@ -10,7 +10,7 @@ public partial class FlowTabsBuilder:ComponentBase
     /// <summary>
     /// Gets or sets the tabs
     /// </summary>
-    [Parameter] public Dictionary<string, List<ElementField>> Tabs { get; set; }
+    [Parameter] public Dictionary<string, List<IFlowField>> Tabs { get; set; }
     
     /// <summary>
     /// Gets or sets an event that is called when the editor is saved

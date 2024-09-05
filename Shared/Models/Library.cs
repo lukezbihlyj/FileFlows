@@ -18,6 +18,11 @@ public class Library : FileFlowObject
     public string Path { get; set; }
     
     /// <summary>
+    /// Gets or sets the extensions this library will process
+    /// </summary>
+    public List<string> Extensions { get; set; }
+    
+    /// <summary>
     /// Gets or sets the filter used to determine what files to add ot the library files
     /// </summary>
     public string Filter { get; set; }
@@ -44,6 +49,10 @@ public class Library : FileFlowObject
     /// </summary>
     public int DetectFileCreationUpper { get; set; }
     /// <summary>
+    /// Gets or sets the date value for file creation date
+    /// </summary>
+    public DateTime? DetectFileCreationDate { get; set; }
+    /// <summary>
     /// Gets or sets the lower value for file creation last written
     /// </summary>
     public long DetectFileLastWrittenLower { get; set; }
@@ -51,6 +60,10 @@ public class Library : FileFlowObject
     /// Gets or sets the upper value for file creation last written
     /// </summary>
     public int DetectFileLastWrittenUpper { get; set; }
+    /// <summary>
+    /// Gets or sets the date value for file last written date
+    /// </summary>
+    public DateTime? DetectFileLastWrittenDate { get; set; }
     /// <summary>
     /// Gets or sets the lower value for file size
     /// </summary>
@@ -79,6 +92,12 @@ public class Library : FileFlowObject
     /// Gets or sets the flow this library uses
     /// </summary>
     public ObjectReference Flow { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this is a downloads directory and if such any file that's
+    /// found that has been processed will be reprocessed
+    /// </summary>
+    public bool DownloadsDirectory { get; set; }
 
     /// <summary>
     /// Gets or sets if the file access tests should be skipped for this library
@@ -120,6 +139,7 @@ public class Library : FileFlowObject
     /// <summary>
     /// When the library was last scanned
     /// </summary>
+    [DontAudit]
     public DateTime LastScanned { get; set; }
 
     
@@ -133,7 +153,7 @@ public class Library : FileFlowObject
     /// <summary>
     /// The timespan of when this was last scanned
     /// </summary>
-    public TimeSpan LastScannedAgo => DateTime.Now - LastScanned;
+    public TimeSpan LastScannedAgo => DateTime.UtcNow - LastScanned;
 
     /// <summary>
     /// Gets or sets the number of seconds to scan files
@@ -176,4 +196,15 @@ public class Library : FileFlowObject
     /// Note: this only happens if the original file no longer exists.  This is also is limited to files in the same library
     /// </summary>
     public bool UpdateMovedFiles { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the maximum concurrent files that can be processed at one time in this library
+    /// </summary>
+    public int MaxRunners { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if only the top level folder should be searched and no sub folders.
+    /// If false, then all sub folders will also be searched
+    /// </summary>
+    public bool TopLevelOnly { get; set; }
 }

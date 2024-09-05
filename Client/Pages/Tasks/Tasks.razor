@@ -1,6 +1,6 @@
 @namespace FileFlows.Client.Pages
 @using FileFlows.Shared.Models
-@using Humanizer
+@using FileFlows.Client.Helpers
 @inherits ListPage<Guid, FileFlowsTask>
 
 @page "/tasks"
@@ -12,7 +12,7 @@
 
     <Body>
     <FlowTable @ref="Table" Data="@Data" TItem="FileFlowsTask" Selection="SelectionMode.Multiple"
-               DoubleClick="@OnDoubleClick" TableIdentifier="Tasks">
+               DoubleClick="@OnDoubleClick" TableIdentifier="Tasks" DisableColumn="(item) => !item.Enabled">
         <ToolBar>            
             <FlowTableButton Clicked=Add Icon="fas fa-plus" Label="Labels.Add" />
             <FlowTableButton Clicked=Edit SelectedOne="true" Icon="fas fa-edit" Label="Labels.Edit" />
@@ -20,54 +20,50 @@
             <FlowTableButtonSeparator/>
             <FlowTableButton Clicked=Run SelectedOne="true" Icon="fas fa-running" Label="Labels.Run"/>
             <FlowTableButton Clicked=RunHistory SelectedOne="true" Icon="fas fa-history" Label="Labels.RunHistory"/>
+            @if (Profile != null && Profile.LicensedFor(LicenseFlags.Auditing) && Profile.HasRole(UserRole.Admin))
+            {
+                <FlowTableButtonSeparator />     
+                <FlowTableButton Clicked=AuditLog SelectedOne="true" Icon="fas fa-clipboard-list" Label="Labels.Audit" />
+            }
             <FlowTableButtonSeparator />             
-            <FlowTableHelpButton HelpUrl="Tasks" />
+            <FlowTableButton Clicked=EditScript SelectedOne="true" Icon="fas fa-edit" Label="@lblEditScript" />
+            <FlowTableButtonSeparator />             
+            <FlowTableHelpButton HelpUrl="system/tasks" />
         </ToolBar>
 
         <Columns>
-            <FlowTableColumn TItem="FileFlowsTask">
+            <FlowTableColumn TItem="FileFlowsTask" NoHeight="true">
                 <Header>
                     @Globals.lblName
                 </Header>
                 <Cell Context="item">
-                    <span>@item.Name</span>
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="FileFlowsTask" Width="30rem" MobileWidth="0" >
-                <Header>
-                    Script
-                </Header>
-                <Cell Context="item">
-                    <span>@item.Script</span>
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="FileFlowsTask" Width="14rem" MobileWidth="0" >
-                <Header>
-                    @lblLastRun
-                </Header>
-                <Cell Context="item">
-                    @if (item.LastRun < new DateTime(2000, 1, 1))
-                    {
-                        <span>@lblNever</span>
-                    }
-                    else{
-                        <span>@item.LastRun.Humanize()</span>
-                    }
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="FileFlowsTask" Width="14rem" MobileWidth="0" >
-                <Header>
-                    @lblTrigger
-                </Header>
-                <Cell Context="item">
-                    @if (item.Type == TaskType.Schedule)
-                    {
-                        <span>@GetSchedule(item)</span>
-                    }
-                    else
-                    {
-                        <span>@item.Type.Humanize()</span>
-                    }
+                    <div class="table-item">
+                        <TableItemIcon Icon="@GetIcon(item)" DefaultIcon="fab fa-docker" />
+                        <div class="center">
+                            <span class="name"><span>@item.Name</span></span>
+                            <div class="info">
+                                @if (Scripts.TryGetValue(item.Script, out var scriptName))
+                                {
+                                    <IconValue Color="IconValueColor.Blue" Icon="fas fa-scroll" Value="@scriptName" />
+                                }
+                                else
+                                {
+                                    <IconValue Color="IconValueColor.Blue" Icon="fas fa-scroll" Value="Unknown" />
+                                }
+                                
+                                @if (item.LastRun > new DateTime(2000, 1, 1))
+                                {
+                                    <IconValue Color="IconValueColor.Pink" Icon="fas fa-calendar" Value="@FormatHelper.HumanizeDate(item.LastRun)" />
+                                }
+                            </div>
+                        </div>
+                        <div class="right">
+                            <span class="top-right">@GetScheduleText(item)</span>
+
+                            <FlowSwitch Value="@item.Enabled" ValueChanged="@(args => { item.Enabled = args; Enable(args, item); })"/>
+                        </div>
+                    </div>
+
                 </Cell>
             </FlowTableColumn>
         </Columns>
@@ -76,3 +72,4 @@
     </Body>
 
 </PageView>
+<FileFlows.Client.Components.Dialogs.ImportScript @ref="ScriptImporter" />

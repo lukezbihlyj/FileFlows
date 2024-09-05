@@ -5,10 +5,17 @@
     <PageTitle>FileFlows - @Active.Title</PageTitle>
 }
 
-<div class="top-row navbar navbar-dark">
-    <a class="navbar-brand" target="_blank" href="https://fileflows.com/" rel="noreferrer">
-        
-    </a>
+<div class="top-row navbar navbar-dark @(UserMenuOpened ? "user-menu-opened" : "user-menu-closed")">
+    <span class="navbar-brand" @onclick="() => ToggleUserMenu()">
+        <i class="fas fa-caret-right" />
+        <img src="/logo.svg" />
+    </span>
+    <div class="user-menu">
+        @foreach (var nmi in UserMenu)
+        {
+            <span @onclick="() => Click(nmi)">@nmi.Title</span>
+        }
+    </div>
     <span class="page-title">
         @if (Active != null)
         {
@@ -21,10 +28,15 @@
     </button>
 </div>
 
-<div class="nav-menu-container @NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        @foreach (var group  in MenuItems)
+<div class="nav-menu-container @(hideNavMenu ? "hide-menu" : "")">
+    <ul id="ul-nav-menu" class="nav flex-column">
+        @foreach (var group in MenuItems)
         {
+            if (group.Items.Any(x => x != null) == false)
+            {
+                continue;
+            }
+
             <li class="nav-menu-group">
                 @if(string.IsNullOrEmpty(group.Icon) == false)
                 {
@@ -38,12 +50,16 @@
                 {
                     continue;
                 }
+                if (item == nmiPause && App.Instance.IsMobile == false)
+                {
+                    continue;
+                }
                 <li class="nav-item @(item.Url == ""  ? "dashboard" : item.Url.Replace("/", ""))">
                     <a class="nav-link @(Active == item  ? "active": "")" href="@item.Url" @onclick:preventDefault @onclick:stopPropagation
-                                                                                           @onclick="() => Click(item)">
+                       @onclick="() => Click(item)">
                         <span class="icon @item.Icon" aria-hidden="true"></span>
                         <span class="text-label">@item.Title</span>
-                        @if (item.Url == "library-files" && (Processing > 0 || Failed > 0 || Unprocessed > 0))
+                        @if (item.Url == "library-files" && (Processing > 0 || Failed > 0 || Unprocessed > 0 || OnHold > 0))
                         {
                             <ul class="bubbles">
                                 <li title="Unprocessed" class="bubble Unprocessed d-@(new string('0', Unprocessed.ToString().Length))">@Unprocessed</li>
@@ -51,9 +67,30 @@
                                 {
                                     <li title="Processing" class="bubble Processing d-@(new string('0', Processing.ToString().Length))">@Processing</li>
                                 }
+                                @if (OnHold > 0)
+                                {
+                                    <li title="On Hold" class="bubble OnHold d-@(new string('0', OnHold.ToString().Length))">@OnHold</li>
+                                }
                                 @if (Failed > 0)
                                 {
                                     <li title="Failed" class="bubble Failed d-@(new string('0', Failed.ToString().Length))">@Failed</li>
+                                }
+                            </ul>
+                        }
+                        else if (item.Url == "notifications" && Profile?.UnreadNotifications?.Total > 0)
+                        {
+                            <ul class="bubbles">
+                                @if (Profile.UnreadNotifications.Warning > 0)
+                                {
+                                    <li title="Warning" class="bubble warning d-@(new string('0', Profile.UnreadNotifications.Warning.ToString().Length))">@Profile.UnreadNotifications.Warning</li>
+                                }
+                                @if (Profile.UnreadNotifications.Error  > 0)
+                                {
+                                    <li title="Error" class="bubble error d-@(new string('0', Profile.UnreadNotifications.Error.ToString().Length))">@Profile.UnreadNotifications.Error</li>
+                                }
+                                @if (Profile.UnreadNotifications.Critical  > 0)
+                                {
+                                    <li title="Critical" class="bubble critical d-@(new string('0', Profile.UnreadNotifications.Critical.ToString().Length))">@Profile.UnreadNotifications.Critical</li>
                                 }
                             </ul>
                         }
@@ -68,29 +105,27 @@
                 </li>
             }
         }
-        <li class="nav-item help">
-            <a class="nav-link" href="https://docs.fileflows.com/" target="_blank" rel="noreferrer">
-                <span class="icon far fa-question-circle" aria-hidden="true"></span> <span class="text-label">@lblHelp</span>
-            </a>
-        </li>
-        <li class="nav-item forum">
-            <a class="nav-link" href="https://forum.fileflows.com/" target="_blank" rel="noreferrer">
-                <span class="icon fas fa-comments" aria-hidden="true"></span> <span class="text-label">@lblForum</span>
-            </a>
-        </li>
-        <li class="nav-item discord">
-            <a class="nav-link" href="https://fileflows.com/discord" target="_blank" rel="noreferrer">
-                <span class="icon fab fa-discord" aria-hidden="true"></span> <span class="text-label">@lblDiscord</span>
-            </a>
-        </li>
     </ul>
     
-    <div class="support-links">
-        <a href="https://forum.fileflows.com" rel="noreferrer" target="_blank" title="@lblForum"><i class="fas fa-comments"></i></a>
-        <a href="https://fileflows.com/discord" rel="noreferrer" target="_blank" title="@lblDiscord"><i class="fab fa-discord"></i></a>
-    </div> 
+    <div class="nav-menu-footer">
+        @if (App.Instance.IsMobile == false && Profile?.HasRole(UserRole.PauseProcessing) == true)
+        {
+            <div class="paused-indicator">
+                <span class="@(PausedService.IsPaused ? "paused" : "not-paused")" @onclick="() => PausedService.Toggle()" title="@PausedService.PausedLabel">
+                    <i class="far fa-pause-circle"/>
+                </span>
+            </div>
+        }
+        
+        <div class="support-links">
+            <a href="https://fileflows.com/forum" rel="noreferrer" target="_blank" title="@lblForum"><i class="fas fa-comments"></i></a>
+            <a href="https://fileflows.com/discord" rel="noreferrer" target="_blank" title="@lblDiscord"><i class="fab fa-discord"></i></a>
+        </div> 
 
-    <div class="version-info">
-        @lblVersion: <a href="http://docs.fileflows.com/versions" rel="noreferrer" target="_blank">@Globals.Version</a>
+        <div class="version-info">
+            @lblVersion: <a href="https://fileflows.com/docs/versions" rel="noreferrer" target="_blank">@Globals.Version</a>
+        </div>
     </div>
 </div>
+
+<FileFlows.Client.Components.Dialogs.ChangePassword @ref="ChangePassword"/>

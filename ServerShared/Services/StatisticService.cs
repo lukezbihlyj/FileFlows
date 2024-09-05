@@ -1,7 +1,7 @@
-﻿namespace FileFlows.ServerShared.Services;
-
+﻿using System.Web;
 using FileFlows.Shared.Helpers;
-using FileFlows.Shared.Models;
+
+namespace FileFlows.ServerShared.Services;
 
 /// <summary>
 /// Statistic Service interface
@@ -9,50 +9,14 @@ using FileFlows.Shared.Models;
 public interface IStatisticService
 {
     /// <summary>
-    /// Records a statistic value
+    /// Records a running total value
     /// </summary>
     /// <returns>a task to await</returns>
-    Task Record(string name, object value);
-}
-
-/// <summary>
-/// Statistics service
-/// </summary>
-public class StatisticService : Service, IStatisticService
-{
-
+    Task RecordRunningTotal(string name, string value);
+    
     /// <summary>
-    /// Gets or sets a function used to load new instances of the service
-    /// </summary>
-    public static Func<IStatisticService> Loader { get; set; }
-
-    /// <summary>
-    /// Loads an instance of the plugin service
-    /// </summary>
-    /// <returns>an instance of the plugin service</returns>
-    public static IStatisticService Load()
-    {
-        if (Loader == null)
-            return new StatisticService();
-        return Loader.Invoke();
-    }
-
-    /// <summary>
-    /// Records a statistic value
+    /// Records a average value
     /// </summary>
     /// <returns>a task to await</returns>
-    public async Task Record(string name, object value)
-    {
-        try
-        {
-            await HttpHelper.Post($"{ServiceBaseUrl}/api/statistics/record", new
-            {
-                Name = name,
-                Value = value
-            });
-        }
-        catch (Exception)
-        {
-        }
-    }
+    Task RecordAverage(string name, int value);
 }

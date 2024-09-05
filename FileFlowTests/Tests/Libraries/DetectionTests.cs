@@ -5,13 +5,13 @@ namespace FileFlowTests.Tests.Libraries;
 
 
 [TestClass]
-public class DetectionTests
+public class DetectionTests : TestBase
 {
     [TestMethod]
     public void FileCreation()
     {
         var lib = new Library();
-        var info = new FileInfo(Path.GetTempFileName());
+        var info = new FileInfo(CreateTempFile());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileCreation = range;
@@ -19,47 +19,47 @@ public class DetectionTests
             {
                 case MatchRange.GreaterThan:
                     lib.DetectFileCreationLower = 30; // 30 minutes 
-                    info.CreationTime = DateTime.Now;
+                    info.CreationTime = DateTime.UtcNow;
                     Assert.IsFalse(Test()); 
-                    info.CreationTime = DateTime.Now.AddMinutes(-31);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsTrue(Test());
                     break;
                 case MatchRange.LessThan:
                     lib.DetectFileCreationLower = 30; // 30 minutes 
-                    info.CreationTime = DateTime.Now;
+                    info.CreationTime = DateTime.UtcNow;
                     Assert.IsTrue(Test()); 
-                    info.CreationTime = DateTime.Now.AddMinutes(-31);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsFalse(Test());
                     break;
                 case MatchRange.Any:
                     lib.DetectFileCreationLower = 30; // 30 minutes 
-                    info.CreationTime = DateTime.Now;
+                    info.CreationTime = DateTime.UtcNow;
                     Assert.IsTrue(Test()); 
-                    info.CreationTime = DateTime.Now.AddMinutes(-31);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsTrue(Test());
                     break;
                 case MatchRange.Between:
                     lib.DetectFileCreationLower = 30; // 30 minutes
                     lib.DetectFileCreationUpper = 60; // 60 minutes 
-                    info.CreationTime = DateTime.Now;
+                    info.CreationTime = DateTime.UtcNow;
                     Assert.IsFalse(Test()); 
-                    info.CreationTime = DateTime.Now.AddMinutes(-31);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsTrue(Test());
-                    info.CreationTime = DateTime.Now.AddMinutes(-59);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-59);
                     Assert.IsTrue(Test());
-                    info.CreationTime = DateTime.Now.AddMinutes(-61);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-61);
                     Assert.IsFalse(Test());
                     break;
                 case MatchRange.NotBetween:
                     lib.DetectFileCreationLower = 30; // 30 minutes
                     lib.DetectFileCreationUpper = 60; // 60 minutes 
-                    info.CreationTime = DateTime.Now;
+                    info.CreationTime = DateTime.UtcNow;
                     Assert.IsTrue(Test()); 
-                    info.CreationTime = DateTime.Now.AddMinutes(-31);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsFalse(Test());
-                    info.CreationTime = DateTime.Now.AddMinutes(-59);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-59);
                     Assert.IsFalse(Test());
-                    info.CreationTime = DateTime.Now.AddMinutes(-61);
+                    info.CreationTime = DateTime.UtcNow.AddMinutes(-61);
                     Assert.IsTrue(Test());
                     break;
             } 
@@ -76,7 +76,7 @@ public class DetectionTests
     public void FileLastWritten()
     {
         var lib = new Library();
-        var info = new FileInfo(Path.GetTempFileName());
+        var info = new FileInfo(CreateTempFile());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileLastWritten = range;
@@ -84,47 +84,47 @@ public class DetectionTests
             {
                 case MatchRange.GreaterThan:
                     lib.DetectFileLastWrittenLower = 30; // 30 minutes 
-                    info.LastWriteTime = DateTime.Now;
+                    info.LastWriteTime = DateTime.UtcNow;
                     Assert.IsFalse(Test()); 
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-31);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsTrue(Test());
                     break;
                 case MatchRange.LessThan:
                     lib.DetectFileLastWrittenLower = 30; // 30 minutes 
-                    info.LastWriteTime = DateTime.Now;
+                    info.LastWriteTime = DateTime.UtcNow;
                     Assert.IsTrue(Test()); 
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-31);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsFalse(Test());
                     break;
                 case MatchRange.Any:
                     lib.DetectFileLastWrittenLower = 30; // 30 minutes 
-                    info.LastWriteTime = DateTime.Now;
+                    info.LastWriteTime = DateTime.UtcNow;
                     Assert.IsTrue(Test()); 
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-31);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsTrue(Test());
                     break;
                 case MatchRange.Between:
                     lib.DetectFileLastWrittenLower = 30; // 30 minutes
                     lib.DetectFileLastWrittenUpper = 60; // 60 minutes 
-                    info.LastWriteTime = DateTime.Now;
+                    info.LastWriteTime = DateTime.UtcNow;
                     Assert.IsFalse(Test()); 
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-31);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsTrue(Test());
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-59);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-59);
                     Assert.IsTrue(Test());
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-61);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-61);
                     Assert.IsFalse(Test());
                     break;
                 case MatchRange.NotBetween:
                     lib.DetectFileLastWrittenLower = 30; // 30 minutes
                     lib.DetectFileLastWrittenUpper = 60; // 60 minutes 
-                    info.LastWriteTime = DateTime.Now;
+                    info.LastWriteTime = DateTime.UtcNow;
                     Assert.IsTrue(Test()); 
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-31);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-31);
                     Assert.IsFalse(Test());
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-59);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-59);
                     Assert.IsFalse(Test());
-                    info.LastWriteTime = DateTime.Now.AddMinutes(-61);
+                    info.LastWriteTime = DateTime.UtcNow.AddMinutes(-61);
                     Assert.IsTrue(Test());
                     break;
             } 
@@ -142,7 +142,7 @@ public class DetectionTests
     public void FileSize()
     {
         var lib = new Library();
-        var info = new FileInfo(Path.GetTempFileName());
+        var info = new FileInfo(GetTempFileName());
         foreach(var range in Enum.GetValues<MatchRange>())
         {
             lib.DetectFileSize = range;

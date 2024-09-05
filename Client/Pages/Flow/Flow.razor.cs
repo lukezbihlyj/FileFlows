@@ -1,36 +1,76 @@
 using Microsoft.AspNetCore.Components;
 using FileFlows.Client.Components;
-using FileFlows.Client.Helpers;
 using ffPart = FileFlows.Shared.Models.FlowPart;
 using ffElement = FileFlows.Shared.Models.FlowElement;
-using ff = FileFlows.Shared.Models.Flow;
-using xFlowConnection = FileFlows.Shared.Models.FlowConnection;
+using FFlow = FileFlows.Shared.Models.Flow;
 using Microsoft.JSInterop;
 using FileFlows.Client.Components.Dialogs;
 using System.Text.Json;
 using FileFlows.Plugin;
 using System.Text.RegularExpressions;
+using System.Web;
 using BlazorContextMenu;
+using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.Logging;
 
 namespace FileFlows.Client.Pages;
 
 public partial class Flow : ComponentBase, IDisposable
 {
-    [CascadingParameter] public Editor Editor { get; set; }
-    [Parameter] public System.Guid Uid { get; set; }
+    public Editor Editor { get; set; }
+    /// <summary>
+    /// Gets or sets the UID of the flow to edit
+    /// </summary>
+    [Parameter] public Guid Uid { get; set; }
     [Inject] INavigationService NavigationService { get; set; }
-    [Inject] IBlazorContextMenuService ContextMenuService { get; set; }
+    [Inject] public IBlazorContextMenuService ContextMenuService { get; set; }
     [CascadingParameter] Blocker Blocker { get; set; }
     [Inject] IHotKeysService HotKeyService { get; set; }
-    private ffElement[] Available { get; set; }
-    private ffElement[] Filtered { get; set; }
-    private List<ffPart> Parts { get; set; } = new List<ffPart>();
+    public ffElement[] Available { get; private set; }
+    private ffElement[] AvailablePlugins { get; set; }
+    private ffElement[] AvailableScripts { get; set; }
+    private ffElement[] AvailableSubFlows { get; set; }
 
-    private string lblObsoleteMessage, lblEdit, lblHelp, lblDelete, lblCopy, lblPaste, lblRedo, lblUndo, lblAdd;
-    private string SelectedElement;
+    /// <summary>
+    /// The flow element lists
+    /// </summary>
+    private FlowElementList eleListPlugins, eleListScripts, eleListSubFlows;
 
+    public readonly List<FlowEditor> OpenedFlows = new();
+    private FlowEditor ActiveFlow;
+
+    /// <summary>
+    /// Gets or sets the instance of the ScriptBrowser
+    /// </summary>
+    private RepositoryBrowser ScriptBrowser { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the instance of the SubFlowBrowser
+    /// </summary>
+    private SubFlowBrowser SubFlowBrowser { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the properties editor
+    /// </summary>
+    private FlowPropertiesEditor PropertiesEditor { get; set; }
+    /// <summary>
+    /// The flow template picker instance
+    /// </summary>
+    private FlowTemplatePicker TemplatePicker;
+    /// <summary>
+    /// The Add editor instance
+    /// </summary>
+    private NewFlowEditor AddEditor;
+
+    private string lblEdit, lblHelp, lblDelete, lblCopy, lblPaste, lblRedo, lblUndo, lblAdd, 
+        lblProperties, lblEditSubFlow, lblPlugins, lblScripts, lblSubFlows, lblFields;
+
+
+    /// <summary>
+    /// The default group to show for the `Plugins` flow elements
+    /// </summary>
+    private string PluginsDefaultGroup;
+    
     private int _Zoom = 100;
     private int Zoom
     {
@@ -40,64 +80,57 @@ public partial class Flow : ComponentBase, IDisposable
             if(_Zoom != value)
             {
                 _Zoom = value;
-                _ = ZoomChanged(value);
+                ZoomChanged(value);
             }
         }
     }
 
     private ElementReference eleFilter { get; set; }
 
-    [Inject]
-    private IJSRuntime jsRuntime { get; set; }
+    [Inject] public IJSRuntime jsRuntime { get; set; }
     private bool IsSaving { get; set; }
-    private bool IsExecuting { get; set; }
-
-    private ff Model { get; set; }
-
-    private string Title { get; set; }
 
     private bool EditorOpen = false;
 
-    private string Name { get; set; }
-
     const string API_URL = "/api/flow";
 
-    private string lblName, lblSave, lblSaving, lblClose;
+    private string lblSave, lblSaving, lblClose, lblUnsavedChanges;
 
     private bool _needsRendering = false;
 
-    private bool IsDirty = false;
-
     private bool ElementsVisible = false;
-
-    private string _txtFilter = string.Empty;
-    private string lblFilter;
 
     private Func<Task<bool>> NavigationCheck;
 
-    public string txtFilter
-    {
-        get => _txtFilter;
-        set
-        {
-            _txtFilter = value ?? string.Empty;
-            string filter = value.Trim().Replace(" ", "").ToLower();
-            if (filter == string.Empty)
-                Filtered = Available;
-            else
-            {
-                Filtered = Available.Where(x => x.Name.ToLower().Replace(" ", "").Contains(filter) || x.Group.ToLower().Replace(" ", "").Contains(filter)).ToArray();
-            }
-        }
-    }
+    /// <summary>
+    /// A reference to the floe elements tabs
+    /// </summary>
+    private FlowTabs tabsFlowElements;
 
-    protected override void OnInitialized()
+    private FlowTab tabFields;
+
+    /// <summary>
+    /// Gets or sets if the active tab is the fields tab
+    /// </summary>
+    private bool FieldsTabOpened { get; set; }
+
+    /// <summary>
+    /// Gets or sets the profile service
+    /// </summary>
+    [Inject] protected ProfileService ProfileService { get; set; }
+    
+    /// <summary>
+    /// Gets the profile
+    /// </summary>
+    protected Profile Profile { get; private set; }
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
     {
-        lblName = Translater.Instant("Labels.Name");
+        Profile = await ProfileService.Get();
         lblSave = Translater.Instant("Labels.Save");
         lblClose = Translater.Instant("Labels.Close");
         lblSaving = Translater.Instant("Labels.Saving");
-        lblFilter = Translater.Instant("Labels.FilterPlaceholder");
         lblAdd = Translater.Instant("Labels.Add");
         lblEdit = Translater.Instant("Labels.Edit");
         lblCopy = Translater.Instant("Labels.Copy");
@@ -106,21 +139,28 @@ public partial class Flow : ComponentBase, IDisposable
         lblUndo = Translater.Instant("Labels.Undo");
         lblDelete = Translater.Instant("Labels.Delete");
         lblHelp = Translater.Instant("Labels.Help");
-        lblObsoleteMessage = Translater.Instant("Labels.ObsoleteConfirm.Message");
-
+        lblProperties = Translater.Instant("Labels.Properties");
+        lblFields = Translater.Instant("Labels.Fields");
+        lblEditSubFlow = Translater.Instant("Labels.EditSubFlow");
+        lblPlugins = Translater.Instant("Labels.Plugins");
+        lblScripts = Translater.Instant("Labels.Scripts");
+        lblSubFlows = Translater.Instant("Labels.SubFlows");
+        lblUnsavedChanges =Translater.Instant("Labels.UnsavedChanges");
 
         NavigationCheck = async () =>
         {
-            if (IsDirty)
+            if (OpenedFlows?.Any(x => x.IsDirty) == true)
             {
-                bool result = await Confirm.Show(lblClose, $"Pages.{nameof(Flow)}.Messages.Close");
+                bool result = await Confirm.Show(lblUnsavedChanges, $"Pages.{nameof(Flow)}.Messages.Close");
                 if (result == false)
                     return false;
             }
             return true;
         };
+        
 
         NavigationService.RegisterNavigationCallback(NavigationCheck);
+        NavigationService.RegisterPostNavigateCallback(NavigateAwayCallback);
 
         HotKeyService.RegisterHotkey("FlowFilter", "/", callback: () =>
         {
@@ -137,6 +177,35 @@ public partial class Flow : ComponentBase, IDisposable
         _ = Init();
     }
 
+    /// <summary>
+    /// Callback when the user navigates away, we need to dispose of the opened flows
+    /// </summary>
+    private async Task NavigateAwayCallback()
+    {
+        NavigationService.UnRegisterPostNavigateCallback(NavigateAwayCallback);
+        foreach (var flows in OpenedFlows)
+        {
+            await flows.ffFlow.dispose();
+        }
+    }
+
+    private void OnFlowElementsTabChange(int index)
+    {
+        bool newValue = FieldsTabOpened;
+        if (ActiveFlow?.Flow == null)
+            newValue = false;
+        else if (ActiveFlow.Flow.Type == FlowType.Failure)
+            newValue = false;
+        else if (index != 4)
+            newValue = false;
+        else
+            newValue = true;
+
+        if (newValue == FieldsTabOpened)
+            return;
+        FieldsTabOpened = newValue;
+        StateHasChanged();
+    }
 
     public void Dispose()
     {
@@ -144,68 +213,166 @@ public partial class Flow : ComponentBase, IDisposable
         NavigationService.UnRegisterNavigationCallback(NavigationCheck);
     }
 
-    private void SelectPart(string uid)
-    {
-        if (App.Instance.IsMobile)
-            SelectedElement = uid;
-    }
 
     private async Task Init()
     {
-        this.Blocker.Show();
-        this.StateHasChanged();
+        Blocker.Show();
+        StateHasChanged();
         try
         {
-            FileFlows.Shared.Models.Flow flow;
-            if (Uid == Guid.Empty && App.Instance.NewFlowTemplate != null)
+            await LoadFlowElements();
+            
+            if (Uid == Guid.Empty)
             {
-                flow = App.Instance.NewFlowTemplate;
-                App.Instance.NewFlowTemplate = null;
-            }
-            else
-            {
-                var modelResult = await GetModel(API_URL + "/" + Uid.ToString());
-                flow = (modelResult.Success ? modelResult.Data : null) ?? new ff() { Parts = new List<ffPart>() };
+                AddFlow(newOnly: true);
+                return;
             }
 
-            var elementsResult = await GetElements(API_URL + "/elements?type=" + (int)flow.Type);
-            if (elementsResult.Success)
-            {
-                Available = elementsResult.Data;
-                this.txtFilter = string.Empty;
-            }
-            await InitModel(flow);
-
-            var dotNetObjRef = DotNetObjectReference.Create(this);
-            await jsRuntime.InvokeVoidAsync("ffFlow.init", new object[] { "flow-parts", dotNetObjRef, this.Parts, Available });
-
-            await WaitForRender();
-            await jsRuntime.InvokeVoidAsync("ffFlow.redrawLines");
+            await OpenFlowInNewTab(Uid);
 
         }
         finally
         {
-            this.Blocker.Hide();
-            this.StateHasChanged();
+            Blocker.Hide();
+            StateHasChanged();
         }
     }
 
-    private async Task<RequestResult<ff>> GetModel(string url)
+    /// <summary>
+    /// Gets or sets the active flows name
+    /// </summary>
+    public string ActiveFlowName
     {
-#if (DEMO)
-        string json = "{\"Enabled\":true,\"Parts\":[{\"Uid\":\"10c99731-370d-41b6-b400-08d003e6e843\",\"Name\":\"\",\"FlowElementUid\":\"FileFlows.VideoNodes.VideoFile\",\"xPos\":411,\"yPos\":18,\"Icon\":\"fas fa-video\",\"Inputs\":0,\"Outputs\":1,\"OutputConnections\":[{\"Input\":1,\"Output\":1,\"InputNode\":\"38e28c04-4ce7-4bcf-90f3-79ed0796f347\"}],\"Type\":0,\"Model\":{}},{\"Uid\":\"3121dcae-bfb8-4c37-8871-27618b29beb4\",\"Name\":\"\",\"FlowElementUid\":\"FileFlows.VideoNodes.Video_H265_AC3\",\"xPos\":403,\"yPos\":310,\"Icon\":\"far fa-file-video\",\"Inputs\":1,\"Outputs\":2,\"OutputConnections\":[{\"Input\":1,\"Output\":1,\"InputNode\":\"7363e1d1-2cc3-444c-b970-a508e7ef3d42\"},{\"Input\":1,\"Output\":2,\"InputNode\":\"7363e1d1-2cc3-444c-b970-a508e7ef3d42\"}],\"Type\":2,\"Model\":{\"Language\":\"eng\",\"Crf\":21,\"NvidiaEncoding\":true,\"Threads\":0,\"Name\":\"\",\"NormalizeAudio\":false}},{\"Uid\":\"7363e1d1-2cc3-444c-b970-a508e7ef3d42\",\"Name\":\"\",\"FlowElementUid\":\"FileFlows.BasicNodes.File.MoveFile\",\"xPos\":404,\"yPos\":489,\"Icon\":\"fas fa-file-export\",\"Inputs\":1,\"Outputs\":1,\"OutputConnections\":[{\"Input\":1,\"Output\":1,\"InputNode\":\"bc8f30c0-a72e-47a4-94fc-7543206705b9\"}],\"Type\":2,\"Model\":{\"DestinationPath\":\"/media/downloads/converted/tv\",\"MoveFolder\":true,\"DeleteOriginal\":true}},{\"Uid\":\"38e28c04-4ce7-4bcf-90f3-79ed0796f347\",\"Name\":\"\",\"FlowElementUid\":\"FileFlows.VideoNodes.DetectBlackBars\",\"xPos\":411,\"yPos\":144,\"Icon\":\"fas fa-film\",\"Inputs\":1,\"Outputs\":2,\"OutputConnections\":[{\"Input\":1,\"Output\":1,\"InputNode\":\"3121dcae-bfb8-4c37-8871-27618b29beb4\"},{\"Input\":1,\"Output\":2,\"InputNode\":\"3121dcae-bfb8-4c37-8871-27618b29beb4\"}],\"Type\":3,\"Model\":{}},{\"Uid\":\"bc8f30c0-a72e-47a4-94fc-7543206705b9\",\"Name\":\"\",\"FlowElementUid\":\"FileFlows.BasicNodes.File.DeleteSourceDirectory\",\"xPos\":404,\"yPos\":638,\"Icon\":\"far fa-trash-alt\",\"Inputs\":1,\"Outputs\":2,\"OutputConnections\":null,\"Type\":2,\"Model\":{\"IfEmpty\":true,\"IncludePatterns\":[\"mkv\",\"mp4\",\"divx\",\"avi\"]}}]}";
-
-        var result = System.Text.Json.JsonSerializer.Deserialize<ff>(json);
-        return new RequestResult<ff> { Success = true, Data = result };
-#else
-        return await HttpHelper.Get<ff>(url);
-#endif
+        get => ActiveFlow?.Flow?.Name;
+        set
+        {
+            if (ActiveFlow?.Flow != null)
+            {
+                ActiveFlow.Flow.Name = value;
+                ActiveFlow.MarkDirty();
+            }
+        }
     }
+
+    public async Task OpenFlowInNewTab(Guid uid, bool showBlocker = false)
+    {
+        var existing = OpenedFlows.FirstOrDefault(x => x.Flow.Uid == uid);
+        if (existing != null)
+        {
+            ActivateFlow(existing); // already opened
+            return;
+        }
+        if(showBlocker)
+            Blocker.Show("Pages.Flow.Messages.LoadingFlow");
+        try
+        {
+
+            var modelResult = await GetModel(API_URL + "/" + uid);
+            if (modelResult.Success == false || modelResult.Data == null)
+            {
+                Toast.ShowWarning("Pages.Flow.Messages.FailedToLoadFlow");
+                return;
+            }
+
+            FFlow flow = (modelResult.Success ? modelResult.Data : null) ?? new FFlow { Parts = new List<ffPart>() };
+
+            var fEditor = new FlowEditor(this, flow, ProfileService);
+            await fEditor.Initialize();
+            OpenedFlows.Add(fEditor);
+            ActivateFlow(fEditor);
+        }
+        finally
+        {
+            if (showBlocker)
+                Blocker.Hide();
+        }
+    }
+
+    private async Task LoadFlowElements()
+    {
+        var elementsResult =
+            await GetElements(API_URL + "/elements"); //"?type=" + (int)_FlowType + "&flowUid=" + modelUid);
+        if (elementsResult.Success == false)
+            return;
+
+        Available = elementsResult.Data;
+    }
+
+    private async Task UpdateFlowElementLists()
+    {
+        PluginsDefaultGroup = ActiveFlow?.Flow?.Type == FlowType.SubFlow ? "Sub Flow" : "File";
+        
+        if (eleListPlugins == null)
+            return; // not initialized yet, no need to do this, the first render will contain the correct data
+
+        await WaitForRender(); // ensures these lists exist or not
+
+
+        eleListPlugins?.SetItems(AvailablePlugins, PluginsDefaultGroup);
+        eleListScripts?.SetItems(AvailableScripts);
+        eleListSubFlows?.SetItems(AvailableSubFlows);
+    }
+    
+    private async Task InitializeFlowElements()
+    {
+        FFlow? flow = ActiveFlow?.Flow;
+        if (flow == null)
+        {
+            AvailablePlugins = new ffElement[] { };
+            AvailableScripts = new ffElement[] { };
+            AvailableSubFlows = new ffElement[] { };
+            await UpdateFlowElementLists();
+            return;
+        }
+        
+        AvailablePlugins = Available.Where(x => x.Type is not FlowElementType.Script and not FlowElementType.SubFlow 
+                                                && x.Uid.Contains(".Conditions.") == false
+                                                && x.Uid.Contains(".Templating.") == false)
+            .Where(x =>
+            {
+                if (flow.Type == FlowType.Failure)
+                {
+                    if (x.FailureNode == false)
+                        return false;
+                }
+                else if (x.Type == FlowElementType.Failure)
+                {
+                    return false;
+                }
+
+                if (flow.Type == FlowType.SubFlow)
+                {
+                    if (x.Name.EndsWith("GotoFlow"))
+                        return false; // don't allow gotos inside a sub flow
+                }
+
+                if (flow.Type != FlowType.SubFlow &&
+                    (x.Uid.StartsWith("SubFlowInput") || x.Uid.StartsWith("SubFlowOutput")))
+                    return false;
+                
+                return true;
+            })
+            .ToArray();
+        
+        AvailableScripts = Available.Where(x => x.Type is FlowElementType.Script).ToArray();
+
+        if (flow.Type == FlowType.Failure)
+            AvailableSubFlows = new ffElement[] { };
+        else
+            AvailableSubFlows = Available.Where(x =>
+                    x.Uid != ("SubFlow:" + flow.Uid) &&
+                    (x.Type == FlowElementType.SubFlow || x.Uid.Contains(".Conditions.") ||
+                     x.Uid.Contains(".Templating.")))
+                .ToArray();
+        
+        await UpdateFlowElementLists();
+    }
+
+    private async Task<RequestResult<FFlow>> GetModel(string url)
+        => await HttpHelper.Get<FFlow>(url);
 
     private async Task<RequestResult<ffElement[]>> GetElements(string url)
-    {
-        return await HttpHelper.Get<ffElement[]>(url);
-    }
+        => await HttpHelper.Get<ffElement[]>(url);
 
     private async Task WaitForRender()
     {
@@ -227,217 +394,50 @@ public partial class Flow : ComponentBase, IDisposable
         await NavigationService.NavigateTo("flows");
     }
 
+    void CloseElements()
+    {
+        ElementsVisible = false;
+        StateHasChanged();
+    }
+
     protected override void OnAfterRender(bool firstRender)
     {
         _needsRendering = false;
     }
 
-    private void SetTitle()
+    private void ZoomChanged(int zoom)
     {
-        this.Title = Translater.Instant("Pages.Flow.Title", Model) + ":";
+        foreach (var editor in OpenedFlows)
+            _ = editor.ffFlow.zoom(zoom);
     }
 
-    private async Task InitModel(ff model)
-    {
-        this.Model = model;
-        this.SetTitle();
-        this.Model.Parts ??= new List<ffPart>(); // just incase its null
-        this.Parts = this.Model.Parts;
-        foreach (var p in this.Parts)
-        {
-            // FF-347: sane limits to flow positions
-            if (p.xPos < 10)
-                p.xPos = 50;
-            else if (p.xPos > 2400)
-                p.xPos = 2300;
-            
-            if (p.yPos < 10)
-                p.yPos = 50;
-            else if (p.yPos > 1780)
-                p.yPos = 1750;
-            
-            if (string.IsNullOrEmpty(p.Name) == false || string.IsNullOrEmpty(p?.FlowElementUid))
-                continue;
-            string type = p.FlowElementUid.Substring(p.FlowElementUid.LastIndexOf(".") + 1);
-            string name = Translater.Instant($"Flow.Parts.{type}.Label", supressWarnings: true);
-            if (name == "Label")
-                name = FlowHelper.FormatLabel(type);
-            p.Name = name;
-        }
-
-        this.Name = model.Name ?? "";
-
-        var connections = new Dictionary<string, List<xFlowConnection>>();
-        foreach (var part in this.Parts.Where(x => x.OutputConnections?.Any() == true))
-        {
-            connections.Add(part.Uid.ToString(), part.OutputConnections);
-        }
-        await jsRuntime.InvokeVoidAsync("ffFlow.ioInitConnections", connections);
-
-    }
-
-    [JSInvokable]
-    public async Task<string> NewGuid() => Guid.NewGuid().ToString();
-
-    [JSInvokable]
-    public async Task<object> AddElement(string uid)
-    {
-        var element = this.Available.FirstOrDefault(x => x.Uid == uid);
-        string name;
-        if (element.Type == FlowElementType.Script)
-        {
-            // special type
-            name = element.Name;
-        }
-        else
-        {
-            string type = element.Uid.Substring(element.Uid.LastIndexOf(".") + 1);
-            name = Translater.Instant($"Flow.Parts.{type}.Label", supressWarnings: true);
-            if (name == "Label")
-                name = FlowHelper.FormatLabel(type);
-        }
-
-        if (element.Obsolete)
-        {
-            string msg = element.ObsoleteMessage?.EmptyAsNull() ?? lblObsoleteMessage;
-            string confirmMessage = Translater.Instant("Labels.ObsoleteConfirm.Question");
-            string title = Translater.Instant("Labels.ObsoleteConfirm.Title");
-
-            msg += "\n\n" + confirmMessage;
-            var confirmed = await Confirm.Show(title, msg);
-            if (confirmed == false)
-                return null;
-        }
-
-        element.Name = name;
-        return new { element, uid = Guid.NewGuid() };
-    }
-
-    [JSInvokable]
-    public string Translate(string key, ExpandoObject model)
-    {
-        string prefix = string.Empty;
-        if (key.Contains(".Outputs."))
-        {
-            prefix = Translater.Instant("Labels.Output") + " " + key.Substring(key.LastIndexOf(".") + 1) + ": ";
-        }
-
-        string translated = Translater.Instant(key, model);
-        if (Regex.IsMatch(key, "^[\\d]+$"))
-            return string.Empty;
-        return prefix + translated;
-    }
-
-    private async Task ZoomChanged(int zoom)
-    {
-        await jsRuntime.InvokeVoidAsync("ffFlow.zoom", new object[] { zoom });
-    }
-
-    private async Task Save()
-    {
-#if (DEMO)
-        return;
-#else
-        this.Blocker.Show(lblSaving);
-        this.IsSaving = true;
-        try
-        {
-
-            var parts = await jsRuntime.InvokeAsync<List<FileFlows.Shared.Models.FlowPart>>("ffFlow.getModel");
-
-            Model ??= new ff();
-            Model.Name = this.Name;
-            // ensure there are no duplicates and no rogue connections
-            Guid[] nodeUids = parts.Select(x => x.Uid).ToArray();
-            foreach (var p in parts)
-            {
-                p.OutputConnections = p.OutputConnections
-                                      ?.Where(x => nodeUids.Contains(x.InputNode))
-                                      ?.GroupBy(x => x.Output).Select(x => x.First())
-                                      ?.ToList();
-            }
-            Model.Parts = parts;
-            var result = await HttpHelper.Put<ff>(API_URL, Model);
-            if (result.Success)
-            {
-                if ((App.Instance.FileFlowsSystem.ConfigurationStatus & ConfigurationStatus.Flows) !=
-                    ConfigurationStatus.Flows)
-                {
-                    // refresh the app configuration status
-                    await App.Instance.LoadAppInfo();
-                }
-
-                Model = result.Data;
-                IsDirty = false;
-            }
-            else
-            {
-                Toast.ShowError(
-                    result.Success || string.IsNullOrEmpty(result.Body) ? Translater.Instant($"ErrorMessages.UnexpectedError") : Translater.TranslateIfNeeded(result.Body),
-                    duration: 60_000
-                );
-            }
-        }
-        finally
-        {
-            this.IsSaving = false;
-            this.Blocker.Hide();
-        }
-#endif
-    }
-
-    private async Task<RequestResult<Dictionary<string, object>>> GetVariables(string url, List<FileFlows.Shared.Models.FlowPart> parts)
-    {
-#if (DEMO)
-        string json = "{\"ext\":\".mkv\",\"fileName\":\"Filename\",\"fileSize\":1000,\"fileOrigExt\":\".mkv\",\"fileOrigFileName\":\"OriginalFile\",\"folderName\":\"FolderName\",\"folderFullName\":\"/folder/subfolder\",\"folderOrigName\":\"FolderOriginalName\",\"folderOrigFullName\":\"/originalFolder/subfolder\",\"viVideoCodec\":\"hevc\",\"viAudioCodec\":\"ac3\",\"viAudioCodecs\":\"ac3,aac\",\"viAudioLanguage\":\"eng\",\"viAudioLanguages\":\"eng, mao\",\"viResolution\":\"1080p\"}";
-        var dict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-        return new RequestResult<Dictionary<string, object>> { Success = true, Data = dict };
-#else
-        return await HttpHelper.Post<Dictionary<string, object>>(url, parts);
-#endif
-    }
-
-
-    private List<FlowPart> SelectedParts;
-    [JSInvokable]
-    public async Task OpenContextMenu(OpenContextMenuArgs args)
-    {
-        SelectedParts = args.Parts ?? new();
-        await ContextMenuService.ShowMenu(SelectedParts.Count == 1 ? "FlowContextMenu-Single" :
-            SelectedParts.Count > 1 ? "FlowContextMenu-Multiple" : "FlowContextMenu-Basic", args.X, args.Y);
-    }
-
-    private async Task FilterKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key == "Escape")
-        {
-            this.txtFilter = String.Empty;
-            return;
-        }
-        if (e.Key != "Enter")
-            return;
-        if (this.Filtered.Length != 1)
-            return;
-        var item = this.Filtered[0];
-        await jsRuntime.InvokeVoidAsync("ffFlow.insertElement", item.Uid);
-        this.txtFilter = String.Empty;
-    }
+    private async Task<RequestResult<Dictionary<string, object>>> GetVariables(string url,
+        List<FileFlows.Shared.Models.FlowPart> parts)
+        => await HttpHelper.Post<Dictionary<string, object>>(url, parts);
 
     private Dictionary<string, object> EditorVariables;
-    [JSInvokable]
-    public async Task<object> Edit(ffPart part, bool isNew = false)
+
+    public async Task<object> Edit(FlowEditor editor, ffPart part, bool isNew, List<ffPart> parts)
     {
         // get flow variables that we can pass onto the form
         Blocker.Show();
         Dictionary<string, object> variables = new Dictionary<string, object>();
         try
         {
-            var parts = await jsRuntime.InvokeAsync<List<FlowPart>>("ffFlow.getModel");
             var variablesResult = await GetVariables(API_URL + "/" + part.Uid + "/variables?isNew=" + isNew, parts);
             if (variablesResult.Success)
-                variables = variablesResult.Data;
+                variables = variablesResult.Data!;
         }
-        finally { Blocker.Hide(); }
+        finally
+        {
+            Blocker.Hide();
+        }
+
+        // add the flow variables to the variables dictionary
+        foreach (var variable in editor.Flow.Properties?.Variables ?? new())
+        {
+            variables[variable.Key] = variable.Value;
+        }
 
 
         var flowElement = this.Available.FirstOrDefault(x => x.Uid == part.FlowElementUid);
@@ -448,103 +448,164 @@ public partial class Flow : ComponentBase, IDisposable
             return null;
         }
 
-        string typeName;
-        string typeDisplayName;
+        string? typeName;
+        string? typeDisplayName;
+        string?
+            typeDescription =
+                null; // should leave blank for most things, editor will look it up, for for sub flows etc, use description from that
         if (part.Type == FlowElementType.Script)
         {
             typeName = "Script";
-            typeDisplayName = part.FlowElementUid[7..]; // 7 to remove Script:
+            var script = AvailableScripts.FirstOrDefault(x => x.Uid == part.FlowElementUid);
+            typeDisplayName = script?.Name?.EmptyAsNull() ?? part.Label?.EmptyAsNull() ?? "Script";
+        }
+        else if (part.Type == FlowElementType.SubFlow)
+        {
+            typeName = "SubFlow";
+            var fe = Available.FirstOrDefault(x => part.FlowElementUid == x.Uid);
+            typeDisplayName = fe?.Name?.EmptyAsNull() ?? part.Name?.EmptyAsNull() ?? "Sub Flow";
+            typeDescription = fe?.Description;
         }
         else
         {
-            typeName = part.FlowElementUid[(part.FlowElementUid.LastIndexOf(".") + 1)..];
-            typeDisplayName = Translater.TranslateIfHasTranslation($"Flow.Parts.{typeName}.Label", FlowHelper.FormatLabel(typeName));
+            typeName = part.FlowElementUid[(part.FlowElementUid.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
+            typeDisplayName =
+                Translater.TranslateIfHasTranslation($"Flow.Parts.{typeName}.Label", FlowHelper.FormatLabel(typeName));
         }
 
-        var fields = ObjectCloner.Clone(flowElement.Fields);
+        if (typeDisplayName.ToLowerInvariant().StartsWith("ffmpeg builder: "))
+            typeDisplayName = typeDisplayName["ffmpeg builder: ".Length..];
+
+        var fields = flowElement.Fields == null
+            ? new()
+            : ObjectCloner.Clone(flowElement.Fields).Select(x =>
+            {
+                // if (FieldsTabOpened)
+                x.CopyValue = $"{part.Uid}.{x.Name}";
+                return x;
+            }).ToList();
         // add the name to the fields, so a node can be renamed
         fields.Insert(0, new ElementField
         {
-            Name = "Name",
+            Name = nameof(ffPart.Name),
+            Label = Translater.Instant("Labels.Name"),
             Placeholder = typeDisplayName,
             InputType = FormInputType.Text
         });
+        fields.Insert(1, new ElementField
+        {
+            Name = nameof(ffPart.Color),
+            Label = Translater.Instant("Flow.Parts.Color"),
+            Placeholder = Translater.Instant("Flow.Parts.Color-Placeholder"),
+            InputType = FormInputType.Color
+        });
+        fields.Insert(2, new ElementField
+        {
+            InputType = FormInputType.HorizontalRule
+        });
 
-        bool isFunctionNode = flowElement.Uid == "FileFlows.BasicNodes.Functions.Function";
+
+        if (FieldsTabOpened &&
+            part.Type != FlowElementType.Output) // output is for sub flow outputs, we dont want to show the UID
+        {
+            fields.Insert(0, new ElementField
+            {
+                Name = "UID",
+                InputType = FormInputType.TextLabel,
+                ReadOnlyValue = part.Uid.ToString(),
+                UiOnly = true
+            });
+        }
+
+        bool isFunctionNode = flowElement.Uid == "FileFlows.BasicNodes.Functions.Function" || 
+                              flowElement.Uid.StartsWith("FileFlows.BasicNodes.Scripting.");
+        string? functionLanguage = null;
 
         if (isFunctionNode)
         {
             // special case
-            await FunctionNode(fields);
+            functionLanguage = flowElement.Uid.Split('.').Last().ToLowerInvariant() switch
+            {
+                var s when s.StartsWith("bat") => "bat",
+                var s when s.StartsWith("csharp") => "csharp",
+                var s when s.StartsWith("powershell") => "powershell",
+                var s when s.StartsWith("shell") => "shell",
+                _ => "javascript"
+            };
+            await FunctionNode(fields, functionLanguage);
         }
 
 
         var model = part.Model ?? new ExpandoObject();
-        // add the name to the model, since this is actually bound on the part not model, but we need this 
+        // add the name/color to the model, since this is actually bound on the part not model, but we need this 
         // so the user can update the name
         if (model is IDictionary<string, object> dict)
         {
             dict["Name"] = part.Name ?? string.Empty;
+            dict["Color"] = part.Color ?? string.Empty;
         }
 
-        List<ListOption> flowOptions = null;
-        List<ListOption> variableOptions = null;
+        List<ListOption>? flowOptions = null;
+        List<ListOption>? nodeOptions = null;
+        List<ListOption>? libraryOptions = null;
+        List<ListOption>? variableOptions = null;
 
         foreach (var field in fields)
         {
             field.Variables = variables;
-            if(field.Conditions?.Any() == true)
+            if (field.Conditions?.Any() == true)
             {
-                foreach(var condition in field.Conditions)
+                foreach (var condition in field.Conditions)
                 {
                     if (condition.Owner == null)
                         condition.Owner = field;
                     if (condition.Field == null && string.IsNullOrWhiteSpace(condition.Property) == false)
                     {
-                        var other = fields.Where(x => x.Name == condition.Property).FirstOrDefault();
-                        if (other != null && model is IDictionary<string, object> mdict) 
+                        var other = fields.FirstOrDefault(x => x.Name == condition.Property);
+                        if (other != null && model is IDictionary<string, object> mdict)
                         {
-                            object otherValue = mdict.ContainsKey(other.Name) ? mdict[other.Name] : null;
+                            var otherValue = mdict.ContainsKey(other.Name) ? mdict[other.Name] : null;
                             condition.SetField(other, otherValue);
                         }
                     }
                 }
             }
+
             // special case, load "Flow" into FLOW_LIST
             // this lets a plugin request the list of flows to be shown
             if (field.Parameters?.Any() == true)
             {
-                if (field.Parameters.ContainsKey("OptionsProperty") && field.Parameters["OptionsProperty"] is JsonElement optProperty)
+                if (field.Parameters.ContainsKey("OptionsProperty") &&
+                    field.Parameters["OptionsProperty"] is JsonElement optProperty)
                 {
                     if (optProperty.ValueKind == JsonValueKind.String)
                     {
-                        string optp = optProperty.GetString();
+                        var optp = optProperty.GetString();
                         Logger.Instance.DLog("OptionsProperty = " + optp);
-                        if (optp == "FLOW_LIST")
+                        if (optp is "FLOW_LIST" or "SUB_FLOW_LIST")
                         {
                             if (flowOptions == null)
                             {
                                 flowOptions = new List<ListOption>();
-                                var flowsResult = await HttpHelper.Get<ff[]>($"/api/flow");
+                                var flowsResult = await HttpHelper.Get<Dictionary<Guid, string>>(
+                                    $"/api/flow/basic-list?type=" + (optp == "FLOW_LIST" ? "Standard" : "SubFlow"));
                                 if (flowsResult.Success)
                                 {
-                                    flowOptions = flowsResult.Data?.Where(x => x.Uid != Model?.Uid)?.OrderBy(x => x.Name)?.Select(x => new ListOption
-                                    {
-                                        Label = x.Name,
-                                        Value = new ObjectReference
+                                    flowOptions = flowsResult.Data?.Where(x => x.Key != editor.Flow?.Uid)
+                                        ?.OrderBy(x => x.Value)?.Select(x => new ListOption
                                         {
-                                            Name = x.Name,
-                                            Uid = x.Uid,
-                                            Type = x.GetType().FullName
-                                        }
-                                    })?.ToList() ?? new List<ListOption>();
+                                            Label = x.Value,
+                                            Value = new ObjectReference
+                                            {
+                                                Name = x.Value,
+                                                Uid = x.Key,
+                                                Type = typeof(FFlow).FullName
+                                            }
+                                        })?.ToList() ?? new List<ListOption>();
                                 }
-
                             }
-                            if (field.Parameters.ContainsKey("Options"))
-                                field.Parameters["Options"] = flowOptions;
-                            else
-                                field.Parameters.Add("Options", flowOptions);
+
+                            field.Parameters["Options"] = flowOptions;
                         }
                         else if (optp == "VARIABLE_LIST")
                         {
@@ -554,23 +615,73 @@ public partial class Flow : ComponentBase, IDisposable
                                 var variableResult = await HttpHelper.Get<Variable[]>($"/api/variable");
                                 if (variableResult.Success)
                                 {
-                                    variableOptions = variableResult.Data?.OrderBy(x => x.Name)?.Select(x => new ListOption
-                                    {
-                                        Label = x.Name,
-                                        Value = new ObjectReference
+                                    variableOptions = variableResult.Data?.OrderBy(x => x.Name)?.Select(x =>
+                                        new ListOption
                                         {
-                                            Name = x.Name,
-                                            Uid = x.Uid,
-                                            Type = x.GetType().FullName
-                                        }
-                                    })?.ToList() ?? new List<ListOption>();
+                                            Label = x.Name,
+                                            Value = new ObjectReference
+                                            {
+                                                Name = x.Name,
+                                                Uid = x.Uid,
+                                                Type = x.GetType().FullName
+                                            }
+                                        })?.ToList() ?? new List<ListOption>();
                                 }
 
                             }
-                            if (field.Parameters.ContainsKey("Options"))
-                                field.Parameters["Options"] = variableOptions;
-                            else
-                                field.Parameters.Add("Options", variableOptions);
+
+                            field.Parameters["Options"] = variableOptions;
+                        }
+                        else if (optp == "NODE_LIST")
+                        {
+                            if (nodeOptions == null)
+                            {
+                                nodeOptions = new List<ListOption>();
+                                var nodesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/node/basic-list?enabled=true");
+                                if (nodesResult.Success)
+                                {
+                                    nodeOptions = nodesResult.Data.OrderBy(x => x.Value.ToLowerInvariant()).Select(
+                                        x => new ListOption
+                                        {
+                                            Label = x.Value == "FileFlowsServer" ? "Internal Processing Node" : x.Value,
+                                            Value = new ObjectReference
+                                            {
+                                                Name = x.Value,
+                                                Uid = x.Key,
+                                                Type = typeof(FileFlows.Shared.Models.ProcessingNode).FullName
+                                            }
+                                        })?.ToList() ?? new List<ListOption>();
+                                }
+                            }
+
+                            field.Parameters["Options"] = nodeOptions;
+                        }
+                        else if (optp == "LIBRARY_LIST")
+                        {
+                            if (libraryOptions == null)
+                            {
+                                libraryOptions = new List<ListOption>();
+                                var librariesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/library/basic-list");
+                                if (librariesResult.Success)
+                                {
+                                    if (librariesResult.Data.ContainsKey(CommonVariables.ManualLibraryUid) == false)
+                                        librariesResult.Data[CommonVariables.ManualLibraryUid] =
+                                            CommonVariables.ManualLibrary;
+                                    libraryOptions = librariesResult.Data.OrderBy(x => x.Value.ToLowerInvariant()).Select(
+                                        x => new ListOption
+                                        {
+                                            Label = x.Value,
+                                            Value = new ObjectReference
+                                            {
+                                                Name = x.Value,
+                                                Uid = x.Key,
+                                                Type = typeof(FileFlows.Shared.Models.ProcessingNode).FullName
+                                            }
+                                        })?.ToList() ?? new List<ListOption>();
+                                }
+                            }
+
+                            field.Parameters["Options"] = libraryOptions;
                         }
                     }
                 }
@@ -581,49 +692,47 @@ public partial class Flow : ComponentBase, IDisposable
 
         string title = typeDisplayName;
         EditorOpen = true;
+        StateHasChanged();
         EditorVariables = variables;
-        var newModelTask = Editor.Open(new()
+        var result = await Editor.Open(new()
         {
-            TypeName = "Flow.Parts." + typeName, Title = title, Fields = fields, Model = model,
+            TypeName = "Flow.Parts." + typeName, Title = title, Fields = fields.Select(x => (IFlowField)x).ToList(), Model = model,
+            Description = typeDescription,
             Large = fields.Count > 1, HelpUrl = flowElement.HelpUrl,
-            SaveCallback = isFunctionNode ? FunctionSaveCallback : null
-        });           
-        try
+            SaveCallback = isFunctionNode && functionLanguage == "javascript" ? FunctionSaveCallback : null
+        });
+        EditorOpen = false;
+        StateHasChanged();
+        if (result.Success == false)
         {
-            await newModelTask;
-        }
-        catch (Exception)
-        {
-            // can throw if canceled
+            // was canceled
             return null;
         }
-        finally
+
+        var newModel = result.Model;
+        int outputs = -1;
+        if (part.Model is IDictionary<string, object> dictNew && dictNew != null)
         {
-            EditorOpen = false;
-            await jsRuntime.InvokeVoidAsync("ffFlowPart.focusElement", part.Uid.ToString());
-        }
-        if (newModelTask.IsCanceled == false)
-        {
-            IsDirty = true;
-            var newModel = newModelTask.Result;
-            int outputs = -1;
-            if (part.Model is IDictionary<string, object> dictNew)
+            if (dictNew.TryGetValue("Outputs", out var oOutputs) && int.TryParse(oOutputs?.ToString(), out outputs))
             {
-                if (dictNew?.ContainsKey("Outputs") == true && int.TryParse(dictNew["Outputs"]?.ToString(), out outputs)) { }
             }
-            return new { outputs, model = newModel };
+            else if (part.FlowElementUid == "FileFlows.BasicNodes.Functions.Matches")
+            {
+                // special case, outputs is determine by the "Matches" count
+                if (dictNew?.TryGetValue("MatchConditions", out var oMatches) == true)
+                {
+                    outputs = ObjectHelper.GetArrayLength(oMatches) + 1; // add +1 for not matching
+                }
+            }
         }
-        else
-        {
-            return null;
-        }
+
+        ActiveFlow?.MarkDirty();
+        return new { outputs, model = newModel };
     }
-    
+
     private void ShowElementsOnClick()
     {
         ElementsVisible = !ElementsVisible;
-        if (ElementsVisible)
-            SelectedElement = null; // clear the selected item
     }
 
     private async Task<bool> FunctionSaveCallback(ExpandoObject model)
@@ -632,20 +741,27 @@ public partial class Flow : ComponentBase, IDisposable
         var dict = model as IDictionary<string, object>;
         string code  = (dict?.ContainsKey("Code") == true ? dict["Code"] as string : null) ?? string.Empty;
         var codeResult = await HttpHelper.Post<string>("/api/script/validate", new { Code = code, Variables = EditorVariables, IsFunction = true });
-        string error = null;
+        string? error = null;
         if (codeResult.Success)
         {
             if (string.IsNullOrEmpty(codeResult.Data))
                 return true;
             error = codeResult.Data;
         }
-        Toast.ShowError(error?.EmptyAsNull() ?? codeResult.Body, duration: 20_000);
+        Toast.ShowEditorError(error?.EmptyAsNull() ?? codeResult.Body, duration: 20_000);
         return false;
     }
 
-    private async Task FunctionNode(List<ElementField> fields)
+    /// <summary>
+    /// Creates a function node
+    /// </summary>
+    /// <param name="fields">the fields</param>
+    /// <param name="language">the language of the function</param>
+    private async Task FunctionNode(List<ElementField> fields, string language)
     {
-        var templates = await GetCodeTemplates();
+        var templates = await GetCodeTemplates(language);
+        if (templates.Count == 0)
+            return;
         var templatesOptions = templates.Select(x => new ListOption()
         {
             Label = x.Name,
@@ -672,15 +788,15 @@ public partial class Flow : ComponentBase, IDisposable
         {
             if (value == null)
                 return;
-            CodeTemplate template = value as CodeTemplate;
+            var template = value as CodeTemplate;
             if (template == null || string.IsNullOrEmpty(template.Code))
                 return;
-            Editor editor = sender as Editor;
+            var editor = sender as Editor;
             if (editor == null)
                 return;
             if (editor.Model == null)
                 editor.Model = new ExpandoObject();
-            IDictionary<string, object> model = editor.Model;
+            IDictionary<string, object> model = editor.Model!;
 
             SetModelProperty(nameof(template.Outputs), template.Outputs);
             SetModelProperty(nameof(template.Code), template.Code);
@@ -698,9 +814,9 @@ public partial class Flow : ComponentBase, IDisposable
         fields.Insert(2, efTemplate);
     }
 
-    private async Task<List<CodeTemplate>> GetCodeTemplates()
+    private async Task<List<CodeTemplate>> GetCodeTemplates(string language)
     {
-        var templateResponse = await HttpHelper.Get<List<Script>>("/api/script/templates");
+        var templateResponse = await HttpHelper.Get<List<Script>>($"/api/script/templates?language={HttpUtility.UrlEncode(language)}");
         if (templateResponse.Success == false || templateResponse.Data?.Any() != true)
             return new List<CodeTemplate>();
 
@@ -735,28 +851,42 @@ public partial class Flow : ComponentBase, IDisposable
 
     private async Task EditItem()
     {
-        var item = this.SelectedParts?.FirstOrDefault();
+        var item = ActiveFlow?.SelectedParts?.FirstOrDefault();
         if (item == null)
             return;
-        await jsRuntime.InvokeVoidAsync("ffFlow.contextMenu_Edit", item);
+        await ActiveFlow.ffFlow.contextMenu("Edit", item);
     }
-
-    private void Copy() => jsRuntime.InvokeVoidAsync("ffFlow.contextMenu_Copy", SelectedParts);
-    private void Paste() => jsRuntime.InvokeVoidAsync("ffFlow.contextMenu_Paste");
-    private void Add() => jsRuntime.InvokeVoidAsync("ffFlow.contextMenu_Add");
-    private void Undo() => jsRuntime.InvokeVoidAsync("ffFlow.History.undo");
-    private void Redo() => jsRuntime.InvokeVoidAsync("ffFlow.History.redo");
-    private void DeleteItems() => jsRuntime.InvokeVoidAsync("ffFlow.contextMenu_Delete", SelectedParts);
-
-    private void AddSelectedElement()
+    private async Task EditSubFlow()
     {
-        jsRuntime.InvokeVoidAsync("ffFlow.addElementActual", new object[] { this.SelectedElement, 100, 100});
+        var item = ActiveFlow?.SelectedParts?.FirstOrDefault();
+        if (item is not { Type: FlowElementType.SubFlow })
+            return;
+
+        if (item.FlowElementUid?.StartsWith("SubFlow:") != true)
+            return;
+
+        if (Guid.TryParse(item.FlowElementUid[8..], out Guid uid) == false)
+            return;
+
+        await OpenFlowInNewTab(uid, showBlocker: true);
+    }
+    
+    private void Copy() => _ = ActiveFlow?.ffFlow?.contextMenu("Copy", ActiveFlow?.SelectedParts);
+    private void Paste() => _ = ActiveFlow?.ffFlow?.contextMenu("Paste");
+    private void Add() => _ = ActiveFlow?.ffFlow?.contextMenu("Add");
+    private void Undo() => _ = ActiveFlow?.ffFlow?.undo();
+    private void Redo() => _ = ActiveFlow?.ffFlow?.redo();
+    private void DeleteItems() => _ = ActiveFlow?.ffFlow?.contextMenu("Delete", ActiveFlow?.SelectedParts);
+
+    private void AddSelectedElement(string uid)
+    {
+        ActiveFlow?.ffFlow?.addElementActual(uid, 100, 100);
         this.ElementsVisible = false;
     } 
     
     private async Task OpenHelp()
     {
-        await jsRuntime.InvokeVoidAsync("open", "https://docs.fileflows.com/flow-editor", "_blank");
+        await jsRuntime.InvokeVoidAsync("ff.open", "https://fileflows.com/docs/webconsole/configuration/flows/editor");
     }
 
     private class CodeTemplate
@@ -783,6 +913,184 @@ public partial class Flow : ComponentBase, IDisposable
         /// Gets the selected parts
         /// </summary>
         public List<FlowPart> Parts { get; init; }
+    }
+
+    /// <summary>
+    /// Opens the script browser
+    /// </summary>
+    private async Task OpenScriptBrowser()
+    {
+        bool result = await ScriptBrowser.Open();
+        if (result == false)
+            return; // no new scripts downloaded
+
+        // force clearing them to update the list
+        AvailableScripts = null;
+        //StateHasChanged();
+
+        await LoadFlowElements();
+        await InitializeFlowElements();
+        await UpdateFlowElementLists();
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Opens the sub flow browser
+    /// </summary>
+    private async Task OpenSubFlowBrowser()
+    {
+        bool result = await SubFlowBrowser.Open();
+        if (result == false)
+            return; // no new scripts downloaded
+
+        // force clearing them to update the list
+        AvailableSubFlows = null;
+        //StateHasChanged();
+
+        await LoadFlowElements();
+        await InitializeFlowElements();
+        await UpdateFlowElementLists();
+        StateHasChanged();
+    }
+    
+    private void HandleDragStart((DragEventArgs args, FlowElement element) args)
+        => ActiveFlow?.ffFlow?.dragElementStart(args.element.Uid);
+
+
+    private void ActivateFlow(FlowEditor flow)
+    {
+        if (flow == ActiveFlow)
+            return;
+        
+        foreach (var other in OpenedFlows)
+            other.SetVisibility(other == flow);
+        ActiveFlow = flow;
+        
+        _ = InitializeFlowElements();
+        //StateHasChanged();
+    }
+
+
+    public void TriggerStateHasChanged()
+        => StateHasChanged();
+
+    private async Task CloseEditor(FlowEditor editor)
+    {
+        if (editor.IsDirty && await Confirm.Show(lblClose, $"Pages.{nameof(Flow)}.Messages.Close") == false)
+            return;
+        
+        int index = Math.Max(0, OpenedFlows.IndexOf(editor) - 1);
+        OpenedFlows.Remove(editor);
+        editor.Dispose();
+        ActivateFlow(OpenedFlows.Any() ? OpenedFlows[index] : null);
+    }
+
+    private async Task SaveEditor(FlowEditor editor)
+    {
+        this.Blocker.Show(lblSaving);
+        this.IsSaving = true;
+        try
+        {
+            var model = await editor.GetModel();
+            bool isFirst = OpenedFlows.IndexOf(editor) == 0;
+            var result = await HttpHelper.Put<FFlow>(API_URL, model);
+            if (result.Success)
+            {
+                if (isFirst && Uid == Guid.Empty)
+                {
+                    // update url to save flow
+                    await jsRuntime.InvokeVoidAsync("ff.updateUrlWithNewUid", result.Data.Uid.ToString());
+                }
+                if ((Profile.ConfigurationStatus & ConfigurationStatus.Flows) != ConfigurationStatus.Flows)
+                {
+                    // refresh the app configuration status
+                    await ProfileService.Refresh();
+                }
+
+                editor.UpdateModel(result.Data, clean: true);
+
+                if (model.Type == FlowType.SubFlow)
+                {
+                    // need to refresh the sub flows as their options may have changed
+                    await LoadFlowElements();
+                }
+            }
+            else
+            {
+                Toast.ShowEditorError(
+                    result.Success || string.IsNullOrEmpty(result.Body) ? Translater.Instant($"ErrorMessages.UnexpectedError") : Translater.TranslateIfNeeded(result.Body),
+                    duration: 60_000
+                );
+            }
+        }
+        finally
+        {
+            this.IsSaving = false;
+            this.Blocker.Hide();
+        }
+    }
+
+
+    private async Task AddNewFlow(FFlow flow, bool isDirty)
+    {
+        if (flow.Uid == Guid.Empty)
+            flow.Uid = Guid.NewGuid();
+        
+        FlowEditor editor = new FlowEditor(this, flow, ProfileService);
+        editor.IsDirty = isDirty;
+        await editor.Initialize();
+        bool first = OpenedFlows.Any() == false;
+        OpenedFlows.Add(editor);
+        ActivateFlow(editor);
+        if(this.Zoom != 100)
+            _ = editor.ffFlow.zoom(this.Zoom);
+        await editor.ffFlow.focusName();
+        if (first)
+             await WaitForRender();
+    }
+    
+    /// <summary>
+    /// Shows the add flow wizard
+    /// </summary>
+    /// <param name="newOnly">if only new options should be shown and no open existing</param>
+    private async void AddFlow(bool newOnly = false)
+    {
+        var result  = await TemplatePicker.Show((FlowType)(-1));
+        if(result == null || result.Result == FlowTemplatePickerResult.ResultCode.Cancel)
+            return; // twas canceled
+        if (result.Result == FlowTemplatePickerResult.ResultCode.Open)
+        {
+            if (result.Uid != null)
+                await OpenFlowInNewTab(result.Uid.Value, showBlocker: true);
+            return;
+        }
+
+        var flowTemplateModel = result.Model;
+        if (flowTemplateModel.Fields?.Any() != true)
+        {
+            // nothing extra to fill in, go to the flow editor, typically this if basic flows
+            await AddNewFlow(flowTemplateModel.Flow, isDirty: true);
+            return;
+        }
+        
+        var newFlow = await AddEditor.Show(flowTemplateModel);
+        if (newFlow == null)
+            return; // was canceled
+        
+        if (newFlow.Uid != Guid.Empty)
+        {
+            if ((Profile.ConfigurationStatus & ConfigurationStatus.Flows) != ConfigurationStatus.Flows)
+            {
+                // refresh the app configuration status
+                await ProfileService.Refresh();
+            }
+            await AddNewFlow(newFlow, isDirty: false);
+        }
+        else
+        {
+            // edit it
+            await AddNewFlow(newFlow, isDirty: true);
+        }
     }
 
 } 

@@ -1,56 +1,134 @@
-﻿namespace FileFlows.Server.Controllers;
-
+﻿using FileFlows.Server.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using FileFlows.Server.Services;
+using FileFlows.ServerShared.Models.StatisticModels;
 using FileFlows.Shared.Models;
-using FileFlows.Server.Helpers;
+
+namespace FileFlows.Server.Controllers;
 
 /// <summary>
 /// Status controller
 /// </summary>
 [Route("/api/statistics")]
+[FileFlowsAuthorize]
 public class StatisticsController : Controller
 {
     /// <summary>
-    /// Records a statistic
+    /// Records a running total statistic
     /// </summary>
-    /// <param name="statistic">the statistic to record</param>
-    [HttpPost("record")]
-    public async Task Record([FromBody] Statistic statistic)
-    {
-        if (statistic == null)
-            return;
-        if (LicenseHelper.IsLicensed() == false)
-            return; // only save this to an external database
-        await DbHelper.RecordStatistic(statistic);
-    }
+    /// <param name="name">the name of the statistic</param>
+    /// <param name="value">the value of the statistic</param>
+    [HttpPost("record-running-total")]
+    public Task RecordRunningTotals([FromQuery] string name, [FromQuery] string value)
+        => new StatisticService().RecordRunningTotal(name, value);
+    
+    /// <summary>
+    /// Records a average 
+    /// </summary>
+    /// <param name="name">the name of the statistic</param>
+    /// <param name="value">the value of the statistic</param>
+    [HttpPost("record-average")]
+    public Task RecordAverage([FromQuery] string name, [FromQuery] int value)
+        => new StatisticService().RecordAverage(name, value);
 
     /// <summary>
     /// Gets statistics by name
     /// </summary>
     /// <returns>the matching statistics</returns>
-    [HttpGet("by-name/{name}")]
-    public Task<IEnumerable<Statistic>> GetStatisticsByName([FromRoute] string name)
+    [HttpGet("running-totals/{name}")]
+    public Dictionary<string, long> GetRunningTotals([FromRoute] string name)
+        => new StatisticService().GetRunningTotals(name);
+
+
+    /// <summary>
+    /// Gets average statistics by name
+    /// </summary>
+    /// <returns>the matching statistics</returns>
+    [HttpGet("average/{name}")]
+    public Dictionary<int, int> GetAverage([FromRoute] string name)
+        => new StatisticService().GetAverage(name);
+
+    /// <summary>
+    /// Gets storage saved
+    /// </summary>
+    /// <returns>the storage saved</returns>
+    [HttpGet("storage-saved-raw")]
+    public object GetStorageSavedRaw()
+        => new StatisticService().GetStorageSaved();
+    
+    /// <summary>
+    /// Gets storage saved
+    /// </summary>
+    /// <returns>the storage saved</returns>
+    [HttpGet("storage-saved")]
+    public object GetStorageSaved()
     {
-        if (LicenseHelper.IsLicensed() == false)
-            throw new Exception("Not supported by this installation.");
+        var data = new StatisticService().GetStorageSaved();
+        data = data.OrderByDescending(x => x.OriginalSize - x.FinalSize).ToList();
+        const int MAX = 5;
+        if (data.Count > MAX)
+        {
+            var other = new StorageSavedData
+            {
+                Library = "Other",
+                TotalFiles = data.Skip(MAX - 1).Sum(x => x.TotalFiles),
+                FinalSize = data.Skip(MAX - 1).Sum(x => x.FinalSize),
+                OriginalSize = data.Skip(MAX - 1).Sum(x => x.OriginalSize)
+            };
+            data = data.Take(MAX - 1).ToList();
+            data.Add(other);
+        }
+        var total = new StorageSavedData
+        {
+            Library = "Total",
+            TotalFiles = data.Sum(x => x.TotalFiles),
+            FinalSize = data.Sum(x => x.FinalSize),
+            OriginalSize = data.Sum(x => x.OriginalSize)
+        };
+        data.Add(total);
         
-        return DbHelper.GetStatisticsByName(name);
+        return new
+        {
+            series = new object[]
+            {
+                new { name = "Final Size", data = data.Select(x => x.FinalSize).ToArray() },
+                new { name = "Savings", data = data.Select(x =>
+                {
+                    var change = x.OriginalSize - x.FinalSize;
+                    if (change > 0)
+                        return change;
+                    return 0;
+                }).ToArray() },
+                new { name = "Increase", data = data.Select(x =>
+                {
+                    var change = x.OriginalSize - x.FinalSize;
+                    if (change > 0)
+                        return 0;
+                    return change * -1;
+                }).ToArray() }
+            },
+            labels = data.Select(x => x.Library.Replace("###TOTAL###", "Total")).ToArray(),
+            items = data.Select(x => x.TotalFiles).ToArray()
+        };
+    }
+
+    /// <summary>
+    /// Clears statistics for
+    /// </summary>
+    /// <param name="name">Optional. The name for which DbStatistics should be cleared.</param>
+    /// <returns>the response</returns>
+    [HttpPost("clear")]
+    public async Task<IActionResult> Clear([FromQuery] string? name = null)
+    {
+        try
+        {
+            await new StatisticService().Clear(name);
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 }
 
-
-/// <summary>
-/// A statistic
-/// </summary>
-public class Statistic
-{
-    /// <summary>
-    /// Gets or sets the name of the statistic
-    /// </summary>
-    public string Name { get; set; }
-
-    /// <summary>
-    /// Gets or sets the value
-    /// </summary>
-    public object Value { get; set; }
-}

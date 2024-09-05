@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using FileFlows.Server.Helpers;
 using FileFlows.Shared.Models;
 using System.Text.RegularExpressions;
+using FileFlows.Server.Authentication;
+using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 
 namespace FileFlows.Server.Controllers;
@@ -11,7 +13,8 @@ namespace FileFlows.Server.Controllers;
 /// Library controller
 /// </summary>
 [Route("/api/library")]
-public class LibraryController : Controller
+[FileFlowsAuthorize(UserRole.Libraries)]
+public class LibraryController : BaseController
 {
     private static bool? _HasLibraries;
     /// <summary>
@@ -22,22 +25,34 @@ public class LibraryController : Controller
         get
         {
             if (_HasLibraries == null)
-                UpdateHasLibraries();
+                UpdateHasLibraries().Wait();
             return _HasLibraries == true;
         }
         private set => _HasLibraries = value;
     }
-    private static void UpdateHasLibraries()
-        => _HasLibraries = new LibraryService().GetAll().Count > 0;
+    private static async Task UpdateHasLibraries()
+        => _HasLibraries = await ServiceLoader.Load<LibraryService>().HasAny();
 
     /// <summary>
     /// Gets all libraries in the system
     /// </summary>
     /// <returns>a list of all libraries</returns>
     [HttpGet]
-    public IEnumerable<Library> GetAll() 
-        => new LibraryService().GetAll().OrderBy(x => x.Name.ToLowerInvariant());
+    public async Task<IEnumerable<Library>> GetAll() 
+        => (await ServiceLoader.Load<LibraryService>().GetAllAsync()).OrderBy(x => x.Name.ToLowerInvariant());
 
+
+    /// <summary>
+    /// Basic library list
+    /// </summary>
+    /// <returns>library list</returns>
+    [HttpGet("basic-list")]
+    [FileFlowsAuthorize(UserRole.Files | UserRole.Nodes | UserRole.Reports | UserRole.Flows)]
+    public async Task<Dictionary<Guid, string>> GetLibraryList()
+    {
+        var items = await new LibraryService().GetAllAsync();
+        return items.ToDictionary(x => x.Uid, x => x.Name);
+    }
 
     /// <summary>
     /// Get a library
@@ -45,8 +60,8 @@ public class LibraryController : Controller
     /// <param name="uid">The UID of the library</param>
     /// <returns>the library instance</returns>
     [HttpGet("{uid}")]
-    public Library Get(Guid uid) =>
-        new LibraryService().GetByUid(uid);
+    public Task<Library?> Get(Guid uid) =>
+        ServiceLoader.Load<LibraryService>().GetByUidAsync(uid);
 
     /// <summary>
     /// Saves a library
@@ -54,27 +69,31 @@ public class LibraryController : Controller
     /// <param name="library">The library to save</param>
     /// <returns>the saved library instance</returns>
     [HttpPost]
-    public Library Save([FromBody] Library library)
+    public async Task<IActionResult> Save([FromBody] Library library)
     {
         if (library?.Flow == null)
-            throw new Exception("ErrorMessages.NoFlowSpecified");
+            return BadRequest("ErrorMessages.NoFlowSpecified");
         if (library.Uid == Guid.Empty)
             library.LastScanned = DateTime.MinValue; // never scanned
         if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
             library.Schedule = new string('1', 672);
 
-        var service = new LibraryService();
+        var service = ServiceLoader.Load<LibraryService>();
         bool nameUpdated = false;
         if (library.Uid != Guid.Empty)
         {
             // existing, check for name change
-            var existing = service.GetByUid(library.Uid);
+            var existing = await service.GetByUidAsync(library.Uid);
             nameUpdated = existing != null && existing.Name != library.Name;
         }
         
         bool newLib = library.Uid == Guid.Empty;
-        service.Update(library);
+        var result  = await service.Update(library, await GetAuditDetails());
+        if (result.Failed(out string error))
+            return BadRequest(error);
 
+        library = result.Value;
+        
         _ = Task.Run(async () =>
         {
             await Task.Delay(1);
@@ -84,10 +103,10 @@ public class LibraryController : Controller
             RefreshCaches();
 
             if (newLib)
-                Rescan(new() { Uids = new[] { library.Uid } });
+                _ = Rescan(new() { Uids = new[] { library.Uid } });
         });
         
-        return library;
+        return Ok(library);
     }
 
     /// <summary>
@@ -105,17 +124,17 @@ public class LibraryController : Controller
     /// <param name="enable">true if enabled, otherwise false</param>
     /// <returns>the updated library instance</returns>
     [HttpPut("state/{uid}")]
-    public Library SetState([FromRoute] Guid uid, [FromQuery] bool enable)
+    public async Task<Library> SetState([FromRoute] Guid uid, [FromQuery] bool enable)
     {
-        var service = new LibraryService();
-        var library = service.GetByUid(uid);
+        var service = ServiceLoader.Load<LibraryService>();
+        var library = await service.GetByUidAsync(uid);
         if (library == null)
             throw new Exception("Library not found.");
         
         if (library.Enabled != enable)
         {
             library.Enabled = enable;
-            service.Update(library);
+            library = await service.Update(library, await GetAuditDetails());
         }
         return library;
     }
@@ -124,20 +143,18 @@ public class LibraryController : Controller
     /// Delete libraries from the system
     /// </summary>
     /// <param name="model">A reference model containing UIDs to delete</param>
-    /// <param name="deleteLibraryFiles">[Optional] if libraries files should also be deleted for this library</param>
     /// <returns>an awaited task,</returns>
     [HttpDelete]
-    public async Task Delete([FromBody] ReferenceModel<Guid> model, [FromQuery] bool deleteLibraryFiles = false)
+    public async Task Delete([FromBody] ReferenceModel<Guid> model)
     {
         if (model?.Uids?.Any() != true)
             return;
-        await new LibraryService().Delete(model.Uids);
-        if (deleteLibraryFiles)
-        {
-            await new LibraryFileService().DeleteFromLibraries(model.Uids);
-        }
+        // delete the files first
+        await ServiceLoader.Load<LibraryFileService>().DeleteByLibrary(model.Uids);
+        // then delete the libraries
+        await ServiceLoader.Load<LibraryService>().Delete(model.Uids, await GetAuditDetails());
 
-        UpdateHasLibraries();
+        await UpdateHasLibraries();
         RefreshCaches();
     }
 
@@ -147,16 +164,16 @@ public class LibraryController : Controller
     /// <param name="model">A reference model containing UIDs to rescan</param>
     /// <returns>an awaited task</returns>
     [HttpPut("rescan")]
-    public void Rescan([FromBody] ReferenceModel<Guid> model)
+    public async Task Rescan([FromBody] ReferenceModel<Guid> model)
     {
-        var service = new LibraryService();
+        var service = ServiceLoader.Load<LibraryService>();
         foreach(var uid in model.Uids)
         {
-            var item = service.GetByUid(uid);
+            var item = await service.GetByUidAsync(uid);
             if (item == null)
                 continue;
             item.LastScanned = DateTime.MinValue;
-            service.Update(item);
+            await service.Update(item, await GetAuditDetails());
         }
 
         _ = Task.Run(async () =>
@@ -167,27 +184,29 @@ public class LibraryController : Controller
         });
     }
 
-    internal void UpdateFlowName(Guid uid, string name)
-    {
-        var service = new LibraryService();
-        var libraries = service.GetAll();
-        foreach (var lib in libraries.Where(x => x.Flow?.Uid == uid))
-        {
-            lib.Flow.Name = name;
-            service.Update(lib);
-        }
-    }
+    /// <summary>
+    /// Reprocess libraries.
+    /// All library files will have their status updated to unprocessed.
+    /// </summary>
+    /// <param name="model">A reference model containing UIDs to reprocessing</param>
+    /// <returns>an awaited task</returns>
+    [HttpPut("reprocess")]
+    public Task Reprocess([FromBody] ReferenceModel<Guid> model)
+        => ServiceLoader.Load<LibraryFileService>().ReprocessByLibraryUid(model.Uids);
 
-    internal void UpdateLastScanned(Guid uid)
+    /// <summary>
+    /// Reset libraries.
+    /// All library files will all be removed and the libraries will be rescanned.
+    /// </summary>
+    /// <param name="model">A reference model containing UIDs to reset</param>
+    /// <returns>an awaited task</returns>
+    [HttpPut("reset")]
+    public async Task Reset([FromBody] ReferenceModel<Guid> model)
     {
-        var service = new LibraryService();
-        var lib = service.GetByUid(uid);
-        if (lib == null)
-            return;
-        lib.LastScanned = DateTime.Now;
-        service.Update(lib, dontIncrementConfigRevision: true);
+        await ServiceLoader.Load<LibraryFileService>().DeleteByLibrary(model.Uids);
+        await Rescan(model);
+        await ClientServiceManager.Instance.UpdateFileStatus();
     }
-
 
     private FileInfo[] GetTemplateFiles() 
         => new DirectoryInfo(DirectoryHelper.TemplateDirectoryLibrary).GetFiles("*.json", SearchOption.AllDirectories);
@@ -201,32 +220,55 @@ public class LibraryController : Controller
     {
         SortedDictionary<string, List<Library>> templates = new(StringComparer.OrdinalIgnoreCase);
         var lstGeneral = new List<Library>();
+        Logger.Instance.ILog("Library Templates Directory: " + DirectoryHelper.TemplateDirectoryLibrary);
+        string generalGroup = Translater.Instant("Templates.Libraries.Groups.General");
         foreach (var tf in GetTemplateFiles())
         {
             try
             {
-                string json = string.Join("\n", System.IO.File.ReadAllText(tf.FullName).Split('\n').Skip(1)); // remove the //path comment
-                json = TemplateHelper.ReplaceWindowsPathIfWindows(json);
-                var jst =JsonSerializer.Deserialize<LibraryTemplate>(json, new JsonSerializerOptions
+                string json = System.IO.File.ReadAllText(tf.FullName);
+                if (json.StartsWith("//"))
+                    json = string.Join("\n", json.Split('\n').Skip(1)); // remove the //path comment
+                json = TemplateHelper.ReplaceMediaWithHomeDirectory(json);
+                // json = TemplateHelper.ReplaceWindowsPathIfWindows(json);
+                var jst = JsonSerializer.Deserialize<LibraryTemplate>(json, new JsonSerializerOptions
                 {
                     AllowTrailingCommas = true,
                     PropertyNameCaseInsensitive = true
                 });
                 string group = jst.Group ?? string.Empty;
+                group = Translater.Instant("Templates.Groups." + CleanForJsonKey(group));
+                if (string.IsNullOrWhiteSpace(group) || group == CleanForJsonKey(jst.Group))
+                    group = jst.Group ?? string.Empty;
+
+                string name = jst.Name;
+                string prefix = "Templates.Libraries." + CleanForJsonKey(jst.Name) + ".";
+                string translateName = Translater.Instant(prefix + "Name");
+                if (string.IsNullOrWhiteSpace(translateName) == false && translateName != "Name")
+                    name = translateName;
+                string description = jst.Description;
+                string translateDescription = Translater.Instant(prefix + "Description");
+                if (string.IsNullOrWhiteSpace(translateDescription) == false && translateDescription != "Description")
+                    description = translateDescription;
+
                 var library = new Library
                 {
                     Enabled = true,
                     FileSizeDetectionInterval = jst.FileSizeDetectionInterval,
                     Filter = jst.Filter ?? string.Empty,
                     ExclusionFilter = jst.ExclusionFilter ?? string.Empty,
-                    Name = jst.Name,
-                    Description = jst.Description,
+                    Extensions = jst.Extensions?.OrderBy(x => x.ToLowerInvariant())?.ToList(),
+                    UseFingerprinting = jst.UseFingerprint,
+                    Name = name,
+                    Description = description,
                     Path = jst.Path,
                     Priority = jst.Priority,
                     ScanInterval = jst.ScanInterval,
-                    ReprocessRecreatedFiles = jst.ReprocessRecreatedFiles
+                    ReprocessRecreatedFiles = jst.ReprocessRecreatedFiles,
+                    Folders = jst.Folders,
+                    UpdateMovedFiles = jst.DontUpdateMovedFiles == false
                 };
-                if (group == "General")
+                if (group == generalGroup)
                     lstGeneral.Add(library);
                 else
                 {
@@ -235,12 +277,15 @@ public class LibraryController : Controller
                     templates[group].Add(library);
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                Logger.Instance.WLog($"Error parsing library template '{tf.FullName}': {ex.Message}");
+            }
         }
 
         var dict = new Dictionary<string, List<Library>>();
         if(lstGeneral.Any())
-            dict.Add("General", lstGeneral.OrderBy(x => x.Name.ToLowerInvariant()).ToList());
+            dict.Add(generalGroup, lstGeneral.OrderBy(x => x.Name.ToLowerInvariant()).ToList());
         foreach (var kv in templates)
         {
             if(kv.Value.Any())
@@ -251,13 +296,21 @@ public class LibraryController : Controller
     }
 
     /// <summary>
+    /// Cleans a value for a json key
+    /// </summary>
+    /// <param name="value">the text value</param>
+    /// <returns>the cleaned json key</returns>
+    private string CleanForJsonKey(string value)
+        => Regex.Replace(value, @"[\s/\\]", string.Empty);
+
+    /// <summary>
     /// Rescans enabled libraries and waits for them to be scanned
     /// </summary>
     [HttpPost("rescan-enabled")]
-    public void RescanEnabled()
+    public async Task RescanEnabled()
     {
-        var service = new LibraryService();
-        var libs = service.GetAll().Where(x => x.Enabled).Select(x => x.Uid).ToArray();
-        Rescan(new ReferenceModel<Guid> { Uids = libs });
+        var service = ServiceLoader.Load<LibraryService>();
+        var libs = (await service.GetAllAsync()).Where(x => x.Enabled).Select(x => x.Uid).ToArray();
+        await Rescan(new ReferenceModel<Guid> { Uids = libs });
     }
 }

@@ -1,12 +1,11 @@
 using System.Text.RegularExpressions;
 using FileFlows.Plugin.Models;
+using System.Runtime.InteropServices;
+using System.Text.Json;
+using FileFlows.Plugin.Helpers;
+using FileFlows.Plugin.Services;
 
 namespace FileFlows.Plugin;
-
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.Json;
 
 public class NodeParameters
 {
@@ -15,6 +14,11 @@ public class NodeParameters
     /// Note: This maybe a mapped filename if executed on a external processing node
     /// </summary>
     public string FileName { get; init; }
+    
+    /// <summary>
+    /// Gets or sets the full filename as it appears in the library
+    /// </summary>
+    public string LibraryFileName { get; init; }
 
     /// <summary>
     /// Gets or sets the file relative to the library path
@@ -27,6 +31,12 @@ public class NodeParameters
     /// to change the file path this should be updated too
     /// </summary>
     public string WorkingFile { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets a another processing node to reprocess this file on.
+    /// This will be marked for reprocessing once completed.
+    /// </summary>
+    public ObjectReference ReprocessNode { get; set; }
 
     /// <summary>
     /// Gets the working file shortname
@@ -68,6 +78,22 @@ public class NodeParameters
     /// Gets or sets the result of the flow
     /// </summary>
     public NodeResult Result { get; set; } = NodeResult.Success;
+    
+    /// <summary>
+    /// Gets or sets why the current executing flow element failed
+    /// This is cleared whenever a new flow element starts execution 
+    /// </summary>
+    public string FailureReason { get; set; }
+    
+    /// <summary>
+    /// Gets the processing node this is running on
+    /// </summary>
+    public ObjectReference Node { get; init; }
+    
+    /// <summary>
+    /// Gets or sets the library this file is from
+    /// </summary>
+    public ObjectReference Library { get; init; }
 
     /// <summary>
     /// Gets or sets the parameters used in the flow execution
@@ -85,9 +111,39 @@ public class NodeParameters
     public Func<string, string>? GetToolPathActual { get; set; }
     
     /// <summary>
-    /// Gets or sets the action that records statistics
+    /// Gets or sets the function responsible for getting if a plugin is available
     /// </summary>
-    public Action<string, object>? StatisticRecorder { get; set; }
+    public Func<string, bool>? HasPluginActual { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the actoin responsible for logging an image
+    /// </summary>
+    public Action<string>? LogImageActual { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the function responsible for rendering a template
+    /// </summary>
+    public Func<string, string>? RenderTemplate { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the action that records running totals statistics
+    /// </summary>
+    public Action<string, string>? StatisticRecorderRunningTotals { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the action that records average statistics
+    /// </summary>
+    public Action<string, int>? StatisticRecorderAverage { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the action that records additional info
+    /// </summary>
+    public Action<string, object, int, TimeSpan?>? AdditionalInfoRecorder { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the notification callback
+    /// </summary>
+    public ScriptExecutionArgs.NotificationDelegate NotificationCallback { get; set; }
 
     /// <summary>
     /// Gets or sets the function responsible for getting plugin settings JSON configuration
@@ -103,6 +159,21 @@ public class NodeParameters
     /// Gets or sets the function responsible for unmapping a path
     /// </summary>
     public Func<string, string>? PathUnMapper { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the function responsible for uploading a file
+    /// </summary>
+    public Func<string, string, (bool Success, string Error)>? UploadFile { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the function responsible for deleting a remote directory
+    /// </summary>
+    public Func<string, bool, string[], bool>? DeleteRemote { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the function responsible for deleting a remote directory
+    /// </summary>
+    public Func<string[], string, string, Result<bool>>? SendEmail { get; set; }
 
     /// <summary>
     /// Gets or sets a goto flow 
@@ -113,6 +184,11 @@ public class NodeParameters
     /// Gets or sets if a directory is being processed instead of a file
     /// </summary>
     public bool IsDirectory { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the original file that started this is a directory instead of a file
+    /// </summary>
+    public bool OriginalIsDirectory { get; }
     
     /// <summary>
     /// Gets or sets the path to the library this library file belongs to
@@ -143,6 +219,11 @@ public class NodeParameters
     /// Gets or sets if this node is running on a ARM base platform
     /// </summary>
     public bool IsArm { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the file is a remote file and needs to be downloaded from the server then copied back to it
+    /// </summary>
+    public bool IsRemote { get; set; }
 
     /// <summary>
     /// Gets or sets the temporary path for this node
@@ -184,13 +265,13 @@ public class NodeParameters
     /// <summary>
     /// Gets or sets the process helper
     /// </summary>
-    public ProcessHelper Process { get; set; }
+    public IProcessHelper Process { get; set; }
 
     /// <summary>
     /// if this is af faked instance
     /// </summary>
     private bool Fake = false;
-
+    
     /// <summary>
     /// Gets or sets the original metadata for the input file
     /// </summary>
@@ -200,6 +281,11 @@ public class NodeParameters
     /// Gets or sets the metadata for the file
     /// </summary>
     public Dictionary<string, object> Metadata { get; private set; }
+    
+    /// <summary>
+    /// Gets if the license level of this instance
+    /// </summary>
+    public LicenseLevel LicenseLevel { get; init; }
 
     /// <summary>
     /// Sets the metadata for the file
@@ -212,7 +298,21 @@ public class NodeParameters
         else
             Metadata = metadata;
     }
-
+    
+    /// <summary>
+    /// Gets or sets the file service to use
+    /// </summary>
+    public IFileService FileService { get; init; }
+    
+    /// <summary>
+    /// Gets the math helper 
+    /// </summary>
+    public MathHelper MathHelper { get; init; }
+    
+    /// <summary>
+    /// Gets the string helper 
+    /// </summary>
+    public StringHelper StringHelper { get; init; }
 
     /// <summary>
     /// Constructs a node parameters instance used by the flow runner
@@ -221,13 +321,18 @@ public class NodeParameters
     /// <param name="logger">the logger used during execution</param>
     /// <param name="isDirectory">if this is executing against a directory instead of a file</param>
     /// <param name="libraryPath">the path of the library this file exists in</param>
-    public NodeParameters(string filename, ILogger logger, bool isDirectory, string libraryPath)
+    /// <param name="fileService">the FileService to user</param>
+    public NodeParameters(string? filename, ILogger logger, bool isDirectory, string? libraryPath, IFileService fileService)
     {
         Fake = string.IsNullOrEmpty(filename);
         this.IsDirectory = isDirectory;
+        this.OriginalIsDirectory = isDirectory;
         this.FileName = filename;
         this.LibraryPath = libraryPath;
         this.WorkingFile = filename;
+        this.FileService = fileService;
+        this.MathHelper = new(logger);
+        this.StringHelper = new(logger);
         if (Fake == false)
         {
             try
@@ -239,7 +344,7 @@ public class NodeParameters
         this.RelativeFile = string.Empty;
         this.TempPath = string.Empty;
         this.Logger = logger;
-        InitFile(filename);
+        //InitFile(filename);
         this.Process = new ProcessHelper(logger, this.Fake);
     }
 
@@ -300,6 +405,34 @@ public class NodeParameters
             return path;
         return PathUnMapper(path);
     }
+    
+    /// <summary>
+    /// Checks if a plugin is available
+    /// </summary>
+    /// <param name="name">The name of the plugin</param>
+    /// <returns>true if the plugin is available</returns>
+    public bool HasPlugin(string name)
+    {
+        if (HasPluginActual == null) return false;
+        return HasPluginActual(name);
+    }
+
+    /// <summary>
+    /// Logs an image
+    /// </summary>
+    /// <param name="path">the path to the image</param>
+    public void LogImage(string path)
+        => LogImageActual?.Invoke(path);
+    
+    /// <summary>
+    /// Gets the archive helper
+    /// </summary>
+    public IImageHelper ImageHelper { get; set; }
+    
+    /// <summary>
+    /// Gets the archive  helper
+    /// </summary>
+    public IArchiveHelper ArchiveHelper { get; set; }
 
     private bool initDone = false;
     
@@ -307,54 +440,70 @@ public class NodeParameters
     /// Initializes a file ane updates the variables to that file information
     /// </summary>
     /// <param name="filename">the name of the file to initialize</param>
-    private void InitFile(string filename)
+    public void InitFile(string filename)
     {
         if (Fake) return;
         try
         {
             if (IsDirectory)
             {
+                Variables.TryAdd("folder.OriginalName", LibraryFileName);
                 var di = new DirectoryInfo(filename);
-                UpdateVariables(new Dictionary<string, object> {
+                UpdateVariables(new Dictionary<string, object>
+                {
                     { "folder.Name", di.Name ?? "" },
                     { "folder.FullName", di.FullName ?? "" }
                 });
-                if(initDone == false)
+                if (initDone == false)
                 {
                     initDone = true;
                     var diOriginal = new DirectoryInfo(this.FileName);
-                    UpdateVariables(new Dictionary<string, object> {
+                    UpdateVariables(new Dictionary<string, object>
+                    {
                         { "folder.Date", diOriginal.CreationTime },
                         { "folder.Date.Year", diOriginal.CreationTime.Year },
                         { "folder.Date.Month", diOriginal.CreationTime.Month },
-                        { "folder.Date.Day", diOriginal.CreationTime.Day},
+                        { "folder.Date.Day", diOriginal.CreationTime.Day },
 
                         { "folder.Orig.Name", diOriginal.Name ?? "" },
                         { "folder.Orig.FullName", diOriginal.FullName ?? "" },
                     });
-
+                    
+                    if (FileService.DirectorySize(diOriginal.FullName).Success(out var origSize))
+                        Variables["folder.Orig.Size"] = origSize;
                 }
             }
             else
             {
-                var fi = new FileInfo(filename);
-                UpdateVariables(new Dictionary<string, object> {
-                    { "ext", fi.Extension ?? "" },
+                Variables.TryAdd("file.OriginalName", LibraryFileName);
+                var result = FileService.FileInfo(filename);
+                if (result.IsFailed)
+                    return;
+                var fi = result.Value;
+                if (fi == null)
+                    return;
+                UpdateVariables(new Dictionary<string, object>
+                {
+                    { "ext", fi.Extension },
                     { "file.Name", fi.Name ?? "" },
-                    { "file.NameNoExtension", Path.GetFileNameWithoutExtension(fi.Name ?? "") },
+                    { "file.NameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fi.FullName) ?? string.Empty },
                     { "file.FullName", fi.FullName ?? "" },
                     { "file.Extension", fi.Extension ?? "" },
-                    { "file.Size", fi.Exists ? fi.Length : 0 },
+                    { "file.Size", fi.Length },
 
-                    { "folder.Name", fi.Directory?.Name ?? "" },
-                    { "folder.FullName", fi.DirectoryName ?? "" },
+                    { "folder.Name", FileHelper.GetDirectoryName(fi.FullName) ?? "" },
+                    { "folder.FullName", fi.Directory ?? "" },
                 });
 
-                if(initDone == false)
+                if (initDone == false)
                 {
                     initDone = true;
-                    var fiOriginal = new FileInfo(this.FileName);
-                    UpdateVariables(new Dictionary<string, object> {
+                    var fiOrigResult = FileService.FileInfo(this.FileName);
+                    if (fiOrigResult.IsFailed)
+                        return;
+                    var fiOriginal = fiOrigResult.Value;
+                    UpdateVariables(new Dictionary<string, object>
+                    {
                         { "file.Create", fiOriginal.CreationTime },
                         { "file.Create.Year", fiOriginal.CreationTime.Year },
                         { "file.Create.Month", fiOriginal.CreationTime.Month },
@@ -365,15 +514,19 @@ public class NodeParameters
                         { "file.Modified.Month", fiOriginal.LastWriteTime.Month },
                         { "file.Modified.Day", fiOriginal.LastWriteTime.Day },
 
-                        { "file.Orig.Extension", fiOriginal.Extension ?? "" },
-                        { "file.Orig.FileName", fiOriginal.Name ?? "" },
-                        { "file.Orig.FileNameNoExtension", Path.GetFileNameWithoutExtension(fiOriginal.Name ?? "") },
-                        { "file.Orig.FullName", fiOriginal.FullName ?? "" },
-                        { "file.Orig.Size", fiOriginal.Exists? fiOriginal.Length: 0 },
+                        { "file.Orig.Extension", fiOriginal.Extension ?? string.Empty },
+                        { "file.Orig.FileName", fiOriginal.Name ?? string.Empty },
+                        { "file.Orig.Name", fiOriginal.Name ?? string.Empty },
+                        { "file.Orig.FileNameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
+                        { "file.Orig.NameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
+                        { "file.Orig.FullName", fiOriginal.FullName ?? string.Empty },
+                        { "file.Orig.Size", fiOriginal.Length },
 
-                        { "folder.Orig.Name", fiOriginal.Directory?.Name ?? "" },
-                        { "folder.Orig.FullName", fiOriginal.DirectoryName ?? "" }
+                        { "folder.Orig.Name", FileHelper.GetDirectoryName(fiOriginal.FullName) ?? string.Empty },
+                        { "folder.Orig.FullName", fiOriginal.Directory ?? "" }
                     });
+                    if (FileService.DirectorySize(fiOriginal.Directory).Success(out var origSize))
+                        Variables["folder.Orig.Size"] = origSize;
 
                     if (string.IsNullOrEmpty(this.LibraryPath) == false &&
                         fiOriginal.FullName.StartsWith(this.LibraryPath))
@@ -385,8 +538,13 @@ public class NodeParameters
                     }
                 }
             }
+            if (FileService.DirectorySize(filename).Success(out var size))
+                Variables["folder.Size"] = size;
         }
-        catch (Exception) { }
+        catch (Exception ex)
+        {
+            Logger?.ELog("Failed to init file: " + ex.Message + Environment.NewLine + ex.StackTrace);
+        }
 
     }
 
@@ -440,7 +598,7 @@ public class NodeParameters
 
         if (isDirectory == false)
         {
-            this.WorkingFileSize = new FileInfo(filename).Length;
+            this.WorkingFileSize = FileService.FileSize(filename).ValueOrDefault;
             Logger?.ILog("New working file size: " + this.WorkingFileSize);
         }
 
@@ -455,7 +613,8 @@ public class NodeParameters
             dontDelete = this.WorkingFile.ToLowerInvariant().StartsWith(TempPath.ToLowerInvariant()) == false;
         }
 
-        if (isDirectory == false && this.WorkingFile != this.FileName)
+        if (isDirectory == false && this.WorkingFile != this.FileName
+            && FileHelper.IsUrl(this.WorkingFile) == false)
         {
             string fileToDelete = this.WorkingFile;
             if (dontDelete == false)
@@ -464,15 +623,11 @@ public class NodeParameters
                 _ = Task.Run(async () =>
                 {
                     await Task.Delay(2_000); // wait 2 seconds for the file to be released if used
-                    try
-                    {
-                        File.Delete(fileToDelete);
+                    var result = FileService.FileDelete(fileToDelete);
+                    if (result.IsFailed)
+                        Logger?.WLog("Failed to delete temporary file: " + result.Error);
+                    else
                         Logger.ILog("Deleting old working file: " + fileToDelete);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger?.WLog("Failed to delete temporary file: " + ex.Message + Environment.NewLine + ex.StackTrace);
-                    }
                 });
             }
         }
@@ -506,110 +661,35 @@ public class NodeParameters
     /// <param name="value">The value to set</param>
     public void SetParameter(string name, object value)
     {
-        if (Parameters.ContainsKey(name) == false)
-            Parameters[name] = value;
-        else
+        if (Parameters.TryAdd(name, value) == false)
             Parameters.Add(name, value);
     }
-
     
     /// <summary>
     /// Moves the working file
     /// </summary>
     /// <param name="destination">the destination to move the file</param>
     /// <returns>true if successfully moved</returns>
-    public bool MoveFile(string destination)
+    public Result<bool> MoveFile(string destination)
     {
         if (Fake) return true;
+        
+        Logger?.ILog("MoveFile: " + WorkingFile);
+        Logger?.ILog("Destination: " + destination);
 
-        FileInfo file = new FileInfo(destination);
-        // turning this of as per https://github.com/revenz/FileFlows/issues/79
-        // if (string.IsNullOrEmpty(file.Extension) == false)
-        // {
-        //     // just ensures extensions are lowercased
-        //     destination = new FileInfo(file.FullName.Substring(0, file.FullName.LastIndexOf(file.Extension)) + file.Extension.ToLower()).FullName;
-        // }
-
-        Logger?.ILog("About to move file to: " + destination);
-        destination = MapPath(destination);
-        Logger?.ILog("Mapped destination path: " + destination);
-
-        bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-        if (isWindows)
+        var result = FileService.FileMove(WorkingFile, destination, true);
+        if (result.Failed(out var error))
+            return Result<bool>.Fail(error);
+        
+        Logger?.ILog("File moved to: " + destination);
+        this.WorkingFile = destination;
+        try
         {
-            if (destination.ToLower() == WorkingFile?.ToLower())
-            {
-                Logger?.ILog("Source and destination are the same, skipping move");
-                return true;
-            }
+            // this can fail if the file is then moved really quickly by another process, radarr/sonarr etc
+            Logger?.ILog("Initing new moved file");
+            InitFile(destination);
         }
-        else
-        {
-            // linux, is case sensitive
-            if(destination == WorkingFile)
-            {
-                Logger?.ILog("Source and destination are the same, skipping move");
-                return true;
-            }
-        }
-
-
-        bool moved = false;
-        long fileSize = new FileInfo(WorkingFile).Length;
-        Task task = Task.Run(() =>
-        {
-            try
-            {
-
-                var fileInfo = new FileInfo(destination);
-                if (fileInfo.Exists)
-                    fileInfo.Delete();
-                else
-                    CreateDirectoryIfNotExists(fileInfo?.DirectoryName);
-
-                bool isTempFile = this.WorkingFile.ToLower().StartsWith(this.TempPath.ToLower()) == true;
-
-                Logger?.ILog($"Moving file: \"{WorkingFile}\" to \"{destination}\"");                    
-                File.Move(WorkingFile, destination, true);
-                Logger?.ILog("File moved successfully");
-
-                if (isWindows == false && isTempFile)
-                    Helpers.FileHelper.ChangeOwner(Logger, destination, file: true);
-
-                this.WorkingFile = destination;
-                try
-                {
-                    // this can fail if the file is then moved really quickly by another process, radarr/sonarr etc
-                    Logger?.ILog("Initing new moved file");
-                    InitFile(destination);
-                }
-                catch (Exception) { }
-
-                moved = true;
-            }
-            catch (Exception ex)
-            {
-                Logger?.ELog("Failed to move file: " + ex.Message);
-            }
-        });
-
-        while (task.IsCompleted == false)
-        {
-            long currentSize = 0;
-            var destFileInfo = new FileInfo(destination);
-            if (destFileInfo.Exists)
-                currentSize = destFileInfo.Length;
-
-            if (PartPercentageUpdate != null && fileSize > 0)
-                PartPercentageUpdate(currentSize / fileSize * 100);
-            Thread.Sleep(50);
-        }
-
-        if (moved == false)
-            return false;
-
-        if (PartPercentageUpdate != null)
-            PartPercentageUpdate(100);
+        catch (Exception) { }
         return true;
     }
 
@@ -620,116 +700,33 @@ public class NodeParameters
     /// <param name="source">the source file</param>
     /// <param name="destination">the destination file</param>
     /// <param name="updateWorkingFile"></param>
-    /// <returns>whether or not the file was copied successfully</returns>
-    public bool CopyFile(string source, string destination, bool updateWorkingFile = false)
+    /// <returns>whether the file was copied successfully</returns>
+    public Result<bool> CopyFile(string source, string destination, bool updateWorkingFile = false)
     {
         if (Fake) return true;
 
         if (string.IsNullOrWhiteSpace(source))
-        {
-            Logger?.WLog("CopyFile.Source was not supplied");
-            return false;
-        }
+            return Result<bool>.Fail("CopyFile.Source was not supplied");
+        
         if (string.IsNullOrWhiteSpace(destination))
-        {
-            Logger?.WLog("CopyFile.Destination was not supplied");
-            return false;
-        }
-        
-        string originalSource = source;
-        source = MapPath(source);
-        if(originalSource != source)
-            Logger?.ILog($"Mapped path from '{originalSource}' to '{source}'");
+            return Result<bool>.Fail("CopyFile.Destination was not supplied");
 
-        string originalDestination = destination;
-        destination = MapPath(destination);
-        if(originalDestination != destination)
-            Logger?.ILog($"Mapped path from '{originalDestination}' to '{destination}'");
+        var result = FileService.FileCopy(source, destination, true);
+        if (result.Failed(out var error))
+            return Result<bool>.Fail(error);
         
-        FileInfo file = new FileInfo(destination);
-        
-        bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-        if (isWindows)
+        if(updateWorkingFile)
         {
-            if (destination.ToLower() == source.ToLower())
-            {
-                Logger?.ILog("Source and destination are the same, skipping move");
-                return true;
-            }
-        }
-        else
-        {
-            // linux, is case sensitive
-            if (destination == source)
-            {
-                Logger?.ILog("Source and destination are the same, skipping move");
-                return true;
-            }
-        }
-
-
-        bool copied = false;
-        long fileSize = new FileInfo(source).Length;
-        Task task = Task.Run(() =>
-        {
+            this.WorkingFile = destination;
             try
             {
-
-                var fileInfo = new FileInfo(destination);
-                if (fileInfo.Exists)
-                    fileInfo.Delete();
-                else
-                    CreateDirectoryIfNotExists(fileInfo?.DirectoryName);
-
-                bool isTempFile = source.ToLower().StartsWith(this.TempPath.ToLower()) == true;
-
-                Logger?.ILog($"Copying file: \"{source}\" to \"{destination}\"");
-                File.Copy(source, destination, true);
-                Logger?.ILog("File copied successfully");
-
-                if (isWindows == false && isTempFile)
-                    Helpers.FileHelper.ChangeOwner(Logger, destination, file: true);
-
-                if (updateWorkingFile == false)
-                {
-                    copied = true;
-                    return;
-                }
-
-                this.WorkingFile = destination;
-                try
-                {
-                    // this can fail if the file is then moved really quickly by another process, radarr/sonarr etc
-                    Logger?.ILog("Initing new copied file");
-                    InitFile(destination);
-                }
-                catch (Exception) { }
-
-                copied = true;
+                // this can fail if the file is then moved really quickly by another process, radarr/sonarr etc
+                Logger?.ILog("Initing new copied file");
+                InitFile(destination);
             }
-            catch (Exception ex)
-            {
-                Logger?.ELog("Failed to move file: " + ex.Message);
-            }
-        });
-
-        while (task.IsCompleted == false)
-        {
-            long currentSize = 0;
-            var destFileInfo = new FileInfo(destination);
-            if (destFileInfo.Exists)
-                currentSize = destFileInfo.Length;
-
-            if (PartPercentageUpdate != null && fileSize > 0)
-                PartPercentageUpdate(currentSize / fileSize * 100);
-            Thread.Sleep(50);
+            catch (Exception) { }
         }
 
-        if (copied == false)
-            return false;
-
-        if (PartPercentageUpdate != null)
-            PartPercentageUpdate(100);
         return true;
     }
 
@@ -773,20 +770,19 @@ public class NodeParameters
     /// <param name="stripMissing">if missing variables should be removed</param>
     /// <param name="cleanSpecialCharacters">if special characters (eg directory path separator) should be replaced</param>
     /// <returns>the string with the variables replaced</returns>
-    public string ReplaceVariables(string input, bool stripMissing = false, bool cleanSpecialCharacters = false) => VariablesHelper.ReplaceVariables(input, Variables, stripMissing, cleanSpecialCharacters);
+    public string ReplaceVariables(string input, bool stripMissing = false, bool cleanSpecialCharacters = false) 
+        => VariablesHelper.ReplaceVariables(input, Variables, stripMissing, cleanSpecialCharacters);
 
-
+    
     /// <summary>
     /// Gets a safe filename with any reserved characters removed or replaced
     /// </summary>
     /// <param name="fullFileName">the full filename of the file to make safe</param>
     /// <returns>the safe filename</returns>
-    public FileInfo GetSafeName(string fullFileName)
+    public string GetSafeName(string fullFileName)
     {
-        var dest = new FileInfo(fullFileName);
-
-        string destName = dest.Name;
-        string destDir = dest?.DirectoryName ?? "";
+        string destName = FileHelper.GetShortFileName(fullFileName);
+        string destDir = FileHelper.GetDirectory(fullFileName);
 
         // replace these here to avoid double spaces in name
         if (Path.GetInvalidFileNameChars().Contains(':'))
@@ -812,9 +808,13 @@ public class NodeParameters
                     destDir = destDir.Replace(c.ToString(), "");
             }
         }
-        // put the drive letter back if it was replaced iwth a ' - '
-        destDir = System.Text.RegularExpressions.Regex.Replace(destDir, @"^([a-z]) \- ", "$1:", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        return new FileInfo(Path.Combine(destDir, destName));
+        // put the drive letter back if it was replaced with a ' - '
+        destDir = Regex.Replace(destDir, @"^([a-z]) \- ", "$1:", RegexOptions.IgnoreCase);
+        string seperator = destDir.Contains("\\") ? "\\" : "/";
+        if (destDir.EndsWith(seperator))
+            destDir = destDir[..^1];
+
+        return destDir + seperator + destName;
     }
 
     /// <summary>
@@ -830,7 +830,7 @@ public class NodeParameters
         if (filename.StartsWith(TempPath))
             return filename;
         string dest = Path.Combine(TempPath, new FileInfo(filename).Name);
-        System.IO.File.Copy(filename, dest);
+        File.Copy(filename, dest);
         return dest;
     }
 
@@ -842,7 +842,7 @@ public class NodeParameters
     public bool CreateDirectoryIfNotExists(string directory)
     {
         if (Fake) return true;
-        return Helpers.FileHelper.CreateDirectoryIfNotExists(Logger, directory);
+        return FileService.DirectoryCreate(directory).ValueOrDefault;
     }
 
     /// <summary>
@@ -967,11 +967,30 @@ public class NodeParameters
     }
 
     /// <summary>
-    /// Records a statistic with the server
+    /// Records a running totals statistic with the server
     /// </summary>
     /// <param name="name">the name of the statistic</param>
     /// <param name="value">the value of the statistic</param>
-    public void RecordStatistic(string name, object value) => StatisticRecorder?.Invoke(name, value);
+    public void RecordStatisticRunningTotals(string name, string value) 
+        => StatisticRecorderRunningTotals?.Invoke(name, value);
+
+    /// <summary>
+    /// Records a average statistic with the server
+    /// </summary>
+    /// <param name="name">the name of the statistic</param>
+    /// <param name="value">the value of the statistic</param>
+    public void RecordStatisticAverage(string name, int value) 
+        => StatisticRecorderAverage?.Invoke(name, value);
+    
+    /// <summary>
+    /// Records a memory statistics that is not saved anywhere and will expire
+    /// </summary>
+    /// <param name="name">the name of the statistic</param>
+    /// <param name="value">the value of the statistic</param>
+    /// <param name="steps">the number of steps to keep this info around for</param>
+    /// <param name="expiry">expiry time of this info</param>
+    public void RecordAdditionalInfo(string name, object value, int steps, TimeSpan? expiry) 
+        => AdditionalInfoRecorder?.Invoke(name, value, steps, expiry);
 }
 
 

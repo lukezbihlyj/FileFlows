@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using FileFlows.Client.Components.Inputs;
 using FileFlows.Plugin;
@@ -16,7 +17,7 @@ public partial class CustomDashboard
 
     private async Task AddWidgetDialog()
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         if (DoesntHaveWidget(FileFlows.Shared.Widgets.CpuUsage.WD_UID))
         {
@@ -71,8 +72,7 @@ public partial class CustomDashboard
             });
         }
 
-        if (App.Instance.FileFlowsSystem.ExternalDatabase &&
-            DoesntHaveWidget(FileFlows.Shared.Widgets.OpenDatabaseConnections.WD_UID))
+        if (Profile.LicensedFor(LicenseFlags.ExternalDatabase) && DoesntHaveWidget(FileFlows.Shared.Widgets.OpenDatabaseConnections.WD_UID))
         {
             fields.Add(new ElementField
             {
@@ -81,6 +81,19 @@ public partial class CustomDashboard
                 Parameters = new Dictionary<string, object>
                 {
                     { nameof(InputWidget.Type), WidgetType.TimeSeries }
+                }
+            });
+        }
+
+        if (DoesntHaveWidget(FileFlows.Shared.Widgets.CurrentRevision.WD_UID))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Widget,
+                Name = nameof(FileFlows.Shared.Widgets.CurrentRevision),
+                Parameters = new Dictionary<string, object>
+                {
+                    { nameof(InputWidget.Type), WidgetType.Counter }
                 }
             });
         }
@@ -120,6 +133,19 @@ public partial class CustomDashboard
                 Parameters = new Dictionary<string, object>
                 {
                     { nameof(InputWidget.Type), WidgetType.LibraryFileTable }
+                }
+            });
+        }
+
+        if (DoesntHaveWidget(FileFlows.Shared.Widgets.ProcessingNodes.WD_UID))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Widget,
+                Name = nameof(FileFlows.Shared.Widgets.ProcessingNodes),
+                Parameters = new Dictionary<string, object>
+                {
+                    { nameof(InputWidget.Type), WidgetType.ProcessingNodes }
                 }
             });
         }
@@ -175,7 +201,42 @@ public partial class CustomDashboard
                 }
             });
         }
-
+        if (DoesntHaveWidget(FileFlows.Shared.Widgets.Encoders.WD_UID))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Widget,
+                Name = nameof(FileFlows.Shared.Widgets.Encoders),
+                Parameters = new Dictionary<string, object>
+                {
+                    { nameof(InputWidget.Type), WidgetType.TreeMap }
+                }
+            });
+        }
+        if (DoesntHaveWidget(FileFlows.Shared.Widgets.Decoders.WD_UID))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Widget,
+                Name = nameof(FileFlows.Shared.Widgets.Decoders),
+                Parameters = new Dictionary<string, object>
+                {
+                    { nameof(InputWidget.Type), WidgetType.TreeMap }
+                }
+            });
+        }
+        if (DoesntHaveWidget(FileFlows.Shared.Widgets.DecoderParameters.WD_UID))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Widget,
+                Name = nameof(FileFlows.Shared.Widgets.DecoderParameters),
+                Parameters = new Dictionary<string, object>
+                {
+                    { nameof(InputWidget.Type), WidgetType.TotalsTable }
+                }
+            });
+        }
         if (DoesntHaveWidget(FileFlows.Shared.Widgets.ProcessingTimes.WD_UID))
         {
             fields.Add(new ElementField
@@ -215,6 +276,19 @@ public partial class CustomDashboard
             });
         }
 
+        if (DoesntHaveWidget(FileFlows.Shared.Widgets.AudioContainers.WD_UID))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Widget,
+                Name = nameof(FileFlows.Shared.Widgets.AudioContainers),
+                Parameters = new Dictionary<string, object>
+                {
+                    { nameof(InputWidget.Type), WidgetType.PieChart }
+                }
+            });
+        }
+        
         if (DoesntHaveWidget(FileFlows.Shared.Widgets.VideoResolution.WD_UID))
         {
             fields.Add(new ElementField
@@ -277,7 +351,7 @@ public partial class CustomDashboard
             });
         }
         
-        var result = await Editor.Open(new()
+        await Editor.Open(new()
         {
             TypeName = "Pages.Widget", Title = "Pages.Widget.Title", Fields = fields, SaveLabel = "Labels.Add",
             SaveCallback =
@@ -311,6 +385,12 @@ public partial class CustomDashboard
                             case nameof(OpenDatabaseConnections):
                                 newWidgets.Add(CreateNewWidgetModel(OpenDatabaseConnections.WD_UID, 3, 1));
                                 break;
+                            case nameof(CurrentRevision):
+                                newWidgets.Add(CreateNewWidgetModel(CurrentRevision.WD_UID, 3, 1));
+                                break;
+                            case nameof(ProcessingNodes):
+                                newWidgets.Add(CreateNewWidgetModel(ProcessingNodes.WD_UID, 3, 1));
+                                break;
                             case nameof(Processing):
                                 newWidgets.Add(CreateNewWidgetModel(Processing.WD_UID, 12, 1));
                                 break;
@@ -332,11 +412,23 @@ public partial class CustomDashboard
                             case nameof(AudioCodecs):
                                 newWidgets.Add(CreateNewWidgetModel(AudioCodecs.WD_UID, 6, 2));
                                 break;
+                            case nameof(Encoders):
+                                newWidgets.Add(CreateNewWidgetModel(Encoders.WD_UID, 6, 2));
+                                break;
+                            case nameof(Decoders):
+                                newWidgets.Add(CreateNewWidgetModel(Decoders.WD_UID, 6, 2));
+                                break;
+                            case nameof(DecoderParameters):
+                                newWidgets.Add(CreateNewWidgetModel(DecoderParameters.WD_UID, 6, 2));
+                                break;
                             case nameof(ProcessingTimes):
                                 newWidgets.Add(CreateNewWidgetModel(ProcessingTimes.WD_UID, 6, 2));
                                 break;
                             case nameof(VideoContainers):
                                 newWidgets.Add(CreateNewWidgetModel(VideoContainers.WD_UID, 4, 2));
+                                break;
+                            case nameof(AudioContainers):
+                                newWidgets.Add(CreateNewWidgetModel(AudioContainers.WD_UID, 4, 2));
                                 break;
                             case nameof(VideoResolution):
                                 newWidgets.Add(CreateNewWidgetModel(VideoResolution.WD_UID, 4, 2));

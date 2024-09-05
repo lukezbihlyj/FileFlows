@@ -1,5 +1,6 @@
-﻿using FileFlows.Server.Controllers;
+﻿using System.IO.Compression;
 using FileFlows.Server.Services;
+using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Helpers;
@@ -24,11 +25,11 @@ public class PluginScanner
         var pluginDir = GetPluginDirectory();
         Logger.Instance.DLog("Plugin path:" + pluginDir);
 
-        if (Program.Docker)
+        if (Application.Docker)
             EnsureDefaultsExist(pluginDir);
 
         var service = new PluginService();
-        var dbPluginInfos = service.GetAll().OrderBy(x => x.Name).ToList();
+        var dbPluginInfos = service.GetAllAsync().Result.OrderBy(x => x.Name).ToList();
 
         List<string> installed = new List<string>();
         var options = new JsonSerializerOptions
@@ -36,7 +37,8 @@ public class PluginScanner
             Converters = { new Shared.Json.ValidatorConverter() }
         };
 
-        List<string> langFiles = new List<string>();
+        // dictionary of languages index by their language code
+        Dictionary<string, List<string>> langFiles = new();
 
         if(Directory.Exists(pluginDir) == false)
         {
@@ -76,13 +78,19 @@ public class PluginScanner
                 var langEntry = zf.GetEntry("en.json");
                 if (langEntry != null)
                 {
+                    // older plugin
                     using var srLang = new StreamReader(langEntry.Open());
-                    langFiles.Add(srLang.ReadToEnd());
+                    if (langFiles.ContainsKey("en") == false)
+                        langFiles["en"] = new ();
+                    langFiles["en"].Add(srLang.ReadToEnd());
+                }
+                else
+                {
+                    // get all files in the i18n directory and read them
+                    ExtractLanguageFilesFromZip(zf, langFiles);
                 }
 
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-                PluginInfo pi = JsonSerializer.Deserialize<PluginInfo>(json, options);
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+                PluginInfo? pi = JsonSerializer.Deserialize<PluginInfo>(json, options);
                 if (pi == null)
                 {
                     Logger.Instance?.WLog("Unable to parse plugininfo from file: " + ffplugin);
@@ -105,17 +113,65 @@ public class PluginScanner
                 bool isNew = plugin == null;
                 plugin ??= new();
                 installed.Add(pi.Name);
+
+                bool isDifferent = false;
+                
                 plugin.Uid = pi.Uid;
-                plugin.PackageName = pi.PackageName;
-                plugin.Version = pi.Version;
-                plugin.DateModified = DateTime.Now;
-                plugin.Deleted = false;
-                plugin.Elements = pi.Elements;
-                plugin.Authors = pi.Authors;
-                plugin.Url = pi.Url;
-                plugin.Description = pi.Description;
-                plugin.Settings = pi.Settings;
-                plugin.HasSettings = pi.Settings?.Any() == true;
+                if (isNew || plugin.PackageName != pi.PackageName)
+                {
+                    plugin.PackageName = pi.PackageName;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Name != pi.Name)
+                {
+                    plugin.Name = pi.Name;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Version != pi.Version)
+                {
+                    plugin.Version = pi.Version;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Deleted)
+                {
+                    plugin.Deleted = false;
+                    isDifferent = true;
+                }
+                if (isNew || 
+                    JsonSerializer.Serialize(plugin.Elements ?? new ()) != 
+                    JsonSerializer.Serialize(pi.Elements ?? new ()))
+                {
+                    plugin.Elements = pi.Elements;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Authors != pi.Authors)
+                {
+                    plugin.Authors = pi.Authors;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Url != pi.Url)
+                {
+                    plugin.Url = pi.Url;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Description != pi.Description)
+                {
+                    plugin.Description = pi.Description;
+                    isDifferent = true;
+                }
+                if (isNew || plugin.Icon != pi.Icon)
+                {
+                    plugin.Icon = pi.Icon;
+                    isDifferent = true;
+                }
+                if (isNew || 
+                    JsonSerializer.Serialize(plugin.Settings ?? new ()) != 
+                    JsonSerializer.Serialize(pi.Settings ?? new ()))
+                {
+                    plugin.Settings = pi.Settings;
+                    plugin.HasSettings = pi.Settings?.Any() == true;
+                    isDifferent = true;
+                }
 
                 Logger.Instance.DLog("Plugin.Name: " + plugin.Name);
                 Logger.Instance.DLog("Plugin.PackageName: " + plugin.PackageName);
@@ -123,20 +179,57 @@ public class PluginScanner
                 Logger.Instance.DLog("Plugin.Url: " + plugin.Url);
                 Logger.Instance.DLog("Plugin.Authors: " + plugin.Authors);
 
+                if (Version.TryParse(pi.Version, out Version? piVersion) && piVersion != null)
+                {
+                    if (piVersion.Major < 23)
+                    {
+                        _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Critical,
+                            $"'{plugin.Name}' is very old and should be upgraded or deleted",
+                            "This plugin is very old and needs upgrading or it has been deprecated and should " +
+                            "be removed.\nUsing it will cause unexpected issues");
+                    }
+                    else
+                    {
+                        bool old = false;
+                        if (piVersion.Major < 24)
+                            old = true;
+                        else
+                        {
+                            var oldDate = new DateTime(piVersion.Major + 2000, piVersion.Minor, 1);
+                            if (oldDate < new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1).AddMonths(-1))
+                                old = true;
+                        }
+
+                        if (old)
+                        {
+                            _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
+                                $"'{plugin.Name}' should be upgraded or deleted",
+                                "This plugin is either old and needs upgrading or it has been deprecated and should " +
+                                "be removed.\nUsing it may cause unexpected issues");
+                        }
+                    }
+                }
+
                 if (isNew == false)
                 {
-                    Logger.Instance.ILog("Updating plugin: " + pi.Name);
-                    service.Update(plugin).Wait();
+                    if (isDifferent)
+                    {
+                        Logger.Instance.ILog("Updating plugin: " + pi.Name);
+                        plugin.DateModified = DateTime.UtcNow;
+                        service.Update(plugin, auditDetails: AuditDetails.ForServer()).Wait();
+                    }
                 }
                 else
                 {
                     // new dll
+
+                    plugin.DateModified = DateTime.UtcNow;
                     Logger.Instance.ILog("Adding new plugin: " + pi.Name);
                     plugin.Name = pi.Name;
-                    plugin.DateCreated = DateTime.Now;
-                    plugin.DateModified = DateTime.Now;
+                    plugin.DateCreated = DateTime.UtcNow;
+                    plugin.DateModified = DateTime.UtcNow;
                     plugin.Enabled = true;
-                    service.Update(plugin).Wait();
+                    service.Update(plugin, auditDetails: AuditDetails.ForServer()).Wait();
                 }
             }
             catch (Exception ex)
@@ -151,21 +244,51 @@ public class PluginScanner
             {
                 Logger.Instance.DLog("Delete old plugin: " + plugin.Name);
                 // its an old style plugin, perm delete it
-                service.Delete(plugin.Uid).Wait();
+                service.Delete(new[] { plugin.Uid }, AuditDetails.ForServer()).Wait();
             }
             else
             {
                 Logger.Instance.DLog("Missing plugin: " + plugin.Name);
                 // mark as deleted.
                 plugin.Deleted = true;
-                plugin.DateModified = DateTime.Now;
-                service.Update(plugin).Wait();
+                plugin.DateModified = DateTime.UtcNow;
+                service.Update(plugin, auditDetails: AuditDetails.ForServer()).Wait();
             }
         }
 
-        CreateLanguageFile(langFiles);
+        foreach(var key in langFiles.Keys)
+            CreateLanguageFile(langFiles[key], key);
 
         Logger.Instance.ILog("Finished scanning for plugins");
+    }
+
+    /// <summary>
+    /// Extracts JSON language files from a ZipArchive.
+    /// </summary>
+    /// <param name="zf">The ZipArchive containing language files.</param>
+    /// <param name="langFiles">A dictionary to store language files.</param>
+    static void ExtractLanguageFilesFromZip(ZipArchive zf, Dictionary<string, List<string>> langFiles)
+    {
+        var i18nEntries = zf.Entries.Where(e => e.FullName.StartsWith("i18n") && e.FullName.EndsWith(".json"))
+            .ToArray();
+
+        foreach (var entry in i18nEntries)
+        {
+            // Get the language code from the entry name
+            string languageCode = Path.GetFileNameWithoutExtension(entry.Name);
+
+            // Read the contents of the JSON file
+            using var sr = new StreamReader(entry.Open());
+            string jsonContent = sr.ReadToEnd();
+
+            // Add the JSON content to the dictionary
+            if (!langFiles.ContainsKey(languageCode))
+            {
+                langFiles[languageCode] = new List<string>();
+            }
+
+            langFiles[languageCode].Add(jsonContent);
+        }
     }
 
     /// <summary>
@@ -264,6 +387,8 @@ public class PluginScanner
     /// <returns>true if successful</returns>
     internal static bool UpdatePlugin(string packageName, byte[] data)
     {
+        if (string.IsNullOrEmpty(packageName))
+            throw new InvalidDataException("PackageName is required");
         try
         {
             string dest = Path.Combine(GetPluginDirectory(), packageName);
@@ -308,7 +433,8 @@ public class PluginScanner
     /// Saves to wwwroot/i18n/plugins.en.json
     /// </summary>
     /// <param name="jsonFiles">the individual plugin language files</param>
-    static void CreateLanguageFile(List<string> jsonFiles)
+    /// <param name="langCode">the language code for the file</param>
+    static void CreateLanguageFile(List<string> jsonFiles, string langCode)
     {
         var json = "{}";
         try
@@ -339,6 +465,6 @@ public class PluginScanner
         if (Directory.Exists(dir) == false)
             Directory.CreateDirectory(dir);
 
-        File.WriteAllText(Path.Combine(dir, "plugins.en.json"), json);        
+        File.WriteAllText(Path.Combine(dir, $"plugins.{langCode}.json"), json);        
     }
 }

@@ -15,30 +15,18 @@ public partial class FlowTableButton : ComponentBase, IDisposable
     /// Gets or sets the flow table that this button is contained within 
     /// </summary>
     [CascadingParameter] FlowTableBase Table { get; set; }
-
-    protected string _Label = string.Empty;
     
     /// <summary>
     /// Gets or sets the label for this button
     /// </summary>
-    [Parameter] public string Label
-    {
-        get => _Label;
-        set => _Label = Translater.TranslateIfNeeded(value ?? string.Empty);
-    }
-
-    protected string _Icon;
+    [Parameter] public string Label { get; set; }
 
     /// <summary>
     /// Gets or sets the icon for this button
     /// </summary>
-    [Parameter] public string Icon
-    {
-        get => _Icon;
-        set => _Icon = value ?? string.Empty;
-    }
+    [Parameter]
+    public string Icon { get; set; }
 
-    
     /// <summary>
     /// Gets or sets if this button is disabled
     /// </summary>
@@ -90,6 +78,7 @@ public partial class FlowTableButton : ComponentBase, IDisposable
         await this.Clicked.InvokeAsync();
     }
     
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         if (this.Table != null)
@@ -97,11 +86,20 @@ public partial class FlowTableButton : ComponentBase, IDisposable
             this.Table.AddButton(this);
             this.Table.SelectionChanged += Table_SelectionChanged;
         }
-
         Table_SelectionChanged(null);
     }
 
+    /// <inheritdoc />
+    protected override void OnParametersSet()
+    {
+        Label = Translater.TranslateIfNeeded(Label ?? string.Empty); 
+    }
 
+
+    /// <summary>
+    /// Called when the table selection has changed
+    /// </summary>
+    /// <param name="items">the newly selected items</param>
     private void Table_SelectionChanged(List<object> items)
     {
         bool current = this.Enabled;

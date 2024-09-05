@@ -1,22 +1,24 @@
 using FileFlows.Server.Workers;
 using Microsoft.AspNetCore.Mvc;
 using FileFlows.Shared.Models;
-using FileFlows.Server.Helpers;
 using System.Dynamic;
 using System.IO.Compression;
 using FileFlows.Plugin;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
 using FileFlows.ScriptExecution;
+using FileFlows.Server.Authentication;
 using FileFlows.Server.Services;
 using Logger = FileFlows.Shared.Logger;
+using Range = FileFlows.Shared.Validators.Range;
 
 namespace FileFlows.Server.Controllers;
 /// <summary>
 /// Controller for Flows
 /// </summary>
 [Route("/api/flow")]
-public class FlowController : Controller
+[FileFlowsAuthorize(UserRole.Flows)]
+public class FlowController : BaseController
 {
     const int DEFAULT_XPOS = 450;
     const int DEFAULT_YPOS = 50;
@@ -30,7 +32,7 @@ public class FlowController : Controller
         get
         {
             if (_HasFlows == null)
-                UpdateHasFlows();
+                UpdateHasFlows().Wait();
             return _HasFlows == true;
         }
         private set => _HasFlows = value;
@@ -41,13 +43,27 @@ public class FlowController : Controller
     /// </summary>
     /// <returns>all flows in the system</returns>
     [HttpGet]
-    public IEnumerable<Flow> GetAll() => 
-        new FlowService().GetAll().OrderBy(x => x.Name.ToLowerInvariant());
+    public async Task<IEnumerable<Flow>> GetAll() => 
+        (await ServiceLoader.Load<FlowService>().GetAllAsync()).OrderBy(x => x.Name.ToLowerInvariant());
+
+    /// <summary>
+    /// Basic flow list
+    /// </summary>
+    /// <returns>flow list</returns>
+    [HttpGet("basic-list")]
+    [FileFlowsAuthorize(UserRole.Flows | UserRole.Libraries | UserRole.Reports)]
+    public async Task<Dictionary<Guid, string>> GetFlowList([FromQuery] FlowType? type = null)
+    {
+        IEnumerable<Flow> items = await new FlowService().GetAllAsync();
+        if (type != null)
+            items = items.Where(x => x.Type == type.Value);
+        return items.ToDictionary(x => x.Uid, x => x.Name);
+    }
 
     [HttpGet("list-all")]
-    public IEnumerable<FlowListModel> ListAll()
+    public async Task<IEnumerable<FlowListModel>> ListAll()
     {
-        var flows = new FlowService().GetAll();
+        var flows = await ServiceLoader.Load<FlowService>().GetAllAsync();
         List<FlowListModel> list = new List<FlowListModel>();
 
         foreach(var item in flows)
@@ -57,7 +73,8 @@ public class FlowController : Controller
                 Default = item.Default,
                 Name = item.Name,
                 Type = item.Type,
-                Uid = item.Uid
+                Uid = item.Uid,
+                ReadOnly = item.ReadOnly
             });
         }
         var dictFlows  = list.ToDictionary(x => x.Uid, x => x);
@@ -98,7 +115,7 @@ public class FlowController : Controller
         }
 
         string libTypeName = typeof(Library).FullName ?? string.Empty;
-        var libraries = new LibraryService().GetAll();
+        var libraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
         foreach (var lib in libraries)
         {
             if (lib.Flow == null)
@@ -132,7 +149,7 @@ public class FlowController : Controller
     /// <returns>the failure flow</returns>
     [HttpGet("failure-flow/by-library/{libraryUid}")]
     public Task<Flow?> GetFailureFlow([FromRoute] Guid libraryUid)
-        => new FlowService().GetFailureFlow(libraryUid);
+        => ServiceLoader.Load<FlowService>().GetFailureFlow(libraryUid);
 
     /// <summary>
     /// Exports a flows
@@ -142,18 +159,19 @@ public class FlowController : Controller
     [HttpGet("export")]
     public async Task<IActionResult> Export([FromQuery(Name = "uid")] Guid[] uids)
     {
-        var service = new FlowService();
-        var flows = uids.Select(x => service.GetByUid(x))
-                                    .Where(x => x != null).ToList();
+        var service = ServiceLoader.Load<FlowService>();
+        var allFlows = await service.GetAllAsync();
+        var flows = allFlows.Where(flow => uids.Contains(flow.Uid)).ToList();
+        
         if (flows.Any() == false)
             return NotFound();
+
+        var subFlows = allFlows.Where(x => x.Type == FlowType.SubFlow).ToList();
+            
         if (flows.Count() == 1)
         {
             var flow = flows[0];
-            string json = JsonSerializer.Serialize(flow, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            string json = CreateExportJson(flow, subFlows);
             byte[] data = System.Text.Encoding.UTF8.GetBytes(json);
             return File(data, "application/octet-stream", flow.Name + ".json");
         }
@@ -163,10 +181,7 @@ public class FlowController : Controller
         using var zip = new ZipArchive(ms, ZipArchiveMode.Create, true);
         foreach (var flow in flows)
         {
-            var json = JsonSerializer.Serialize(flow, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            string json = CreateExportJson(flow, subFlows);
             var fe = zip.CreateEntry(flow.Name + ".json");
 
             await using var entryStream = fe.Open();
@@ -179,13 +194,62 @@ public class FlowController : Controller
         return File(ms.ToArray(), "application/octet-stream", "Flows.zip");
     }
 
+    private string CreateExportJson(Flow flow, List<Flow> subFlows)
+    {
+        var dependencies = new List<Guid>();
+        LoadSubFlows(dependencies, flow, subFlows);
+        string json = JsonSerializer.Serialize(new
+        {
+            flow.Name,
+            Uid = flow.Type == FlowType.SubFlow ? (object)flow.Uid : null,
+            flow.Type,
+            Revision = Math.Max(1, flow.Revision),
+            Properties = new
+            {
+                flow.Properties.Description,
+                flow.Properties.Tags,
+                Author = flow.Properties.Author?.EmptyAsNull(),
+                MinimumVersion = flow.Properties.MinimumVersion?.EmptyAsNull(),
+                flow.Properties.Fields,
+                flow.Properties.Variables,
+                flow.Properties.Outputs
+            },
+            SubFlows = dependencies.Any() ? dependencies : null,
+            flow.Parts
+        }, new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = true,
+        });
+        return json;
+    }
+
+    private void LoadSubFlows(List<Guid> list, Flow flow, List<Flow> subflows)
+    {
+        var sfParts = flow.Parts.Where(x => x.FlowElementUid.StartsWith("SubFlow:"))
+            .Select(x => Guid.Parse(x.FlowElementUid.Split(':')[1])).ToArray();
+
+        foreach (var uid in sfParts)
+        {
+            if (list.Contains(uid))
+                continue;
+            var sf = subflows.FirstOrDefault(x => x.Uid == uid);
+            if (sf == null)
+                continue;
+            
+            list.Add(uid);
+            LoadSubFlows(list, sf, subflows);
+        }
+
+    }
+
     /// <summary>
     /// Imports a flow
     /// </summary>
     /// <param name="json">The json data to import</param>
     /// <returns>The newly import flow</returns>
     [HttpPost("import")]
-    public Flow Import([FromBody] string json)
+    public async Task<Flow> Import([FromBody] string json)
     {
         Flow? flow = JsonSerializer.Deserialize<Flow>(json);
         if (flow == null)
@@ -201,15 +265,17 @@ public class FlowController : Controller
         }
 
         // reparse with new UIDs
-        var service = new FlowService();
+        var service = ServiceLoader.Load<FlowService>();
         flow = JsonSerializer.Deserialize<Flow>(json);
-        flow.Uid = Guid.Empty;
+        if(flow.Type != FlowType.SubFlow || await service.UidInUse(flow.Uid))
+            flow.Uid = Guid.Empty;
+        
+        flow.ReadOnly = false;
         flow.Default = false;
-        flow.DateModified = DateTime.Now;
-        flow.DateCreated = DateTime.Now;
-        flow.Name = service.GetNewUniqueName(flow.Name);
-        service.Update(flow);
-        return flow;
+        flow.DateModified = DateTime.UtcNow;
+        flow.DateCreated = DateTime.UtcNow;
+        flow.Name = await service.GetNewUniqueName(flow.Name);
+        return await service.Update(flow, await GetAuditDetails());
     }
 
 
@@ -219,9 +285,9 @@ public class FlowController : Controller
     /// <param name="uid">The UID of the flow</param>
     /// <returns>The duplicated flow</returns>
     [HttpGet("duplicate/{uid}")]
-    public Flow Duplicate([FromRoute] Guid uid)
+    public async Task<Flow> Duplicate([FromRoute] Guid uid)
     { 
-        var flow = new FlowService().GetByUid(uid);
+        var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(uid);
         if (flow == null)
             return null;
         
@@ -229,40 +295,7 @@ public class FlowController : Controller
         {
             WriteIndented = true
         });
-        return Import(json);
-    }
-
-    /// <summary>
-    /// Generates a template for of a flow
-    /// </summary>
-    /// <param name="uid">The Flow UID</param>
-    /// <returns>A download response of the flow template</returns>
-    [HttpGet("template/{uid}")]
-    public IActionResult Template([FromRoute] Guid uid)
-    {
-        var flow = new FlowService().GetByUid(uid);
-        if (flow == null)
-            return NotFound();
-
-        string json = JsonSerializer.Serialize(flow, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
-        int count = 1;
-        foreach (var p in flow.Parts)
-        {
-            json = json.Replace(p.Uid.ToString(), $"00000000-0000-0000-0000-{count:000000000000}");
-            ++count;
-        }
-
-        json = json.Replace("OutputConnections", "connections");
-        json = json.Replace("InputNode", "node");
-        json = Regex.Replace(json, "\"FlowElementUid\":", "\"node\":");
-        json = Regex.Replace(json,
-            "\"(Icon|Label|Inputs|Template|Type|Enabled|DateCreated|DateModified)\": [^,}]+,[\\s]*", string.Empty);
-
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(json);
-        return File(data, "application/octet-stream", flow.Name + ".json");
+        return await Import(json);
     }
 
     /// <summary>
@@ -272,16 +305,16 @@ public class FlowController : Controller
     /// <param name="enable">Whether or not the flow should be enabled</param>
     /// <returns>The updated flow</returns>
     [HttpPut("state/{uid}")]
-    public Flow SetState([FromRoute] Guid uid, [FromQuery] bool? enable)
+    public async Task<Flow> SetState([FromRoute] Guid uid, [FromQuery] bool? enable)
     {
-        var service = new FlowService();
-        var flow = service.GetByUid(uid);
+        var service = ServiceLoader.Load<FlowService>();
+        var flow = await service.GetByUidAsync(uid);
         if (flow == null)
             throw new Exception("Flow not found.");
         if (enable != null)
         {
             flow.Enabled = enable.Value;
-            service.Update(flow);
+            flow = await service.Update(flow, await GetAuditDetails());
         }
 
         return flow;
@@ -293,10 +326,10 @@ public class FlowController : Controller
     /// <param name="uid">The flow UID</param>
     /// <param name="isDefault">Whether or not the flow should be the default</param>
     [HttpPut("set-default/{uid}")]
-    public void SetDefault([FromRoute] Guid uid, [FromQuery(Name = "default")] bool isDefault = true)
+    public async Task SetDefault([FromRoute] Guid uid, [FromQuery(Name = "default")] bool isDefault = true)
     {
-        var service = new FlowService();
-        var flow = service.GetByUid(uid);
+        var service = ServiceLoader.Load<FlowService>();
+        var flow = await service.GetByUidAsync(uid);
         if (flow == null)
             throw new Exception("Flow not found.");
         if(flow.Type != FlowType.Failure)
@@ -305,11 +338,11 @@ public class FlowController : Controller
         if (isDefault)
         {
             // make sure no others are defaults
-            var others = service.GetAll().Where(x => x.Type == FlowType.Failure && x.Default && x.Uid != uid).ToList();
+            var others = (await service.GetAllAsync()).Where(x => x.Type == FlowType.Failure && x.Default && x.Uid != uid).ToList();
             foreach (var other in others)
             {
                 other.Default = false;
-                service.Update(other);
+                await service.Update(other, await GetAuditDetails());
             }
         }
 
@@ -317,7 +350,7 @@ public class FlowController : Controller
             return;
 
         flow.Default = isDefault;
-        service.Update(flow);
+        await service.Update(flow, await GetAuditDetails());
     }
     /// <summary>
     /// Delete flows from the system
@@ -329,12 +362,12 @@ public class FlowController : Controller
     {
         if (model?.Uids?.Any() != true)
             return; // nothing to delete
-        await new FlowService().Delete(model.Uids);
-        UpdateHasFlows();
+        await ServiceLoader.Load<FlowService>().Delete(model.Uids, await GetAuditDetails());
+        await UpdateHasFlows();
     }
 
-    private static void UpdateHasFlows()
-        => _HasFlows = new FlowService().GetAll().Any();
+    private static async Task UpdateHasFlows()
+        => _HasFlows = await ServiceLoader.Load<FlowService>().HasAny();
 
 
     /// <summary>
@@ -347,36 +380,37 @@ public class FlowController : Controller
     {
         if (uid != Guid.Empty)
         {
-
-            var flow = new FlowService().GetByUid(uid);
+            var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(uid);
             if (flow == null)
                 return flow;
 
-            var elements = await GetElements();
+            var elements = await GetElements(uid);
 
-            var scripts = (await new ScriptController().GetAll()).Select(x => x.Name).ToList();
+            var scripts = (await ServiceLoader.Load<ScriptService>().GetAll()).ToDictionary(x => x.Uid, x => x.Name);
+            var flows = (await ServiceLoader.Load<FlowService>().GetAllAsync()).ToDictionary(x => x.Uid.ToString(), x => x.Name);
             foreach (var p in flow.Parts)
             {
                 if (p.Type == FlowElementType.Script && string.IsNullOrWhiteSpace(p.Name))
                 {
-                    string feName = p.FlowElementUid[7..];
+                    string sScriptUid = p.FlowElementUid[7..];
                     // set the name to the script name
-                    if (scripts.Contains(feName))
-                        p.Name = feName;
+                    if (Guid.TryParse(sScriptUid, out var scriptUid) &&
+                        scripts.TryGetValue(scriptUid, out var scriptName) &&
+                        string.IsNullOrWhiteSpace(scriptName) == false)
+                        p.Name = scriptName;
                     else
                         p.Name = "Missing Script";
                 }
-
-                if (p.FlowElementUid.EndsWith("." + p.Name))
-                    p.Name = string.Empty;
-                string icon =
-                    elements?.Where(x => x.Uid == p.FlowElementUid)?.Select(x => x.Icon)?.FirstOrDefault() ??
-                    string.Empty;
-                if (string.IsNullOrEmpty(icon) == false)
-                    p.Icon = icon;
-                p.Label = Translater.TranslateIfHasTranslation(
-                    $"Flow.Parts.{p.FlowElementUid.Substring(p.FlowElementUid.LastIndexOf(".") + 1)}.Label",
-                    string.Empty);
+                else if (p.Type == FlowElementType.SubFlow && string.IsNullOrWhiteSpace(p.Name))
+                {
+                    string feName = p.FlowElementUid[8..]; // remove SubFlow:
+                    if (flows.TryGetValue(feName, out string? subflow) && string.IsNullOrWhiteSpace(subflow) == false)
+                        p.Name = subflow;
+                    else
+                        p.Name = "Missing Sub Flow";
+                }
+                
+                LoadFlowPartValues(p, elements);
             }
 
             return flow;
@@ -384,7 +418,7 @@ public class FlowController : Controller
         else
         {
             // create default flow
-            var flowNames = new FlowService().GetAll().Select(x => x.Name).ToList();
+            var flowNames = (await ServiceLoader.Load<FlowService>().GetAllAsync()).Select(x => x.Name).ToList();
             Flow flow = new Flow();
             flow.Parts = new();
             flow.Name = "New Flow";
@@ -396,8 +430,8 @@ public class FlowController : Controller
             }
 
             // try find basic node
-            var elements = await GetElements();
-            var info = elements.Where(x => x.Uid == "FileFlows.BasicNodes.File.InputFile").FirstOrDefault();
+            var elements = await GetElements(uid);
+            var info = elements.FirstOrDefault(x => x.Uid == "FileFlows.BasicNodes.File.InputFile");
             if (info != null && string.IsNullOrEmpty(info.Name) == false)
             {
                 flow.Parts.Add(new FlowPart
@@ -418,17 +452,62 @@ public class FlowController : Controller
     }
 
 
+    private void LoadFlowPartValues(FlowPart p, FlowElement[] elements)
+    {
+        if (p.FlowElementUid.EndsWith("." + p.Name))
+            p.Name = string.Empty;
+        p.CustomColor = null; // clear it
+        p.ReadOnly = false;
+
+        p.Label = Translater.TranslateIfHasTranslation(
+            $"Flow.Parts.{p.FlowElementUid[(p.FlowElementUid.LastIndexOf(".", StringComparison.Ordinal) + 1)..]}.Label",
+            string.Empty);
+        
+        var element = elements?.FirstOrDefault(x => x.Uid == p.FlowElementUid);
+        if (element == null)
+            return;
+        if (string.IsNullOrEmpty(element.Icon) == false)
+            p.Icon = element.Icon;
+        if (string.IsNullOrEmpty(element.CustomColor) == false)
+            p.CustomColor = element.CustomColor;
+        p.ReadOnly = element.ReadOnly;
+        if (p.ReadOnly == false)
+        {
+            if (element.Uid == "SubFlowOutput" && p.Name.StartsWith("Output "))
+                p.ReadOnly = true;
+            else if (element.Uid == "SubFlowInput")
+                p.ReadOnly = true;
+        }
+        p.Icon = element.Icon;
+        p.Inputs = element.Inputs;
+        if((element.Uid.EndsWith(".Random") || element.Uid.EndsWith(".IfString") || element.Uid.EndsWith(".Function") 
+            || element.Uid.StartsWith("FileFlows.BasicNodes.Scripting.")   ) == false)
+            p.Outputs = element.Outputs;
+        
+    }
+
     /// <summary>
     /// Gets all nodes in the system
     /// </summary>
+    /// <param name="flowUid">the UID of the flow to get elements for</param>
+    /// <param name="type">the type of flow to get flow elements for</param>
     /// <returns>Returns a list of all the nodes in the system</returns>
     [HttpGet("elements")]
-    public async Task<FlowElement[]> GetElements(FlowType type = FlowType.Standard)
+    public Task<FlowElement[]> GetElements([FromQuery] Guid flowUid, [FromQuery]FlowType? type = null)
+        => GetFlowElements(flowUid, type);
+
+    /// <summary>
+    /// Get all available flow elements in the system
+    /// </summary>
+    /// <param name="flowUid">the UID of the flow to get elements for</param>
+    /// <param name="type">the type of flow to get flow elements for</param>
+    /// <returns>all the flow elements</returns>
+    internal static async Task<FlowElement[]> GetFlowElements( Guid flowUid, FlowType? type = null)
     {
-        var plugins = await new PluginController().GetAll(includeElements: true);
+        var plugins = await new PluginController(null).GetAll(includeElements: true);
         var results = plugins.Where(x => x.Enabled && x.Elements != null).SelectMany(x => x.Elements)?.Where(x =>
         {
-            if ((int)type == -1) // special case used by get variables, we want everything
+            if (type == null || (int)type == -1) // special case used by get variables, we want everything
                 return true;
             if (type == FlowType.Failure)
             {
@@ -440,11 +519,28 @@ public class FlowController : Controller
                 return false;
             }
 
+            if (type == FlowType.SubFlow)
+            {
+                if (x.Name.EndsWith("GotoFlow"))
+                    return false; // don't allow gotos inside a sub flow
+            }
+
             return true;
         })?.ToList();
 
+        if (type == FlowType.SubFlow || type == null || (int)type == -1)
+            results.InsertRange(0, GetSubFlowFlowElements());
+        
+        if (type == FlowType.Standard || type == FlowType.SubFlow || type == null || (int)type == -1)
+        {
+            var subflows = (await ServiceLoader.Load<FlowService>().GetAllAsync()).Where(x => x.Type == FlowType.SubFlow && x.Uid != flowUid)
+                .OrderBy(x => x.Name)
+                .Select(SubFlowToElement);
+            results.AddRange(subflows);
+        }
+
         // get scripts 
-        var scripts = (await new ScriptController().GetAll())?
+        var scripts = (await ServiceLoader.Load<ScriptService>().GetAll())?
             .Where(x => x.Type == ScriptType.Flow)
             .Select(x => ScriptToFlowElement(x))
             .Where(x => x != null)
@@ -452,6 +548,7 @@ public class FlowController : Controller
         results.AddRange(scripts);
 
         return results?.ToArray() ?? new FlowElement[] { };
+        
     }
 
     /// <summary>
@@ -459,21 +556,45 @@ public class FlowController : Controller
     /// </summary>
     /// <param name="script"></param>
     /// <returns></returns>
-    private FlowElement ScriptToFlowElement(Script script)
+    private static FlowElement ScriptToFlowElement(Script script)
     {
         try
         {
-            var sm = new ScriptParser().Parse(script?.Name, script?.Code);
             FlowElement ele = new FlowElement();
             ele.Name = script.Name;
-            ele.Uid = $"Script:{script.Name}";
-            ele.Icon = "fas fa-scroll";
+            ele.Uid = $"Script:{script.Uid}";
+            switch (script.Language)
+            {
+                case ScriptLanguage.Batch:
+                    ele.Icon = "svg:bat";
+                    break;
+                case ScriptLanguage.CSharp:
+                    ele.Icon = "svg:cs";
+                    break;
+                case ScriptLanguage.PowerShell:
+                    ele.Icon = "svg:ps1";
+                    break;
+                case ScriptLanguage.Shell:
+                    ele.Icon = "svg:sh";
+                    break;
+                default:
+                    ele.Icon = "fas fa-scroll";
+                    break;
+            }
+
+            int index = script.Name.IndexOf(" - ", StringComparison.InvariantCulture);
+            if (index > 0)
+                ele.Group = ele.Name[..(index)];
+            else
+                ele.Group = "Scripts";
+            
             ele.Inputs = 1;
-            ele.Description = sm.Description;
-            ele.OutputLabels = sm.Outputs.Select(x => x.Description).ToList();
+            ele.Description = script.Description;
+            //ele.OutputLabels = script.Outputs.Select(x => x.Description).ToList();
+            ele.OutputLabels = script.Outputs.Select(x => x.Value).ToList();
             int count = 0;
             IDictionary<string, object> model = new ExpandoObject()!;
-            ele.Fields = sm.Parameters.Select(x =>
+            ele.Fields = script.Parameters.Select(x =>
             {
                 ElementField ef = new ElementField();
                 ef.InputType = x.Type switch
@@ -495,9 +616,8 @@ public class FlowController : Controller
                 });
                 return ef;
             }).ToList();
-            ele.Group = "Scripts";
             ele.Type = FlowElementType.Script;
-            ele.Outputs = sm.Outputs.Count;
+            ele.Outputs = script.Outputs.Count;
             ele.Model = model as ExpandoObject;
             return ele;
         }
@@ -509,13 +629,169 @@ public class FlowController : Controller
     }
 
     /// <summary>
+    /// Gets the output flow element used by sub flows
+    /// </summary>
+    /// <returns>the output flow element</returns>
+    private static List<FlowElement> GetSubFlowFlowElements()
+    {
+        List<FlowElement> elements = new();
+            
+        FlowElement eleInput = new FlowElement();
+        eleInput.Name = "Sub Flow Input";
+        eleInput.Uid = $"SubFlowInput";
+        eleInput.Icon = "fas fa-long-arrow-alt-down";
+        eleInput.Outputs = 1;
+        eleInput.Description = "Sub Flow Input";
+        eleInput.ReadOnly = true;
+        eleInput.Group = "Sub Flow";
+        eleInput.Model = new ExpandoObject()!;
+        eleInput.Type = FlowElementType.Input;
+        elements.Add(eleInput);
+
+        for (int i = 1; i <= 5; i++)
+        {
+            FlowElement eleNumOutput = new FlowElement();
+            eleNumOutput.Name = "Output " + i;
+            eleNumOutput.Uid = $"SubFlowOutput" + i;
+            eleNumOutput.Icon = "fas fa-sign-out-alt";
+            eleNumOutput.Inputs = 1;
+            eleNumOutput.ReadOnly = true;
+            eleNumOutput.NoEditorOnAdd = true;
+            eleNumOutput.Description = "Sub Flow Output " + i;
+            IDictionary<string, object> enoModel = new ExpandoObject()!;
+            enoModel.Add("Output", i);
+            eleNumOutput.Group = "Sub Flow";
+            eleNumOutput.Type = FlowElementType.Output;
+            eleNumOutput.Model = enoModel as ExpandoObject;
+            
+            elements.Add(eleNumOutput);
+        }
+
+        FlowElement eleOutput = new FlowElement();
+        eleOutput.Name = "Sub Flow Output";
+        eleOutput.Uid = $"SubFlowOutput";
+        eleOutput.Icon = "fas fa-sign-out-alt";
+        eleOutput.Inputs = 1;
+        eleOutput.Description = "Sub Flow Output";
+        IDictionary<string, object> model = new ExpandoObject()!;
+        model.Add("Output", 1);
+        eleOutput.Fields = new List<ElementField>()
+        {
+            new()
+            {
+                InputType = FormInputType.Int,
+                Name = "Output",
+                Description = "Output",
+            }
+        };
+        eleOutput.Group = "Sub Flow";
+        eleOutput.Type = FlowElementType.Output;
+        eleOutput.Model = model as ExpandoObject;
+        elements.Add(eleOutput);
+
+        return elements;
+    }
+    
+    
+    /// <summary>
+    /// Converts a sub flow to a flow element to be used in flow editor
+    /// </summary>
+    /// <returns>the flow element</returns>
+    private static FlowElement SubFlowToElement(Flow flow)
+    {
+        if (flow.Type != FlowType.SubFlow)
+            return null;
+        
+        FlowElement ele = new FlowElement();
+        ele.Name = flow.Name;
+        ele.Uid = $"SubFlow:" + flow.Uid;
+        ele.Icon = "fas fa-subway";
+        ele.Inputs = 1;
+        ele.Outputs = flow.Properties.Outputs?.Count ?? 0;
+        ele.OutputLabels = flow.Properties.Outputs?.Select(x => x.Value)?.ToList() ?? new ();
+        ele.Description = flow.Properties.Description;
+        ele.NoEditorOnAdd = flow.Properties?.Fields?.Any() != true;
+        IDictionary<string, object> model = new ExpandoObject()!;
+        model.Add("Output", 1);
+        ele.Fields = new List<ElementField>();
+        foreach(var field in flow.Properties.Fields)
+        {
+            if (string.IsNullOrWhiteSpace(field.Name))
+                continue;
+            
+            var f = new ElementField()
+            {
+                Name = field.Name,
+                Label = field.Name.Replace("_", " "),
+                Description = field.Description
+            };
+            
+            f.InputType = field.Type switch
+            {
+                FlowFieldType.Boolean => FormInputType.Switch,
+                FlowFieldType.Number => FormInputType.Int,
+                FlowFieldType.Slider => FormInputType.Slider,
+                FlowFieldType.Select => FormInputType.Select,
+                FlowFieldType.Directory => FormInputType.Folder,
+                FlowFieldType.String => FormInputType.TextVariable,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            if (field.Type is FlowFieldType.Number or FlowFieldType.Slider)
+            {
+                if (field.IntMaximum > field.IntMinimum)
+                {
+                    f.Validators ??= new();
+                    f.Validators.Add(new Range { Minimum = field.IntMinimum, Maximum = field.IntMaximum });
+                }
+
+                if (field.Type is FlowFieldType.Slider)
+                {
+                    f.Parameters ??= new();
+                    f.Parameters[nameof(field.Inverse)] = field.Inverse;
+                }
+            }
+            else if (field.Type is FlowFieldType.Select)
+            {
+                f.Parameters ??= new();
+                f.Parameters[nameof(field.Options)] = field.Options.Select(x =>
+                {
+                    var index = x.IndexOf("|", StringComparison.InvariantCulture);
+                    return new ListOption
+                    {
+                        Label = index > 0 ? x[..index] : x,
+                        Value = index > 0 ? x[(index + 1)..] : x
+                    };
+                }).ToList();
+            }
+
+            // var defaultValue = field.Type switch
+            // {
+            //     FlowFieldType.Boolean => field.DefaultValue as bool? ?? false,
+            //     FlowFieldType.Number => field.DefaultValue as int? ?? 0,
+            //     FlowFieldType.Slider => field.DefaultValue as int? ?? 0,
+            //     FlowFieldType.Directory => field.DefaultValue as string ?? string.Empty,
+            //     FlowFieldType.String => field.DefaultValue as string ?? string.Empty,
+            //     _ => field.DefaultValue
+            // };
+            model.Add(field.Name, field.DefaultValue );
+            
+            ele.Fields.Add(f);
+        };
+        ele.Group = "Sub Flows";
+        ele.Type = FlowElementType.SubFlow;
+        ele.Model = model as ExpandoObject;
+        return ele;
+    }
+    
+    /// <summary>
     /// Saves a flow
     /// </summary>
     /// <param name="model">The flow being saved</param>
     /// <param name="uniqueName">Whether or not a new unique name should be generated if the name already exists</param>
     /// <returns>The saved flow</returns>
     [HttpPut]
-    public Flow Save([FromBody] Flow model, [FromQuery] bool uniqueName = false)
+    public async Task<Flow> Save([FromBody] Flow model, [FromQuery] bool uniqueName = false)
     {
         if (model == null)
             throw new Exception("No model");
@@ -524,17 +800,18 @@ public class FlowController : Controller
             throw new Exception("ErrorMessages.NameRequired");
 
         
-        var service = new FlowService();
+        var service = ServiceLoader.Load<FlowService>();
         model.Name = model.Name.Trim();
+        model.Revision++;
         if (uniqueName == false)
         {
-            bool inUse = service.NameInUse(model.Uid, model.Name);
+            bool inUse = await service.NameInUse(model.Uid, model.Name);
             if (inUse)
                 throw new Exception("ErrorMessages.NameInUse");
         }
         else
         {
-            model.Name = service.GetNewUniqueName(model.Name);
+            model.Name = await service.GetNewUniqueName(model.Name);
         }
 
         if (model.Parts?.Any() != true)
@@ -550,17 +827,16 @@ public class FlowController : Controller
                 p.Name = string.Empty; // fixes issue with flow part being named after the display
         }
 
-        int inputNodes = model.Parts
-            .Where(x => x.Type == FlowElementType.Input || x.Type == FlowElementType.Failure).Count();
+        int inputNodes = model.Parts.Count(x => x.Type == FlowElementType.Input || x.Type == FlowElementType.Failure);
         if (inputNodes == 0)
             throw new Exception("Flow.ErrorMessages.NoInput");
-        else if (inputNodes > 1)
+        if (inputNodes > 1)
             throw new Exception("Flow.ErrorMessages.TooManyInputNodes");
 
         if (model.Uid == Guid.Empty && model.Type == FlowType.Failure)
         {
             // if first failure flow make it default
-            var others = service.GetAll().Where(x => x.Type == FlowType.Failure).Count();
+            var others = (await service.GetAllAsync()).Count(x => x.Type == FlowType.Failure);
             if (others == 0)
                 model.Default = true;
         }
@@ -569,15 +845,17 @@ public class FlowController : Controller
         if (model.Uid != Guid.Empty)
         {
             // existing, check for name change
-            var existing = service.GetByUid(model.Uid);
+            var existing = await service.GetByUidAsync(model.Uid);
             nameChanged = existing != null && existing.Name != model.Name;
         }
+        
+        Logger.Instance.ILog($"Saving Flow '{model.Name}'");
 
-        service.Update(model);
+        model = await service.Update(model, await GetAuditDetails());
         if(nameChanged)
             _ = new ObjectReferenceUpdater().RunAsync();
 
-        return model;
+        return await Get(model.Uid);
     }
 
     /// <summary>
@@ -592,19 +870,20 @@ public class FlowController : Controller
         if (uid == Guid.Empty)
             return; // renaming a new flow
 
-        var service = new FlowService();
-        var flow = service.GetByUid(uid);
+        var service = ServiceLoader.Load<FlowService>();
+        var flow = await service.GetByUidAsync(uid);
         if (flow == null)
             throw new Exception("Flow not found");
         if (flow.Name == name)
             return; // name already is the requested name
 
         flow.Name = name;
-        service.Update(flow);
+        flow = await service.Update(flow, await GetAuditDetails());
 
         // update any object references
-        await new LibraryFileService().UpdateFlowName(flow.Uid, flow.Name);
-        new LibraryController().UpdateFlowName(flow.Uid, flow.Name);
+        var lfService = ServiceLoader.Load<LibraryFileService>();
+        await lfService.UpdateFlowName(flow.Uid, flow.Name);
+        await lfService.UpdateFlowName(flow.Uid, flow.Name);
     }
 
     /// <summary>
@@ -626,11 +905,12 @@ public class FlowController : Controller
         if (dir)
         {
             variables.Add("folder.Name", "FolderName");
+            variables["folder.OriginalName"] = "/original/file/on/server.txt";
             variables.Add("folder.FullName", windows ? @"C:\Folder\SubFolder" : "/folder/subfolder");
-            variables.Add("folder.Date", DateTime.Now);
-            variables.Add("folder.Date.Day", DateTime.Now.Day);
-            variables.Add("folder.Date.Month", DateTime.Now.Month);
-            variables.Add("folder.Date.Year", DateTime.Now.Year);
+            variables.Add("folder.Date", DateTime.UtcNow);
+            variables.Add("folder.Date.Day", DateTime.UtcNow.Day);
+            variables.Add("folder.Date.Month", DateTime.UtcNow.Month);
+            variables.Add("folder.Date.Year", DateTime.UtcNow.Year);
             variables.Add("folder.OrigName", "FolderOriginalName");
             variables.Add("folder.OrigFullName",
                 windows ? @"C:\OriginalFolder\SubFolder" : "/originalFolder/subfolder");
@@ -638,6 +918,7 @@ public class FlowController : Controller
         else
         {
             variables.Add("ext", ".mkv");
+            variables["file.OriginalName"] = "/original/file/on/server.txt";
             variables.Add("file.Name", "Filename.ext");
             variables.Add("file.NameNoExtension", "Filename");
             variables.Add("file.Extension", ".mkv");
@@ -652,14 +933,14 @@ public class FlowController : Controller
                 windows ? @"C:\Folder\files\filename.ext" : "/media/files/filename.ext");
             variables.Add("file.Orig.Size", 1000);
 
-            variables.Add("file.Create", DateTime.Now);
-            variables.Add("file.Create.Day", DateTime.Now.Day);
-            variables.Add("file.Create.Month", DateTime.Now.Month);
-            variables.Add("file.Create.Year", DateTime.Now.Year);
-            variables.Add("file.Modified", DateTime.Now);
-            variables.Add("file.Modified.Day", DateTime.Now.Day);
-            variables.Add("file.Modified.Month", DateTime.Now.Month);
-            variables.Add("file.Modified.Year", DateTime.Now.Year);
+            variables.Add("file.Create", DateTime.UtcNow);
+            variables.Add("file.Create.Day", DateTime.UtcNow.Day);
+            variables.Add("file.Create.Month", DateTime.UtcNow.Month);
+            variables.Add("file.Create.Year", DateTime.UtcNow.Year);
+            variables.Add("file.Modified", DateTime.UtcNow);
+            variables.Add("file.Modified.Day", DateTime.UtcNow.Day);
+            variables.Add("file.Modified.Month", DateTime.UtcNow.Month);
+            variables.Add("file.Modified.Year", DateTime.UtcNow.Year);
 
             variables.Add("folder.Name", "FolderName");
             variables.Add("folder.FullName", windows ? @"C:\Folder\SubFolder" : "/folder/subfolder");
@@ -667,9 +948,14 @@ public class FlowController : Controller
             variables.Add("folder.Orig.FullName",
                 windows ? @"C:\OriginalFolder\SubFolder" : "/originalFolder/subfolder");
         }
+        variables.Add("folder.Size", 10000);
+        variables.Add("folder.Orig.Size", 10000);
+        variables["library.Name"] = "My Library";
+        variables["library.Path"] = "/library/path";
+        variables["temp"] = "/node-temp";
 
         //p.FlowElementUid == FileFlows.VideoNodes.DetectBlackBars
-        var flowElements = await GetElements((FlowType)(-1));
+        var flowElements = await GetElements(Guid.Empty, (FlowType)(-1));
         flowElements ??= new FlowElement[] { };
         var dictFlowElements = flowElements.ToDictionary(x => x.Uid, x => x);
 
@@ -747,145 +1033,5 @@ public class FlowController : Controller
 
             return results;
         }
-    }
-
-    /// <summary>
-    /// Gets all the flow template files
-    /// </summary>
-    /// <returns>a array of all flow template files</returns>
-    private FileInfo[] GetTemplateFiles() 
-        => new DirectoryInfo(DirectoryHelper.TemplateDirectoryFlow).GetFiles("*.json", SearchOption.AllDirectories);
-
-    /// <summary>
-    /// Get flow templates
-    /// </summary>
-    /// <param name="type">the flow type</param>
-    /// <returns>A list of flow templates</returns>
-    [HttpGet("templates")]
-    public async Task<IDictionary<string, List<FlowTemplateModel>>> GetTemplates([FromQuery] FlowType type = FlowType.Standard)
-    {
-        var elements = await GetElements((FlowType)(-1)); // special case to load all template typs
-        var parts = elements.ToDictionary(x => x.Uid, x => x);
-
-        Dictionary<string, List<FlowTemplateModel>> templates = new();
-        string group = string.Empty;
-        templates.Add(group, new List<FlowTemplateModel>());
-        templates.Add("Basic", new List<FlowTemplateModel>());
-
-        var templateList = GetFlowTemplates(parts)
-            .Where(x => x.Template.Type == type)
-            .OrderBy(x => x.Template.Group.ToLowerInvariant())
-            .ThenBy(x => x.Template.Name == x.Template.Group + " File" ? 0 : 1)
-            .ThenBy(x => x.Template.Name.ToLowerInvariant());
-        foreach (var item in templateList)
-        {
-
-            if (templates.ContainsKey(item.Template.Group ?? String.Empty) == false)
-                templates.Add(item.Template.Group ?? String.Empty, new List<FlowTemplateModel>());
-
-            templates[item.Template.Group ?? String.Empty].Add(new FlowTemplateModel
-            {
-                Fields = item.Template.Fields,
-                Save = item.Template.Save,
-                Type = item.Template.Type,
-                Flow = new Flow
-                {
-                    Name = item.Template.Name,
-                    Template = item.Template.Name,
-                    Enabled = true,
-                    Description = item.Template.Description,
-                    Parts = item.Parts
-                }
-            });
-        }
-
-        return templates;
-    }
-
-    private List<(FlowTemplate Template, List<FlowPart> Parts)> GetFlowTemplates(Dictionary<string, FlowElement> parts)
-    {
-        var templates = new List<(FlowTemplate, List<FlowPart>)>();
-        foreach (var tf in GetTemplateFiles())
-        {
-            try
-            {
-                string json = System.IO.File.ReadAllText(tf.FullName);
-                if (json.StartsWith("// path"))
-                {
-                    json = string.Join("\n", json.Split('\n').Skip(1)).Trim();
-                }
-                
-                for (int i = 1; i < 50; i++)
-                {
-                    Guid oldUid = new Guid("00000000-0000-0000-0000-0000000000" + (i < 10 ? "0" : "") + i);
-                    Guid newUid = Guid.NewGuid();
-                    json = json.Replace(oldUid.ToString(), newUid.ToString());
-                }
-
-                json = TemplateHelper.ReplaceWindowsPathIfWindows(json);
-                var jst = JsonSerializer.Deserialize<FlowTemplate>(json, new JsonSerializerOptions
-                {
-                    AllowTrailingCommas = true,
-                    PropertyNameCaseInsensitive = true
-                });
-                if (jst == null)
-                    continue;
-                try
-                {
-
-                    List<FlowPart> flowParts = new List<FlowPart>();
-                    int y = DEFAULT_YPOS;
-                    bool invalid = false;
-                    foreach (var jsPart in jst.Parts)
-                    {
-                        if (jsPart.Node == null || parts.ContainsKey(jsPart.Node) == false)
-                        {
-                            invalid = true;
-                            break;
-                        }
-
-                        var element = parts[jsPart.Node];
-
-                        flowParts.Add(new FlowPart
-                        {
-                            yPos = jsPart.yPos ?? y,
-                            xPos = jsPart.xPos ?? DEFAULT_XPOS,
-                            FlowElementUid = element.Uid,
-                            Outputs = jsPart.Outputs ?? element.Outputs,
-                            Inputs = element.Inputs,
-                            Type = element.Type,
-                            Name = jsPart.Name ?? string.Empty,
-                            Uid = jsPart.Uid,
-                            Icon = element.Icon,
-                            Model = jsPart.Model,
-                            OutputConnections = jsPart.Connections?.Select(x => new FlowConnection
-                            {
-                                Input = x.Input,
-                                Output = x.Output,
-                                InputNode = x.Node
-                            }).ToList() ?? new List<FlowConnection>()
-                        });
-                        y += 150;
-                    }
-
-                    if (invalid)
-                        continue;
-
-                    templates.Add((jst, flowParts));
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.ELog("Template: " + jst.Name);
-                    Logger.Instance.ELog("Error reading template: " + ex.Message + Environment.NewLine +
-                                         ex.StackTrace);
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.ELog("Error reading template: " + ex.Message + Environment.NewLine + ex.StackTrace);
-            }
-        }
-        return templates;
     }
 }

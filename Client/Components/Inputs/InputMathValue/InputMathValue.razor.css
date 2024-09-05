@@ -1,0 +1,64 @@
+.input-math-value-wrapper {
+  display: flex;
+  flex-direction: row;
+  max-width: 40rem;
+}
+
+.math-value-text {
+  margin-right: 1px;
+  flex-grow: 1;
+  display: flex;
+  background: var(--input-background);
+  align-items: center;
+}
+
+.and {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  padding: 0 1rem;
+}
+
+.error .input-math-value-wrapper {
+  border: solid 1px var(--accent);
+}
+.error input, .error select {
+  border-color: var(--input-background) !important;
+}
+
+.math-operation {
+  width: 10rem;
+  min-width: 10rem;
+  border-right: solid 2px transparent;
+}
+
+input {
+  width: 100%;
+  height: var(--input-height, 2.1875rem);
+  line-height: 1.5;
+  font-size: 1rem;
+  padding: 0.1875rem 0.625rem;
+  text-align: center;
+  outline: none;
+}
+input:read-only {
+  filter: opacity(0.5);
+}
+
+select {
+  width: 100%;
+  max-width: 40rem;
+  background-color: var(--input-background) !important;
+  color: var(--color) !important;
+  height: 2.1875rem;
+  line-height: 1.5;
+  font-size: 1rem;
+  border-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 0.5rem;
+  outline: none;
+}
+select option:checked {
+  background-color: rgba(var(--accent-rgb), 0.3);
+}

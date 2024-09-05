@@ -36,6 +36,9 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     [CascadingParameter] protected InputRegister InputRegister { get; set; }
     [CascadingParameter] protected Editor Editor { get; set; }
 
+    /// <summary>
+    /// Gets or sets the JavaScript runtime
+    /// </summary>
     [Inject] protected IJSRuntime jsRuntime { get; set; }
     protected string Uid = System.Guid.NewGuid().ToString();
     private string _Label;
@@ -43,18 +46,36 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     private string _Help;
     public EventHandler<bool> ValidStateChanged { get; set; }
 
+    /// <summary>
+    /// Gets or sets the suffix
+    /// </summary>
     public string Suffix { get; set; }
+    /// <summary>
+    /// Gets or sets the prefix
+    /// </summary>
     public string Prefix { get; set; }
 
     protected string LabelOriginal => _LabelOriginal;
 
 
+    /// <summary>
+    /// Gets or sets the on submit event callback
+    /// </summary>
     [Parameter] public EventCallback OnSubmit { get; set; }
+    /// <summary>
+    /// Gets or sets the on close event callback
+    /// </summary>
     [Parameter] public EventCallback OnClose { get; set; }
 
-    [Parameter]
-    public bool HideLabel { get; set; }
+    /// <summary>
+    /// Gets or ses if the label should be hidden
+    /// </summary>
+    [Parameter] public bool HideLabel { get; set; }
 
+#pragma warning disable BL0007
+    /// <summary>
+    /// Gets or sets label for the Input
+    /// </summary>
     [Parameter]
     public string Label
     {
@@ -86,20 +107,32 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
             }
         }
     }
+#pragma warning restore BL0007
 
-    [Parameter]
-    public bool ReadOnly { get; set; }
+    /// <summary>
+    /// Gets or sets if this is read only
+    /// </summary>
+    [Parameter] public bool ReadOnly { get; set; }
 
-    [Parameter]
-    public bool Disabled { get; set; }
+    /// <summary>
+    /// Gets or sets if this is disabled
+    /// </summary>
+    [Parameter] public bool Disabled { get; set; }
 
-    //[Parameter] // dont not make this a parameter, it sets it to false unexpectedly
+    /// <summary>
+    /// Gets or sets if this is visible
+    /// Don't make this a Parameter, it breaks stuff
+    /// </summary>
     public bool Visible { get; set; }
 
     private ElementField _Field;
+    
+#pragma warning disable BL0007
 
-    [Parameter]
-    public ElementField Field
+    /// <summary>
+    /// Gets or sets the element field bound to this
+    /// </summary>
+    [Parameter] public ElementField Field
     {
         get => _Field;
         set
@@ -112,30 +145,29 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
         }
     }
 
+    /// <summary>
+    /// Gets or sets the Help text for this 
+    /// </summary>
+    [Parameter] public string Help { get => _Help; set { if (string.IsNullOrEmpty(value) == false) _Help = value; } }
+    
+#pragma warning restore BL0007
+    
+    /// <summary>
+    /// Gets or sets the placeholder text
+    /// </summary>
     [Parameter]
-    public string Help { get => _Help; set { if (string.IsNullOrEmpty(value) == false) _Help = value; } }
-    public string _Placeholder;
-
-    [Parameter]
-    public string Placeholder
-    {
-        get => _Placeholder;
-        set { _Placeholder = value ?? ""; }
-    }
+    public string Placeholder { get; set; } = string.Empty;
 
 
+    /// <summary>
+    /// Gets or sets the validators text
+    /// </summary>
     [Parameter] public List<FileFlows.Shared.Validators.Validator> Validators { get; set; }
 
-
-    private string _ErrorMessage = string.Empty;
-    public string ErrorMessage
-    {
-        get => _ErrorMessage;
-        set
-        {
-            _ErrorMessage = value;
-        }
-    }
+    /// <summary>
+    /// Gets or sets the error message
+    /// </summary>
+    public string ErrorMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets the text to show as the placeholder
@@ -152,6 +184,15 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
 
     protected T _Value;
     private bool _ValueUpdating = false;
+    /// <summary>
+    /// Gets if the value is currently updating
+    /// </summary>
+    protected bool ValueIsUpdating => _ValueUpdating;
+    
+#pragma warning disable BL0007
+    /// <summary>
+    /// Gets or sets the value
+    /// </summary>
     [Parameter]
     public T Value
     {
@@ -201,6 +242,9 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
                         }
                     }
                 }
+
+                if (areEqual == false)
+                    _ = OnChangedValue.InvokeAsync(value);
             }
             finally
             {
@@ -208,16 +252,21 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
             }
         }
     }
+#pragma warning restore BL0007
 
     protected virtual void ValueUpdated() { }
 
     [Parameter]
     public EventCallback<T> ValueChanged { get; set; }
+    /// <summary>
+    /// Gets or sets the On changed event, this is similar to the ValueChanged but can be used with the bound value
+    /// Only use this if you want to subscribe to events when the value changes but not update the bound model
+    /// </summary>
+    [Parameter] public EventCallback<T> OnChangedValue { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Logger.Instance.ILog("InputRegister: " + (InputRegister?.GetTheType()?.Name ?? "null"));
         if(this.Field != null)
             InputRegister.RegisterInput(this.Field.Uid, this);
         this.Visible = true;
@@ -250,7 +299,12 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
         }
     }
 
-    private void FieldOnValueChanged(object sender, object value)
+    /// <summary>
+    /// Called when the field value changes
+    /// </summary>
+    /// <param name="sender">the sender of the event</param>
+    /// <param name="value">the new value</param>
+    protected virtual void FieldOnValueChanged(object sender, object value)
     {
         if (Disposed) return;
         if (_ValueUpdating)
@@ -260,7 +314,7 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
             if (typeof(T) == typeof(int))
                 value = je.GetInt32();
             else if (typeof(T) == typeof(string))
-                value = je.GetString();
+                value = je.GetString() ?? string.Empty;
             else if (typeof(T) == typeof(bool))
                 value = je.GetBoolean();
         }
@@ -269,7 +323,7 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
         {
             this.Value = (T)value;
         }
-        catch (InvalidCastException ex)
+        catch (InvalidCastException)
         {
             Logger.Instance.ILog($"Could not cast '{value.GetType().FullName}' to '{typeof(T).FullName}'");
         }
@@ -299,8 +353,17 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
         if(this.Visible != state)
         {
             this.Visible = state;
+            VisibleChanged(state);
             this.StateHasChanged();
         }
+    }
+
+    /// <summary>
+    /// Called when the visibility changed
+    /// </summary>
+    /// <param name="visible">the new visibility</param>
+    protected virtual void VisibleChanged(bool visible)
+    {
     }
 
     protected void ClearError() => this.ErrorMessage = "";

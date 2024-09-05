@@ -1,6 +1,8 @@
-﻿using FileFlows.Server.Helpers;
+﻿using System.Diagnostics;
+using FileFlows.Server.Helpers;
 using FileFlows.Shared.Formatters;
 using FileFlows.Server.Controllers;
+using FileFlows.Server.Services;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Helpers;
 
@@ -11,7 +13,7 @@ namespace FileFlows.Server.Workers;
 /// </summary>
 public class ServerUpdater : UpdaterWorker
 {
-    private static string UpdateUrl = "https://fileflows.com/auto-update";
+    private static string UpdateUrl = Globals.FileFlowsDotComUrl + "/auto-update";
 
     internal static ServerUpdater Instance;
     private Version? NotifiedUpdateVersion;
@@ -25,18 +27,48 @@ public class ServerUpdater : UpdaterWorker
         Instance = this;
     }
 
+    /// <inheritdoc />
+    protected override void Execute()
+    {
+        var settings = ServiceLoader.Load<ISettingsService>().Get().Result;
+        if (settings.EulaAccepted == false)
+            return; // cannot execute if EULA not accepted
+        base.Execute();
+    }
+
     /// <summary>
     /// Pre-check to run before executing
     /// </summary>
     /// <returns>if false, no update will be checked for</returns>
     protected override bool PreCheck() => LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates);
-    
+
+    /// <inheritdoc />
+    protected override void PreUpgradeArgumentsAdd(ProcessStartInfo startInfo)
+    {
+        Logger.ILog("Is MacOS: " + OperatingSystem.IsMacOS());
+        bool hasEntryPoint = string.IsNullOrWhiteSpace(Application.EntryPoint) == false;
+        Logger.ILog("Has Entry Point: " + hasEntryPoint);
+        if (OperatingSystem.IsMacOS() && hasEntryPoint)
+        {
+            Logger.ILog("Upgrading Mac App");
+            startInfo.ArgumentList.Add("mac");
+            startInfo.ArgumentList.Add(Application.EntryPoint);
+            startInfo.ArgumentList.Add(Globals.Version.Split('.').Last());
+        }
+        base.PreUpgradeArgumentsAdd(startInfo);
+    }
+
+    /// <inheritdoc />
     protected override void Initialize(ScheduleType schedule, int interval)
     {
+        var logger = new Logger();
+        logger.RegisterWriter(new FileLogger(DirectoryHelper.LoggingDirectory, "AutoUpdater", false));
+        Logger = logger;
+        
         if (int.TryParse(Environment.GetEnvironmentVariable("AutoUpdateInterval") ?? string.Empty, out int minutes) &&
             minutes > 0)
         {
-            Logger.Instance?.DLog($"{nameof(ServerUpdater)}: Using Auto Update Interval: " + minutes + " minute" + (minutes == 1 ? "" : "s"));
+            Logger.DLog($"{nameof(ServerUpdater)}: Using Auto Update Interval: " + minutes + " minute" + (minutes == 1 ? "" : "s"));
             interval = minutes;
             schedule = ScheduleType.Minute;
         }
@@ -46,7 +78,7 @@ public class ServerUpdater : UpdaterWorker
         {
             if (updateUrl.EndsWith("/"))
                 updateUrl = updateUrl[..^1];
-            Logger.Instance?.DLog($"{nameof(ServerUpdater)}: Using Auto Update URL: " + updateUrl);
+            Logger.DLog($"{nameof(ServerUpdater)}: Using Auto Update URL: " + updateUrl);
             UpdateUrl = updateUrl;
         }
         base.Initialize(schedule, interval);
@@ -57,7 +89,7 @@ public class ServerUpdater : UpdaterWorker
     /// </summary>
     protected override void QuitApplication()
     {
-        Logger.Instance.ILog($"{nameof(ServerUpdater)} - Exiting Application to run update");
+        Logger.ILog($"{nameof(ServerUpdater)} - Exiting Application to run update");
         WorkerManager.StopWorkers();
         // systemd needs an OK status not to auto restart, we dont want to auto restart that when upgrading
         Environment.Exit(Globals.IsSystemd ? 0 : 99);  
@@ -69,7 +101,7 @@ public class ServerUpdater : UpdaterWorker
     /// <returns>if auto updates are enabled</returns>
     protected override bool GetAutoUpdatesEnabled()
     {
-        var settings = new SettingsController().Get().Result;
+        var settings = ServiceLoader.Load<ISettingsService>().Get().Result;
         return settings?.AutoUpdate == true;
     }
 
@@ -137,7 +169,7 @@ public class ServerUpdater : UpdaterWorker
         if (File.Exists(file))
         {
             string size = FileSizeFormatter.Format(new FileInfo(file).Length);
-            Logger.Instance.ILog($"{UpdaterName}: Update already downloaded: {file} ({size}");
+            Logger.ILog($"{UpdaterName}: Update already downloaded: {file} ({size})");
             return file;
         }
 
@@ -145,19 +177,19 @@ public class ServerUpdater : UpdaterWorker
             Directory.Delete(updateDirectory, true);
         Directory.CreateDirectory(updateDirectory);
 
-        Logger.Instance.ILog($"{UpdaterName}: Downloading update: " + onlineVersion);
+        Logger.ILog($"{UpdaterName}: Downloading update: " + onlineVersion);
         
         
-        string url = $"{UpdateUrl}/download/{onlineVersion}?ts={DateTime.Now.Ticks}";
+        string url = $"{UpdateUrl}/download/{onlineVersion}?ts={DateTime.UtcNow.Ticks}";
         HttpHelper.DownloadFile(url, file).Wait();
         if (File.Exists(file) == false)
         {
-            Logger.Instance.WLog($"{UpdaterName}: Download failed");
+            Logger.WLog($"{UpdaterName}: Download failed");
             return string.Empty;
         }
 
         string dlSize = FileSizeFormatter.Format(new FileInfo(file).Length);
-        Logger.Instance.ILog($"{UpdaterName}: Download complete: {file} ({dlSize})");
+        Logger.ILog($"{UpdaterName}: Download complete: {file} ({dlSize})");
         DownloadedVersion = result.onlineVersion;
         return file;
     }
@@ -166,7 +198,7 @@ public class ServerUpdater : UpdaterWorker
     /// Gets the latest version available online
     /// </summary>
     /// <returns>The latest version available online</returns>
-    public static (bool updateAvailable, Version onlineVersion) GetLatestOnlineVersion()
+    public (bool updateAvailable, Version onlineVersion) GetLatestOnlineVersion()
     {
         try
         {
@@ -182,22 +214,22 @@ public class ServerUpdater : UpdaterWorker
             var result = HttpHelper.Get<string>(url, noLog: true).Result;
             if (result.Success == false)
             {
-                Logger.Instance.ILog($"{nameof(ServerUpdater)}: Failed to retrieve online version");
+                Logger.ILog($"{nameof(ServerUpdater)}: Failed to retrieve online version");
                 return (false, new Version(0, 0, 0, 0));
             }
 
-            Version current = Globals.Version;
+            Version current = new Version(Globals.Version);
             Version? onlineVersion;
             if (Version.TryParse(result.Data, out onlineVersion) == false)
             {
-                Logger.Instance.ILog($"{nameof(ServerUpdater)}: Failed to parse online version: " + result.Data);
+                Logger.ILog($"{nameof(ServerUpdater)}: Failed to parse online version: " + result.Data);
                 return (false, new Version(0, 0, 0, 0));
             }
-
-            if (current >= onlineVersion)
+            
+            if (current.Revision >= onlineVersion.Revision)
             {
-                Logger.Instance.ILog(
-                    $"{nameof(ServerUpdater)}: Current version '{current}' newer or same as online version '{onlineVersion}'");
+                Logger.ILog(
+                    $"{nameof(ServerUpdater)}: Current version '{Globals.Version}' newer or same as online version '{onlineVersion}' [{current.Revision} v {onlineVersion.Revision}]");
                 return (false, onlineVersion);
             }
 
@@ -205,7 +237,9 @@ public class ServerUpdater : UpdaterWorker
         }
         catch (Exception ex)
         {
-            Logger.Instance.ELog($"{nameof(ServerUpdater)}: Failed checking online version: " + ex.Message);
+            while(ex.InnerException != null)
+                ex = ex.InnerException;
+            Logger.ELog($"{nameof(ServerUpdater)}: Failed checking online version: " + ex.Message);
             return (false, new Version(0, 0, 0, 0));
         }
     }

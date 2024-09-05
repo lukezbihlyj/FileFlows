@@ -1,7 +1,5 @@
 namespace FileFlows.Shared.Widgets;
 
-
-
 /// <summary>
 /// Widget definition, these are the different types of Widgets in the system
 /// </summary>
@@ -24,6 +22,14 @@ public abstract class WidgetDefinition
             return new AudioCodecs();
         if (uid == Codecs.WD_UID)
             return new Codecs();
+        if (uid == Encoders.WD_UID)
+            return new Encoders();
+        if (uid == Decoders.WD_UID)
+            return new Decoders();
+        if (uid == Decoders.WD_UID)
+            return new Decoders();
+        if (uid == DecoderParameters.WD_UID)
+            return new DecoderParameters();
         if (uid == ComicFormats.WD_UID)
             return new ComicFormats();
         if (uid == ComicPages.WD_UID)
@@ -46,6 +52,8 @@ public abstract class WidgetDefinition
             return new VideoCodecs();
         if (uid == VideoContainers.WD_UID)
             return new VideoContainers();
+        if (uid == AudioContainers.WD_UID)
+            return new AudioContainers();
         if (uid == VideoResolution.WD_UID)
             return new VideoResolution();
         if (uid == OpenDatabaseConnections.WD_UID)
@@ -54,6 +62,12 @@ public abstract class WidgetDefinition
             return new StorageSaved();
         if (uid == NvidiaSmi.WD_UID)
             return new NvidiaSmi();
+        if (uid == ProcessingNodes.WD_UID)
+            return new ProcessingNodes();
+        if (uid == ProcessingNodes.WD_UID)
+            return new ProcessingNodes();
+        if (uid == CurrentRevision.WD_UID)
+            return new CurrentRevision();
         throw new Exception("Unknown widget: " + uid);
     }
     
@@ -98,6 +112,10 @@ public enum WidgetType
     /// </summary>
     LibraryFileTable = 2,
     /// <summary>
+    /// Processing nodes overview
+    /// </summary>
+    ProcessingNodes = 3,
+    /// <summary>
     /// Box plot 
     /// </summary>
     BoxPlot = 101,
@@ -126,7 +144,20 @@ public enum WidgetType
     /// </summary>
     BellCurve = 107,
     /// <summary>
+    /// Counter
+    /// </summary>
+    Counter = 108,
+    /// <summary>
+    /// Key Value Table
+    /// </summary>
+    KeyValueTable = 109,
+    /// <summary>
+    /// Table that shows the totals
+    /// </summary>
+    TotalsTable = 110,
+    /// <summary>
     /// Nvidia Chart
     /// </summary>
     Nvidia = 121
+    
 }

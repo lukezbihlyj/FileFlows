@@ -3,35 +3,89 @@ using FileFlows.Client.Components;
 using FileFlows.Client.Components.Dialogs;
 using Microsoft.AspNetCore.Components;
 using FileFlows.Client.Components.Common;
-using Humanizer;
+using FileFlows.Client.Helpers;
 
 namespace FileFlows.Client.Pages;
 
+/// <summary>
+/// List Page
+/// </summary>
+/// <typeparam name="U">The type of Unique Identifier</typeparam>
+/// <typeparam name="T">The type bound in the list</typeparam>
 public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
 {
+    /// <summary>
+    /// Gets or sets the navigation manager
+    /// </summary>
+    [Inject] public NavigationManager NavigationManager { get; set; }
+    /// <summary>
+    /// Gets or sets the table instance
+    /// </summary>
     protected FlowTable<T> Table { get; set; }
+    /// <summary>
+    /// Gets or sets the blocker
+    /// </summary>
     [CascadingParameter] public Blocker Blocker { get; set; }
+    /// <summary>
+    /// Gets or sets the editor
+    /// </summary>
     [CascadingParameter] public Editor Editor { get; set; }
+    /// <summary>
+    /// Translations
+    /// </summary>
     public string lblAdd, lblEdit, lblDelete, lblDeleting, lblRefresh;
     
 
+    /// <summary>
+    /// Gets the API URL for the list
+    /// </summary>
     public abstract string ApiUrl { get; }
-    private bool _needsRendering = false;
+    /// <summary>
+    /// If this component needs rendering
+    /// </summary>
+    private bool _needsRendering;
 
+    /// <summary>
+    /// Gets or sets if the list has loaded
+    /// </summary>
     protected bool Loaded { get; set; }
+    /// <summary>
+    /// Gets or sets if there is data
+    /// </summary>
     protected bool HasData { get; set; }
 
-    public List<T> _Data = new List<T>();
+    /// <summary>
+    /// Gets or sets the profile service
+    /// </summary>
+    [Inject] protected ProfileService ProfileService { get; set; }
+    
+    /// <summary>
+    /// Gets the profile
+    /// </summary>
+    protected Profile Profile { get; private set; }
+
+    private List<T> _Data = new ();
+    
+    /// <summary>
+    /// Gets the data
+    /// </summary>
     public List<T> Data
     {
         get => _Data;
-        set
-        {
-            _Data = value ?? new List<T>();
-        }
+        set => _Data = value ?? new ();
     }
 
-    protected override void OnInitialized() => OnInitialized(true);
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        Profile = await ProfileService.Get();
+        if (Licensed() == false)
+        {
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+        OnInitialized(true);
+    }
 
     protected void OnInitialized(bool load)
     {
@@ -45,14 +99,28 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
             _ = Load(default);
     }
 
-    public virtual async Task Refresh() => await Load(default);
+    public virtual async Task Refresh(bool showBlocker = true) => await Load(default, showBlocker);
 
     public virtual string FetchUrl => ApiUrl;
 
-    public async virtual Task PostLoad()
-    {
-        await Task.CompletedTask;
-    }
+    /// <summary>
+    /// Called after the data is loaded
+    /// </summary>
+    public virtual Task PostLoad()
+        => Task.CompletedTask;
+
+    /// <summary>
+    /// Called directly after the data is fetched from the server, and before it is bound to the table
+    /// This happens before "PostLoad"
+    /// </summary>
+    /// <param name="data">the data from the server</param>
+    /// <returns>a task to await</returns>
+    public virtual Task<List<T>> PostLoadGotData(List<T> data)
+        => Task.FromResult(data);
+    
+    /// <summary>
+    /// Waits for a render to occur
+    /// </summary>
     protected async Task WaitForRender()
     {
         _needsRendering = true;
@@ -62,6 +130,8 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
             await Task.Delay(50);
         }
     }
+    
+    /// <inheritdoc />
     protected override void OnAfterRender(bool firstRender)
     {
         _needsRendering = false;
@@ -73,11 +143,12 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
     /// Sets the table data, virtual so a filter can be set if needed
     /// </summary>
     /// <param name="data">the data to set</param>
-    protected virtual void SetTableData(List<T> data) => Table.SetData(data);
+    protected virtual void SetTableData(List<T> data) => Table?.SetData(data, clearSelected: false);
 
-    public virtual async Task Load(U selectedUid)
+    public virtual async Task Load(U selectedUid, bool showBlocker = true)
     {
-        Blocker.Show("Loading Data");
+        if(showBlocker)
+            Blocker.Show("Loading Data");
         await this.WaitForRender();
         try
         {
@@ -85,11 +156,11 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
             var result = await FetchData();
             if (result.Success)
             {
-                this.Data = result.Data;
+                this.Data = await PostLoadGotData(result.Data);
                 if (Table != null)
                 {
                     SetTableData(this.Data);
-                    var item = this.Data.Where(x => x.Uid.Equals(selectedUid)).FirstOrDefault();
+                    var item = this.Data.FirstOrDefault(x => x.Uid.Equals(selectedUid));
                     if (item != null)
                     {
                         _ = Task.Run(async () =>
@@ -108,7 +179,8 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
             fetching.Release();
             HasData = this.Data?.Any() == true;
             this.Loaded = true;
-            Blocker.Hide();
+            if(showBlocker)
+                Blocker.Hide();
             await this.WaitForRender();
         }
     }
@@ -119,15 +191,22 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
     }
 
 
+    /// <summary>
+    /// Event called when a user double-clicks on a item
+    /// </summary>
+    /// <param name="item">the item that was double-clicked</param>
     protected async Task OnDoubleClick(T item)
     {
         await Edit(item);
     }
 
 
+    /// <summary>
+    /// Edits an item
+    /// </summary>
     public async Task Edit()
     {
-        var items = Table.GetSelected();
+        var items = Table?.GetSelected()?.ToList();
         if (items?.Any() != true)
             return;
         var selected = items.First();
@@ -138,35 +217,58 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
             await this.Load(selected.Uid);
     }
 
+    /// <summary>
+    /// Edit a specific item
+    /// </summary>
+    /// <param name="item">the item to edit</param>
+    /// <returns>true if the item was changed</returns>
     public abstract Task<bool> Edit(T item);
 
-    public void ShowEditHttpError<U>(RequestResult<U> result, string defaultMessage = "ErrorMessage.NotFound")
+    /// <summary>
+    /// Shows an error in a toast
+    /// </summary>
+    /// <param name="result">The result with the error</param>
+    /// <param name="defaultMessage">the default message</param>
+    /// <typeparam name="V">The type of RequestResult</typeparam>
+    public void ShowEditHttpError<V>(RequestResult<V> result, string defaultMessage = "ErrorMessage.NotFound")
     {
         Toast.ShowError(
             result.Success || string.IsNullOrEmpty(result.Body) ? Translater.Instant(defaultMessage) : Translater.TranslateIfNeeded(result.Body),
             duration: 60_000
         );
     }
+    
+    /// <summary>
+    /// Tests if the user is licensed for this page
+    /// </summary>
+    /// <returns>true if they are licensed</returns>
+    protected virtual bool Licensed() => true;
 
 
-    public async Task Enable(bool enabled, T item)
+    /// <summary>
+    /// Enables or disabled the item
+    /// </summary>
+    /// <param name="enabled"></param>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public EventCallback Enable(bool enabled, T item)
     {
-#if (DEMO)
-        return;
-#else
-        Blocker.Show();
-        this.StateHasChanged();
-        Data.Clear();
-        try
+        Task.Run(async () =>
         {
-            await HttpHelper.Put<T>($"{ApiUrl}/state/{item.Uid}?enable={enabled}");
-        }
-        finally
-        {
-            Blocker.Hide();
-            this.StateHasChanged();
-        }
-#endif
+            Blocker.Show();
+            StateHasChanged();
+            Data.Clear();
+            try
+            {
+                await HttpHelper.Put<T>($"{ApiUrl}/state/{item.Uid}?enable={enabled}");
+            }
+            finally
+            {
+                Blocker.Hide();
+                this.StateHasChanged();
+            }
+        });
+        return EventCallback.Empty;
     }
 
     protected virtual string DeleteMessage => "Labels.DeleteItems";
@@ -187,7 +289,6 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
 
         try
         {
-#if (!DEMO)
             var deleteResult = await HttpHelper.Delete(DeleteUrl, new ReferenceModel<U> { Uids = uids });
             if (deleteResult.Success == false)
             {
@@ -197,7 +298,6 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
                     Toast.ShowError( Translater.Instant("ErrorMessages.DeleteFailed"));
                 return;
             }
-#endif
 
             this.Data = this.Data.Where(x => uids.Contains(x.Uid) == false).ToList();
 
@@ -217,13 +317,13 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
 
     protected async Task Revisions()
     {
-        var items = Table.GetSelected();
+        var items = Table.GetSelected()?.ToList();
         if (items?.Any() != true)
             return;
         var selected = items.First();
         if (selected == null)
             return;
-        Guid guid = Guid.Empty;
+        Guid guid;
         if (selected is RevisionedObject ro)
             guid = ro.RevisionUid;
         else if (selected.Uid is Guid sGuid)
@@ -236,19 +336,41 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
             await Load(selected.Uid);
     }
     
+    /// <summary>
+    /// Shows the audit log
+    /// </summary>
+    protected async Task AuditLog()
+    {
+        if (Profile.LicensedFor(LicenseFlags.Auditing) == false)
+            return;
+        
+        var selected = Table.GetSelected().FirstOrDefault();
+        if (selected == null)
+            return;
+        if(selected.Uid is Guid uid)
+            await AuditHistory.Instance.Show(uid, GetAuditTypeName());
+    }
+
+    /// <summary>
+    /// Gets the audit type name
+    /// </summary>
+    /// <returns>the audit type name</returns>
+    protected virtual string GetAuditTypeName()
+        => typeof(T).FullName;
     
     /// <summary>
     /// Humanizes a date, eg 11 hours ago
     /// </summary>
-    /// <param name="date">the date</param>
+    /// <param name="dateUtc">the date</param>
     /// <returns>the humanized date</returns>
-    protected string DateString(DateTime? date)
+    protected string DateString(DateTime? dateUtc)
     {
-        if (date == null) return string.Empty;
-        if (date.Value.Year < 2020) return string.Empty; // fixes 0000-01-01 issue
-        var localDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, date.Value.Hour,
-            date.Value.Minute, date.Value.Second);
-        return localDate.ToUniversalTime().Humanize();
+        if (dateUtc == null) return string.Empty;
+        if (dateUtc.Value.Year < 2020) return string.Empty; // fixes 0000-01-01 issue
+        // var localDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, date.Value.Hour,
+        //     date.Value.Minute, date.Value.Second);
+
+        return FormatHelper.HumanizeDate(dateUtc.Value);
     }
 
 }

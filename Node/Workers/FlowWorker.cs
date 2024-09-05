@@ -1,13 +1,13 @@
 ﻿using System.Text;
 using FileFlows.Plugin;
-using FileFlows.Server;
+using FileFlows.RemoteServices;
 using FileFlows.ServerShared;
 using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Helpers;
 using FileFlows.ServerShared.Services;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
-using Jint.Native.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace FileFlows.Node.Workers;
 
@@ -23,19 +23,49 @@ public class FlowWorker : Worker
     /// not match the UI of an executor in the UI
     /// </summary>
     public readonly Guid Uid = Guid.NewGuid();
-
-    private static readonly string ConfigKey = Environment.GetEnvironmentVariable("FF_ENCRYPT")?.EmptyAsNull() ?? Guid.NewGuid().ToString();
-
-    #if(DEBUG)
-    private static readonly bool ConfigNoEncrypt = true;
-    #else
-    private static readonly bool ConfigNoEncrypt = Environment.GetEnvironmentVariable("FF_NO_ENCRYPT") == "1";
-    #endif
-
+    
     /// <summary>
-    /// The current configuration
+    /// Gets the Current configuration revision
     /// </summary>
-    internal static int CurrentConfigurationRevision { get; private set; } = -1;
+    public static ConfigurationRevision? CurrentConfig { get; set; }
+
+    private readonly string _configKeyDefault = Guid.NewGuid().ToString();
+    
+    /// <summary>
+    /// Gets if the config encryption key 
+    /// </summary>
+    /// <returns>the configuration encryption key</returns>
+    private string GetConfigKey(ProcessingNode node)
+    {
+        var key = Environment.GetEnvironmentVariable("FF_ENCRYPT");
+        if (string.IsNullOrWhiteSpace(key) == false)
+            return key;
+        key = node?.GetVariable("FF_ENCRYPT");
+        
+        if (string.IsNullOrWhiteSpace(key) == false)
+            return key;
+        
+        return _configKeyDefault;
+    }
+    
+    /// <summary>
+    /// Gets if the config should not be encrypted
+    /// </summary>
+    /// <returns>true if the configuration should NOT be encrypted</returns>
+    private bool GetConfigNoEncrypt(ProcessingNode node)
+    {
+        if (Environment.GetEnvironmentVariable("FF_NO_ENCRYPT") == "1")
+            return true;
+        if (node?.GetVariable("FF_NO_ENCRYPT") == "1")
+            return true;
+        
+        return false;
+    }
+    
+    /// <summary>
+    /// Gets or sets if a failed flow should keep its files
+    /// </summary>
+    static bool CurrentConfigurationKeepFailedFlowFiles { get; set; }
 
     /// <summary>
     /// The instance of the flow worker 
@@ -46,7 +76,6 @@ public class FlowWorker : Worker
     private readonly List<Guid> ExecutingRunners = new ();
 
     private const int DEFAULT_INTERVAL = 10;
-
     
     /// <summary>
     /// If this flow worker is running on the server or an external processing node
@@ -94,72 +123,111 @@ public class FlowWorker : Worker
     /// </summary>
     protected override void Execute()
     {
-        if (UpdaterWorker.UpdatePending)
+        bool canProcessMore = ExecuteActual(out ProcessingNode? node);
+        // check if the timer has changed
+        if (node == null)
             return;
 
-        if (IsEnabledCheck?.Invoke() == false)
+        if (canProcessMore)
+        {
+            Initialize(ScheduleType.Minute, 1);
+            Task.Run(async () =>
+            {
+                // wait one second so the other process can start and actually tell the service its running
+                int delay = CurrentConfig?.DelayBetweenNextFile ?? 0;
+                if(delay > 0)
+                    await Task.Delay(delay);
+                Execute();
+            });
             return;
-        var nodeService = NodeService.Load();
-        ProcessingNode node;
+        }
+
+        int newInterval = node.ProcessFileCheckInterval;
+        if (newInterval < 1)
+        {
+            var settingsService = ServiceLoader.Load<IFlowRunnerService>();
+            newInterval = settingsService.GetFileCheckInterval().Result;
+        }
+        
+        if (newInterval == Interval || newInterval < 5)
+            return;
+        Logger.Instance.ILog($"Updating file check interval to {newInterval} seconds");
+        Initialize(ScheduleType.Second, newInterval);
+    }
+    
+    /// <summary>
+    /// Actually executes this worker
+    /// </summary>
+    /// <returns>true if a node started processing and it can instantly start processing more files</returns>
+    private bool ExecuteActual(out ProcessingNode? node)
+    {
+        node = null;
+        if (UpdaterWorker.UpdatePending)
+            return false;
+
+        if (IsEnabledCheck?.Invoke() == false)
+            return false;
+        
+        var nodeService = ServiceLoader.Load<INodeService>();
+        if (nodeService.GetSystemIsRunning().Result != true)
+        {
+            Logger.Instance?.ELog("FileFlows server is paused or not running.");
+            return false;
+        }
         try
         {
             node = isServer ? nodeService.GetServerNodeAsync().Result : nodeService.GetByAddressAsync(this.Hostname).Result;
+            if(node == null)
+            {
+                Logger.Instance?.ELog("Failed to register node");
+                return false;
+            }
         }
         catch(Exception ex)
         {
             Logger.Instance?.ELog("Failed to register node: " + ex.Message);
-            return;
+            return false;
         }
+
 
         if (FirstExecute)
         {
             FirstExecute = false;
             // tell the server to kill any flow executors from this node, in case this node was restarted
-            nodeService.ClearWorkersAsync(node.Uid);
+            nodeService.ClearWorkersAsync(node.Uid).Wait();
         }
 
-        if (node == null)
-        {
-            Logger.Instance?.DLog($"Node not found");
-            return;
-        }
-
-        if (UpdateConfiguration().Result == false)
-            return;
-
-        var settingsService = SettingsService.Load();
-        var ffStatus = settingsService.GetFileFlowsStatus().Result;
+        var frService = ServiceLoader.Load<IFlowRunnerService>();
+        var isLicensed = frService.IsLicensed().Result;
 
         string nodeName = node?.Name == "FileFlowsServer" ? "Internal Processing Node" : (node?.Name ?? "Unknown");
 
         if (node?.Enabled != true)
         {
             Logger.Instance?.DLog($"Node '{nodeName}' is not enabled");
-            return;
+            return false;
         }
 
-        if(string.IsNullOrEmpty(node?.Schedule) == false && TimeHelper.InSchedule(node.Schedule) == false)
+        if (UpdateConfiguration(node).Result == false)
         {
-            Logger.Instance?.DLog($"Node '{nodeName}' is out of schedule");
-            Interval = 300; // slow interval down to 5minus
-            return;
+            Logger.Instance?.WLog("Failed to write configuration for Node, pausing system");
+            nodeService.Pause(30).Wait();
+            return false;
         }
 
-        if (Interval == 300)
-            Interval = DEFAULT_INTERVAL;
-
+        int count = ExecutingRunners.Count;
         if (node?.FlowRunners <= ExecutingRunners.Count)
         {
             Logger.Instance?.DLog($"At limit of running executors on '{nodeName}': " + node.FlowRunners);
-            return; // already maximum executors running
+            return false; // already maximum executors running
         }
 
 
-        string tempPath = node?.TempPath ?? string.Empty;
+        string tempPath = node?.TempPath?.EmptyAsNull() ?? AppSettings.ForcedTempPath?.EmptyAsNull() ?? string.Empty;
         if (string.IsNullOrEmpty(tempPath))
         {
             Logger.Instance?.ELog($"Temp Path not set on node '{nodeName}', cannot process");
-            return;
+            return false;
         }
         
         if(Directory.Exists(tempPath) == false)
@@ -171,60 +239,74 @@ public class FlowWorker : Worker
             catch (Exception)
             {
                 Logger.Instance?.ELog($"Temp Path does not exist on on node '{nodeName}', and failed to create it: {tempPath}");
-                return;
+                return false;
             }
         }
 
-        if (ffStatus?.Licensed == true && string.IsNullOrWhiteSpace(node.PreExecuteScript) == false)
+        
+        var libFileService = ServiceLoader.Load<ILibraryFileService>();
+        if (isLicensed && node?.PreExecuteScript != null)
         {
             if (PreExecuteScriptTest(node) == false)
-                return;
+            {
+                int interval = node.ProcessFileCheckInterval;
+                if (interval < 1)
+                {
+                    var settingsService = ServiceLoader.Load<IFlowRunnerService>();
+                    interval = settingsService.GetFileCheckInterval().Result;
+                }
+                interval = Math.Max(10, interval);
+                // tell the server, so if this is a higher priority node, it doesn't block processing
+                libFileService.NodeCannotRun(node.Uid, interval).Wait();
+                return false;
+            }
         }
-        
-        var libFileService = LibraryFileService.Load();
         var libFileResult = libFileService.GetNext(node?.Name ?? string.Empty, node?.Uid ?? Guid.Empty,node?.Version ?? string.Empty, Uid).Result;
         if (libFileResult?.Status != NextLibraryFileStatus.Success)
         {
             Logger.Instance.ILog("No file found to process, status from server: " + (libFileResult?.Status.ToString() ?? "UNKNOWN"));
-            return;
+            return false;
         }
         if (libFileResult?.File == null)
-            return; // nothing to process
+            return false; // nothing to process
         var libFile = libFileResult.File;
 
         bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-        Guid processUid = Guid.NewGuid();
-        AddExecutingRunner(processUid);
+        AddExecutingRunner(libFile.Uid);
+        var node2 = node;
         Task.Run(() =>
         {
+            int exitCode = 0; 
+            StringBuilder completeLog = new StringBuilder();
+            bool keepFiles = false;
             try
             {
-#pragma warning disable CS8601 // Possible null reference assignment.
-                var parameters = new string[]
-                {
-                    "--uid",
-                    processUid.ToString(),
-                    "--libfile",
-                    libFile.Uid.ToString(),
-                    "--tempPath",
-                    tempPath,
-                    "--cfgPath",
-                    GetConfigurationDirectory(),
-                    "--cfgKey",
-                    ConfigNoEncrypt ? "NO_ENCRYPT" : ConfigKey,
-                    "--baseUrl",
-                    Service.ServiceBaseUrl,
-                    Globals.IsDocker ? "--docker" : null,
-                    isServer ? null : "--hostname",
-                    isServer ? null : Hostname,
-                    isServer ? "--server" : "--notserver"
-                }.Where(x => x != null).ToArray();
+                var runnerParameters = new RunnerParameters();
+                runnerParameters.Uid = libFile.Uid;
+                runnerParameters.NodeUid = node2!.Uid;
+                runnerParameters.LibraryFile = libFile.Uid;
+                runnerParameters.TempPath = tempPath;
+                runnerParameters.ConfigPath = GetConfigurationDirectory();
+                runnerParameters.ConfigKey = GetConfigNoEncrypt(node2) ? "NO_ENCRYPT" : GetConfigKey(node2);
+                runnerParameters.BaseUrl = RemoteService.ServiceBaseUrl;
+                runnerParameters.AccessToken = RemoteService.AccessToken;
+                runnerParameters.RemoteNodeUid = RemoteService.NodeUid;
+                runnerParameters.IsDocker = Globals.IsDocker;
+                runnerParameters.IsInternalServerNode = isServer;
+                runnerParameters.Hostname = isServer ? null : Hostname;
+                string json = JsonSerializer.Serialize(runnerParameters);
+                string randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 20)
+                    .Select(s => s[new Random().Next(s.Length)]).ToArray());
+                string encrypted = Decrypter.Encrypt(json, "hVYjHrWvtEq8huShjTkA" + randomString + "oZf4GW3jJtjuNHlMNpl9");
+                var parameters = new[] { encrypted, randomString };
+                string workingDir = Path.Combine(tempPath, "Runner-" + libFile.Uid);
 #pragma warning restore CS8601 // Possible null reference assignment.
 
                 try
                 {
 #if (DEBUG)
-                    FileFlows.FlowRunner.Program.Main(parameters);
+                    (exitCode, string output)  = FlowRunner.Program.RunWithLog(parameters);
+                    string error = string.Empty;
 #else   
                     using Process process = new Process();
                 
@@ -244,7 +326,17 @@ public class FlowWorker : Worker
                     process.StartInfo.CreateNoWindow = true;
                     process.Start();
                     string output = process.StandardOutput.ReadToEnd();
-                    StringBuilder completeLog = new StringBuilder();
+                    string error = process.StandardError.ReadToEnd();
+                    process.WaitForExit();
+                    exitCode = process.ExitCode;
+
+                #endif
+                    if (exitCode == 100)
+                    {
+                        exitCode = 0; // special case
+                        keepFiles = true;
+                    }
+                    
                     if (string.IsNullOrEmpty(output) == false)
                     {
                         completeLog.AppendLine(
@@ -256,8 +348,6 @@ public class FlowWorker : Worker
                             "===                       PROCESSING NODE OUTPUT END                       ===" + Environment.NewLine +
                             "==============================================================================");
                     }
-                    string error = process.StandardError.ReadToEnd();
-                    process.WaitForExit();
                     if (string.IsNullOrEmpty(error) == false)
                     {
                         completeLog.AppendLine(
@@ -270,61 +360,134 @@ public class FlowWorker : Worker
                             "==============================================================================");
                     }
 
-                    SaveLog(libFile, completeLog.ToString());
-
-                    if (process.ExitCode != 0)
+                    if (exitCode is 0 or (int)FileStatus.ReprocessByFlow)
+                        return;
+                    
+                    Logger.Instance?.ELog("Error executing runner: Exit code: " + exitCode);
+                    if (Enum.IsDefined(typeof(FileStatus), exitCode))
+                        libFile.Status = (FileStatus)exitCode;
+                    else
                     {
-                        Logger.Instance?.ELog("Error executing runner: Invalid exit code: " + process.ExitCode);
                         libFile.Status = FileStatus.ProcessingFailed;
-                        libFileService.Update(libFile);
+                        Logger.Instance?.ILog("Invalid exit code, setting file as failed");
                     }
-                #endif
+                    FinishWork(libFile.Uid, node2, libFile);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance?.ELog("Error executing runner: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    AppendToCompleteLog(completeLog, "Error executing runner: " + ex.Message + Environment.NewLine + ex.StackTrace, type: "ERR");
                     libFile.Status = FileStatus.ProcessingFailed;
-                    libFileService.Update(libFile);
+                    FinishWork(libFile.Uid, node2, libFile);
+                    exitCode = (int)FileStatus.ProcessingFailed;
                 }
             }
             finally
             {
-                RemoveExecutingRunner(processUid);
+                RemoveExecutingRunner(libFile.Uid);
 
                 try
                 {
-                    string dir = Path.Combine(tempPath, "Runner-" + processUid.ToString());
-                    if(Directory.Exists(dir))
-                        Directory.Delete(dir, true);
+                    string dir = Path.Combine(tempPath, "Runner-" + libFile.Uid);
+                    if (keepFiles == false || CurrentConfigurationKeepFailedFlowFiles == false)
+                    {
+                        if (Directory.Exists(dir))
+                        {
+                            Directory.Delete(dir, true);
+                            AppendToCompleteLog(completeLog, "Deleted temporary directory: " + dir);
+                        }
+                    }
+                    else
+                    {
+                        AppendToCompleteLog(completeLog, "Flow failed keeping temporary files in: " + dir);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance?.WLog("Failed to clean up runner directory: " + ex.Message);
+                    AppendToCompleteLog(completeLog, "Failed to clean up runner directory: " + ex.Message, type: "ERR");
                 }
+                
+                SaveLog(libFile, completeLog.ToString());
 
                 Trigger();
             }
         });
+        
+        if (count + 1 >= node!.FlowRunners)
+            return false;
+
+        var library = CurrentConfig?.Libraries?.FirstOrDefault(x => x.Uid == libFile.LibraryUid);
+        
+        if (CurrentConfig?.LicenseLevel != LicenseLevel.Basic && library is { MaxRunners: > 0 })
+            return false; // cant process instantly or this could ignore the library limit
+
+        return true;
     }
+
+    private void FinishWork(Guid processUid, ProcessingNode node, LibraryFile libFile)
+    {
+        FlowExecutorInfo info = new()
+        {
+            Uid = processUid,
+            LibraryFile = libFile,
+            NodeUid = node.Uid,
+            NodeName = node.Name,
+            RelativeFile = libFile.RelativePath,
+            Library = libFile.Library
+        };
+        ServiceLoader.Load<IFlowRunnerService>().Finish(info).Wait();
+    }
+
+    /// <summary>
+    /// Adds a message to the complete log with a formatted date
+    /// </summary>
+    /// <param name="completeLog">the complete log</param>
+    /// <param name="message">the message to add</param>
+    private void AppendToCompleteLog(StringBuilder completeLog, string message, string type = "INFO")
+        => completeLog.AppendLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} [{type}] -> {message}");
 
     private bool PreExecuteScriptTest(ProcessingNode node)
     {
-        var scriptService  = ScriptService.Load();
+        var script = CurrentConfig?.SystemScripts?.FirstOrDefault(x => node.PreExecuteScript!.Value == x.Uid);
+        if (script != null && script.Language != ScriptLanguage.JavaScript)
+        {
+            StringLogger logger = new();
+            var seResult = new ScriptExecutor().Execute(new()
+            {
+                Code = script.Code,
+                TempPath = Path.GetTempPath(),
+                Language = script.Language,
+                Logger = logger,
+                ScriptType = ScriptType.System,
+                NotificationCallback = (severity, title, message) =>
+                {
+                    _ = ServiceLoader.Load<INotificationService>()
+                        .Record((NotificationSeverity)severity, title, message);
+                } 
+            });
+            if (seResult.Failed(out var error))
+            {
+                _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
+                    $"Failed executing pre-execute script '{script.Name}'",
+                    $"Failed to execute on node '{node.Name}': {error}");
+                Logger.Instance.WLog("Failed running pre-execute script: " + error + "\n" + logger);
+                return false;
+            }
+            bool preExecuteResult = seResult.Value == 1;
+            
+            if(preExecuteResult == false)
+                Logger.Instance.ILog("Pre-Execute Script Returned False:\n" + logger);
+            else
+                Logger.Instance.ILog("Pre-Execute Script Successful:\n" + logger);
+            
+            return preExecuteResult;
+        }
         string scriptDir = Path.Combine(GetConfigurationDirectory(), "Scripts");
         string sharedDir = Path.Combine(scriptDir, "Shared");
         string jsFile = Path.Combine(scriptDir, "System", node.PreExecuteScript + ".js");
         if (File.Exists(jsFile) == false)
         {
-            jsFile = Path.Combine(GetConfigurationDirectory(), "Scripts", "Flow", node.PreExecuteScript + ".js");
-            if (File.Exists(jsFile) == false)
-            {
-                jsFile = Path.Combine(sharedDir, node.PreExecuteScript + ".js");
-                if (File.Exists(jsFile) == false)
-                {
-                    Logger.Instance.ELog("Failed to locate pre-execute script: " + node.PreExecuteScript);
-                    return false;
-                }
-            }
+            Logger.Instance.ELog("Failed to locate pre-execute script: " + node.PreExecuteScript);
+            return false;
         }
 
         Logger.Instance.ILog("Loading Pre-Execute Script: " + jsFile);
@@ -335,19 +498,16 @@ public class FlowWorker : Worker
             return false;
         }
 
-        var variableService = new VariableService();
+        var variableService = ServiceLoader.Load<IVariableService>();
         var variables = variableService.GetAllAsync().Result?.ToDictionary(x => x.Name, x => (object)x.Value) ?? new ();
-        if (variables.ContainsKey("FileFlows.Url"))
-            variables["FileFlows.Url"] = Service.ServiceBaseUrl;
-        else
-            variables.Add("FileFlows.Url", Service.ServiceBaseUrl);
+        variables["FileFlows.Url"] = RemoteService.ServiceBaseUrl;
         var result = ScriptExecutor.Execute(code, variables, sharedDirectory: sharedDir);
         if (result.Success == false)
         {
             Logger.Instance.ELog("Pre-execute script failed: " + result.ReturnValue + "\n" + result.Log);
             return false;
         }
-        Logger.Instance.ILog("Pre-Execute script returned: " + result.ReturnValue == null ? "" : System.Text.Json.JsonSerializer.Serialize(result.ReturnValue));
+        Logger.Instance.ILog("Pre-Execute script returned: " + (result.ReturnValue == null ? "" : System.Text.Json.JsonSerializer.Serialize(result.ReturnValue)));
         
 
         if (result.ReturnValue?.ToString()?.ToLowerInvariant() == "exit")
@@ -383,24 +543,6 @@ public class FlowWorker : Worker
         }
         Logger.Instance.ILog("Pre-execute script passed: \n"+ result.Log.Replace("\\n", "\n"));
         return true;
-    }
-
-    private void StringBuilderLog(StringBuilder builder, LogType type, params object[] args)
-    {
-        string typeString = type switch
-        {
-            LogType.Debug => "[DBUG] ",
-            LogType.Info => "[INFO] ",
-            LogType.Warning => "[WARN] ",
-            LogType.Error => "[ERRR] ",
-            _ => "",
-        };
-        string message = typeString + string.Join(", ", args.Select(x =>
-            x == null ? "null" :
-            x.GetType().IsPrimitive ? x.ToString() :
-            x is string ? x.ToString() :
-            System.Text.Json.JsonSerializer.Serialize(x)));
-        builder.AppendLine(message);
     }
 
     /// <summary>
@@ -455,8 +597,10 @@ public class FlowWorker : Worker
     /// <param name="libFile">The Library File that was processed</param>
     /// <param name="log">The full flow runner log</param>
     private void SaveLog(LibraryFile libFile, string log)
-    { 
-        var service = new LibraryFileService();
+    {
+        if (string.IsNullOrWhiteSpace(log))
+            return;
+        var service = ServiceLoader.Load<ILibraryFileService>();
         bool saved = service.SaveFullLog(libFile.Uid, log).Result;
         if (!saved)
         {
@@ -465,7 +609,6 @@ public class FlowWorker : Worker
             Logger.Instance?.DLog(Environment.NewLine + log);
         }
     }
-
 
     /// <summary>
     /// The location of dotnet
@@ -490,8 +633,13 @@ public class FlowWorker : Worker
         return Dotnet;
     }
 
+    /// <summary>
+    /// Gets the configuration directory
+    /// </summary>
+    /// <param name="configVersion">the config revision</param>
+    /// <returns>the configuration directory</returns>
     private string GetConfigurationDirectory(int? configVersion = null) =>
-        Path.Combine(DirectoryHelper.ConfigDirectory, (configVersion ?? CurrentConfigurationRevision).ToString());
+        Path.Combine(DirectoryHelper.ConfigDirectory, (configVersion ?? CurrentConfig?.Revision ?? 0).ToString());
 
     private bool GetCurrentConfigEncrypted()
     {
@@ -507,10 +655,11 @@ public class FlowWorker : Worker
     /// <summary>
     /// Ensures the local configuration is current with the server
     /// </summary>
+    /// <param name="node">the processing node</param>
     /// <returns>an awaited task</returns>
-    private async Task<bool> UpdateConfiguration()
+    private async Task<bool> UpdateConfiguration(ProcessingNode node)
     {
-        var service = new SettingsService();
+        var service = ServiceLoader.Load<ISettingsService>();
         int revision = await service.GetCurrentConfigurationRevision();
         if (revision == -1)
         {
@@ -519,7 +668,7 @@ public class FlowWorker : Worker
         }
 
 
-        if (revision == CurrentConfigurationRevision)
+        if (revision == CurrentConfig?.Revision)
             return true;
 
         var config = await service.GetCurrentConfiguration();
@@ -549,21 +698,26 @@ public class FlowWorker : Worker
         }
 
         foreach (var script in config.FlowScripts)
-            await System.IO.File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "Flow", script.Name + ".js"), script.Code);
+            await File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "Flow", script.Uid + ".js"), script.Code);
         foreach (var script in config.SystemScripts)
-            await System.IO.File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "System", script.Name + ".js"), script.Code);
+            await File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "System", script.Uid + ".js"), script.Code);
         foreach (var script in config.SharedScripts)
-            await System.IO.File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "Shared", script.Name + ".js"), script.Code);
+            await File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "Shared", script.Name + ".js"), script.Code);
         
-
         bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         bool macOs = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         bool is64bit = IntPtr.Size == 8;
-        foreach (var plugin in config.Plugins ?? new Dictionary<string, byte[]>())
+        foreach (var plugin in config.Plugins)
         {
-            var zip = Path.Combine(dir, plugin.Key + ".zip");
-            await File.WriteAllBytesAsync(zip, plugin.Value);
-            string destDir = Path.Combine(dir, "Plugins", plugin.Key);
+            var result = await service.DownloadPlugin(plugin, dir);
+            if (result.Failed(out string error))
+            {
+                Logger.Instance?.ELog(error);
+                return false;
+            }
+
+            var zip = result.Value;
+            string destDir = Path.Combine(dir, "Plugins", plugin);
             Directory.CreateDirectory(destDir);
             System.IO.Compression.ZipFile.ExtractToDirectory(zip, destDir);
             File.Delete(zip);
@@ -595,12 +749,24 @@ public class FlowWorker : Worker
             }
         }
 
+        var variables = config.Variables;
+        if (node.Variables?.Any() == true)
+        {
+            foreach (var v in node.Variables)
+            {
+                variables[v.Key] = v.Value;
+            }
+        }
+
         string json = System.Text.Json.JsonSerializer.Serialize(new
         {
             config.Revision,
             config.MaxNodes,
-            config.Variables,
+            config.LicenseLevel,
+            config.AllowRemote,
+            Variables = variables,
             config.Libraries,
+            config.PluginNames,
             config.PluginSettings,
             config.Flows,
             config.FlowScripts,
@@ -609,7 +775,7 @@ public class FlowWorker : Worker
         });
 
         string cfgFile = Path.Combine(dir, "config.json");
-        if (ConfigNoEncrypt)
+        if (GetConfigNoEncrypt(node))
         {
             Logger.Instance?.DLog("Configuration set to no encryption, saving as plain text");
             await File.WriteAllTextAsync(cfgFile, json);
@@ -617,13 +783,62 @@ public class FlowWorker : Worker
         else
         {
             Logger.Instance?.DLog("Saving encrypted configuration");
-            Utils.ConfigEncrypter.Save(json, ConfigKey, cfgFile);
+            Utils.ConfigEncrypter.Save(json, GetConfigKey(node), cfgFile);
         }
 
-        CurrentConfigurationRevision = revision;
+        if (Globals.IsDocker)
+        {
+            if (WriteAndRunDockerMods(config.DockerMods ?? new(), node.Name) == false)
+                return false;
+        }
+
+
+        CurrentConfig = config;
+        CurrentConfigurationKeepFailedFlowFiles = config.KeepFailedFlowTempFiles;
 
         return true;
-
     }
 
+    /// <summary>
+    /// Writes and run all the DockerMods
+    /// </summary>
+    /// <param name="mods">the DockerMods</param>
+    /// <param name="nodeName">the hostname node this is running on</param>
+    bool WriteAndRunDockerMods(List<DockerMod> mods, string nodeName)
+    {
+        var directory = DirectoryHelper.DockerModsDirectory;
+        Logger.Instance.ILog("DockerMods Directory: " + directory);
+        if (Directory.Exists(directory) == false)
+            Directory.CreateDirectory(directory);
+        
+        DockerModHelper.UninstallUnknownMods(mods).Wait();
+
+        if (mods?.Any() != true)
+        {
+            Logger.Instance.ILog("No DockerMods to run");
+            return true;
+        }
+
+        
+        foreach (var mod in mods)
+        {
+            var result = DockerModHelper.Execute(mod).Result;
+            if (result.Failed(out string error))
+            {
+                _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Critical,
+                    $"Docker Mod '{mod.Name}' Failed on '{nodeName}'",
+                    error);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Gets the executors UIDs
+    /// </summary>
+    /// <returns>the executors UIDs</returns>
+    public Guid[] GetExecutors()
+        => ExecutingRunners?.ToArray() ?? new Guid[] { };
 }

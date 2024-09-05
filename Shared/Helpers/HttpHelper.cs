@@ -1,35 +1,50 @@
-using System.Collections;
 using System.IO;
-using NPoco.Expressions;
-
-namespace FileFlows.Shared.Helpers;
-
-using System;
-using System.Net.Http;
+using System.Net;
 using System.Text;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using FileFlows.Shared.Models;
+
+namespace FileFlows.Shared.Helpers;
 
 /// <summary>
 /// A helper for HTTP processing of requests
 /// </summary>
 public class HttpHelper
 {
-    //public delegate void RemainingFilesHeader(int count);
+    private static HttpClient _Client;
+    
+    /// <summary>
+    /// Gets or sets the 401 action handler
+    /// </summary>
+    public static Action On401 { get; set; }
 
-    //public static event RemainingFilesHeader OnRemainingFilesHeader;
+    
+    /// <summary>
+    /// Gets or sets the redirect handler
+    /// </summary>
+    public static Action<string> OnRedirect { get; set; }
     
     /// <summary>
     /// Gets or sets the HTTP Client used
     /// </summary>
-    public static HttpClient Client { get; set; }
+    public static HttpClient Client
+    {
+        get => _Client;
+        set => _Client = value;
+    }
 
     /// <summary>
     /// Gets or sets the logger used
     /// </summary>
     public static Plugin.ILogger Logger { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an action that can adjust the http request message if needed  
+    /// </summary>
+    public static Action<HttpRequestMessage> OnHttpRequestCreated { get; set; }
 
     /// <summary>
     /// Performs a GET request
@@ -39,7 +54,7 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<T>> Get<T>(string url)
     {
-        return await MakeRequest<T>(HttpMethod.Get, url);
+        return await MakeRequest<T>(System.Net.Http.HttpMethod.Get, url);
     }
     
     /// <summary>
@@ -52,9 +67,8 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<T>> Get<T>(string url, int timeoutSeconds = 0, bool noLog = false)
     {
-        return await MakeRequest<T>(HttpMethod.Get, url, timeoutSeconds: timeoutSeconds, noLog: noLog);
+        return await MakeRequest<T>(System.Net.Http.HttpMethod.Get, url, timeoutSeconds: timeoutSeconds, noLog: noLog);
     }
-#if (!DEMO)
     
     /// <summary>
     /// Performs a POST request
@@ -65,7 +79,7 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<string>> Post(string url, object data = null, bool noLog = false)
     {
-        return await MakeRequest<string>(HttpMethod.Post, url, data, noLog: noLog);
+        return await MakeRequest<string>(System.Net.Http.HttpMethod.Post, url, data, noLog: noLog);
     }
     
     /// <summary>
@@ -78,7 +92,7 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<T>> Post<T>(string url, object data = null, int timeoutSeconds = 0)
     {
-        return await MakeRequest<T>(HttpMethod.Post, url, data, timeoutSeconds: timeoutSeconds);
+        return await MakeRequest<T>(System.Net.Http.HttpMethod.Post, url, data, timeoutSeconds: timeoutSeconds);
     }
     
     /// <summary>
@@ -89,7 +103,7 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<string>> Put(string url, object data = null)
     {
-        return await MakeRequest<string>(HttpMethod.Put, url, data);
+        return await MakeRequest<string>(System.Net.Http.HttpMethod.Put, url, data);
     }
     
     /// <summary>
@@ -101,7 +115,7 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<T>> Put<T>(string url, object data = null)
     {
-        return await MakeRequest<T>(HttpMethod.Put, url, data);
+        return await MakeRequest<T>(System.Net.Http.HttpMethod.Put, url, data);
     }
 
     /// <summary>
@@ -112,10 +126,10 @@ public class HttpHelper
     /// <returns>the request result</returns>
     public static async Task<RequestResult<string>> Delete(string url, object data = null)
     {
-        return await MakeRequest<string>(HttpMethod.Delete, url, data);
+        return await MakeRequest<string>(System.Net.Http.HttpMethod.Delete, url, data);
     }
-
-
+    
+    
     /// <summary>
     /// Downloads a file from a URL
     /// </summary>
@@ -133,7 +147,7 @@ public class HttpHelper
 
             using HttpResponseMessage response = await Client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             await using var streamToReadFrom = await response.Content.ReadAsStreamAsync();
-            await using var streamToWriteTo = File.Open(destination, FileMode.Create);
+            await using var streamToWriteTo = FileOpenHelper.OpenWrite_NoReadLock(destination, FileMode.Create);
             await streamToReadFrom.CopyToAsync(streamToWriteTo);
         }
         catch (Exception ex)
@@ -141,7 +155,6 @@ public class HttpHelper
             throw new Exception("Error downloading file: " + ex.Message);
         }
     }
-#endif
 
     /// <summary>
     /// Logs a message to the log
@@ -172,100 +185,99 @@ public class HttpHelper
     /// <param name="noLog">if the request show record nothing to the log</param>
     /// <typeparam name="T">The request object returned</typeparam>
     /// <returns>a processing result of the request</returns>
-    private static async Task<RequestResult<T>> MakeRequest<T>(HttpMethod method, string url, object data = null, int timeoutSeconds = 0, bool noLog = false)
+    private static async Task<RequestResult<T>> MakeRequest<T>(System.Net.Http.HttpMethod method, string url, object data = null,
+        int timeoutSeconds = 0, bool noLog = false)
     {
-        try
-        {
 #if (DEBUG)
-            if (url.Contains("i18n") == false && url.StartsWith("http") == false)
-                url = "http://localhost:6868" + url;
+        if (url.Contains("i18n") == false && url.StartsWith("http") == false)
+            url = "http://localhost:6868" + url;
 #endif
-            var request = new HttpRequestMessage
-            {
-                Method = method,
-                RequestUri = new Uri(url, UriKind.RelativeOrAbsolute),
-                Content = data != null ? AsJson(data) : null
-            };
-
-            if (method == HttpMethod.Post && data == null)
-            {
-                // if this is null, asp.net will return a 415 content not support, as the content-type will not be set
-                request.Content = new StringContent("", Encoding.UTF8, "application/json");
-            }
-
-            if(noLog == false)
-                Log("Making request [" + method + "]: " + url);
-            HttpResponseMessage response;
-            if (timeoutSeconds > 0)
-            {
-                using var cancelToken = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
-                response = await Client.SendAsync(request, cancelToken.Token);
-            }
-            else
-                response = await Client.SendAsync(request);
-
-            if (typeof(T) == typeof(byte[]))
-            {
-                var bytes = await response.Content.ReadAsByteArrayAsync();
-                if (response.IsSuccessStatusCode)
-                    return new RequestResult<T> { Success = true, Data = (T)(object)bytes, Headers = GetHeaders(response)};
-                return new RequestResult<T> { Success = false, Headers = GetHeaders(response) };
-            }
-
-            // if (TryGetHeader(response, "x-files-remaining", out int filesRemaining))
-            // {
-            //     if (OnRemainingFilesHeader != null)
-            //     {
-            //         try
-            //         {
-            //             OnRemainingFilesHeader.Invoke(filesRemaining);
-            //         }
-            //         catch (Exception)
-            //         {
-            //         }
-            //     }
-            // }
-            
-            
-            string body = await response.Content.ReadAsStringAsync();
-            
-
-            if (response.IsSuccessStatusCode && (body.Contains("INFO") == false && body.Contains("An unhandled error has occurred.")) == false)
-            {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
-                    Converters = { new FileFlows.Shared.Json.ValidatorConverter() }
-                };
-#pragma warning disable CS8600
-                T result = string.IsNullOrEmpty(body) ? default(T) : typeof(T) == typeof(string) ? (T)(object)body : JsonSerializer.Deserialize<T>(body, options);
-#pragma warning restore CS8600
-                return new RequestResult<T> { Success = true, Body = body, Data = result, Headers = GetHeaders(response) };
-            }
-            else
-            {
-                if (body.Contains("An unhandled error has occurred."))
-                    body = "An unhandled error has occurred."; // asp.net error
-                else if (body.Contains("502 Bad Gateway"))
-                {
-                    body = "Unable to connect, server possibly down";
-                    noLog = true;
-                }
-                if(noLog == false)
-                    Log("Error Body: " + body);
-                return new RequestResult<T> { Success = false, Body = body, Data = default(T), Headers = GetHeaders(response) };
-            }
-        }
-        catch (Exception)
+        var request = new HttpRequestMessage
         {
-            throw;
+            Method = method,
+            RequestUri = new Uri(url, UriKind.RelativeOrAbsolute),
+            Content = data != null ? AsJson(data) : null
+        };
+
+        OnHttpRequestCreated?.Invoke(request);
+
+        if (method == System.Net.Http.HttpMethod.Post && data == null)
+        {
+            // if this is null, asp.net will return a 415 content not support, as the content-type will not be set
+            request.Content = new StringContent("", Encoding.UTF8, "application/json");
         }
-        
+
+        HttpResponseMessage response;
+        if (timeoutSeconds > 0)
+        {
+            using var cancelToken = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
+            response = await Client.SendAsync(request, cancelToken.Token);
+        }
+        else
+            response = await Client.SendAsync(request);
+
+        if (typeof(T) == typeof(byte[]))
+        {
+            var bytes = await response.Content.ReadAsByteArrayAsync();
+            if (response.IsSuccessStatusCode)
+                return new RequestResult<T> { Success = true, Data = (T)(object)bytes, StatusCode = response.StatusCode, Headers = GetHeaders(response) };
+            return new RequestResult<T> { Success = false, Headers = GetHeaders(response), StatusCode = response.StatusCode };
+        }
+
+        string body = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode &&
+            (body.Contains("INFO") == false && body.Contains("An unhandled error has occurred.")) == false)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                Converters = { new FileFlows.Shared.Json.ValidatorConverter() }
+            };
+#pragma warning disable CS8600
+            T result = string.IsNullOrEmpty(body) ? default(T) :
+                typeof(T) == typeof(string) ? (T)(object)body : JsonSerializer.Deserialize<T>(body, options);
+#pragma warning restore CS8600
+            return new RequestResult<T> { Success = true, Body = body, Data = result, StatusCode = response.StatusCode, Headers = GetHeaders(response) };
+        }
+        else
+        {
+            if (body.Contains("An unhandled error has occurred."))
+                body = "An unhandled error has occurred."; // asp.net error
+            else if (body.Contains("502 Bad Gateway"))
+            {
+                body = "Unable to connect, server possibly down";
+                noLog = true;
+            }
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized && On401 != null)
+            {
+                On401();
+            }
+
+            if (response.StatusCode == HttpStatusCode.ServiceUnavailable && OnRedirect != null && 
+                response.Headers.TryGetValues("Location", out var locationValues) && 
+                locationValues.FirstOrDefault() is string location && string.IsNullOrWhiteSpace(location) == false)
+            {
+                OnRedirect(location);
+            }
+
+            if (noLog == false && string.IsNullOrWhiteSpace(body) == false)
+            {
+                Log("Request URL: " + url);
+                Log("Error Body: " + body);
+            }
+
+            return new RequestResult<T>
+                { Success = false, Body = body, Data = default(T), StatusCode = response.StatusCode, Headers = GetHeaders(response) };
+        }
+
+
         Dictionary<string, string> GetHeaders(HttpResponseMessage response)
         {
             return response.Headers.Where(x => x.Key.StartsWith("x-"))
                 .DistinctBy(x => x.Key)
-                .ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
+                .ToDictionary(x => x.Key, x => x.Value.FirstOrDefault() ?? string.Empty);
         }
     }
 
@@ -310,19 +322,32 @@ public class HttpHelper
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
-    public static HttpClient GetDefaultHttpHelper(string serviceBaseUrl)
+    /// <summary>
+    /// Gets the default HttpClient
+    /// </summary>
+    /// <param name="serviceBaseUrl">the base URL for services</param>
+    /// <returns>a HttpClient</returns>
+    public static HttpClient GetDefaultHttpClient(string serviceBaseUrl)
     {
-        if (Environment.GetEnvironmentVariable("HTTPS") != "1")
-            return new HttpClient();
+        // #if(!DEBUG)
+        // if (Environment.GetEnvironmentVariable("HTTPS") != "1")
+        //     return new HttpClient();
+        // #endif
+        
         var handler = new HttpClientHandler();
         handler.ClientCertificateOptions = ClientCertificateOption.Manual;
         handler.ServerCertificateCustomValidationCallback = 
             (httpRequestMessage, cert, cetChain, policyErrors) =>
             {
+                string url = httpRequestMessage.RequestUri.ToString();
+                Shared.Logger.Instance?.ILog("Checking URL: " + url);
                 if (string.IsNullOrEmpty(serviceBaseUrl))
                     return true;
-                if (httpRequestMessage.RequestUri.ToString()
-                    .StartsWith(serviceBaseUrl))
+                if (url.StartsWith(serviceBaseUrl))
+                    return true;
+                if (url.StartsWith("https://192.168") || url.StartsWith("https://localhost"))
+                    return true;
+                if (Environment.GetEnvironmentVariable("FF_IGNORE_CERT_ERRORS") == "1")
                     return true;
                 return cert.Verify();
             };

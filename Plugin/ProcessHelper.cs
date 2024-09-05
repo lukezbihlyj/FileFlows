@@ -84,8 +84,6 @@ public class ExecuteArgs
     /// Gets or sets the timeout in seconds of the process
     /// </summary>
     public int Timeout { get; set; }
-    
-
     /// <summary>
     /// When silent, nothing will be logged
     /// </summary>
@@ -125,7 +123,25 @@ public class ExecuteArgs
 /// <summary>
 /// A helper class that handles executing processes and reading their output
 /// </summary>
-public class ProcessHelper
+public interface IProcessHelper
+{
+    /// <summary>
+    /// Cancels the running process
+    /// </summary>
+    void Cancel();
+
+    /// <summary>
+    /// Executes a shell command
+    /// </summary>
+    /// <param name="args">the arguments of the shell command</param>
+    /// <returns>the processing result of the executed command</returns>
+    Task<ProcessResult> ExecuteShellCommand(ExecuteArgs args);
+}
+
+/// <summary>
+/// A helper class that handles executing processes and reading their output
+/// </summary>
+public class ProcessHelper : IProcessHelper
 {
     private Process process;
     private readonly ILogger Logger;
@@ -249,9 +265,10 @@ public class ProcessHelper
                 // Reads the output stream first and then waits because deadlocks are possible
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
+                var timeoutMilliseconds = args.Timeout * 1000;
 
                 // Creates task to wait for process exit using timeout
-                var waitForExit = WaitForExitAsync(process, args.Timeout);
+                var waitForExit = WaitForExitAsync(process, timeoutMilliseconds);
 
                 // Create task to wait for process exit and closing all output streams
                 var processTask = Task.WhenAll(waitForExit, outputCloseEvent.Task, errorCloseEvent.Task);
@@ -259,7 +276,7 @@ public class ProcessHelper
                 // Waits process completion and then checks it was not completed by timeout
                 if (
                     (
-                        (args.Timeout > 0 && await Task.WhenAny(Task.Delay(args.Timeout), processTask) == processTask) ||
+                        (args.Timeout > 0 && await Task.WhenAny(Task.Delay(timeoutMilliseconds), processTask) == processTask) ||
                         (args.Timeout == 0 && await Task.WhenAny(processTask) == processTask)
                     )
                      && waitForExit.Result)
@@ -286,6 +303,9 @@ public class ProcessHelper
                     {
                         // Kill hung process
                         process.Kill();
+                        result.StandardError = errorBuilder.ToString();
+                        result.StandardOutput = outputBuilder.ToString();  
+                        result.Output = result.StandardOutput?.EmptyAsNull() ?? result.StandardError;
                     }
                     catch
                     {
@@ -361,12 +381,12 @@ public class ProcessHelper
     /// Waits for a process to exit
     /// </summary>
     /// <param name="process">the process to wait for</param>
-    /// <param name="timeout">how long to wait before failing</param>
+    /// <param name="timeoutMilliseconds">how long to wait before failing</param>
     /// <returns>if the process completed before the timeout</returns>
-    private static Task<bool> WaitForExitAsync(Process process, int timeout)
+    private static Task<bool> WaitForExitAsync(Process process, int timeoutMilliseconds)
     {
-        if (timeout > 0)
-            return Task.Run(() => process.WaitForExit(timeout));
+        if (timeoutMilliseconds > 0)
+            return Task.Run(() => process.WaitForExit(timeoutMilliseconds));
         return Task.Run(() =>
         {
             process.WaitForExit();

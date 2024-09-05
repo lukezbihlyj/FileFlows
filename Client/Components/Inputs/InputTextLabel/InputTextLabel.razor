@@ -1,16 +1,21 @@
 @namespace FileFlows.Client.Components.Inputs
 @inherits Input<object>
 
-<InputWrapper Input="@this" NoSpacing=@true>
+<InputWrapper Input="@this" NoSpacing=@true Error="Error">
     @if (Link)
     {
         <a href="@StringValue" rel="noreferrer" target="_blank">@StringValue</a>
+    }
+    else if (isHtml)
+    {
+        <span class="markdown">@(new MarkupString(StringValue))</span>    
     }
     else if (Pre)
     {
         <span class="pre-text">@StringValue</span>
     }
-    else {
+    else
+    {
         <span>@StringValue <i @onclick="CopyToClipboard" class="far fa-clipboard" title="@lblTooltip"></i></span>
     }
 </InputWrapper>

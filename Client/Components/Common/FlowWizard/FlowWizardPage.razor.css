@@ -1,0 +1,8 @@
+.flow-page {
+  display: none;
+}
+.flow-page.active {
+  display: block;
+  flex-grow:1;
+  overflow: auto;
+}

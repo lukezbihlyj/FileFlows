@@ -26,6 +26,11 @@ public partial class InputExecutedNodes: Input<IEnumerable<ExecutedNode>>
     private bool InitializeResizer = false;
     private string ResizerUid;
 
+    // Unicode character for vertical line
+    const char verticalLine = '\u2514'; 
+    // Unicode character for horizontal line
+    const char horizontalLine = '\u2500'; 
+
     private List<string> _LogLines;
     private List<string> LogLines
     {
@@ -80,16 +85,36 @@ public partial class InputExecutedNodes: Input<IEnumerable<ExecutedNode>>
     
     private string FormatNodeName(ExecutedNode node)
     {
-        if (string.IsNullOrEmpty(node.NodeName))
-            return FormatNodeUid(node.NodeUid);
+        string prefix = GetFlowPartPrefix(node.Depth);
         
-        string nodeUid = Regex.Match(node.NodeUid.Substring(node.NodeUid.LastIndexOf(".") + 1), "[a-zA-Z0-9]+").Value.ToLower();
+        if (string.IsNullOrEmpty(node.NodeName))
+            return prefix + FormatNodeUid(node.NodeUid);
+        
+        string nodeUid = Regex.Match(node.NodeUid.Substring(node.NodeUid.LastIndexOf(".", StringComparison.Ordinal) + 1), "[a-zA-Z0-9]+").Value.ToLower();
         string nodeName = Regex.Match(node.NodeName ?? string.Empty, "[a-zA-Z0-9]+").Value.ToLower();
 
-        if (string.IsNullOrEmpty(node.NodeName) || nodeUid == nodeName)
-            return FormatNodeUid(node.NodeUid);
+        //if (string.IsNullOrEmpty(node.NodeName) || nodeUid == nodeName)
+        //    return FormatNodeUid(node.NodeUid);
         
-        return node.NodeName;
+        return prefix + node.NodeName;
+    }
+    
+    
+    /// <summary>
+    /// Gets the prefix to show in front of the executed flow element
+    /// </summary>
+    /// <param name="depth">the depth the flow element was executed in</param>
+    /// <returns>the prefix to show</returns>
+    private string GetFlowPartPrefix(int depth)
+    {
+        if (depth < 1)
+            return string.Empty;
+        var prefix = string.Empty + verticalLine + horizontalLine;
+        for (int i = 1; i < depth; i++)
+            prefix += horizontalLine.ToString() + horizontalLine;
+        
+        return prefix + " ";
+
     }
 
     private void ClosePartialLog()
@@ -98,7 +123,7 @@ public partial class InputExecutedNodes: Input<IEnumerable<ExecutedNode>>
         PartialLog = null;
     }
 
-    private async Task OpenLog(ExecutedNode node)
+    private void  OpenLog(ExecutedNode node)
     {
         int index = Value.ToList().IndexOf(node);
         if (index < 0)
@@ -110,7 +135,9 @@ public partial class InputExecutedNodes: Input<IEnumerable<ExecutedNode>>
         this.Maximised = false;
         ++index;
         var lines  = LogLines;
-        int startIndex = lines.FindIndex(x => x.IndexOf($"Executing Node {index}:") > 0);
+        int startIndex = lines.FindIndex(x =>
+            x.IndexOf($"Executing Flow Element {index}:", StringComparison.Ordinal) > 0 ||
+            x.IndexOf($"Executing Node {index}:", StringComparison.Ordinal) > 0);
         if (startIndex < 1)
         {
             Toast.ShowWarning(lblLogPartialNotAvailable);
@@ -121,7 +148,7 @@ public partial class InputExecutedNodes: Input<IEnumerable<ExecutedNode>>
 
         var remainingLindex = lines.Skip(startIndex + 3).ToList();
 
-        int endIndex = remainingLindex.FindIndex(x => x.IndexOf("======================================================================") > 0);
+        int endIndex = remainingLindex.FindIndex(x => x.IndexOf("======================================================================", StringComparison.Ordinal) > 0);
 
         string sublog;
         if (endIndex > -1)

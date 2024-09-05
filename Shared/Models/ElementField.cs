@@ -10,8 +10,20 @@ using FileFlows.Plugin;
 /// <summary>
 /// An element field is a UI component that is displayed in the web browser
 /// </summary>
-public class ElementField
+public class ElementField : IFlowField
 {
+    /// <summary>
+    /// Gets or sets a value that makes this field read-only
+    /// Special case, used by the flow editor to show the UID of flow elements
+    /// </summary>
+    public object ReadOnlyValue { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a value that can be copied to the clipboard for this field
+    /// If set, a copy icon will be shown next to the label
+    /// </summary>
+    public string CopyValue { get; set; }
+    
     /// <summary>
     /// A unique identifier for this field
     /// </summary>
@@ -62,6 +74,16 @@ public class ElementField
     /// Gets or sets if this should hide the label
     /// </summary>
     public bool HideLabel { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional column span to use if this is used inside a Panel
+    /// </summary>
+    public int? ColSpan { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional row span to use if this is used inside a Panel
+    /// </summary>
+    public int? RowSpan { get; set; }
 
     /// <summary>
     /// Gets or sets the input type of this field
@@ -163,7 +185,7 @@ public class ElementField
     /// </summary>
     /// <param name="condition">the condition to invokte</param>
     /// <param name="state">the condition state</param>
-    internal void InvokeChange(Condition condition, bool state)
+    public void InvokeChange(Condition condition, bool state)
     {
         if(this.DisabledConditions?.Any(x => x == condition) == true)
             this.DisabledChange?.Invoke(state);

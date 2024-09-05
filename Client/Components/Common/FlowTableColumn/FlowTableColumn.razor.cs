@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Components;
 
-    public partial class FlowTableColumn<TItem>:ComponentBase
+    public partial class FlowTableColumn<TItem>:ComponentBase where TItem : notnull
     {
         [CascadingParameter] FlowTable<TItem> Table { get; set; }
 
@@ -14,54 +14,65 @@
 
         [Parameter]
         public bool Hidden { get; set; }
+        /// <summary>
+        /// Gets or sets if this is a pre-field
+        /// </summary>
         [Parameter] public bool Pre { get; set; }
+        /// <summary>
+        /// Gets or sets if this has no height field set
+        /// </summary>
+        [Parameter] public bool NoHeight { get; set; }
 
-        string _Width = string.Empty;
-        string className = "fillspace";
-        string style = string.Empty;
-        [Parameter]
-        public string Width
-        {
-            get => _Width;
-            set
-            {
-                _Width = value ?? string.Empty;
-                if (_Width != string.Empty) {
-                    className = string.Empty;
-                    //style = $"width:{_Width};min-width:{_Width};max-width:{_Width}";
-                    //style = string.Empty;
-                }
-                else{
-                    //style = string.Empty;
-                }
-            }
-        }
+        /// <summary>
+        /// Gets or sets the class name for the table column
+        /// </summary>
+        public string ClassName => string.IsNullOrWhiteSpace(Width) ? "fillspace" : string.Empty;
+        [Parameter] public string Width { get; set; }
 
+        /// <summary>
+        /// Gets or sets the width for mobile devices
+        /// </summary>
         [Parameter]
         public string MobileWidth { get; set; }
 
-        private string _MinWidth = string.Empty;    
-        [Parameter]
-        public string MinWidth
-        {
-            get => _MinWidth;
-            set
-            {
-                _MinWidth = value ?? string.Empty;
-                if (_MinWidth == string.Empty)
-                    style = string.Empty;
-                else
-                    style = $"min-width: {_MinWidth};";
 
-            }
-        }
+        /// <summary>
+        /// Gets or sets the width for very large displays
+        /// </summary>
+        [Parameter]
+        public string LargeWidth { get; set; }
+        
+        /// <summary>
+        /// Gets or sets if the header alignment
+        /// </summary>
+        [Parameter]
+        public FlowTableAlignment HeaderAlign { get; set; }
+        
+        /// <summary>
+        /// Gets or sets if the column alignment
+        /// </summary>
+        [Parameter] public FlowTableAlignment ColumnAlign { get; set; }
+
+        /// <summary>
+        /// Shortcut for setting both header and column alignment
+        /// </summary>
+        [Parameter]
+        public FlowTableAlignment? Align { get; set; }
+
+        private string _MinWidth = string.Empty;    
+        /// <summary>
+        /// Gets or sets the minimum width of the column
+        /// </summary>
+        [Parameter]
+        public string MinWidth { get; set; }
 
         [Parameter]
         public string ColumnName { get; set; }
 
-
-        public string ClassName => className;
-        public string Style => style;
+        /// <summary>
+        /// Gets the style
+        /// </summary>
+        public string Style => string.IsNullOrEmpty(MinWidth) ? string.Empty : $"min-width: {MinWidth};";
 
         protected override void OnInitialized()
         {
@@ -69,4 +80,23 @@
         }
 
     }
+}
+
+/// <summary>
+/// Alignment options for a flow table
+/// </summary>
+public enum FlowTableAlignment 
+{
+    /// <summary>
+    /// Left align
+    /// </summary>
+    Left,
+    /// <summary>
+    /// Center align
+    /// </summary>
+    Center,
+    /// <summary>
+    /// Right align
+    /// </summary>
+    Right
 }

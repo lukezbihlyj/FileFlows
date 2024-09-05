@@ -8,7 +8,7 @@ public class MappingTests
     private ProcessingNode GetProcessingNode()
     {
         var node = new ProcessingNode();
-        node.DirectorySeperatorChar = '/';
+        node.DirectorySeparatorChar = '/';
         node.Mappings = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("/usr/local/bin/ffmeg", "/Applications/ffmpeg"),
@@ -86,5 +86,17 @@ public class MappingTests
 
         string result2 = node.UnMap(result);
         Assert.AreEqual(unmapped, result2);
+    }
+    
+    [TestMethod]
+    public void Mapping_ZDrive()
+    {
+        var node = GetProcessingNode();
+        node.Mappings = new List<KeyValuePair<string, string>>
+        {
+            new ("/work", "Z:")
+        };
+        string result = node.Map("/work/Transcodes/complete/anime/" + TestFile).Replace("/", "\\");
+        Assert.AreEqual("Z:\\Transcodes\\complete\\anime\\" + TestFile.Replace("/", "\\"), result);
     }
 }

@@ -12,11 +12,6 @@ using FileFlows.Shared.Models;
 /// </summary>
 public class PluginHelper
 {
-    //HostAssemblyLoadContext Context;
-    public PluginHelper()
-    {
-        //  Context = new HostAssemblyLoadContext(GetPluginDirectory());
-    }
 #if (DEBUG)
     private static string GetPluginDirectory()
     {
@@ -136,7 +131,7 @@ public class PluginHelper
                     if (dict[k] == null)
                         continue;
 
-                    var value = FileFlows.Shared.Converter.ConvertObject(prop.PropertyType, dict[k]);
+                    var value = Converter.ConvertObject(prop.PropertyType, dict[k], Logger.Instance);
                     if (value != null)
                         prop.SetValue(node, value);
                 }

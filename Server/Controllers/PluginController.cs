@@ -1,26 +1,51 @@
+using System.Dynamic;
+using System.Text.RegularExpressions;
+using FileFlows.Server.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
-using FileFlows.ServerShared.Services;
+using FileFlows.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FileFlows.Server.Controllers;
-
-using System.ComponentModel;
-using System.Dynamic;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using FileFlows.Plugin.Attributes;
-using FileFlows.Server.Helpers;
-using FileFlows.Shared.Models;
-using FileFlows.Shared.Helpers;
-using FileFlows.ServerShared.Helpers;
-using System.Text.Json;
 
 /// <summary>
 /// Plugin Controller
 /// </summary>
 [Route("/api/plugin")]
-public class PluginController : Controller
+[FileFlowsAuthorize(UserRole.Plugins)]
+public class PluginController : BaseController
 {
-    internal const string PLUGIN_BASE_URL = "https://fileflows.com/api/plugin";
+    /// <summary>
+    /// Get the plugins translation file
+    /// </summary>
+    /// <param name="langCode">The language code to get the translations for</param>
+    /// <returns>The json plugin translation file</returns>
+    [HttpGet("language/{langCode}.json")]
+    [AllowAnonymous]
+    public IActionResult LanguageFile([FromRoute] string langCode = "en")
+    {
+        if(Regex.IsMatch(langCode, "^[a-zA-Z]{2,3}$") == false)
+            return new JsonResult(new {});
+        string file = $"i18n/plugins.{langCode}.json";
+        if(System.IO.File.Exists(Path.Combine(_hostingEnvironment.WebRootPath, file)))
+            return File(file, "text/json");
+        return new JsonResult(new {});
+    }
+    
+    /// <summary>
+    /// Represents the hosting environment of the application.
+    /// </summary>
+    private readonly IWebHostEnvironment _hostingEnvironment;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PluginController"/> class.
+    /// </summary>
+    /// <param name="hostingEnvironment">The hosting environment.</param>
+    public PluginController(IWebHostEnvironment hostingEnvironment)
+    {
+        _hostingEnvironment = hostingEnvironment;
+    }
 
     /// <summary>
     /// Get a list of all plugins in the system
@@ -28,74 +53,17 @@ public class PluginController : Controller
     /// <param name="includeElements">If data should contain all the elements for the plugins</param>
     /// <returns>a list of plugins</returns>
     [HttpGet]
-    public async Task<IEnumerable<PluginInfoModel>> GetAll(bool includeElements = true)
-    {
-        var plugins = new Services.PluginService().GetAll()
-            .Where(x => x.Deleted == false);
-        List<PluginInfoModel> pims = new List<PluginInfoModel>();
-        var packages = await GetPluginPackages();
-
-        Dictionary<string, PluginInfoModel> pluginDict = new();
-        foreach (var plugin in plugins)
-        {
-            var pim = new PluginInfoModel
-            {
-                Uid = plugin.Uid,
-                Name = plugin.Name,
-                DateCreated = plugin.DateCreated,
-                DateModified = plugin.DateModified,
-                Enabled = plugin.Enabled,
-                Version = plugin.Version,
-                Deleted = plugin.Deleted,
-                Settings = plugin.Settings,
-                Authors = plugin.Authors,
-                Url =  plugin.Url,
-                PackageName = plugin.PackageName,
-                Description = plugin.Description,   
-                Elements = includeElements ? plugin.Elements : null
-            };
-            var package = packages.FirstOrDefault(x => x.Name.ToLower().Replace(" ", "") == plugin.Name.ToLower().Replace(" ", ""));
-            pim.LatestVersion = package?.Version ?? "";
-            pims.Add(pim);
-
-            foreach (var ele in plugin.Elements)
-            {
-                if (pluginDict.ContainsKey(ele.Uid) == false)
-                    pluginDict.Add(ele.Uid, pim);
-            }
-        }
-
-        string flowTypeName = typeof(Flow).FullName ?? string.Empty;
-        var flows = new Services.FlowService().GetAll();
-        foreach (var flow in flows)
-        {
-            foreach (var p in flow.Parts)
-            {
-                if (pluginDict.ContainsKey(p.FlowElementUid) == false)
-                    continue;
-                var plugin = pluginDict[p.FlowElementUid];
-                if (plugin.UsedBy != null && plugin.UsedBy.Any(x => x.Uid == flow.Uid))
-                    continue;
-                plugin.UsedBy ??= new();
-                plugin.UsedBy.Add(new ()
-                {
-                    Name = flow.Name,
-                    Type = flowTypeName,
-                    Uid = flow.Uid
-                });
-            }
-        }
-        return pims.OrderBy(x => x.Name.ToLowerInvariant());
-    }
-
+    public Task<IEnumerable<PluginInfoModel>> GetAll(bool includeElements = true)
+        => ServiceLoader.Load<PluginService>().GetPluginInfoModels(includeElements);
+    
     /// <summary>
     /// Get the plugin info for a specific plugin
     /// </summary>
     /// <param name="uid">The uid of the plugin</param>
     /// <returns>The plugin info for the plugin</returns>
     [HttpGet("{uid}")]
-    public PluginInfo Get([FromRoute] Guid uid)
-        => new Services.PluginService().GetByUid(uid) ?? new();
+    public async Task<PluginInfo> Get([FromRoute] Guid uid)
+        => await new Services.PluginService().GetByUid(uid) ?? new();
 
     /// <summary>
     /// Get the plugin info for a specific plugin by package name
@@ -103,17 +71,8 @@ public class PluginController : Controller
     /// <param name="name">The package name of the plugin</param>
     /// <returns>The plugin info for the plugin</returns>
     [HttpGet("by-package-name/{name}")]
-    public PluginInfo GetByPackageName([FromRoute] string name)
+    public Task<PluginInfo?> GetByPackageName([FromRoute] string name)
         => new Services.PluginService().GetByPackageName(name);
-
-    /// <summary>
-    /// Get the plugins translation file
-    /// </summary>
-    /// <param name="langCode">The language code to get the translations for</param>
-    /// <returns>The json plugin translation file</returns>
-    [HttpGet("language/{langCode}.json")]
-    public IActionResult LanguageFile([FromQuery] string langCode = "en")
-        => File("i18n/plugins.en.json", "text/json");
 
     /// <summary>
     /// Get the available plugin packages 
@@ -121,48 +80,12 @@ public class PluginController : Controller
     /// <param name="missing">If only missing plugins should be included, ie plugins not installed</param>
     /// <returns>a list of plugins</returns>
     [HttpGet("plugin-packages")]
-    public async Task<IEnumerable<PluginPackageInfo>> GetPluginPackages([FromQuery] bool missing = false)
+    public async Task<IActionResult> GetPluginPackages([FromQuery] bool missing = false)
     {
-        Version ffVersion = Globals.Version;
-        List<PluginPackageInfo> data = new List<PluginPackageInfo>();
-        var repos = GetRepositories();
-        foreach (string repo in repos)
-        {
-            try
-            {
-                var plugins = await HttpHelper.Get<IEnumerable<PluginPackageInfo>>(repo + "?rand=" + System.DateTime.Now.ToFileTime());
-                if (plugins.Success == false)
-                    continue;
-                foreach(var plugin in plugins.Data)
-                {
-                    if (data.Any(x => x.Name == plugin.Name))
-                        continue;
-
-#if (!DEBUG)
-                    if(string.IsNullOrWhiteSpace(plugin.MinimumVersion) == false)
-                    {
-                        if (ffVersion < new Version(plugin.MinimumVersion))
-                            continue;
-                    }
-#endif
-                    data.Add(plugin);
-                }
-            }
-            catch (Exception) { }
-        }
-
-#if (DEBUG)
-#endif
-
-        if (missing)
-        {
-            // remove plugins already installed
-            var installed = new Services.PluginService().GetAll()
-                .Where(x => x.Deleted != true).Select(x => x.PackageName).ToList();
-            return data.Where(x => installed.Contains(x.Package) == false);
-        }
-
-        return data.OrderBy(x => x.Name);
+        var result = await ServiceLoader.Load<PluginService>().GetPluginPackagesActual(missing);
+        if (result.Failed(out string message))
+            return BadRequest(message);
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -174,20 +97,28 @@ public class PluginController : Controller
     public async Task<bool> Update([FromBody] ReferenceModel<Guid> model)
     {
         bool updated = false;
-        var plugins = await GetPluginPackages();
+        
+        var pluginsResult = await ServiceLoader.Load<PluginService>().GetPluginPackagesActual();
+        var plugins = pluginsResult.IsFailed ? new() : pluginsResult.Value;
 
-        var pluginDownloader = new PluginDownloader(this.GetRepositories());
+        var pluginDownloader = new PluginDownloader();
         foreach (var uid in model?.Uids ?? new Guid[] { })
         {
-            var plugin = new Services.PluginService().GetByUid(uid);
+            var plugin = await new Services.PluginService().GetByUid(uid);
             if (plugin == null)
                 continue;
 
-            var ppi = plugins.FirstOrDefault(x => x.Name.Replace(" ", "").ToLower() == plugin.Name.Replace(" ", "").ToLower());
+            var ppi = plugins.FirstOrDefault(x => x.Package.Replace(" ", "").ToLowerInvariant() 
+                                                  == plugin.PackageName.Replace(" ", "").ToLowerInvariant());
 
             if (ppi == null)
             {
                 Logger.Instance.WLog("PluginUpdate: No plugin info found for plugin: " + plugin.Name);
+                continue;
+            }
+            if(string.IsNullOrEmpty(ppi.Package))
+            {
+                Logger.Instance.WLog("PluginUpdate: No plugin info did not contain Package name for plugin: " + plugin.Name);
                 continue;
             }
 
@@ -198,7 +129,7 @@ public class PluginController : Controller
                 continue;
             }
 
-            var dlResult = pluginDownloader.Download(ppi.Package);
+            var dlResult = await pluginDownloader.Download(Version.Parse(ppi.Version), ppi.Package);
             if (dlResult.Success == false)
             {
                 Logger.Instance.WLog("PluginUpdate: Failed to download plugin");
@@ -224,8 +155,8 @@ public class PluginController : Controller
     /// <param name="model">A reference model containing UIDs to delete</param>
     /// <returns>an awaited task</returns>
     [HttpDelete]
-    public Task Delete([FromBody] ReferenceModel<Guid> model)
-        => new Services.PluginService().Delete(model.Uids);
+    public async Task Delete([FromBody] ReferenceModel<Guid> model)
+        => await new PluginService().Delete(model.Uids, await GetAuditDetails());
 
     /// <summary>
     /// Download plugins into the FileFlows system
@@ -233,27 +164,12 @@ public class PluginController : Controller
     /// <param name="model">A list of plugins to download</param>
     /// <returns>an awaited task</returns>
     [HttpPost("download")]
-    public void Download([FromBody] DownloadModel model)
+    public async Task Download([FromBody] DownloadModel model)
     {
         if (model == null || model.Packages?.Any() != true)
             return; // nothing to delete
 
-        var pluginDownloader = new PluginDownloader(GetRepositories());
-        foreach(var package in model.Packages)
-        {
-            try
-            {
-                var dlResult = pluginDownloader.Download(package);
-                if (dlResult.Success)
-                {
-                    PluginScanner.UpdatePlugin(package, dlResult.Data);
-                }
-            }
-            catch (Exception ex)
-            { 
-                Logger.Instance?.ELog($"Failed downloading plugin package: '{package}' => {ex.Message}");
-            }
-        }
+        await ServiceLoader.Load<PluginService>().DownloadPlugins(model.Packages);
     }
 
     /// <summary>
@@ -272,7 +188,7 @@ public class PluginController : Controller
         if (package.EndsWith(".ffplugin") == false)
             package += ".ffplugin";
 
-        if(System.Text.RegularExpressions.Regex.IsMatch(package, "^[a-zA-Z0-9_\\-]+\\.ffplugin$") == false)
+        if(Regex.IsMatch(package, "^[a-zA-Z0-9_\\-]+\\.ffplugin$") == false)
         {
             Logger.Instance?.ELog("Download Package Error: invalid package: " + package);
             throw new Exception("Download Package Error: invalid package: " + package);
@@ -289,7 +205,7 @@ public class PluginController : Controller
 
         try
         {
-            return File(System.IO.File.OpenRead(file), "application/octet-stream");
+            return File(FileOpenHelper.OpenRead_NoLocks(file), "application/octet-stream");
         }
         catch(Exception ex)
         {
@@ -305,7 +221,7 @@ public class PluginController : Controller
     /// <returns>the plugin settings json</returns>
     [HttpGet("{packageName}/settings")]
     public Task<string> GetPluginSettings([FromRoute] string packageName)
-        => new Services.PluginService().GetSettingsJson(packageName);
+        => new PluginService().GetSettingsJson(packageName);
 
     /// <summary>
     /// Sets the json plugin settings for a plugin
@@ -316,12 +232,12 @@ public class PluginController : Controller
     [HttpPost("{packageName}/settings")]
     public async Task SetPluginSettingsJson([FromRoute] string packageName, [FromBody] string json)
     {
-        // need to decode any passwords
+        // need to encrypt any passwords
         if (string.IsNullOrEmpty(json) == false)
         {
             try
             {
-                var plugin = GetByPackageName(packageName);
+                var plugin = await GetByPackageName(packageName);
                 if (string.IsNullOrEmpty(plugin?.Name) == false)
                 {
                     bool updated = false;
@@ -345,7 +261,7 @@ public class PluginController : Controller
                             if (string.IsNullOrEmpty(text))
                                 continue;
 
-                            dict[key] = Helpers.Decrypter.Encrypt(text);
+                            dict[key] = DataLayer.Helpers.Decrypter.Encrypt(text);
                             updated = true;
                         }
                     }
@@ -359,17 +275,13 @@ public class PluginController : Controller
             }
         }
 
-        var obj = await DbHelper.SingleByName<Models.PluginSettingsModel>("PluginSettings_" + packageName);
-        obj ??= new Models.PluginSettingsModel();
-        obj.Name = "PluginSettings_" + packageName;
+        var service = ServiceLoader.Load<PluginService>();
+        var oldSettings = await service.GetSettingsJson(packageName);
         var newJson = json ?? string.Empty;
-        if (newJson != obj.Json)
-        {
-            obj.Json = json ?? String.Empty;
-            await DbHelper.Update(obj);
-            // need to increment the revision increment so these plugin settings are pushed to the nodes
-            await new Services.SettingsService().RevisionIncrement();
-        }
+        if (newJson == oldSettings)
+            return;
+        await service.SetSettingsJson(packageName, newJson, await GetAuditDetails());
+        await ((SettingsService)ServiceLoader.Load<ISettingsService>()).RevisionIncrement();
     }
 
     
@@ -383,13 +295,13 @@ public class PluginController : Controller
     public async Task<PluginInfo> SetState([FromRoute] Guid uid, [FromQuery] bool? enable)
     {
         var service = new Services.PluginService();
-        var plugin = service.GetByUid(uid);
+        var plugin = await service.GetByUid(uid);
         if (plugin == null)
             throw new Exception("Node not found.");
         if (enable != null && plugin.Enabled != enable.Value)
         {
             plugin.Enabled = enable.Value;
-            await service.Update(plugin);
+            await service.Update(plugin, await GetAuditDetails());
         }
 
         return plugin;
@@ -403,14 +315,6 @@ public class PluginController : Controller
         /// <summary>
         /// A list of plugin packages to download
         /// </summary>
-        public List<string> Packages { get; set; }
-    }
-
-    internal List<string> GetRepositories()
-    {
-        var repos = new SettingsController().Get().Result.PluginRepositoryUrls?.Select(x => x)?.ToList() ?? new List<string>();
-        if (repos.Contains(PLUGIN_BASE_URL) == false)
-            repos.Add(PLUGIN_BASE_URL);
-        return repos;
+        public List<PluginPackageInfo> Packages { get; set; }
     }
 }

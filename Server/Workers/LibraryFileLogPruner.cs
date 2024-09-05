@@ -1,13 +1,14 @@
 using FileFlows.Server.Controllers;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Workers;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Workers;
 
 /// <summary>
 /// Worker that will automatically delete logs for non existing library files
 /// </summary>
-public class LibraryFileLogPruner:Worker
+public class LibraryFileLogPruner:ServerWorker
 {
     /// <summary>
     /// Constructor for the log pruner
@@ -19,14 +20,14 @@ public class LibraryFileLogPruner:Worker
     /// <summary>
     /// Executes the log pruner, Run calls this 
     /// </summary>
-    protected override void Execute()
+    protected override void ExecuteActual(Settings settings)
     {
-        var libFiles = new LibraryFileService().GetUids().Result.Select(x => x.ToString()).ToList();
+        var libFiles = ServiceLoader.Load<LibraryFileService>().GetUids().Result.Select(x => x.ToString()).ToList();
         var files = new DirectoryInfo(DirectoryHelper.LibraryFilesLoggingDirectory).GetFiles();
         foreach (var file in files)
         {
             // first check if the file is somewhat new, if it is, dont delete just yet
-            if (file.LastWriteTime > DateTime.Now.AddHours(-1))
+            if (file.LastWriteTimeUtc > DateTime.UtcNow.AddHours(-1))
                 continue;
             
             string shortName = file.Name;

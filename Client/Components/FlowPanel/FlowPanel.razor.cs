@@ -1,36 +1,27 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components;
-
-using FileFlows.Shared.Models;
-using Microsoft.AspNetCore.Components;
-using System.Collections.Generic;
 
 /// <summary>
 /// A flow panel is container that contains fields for an editor form
 /// </summary>
 public partial class FlowPanel:ComponentBase
 {
-    private List<ElementField> _Fields;
-
     /// <summary>
     /// Gets or sets the fields in the flow panel
     /// </summary>
     [Parameter]
-    public List<ElementField> Fields
-    {
-        get => _Fields;
-        set
-        {
-            _Fields = value;
-            this.StateHasChanged();
-        }
-    }
-
+    public List<IFlowField> Fields { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional number of columns
+    /// </summary>
+    [Parameter] public int Columns { get; set; }
+    
     /// <summary>
     /// Gets or sets the Editor this flow panel is used in
     /// </summary>
-    [CascadingParameter] public Editor Editor { get; set; }
+    [CascadingParameter] public EditorBase Editor { get; set; }
 
     /// <summary>
     /// Gets or sets an event that is called when the editor is saved
@@ -88,11 +79,4 @@ public partial class FlowPanel:ComponentBase
     /// Get the name of the type this editor is editing
     /// </summary>
     protected string TypeName => Editor.TypeName;
-
-    public void SetFields(List<ElementField> fields)
-    {
-        Logger.Instance.ILog("Setting fields", fields);
-        this._Fields = fields;
-        this.StateHasChanged();
-    }
 }

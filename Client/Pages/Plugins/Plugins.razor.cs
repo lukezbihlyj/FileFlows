@@ -13,9 +13,15 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
 
     private PluginBrowser PluginBrowser { get; set; }
 
+    private string lblSettings, lblInUse, lblFlowElement, lblFlowElements;
+
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
-        _ = Load(default);
+        lblSettings = Translater.Instant("Labels.Settings");
+        lblInUse = Translater.Instant("Labels.InUse");
+        lblFlowElement = Translater.Instant("Labels.FlowElement");
+        lblFlowElements = Translater.Instant("Labels.FlowElements");
     }
 
     protected override string DeleteMessage => "Pages.Plugins.Messages.DeletePlugins";
@@ -32,6 +38,11 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
         var plugins = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (plugins?.Any() != true)
             return;
+        await Update(plugins);
+    }
+    
+    async Task Update(params Guid[] plugins)
+    {
         Blocker.Show("Pages.Plugins.Messages.UpdatingPlugins");
         this.StateHasChanged();
         Data.Clear();
@@ -50,7 +61,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
 
     async Task PluginsUpdated()
     {
-        await App.Instance.LoadLanguage();
+        await App.Instance.LoadLanguage(Profile.Language);
         await this.Load(default);
     }
 
@@ -58,7 +69,6 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
 
     async Task<bool> SaveSettings(ExpandoObject model)
     {
-#if (!DEMO)
         Blocker.Show();
         this.StateHasChanged();
 
@@ -68,7 +78,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
             var pluginResult = await HttpHelper.Post($"{ApiUrl}/{EditingPlugin.PackageName}/settings", json);
             if (pluginResult.Success == false)
             {
-                Toast.ShowError( Translater.Instant("ErrorMessages.SaveFailed"));
+                Toast.ShowEditorError( Translater.Instant("ErrorMessages.SaveFailed"));
                 return false;
             }
             return true;
@@ -78,14 +88,10 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
             Blocker.Hide();
             this.StateHasChanged();
         }
-#else
-        return true;
-#endif
     }
 
     public override async Task<bool> Edit(PluginInfoModel plugin)
     {
-#if (!DEMO)
         if (plugin?.Settings?.Any() != true)
             return false;
         Blocker.Show();
@@ -99,7 +105,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
             if (pluginResult.Success == false)
                 return false;
             if (string.IsNullOrWhiteSpace(pluginResult.Data) == false)
-                model = JsonSerializer.Deserialize<ExpandoObject>(pluginResult.Data);
+                model = JsonSerializer.Deserialize<ExpandoObject>(pluginResult.Data) ?? new ExpandoObject();
         }
         finally
         {
@@ -109,17 +115,15 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
         this.EditingPlugin = plugin;
 
         // clone the fields as they get wiped
-        var fields = plugin.Settings.ToList();
+        var fields = plugin.Settings.Select(x => (IFlowField)x).ToList();
 
-        var result = await Editor.Open(new()
+        await Editor.Open(new()
         {
             TypeName = "Plugins." + plugin.PackageName, Title = plugin.Name, Fields = fields, Model = model,
+            HelpUrl = GetPluginHelpUrl(plugin, true),
             SaveCallback = SaveSettings
         });
         return false; // we dont need to reload the list
-#else
-        return false;
-#endif
     }
 
 
@@ -141,7 +145,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
     {
         await Editor.Open(new()
         {
-            TypeName = "Pages.Plugins", Title = plugin.Name, Fields = new List<ElementField>
+            TypeName = "Pages.Plugins", Title = plugin.Name, HelpUrl = GetPluginHelpUrl(plugin), Fields = new List<IFlowField>
             {
                 new ElementField
                 {
@@ -185,7 +189,7 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
                         { nameof(InputChecklist.ListOnly), true },
                         {
                             nameof(InputChecklist.Options),
-                            plugin.Elements?.Select(x => new ListOption { Label = x.Name, Value = x })?.ToList() ??
+                            plugin.Elements?.OrderBy(x =>x.Name?.ToLowerInvariant())?.Select(x => new ListOption { Label = x.Name, Value = x })?.ToList() ??
                             new List<ListOption>()
                         }
                     }
@@ -195,7 +199,24 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
         });
     }
 
-    
+    /// <summary>
+    /// Gets the help URL for the plugin 
+    /// </summary>
+    /// <param name="plugin">the plugin</param>
+    /// <returns>the help URL</returns>
+    private string GetPluginHelpUrl(PluginInfoModel plugin, bool settings = false)
+    {
+        string name = plugin.Name;
+        if (plugin.PackageName.EndsWith("Nodes") && plugin.Name is "Discord" or "Email" == false)
+            name += " Nodes"; // for now will be removed later
+        name = name.Replace(" ", "-").ToLowerInvariant();
+        string url = $"https://fileflows.com/docs/plugins/{name}";
+        if (settings)
+            url += "/settings";
+        return url;
+    }
+
+
     public override async Task Delete()
     {
         var used = Table.GetSelected()?.Any(x => x.UsedBy?.Any() == true) == true;
@@ -213,6 +234,39 @@ public partial class Plugins : ListPage<Guid, PluginInfoModel>
         var item = Table.GetSelected()?.FirstOrDefault();
         if (item?.UsedBy?.Any() != true)
             return;
-        await UsedByDialog.Show(item.UsedBy);
+        await OpenUsedBy(item);
+    }
+    
+    /// <summary>
+    /// Opens the used by dialog
+    /// </summary>
+    /// <param name="item">the plugin info model to open used by for</param>
+    /// <returns>a task to await</returns>
+    private Task OpenUsedBy(PluginInfoModel item)
+        => UsedByDialog.Show(item.UsedBy);
+    
+    
+
+    /// <summary>
+    /// we only want to do the sort the first time, otherwise the list will jump around for the user
+    /// </summary>
+    private List<Guid> initialSortOrder;
+    
+    /// <inheritdoc />
+    public override Task PostLoad()
+    {
+        if (initialSortOrder == null)
+        {
+            Data = Data?.OrderByDescending(x => x.Enabled)?.ThenBy(x => x.Name)
+                ?.ToList();
+            initialSortOrder = Data?.Select(x => x.Uid)?.ToList();
+        }
+        else
+        {
+            Data = Data?.OrderBy(x => initialSortOrder.Contains(x.Uid) ? initialSortOrder.IndexOf(x.Uid) : 1000000)
+                .ThenBy(x => x.Name)
+                ?.ToList();
+        }
+        return base.PostLoad();
     }
 }

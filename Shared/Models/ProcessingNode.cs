@@ -27,11 +27,26 @@ public class ProcessingNode: FileFlowObject
     /// Gets or sets if this node is enabled
     /// </summary>
     public bool Enabled { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the number of seconds to check for a new file to process
+    /// </summary>
+    public int ProcessFileCheckInterval { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the priority of the processing node
+    /// Higher the value, the higher the priority 
+    /// </summary>
+    public int Priority { get; set; }
 
     /// <summary>
     /// Gets or sets the type of operating system this node is running on
     /// </summary>
     public OperatingSystemType OperatingSystem { get; set; }
+    /// <summary>
+    /// Gets or sets the architecture type
+    /// </summary>
+    public ArchitectureType Architecture { get; set; }
     /// <summary>
     /// Gets or sets the FileFlows version of this node
     /// </summary>
@@ -40,7 +55,7 @@ public class ProcessingNode: FileFlowObject
     /// <summary>
     /// Gets or sets a script to execute before a runner can start
     /// </summary>
-    public string PreExecuteScript { get; set; }
+    public Guid? PreExecuteScript { get; set; }
 
     /// <summary>
     /// Gets or sets the number of flow runners this node can run simultaneously 
@@ -55,6 +70,10 @@ public class ProcessingNode: FileFlowObject
     /// Gets or sets the mappings for this node
     /// </summary>
     public List<KeyValuePair<string, string>> Mappings { get; set; }
+    /// <summary>
+    /// Gets or sets the variables for this node
+    /// </summary>
+    public List<KeyValuePair<string, string>> Variables { get; set; }
     /// <summary>
     /// Gets or sets the schedule for this node
     /// </summary>
@@ -73,6 +92,19 @@ public class ProcessingNode: FileFlowObject
     public string Permissions { get; set; }
 
     /// <summary>
+    /// Gets or sets the permissions to set
+    /// </summary>
+    public int? PermissionsFiles
+    {
+        // this will change in a few versions and Permissions property will be removed
+        get => int.TryParse(Permissions, out int value) ? value : null;
+        set => Permissions = value?.ToString("D3");
+    }
+    /// <summary>
+    /// Gets or sets the permissions to set for folders
+    /// </summary>
+    public int? PermissionsFolders { get; set; }
+    /// <summary>
     /// Gets or sets if this node can process all libraries
     /// </summary>
     public ProcessingLibraries AllLibraries { get; set; }
@@ -87,9 +119,15 @@ public class ProcessingNode: FileFlowObject
     public int MaxFileSizeMb { get; set; }
 
     /// <summary>
+    /// Gets or sets how many files have been processed
+    /// </summary>
+    [DbIgnore]
+    public int ProcessedFiles { get; set; }
+    
+    /// <summary>
     /// The directory separator used by this node
     /// </summary>
-    public char DirectorySeperatorChar = System.IO.Path.DirectorySeparatorChar;
+    public char DirectorySeparatorChar = System.IO.Path.DirectorySeparatorChar;
 
     /// <summary>
     /// Maps a path locally for this node
@@ -112,9 +150,9 @@ public class ProcessingNode: FileFlowObject
                 string replacement = mapping.Value.Replace("\\", "/");
                 path = Regex.Replace(path, "^" + pattern, replacement, RegexOptions.IgnoreCase);
             }
-            // now convert / to path charcter
-            if (DirectorySeperatorChar != '/')
-                path = path.Replace('/', DirectorySeperatorChar);
+            // now convert / to path character
+            if (DirectorySeparatorChar != '/')
+                path = path.Replace('/', DirectorySeparatorChar);
             if(path.StartsWith("//")) // special case for SMB paths
                 path = path.Replace('/', '\\');
         }
@@ -153,4 +191,50 @@ public class ProcessingNode: FileFlowObject
 
         return path;
     }
+
+    /// <summary>
+    /// Gets a variable, or empty if not found
+    /// </summary>
+    /// <param name="key">the key to the variable</param>
+    /// <returns>the variable value</returns>
+    public string GetVariable(string key)
+        => Variables?.FirstOrDefault(x => x.Key == key).Value ?? string.Empty;
+
+    /// <summary>
+    /// Gets or sets the status of the processing node
+    /// </summary>
+    [DbIgnore]
+    public ProcessingNodeStatus Status { get; set; }
+}
+
+/// <summary>
+/// Current status of a processing node
+/// </summary>
+public enum ProcessingNodeStatus
+{
+    /// <summary>
+    /// The node is offline or cannot be reached
+    /// </summary>
+    Offline = 0,
+    /// <summary>
+    /// The node is available but not processing
+    /// </summary>
+    Idle = 1,
+    /// <summary>
+    /// The node is currently processing files
+    /// </summary>
+    Processing = 2,
+    /// <summary>
+    /// The node is disabled
+    /// </summary>
+    Disabled = 3,
+    /// <summary>
+    /// The node is out of schedule
+    /// </summary>
+    OutOfSchedule = 4,
+    /// <summary>
+    /// The node's version does not match the servers
+    /// </summary>
+    VersionMismatch = 5,
+    
 }

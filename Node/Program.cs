@@ -2,8 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Avalonia;
+using FileFlows.Node.Helpers;
 using FileFlows.Node.Ui;
 using FileFlows.Node.Utils;
+using FileFlows.RemoteServices;
 using FileFlows.ServerShared;
 using FileFlows.ServerShared.Helpers;
 using FileFlows.ServerShared.Models;
@@ -18,22 +20,26 @@ public class Program
     /// Gets an instance of a node manager
     /// </summary>
     internal static NodeManager? Manager { get; private set; }
+    
+    /// <summary>
+    /// Gets or sets an optional entry point that launched this
+    /// </summary>
+    public static string? EntryPoint { get; private set; }
 
-    private static bool Exiting = false;
-    private static Mutex appMutex;
+    private static Mutex? appMutex;
     const string appName = "FileFlowsNode";
     public static void Main(string[] args)
     {
         args ??= new string[] { };
         #if(DEBUG)
-        args = new[] { "--no-gui" };
+        //args = new[] { "--no-gui" };
         #endif
         if (args.Any(x => x.ToLower() == "--help" || x.ToLower() == "-?" || x.ToLower() == "/?" || x.ToLower() == "/help" || x.ToLower() == "-help"))
         {
             CommandLineOptions.PrintHelp();
             return;
         }
-        Shared.Helpers.HttpHelper.Client = Shared.Helpers.HttpHelper.GetDefaultHttpHelper(ServerShared.Services.Service.ServiceBaseUrl);
+        HttpHelper.Client = HttpHelper.GetDefaultHttpClient(RemoteService.ServiceBaseUrl);
         ServicePointManager.DefaultConnectionLimit = 50;
 
         var options = CommandLineOptions.Parse(args);
@@ -45,31 +51,39 @@ public class Program
                 SystemdService.Install(DirectoryHelper.BaseDirectory, true);
             return;
         }
+
+        Program.EntryPoint = options.EntryPoint;
         Globals.IsDocker = options.Docker;
+        Globals.IsNode = true;
         Globals.IsSystemd = options.IsSystemd;
-        if (options.ApiPort > 0 && options.ApiPort < 65535)
-            Workers.RestApiWorker.Port = options.ApiPort;
+        // if (options.ApiPort > 0 && options.ApiPort < 65535)
+        //     Workers.RestApiWorker.Port = options.ApiPort;
+        
+        SharedServiceLoader.Loader = type =>
+        {
+            var method = typeof(ServiceLoader).GetMethod("Load", new Type[] { });
+            var genericMethod = method?.MakeGenericMethod(type);
+            return genericMethod?.Invoke(null, null)!;
+        };
+
+        DirectoryHelper.Init();
         
         Console.WriteLine("BaseDirectory: " + DirectoryHelper.BaseDirectory);
         
-        DirectoryHelper.Init(options.Docker, true);
+        if(string.IsNullOrWhiteSpace(options.EntryPoint) == false && OperatingSystem.IsMacOS())
+            File.WriteAllText(Path.Combine(DirectoryHelper.BaseDirectory, "version.txt"), Globals.Version.Split('.').Last());
         
         appMutex = new Mutex(true, appName, out bool createdNew);
         if (createdNew == false)
         {
             // app is already running
-            if (options.NoGui)
+            if (options.Gui == false)
             {
                 Console.WriteLine("An instance of FileFlows Node is already running");
             }
             else
             {
-                try
-                {
-                    var appBuilder = BuildAvaloniaApp(true);
-                    appBuilder.StartWithClassicDesktopLifetime(args);
-                }
-                catch (Exception) { }
+                GuiHelper.ShowMessage("FileFlows", "FileFlows Node is already running.");
             }
             
             return;
@@ -78,14 +92,16 @@ public class Program
         try
         {
             LoadEnvironmentalVaraibles();
-            
-            Service.ServiceBaseUrl = AppSettings.Load().ServerUrl;
+
+            var appSettings = AppSettings.Load();
+            RemoteService.ServiceBaseUrl = appSettings.ServerUrl;
             #if(DEBUG)
-            if (string.IsNullOrEmpty(Service.ServiceBaseUrl))
-                Service.ServiceBaseUrl = "http://localhost:6868/";
+            if (string.IsNullOrEmpty(RemoteService.ServiceBaseUrl))
+                RemoteService.ServiceBaseUrl = "http://localhost:6868/";
             #endif
 
-
+            RemoteService.AccessToken = appSettings.AccessToken;
+            
             if (string.IsNullOrEmpty(options.Server) == false)
                 AppSettings.ForcedServerUrl = options.Server;
             if (string.IsNullOrEmpty(options.Temp) == false)
@@ -96,9 +112,9 @@ public class Program
             if(File.Exists(DirectoryHelper.NodeConfigFile) == false)
                 AppSettings.Instance.Save();
 
-            new ConsoleLogger();
-            new FileLogger(DirectoryHelper.LoggingDirectory, "FileFlows-Node");
-            new ServerLogger();
+            _ = new ConsoleLogger();
+            _ = new FileLogger(DirectoryHelper.LoggingDirectory, "FileFlows-Node");
+            _ = new ServerLogger();
             
             Logger.Instance?.ILog("FileFlows Node version: " + Globals.Version);
             if (Globals.IsDocker)
@@ -108,8 +124,7 @@ public class Program
 
             AppSettings.Init();
 
-
-            bool showUi = options.Docker == false && options.NoGui == false;
+            bool showUi = options.Docker == false && options.Gui;
 
             Manager = new ();
             
@@ -127,7 +142,7 @@ public class Program
             if (showUi)
             {
                 if(Globals.IsWindows)
-                    Utils.WindowsConsoleManager.Hide();
+                    WindowsConsoleManager.Hide();
                 
                 Logger.Instance?.ILog("Launching GUI");
                 Task.Run(async () =>
@@ -140,7 +155,10 @@ public class Program
                     var appBuilder = BuildAvaloniaApp();
                     appBuilder.StartWithClassicDesktopLifetime(args);
                 }
-                catch (Exception) { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + Environment.NewLine +ex.StackTrace);
+                }
 
             }
             else
@@ -153,8 +171,13 @@ public class Program
 
                 Shared.Logger.Instance?.ILog("Registering FileFlow Node");
 
-                if (Manager.Register().Result == false)
+                var registerResult = Manager.Register().Result;
+                if (registerResult.Success == false)
+                {
+                    Logger.Instance?.WLog("Register failed: " + registerResult.Message);
                     return;
+                }
+
 
                 Shared.Logger.Instance?.ILog("FileFlows node starting");
                 
@@ -180,8 +203,9 @@ public class Program
         AppSettings.ForcedServerUrl = Environment.GetEnvironmentVariable("ServerUrl");
         AppSettings.ForcedTempPath = Environment.GetEnvironmentVariable("TempPath");
         AppSettings.ForcedHostName = Environment.GetEnvironmentVariable("NodeName");
+        AppSettings.ForcedAccessToken = Environment.GetEnvironmentVariable("AccessToken");
 
-        string mappings = Environment.GetEnvironmentVariable("NodeMappings");
+        var mappings = Environment.GetEnvironmentVariable("NodeMappings");
         if (string.IsNullOrWhiteSpace(mappings) == false)
         {
             try
@@ -207,9 +231,8 @@ public class Program
 
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp(bool messagebox = false)
-        => (messagebox ? AppBuilder.Configure<MessageApp>() : AppBuilder.Configure<App>())
-            .UsePlatformDetect();
+    public static AppBuilder BuildAvaloniaApp()
+        =>  AppBuilder.Configure<App>().UsePlatformDetect();
 
     /// <summary>
     /// Quits the node application
@@ -217,7 +240,6 @@ public class Program
     /// <param name="exitCode">the exit code</param>
     internal static void Quit(int exitCode = 0)
     {
-        Exiting = true;
         MainWindow.Instance?.ForceQuit();
         Environment.Exit(exitCode);
     }

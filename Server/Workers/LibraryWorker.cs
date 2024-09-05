@@ -8,7 +8,7 @@ namespace FileFlows.Server.Workers;
 /// <summary>
 /// Worker to monitor libraries
 /// </summary>
-public class LibraryWorker : Worker
+public class LibraryWorker : ServerWorker
 {
     
     private Dictionary<string, WatchedLibrary> WatchedLibraries = new ();
@@ -18,12 +18,16 @@ public class LibraryWorker : Worker
     /// </summary>
     private static LibraryWorker Instance;
 
+    private readonly Logger Logger;
+
     /// <summary>
     /// Creates a new instance of the library worker
     /// </summary>
     public LibraryWorker() : base(ScheduleType.Minute, 1)
     {
         Instance = this;
+        Logger = new();
+        Logger.RegisterWriter(new FileLogger(DirectoryHelper.LoggingDirectory, "Library", false));
     }
 
     public override void Start()
@@ -48,6 +52,19 @@ public class LibraryWorker : Worker
     /// Updates the libraries being watched
     /// </summary>
     public static void UpdateLibraries() => Instance?.UpdateLibrariesInstance();
+
+    /// <summary>
+    /// Gets a watched library instance for a library if one exists
+    /// </summary>
+    /// <param name="library">the library</param>
+    /// <returns>the watched library instance</returns>
+    public static WatchedLibrary? GetWatchedLibrary(Library library)
+    {
+        string key =  library.Uid + ":" + library.Path;
+        if (Instance.WatchedLibraries.ContainsKey(key))
+            return Instance.WatchedLibraries[key];
+        return null;
+    }
     
 
     private void Watch(params Library[] libraries)
@@ -59,7 +76,7 @@ public class LibraryWorker : Worker
             {
                 if (WatchedLibraries.ContainsKey(key))
                     continue;
-                WatchedLibraries.Add(key, new WatchedLibrary(lib));
+                WatchedLibraries.Add(key, new WatchedLibrary(Logger, lib));
             }
         }
     }
@@ -82,8 +99,8 @@ public class LibraryWorker : Worker
     /// </summary>
     private void UpdateLibrariesInstance()
     {
-        Logger.Instance.DLog("LibraryWorker: Updating Libraries");
-        var libraries = new Services.LibraryService().GetAll();
+        Logger.DLog("LibraryWorker: Updating Libraries");
+        var libraries = new Services.LibraryService().GetAllAsync().Result;
         var libraryUids = libraries.Select(x => x.Uid + ":" + x.Path).ToList();            
 
         Watch(libraries.Where(x => WatchedLibraries.ContainsKey(x.Uid + ":" + x.Path) == false).ToArray());
@@ -97,53 +114,58 @@ public class LibraryWorker : Worker
             libwatcher.UpdateLibrary(library);
         }
      
-        LibrariesLastUpdated = DateTime.Now;
+        LibrariesLastUpdated = DateTime.UtcNow;
     }
 
-    protected override void Execute()
+    protected override void ExecuteActual(Settings settings)
     {
-        if(LibrariesLastUpdated < DateTime.Now.AddHours(-1))
+        if(LibrariesLastUpdated < DateTime.UtcNow.AddHours(-1))
             UpdateLibrariesInstance();
 
         foreach(var libwatcher in WatchedLibraries.Values)
         {
             var library = libwatcher.Library;
+            if (library.Enabled == false)
+                continue; // dont scan a disabled library
             if (library.FullScanIntervalMinutes == 0)
                 library.FullScanIntervalMinutes = 60;
+            bool scan = library.Scan;
+            if (!scan && library.Uid == libwatcher.Library?.Uid && libwatcher.UseScanner)
+                scan = true;
+            
             if (libwatcher.ScanComplete == false)
             {
                 // hasn't been scanned yet, we scan when the app starts or library is first added
             }
-            else if (library.Scan == false)
+            else if (scan == false)
             {
                 if (library.FullScanDisabled)
                 {
-                    Logger.Instance.DLog($"LibraryWorker: Library '{library.Name}' full scan disabled");
+                    Logger.DLog($"LibraryWorker: Library '{library.Name}' full scan disabled");
                     continue;
                 }
 
                 // need to check full scan interval
                 if (library.LastScannedAgo.TotalMinutes < library.FullScanIntervalMinutes)
                 {
-                    Logger.Instance.DLog($"LibraryWorker: Library '{library.Name}' was scanned recently {library.LastScannedAgo} (full scan interval {library.FullScanIntervalMinutes} minutes)");
+                    Logger.DLog($"LibraryWorker: Library '{library.Name}' was scanned recently {library.LastScannedAgo} (full scan interval {library.FullScanIntervalMinutes} minutes)");
                     continue;
                 }
             }
             else if (library.LastScannedAgo.TotalSeconds < library.ScanInterval)
             {
-                Logger.Instance.DLog($"LibraryWorker: Library '{library.Name}' was scanned recently {library.LastScannedAgo} ({(new TimeSpan(library.ScanInterval * TimeSpan.TicksPerSecond))}");
+                Logger.DLog($"LibraryWorker: Library '{library.Name}' was scanned recently {library.LastScannedAgo} ({(new TimeSpan(library.ScanInterval * TimeSpan.TicksPerSecond))}");
                 continue;
             }
 
-            Logger.Instance.DLog($"LibraryWorker: Library '{library.Name}' calling scan " +
+            Logger.DLog($"LibraryWorker: Library '{library.Name}' calling scan " +
                                  $"(Scan complete: {libwatcher.ScanComplete}) " +
-                                 $"(Library Scan: {library.Scan} " +
+                                 $"(Library Scan: {scan} " +
                                  $"(last scanned: {library.LastScannedAgo}) " +
                                  $"(Full Scan interval: {library.FullScanIntervalMinutes})");
 
-            Task.Run(async () =>
+            Task.Run(() =>
             {
-                await Task.Delay(1);
                 libwatcher.Scan();
             });
         }
@@ -156,15 +178,6 @@ public class LibraryWorker : Worker
     internal static void ResetProcessing(bool internalOnly = true)
     {
         var service = new Server.Services.LibraryFileService();
-        if (internalOnly)
-        {
-            service.ResetProcessingStatus(Globals.InternalNodeUid).Wait();
-        }
-        else
-        {
-            // special case can use dbhelper directly
-            // this is called at the start up of FileFlows
-            service.ResetProcessingStatus().Wait();
-        }
+        service.ResetProcessingStatus(internalOnly ? CommonVariables.InternalNodeUid : null).Wait();
     }
 }

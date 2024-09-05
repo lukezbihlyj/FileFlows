@@ -1,16 +1,18 @@
+using System.Web;
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Inputs;
+using FileFlows.Client.Components.ScriptEditor;
 using FileFlows.Plugin;
 using Humanizer;
 
 namespace FileFlows.Client.Pages;
 
-public partial class Tasks: ListPage<Guid, FileFlowsTask>
+public partial class Tasks : ListPage<Guid, FileFlowsTask>
 {
     public override string ApiUrl => "/api/task";
 
     private string lblLastRun, lblNever, lblTrigger;
-    private string lblRunAt, lblSuccess, lblReturnCode;
+    private string lblRunAt, lblSuccess, lblReturnCode, lblEditScript;
 
     private enum TimeSchedule
     {
@@ -28,6 +30,23 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
     private static readonly string SCHEDULE_12_HOURLY = string.Concat(Enumerable.Repeat("1" + new string('0', 47), 2 * 7));
     private static readonly string SCHEDULE_DAILY = string.Concat(Enumerable.Repeat("1" + new string('0', 95), 7));
 
+    private Dictionary<Guid, string> Scripts = new ();
+    
+    private string lblFileAdded, lblFileProcessed, lblFileProcessing, lblFileProcessFailed, lblFileProcessSuccess, 
+        lblFileFlowsServerUpdating,  lblFileFlowsServerUpdateAvailable, lblCustomSchedule;
+
+    /// <summary>
+    /// The script importer
+    /// </summary>
+    private Components.Dialogs.ImportScript ScriptImporter;
+
+    /// <summary>
+    /// Gets if they are licensed for this page
+    /// </summary>
+    /// <returns>if they are licensed for this page</returns>
+    protected override bool Licensed()
+        => Profile.LicensedFor(LicenseFlags.Tasks); 
+    
     protected override void OnInitialized()
     {
         lblNever = Translater.Instant("Labels.Never");
@@ -36,9 +55,63 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
         lblRunAt = Translater.Instant("Labels.RunAt");
         lblSuccess = Translater.Instant("Labels.Success");
         lblReturnCode = Translater.Instant("Labels.ReturnCode");
+        lblEditScript = Translater.Instant("Pages.Tasks.Buttons.EditScript");
+
+        lblCustomSchedule = Translater.Instant("Pages.Tasks.Fields.CustomSchedule");
+        lblFileAdded = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileAdded)}");
+        lblFileProcessed = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileProcessed)}");
+        lblFileProcessing = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileProcessing)}");
+        lblFileProcessFailed = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileProcessFailed)}");
+        lblFileProcessSuccess = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileProcessSuccess)}");
+        lblFileFlowsServerUpdating = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileFlowsServerUpdating)}");
+        lblFileFlowsServerUpdateAvailable = Translater.Instant($"Enums.{nameof(TaskType)}.{nameof(TaskType.FileFlowsServerUpdateAvailable)}");
         base.OnInitialized();
     }
 
+    /// <summary>
+    /// we only want to do the sort the first time, otherwise the list will jump around for the user
+    /// </summary>
+    private List<Guid> initialSortOrder;
+
+
+    /// <inheritdoc />
+    public async override Task PostLoad()
+    {
+        try
+        {
+            var result = await HttpHelper.Get<Dictionary<Guid, string>>("/api/script/basic-list?type=system");
+            if (result.Success)
+                Scripts = result.Data.Where(x => x.Value != "FILE_DISPLAY_NAME").ToDictionary();
+        }
+        catch (Exception)
+        {
+            Toast.ShowError("Failed loading scripts");
+        }
+    }
+
+    /// <inheritdoc />
+    public override Task<List<FileFlowsTask>> PostLoadGotData(List<FileFlowsTask> data)
+    {
+        if(initialSortOrder == null)
+        {
+            data = data.OrderByDescending(x => x.Enabled).ThenBy(x => x.Name)
+                .ToList();
+            initialSortOrder = data.Select(x => x.Uid).ToList();
+        }
+        else
+        {
+            data = data.OrderBy(x => initialSortOrder.Contains(x.Uid) ? initialSortOrder.IndexOf(x.Uid) : 1000000)
+                .ThenBy(x => x.Name)
+                .ToList();
+        }
+        return Task.FromResult(data);
+    }
+    
+    /// <summary>
+    /// Gets the text for the schedule
+    /// </summary>
+    /// <param name="task">the task</param>
+    /// <returns>the schedule text</returns>
     private string GetSchedule(FileFlowsTask task)
     {
         if (task.Type != TaskType.Schedule)
@@ -51,6 +124,9 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
         return "Custom Schedule";
     }
     
+    /// <summary>
+    /// Adds a new task
+    /// </summary>
     private async Task Add()
     {
         await Edit(new FileFlowsTask()
@@ -59,27 +135,29 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
         });
     }
     
+    /// <inheritdoc />
     public override async Task<bool> Edit(FileFlowsTask item)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
-        var scriptResponse = await HttpHelper.Get<List<Script>>("/api/script/list/system");
-        if (scriptResponse.Success == false)
-        {
-            Toast.ShowError(scriptResponse.Body);
-            return false;
-        }
+        // var scriptResponse = await HttpHelper.Get<Dictionary<string, string>>("/api/script/basic-list?type=system");
+        // if (scriptResponse.Success == false)
+        // {
+        //     Toast.ShowError(scriptResponse.Body);
+        //     return false;
+        // }
 
-        if (scriptResponse.Data?.Any() != true)
+
+        if (Scripts.Any() != true)
         {
             Toast.ShowError("Pages.Tasks.Messages.NoScripts");
             return false;
         }
 
-        var scriptOptions = scriptResponse.Data.Select(x => new ListOption()
+        var scriptOptions = Scripts.Select(x => new ListOption()
         {
-            Label = x.Name,
-            Value = x.Uid
+            Label = x.Value,
+            Value = x.Key
         }).ToList();
 
         fields.Add(new ElementField
@@ -204,6 +282,11 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
     }
     
     
+    /// <summary>
+    /// Saves a task
+    /// </summary>
+    /// <param name="model">the model of the task to save</param>
+    /// <returns>true if successful and if the editor should be closed</returns>
     async Task<bool> Save(ExpandoObject model)
     {
         Blocker.Show();
@@ -211,7 +294,7 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
         var task = new FileFlowsTask();
         var dict = model as IDictionary<string, object>;
         task.Name = dict["Name"].ToString() ?? string.Empty;
-        task.Script = dict["Script"].ToString() ?? string.Empty;
+        task.Script = (Guid)dict["Script"];
         task.Uid = (Guid)dict["Uid"];
         task.Type = (TaskType)dict["Type"];
         if (task.Type == TaskType.Schedule)
@@ -240,7 +323,7 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
             var saveResult = await HttpHelper.Post<FileFlowsTask>($"{ApiUrl}", task);
             if (saveResult.Success == false)
             {
-                Toast.ShowError( saveResult.Body?.EmptyAsNull() ?? Translater.Instant("ErrorMessages.SaveFailed"));
+                Toast.ShowEditorError( saveResult.Body?.EmptyAsNull() ?? Translater.Instant("ErrorMessages.SaveFailed"));
                 return false;
             }
 
@@ -260,8 +343,9 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
         }
     }
     
-    
-
+    /// <summary>
+    /// Runs the task on the server
+    /// </summary>
     async Task Run()
     {
         var item = Table.GetSelected()?.FirstOrDefault();
@@ -288,6 +372,9 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
     }
 
 
+    /// <summary>
+    /// Gets the run history for the selected task and shows it
+    /// </summary>
     async Task RunHistory()
     {
         var item = Table.GetSelected()?.FirstOrDefault();
@@ -323,10 +410,14 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
         }
     }
 
+    /// <summary>
+    /// Shows the task history
+    /// </summary>
+    /// <param name="task">the task to show the history</param>
     async Task TaskHistory(FileFlowsTask task)
     {
-        List<ElementField> fields = new List<ElementField>();
-        fields.Add(new ()
+        List<IFlowField> fields = new ();
+        fields.Add(new ElementField()
         {
             InputType = FormInputType.Table,
             Name = nameof(task.RunHistory),
@@ -362,7 +453,7 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
 
     async Task TaskRun(FileFlowsTaskRun fileFlowsTaskRun)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         fields.Add(new ElementField
         {
@@ -393,4 +484,71 @@ public partial class Tasks: ListPage<Guid, FileFlowsTask>
             Fields = fields
         });
     }
+
+    async Task EditScript()
+    {
+        var item = Table.GetSelected()?.FirstOrDefault();
+        if (item == null)
+            return;
+
+        this.Blocker.Show();
+        Script script;
+        try
+        {
+            var response =
+                await HttpHelper.Get<Script>("/api/script/" + HttpUtility.UrlPathEncode(item.Script.ToString()) + "?type=System");
+            if (response.Success == false)
+            {
+                Toast.ShowError("Failed to load script");
+                return;
+            }
+
+            script = response.Data!;
+        }
+        finally
+        {
+            this.Blocker.Hide();
+        }
+
+        var editor = new ScriptEditor(Editor, ScriptImporter, blocker: Blocker);
+        await editor.Open(script);
+    }
+
+    /// <summary>
+    /// Gets the icon for a task
+    /// </summary>
+    /// <param name="task">the task</param>
+    /// <returns>the icon</returns>
+    private string GetIcon(FileFlowsTask task)
+    {
+        return task.Type switch
+        {
+            TaskType.FileAdded => "fas fa-folder-plus",
+            TaskType.FileProcessed => "fas fa-thumbs-up",
+            TaskType.FileProcessing => "fas fa-running",
+            TaskType.FileProcessFailed => "fas fa-exclamation-circle",
+            TaskType.FileProcessSuccess => "fas fa-check-circle",
+            TaskType.FileFlowsServerUpdating => "fas fa-hourglass-half",
+            TaskType.FileFlowsServerUpdateAvailable => "fas fa-cloud-download-alt",
+            _ => "fas fa-clock"
+        };
+    }
+
+    /// <summary>
+    /// Gets the text for a task
+    /// </summary>
+    /// <param name="task">the task</param>
+    /// <returns>the text</returns>
+    private string GetScheduleText(FileFlowsTask task)
+        => task.Type switch
+        {
+            TaskType.FileAdded => lblFileAdded,
+            TaskType.FileProcessed => lblFileProcessed,
+            TaskType.FileProcessing => lblFileProcessing,
+            TaskType.FileProcessSuccess => lblFileProcessSuccess,
+            TaskType.FileProcessFailed => lblFileProcessFailed,
+            TaskType.FileFlowsServerUpdating => lblFileFlowsServerUpdating,
+            TaskType.FileFlowsServerUpdateAvailable => lblFileFlowsServerUpdateAvailable,
+            _ => GetSchedule(task)
+        };
 }

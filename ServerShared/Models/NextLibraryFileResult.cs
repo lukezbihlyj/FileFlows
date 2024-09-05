@@ -11,7 +11,7 @@ public class NextLibraryFileResult
     /// <summary>
     /// Gets or sets the library file to process
     /// </summary>
-    public LibraryFile File { get; set; }
+    public LibraryFile? File { get; set; }
 
     /// <summary>
     /// Gets or sets the status of the call
@@ -51,5 +51,9 @@ public enum NextLibraryFileStatus
     /// <summary>
     /// The node is not enabled
     /// </summary>
-    NodeNotEnabled = 6
+    NodeNotEnabled = 6,
+    /// <summary>
+    /// License limit reached
+    /// </summary>
+    LicenseLimitReached = 7
 }

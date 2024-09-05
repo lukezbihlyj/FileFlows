@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using FileFlows.Plugin;
 using Jint;
 using Jint.Runtime;
 
@@ -21,7 +22,7 @@ public class Executor
     /// <summary>
     /// Gets or sets the variables that will be passed into the executed code
     /// </summary>
-    public Dictionary<string, object> Variables { get; set; } = new Dictionary<string, object>();
+    public Dictionary<string, object> Variables { get; set; } = new ();
 
     /// <summary>
     /// Gets or sets the logger for the code execution
@@ -46,12 +47,17 @@ public class Executor
     /// <summary>
     /// Gets or sets the directory where shared modules will be loaded from
     /// </summary>
-    public string SharedDirectory { get; set; } = string.Empty;
+    public string? SharedDirectory { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the process executor that is used by script to execute an external process
     /// </summary>
     public IProcessExecutor ProcessExecutor { get; set; } = null!;
+    
+    /// <summary>
+    /// Gets or sets if the code should be included in the failed logged
+    /// </summary>
+    public bool DontLogCode { get; set; }
     
     /// <summary>
     /// Static constructor for the executor
@@ -79,13 +85,24 @@ public class Executor
     /// <summary>
     /// Executes javascript
     /// </summary>
-    /// <returns>the output to be called next</returns>
-    public object Execute()
+    /// <returns>the result of the execution</returns>
+    public object? Execute()
     {
         if (string.IsNullOrEmpty(Code))
             return false; // no code, flow cannot continue doesnt know what to do
         try
         {
+            // Create a wrapper object for LanguageHelper
+            var languageHelperWrapper = new
+            {
+                GetEnglishFor = new Func<string, string>(LanguageHelper.GetEnglishFor),
+                GetIso1Code = new Func<string, string>(LanguageHelper.GetIso1Code),
+                GetIso2Code = new Func<string, string>(LanguageHelper.GetIso2Code),
+                AreSame = new Func<string, string, bool>(LanguageHelper.AreSame)
+            };
+
+            AdjustVariables(Variables);
+            
             // replace Variables. with dictionary notation
             string tcode = Code;
             foreach (string k in Variables.Keys.OrderByDescending(x => x.Length))
@@ -99,7 +116,7 @@ public class Executor
                 if (k.StartsWith("file.") || k.StartsWith("folder."))
                 {
                     // FF-301: special case, these are readonly, need to make these easier to use
-                    if (Regex.IsMatch(k, @"\.(Create|Modified)$"))
+                    if (Regex.IsMatch(k, @"\.(Date|Create|Modified)$"))
                         continue; // dates
                     if (Regex.IsMatch(k, @"\.(Year|Day|Month|Size)$"))
                         replacement = "Number(" + replacement + ")";
@@ -121,17 +138,28 @@ public class Executor
 
             tcode = tcode.Replace("Flow.Execute(", "Execute(");
 
+            if (tcode.StartsWith("function") == false && tcode.IndexOf("export const result", StringComparison.Ordinal) < 0)
+            {
+                tcode = "function Script() {\n" + tcode + "\n}\n";
+                tcode += $"var scriptResult = Script();\nexport const result = scriptResult;";
+            }
 
-            string sharedDir = SharedDirectory.Replace("\\", "/");
-            if (sharedDir.EndsWith("/") == false)
-                sharedDir += "/";
-            tcode = Regex.Replace(tcode, @"(?<=(from[\s](['""])))(\.\.\/)*Shared\/", sharedDir);
+            if (SharedDirectory != null) // can be null in unit tests
+            {
+                string sharedDir = SharedDirectory.Replace("\\", "/");
+                if (sharedDir.EndsWith("/") == false)
+                    sharedDir += "/";
+                tcode = Regex.Replace(tcode, @"(?<=(from[\s](['""])))(\.\.\/)*Shared\/", sharedDir);
+            }
 
             foreach(Match match in Regex.Matches(tcode, @"import[\s]+{[^}]+}[\s]+from[\s]+['""]([^'""]+)['""]"))
             {
                 var importFile = match.Groups[1].Value;
-                if(importFile.EndsWith(".js") == false)
-                    tcode = tcode.Replace(importFile, importFile + ".js");
+                tcode = tcode.Replace(match.Value, "");
+                if (importFile.EndsWith(".js") == false)
+                    tcode = match.Value.Replace(importFile, importFile + ".js") + "\n" + tcode;
+                else
+                    tcode = match.Value + "\n" + tcode;
             }
 
             var processExecutor = this.ProcessExecutor ?? new BasicProcessExecutor(Logger);
@@ -139,13 +167,23 @@ public class Executor
             var engine = new Engine(options =>
             {
                 options.AllowClr();
-                options.EnableModules(SharedDirectory);
+                if (string.IsNullOrEmpty(SharedDirectory) == false)
+                {
+                    Logger.ILog("Shared Directory for scripts: " + SharedDirectory);
+                    options.EnableModules(SharedDirectory);
+                }
+                else
+                {
+                    Logger.WLog("No Shared Directory for scripts defined.");
+                }
             })
             .SetValue("Logger", Logger)
             .SetValue("Variables", Variables)
             .SetValue("Sleep", (int milliseconds) => Thread.Sleep(milliseconds))
             .SetValue("http", HttpClient)
-            .SetValue("StringContent", (string content) => new System.Net.Http.StringContent(content))
+            .SetValue("CacheStore", CacheStore.Instance)
+            .SetValue("LanguageHelper", languageHelperWrapper)
+            .SetValue("StringContent", (string content) => new StringContent(content))
             .SetValue("JsonContent", (object content) =>
             {
                 if (content is string == false)
@@ -169,17 +207,43 @@ public class Executor
                return result;
             })
             .SetValue(nameof(FileInfo), new Func<string, FileInfo>((string file) => new FileInfo(file)))
-            .SetValue(nameof(DirectoryInfo), new Func<string, DirectoryInfo>((string path) => new DirectoryInfo(path))); ;
-            
-            foreach (var arg in AdditionalArguments ?? new ())
+            .SetValue(nameof(DirectoryInfo), new Func<string, DirectoryInfo>((string path) => new DirectoryInfo(path)));
+
+            foreach (var arg in AdditionalArguments ?? new())
+            {
+                if (arg.Value is JsonElement je)
+                {
+                    switch (je.ValueKind)
+                    {
+                        case JsonValueKind.False:
+                            engine.SetValue(arg.Key, false);
+                            continue;
+                        case JsonValueKind.True:
+                            engine.SetValue(arg.Key, true);
+                            continue;
+                        case JsonValueKind.Number:
+                            engine.SetValue(arg.Key, je.GetDouble());
+                            continue;
+                        case JsonValueKind.String:
+                            engine.SetValue(arg.Key, je.GetString());
+                            continue;
+                    }   
+                }
+                
                 engine.SetValue(arg.Key, arg.Value);
-            
-            engine.AddModule("Script", tcode);
-            var ns = engine.ImportModule("Script");
-            var result = ns.Get("result");            
+            }
+
+            // if(DontLogCode == false)
+            //     Logger.DLog("Executing code: \n\n" + tcode + "\n\n" + new string('-', 30));
+            #if(DEBUG)
+            Logger.ILog("TCode:\n" + tcode);
+            #endif
+            engine.Modules.Add("Script", tcode);
+            var ns = engine.Modules.Import("Script");
+            var result = ns.Get("result");
             try
             {
-                if(result != null)
+                if (result != null)
                 {
                     try
                     {
@@ -195,7 +259,11 @@ public class Executor
                     }
                 }
             }
-            catch(Exception) { }
+            catch (Exception)
+            {
+            }
+
+            AdjustVariables(Variables);
 
             return true;
         }
@@ -203,14 +271,18 @@ public class Executor
         {
             if (ex.Message == "true")
                 return true;
+            if (ex.Message == "undefined")
+                return null;
             if (int.TryParse(ex.Message, out int code))
                 return code;
-            // print out the code block for debugging
-            int lineNumber = 0;
-            var lines = Code.Split('\n');
-            string pad = "D" + (lines.ToString()!.Length);
-            Logger.DLog("Code: " + Environment.NewLine +
-                string.Join("\n", lines.Select(x => (++lineNumber).ToString("D3") + ": " + x)));
+            //if (DontLogCode == false)
+            {
+                // print out the code block for debugging
+                int lineNumber = 0;
+                var lines = Code.Split('\n');
+                Logger.DLog("Code: " + Environment.NewLine +
+                            string.Join("\n", lines.Select(x => (++lineNumber).ToString("D3") + ": " + x)));
+            }
 
             Logger.ELog($"Failed executing script: {ex.Message}");
             return false;
@@ -221,6 +293,49 @@ public class Executor
             if(ex is MissingVariableException == false)
                 Logger.ELog("Failed executing script: " + ex.Message + Environment.NewLine + ex.StackTrace);
             return false;
+        }
+    }
+
+
+    /// <summary>
+    /// Adjusts the varaibles to remove any JsonElements
+    /// </summary>
+    /// <param name="variables">the varaibles</param>
+    private void AdjustVariables(Dictionary<string, object> variables)
+    {
+        foreach (var key in variables.Keys)
+        {
+            var obj = variables[key];
+            if (obj == null)
+                continue;
+            if (obj is JsonElement je == false)
+                continue;
+            if (je.ValueKind == JsonValueKind.False)
+            {
+                Logger?.ILog($"Adjust variable '{key}' to: false");
+                variables[key] = false;
+                continue;
+            }
+            if (je.ValueKind == JsonValueKind.True)
+            {
+                Logger?.ILog($"Adjust variable '{key}' to: true");
+                variables[key] = true;
+                continue;
+            }
+            if (je.ValueKind == JsonValueKind.String)
+            {
+                string sValue = je.GetString() ?? string.Empty;
+                variables[key] = sValue;
+                Logger?.ILog($"Adjust variable '{key}' to: '{sValue}'");
+                continue;
+            }
+            if (je.ValueKind == JsonValueKind.Number)
+            {
+                int iValue = je.GetInt32();
+                variables[key] = iValue;
+                Logger?.ILog($"Adjust variable '{key}' to: {iValue}");
+                continue;
+            }
         }
     }
 }

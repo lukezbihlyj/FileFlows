@@ -1,3 +1,5 @@
+using FileFlows.Plugin;
+
 namespace FileFlows.Shared.Models;
 
 /// <summary>
@@ -5,7 +7,6 @@ namespace FileFlows.Shared.Models;
 /// </summary>
 public class SettingsUiModel:Settings
 {
-
     /// <summary>
     /// Gets or sets the license email
     /// </summary>
@@ -15,11 +16,20 @@ public class SettingsUiModel:Settings
     /// Gets or sets the licensed key
     /// </summary>
     public string LicenseKey { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the number of they can process
+    /// </summary>
+    public string LicenseFiles { get; set; }
 
     /// <summary>
     /// Gets the license flags for the user
     /// </summary>
-    public string LicenseFlags { get; set; }
+    public LicenseFlags LicenseFlags { get; set; }
+    /// <summary>
+    /// Gets the license level for the user
+    /// </summary>
+    public LicenseLevel LicenseLevel { get; set; }
     /// <summary>
     /// Gets the license expiry date for the user
     /// </summary>
@@ -68,4 +78,29 @@ public class SettingsUiModel:Settings
     /// </summary>
     public bool RecreateDatabase { get; set; }
     
+    /// <summary>
+    /// Gets or sets if database backups should not be taken during upgrade
+    /// </summary>
+    public bool DontBackupOnUpgrade { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the file server all list
+    /// </summary>
+    public string FileServerAllowedPathsString { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the security mode
+    /// </summary>
+    public SecurityMode Security { get; set; }
+    
+    /// <summary>
+    /// Gets or set the placeholder for the OIDC call back address
+    /// </summary>
+    public string OidcCallbackAddressPlaceholder { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if DockerMods should run on the server on startup/when enabled
+    /// </summary>
+    public bool DockerModsOnServer { get; set; }
+
 }

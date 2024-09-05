@@ -1,6 +1,11 @@
 ﻿using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Text.Json;
+using FileFlows.Client.Components;
+using FileFlows.Client.Components.Dialogs;
 using FileFlows.Client.Components.Inputs;
 using FileFlows.Plugin;
+using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Pages;
 
@@ -9,40 +14,47 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
 
     public override async Task<bool> Edit(ProcessingNode node)
     {
-#if (!DEMO)
-
         bool isServerProcessingNode = node.Address == FileFlowsServer;
         node.Mappings ??= new();
         this.EditingItem = node;
 
-        var scripts = (await HttpHelper.Get<List<Script>>("/api/script")).Data ?? new List<Script>();
-
-        var tabs = new Dictionary<string, List<ElementField>>();
-        tabs.Add("General", TabGeneral(node, isServerProcessingNode, scripts));
-        tabs.Add("Schedule", TabSchedule(node, isServerProcessingNode));
-        if(isServerProcessingNode == false)
-            tabs.Add("Mappings", TabMappings(node));
-        tabs.Add("Processing", await TabProcessing(node));
-        if (node.OperatingSystem == OperatingSystemType.Linux || node.OperatingSystem == OperatingSystemType.Unknown)
-            tabs.Add("Advanced", TabAdvanced(node));
+        Dictionary<Guid, string> scripts;
+        var tabs = new Dictionary<string, List<IFlowField>>();
+        Blocker.Show();
+        try
+        {
+            scripts = (await HttpHelper.Get<Dictionary<Guid, string>>("/api/script/basic-list?type=System")).Data ?? new ();
+            tabs.Add("General", TabGeneral(node, isServerProcessingNode, scripts));
+            tabs.Add("Schedule", TabSchedule(node, isServerProcessingNode));
+            if (isServerProcessingNode == false)
+                tabs.Add("Mappings", TabMappings(node));
+            tabs.Add("Processing", await TabProcessing(node));
+            if (node.OperatingSystem != OperatingSystemType.Windows)
+                tabs.Add("Advanced", TabAdvanced(node));
+            tabs.Add("Variables", TabVariables(node));
+        }
+        finally
+        {
+            Blocker.Hide();
+        }
 
         string helpUrl = isServerProcessingNode
             ? string.Empty
-            : "http://docs.fileflows.com/guides/external-processing-node";
+            : "https://fileflows.com/docs/guides/external-processing-node";
 
-        var result = await Editor.Open(new()
+
+        await Editor.Open(new()
         {
             TypeName = "Pages.ProcessingNode", Title = "Pages.ProcessingNode.Title", Model = node, Tabs = tabs,
             Large = true,
             SaveCallback = Save, HelpUrl = helpUrl
         });
-#endif
         return false;
     }
 
-    private List<ElementField> TabGeneral(ProcessingNode node, bool isServerProcessingNode, List<Script> scripts)
+    private List<IFlowField> TabGeneral(ProcessingNode node, bool isServerProcessingNode, Dictionary<Guid, string> scripts)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
 
         if (isServerProcessingNode)
         {
@@ -92,6 +104,19 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         });
         fields.Add(new ElementField
         {
+            InputType = FormInputType.Int,
+            Name = nameof(node.Priority),
+            Validators = new List<FileFlows.Shared.Validators.Validator> {
+                new FileFlows.Shared.Validators.Range() { Minimum = 0, Maximum = 100 }
+            },
+            Parameters = new()
+            {
+                { "Min", 0 },
+                { "Max", 100 }
+            }
+        });
+        fields.Add(new ElementField
+        {
             InputType = isServerProcessingNode ? FormInputType.Folder : FormInputType.Text,
             Name = nameof(node.TempPath),
             Validators = new List<FileFlows.Shared.Validators.Validator> {
@@ -99,13 +124,13 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
             }
         });
 
-        if (App.Instance.FileFlowsSystem.Licensed)
+        if (Profile.LicensedFor(LicenseFlags.Tasks))
         {
             var scriptOptions = scripts.Select(x => new ListOption
             {
-                Value = x.Name, Label = x.Name
+                Value = x.Key, Label = x.Value
             }).ToList();
-            scriptOptions.Insert(0, new ListOption() { Label = "Labels.None", Value = string.Empty});
+            scriptOptions.Insert(0, new ListOption() { Label = "Labels.None", Value = Guid.Empty});
             fields.Add(new ElementField
             {
                 InputType = FormInputType.Select,
@@ -121,9 +146,9 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return fields;
     }
 
-    private List<ElementField> TabSchedule(ProcessingNode node, bool isServerProcessingNode)
+    private List<IFlowField> TabSchedule(ProcessingNode node, bool isServerProcessingNode)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -142,15 +167,15 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return fields;
 
     }
-    private List<ElementField> TabMappings(ProcessingNode node)
+    private List<IFlowField> TabMappings(ProcessingNode node)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
             Name = "MappingsDescription"
         });
-        fields.Add(new ElementField
+        var efMappings = new ElementField
         {
             InputType = FormInputType.KeyValue,
             Name = nameof(node.Mappings),
@@ -158,25 +183,67 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
             {
                 { "HideLabel", true }
             }
-        });
+        };
+        var otherNodes = this.Data.Where(x => x.Uid != node.Uid && x.Mappings?.Any() == true).ToList();
+        if (otherNodes.Any() == true)
+        {
+            var onClickCallback = EventCallback.Factory.Create(this, () => { _ = CopyMappingsDialog(node, otherNodes, efMappings); });
+            fields.Add(new ElementField()
+            {
+                Name = "CopyMappings",
+                HideLabel = true,
+                InputType = FormInputType.Button,
+                Parameters = new()
+                {
+                    { nameof(InputButton.OnClick), onClickCallback }
+                }
+            });
+        }
+
+        fields.Add(efMappings);
         return fields;
+    }
+
+    private async Task CopyMappingsDialog(ProcessingNode node, List<ProcessingNode> otherNodes, ElementField efMappings)
+    {
+        ProcessingNode source = await SelectDialog.Show("Copy Mappings", "Select a Node to copy mappings from", otherNodes.Select(
+            x => new ListOption()
+            {
+                Value = x,
+                Label = x.Name
+            }).ToList(), otherNodes.First());
+        if (source == null)
+            return; // was canceled
+        if (node.Mappings == null)
+            node.Mappings = new();
+        
+        
+        foreach (var mapping in source.Mappings ?? new())
+        {
+            if (node.Mappings.Any(x => x.Key == mapping.Key))
+                continue;
+            Logger.Instance.ILog("Adding Mapping: " + mapping.Key);
+            node.Mappings.Add(new(mapping.Key, mapping.Value));
+        }
+        Logger.Instance.ILog("Mappings: " + JsonSerializer.Serialize(node.Mappings));
+        efMappings.InvokeValueChanged(this, node.Mappings);
     }
     
     
-    private async Task<List<ElementField>> TabProcessing(ProcessingNode node)
+    private async Task<List<IFlowField>> TabProcessing(ProcessingNode node)
     {
-        var librariesResult = await HttpHelper.Get<Library[]>("/api/library");
+        var librariesResult = await HttpHelper.Get<Dictionary<Guid, string>>("/api/library/basic-list");
         var libraries = librariesResult?.Data?.Select(x => new ListOption
         {
-            Label = x.Name,
+            Label = x.Value,
             Value = new ObjectReference
             {
-                Uid = x.Uid,
-                Name = x.Name,
+                Uid = x.Key,
+                Name = x.Value,
                 Type = typeof(Library)?.FullName ?? string.Empty
             }
         })?.OrderBy(x => x.Label)?.ToList() ?? new List<ListOption>();
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -219,12 +286,17 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
             InputType = FormInputType.Int,
             Name = nameof(node.MaxFileSizeMb)
         });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Int,
+            Name = nameof(node.ProcessFileCheckInterval)
+        });
         return fields;
     }
 
-    private List<ElementField> TabAdvanced(ProcessingNode node)
+    private List<IFlowField> TabAdvanced(ProcessingNode node)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Switch,
@@ -245,17 +317,61 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         };
         fields.Add(efDontSetPermissions);
 
-        var condition = new Condition()
-        {
-            Value = false
-        };
-        condition.SetField(efDontSetPermissions, node.DontSetPermissions);
-
         fields.Add(new ElementField
         {
-            InputType = FormInputType.Text,
-            Name = nameof(node.Permissions),
-            DisabledConditions = new List<Condition> { condition }
+            InputType = FormInputType.Int,
+            Name = nameof(node.PermissionsFiles),
+            DisabledConditions = new List<Condition>
+            {
+                new (efDontSetPermissions,node.DontSetPermissions, value: false)
+            },
+            Placeholder = ServerShared.Globals.DefaultPermissionsFile.ToString("D3"),
+            Parameters = new ()
+            {
+                { nameof(InputNumber<int>.Max), 777 },
+                { nameof(InputNumber<int>.ZeroAsEmpty), true }
+            }
+        });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Int,
+            Name = nameof(node.PermissionsFolders),
+            DisabledConditions = new List<Condition>
+            {
+                new (efDontSetPermissions,node.DontSetPermissions, value: false)
+            },
+            Placeholder = ServerShared.Globals.DefaultPermissionsFolder.ToString("D3"),
+            Parameters = new ()
+            {
+                { nameof(InputNumber<int>.Max), 777 },
+                { nameof(InputNumber<int>.ZeroAsEmpty), true }
+            }
+        });
+        return fields;
+    }
+    
+    
+    /// <summary>
+    /// Adds the variables element fields
+    /// </summary>
+    /// <param name="node">the processing node</param>
+    /// <returns>a list of element fields</returns>
+    private List<IFlowField> TabVariables(ProcessingNode node)
+    {
+        List<IFlowField> fields = new ();
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Label,
+            Name = "VariablesDescription"
+        });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.KeyValue,
+            Name = nameof(node.Variables),
+            Parameters = new()
+            {
+                { "HideLabel", true }
+            }
         });
         return fields;
     }

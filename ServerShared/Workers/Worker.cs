@@ -51,6 +51,11 @@ public abstract class Worker
         Initialize(schedule, interval);
     }
 
+    /// <summary>
+    /// Initialises the worker
+    /// </summary>
+    /// <param name="schedule">the schedule</param>
+    /// <param name="interval">the interval</param>
     protected virtual void Initialize(ScheduleType schedule, int interval)
     {
         this.Schedule = schedule;
@@ -59,7 +64,7 @@ public abstract class Worker
 
     static readonly List<Worker> Workers = new List<Worker>();
 
-    private System.Timers.Timer timer;
+    private System.Timers.Timer? timer;
 
     /// <summary>
     /// Start the worker
@@ -100,6 +105,11 @@ public abstract class Worker
 
     private bool Executing = false;
 
+    /// <summary>
+    /// Timer elapsed
+    /// </summary>
+    /// <param name="sender">the sender</param>
+    /// <param name="e">the event</param>
     private void TimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         try
@@ -111,7 +121,7 @@ public abstract class Worker
         }
         finally
         {
-            if (Schedule != ScheduleType.Startup)
+            if (Schedule != ScheduleType.Startup && timer != null)
             {
                 timer.Interval = ScheduleNext() * 1_000;
                 timer.AutoReset = false;
@@ -119,14 +129,17 @@ public abstract class Worker
             }
         }
     }
-
+    
+    /// <summary>
+    /// Trigger the worker
+    /// </summary>
     public void Trigger()
     {
         try
         {
             if (Executing)
                 return; // dont let run twice
-            Logger.Instance.ILog("Triggering worker: " + this.GetType().Name);
+            Logger.Instance.DLog("Triggering worker: " + this.GetType().Name);
 
             _ = Task.Run(() =>
             {
@@ -153,10 +166,17 @@ public abstract class Worker
         }
     }
 
+    /// <summary>
+    /// Execute the worker
+    /// </summary>
     protected virtual void Execute()
     {
     }
 
+    /// <summary>
+    /// Get seconds until next interval
+    /// </summary>
+    /// <returns>seconds until next interval</returns>
     private int ScheduleNext()
     {
         switch (this.Schedule)
@@ -197,7 +217,7 @@ public abstract class Worker
         return SecondsUntilNext(next);
     }
     /// <summary>
-    /// Gets how many how many seconds until specified minute
+    /// Gets how many seconds until specified minute
     /// </summary>
     /// <returns>how many seconds until specified minute</returns>
     private int ScheduleMinute()

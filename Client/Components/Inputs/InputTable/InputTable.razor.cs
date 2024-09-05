@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Globalization;
 using System.Reflection;
 using Microsoft.AspNetCore.Components;
 
@@ -46,7 +47,7 @@ public partial class InputTable:Input<object>
         if (Data == null)
         {
             Type genericListType = typeof(List<>).MakeGenericType(TableType);
-            Data = (IList)Activator.CreateInstance(genericListType);
+            Data = (IList)Activator.CreateInstance(genericListType)!;
         }
 
         AllowSelection = SelectAction != null;
@@ -57,9 +58,11 @@ public partial class InputTable:Input<object>
         if (value == null || string.IsNullOrWhiteSpace(column.Property) || Properties.ContainsKey(column.Property) == false)
             return string.Empty;
         var prop = Properties[column.Property];
-        object pValue = prop.GetValue(value);
+        var pValue = prop.GetValue(value);
         if (pValue == null)
             return string.Empty;
+        if (pValue is DateTime dt)
+            return dt.ToLocalTime().ToString(CultureInfo.CurrentCulture);
         return pValue.ToString();
     }
 

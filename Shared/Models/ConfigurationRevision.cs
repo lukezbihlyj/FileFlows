@@ -1,5 +1,4 @@
 using FileFlows.Plugin;
-using FileFlows.Shared.Models;
 
 namespace FileFlows.Shared.Models;
 
@@ -12,11 +11,31 @@ public class ConfigurationRevision
     /// Gets or sets the Revision
     /// </summary>
     public int Revision { get; set; }
+    
+    /// <summary>
+    /// Gets the delay between requesting a new file if a file can be processed instantly
+    /// </summary>
+    public int DelayBetweenNextFile { get; set; }
 
     /// <summary>
     /// Gets or sets the maximum nodes that can be executed
     /// </summary>
     public int MaxNodes { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this is a license level
+    /// </summary>
+    public LicenseLevel LicenseLevel { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if remote files are allowed
+    /// </summary>
+    public bool AllowRemote { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if temporary files should be kept if the flow fails
+    /// </summary>
+    public bool KeepFailedFlowTempFiles { get; set; }
 
     /// <summary>
     /// Gets or sets the system variables
@@ -54,7 +73,17 @@ public class ConfigurationRevision
     public Dictionary<string, string> PluginSettings { get; set; }
 
     /// <summary>
-    /// Gets or sets a dictionary of plugin names and their binary data in the system
+    /// Gets or sets a dictionary of plugins in use
     /// </summary>
-    public Dictionary<string, byte[]> Plugins { get; set; }
+    public List<string> Plugins { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a list of plugin names in use
+    /// </summary>
+    public List<string> PluginNames { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a list of DockerMods in use
+    /// </summary>
+    public List<DockerMod> DockerMods { get; set; }
 }

@@ -14,6 +14,13 @@ using System.Collections.Generic;
 public class LibraryFile : FileFlowObject
 {
     /// <summary>
+    /// Gets or sets the display name for this library file
+    /// </summary>
+    [DbIgnore] // ignores serialization for models, if we removes this it can be kept in unwanted serializations
+    [NPoco.Ignore] // ignores the insert from PetaPoco, if we remove this, migration fails.  we have both to prevent dependency of NPoco outside of server
+    public string DisplayName { get; set; }
+    
+    /// <summary>
     /// Gets or sets the relative path of the library file.
     /// This is the path relative to the library
     /// </summary>
@@ -23,6 +30,11 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the path of the final output file
     /// </summary>
     public string OutputPath { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the reason this file failed, if it failed
+    /// </summary>
+    public string FailureReason { get; set; }
 
     /// <summary>
     /// Gets or sets the flow that executed this file
@@ -177,6 +189,11 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the UID of the worker that is executing this library file
     /// </summary>
     public Guid? WorkerUid { get; set; }
+
+    /// <summary>
+    /// Gets or sets the UID a UID this file should be processed on
+    /// </summary>
+    public Guid? ProcessOnNodeUid { get; set; }
     
     /// <summary>
     /// Gets or sets when the file began processing
@@ -225,7 +242,7 @@ public class LibraryFile : FileFlowObject
             if (Status == FileStatus.Unprocessed)
                 return new TimeSpan();
             if (Status == FileStatus.Processing)
-                return DateTime.Now.Subtract(ProcessingStarted);
+                return DateTime.UtcNow.Subtract(ProcessingStarted);
             if (ProcessingEnded < new DateTime(2000, 1, 1))
                 return new TimeSpan();
             return ProcessingEnded.Subtract(ProcessingStarted);
@@ -264,6 +281,12 @@ public class LibraryFile : FileFlowObject
     /// </summary>
     [Column]
     public Dictionary<string, object> FinalMetadata { get; set; }
+    
+    /// <summary>
+    /// Gets or sets custom variables to use with this file
+    /// </summary>
+    [Column]
+    public Dictionary<string, object> CustomVariables { get; set; }
 
 }
 
@@ -315,7 +338,11 @@ public enum FileStatus
     /// <summary>
     /// The library this file was created under no longer exists
     /// </summary>
-    MissingLibrary = 7
+    MissingLibrary = 7,
+    /// <summary>
+    /// Special case, the file has ben marked for reprocessing, this can only happen once
+    /// </summary>
+    ReprocessByFlow = 99
 }
 
 /// <summary>
@@ -342,6 +369,11 @@ public class ExecutedNode
     /// Gets or sets the output from this node
     /// </summary>
     public int Output { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the flow depth this flow element was executed in 
+    /// </summary>
+    public int Depth { get; set; }
 }
 
 /// <summary>

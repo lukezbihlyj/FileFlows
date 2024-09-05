@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using FileFlows.ServerShared;
 using FileFlows.ServerShared.Helpers;
 using FileFlows.ServerShared.Models;
 
@@ -22,11 +21,15 @@ public class AppSettings
     /// Gets or sets a forced hostname to identify this node as
     /// </summary>
     public static string? ForcedHostName { get; set; }
+    /// <summary>
+    /// Gets or sets a forced API Token 
+    /// </summary>
+    public static string? ForcedAccessToken { get; set; }
 
     /// <summary>
     /// Gets or sets mappings passed in via enviromental values
     /// </summary>
-    public static List<RegisterModelMapping> EnvironmentalMappings { get; set; }
+    public static List<RegisterModelMapping>? EnvironmentalMappings { get; set; }
     
     /// <summary>
     /// Gets or sets the runner count defined by environmental settings
@@ -39,7 +42,7 @@ public class AppSettings
     public static bool? EnvironmentalEnabled { get; set; }
 
     private string _ServerUrl = string.Empty;
-    private string _TempPath = string.Empty;
+    
     /// <summary>
     /// Gets or sets the URL to the server
     /// </summary>
@@ -51,28 +54,29 @@ public class AppSettings
                 return ForcedServerUrl;
             return _ServerUrl;
         }
-        set
-        {
-            _ServerUrl = value ?? String.Empty;
-        }
+        set => _ServerUrl = value ?? String.Empty;
     }
 
+    private string _AccessToken = string.Empty;
+    
     /// <summary>
-    /// Gets or sets the temporary path
+    /// Gets or sets the Access Token
     /// </summary>
-    public string TempPath
+    public string AccessToken
     {
         get
         {
-            if (string.IsNullOrEmpty(ForcedTempPath) == false)
-                return ForcedTempPath;
-            return _TempPath;
+            if (string.IsNullOrEmpty(ForcedAccessToken) == false)
+                return ForcedAccessToken;
+            return _AccessToken;
         }
-        set
-        {
-            _TempPath = value ?? String.Empty;
-        }
+        set => _AccessToken = value ?? String.Empty;
     }
+
+    /// <summary>
+    /// Gets or sets if the app should start minimized
+    /// </summary>
+    public bool StartMinimized { get; set; }
 
     /// <summary>
     /// Gets the hostname of this node
@@ -86,16 +90,6 @@ public class AppSettings
             return Environment.MachineName;
         }
     }
-
-    /// <summary>
-    /// Gets or sets the number of runners this node can execute
-    /// </summary>
-    public int Runners { get; set; }
-    
-    /// <summary>
-    /// Gets or sets if this node is enabled
-    /// </summary>
-    public bool Enabled { get; set; }
 
     /// <summary>
     /// Saves the configuration
@@ -144,7 +138,6 @@ public class AppSettings
         if (File.Exists(file) == false)
         {
             AppSettings settings = new();
-            settings.TempPath = Globals.IsDocker ? "/temp" :  Path.Combine(DirectoryHelper.BaseDirectory, "Temp");
             settings.Save();
             return settings;
         }

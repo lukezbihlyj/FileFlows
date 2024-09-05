@@ -22,8 +22,6 @@ public class MainWindow : Window
     readonly NativeMenu menu = new();
     internal static MainWindow? Instance;
 
-    public Grid TitleBar;
-
     public MainWindow()
     {
         Instance = this;
@@ -38,8 +36,8 @@ public class MainWindow : Window
         ExtendClientAreaChromeHints =
             dc.CustomTitle ? ExtendClientAreaChromeHints.NoChrome : ExtendClientAreaChromeHints.Default;
         ExtendClientAreaToDecorationsHint = dc.CustomTitle;
-        this.MaxHeight = dc.CustomTitle ? 420 : 390;
-        this.Height = dc.CustomTitle ? 420 : 390;
+        this.MaxHeight = dc.CustomTitle ? 380 : 350;
+        this.Height = dc.CustomTitle ? 380 : 350;
 
         DataContext = dc;
         _trayIcon.IsVisible = true;
@@ -191,9 +189,34 @@ public class MainWindow : Window
     /// </summary>
     public async Task SaveRegister()
     {
-        if(Program.Manager != null && await Program.Manager.Register() == true)
+        if (Program.Manager == null)
+            return;
+        try
         {
+            var result = await Program.Manager.Register();
+            if (result.Success == false)
+                ShowMessage("Register Failed", result.Message);
+            else
+                ShowMessage("Registered", "Successfully registered with the FileFlows server.");
         }
+        catch (Exception ex)
+        {
+            Logger.Instance.ELog("Failed registering: " + ex.Message + Environment.NewLine + ex.StackTrace);
+        }
+    }
+    
+    /// <summary>
+    /// Shows a message box message
+    /// </summary>
+    /// <param name="title">the title of the message</param>
+    /// <param name="message">the text of the message</param>
+    void ShowMessage(string title, string message)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            var window = new MessageBox(message, title);
+            window.Show();
+        });
     }
 
     /// <summary>
@@ -222,7 +245,12 @@ public class MainWindowViewModel:INotifyPropertyChanged
     /// </summary>
     public string Version { get; set; }
 
-    private string _ServerUrl = String.Empty;
+    /// <summary>
+    /// Gets or sets if the window is enabled, it will be disabled during registration
+    /// </summary>
+    public bool Enabled { get; set; } = true;
+
+    private string _ServerUrl = string.Empty;
     /// <summary>
     /// Gets or sets the URL of the FileFlows Server
     /// </summary>
@@ -233,63 +261,58 @@ public class MainWindowViewModel:INotifyPropertyChanged
         {
             if (_ServerUrl?.EmptyAsNull() != value?.EmptyAsNull())
             {
-                _ServerUrl = value ?? String.Empty;
+                _ServerUrl = value ?? string.Empty;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ServerUrl)));
             }
         }
     }
 
-    private string _TempPath = String.Empty;
+
+    private string _AccessToken = string.Empty;
     /// <summary>
-    /// Gets or sets the temporary path used during flow processing
+    /// Gets or sets the Access Token
     /// </summary>
-    public string TempPath
+    public string AccessToken
     {
-        get => _TempPath;
+        get => _AccessToken;
         set
         {
-            if (_TempPath?.EmptyAsNull() != value?.EmptyAsNull())
+            if (_AccessToken?.EmptyAsNull() != value?.EmptyAsNull())
             {
-                _TempPath = value ?? String.Empty;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TempPath)));
+                _AccessToken = value ?? string.Empty;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AccessToken)));
             }
         }
     }
-
-    private int _FlowRunners;
     /// <summary>
-    /// Gets or sets the number of FlowRunners
+    /// Gets if start minimized should be shown 
     /// </summary>
-    public int FlowRunners
+    public bool ShowStartMinimized
     {
-        get => _FlowRunners;
-        set
+        get
         {
-            if (_FlowRunners != value)
-            {
-                _FlowRunners = value < 0 ? 0 : value > 100 ? 100 : value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlowRunners)));
-            }
+            if (OperatingSystem.IsMacOS())
+                return false;
+            return true;
         }
     }
     
-    private bool _Enabled;
     /// <summary>
-    /// Gets or sets if the Node is enabled
+    /// Gets or sets if the app should start minimized
     /// </summary>
-    public bool Enabled
+    public bool StartMinimized
     {
-        get => _Enabled;
+        get => AppSettings.Instance.StartMinimized;
         set
         {
-            if (_Enabled != value)
+            if (AppSettings.Instance.StartMinimized != value)
             {
-                _Enabled = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
+                AppSettings.Instance.StartMinimized = value;
+                AppSettings.Instance.Save();
             }
-        }
+        } 
     }
-
+    
     /// <summary>
     /// Event that is fired when a property value is changed
     /// </summary>
@@ -307,7 +330,7 @@ public class MainWindowViewModel:INotifyPropertyChanged
             ServerUrl = "http://" + ServerUrl;
         if (ServerUrl.EndsWith("/") == false)
             ServerUrl += "/";
-        
+
         AppSettings.Instance.ServerUrl = ServerUrl;
 
         Window.Launch();
@@ -334,7 +357,7 @@ public class MainWindowViewModel:INotifyPropertyChanged
     /// </summary>
     public void SaveRegister()
     {
-        if(string.IsNullOrWhiteSpace(ServerUrl) || string.IsNullOrWhiteSpace(TempPath) || ServerUrl == "http://")
+        if(string.IsNullOrWhiteSpace(ServerUrl) || ServerUrl == "http://")// || string.IsNullOrWhiteSpace(TempPath))
             return;
         
         if (Regex.IsMatch(ServerUrl, "^http(s)?://") == false)
@@ -342,12 +365,28 @@ public class MainWindowViewModel:INotifyPropertyChanged
         if (ServerUrl.EndsWith("/") == false)
             ServerUrl += "/";
         
+        AppSettings.Instance.AccessToken = AccessToken;
         AppSettings.Instance.ServerUrl = ServerUrl;
-        AppSettings.Instance.TempPath = TempPath;
-        AppSettings.Instance.Runners = FlowRunners;
-        AppSettings.Instance.Enabled = Enabled;
-        
-        _ = Window.SaveRegister();
+
+        Enabled = false;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
+        Task.Run(async () =>
+        {
+            try
+            {
+                await Window.SaveRegister();
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.ELog("Error Registering: " + ex.Message + Environment.NewLine + ex.StackTrace);
+            }
+
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                Enabled = true;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
+            });
+        });
     }
 
     /// <summary>
@@ -360,9 +399,7 @@ public class MainWindowViewModel:INotifyPropertyChanged
         this.Version = "FileFlows Node Version: " + Globals.Version;
         
         ServerUrl = AppSettings.Instance.ServerUrl;
-        TempPath = AppSettings.Instance.TempPath;
-        FlowRunners = AppSettings.Instance.Runners;
-        Enabled = AppSettings.Instance.Enabled;
+        AccessToken = AppSettings.Instance.AccessToken;
     }
 
     /// <summary>
@@ -372,6 +409,5 @@ public class MainWindowViewModel:INotifyPropertyChanged
     {
         OpenFolderDialog ofd = new OpenFolderDialog();
         var result = await ofd.ShowAsync(Window);
-        this.TempPath = result ?? string.Empty;
     }
 }

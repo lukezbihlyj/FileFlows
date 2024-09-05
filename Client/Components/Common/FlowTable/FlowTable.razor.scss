@@ -33,10 +33,11 @@
                 width:18rem;
             }
         }
+        
 
         input {
             background-color: transparent !important;
-            width: 100%;
+            width: calc(100% - 2px);
             line-height: 1rem;
             padding-right: 1.75rem;
             border: 1px solid var(--input-background) !important;
@@ -111,11 +112,30 @@
     display: flex;
     flex-direction: row;
     user-select: none;
+    position: relative;
     width: 100%;
+    padding-left: 0.25rem;
+    &:nth-child(odd) {
+        background:rgb(255 255 255 / 3%);
+    }
     &:not(.flowtable-header-row) {
-        border-top: none;
-        border-right: none;
-        border-left: none;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-left-color: transparent;
+        &:hover {
+            background: var(--base-lighter);
+        }
+    }
+
+    &.selected {
+        border-left:solid 3px var(--accent);
+        padding-left:calc(0.25rem - 2px);
+        background: var(--base);
+    }
+    &.disabled ::deep .column {
+        > span, > div {
+            opacity: 0.5;
+        }
     }
 
     > span {
@@ -135,20 +155,33 @@
             line-height: unset;
             margin: 0.3rem 0;
         }
-    }
-
-    &.selected {
-        background: rgba(var(--accent-rgb), 0.3);
+        &.no-height {
+            height: unset;
+            line-height: unset;
+            margin-bottom: auto;
+            padding: 0.25rem 0;
+        }
     }
 }
 .flowtable-header-row {
     padding-right: 0.7rem;
-    font-weight: 600;
-    background: rgba(var(--input-background-rgb), 0.3);
+    font-weight: var(--bold, 600);
+    background: rgba(var(--input-background-rgb), 0.3) !important;
 }
 
+.flowtable:not(.hide-head.hide-toolbar)
+{
+    ::deep .flowtable-body {
+        height: calc(100% - 2.4rem);
+    }
+}
+.flowtable.hide-head.hide-toolbar
+{
+    ::deep .flowtable-body {
+        border-top: solid 1px $borderColor;
+    }
+}
 ::deep .flowtable-body {
-    height: calc(100% - 2.4rem);
     overflow-y: scroll;
     border-left: solid 1px $borderColor;
     border-bottom: solid 1px $borderColor;
@@ -270,5 +303,13 @@
         .pager .page-size {
             width:3.5rem;
         }
+    }
+}
+
+.column {
+    // pointer-events: none;
+    align-self: center;
+    ::deep label {
+        pointer-events: auto;
     }
 }

@@ -1,10 +1,65 @@
 window.dashboardElementResized = new Event('dashboardElementResized', {});
+var ffcsharp;
+var ACCESS_TOKEN;
 
 window.ff = {
+    setCSharp(csharp) {
+        window.ff.ffcsharp = csharp;
+    },
+    getAccessToken:  function(){
+        try{
+            let value = localStorage.getItem('ACCESS_TOKEN');
+            if(value)
+                return JSON.parse(value);
+        }catch(err){
+            return ACCESS_TOKEN;
+        }
+    },
+    setAccessToken: function(token) {
+        try{
+            if(token) localStorage.setItem('ACCESS_TOKEN', JSON.stringify(token));
+            else localStorage.setItem('ACCESS_TOKEN', token);
+        }catch(err){
+            return ACCESS_TOKEN = token;
+        }
+    },
+    doFetch: function(url) {
+        let token = ff.getAccessToken();
+        if(!token)
+            return fetch(url);
 
+        return fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+    },
+    open: function(url, inBrowser){
+        if(inBrowser) {
+            open(url, '_blank', 'noopener,noreferrer');
+            return;            
+        }
+        if(!window.ff.ffcsharp){
+            console.log('ffcsharp not set, cannot open help');
+            return;
+        }
+        window.ff.ffcsharp.invokeMethodAsync('OpenUrl', url).then(result => {
+            if(!result)
+                open(url, '_blank', 'noopener,noreferrer');
+        })
+    },
+    openLink: function(event) {
+        event.preventDefault();
+        let url = event.target.getAttribute('href');
+        if(url.startsWith('/'))
+            window.ff.ffcsharp.invokeMethodAsync('NavigateTo', url)
+        else
+            ff.open(url);        
+    },
     log: function (level, parameters) {
 
-        if (!parameters || parameters.length == 0)
+        if (!parameters || parameters.length === 0)
             return;
         let message = parameters[0]
         parameters.splice(0, 1);
@@ -53,6 +108,49 @@ window.ff = {
         anchorElement.click();
         anchorElement.remove();
     },
+    saveTextAsFile: function (fileName, textContent) {
+        // Create a Blob with the file contents
+        let blob = new Blob([textContent], { type: 'text/plain' });
+
+        // Create a temporary anchor element
+        let a = document.createElement("a");
+        document.body.appendChild(a);
+
+        // Set the object URL as the anchor's href
+        a.href = window.URL.createObjectURL(blob);
+
+        // Set the file name
+        a.download = fileName;
+
+        // Trigger a click event on the anchor to initiate download
+        a.click();
+
+        // Cleanup
+        window.URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
+    },
+    saveByteArrayAsFile: function (fileName, byteArray) {
+        // Convert byte array to Blob
+        let blob = new Blob([byteArray], { type: 'application/octet-stream' });
+
+        // Create a temporary anchor element
+        let link = document.createElement('a');
+
+        // Set the href attribute of the anchor element to the Blob object URL
+        link.href = window.URL.createObjectURL(blob);
+
+        // Set the download attribute to specify the file name
+        link.download = fileName;
+
+        // Append the anchor element to the body
+        document.body.appendChild(link);
+
+        // Programmatically click the anchor element to trigger the download
+        link.click();
+
+        // Remove the anchor element from the DOM
+        document.body.removeChild(link);
+    },
     copyToClipboard: function (text) {
         if (window.clipboardData && window.clipboardData.setData) {
             // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
@@ -79,57 +177,6 @@ window.ff = {
     },
     scrollTableToTop: function(){
         document.querySelector('.flowtable-body').scrollTop = 0;
-    },
-    
-    
-    dashboard: function(uid) {
-        let dashboardData = localStorage.getItem('dashboard-' + uid);
-        
-        if(dashboardData)
-        {
-            try {
-                dashboardData = JSON.parse(dashboardData);
-                for (let item of dashboardData) {
-                    let ele = document.getElementById(item.id);
-                    if (!ele) {
-                        console.log('element not found', item, item.id);
-                        continue;
-                    }
-                    ele.setAttribute('gs-x', item.x);
-                    ele.setAttribute('gs-y', item.y);
-                    ele.setAttribute('gs-w', item.w);
-                    ele.setAttribute('gs-h', item.h);
-                }
-            }catch(err){
-                // can throw if the saved data is corrupt, silent fail to defaults
-            }
-        }
-
-        var grid = GridStack.init({
-            cellHeight:170,
-            handle: '.draghandle'
-        });
-
-        saveGrid = () => {
-            let data = [];
-            for(let ele of document.querySelectorAll('.grid-stack-item')){
-                let id = ele.id;
-                let x = parseInt(ele.getAttribute('gs-x'), 10);
-                let y = parseInt(ele.getAttribute('gs-y'), 10);
-                let w = parseInt(ele.getAttribute('gs-w'), 10);
-                let h = parseInt(ele.getAttribute('gs-h'), 10);
-                data.push({
-                    id:id, x: x, y:y, w:w, h:h
-                });                
-            }
-            localStorage.setItem('dashboard-' + uid, JSON.stringify(data));
-        }
-        
-        grid.on('resizestop', (e, el) => {
-            window.dashboardElementResized.args = e;
-            el.dispatchEvent(window.dashboardElementResized);
-            saveGrid();
-        });
     },
     
     nearBottom: function(element){
@@ -359,6 +406,47 @@ window.ff = {
         {
             event.stopPropagation();
             return false;
+        }
+    },
+    toast: function(type, title, message, timeout){
+        switch(type)
+        {
+            case 'info': Toast.info(title, message, timeout); break;
+            case 'warn': Toast.warn(title, message, timeout); break;
+            case 'success': Toast.success(title, message, timeout); break;
+            case 'error': Toast.error(title, message, timeout); break;
+        }
+    },
+    updateUrlWithNewUid: function(newUid) {
+        // Get the current URL
+        let currentUrl = window.location.href;
+    
+        // Replace the empty GUID with the new UID
+        let updatedUrl = currentUrl.replace("00000000-0000-0000-0000-000000000000", newUid);
+    
+        // Update the URL
+        window.history.replaceState({}, document.title, updatedUrl);
+    },
+
+    handleClickOutside: function(elementId, dotnetObjRef) {
+        let clickHandler = function(event) {
+            let element = document.getElementById(elementId);
+            if (element && !element.contains(event.target)) {
+                dotnetObjRef.invokeMethodAsync('OnOutsideClick');
+            }
+        };
+
+        window.addEventListener('click', clickHandler);
+
+        let elementClickHandlers = window.elementClickHandlers || {};
+        elementClickHandlers[elementId] = clickHandler;
+        window.elementClickHandlers = elementClickHandlers;
+    },
+    removeClickHandler: function(elementId) {
+        let clickHandler = window.elementClickHandlers[elementId];
+        if (clickHandler) {
+            window.removeEventListener('click', clickHandler);
+            delete window.elementClickHandlers[elementId];
         }
     }
 };

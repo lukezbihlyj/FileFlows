@@ -1,33 +1,44 @@
-﻿using FileFlows.Shared;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Threading.Tasks;
 
-namespace FileFlows.Client.Components.Common
+namespace FileFlows.Client.Components.Common;
+
+/// <summary>
+/// Help button in the FlowTable
+/// </summary>
+public class FlowTableHelpButton : FlowTableButton
 {
-    public class FlowTableHelpButton : FlowTableButton
+    /// <summary>
+    /// Gets or sets the JavaScript Runtime
+    /// </summary>
+    [Inject] IJSRuntime jsRuntime { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Help URL to open
+    /// </summary>
+    [Parameter] public string HelpUrl { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
     {
-        [Inject] IJSRuntime jsRuntime { get; set; }
+        base.OnInitialized();
 
-        [Parameter]
-        public string HelpUrl { get; set; }
+        this.Icon = "fas fa-question-circle";
+        this.Label = Translater.Instant("Labels.Help");
+    }
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
+    /// <summary>
+    /// When the button is clicked
+    /// </summary>
+    /// <returns>a task to await</returns>
+    public override async Task OnClick()
+    {
+        string url = this.HelpUrl;            
+        if (string.IsNullOrEmpty(HelpUrl))
+            url = "https://fileflows.com/docs";
+        else if (url.ToLower().StartsWith("http") == false)
+            url = "https://fileflows.com/docs/webconsole/" + url;
 
-            this._Icon = "fas fa-question-circle";
-            this._Label = Translater.Instant("Labels.Help");
-        }
-
-        public override async Task OnClick()
-        {
-            string url = this.HelpUrl;            
-            if (string.IsNullOrEmpty(HelpUrl))
-                url = "https://docs.fileflows.com";
-            else if (url.ToLower().StartsWith("http") == false)
-                url = "https://docs.fileflows.com/" + url;
-            await jsRuntime.InvokeVoidAsync("open", url.ToLower(), "_blank");
-        }
+        await App.Instance.OpenHelp(url.ToLowerInvariant());
     }
 }

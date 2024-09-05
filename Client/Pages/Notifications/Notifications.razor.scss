@@ -1,0 +1,29 @@
+.table-item {
+  min-height:2.5rem;
+}
+
+.title {
+  font-weight: var(--bold, 600);
+}
+
+.message {
+  white-space:pre-wrap;
+}
+
+.icon {
+  &.info {
+    color:var(--info);
+  }
+  &.warning {
+    color:var(--yellow);
+  }
+  &.error {
+    color:#d46a29;
+  }
+  &.critical {
+    color:var(--red);
+  }
+  
+  align-self: auto;
+  padding-top: 0.25rem;
+}

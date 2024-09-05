@@ -11,6 +11,11 @@ public class Node
     public virtual FlowElementType Type { get; }
 
     /// <summary>
+    /// Gets the license level required for this plugin
+    /// </summary>
+    public virtual LicenseLevel LicenseLevel => LicenseLevel.Free;
+
+    /// <summary>
     /// Gets if this node is obsolete and should be phased out
     /// </summary>
     public virtual bool Obsolete => false;
@@ -19,7 +24,7 @@ public class Node
     /// Gets a message to show when the user tries to use this obsolete node
     /// </summary>
     public virtual string ObsoleteMessage => null;
-
+    
     /// <summary>
     /// Gets the number of inputs this node has
     /// </summary>
@@ -59,11 +64,15 @@ public class Node
     /// </summary>
     public virtual bool NoEditorOnAdd => false;
 
+    /// <summary>
+    /// Gets an optional custom color to show
+    /// </summary>
+    public virtual string CustomColor => null;
 
     /// <summary>
     /// Gets the group this node belongs to
     /// </summary>
-    public string Group
+    public virtual string Group
     {
         get
         {

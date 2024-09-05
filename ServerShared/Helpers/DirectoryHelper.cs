@@ -1,6 +1,4 @@
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
-using FileFlows.Shared.Models;
 
 namespace FileFlows.ServerShared.Helpers;
 
@@ -10,28 +8,13 @@ namespace FileFlows.ServerShared.Helpers;
 public class DirectoryHelper
 {
     /// <summary>
-    /// Gets if this is a Docker instance or not
-    /// </summary>
-    public static bool IsDocker { get; private set; }
-    /// <summary>
-    /// Gets if this is a Node or Server
-    /// </summary>
-    public static bool IsNode { get; private set; }
-
-    /// <summary>
     /// Initializes the Directory Helper
     /// </summary>
-    /// <param name="isDocker">True if running inside a docker</param>
-    /// <param name="isNode">True if running on a node</param>
-    public static void Init(bool isDocker, bool isNode)
+    public static void Init()
     {
-        DirectoryHelper.IsDocker = isDocker;
-        DirectoryHelper.IsNode = isNode;
-        
         InitLoggingDirectory();
         InitDataDirectory();
         InitPluginsDirectory();
-        InitScriptsDirectory();
         InitTemplatesDirectory();
 
         FlowRunnerDirectory = Path.Combine(BaseDirectory, "FlowRunner");
@@ -46,25 +29,11 @@ public class DirectoryHelper
         if (Directory.Exists(dir) == false)
             Directory.CreateDirectory(dir);
 
-        string oldDir = Path.Combine(BaseDirectory, IsNode ? "Node" : "Server", "Plugins");
+        string oldDir = Path.Combine(BaseDirectory, Globals.IsNode ? "Node" : "Server", "Plugins");
         if (Directory.Exists(oldDir) == false)
             return;
         MoveDirectoryContent(oldDir, dir);
         #endif
-    }
-
-    private static void InitScriptsDirectory()
-    {
-#if(DEBUG && false)
-        return;
-#else
-        foreach (var dir in new[] { ScriptsDirectory, ScriptsDirectoryFlow, ScriptsDirectorySystem, ScriptsDirectoryShared, ScriptsDirectoryFunction })
-        {
-            if (Directory.Exists(dir) == false)
-                Directory.CreateDirectory(dir);
-        }
-#endif
-        
     }
 
     private static void InitTemplatesDirectory()
@@ -80,10 +49,10 @@ public class DirectoryHelper
 #endif
         
     }
-    private static string _BaseDirectory;
+    private static string _BaseDirectory = null!;
 
     /// <summary>
-    /// Gets the base directory of FileFlows
+    /// Gets or sets the base directory of FileFlows
     /// eg %appdata%\FileFlows
     /// </summary>
     public static string BaseDirectory
@@ -95,13 +64,15 @@ public class DirectoryHelper
                 var dllDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
                 if (string.IsNullOrEmpty(dllDir))
                     throw new Exception("Failed to find DLL directory");
-                _BaseDirectory = new DirectoryInfo(dllDir).Parent.FullName;
+                _BaseDirectory = new DirectoryInfo(dllDir).Parent?.FullName ?? string.Empty;
             }
             return _BaseDirectory;
         }
+        set =>  _BaseDirectory = value;
     }
     
-    private static string ExecutingDirectory => Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+    private static string ExecutingDirectory => 
+        Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
 
 
     /// <summary>
@@ -167,11 +138,11 @@ public class DirectoryHelper
         
         ServerConfigFile = Path.Combine(dir, "server.config");
 
-        DatabaseDirectory = IsDocker == false ? dir : Path.Combine(dir, "Data");
+        DatabaseDirectory = Globals.IsDocker == false ? dir : Path.Combine(dir, "Data");
         if (Directory.Exists(DatabaseDirectory) == false)
             Directory.CreateDirectory(DatabaseDirectory);
         
-        ConfigDirectory = Path.Combine(IsDocker == false ? dir : Path.Combine(dir, "Data"), "Config");
+        ConfigDirectory = Path.Combine(Globals.IsDocker == false ? dir : Path.Combine(dir, "Data"), "Config");
         if (Directory.Exists(ConfigDirectory) == false)
             Directory.CreateDirectory(ConfigDirectory);
     }
@@ -179,32 +150,32 @@ public class DirectoryHelper
     /// <summary>
     /// Gets the logging directory
     /// </summary>
-    public static string LoggingDirectory { get; private set; }
+    public static string LoggingDirectory { get; private set; } = null!;
     
     /// <summary>
     /// Gets the directory where library file logs are stored 
     /// </summary>
-    public static string LibraryFilesLoggingDirectory { get; private set; }
+    public static string LibraryFilesLoggingDirectory { get; private set; } = null!;
 
     /// <summary>
     /// Gets the data directory
     /// </summary>
-    public static string DataDirectory { get; private set; }
+    public static string DataDirectory { get; private set; } = null!;
     
     /// <summary>
     /// Gets the directory containing the cached configurations
     /// </summary>
-    public static string ConfigDirectory { get; private set; }
+    public static string ConfigDirectory { get; private set; } = null!;
     
     /// <summary>
     /// Gets the directory the database is saved in
     /// </summary>
-    public static string DatabaseDirectory { get; private set; }
+    public static string DatabaseDirectory { get; private set; } = null!;
 
     /// <summary>
     /// Gets the flow runner directory
     /// </summary>
-    public static string FlowRunnerDirectory { get; private set; }
+    public static string FlowRunnerDirectory { get; private set; } = null!;
 
     /// <summary>
     /// Gets the logging directory
@@ -218,7 +189,7 @@ public class DirectoryHelper
             #else
             // docker we expose this in the data directory so we
             // reduce how many things we have to map out
-            if (IsDocker) 
+            if (Globals.IsDocker) 
                 return Path.Combine(DataDirectory, "Plugins");
             return Path.Combine(BaseDirectory, "Plugins");
             #endif
@@ -233,7 +204,7 @@ public class DirectoryHelper
         {
             // docker we expose this in the data directory so we
             // reduce how many things we have to map out
-            if (IsDocker) 
+            if (Globals.IsDocker) 
                 return Path.Combine(DataDirectory, "Templates");
             return Path.Combine(BaseDirectory, "Templates");
         }
@@ -246,57 +217,67 @@ public class DirectoryHelper
     /// Gets the directory for library templates
     /// </summary>
     public static string TemplateDirectoryLibrary => Path.Combine(TemplateDirectory, "Library");
-    
-    /// <summary>
-    /// Gets the scripts directory
-    /// </summary>
-    public static string ScriptsDirectory
-    {
-        get
-        {
-            // docker we expose this in the data directory so we
-            // reduce how many things we have to map out
-            if (IsDocker) 
-                return Path.Combine(DataDirectory, "Scripts");
-            return Path.Combine(BaseDirectory, "Scripts");
-        }
-    }
-    
-    /// <summary>
-    /// Gets the scripts directory for flow scripts
-    /// </summary>
-    public static string ScriptsDirectoryFlow => Path.Combine(ScriptsDirectory, "Flow");
-    
-    /// <summary>
-    /// Gets the scripts directory for system scripts
-    /// </summary>
-    public static string ScriptsDirectorySystem => Path.Combine(ScriptsDirectory, "System");
 
     /// <summary>
-    /// Gets the scripts directory for scripts from the repository
+    /// Gets the DockerMods directory
     /// </summary>
-    public static string ScriptsDirectoryShared => Path.Combine(ScriptsDirectory, "Shared");
+    public static string DockerModsDirectory => "/app/DockerMods"; // this directory will not be mapped out, so will be cleaned when new DockerImage is pulled
+    
+    // /// <summary>
+    // /// Gets the scripts directory
+    // /// </summary>
+    // public static string ScriptsDirectory
+    // {
+    //     get
+    //     {
+    //         // docker we expose this in the data directory so we
+    //         // reduce how many things we have to map out
+    //         if (Globals.IsDocker) 
+    //             return Path.Combine(DataDirectory, "Scripts");
+    //         return Path.Combine(BaseDirectory, "Scripts");
+    //     }
+    // }
+    
+    // /// <summary>
+    // /// Gets the scripts directory for flow scripts
+    // /// </summary>
+    // public static string ScriptsDirectoryFlow => Path.Combine(ScriptsDirectory, "Flow");
+    //
+    // /// <summary>
+    // /// Gets the scripts directory for system scripts
+    // /// </summary>
+    // public static string ScriptsDirectorySystem => Path.Combine(ScriptsDirectory, "System");
+    //
+    // /// <summary>
+    // /// Gets the scripts directory for scripts from the repository
+    // /// </summary>
+    // public static string ScriptsDirectoryShared => Path.Combine(ScriptsDirectory, "Shared");
+    //
+    // /// <summary>
+    // /// Gets the scripts directory for webhook scripts
+    // /// </summary>
+    // public static string ScriptsDirectoryWebhook => Path.Combine(ScriptsDirectory, "Webhook");
     
     /// <summary>
     /// Gets the scripts directory for template scripts
     /// </summary>
-    public static string ScriptsDirectoryFunction => Path.Combine(ScriptsDirectory, "Function");
+    public static string ScriptsDirectoryFunction => Path.Combine(TemplateDirectory, "Function");
     
     /// <summary>
     /// Gets the location of the encryption key file
     /// </summary>
-    public static string EncryptionKeyFile { get;private set; }
+    public static string EncryptionKeyFile { get;private set; } = null!;
 
     /// <summary>
     /// Gets the location of the node configuration file
     /// </summary>
-    public static string NodeConfigFile { get; private set; }
+    public static string NodeConfigFile { get; private set; } = null!;
 
 
     /// <summary>
     /// Gets the location of the server configuration file
     /// </summary>
-    public static string ServerConfigFile { get; private set; }
+    public static string ServerConfigFile { get; private set; } = null!;
     
     private static void MoveDirectoryContent(string source, string destination)
     {
@@ -393,7 +374,7 @@ public class DirectoryHelper
         foreach (FileInfo file in dir.GetFiles())
         {
             string targetFilePath = Path.Combine(destinationDir, file.Name);
-            file.CopyTo(targetFilePath);
+            file.CopyTo(targetFilePath, true);
         }
 
         // If recursive and copying subdirectories, recursively call this method
@@ -405,5 +386,20 @@ public class DirectoryHelper
                 CopyDirectory(subDir.FullName, newDestinationDir, true);
             }
         }
+    }
+
+    /// <summary>
+    /// Gets the home directory, this will be used as the default location when adding flows/libraries etc
+    /// </summary>
+    /// <returns>the users home directory</returns>
+    public static string GetUsersHomeDirectory()
+    {
+        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)?.EmptyAsNull() ?? Environment.GetEnvironmentVariable("HOME");
+        if (string.IsNullOrWhiteSpace(home) == false)
+            return home;
+        if(OperatingSystem.IsWindows() == false && Directory.Exists("/media"))
+            return "/media";
+        
+        return OperatingSystem.IsWindows() ? "C:\\" : "/";
     }
 }

@@ -1,0 +1,64 @@
+@using FileFlows.Plugin
+@namespace FileFlows.Client.Components.Dialogs
+
+<Modal Title="@Title" Visible="Visible" Styling="@(App.Instance.IsMobile ? "" : "width: min(60rem, 90vw);max-width: min(60rem, 90vw);")">
+
+    <Body>
+    <table class="table alt-rows selectable">
+        <tbody>
+        
+
+        @foreach (var lang in new[]
+                  {
+                      ("JavaScript", ScriptLanguage.JavaScript, lblJavaScriptDescription, "svg:javascript", false, false),
+                      ("C#", ScriptLanguage.CSharp, lblCSharpDescription, "svg:csharp", false, false),
+                      ("Batch (.bat)", ScriptLanguage.Batch, lblBatchDescription, "svg:dos", true, false),
+                      ("PowerShell (.ps1)", ScriptLanguage.PowerShell, lblPowerShellDescription, "svg:powershell", true, false),
+                      ("Shell (.sh)", ScriptLanguage.Shell, lblShellDescription, "svg:bash", false, true),
+                  })
+        {
+            var name = lang.Item1;
+            var language = lang.Item2;
+            var desc = lang.Item3;
+            var icon = lang.Item4;
+            bool selected = Language == language;
+            bool onlyWindows = lang.Item5;
+            bool onlyUnixLike = lang.Item6;
+
+            <tr class="row @(selected ? "selected" : string.Empty)">
+                <td>
+            <div class="language table-item"
+                 @onclick="() => SetLanguage(language, false)"
+                 @ondblclick="() => SetLanguage(language, true)">
+                <TableItemIcon Icon="@icon" DefaultIcon="fas fa-scroll"/>
+                <div class="center with-desc">
+                    <span class="name"><span>@name</span></span>
+                    <span class="description"><span>@desc</span></span>
+                    <div class="info">
+                        @if (onlyWindows)
+                        {
+                            <IconValue Color="IconValueColor.Green" Icon="fab fa-windows" Value="Windows"/>
+                        }
+
+                        @if (onlyUnixLike)
+                        {
+                            <IconValue Color="IconValueColor.Purple" Icon="fab fa-apple" Value="MacOS"/>
+                            <IconValue Color="IconValueColor.Orange" Icon="fab fa-linux" Value="Linux"/>
+                            <IconValue Color="IconValueColor.Blue" Icon="fab fa-docker" Value="Docker"/>
+                        }
+                    </div>
+                </div>
+            </div>
+
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    </Body>
+    <Footer>
+        <button @onclick=@Next>@lblNext</button>
+        <button @onclick=@Cancel>@lblCancel</button>
+    </Footer>
+</Modal>

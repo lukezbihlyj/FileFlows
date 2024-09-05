@@ -1,7 +1,20 @@
-﻿.flow-tabs {
+.flow-tabs {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.flow-tabs.contain-tabs {
+  max-height: 100%;
+  overflow: auto;
+  height: 100%;
+}
+.flow-tabs.contain-tabs .flow-tabs-content {
+  overflow: auto;
+  height: 100%;
+}
+.flow-tabs.contain-tabs .flow-tab-buttons {
+  margin-bottom: 0.5rem;
 }
 
 .flow-tab-buttons {
@@ -17,6 +30,17 @@
     padding-left: 0;
   }
 }
+.title-only-on-active {
+  padding-right: 0.5rem;
+}
+.title-only-on-active .tab-button {
+  width: unset !important;
+  flex-grow: 1;
+}
+.title-only-on-active .tab-button:not(.active) i {
+  margin: 0;
+}
+
 .tab-button {
   width: 8rem;
   overflow-x: hidden;
@@ -26,8 +50,8 @@
   bottom: -1px;
   margin-right: 0.25rem;
 }
-.tab-button:hover {
-  border-color: var(--accent) !important;
+.tab-button i {
+  margin: 0 0.5rem;
 }
 .tab-button.active {
   border-color: var(--accent) !important;
@@ -35,6 +59,16 @@
 }
 .tab-button:not(.active) {
   font-size: 0.7rem !important;
+}
+
+.flow-tabs:not(.disabled) .tab-button:hover {
+  border-color: var(--accent) !important;
+}
+
+.flow-tabs.disabled .tab-button.active:hover {
+  box-shadow: none !important;
+  background-image: none !important;
+  cursor: default;
 }
 
 .flow-tabs-content {

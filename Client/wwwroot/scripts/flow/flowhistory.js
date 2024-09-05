@@ -1,20 +1,28 @@
 class ffFlowHistory {
-    history = [];
-    redoActions = [];
+    
+    constructor(ffFlow)
+    {
+        this.ffFlow = ffFlow;
+        this.history = [];
+        this.redoActions = [];        
+    }
     
     perform(action){
+        console.log('history perform', action);
+        this.ffFlow.markDirty();
         // doing new action, anything past the current point we will clear
         this.redoActions = [];
         this.history.push(action);
-        action.perform();        
+        action.perform(this.ffFlow);        
     }
     
     redo() {
         if(this.redoActions.length === 0)
             return; // nothing to redo
         let action = this.redoActions.splice(this.redoActions.length - 1, 1)[0];
+        console.log('history redo', action);
         this.history.push(action);
-        action.perform();
+        action.perform(this.ffFlow);
     }
     
     undo(){
@@ -22,8 +30,9 @@ class ffFlowHistory {
             return;
         }
         let action = this.history.pop();
+        console.log('history undo', action);
         this.redoActions.push(action);
-        action.undo();
+        action.undo(this.ffFlow);
     }    
 }
 
@@ -36,24 +45,24 @@ class FlowActionMove {
     
     constructor(element, xPos, yPos, originalXPos, originalYPos) {
         // store the Id of the element, and not the actual element
-        // incase the element is deleted then restored
-        this.elementId = element.getAttribute('id');
+        // in case the element is deleted then restored
+        this.elementId = element.getAttribute('x-uid');
         this.xPos = xPos;
         this.yPos = yPos;
         this.originalXPos = originalXPos;
         this.originalYPos = originalYPos;        
     }
     
-    perform() {
-        this.moveTo(this.xPos, this.yPos);
+    perform(ffFlow) {
+        this.moveTo(ffFlow, this.xPos, this.yPos);
     }
     
-    undo(){
-        this.moveTo(this.originalXPos, this.originalYPos);
+    undo(ffFlow){
+        this.moveTo(ffFlow, this.originalXPos, this.originalYPos);
     }
     
-    moveTo(x, y){
-        let element = document.getElementById(this.elementId);
+    moveTo(ffFlow, x, y){
+        let element = ffFlow.getFlowPart(this.elementId);
         if(!element)
             return;
         element.style.transform = '';
@@ -72,9 +81,9 @@ class FlowActionDelete {
     ioOutputConnections;
     ffFlowPart;
     
-    constructor(uid) {
+    constructor(ffFlow, uid) {
         this.uid = uid;
-        let element = document.getElementById(uid);
+        let element = ffFlow.getFlowPart(uid);
         this.parent = element.parentNode;
         this.html = element.outerHTML;
         this.ioOutputConnections = ffFlow.FlowLines.ioOutputConnections[this.uid];
@@ -86,10 +95,10 @@ class FlowActionDelete {
         }
     }
 
-    perform() {
-        var div = document.getElementById(this.uid);
+    perform(ffFlow) {
+        let div = ffFlow.getFlowPart(this.uid);
         if (div) {
-            ffFlowPart.flowPartElements = ffFlowPart.flowPartElements.filter(x => x !== div);
+            ffFlow.ffFlowPart.flowPartElements = ffFlow.ffFlowPart.flowPartElements.filter(x => x !== div);
             div.remove();
         }
 
@@ -106,7 +115,7 @@ class FlowActionDelete {
         ffFlow.redrawLines();
     }
 
-    undo(){        
+    undo(ffFlow){        
         if(this.ffFlowPart)
             ffFlow.parts.push(this.ffFlowPart);
         
@@ -117,8 +126,8 @@ class FlowActionDelete {
         newPart.classList.remove('selected');
         this.parent.appendChild(newPart);
         div.remove();
-        ffFlowPart.flowPartElements.push(newPart);
-        ffFlowPart.attachEventListeners({part: this.ffFlowPart, allEvents: true});
+        ffFlow.ffFlowPart.flowPartElements.push(newPart);
+        ffFlow.ffFlowPart.attachEventListeners({part: this.ffFlowPart, allEvents: true});
 
         // recreate the connections
         ffFlow.FlowLines.ioOutputConnections[this.uid] = this.ioOutputConnections;
@@ -133,21 +142,21 @@ class FlowActionConnection {
     previousConnection;
     connection;
 
-    constructor(outputNodeUid, connection) {
+    constructor(ffFlow, outputNodeUid, connection) {
         this.outputNodeUid = outputNodeUid;
         this.connection = connection;
         this.previousConnection = ffFlow.FlowLines.ioOutputConnections.get(this.outputNodeUid);
     }
 
-    perform() {
-        this.connect(this.connection);
+    perform(ffFlow) {
+        this.connect(ffFlow, this.connection);
     }
 
-    undo(){
-        this.connect(this.previousConnection);
+    undo(ffFlow){
+        this.connect(ffFlow, this.previousConnection);
     }
     
-    connect(connection){
+    connect(ffFlow, connection){
         if(connection)
             ffFlow.FlowLines.ioOutputConnections.set(this.outputNodeUid, connection);
         else
@@ -157,7 +166,7 @@ class FlowActionConnection {
 }
 
 
-class FlowActionAddNode {
+class FlowActionAddPart {
 
     part;
     
@@ -165,16 +174,16 @@ class FlowActionAddNode {
         this.part = part;
     }
 
-    perform() {
-        ffFlowPart.addFlowPart(this.part);
+    perform(ffFlow) {
+        ffFlow.ffFlowPart.addFlowPart(this.part);
         ffFlow.parts.push(this.part);
     }
 
-    undo()
+    undo(ffFlow)
     {
-        var div = document.getElementById(this.part.uid);
+        let div = ffFlow.getFlowPart(this.part.uid);
         if (div) {
-            ffFlowPart.flowPartElements = ffFlowPart.flowPartElements.filter(x => x !== div);
+            ffFlow.ffFlowPart.flowPartElements = ffFlow.ffFlowPart.flowPartElements.filter(x => x !== div);
             div.remove();
         }
 
@@ -188,6 +197,146 @@ class FlowActionAddNode {
         }
 
         ffFlow.setInfo();
+        ffFlow.redrawLines();
+    }
+}
+
+
+class FlowActionReplacePart {
+
+    part;
+    replacing;
+
+    constructor(part, replacing) {
+        this.part = part;
+        this.replacing = replacing;
+    }
+
+    perform(ffFlow) {
+        this.swap(ffFlow, this.replacing, this.part);
+    }
+
+    undo(ffFlow)
+    {
+        this.swap(ffFlow, this.part, this.replacing);
+    }
+    
+    swap(ffFlow, oldPart, newPart)
+    {
+        let index = ffFlow.parts.indexOf(oldPart);
+        if(index < 0)
+            return;
+        newPart.uid = oldPart.uid; // so the input connections stay the same
+        newPart.xPos = oldPart.xPos;
+        newPart.yPos = oldPart.yPos;
+        if(oldPart.outputConnections) {
+            this.part.outputConnections = [];
+            for (let oc of oldPart.outputConnections) {
+                if(this.part.outputs > oc.output){
+                    this.part.outputConnections.push(oc);
+                }
+            }
+        }
+
+        // have to remove the original before we can add the new one so the correct flow part is found
+        let div = ffFlow.getFlowPart(oldPart.uid);
+        if (div) {
+            ffFlow.ffFlowPart.flowPartElements = ffFlow.ffFlowPart.flowPartElements.filter(x => x !== div);
+            div.remove();
+        }
+
+        ffFlow.ffFlowPart.addFlowPart(newPart);
+        ffFlow.parts[index] = newPart;
+
+        ffFlow.setInfo();
+        ffFlow.redrawLines();
+    }
+}
+
+class FlowActionIntersectLine {
+
+    part;
+    line;
+    originalConnection;
+    originalOutput;
+    existingPart;
+
+    constructor(part, line, existing) {
+        this.part = part;
+        this.line = line;
+        this.originalConnection = { index: line.connection.index, part: line.connection.part};
+        this.originalOutput = line.output.getAttribute('x-uid');
+        this.existingPart = !!existing;
+    }
+    
+    deletePart(ffFlow, part){
+        let uid = part.uid;
+        let div = ffFlow.getFlowPart(uid);
+        if (div) {
+            ffFlow.ffFlowPart.flowPartElements = ffFlow.ffFlowPart.flowPartElements.filter(x => x !== div);
+            div.remove();
+        }
+
+        this.deleteOutputConnections(ffFlow, part);
+
+        for (let i = 0; i < ffFlow.parts.length; i++) {
+            if (ffFlow.parts[i].uid === uid) {
+                ffFlow.parts.splice(i, 1);
+                break;
+            }
+        }
+    }
+    
+    deleteOutputConnections(ffFlow, part){
+        ffFlow.FlowLines.ioOutputConnections.delete(part.uid);
+        for(let i=0;i<= part.outputs;i++){
+            ffFlow.FlowLines.ioOutputConnections.delete(part.uid + '-output-' + (i === 0 ? '-1' : i));            
+        }        
+    }
+    
+    undo(ffFlow)
+    {
+        // first delete the new part
+        if(!this.existingPart)
+            this.deletePart(ffFlow, this.part);
+        else{
+            // clear connections
+            this.deleteOutputConnections(ffFlow, this.part);
+        }
+        
+        // reconnect the original connection
+        ffFlow.FlowLines.ioOutputConnections.set(this.originalOutput, [this.originalConnection]);        
+        ffFlow.redrawLines();
+    }
+    
+    perform(ffFlow) {
+        if(!this.existingPart) {
+            ffFlow.ffFlowPart.addFlowPart(this.part);
+            ffFlow.parts.push(this.part);
+        }
+                
+        if(this.part.inputs < 1)
+            return; // can't connect
+        if(this.part.outputs < 1)
+            return // can't connect
+        
+        let output = this.line.output; // output element
+        let outputUid = output.getAttribute('x-uid');
+        
+        let connection = this.line.connection; // { index: number, part: uid }
+        let finalPart = connection.part;
+        
+        // move the output from the original, to this input
+        ffFlow.FlowLines.ioOutputConnections.set(outputUid, [{
+            index: this.originalConnection.index,
+            part: this.part.uid
+        }]);
+
+        // now connect the first output from this part to the previous input
+        let outputIndex = output.className.indexOf('--1') > 0 ? -1 : 1;
+        let partOutputUid = this.part.uid + '-output-' + outputIndex;
+        ffFlow.FlowLines.ioOutputConnections.set(partOutputUid, [{index: this.originalConnection.index, part: finalPart}]);
+        
         ffFlow.redrawLines();
     }
 }

@@ -1,7 +1,7 @@
 @namespace FileFlows.Client.Pages
 @using FileFlows.Shared.Models
 @using FileFlows.Plugin
-@inherits ListPage<string, Script>
+@inherits ListPage<Guid, Script>
 
 @page "/scripts"
 
@@ -18,89 +18,84 @@
     <FlowTable @ref="Table" Data="@(SelectedType == ScriptType.Flow ? DataFlow : SelectedType == ScriptType.Shared ? DataShared : DataSystem)" TItem="Script" Selection="SelectionMode.Multiple"
                DoubleClick="@OnDoubleClick" TableIdentifier="@TableIdentifier">
         <ToolBar>
-            <FlowTableButton Visible="@(SelectedType == ScriptType.Shared)" Clicked=Edit SelectedOne="true" Icon="fas fa-info-circle" Label="Labels.View"/>
-            <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)" Clicked=Add Icon="fas fa-plus" Label="Labels.Add"/>
-            <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)" Clicked=Edit SelectedOne="true" Icon="fas fa-edit" Label="Labels.Edit"/>
-            <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)" Clicked=Delete SelectedOneOrMore="true" Icon="fas fa-trash" Label="Labels.Delete"/>
+            <FlowTableButton Clicked=Add Icon="fas fa-plus" Label="Labels.Add"/>
+            <FlowTableButton Clicked=Edit SelectedOne="true" Icon="fas fa-edit" Label="Labels.Edit"/>
+            <FlowTableButton Clicked=Delete SelectedOneOrMore="true" Icon="fas fa-trash" Label="Labels.Delete"/>
             @if (App.Instance.IsMobile == false)
             {
                 <FlowTableButtonSeparator Visible="@(SelectedType != ScriptType.Shared)" />
                 <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)"  Clicked=Update SelectedOneOrMore="true" Icon="fas fa-cloud-download-alt" Label="Labels.Update"/>
                 <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)"  Clicked=Browser Icon="fas fa-code-branch" Label="Pages.Scripts.Buttons.ScriptBrowser"/>
-                <FlowTableButtonSeparator Visible="@(SelectedType != ScriptType.Shared)" />
-                <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)" Clicked=Import Icon="fas fa-file-import" Label="Labels.Import"/>
-                <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)" Clicked=Export SelectedOne="true" Icon="fas fa-file-export" Label="Labels.Export"/>
-                <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)" Clicked=Duplicate SelectedOne="true" Icon="fas fa-clone" Label="Labels.Duplicate"/>
+                <FlowTableButtonSeparator />
+                <FlowTableButton Clicked=Import Icon="fas fa-file-import" Label="Labels.Import"/>
+                <FlowTableButton Clicked=Export SelectedOne="true" Icon="fas fa-file-export" Label="Labels.Export"/>
+                <FlowTableButton Clicked=Duplicate SelectedOne="true" Icon="fas fa-clone" Label="Labels.Duplicate"/>
                 <FlowTableButtonSeparator Visible="@(SelectedType != ScriptType.Shared)" />
                 <FlowTableButton Visible="@(SelectedType != ScriptType.Shared)"  Clicked=UsedBy SelectedOne="true" Icon="fas fa-info-circle" Label="Labels.UsedBy"/>
             }
             <FlowTableButtonSeparator/>
-            <FlowTableHelpButton HelpUrl="scripts"/>
+            <FlowTableHelpButton HelpUrl="extensions/scripts"/>
         </ToolBar>
 
         <Columns>
-            <FlowTableColumn TItem="Script">
-                <Header>
-                    @Globals.lblName
-                </Header>
-                <Cell Context="item">
-                    <span>@item.Name</span>
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="Script" Width="6rem">
-                <Header>
-                    Revision
-                </Header>
-                <Cell Context="item">
-                    @if (item.Revision > 0)
-                    {
-                        <span>@item.Revision</span>
-                    }
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="Script" Width="9rem">
-                <Header>
-                    Latest Revision
-                </Header>
-                <Cell Context="item">
-                    @if (item.LatestRevision > 0)
-                    {
-                        <span>@item.LatestRevision</span>
-                    }
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="Script" Width="10rem" Hidden=@(SelectedType == ScriptType.Shared)>
-                <Header>
-                    Read Only
-                </Header>
-                <Cell Context="item">
-                    @if (item.Repository)
-                    {
-                        <i class="fas fa-check"></i>
-                    }
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="Script" Width="10rem" Hidden=@(SelectedType == ScriptType.Shared)>
-                <Header>
-                    In Use
-                </Header>
-                <Cell Context="item">
-                    @if (item.UsedBy?.Any() == true)
-                    {
-                        <i class="fas fa-check"></i>
-                    }
-                </Cell>
-            </FlowTableColumn>
-            <FlowTableColumn TItem="Script" Width="36rem" MobileWidth="0" Hidden=@(SelectedType != ScriptType.Shared)>
-                <Header>
-                    Import
-                </Header>
-                <Cell Context="item">
-                    <span>
-                        import { @item.Name } from 'Shared/@(item.Name)';
-                    </span>
-                </Cell>
-            </FlowTableColumn>
+            <FlowTableColumn TItem="Script" NoHeight="true">
+               <Header>
+                   @Globals.lblName
+               </Header>
+               <Cell Context="item">
+                   <div class="table-item">
+                       <span class="icon">
+                           @{
+                               string icon = GetIcon(item);
+                           }
+                           @if(icon.EndsWith(".svg"))
+                           {
+                               <img src="@icon"/>
+                           }
+                           else
+                           {
+                               <i class="icon @icon"></i>
+                           }
+                       </span>
+                       <div class="center">
+                           <span class="name">
+                               <span>@item.Name</span>
+                               @if(string.IsNullOrWhiteSpace(item.Description) == false){
+                                   <span>@item.Description</span>
+                               }
+                           </span>
+                           <div class="info">
+                               @if (item.Repository)
+                               {
+                                   <IconValue Color="IconValueColor.Blue" Icon="fas fa-code-branch" Value="@item.Revision.ToString()" />
+                                    <IconValue Color="IconValueColor.Red" Icon="fas fa-ban" Value="@lblReadOnly" Tooltip="@lblReadOnly"/>
+                               }
+                               @if (item.LatestRevision > item.Revision)
+                               {
+                                   <IconValue Color="IconValueColor.Orange" Icon="fas fa-code-branch" Value="@item.LatestRevision.ToString()" Tooltip="@lblUpdateAvailable"/>
+                               }
+                                @if (item.UsedBy?.Any() == true)
+                                {
+                                    <IconValue Color="IconValueColor.Green" OnClick="() => OpenUsedBy(item)" Icon="fas fa-folder" Value="@lblInUse" />
+                                }
+                               else if (item.Name == "FILE_DISPLAY_NAME")
+                               {
+                                   <IconValue Color="IconValueColor.Green" Icon="fas fa-folder" Value="@lblInUse" />
+                               }
+                           </div>
+                       </div>
+                        <div class="right">
+                            @if (string.IsNullOrEmpty(item.Author) == false)
+                            {
+                                <span class="top-right" title="@(item.Repository ? lblReadOnly : "")">
+                                    @item.Author
+                                </span>
+                            }
+                        </div>
+                   </div>
+                       
+               </Cell>
+           </FlowTableColumn>
         </Columns>
     </FlowTable>
 
@@ -108,5 +103,6 @@
 
 </PageView>
 
-<ScriptBrowser @ref="ScriptBrowser" />
+<RepositoryBrowser @ref="ScriptBrowser" Type="@("Script:"+ SelectedType)" Icons="true" Icon="fas fa-scroll" />
 <FileFlows.Client.Components.Dialogs.ImportScript @ref="ScriptImporter" />
+<FileFlows.Client.Components.Dialogs.ScriptLanguagePicker @ref="LanguagePicker" />

@@ -15,13 +15,25 @@ namespace FileFlows.Client.Components.Inputs
 
         [Parameter] public bool NoSpacing { get; set;}
 
+        /// <summary>
+        /// Gets or sets the clipboard service
+        /// </summary>
+        [Inject] IClipboardService ClipboardService { get; set; }   
+
         [Parameter] public RenderFragment ChildContent { get; set; }
+        
+        /// <summary>
+        /// Gets or sets if this is an error input
+        /// </summary>
+        [Parameter] public bool Error { get; set; }
 
         private string HelpHtml = string.Empty;
         private string CurrentHelpText;
+        private string lblTooltip;
         
         protected override void OnInitialized()
         {
+            this.lblTooltip = Translater.Instant("Labels.CopyToClipboard");
             InitHelpText();
         }
 
@@ -51,9 +63,14 @@ namespace FileFlows.Client.Components.Inputs
                 string help = Markdig.Markdown.ToHtml(Input.Help).Trim();
                 if (help.StartsWith("<p>") && help.EndsWith("</p>"))
                     help = help[3..^4].Trim();
-                help = help.Replace("<a ", "<a rel=\"noreferrer\" target=\"_blank\" ");
+                help = help.Replace("<a ", "<a onclick=\"ff.openLink(event);return false;\" ");
                 this.HelpHtml = help;
             }
+        }
+        
+        async Task CopyToClipboard()
+        {
+            await ClipboardService.CopyToClipboard(this?.Input?.Field?.CopyValue);
         }
     }
 }

@@ -10,12 +10,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using FileFlows.Node.Ui;
+using FileFlows.RemoteServices;
 using FileFlows.ServerShared;
 using FileFlows.ServerShared.Helpers;
 using FileFlows.ServerShared.Workers;
 
 namespace FileFlows.Node;
-
 
 /// <summary>
 /// A manager that handles registering a node with the FileFlows server
@@ -54,7 +54,8 @@ public class NodeManager
         if (updater.RunCheck())
             return;
 
-        Version nodeVersion = Globals.Version;
+        var nodeVersion = Globals.Version;
+        var nodeVersionVersion = new Version(nodeVersion);
 
         var flowWorker = new FlowWorker(AppSettings.Instance.HostName)
         {
@@ -72,30 +73,31 @@ public class NodeManager
                     return false;
                 }
 
-                var nodeService = new NodeService();
+                var nodeService = ServiceLoader.Load<INodeService>();
                 try
                 {
                     var settings = nodeService.GetByAddressAsync(AppSettings.Instance.HostName).Result;
                     if (settings == null)
                     {
-                        Logger.Instance.ELog("Failed getting settings for node: " + AppSettings.Instance.HostName);
+                        Logger.Instance?.ELog("Failed getting settings for node: " + AppSettings.Instance.HostName);
                         return false;
                     }
 
-                    AppSettings.Instance.Enabled = settings.Enabled;
-                    AppSettings.Instance.Runners = settings.FlowRunners;
-                    AppSettings.Instance.TempPath = settings.TempPath;
+                    //AppSettings.Instance.Enabled = settings.Enabled;
+                    //AppSettings.Instance.Runners = settings.FlowRunners;
+                    // AppSettings.Instance.TempPath = settings.TempPath;
                     AppSettings.Instance.Save();
 
-                    var serverVersion = new SystemService().GetVersion().Result;
-                    if (serverVersion != nodeVersion)
+                    var serverVersion = ServiceLoader.Load<ISettingsService>().GetServerVersion().Result;
+                    if (serverVersion != nodeVersionVersion)
                     {
                         Logger.Instance?.ILog($"Node version '{nodeVersion}' does not match server version '{serverVersion}'");
                         NodeUpdater.CheckForUpdate();
                         return false;
                     }
 
-                    return AppSettings.Instance.Enabled;
+                    //return AppSettings.Instance.Enabled;
+                    return settings.Enabled;
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +115,7 @@ public class NodeManager
         WorkerManager.StartWorkers(
             flowWorker, 
             updater, 
-            new RestApiWorker(),
+            //new RestApiWorker(), // is this used?
             new LogFileCleaner(),
             new TempFileCleaner(AppSettings.Instance.HostName), 
             new SystemStatisticsWorker(),
@@ -125,8 +127,8 @@ public class NodeManager
     /// <summary>
     /// Registers the node with the server
     /// </summary>
-    /// <returns>whether or not it was registered</returns>
-    public async Task<bool> Register()
+    /// <returns>whether it was registered</returns>
+    public async Task<(bool Success, string Message)> Register()
     {
         string path = DirectoryHelper.BaseDirectory;
 
@@ -147,43 +149,50 @@ public class NodeManager
             mappings.AddRange(AppSettings.EnvironmentalMappings);
         }
 
-        if (AppSettings.EnvironmentalRunnerCount != null)
-            AppSettings.Instance.Runners = AppSettings.EnvironmentalRunnerCount.Value;
-
-        if (AppSettings.EnvironmentalEnabled != null)
-            AppSettings.Instance.Enabled = AppSettings.EnvironmentalEnabled.Value;
-
-        if (string.IsNullOrEmpty(AppSettings.Instance.TempPath))
-            AppSettings.Instance.TempPath = Globals.IsDocker ? "/temp" : Path.Combine(DirectoryHelper.BaseDirectory, "Temp");
+        string tempPath =  AppSettings.ForcedTempPath?.EmptyAsNull() ?? (Globals.IsDocker ? "/temp" : Path.Combine(DirectoryHelper.BaseDirectory, "Temp"));
 
         var settings = AppSettings.Instance;
-        var nodeService = new NodeService();
-        Shared.Models.ProcessingNode result;
+        if (string.IsNullOrEmpty(settings.ServerUrl))
+            return (false, "Server URL not set");
+        
+        RemoteService.AccessToken = settings.AccessToken;
+        var nodeService = ServiceLoader.Load<INodeService>();
+        Shared.Models.ProcessingNode? result;
         try
         {
-            result = await nodeService.Register(settings.ServerUrl, settings.HostName, settings.TempPath, settings.Runners, settings.Enabled, mappings);
+            result = await nodeService.Register(settings.ServerUrl, settings.HostName, tempPath, mappings);
             if (result == null)
             {
                 this.Registered = false;
-                return false;
+                return (false, "Failed to register");
             }
+        }
+        catch (TaskCanceledException ex)
+        {
+            Logger.Instance?.ELog("Failed to register with server: " + ex.Message);
+            this.Registered = false;
+            return (false, "Connection timed out. Check network and address.");
         }
         catch (Exception ex)
         {
-            Shared.Logger.Instance?.ELog("Failed to register with server: " + ex.Message);
+            Logger.Instance?.ELog("Failed to register with server: " + ex.Message);
             this.Registered = false;
-            return false;
+            if(ex.Message.StartsWith("A task was canceled"))
+                return (false, "Connection timed out. Check network and address.");
+            return (false, ex.Message);
         }
 
-        Service.ServiceBaseUrl = settings.ServerUrl;
-        if (Service.ServiceBaseUrl.EndsWith("/"))
-            Service.ServiceBaseUrl = Service.ServiceBaseUrl.Substring(0, Service.ServiceBaseUrl.Length - 1);
+        if(result.Uid != CommonVariables.InternalNodeUid) // internal node uid is already set elsewhere to a unique UID for security
+            RemoteService.NodeUid = result.Uid;
+        RemoteService.ServiceBaseUrl = settings.ServerUrl;
+        if (RemoteService.ServiceBaseUrl.EndsWith("/"))
+            RemoteService.ServiceBaseUrl = RemoteService.ServiceBaseUrl[..^1];
 
-        Shared.Logger.Instance?.ILog("Successfully registered node");
-        settings.Enabled = result.Enabled;
-        settings.Runners = result.FlowRunners;
+        Logger.Instance?.ILog("Successfully registered node");
+        //settings.Enabled = result.Enabled;
+        //settings.Runners = result.FlowRunners;
         settings.Save();
         this.Registered = true;
-        return true;
+        return (true, string.Empty);
     }
 }

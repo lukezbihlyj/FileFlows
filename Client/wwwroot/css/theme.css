@@ -1,18 +1,26 @@
 body {
+  --base-darkest: rgb(7, 7, 7);
+  --base-darkest-rgb: 7, 7, 7;
+  --base-darker: rgb(14, 14, 14);
+  --base-darker-rgb: 14, 14, 14;
+  --base: rgb(21, 21, 21);
+  --base-rgb: 21, 21, 21;
+  --base-lighter: rgb(28, 28, 28);
+  --base-lighter-rgb: 28, 28, 28;
+  --base-lightest: rgb(35, 35, 35);
+  --base-lightest-rgb: 35, 35, 35;
+  --base-lightest-2: rgb(42, 42, 42);
+  --base-lightest-2-rgb: 42, 42, 42;
+  --input-height: 2.1875rem;
   --color: rgb(240, 240, 240);
   --color-rgb: 240, 240, 240;
   --color-darker: rgb(220, 220, 220);
   --color-darke-rgb: 220, 220, 220;
   --color-darkest: rgb(160, 160, 160);
   --color-darkest-rgb: 160, 160, 160;
-  --base: rgb(17, 18, 20);
-  --base-rgb: 7, 18, 20;
-  --base-darker: rgb(6, 17, 19);
-  --base-darker-rgb: 6, 17, 19;
-  --base-darkest: rgb(4, 11, 12);
-  --base-darkest-rgb: 4, 11, 12;
   --accent: rgb(255, 0, 144);
   --accent-rgb: 255, 0, 144;
+  --table-link-color: var(--blue);
   --border-color: rgba(var(--color-rgb), 0.1);
   --input-background: rgb(49, 49, 49);
   --input-background-rgb: 49, 49, 49;
@@ -22,13 +30,12 @@ body {
   --flow-logic: var(--orange);
   --flow-input: var(--indigo);
   --flow-output: var(--green);
+  --flow-subflow: var(--green);
   --flow-process: var(--cyan);
-  --flow-build-start: var(--teal);
-  --flow-build-end: var(--teal);
-  --flow-build-part: var(--blue);
+  --flow-buildstart: var(--teal);
+  --flow-buildend: var(--teal);
+  --flow-buildpart: var(--blue);
   --flow-communication: var(--yellow);
   --flow-failure: var(--error);
   --flow-script:#c14242;
 }
-
-/*# sourceMappingURL=theme.css.map */

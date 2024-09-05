@@ -1,6 +1,5 @@
 ﻿using FileFlows.Plugin;
 using FileFlows.Client.Components.Inputs;
-using FileFlows.Client.Components.Inputs.InputWidgetPreviews;
 
 namespace FileFlows.Client.Pages;
 
@@ -18,20 +17,28 @@ public partial class Libraries : ListPage<Guid, Library>
             ShowEditHttpError(flowResult, "Pages.Libraries.ErrorMessages.NoFlows");
             return false;
         }
-        var flowOptions = flowResult.Data.Where(x => x.Type != FlowType.Failure).Select(x => new ListOption { Value = new ObjectReference { Name = x.Name, Uid = x.Uid, Type = x.GetType().FullName }, Label = x.Name });
+        var flowOptions = flowResult.Data
+            .Select(x => new ListOption { Value = new ObjectReference { Name = x.Value, Uid = x.Key, Type = typeof(Flow).FullName! }, Label = x.Value });
         efTemplate = null;
 
-        var tabs = new Dictionary<string, List<ElementField>>();
-        var tabGeneral = await TabGeneral(library, flowOptions);
+        var tabs = new Dictionary<string, List<IFlowField>>();
+        
+        var efFolders = new ElementField
+        {
+            InputType = FormInputType.Switch,
+            Name = nameof(library.Folders)
+        };
+        
+        var tabGeneral = await TabGeneral(library, flowOptions, efFolders);
         tabs.Add("General", tabGeneral);
         tabs.Add("Schedule", TabSchedule(library));
         tabs.Add("Detection", TabDetection(library));
         tabs.Add("Scan", TabScan(library));
-        tabs.Add("Advanced", TabAdvanced(library));
-        var result = await Editor.Open(new()
+        tabs.Add("Advanced", TabAdvanced(library, efFolders));
+        await Editor.Open(new()
         {
             TypeName = "Pages.Library", Title = "Pages.Library.Title", Model = library, SaveCallback = Save, Tabs = tabs,
-            HelpUrl = "https://docs.fileflows.com/libraries"
+            HelpUrl = "https://fileflows.com/docs/webconsole/configuration/libraries/library"
         });
         if (efTemplate != null)
         {
@@ -42,9 +49,9 @@ public partial class Libraries : ListPage<Guid, Library>
     }
 
 
-    private async Task<List<ElementField>> TabGeneral(Library library, IEnumerable<ListOption> flowOptions)
+    private async Task<List<IFlowField>> TabGeneral(Library library, IEnumerable<ListOption> flowOptions, ElementField efFolders)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         if (library == null || library.Uid == Guid.Empty)
         {
             // adding
@@ -52,7 +59,7 @@ public partial class Libraries : ListPage<Guid, Library>
             try
             {
                 var templateResult = await HttpHelper.Get<Dictionary<string, List<Library>>>("/api/library/templates");
-                if (templateResult.Success == true || templateResult.Data?.Any() == true)
+                if (templateResult.Success || templateResult.Data?.Any() == true)
                 {
                     List<ListOption> templates = new();
                     foreach (var group in templateResult.Data)
@@ -77,7 +84,7 @@ public partial class Libraries : ListPage<Guid, Library>
                         Value = null
                     };
                     
-                    if(templates.Any() && templates[0].Value == Globals.LIST_OPTION_GROUP)
+                    if(templates.Any() && (string)templates[0].Value! == Globals.LIST_OPTION_GROUP)
                         templates.Insert(1, loCustom);
                     else
                         templates.Insert(0, loCustom);
@@ -89,7 +96,7 @@ public partial class Libraries : ListPage<Guid, Library>
                         Parameters = new Dictionary<string, object>
                         {
                             { nameof(InputSelect.Options), templates },
-                            { nameof(InputSelect.AllowClear), false},
+                            { nameof(InputSelect.AllowClear), true},
                             { nameof(InputSelect.ShowDescription), true }
                         }
                     };
@@ -128,7 +135,7 @@ public partial class Libraries : ListPage<Guid, Library>
             InputType = FormInputType.Select,
             Name = nameof(library.Flow),
             Parameters = new Dictionary<string, object>{
-                { "Options", flowOptions.ToList() }
+                { "Options", flowOptions.OrderBy(x => x.Label.ToLowerInvariant()).ToList() }
             },
             Validators = new List<FileFlows.Shared.Validators.Validator>
             {
@@ -151,7 +158,7 @@ public partial class Libraries : ListPage<Guid, Library>
             }
         });
         
-        if(App.Instance.FileFlowsSystem.Licensed)
+        if(Profile.LicensedFor(LicenseFlags.ProcessingOrder))
         {
             fields.Add(new ElementField
             {
@@ -161,6 +168,7 @@ public partial class Libraries : ListPage<Guid, Library>
                     { "AllowClear", false },
                     { "Options", new List<ListOption> {
                         new () { Value = ProcessingOrder.AsFound, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.AsFound)}" },
+                        new () { Value = ProcessingOrder.Alphabetical, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.Alphabetical)}" },
                         new () { Value = ProcessingOrder.SmallestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.SmallestFirst)}" },
                         new () { Value = ProcessingOrder.LargestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.LargestFirst)}" },
                         new () { Value = ProcessingOrder.NewestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.NewestFirst)}" },
@@ -170,6 +178,16 @@ public partial class Libraries : ListPage<Guid, Library>
                 }
             });
         }
+        
+        fields.Add(new ElementField()
+        {
+            InputType = FormInputType.StringArray,
+            Name = nameof(library.Extensions),
+            Conditions = new List<Condition>
+            {
+                new (efFolders, library.Folders, value: false)
+            }
+        });
         fields.Add(new ElementField
         {
             InputType = FormInputType.Int,
@@ -184,9 +202,9 @@ public partial class Libraries : ListPage<Guid, Library>
         return fields;
     }
 
-    private List<ElementField> TabSchedule(Library library)
+    private List<IFlowField> TabSchedule(Library library)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Label,
@@ -202,12 +220,21 @@ public partial class Libraries : ListPage<Guid, Library>
                 { "HideLabel", true }
             }
         });
+        if (Profile.LicensedFor(LicenseFlags.ProcessingOrder))
+        {
+            fields.Add(new ElementField()
+            {
+                InputType = FormInputType.Int,
+                Name = nameof(library.MaxRunners)
+            });
+        }
+
         return fields;
     }
 
-    private List<ElementField> TabAdvanced(Library library)
+    private List<IFlowField> TabAdvanced(Library library, ElementField efFolders)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
             InputType = FormInputType.Text,
@@ -223,11 +250,6 @@ public partial class Libraries : ListPage<Guid, Library>
             InputType = FormInputType.Switch,
             Name = nameof(library.ExcludeHidden)
         });
-        ElementField efFolders = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.Folders)
-        };
         fields.Add(efFolders);
         fields.Add(new ElementField
         {
@@ -237,7 +259,15 @@ public partial class Libraries : ListPage<Guid, Library>
             {
                 new (efFolders, library.Folders, value: false)
             }
-            
+        });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Switch,
+            Name = nameof(library.TopLevelOnly),
+            Conditions = new List<Condition>
+            {
+                new (efFolders, library.Folders, value: false)
+            }
         });
         var efFingerprinting = new ElementField
         {
@@ -272,62 +302,91 @@ public partial class Libraries : ListPage<Guid, Library>
                 new Condition(efFolders, library.Folders, value: true)                    
             }
         });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Switch,
+            Name = nameof(library.DownloadsDirectory)
+        });
         return fields;
     }
 
-    private List<ElementField> TabDetection(Library library)
+    private List<IFlowField> TabDetection(Library library)
     {
-        List<ElementField> fields = new List<ElementField>();
-        fields.Add(new ()
+        List<IFlowField> fields = new ();
+        fields.Add(new ElementField()
         {
             InputType = FormInputType.Label,
             Name = "DetectionDescription"
         });
-        var matchParameters = new Dictionary<string, object>
-        {
-            { "AllowClear", false },
-            { "Options", new List<ListOption> {
-                new () { Value = (int)MatchRange.Any, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.Any)}" },
-                new () { Value = MatchRange.GreaterThan, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.GreaterThan)}" },
-                new () { Value = MatchRange.LessThan, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.LessThan)}" },
-                new () { Value = MatchRange.Between, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.Between)}" },
-                new () { Value = MatchRange.NotBetween, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.NotBetween)}" }
-            } }
-        };
         foreach (var prop in new[]
                  {
-                     (nameof(Library.DetectFileCreation), "date", true),
-                     (nameof(library.DetectFileLastWritten), "date", true),
-                     (nameof(library.DetectFileSize), "size", false)
+                     (Field: nameof(Library.DetectFileCreation), Type: "date", AddSeparator: true, InitialValue: library.DetectFileCreation),
+                     (Field: nameof(library.DetectFileLastWritten), Type: "date", AddSeparator: true, InitialValue: library.DetectFileLastWritten),
+                     (Field: nameof(library.DetectFileSize), Type: "size", AddSeparator: false, InitialValue: library.DetectFileSize)
                  })
         {
+            var matchParameters = new Dictionary<string, object>
+            {
+                { "AllowClear", false },
+                { "Options", new List<ListOption> {
+                    new () { Value = (int)MatchRange.Any, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.Any)}" },
+                    new () { Value = MatchRange.GreaterThan, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.GreaterThan)}" },
+                    new () { Value = MatchRange.LessThan, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.LessThan)}" },
+                    new () { Value = MatchRange.Between, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.Between)}" },
+                    new () { Value = MatchRange.NotBetween, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.NotBetween)}" }
+                } }
+            };
+            if (prop.Type == "date")
+            {
+                ((List<ListOption>)matchParameters["Options"]).AddRange(new ListOption[]
+                {
+                    new () { Value = MatchRange.After, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.After)}" },
+                    new () { Value = MatchRange.Before, Label = $"Enums.{nameof(MatchRange)}.{nameof(MatchRange.Before)}" }
+                });
+            }
+            
             var efDetection = new ElementField
             {
                 InputType = FormInputType.Select,
-                Name = prop.Item1,
+                Name = prop.Field,
                 Parameters = matchParameters
             };
             fields.Add(efDetection);
             fields.Add(new ElementField
             {
-                InputType = prop.Item2 == "date" ? FormInputType.Period : FormInputType.FileSize,
-                Name = prop.Item1 + "Lower",
+                InputType = prop.Type == "date" ? FormInputType.Period : FormInputType.FileSize,
+                Name = prop.Field + "Lower",
                 Conditions = new List<Condition>
                 {
-                    new (efDetection, prop.Item1, value: (int)MatchRange.Any, isNot: true)
+                    new AnyCondition(efDetection, prop.InitialValue, new []
+                    {
+                        MatchRange.GreaterThan, MatchRange.LessThan, MatchRange.Between, MatchRange.NotBetween
+                    })
                 }
             });
             fields.Add(new ElementField
             {
-                InputType = prop.Item2 == "date" ? FormInputType.Period : FormInputType.FileSize,
-                Name = prop.Item1 + "Upper",
+                InputType = prop.Type == "date" ? FormInputType.Period : FormInputType.FileSize,
+                Name = prop.Field + "Upper",
                 Conditions = new List<Condition>
                 {
-                    new AnyCondition(efDetection, prop.Item1, new [] { MatchRange.Between, MatchRange.NotBetween})
+                    new AnyCondition(efDetection, prop.InitialValue, new [] { MatchRange.Between, MatchRange.NotBetween})
+                }
+            });
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Date,
+                Name = prop.Field + "Date",
+                Conditions = new List<Condition>
+                {
+                    new AnyCondition(efDetection, prop.InitialValue, new []
+                    {
+                        MatchRange.After, MatchRange.Before
+                    })
                 }
             });
             
-            if(prop.Item3)
+            if(prop.AddSeparator)
                 fields.Add(ElementField.Separator());
         }
 
@@ -335,9 +394,9 @@ public partial class Libraries : ListPage<Guid, Library>
     }
     
     
-    private List<ElementField> TabScan(Library library)
+    private List<IFlowField> TabScan(Library library)
     {
-        List<ElementField> fields = new List<ElementField>();
+        List<IFlowField> fields = new ();
         
         var fieldScan = new ElementField
         {

@@ -8,20 +8,26 @@ namespace FileFlows.Client.Components.Inputs;
 /// </summary>
 public partial class InputFileSize : Input<long>
 {
+    /// <inheritdoc />
     public override bool Focus() => FocusUid();
 
-    private bool UpdatingValue = false;
-
+    /// <summary>
+    /// Gets or sets the unit for the number
+    /// </summary>
     private long Unit { get; set; }
 
+    /// <summary>
+    /// Gets or sets the number in the input field
+    /// </summary>
     private long Number { get; set; }
 
+    
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         this.Unit = 1000;
-        Logger.Instance.ILog("Start value: ", this.Value);
 
         if (Value > 0)
         {
@@ -38,13 +44,17 @@ public partial class InputFileSize : Input<long>
         }
         else
         {
-            Number = 10;
-            Unit = 1000000;
+            Number = base.Field?.Name == "ProbeSize" ? 5 : 10;
+            Unit = 1_000_000;
             Value = Number * Unit;
         }
     }
 
-    private async Task ChangeValue(ChangeEventArgs e)
+    /// <summary>
+    /// When the number field changes
+    /// </summary>
+    /// <param name="e">the event</param>
+    private void ChangeValue(ChangeEventArgs e)
     {
         if (int.TryParse(e.Value?.ToString() ?? "", out int value) == false)
             return;
@@ -61,11 +71,14 @@ public partial class InputFileSize : Input<long>
         else if (value < 1)
             value = 1;
         this.Number = value;
-        UpdatingValue = true;
         this.Value = this.Number * this.Unit;
         this.ClearError();
     }
 
+    /// <summary>
+    /// When a key is pressed in the number field
+    /// </summary>
+    /// <param name="e">the event</param>
     private async Task OnKeyDown(KeyboardEventArgs e)
     {
         if (e.Code == "Enter")
@@ -75,23 +88,18 @@ public partial class InputFileSize : Input<long>
     }
     
     
+    /// <summary>
+    /// When the unit select value changes
+    /// </summary>
+    /// <param name="args">the event arguments</param>
     private void UnitSelectionChanged(ChangeEventArgs args)
     {
-        UpdatingValue = true;
-        try
+        if (int.TryParse(args?.Value?.ToString(), out int index))
         {
-            if (int.TryParse(args?.Value?.ToString(), out int index))
-            {
-                Unit = index;
-                Value = Number * Unit;
-            }
-            else
-                Logger.Instance.DLog("Unable to find index of: ",  args?.Value);
+            Unit = index;
+            Value = Number * Unit;
         }
-        finally
-        {
-            UpdatingValue = false;
-        }
+        else
+            Logger.Instance.DLog("Unable to find index of: ",  args?.Value);
     }
-
 }

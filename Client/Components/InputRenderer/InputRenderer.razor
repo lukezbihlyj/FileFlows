@@ -6,6 +6,8 @@
 @using FileFlows.Shared.Widgets
 @using Microsoft.Extensions.Logging
 @using System.Collections
+@using FileFlows.Plugin.Models
+@using FileFlows.Plugin.Types
 
 @{
     string label = string.IsNullOrEmpty(field.Label) == false ? field.Label : IsScript ? FlowHelper.FormatLabel(field.Name) : TypeName + ".Fields." + field.Name;
@@ -16,13 +18,36 @@
 
     bool readOnly = GetParameter<bool>(field, "ReadOnly");
     bool hideLabel = GetParameter<bool>(field, "HideLabel");
-    switch (field.InputType)
+
+    @switch (field.InputType)
     {
+        case FormInputType.Button:
+            {
+                var text = Translater.TranslateIfNeeded(label);
+                var onclick = GetParameter<EventCallback>(field, nameof(InputButton.OnClick));
+                <InputButton Field=@field Text="@text" OnClick="@onclick" />
+            }
+            break;
+        case FormInputType.Color:
+        {
+            var value = GetValue<string>(field.Name) ?? "";
+            <InputColor Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                           Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
         case FormInputType.Text:
             {
-                var value = GetValue<string>(field.Name) ?? "";
-                <InputText Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-    Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                if (field.ReadOnlyValue is string strValue)
+                {
+                    <InputText Label="@label" Value="@strValue" ReadOnly=@readOnly 
+                               Placeholder="@field.Placeholder" HideLabel=@hideLabel Help=@field.HelpText />
+                }
+                else
+                {
+                    var value = GetValue<string>(field.Name) ?? "";
+                    <InputText Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                               Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText/>
+                }
             }
             break;
         case FormInputType.TextVariable:
@@ -35,9 +60,28 @@
         case FormInputType.TextArea:
             {
                 var value = GetValue<string>(field.Name) ?? "";
+                var variables = GetParameter<bool>(field, "Variables") ? field.Variables : null;
+                var rows = GetParameter<int>(field, "Rows");
                 <InputTextArea Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-    Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                               Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel 
+                               Variables="@variables" Rows="@rows"
+                               OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText
+                />
             }
+            break;
+        case FormInputType.Template:
+        {
+            var value = GetValue<string>(field.Name);
+            var options = GetParameter<List<ListOption>>(field, "Options");
+            if (options?.Any() == true)
+            {
+                <InputSelect Label="Template" ValueChanged="@(x => UpdateTemplateCode(x, field))" 
+                             Options="options" BlankClearLabel="true" AllowClear="true" />
+            }
+            <InputCode Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                       Validators=@field.Validators Variables=@field.Variables Placeholder="@field.Placeholder" HideLabel=@hideLabel 
+                       Language="liquid" OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
             break;
         case FormInputType.Password:
             {
@@ -64,9 +108,34 @@
                 {
                     (min, max) = GetRange(field);
                 }
+                var zeroAsEmpty = GetParameter<bool>(field, "ZeroAsEmpty");
                 <InputNumber TItem="int" Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-    Validators=@field.Validators Placeholder="@field.Placeholder" Min="@min" Max="@max" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                             Validators=@field.Validators Placeholder="@field.Placeholder" Min="@min" Max="@max" HideLabel=@hideLabel 
+                             OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText ZeroAsEmpty="@zeroAsEmpty" />
             }
+            break;
+        case FormInputType.IconPicker:
+        {
+            var value = GetValue<string>(field.Name);
+            <InputIconPicker Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                         Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel 
+                         OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText  />
+        }
+            break;
+        case FormInputType.MathValue:
+        {
+            var value = GetValue<string>(field.Name);
+            <InputMathValue Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))" 
+                                Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
+        case FormInputType.NumberPercent:
+        {
+            var value = GetValue<NumberPercent>(field.Name) ?? new ();
+            var unit = GetParameter<string>(field, nameof(InputNumberPercent.Unit));
+            <InputNumberPercent Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))" Unit="@unit"
+                         Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
             break;
         case FormInputType.Period:
         {
@@ -93,6 +162,7 @@
             }
             <InputNumber TItem="float" Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
                          Validators=@field.Validators Placeholder="@field.Placeholder" Min="@((float)min)" Max="@((float)max)" 
+                         @* ReSharper disable CSharpWarnings::CS8619 *@
                          HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
         }
             break;
@@ -102,8 +172,21 @@
                 var listOnly = GetParameter<bool>(field, "ListOnly");
                 var options = GetParameter<List<ListOption>>(field, nameof(InputChecklist.Options));
                 <InputChecklist Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-    Validators=@field.Validators Options="@options" HideLabel=@hideLabel ListOnly=@listOnly OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                                Validators=@field.Validators Options="@options" HideLabel=@hideLabel ListOnly=@listOnly OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
+            break;
+        case FormInputType.MultiSelect:
+        {
+            var value = GetValue<List<object>>(field.Name);
+            var options = GetParameter<List<ListOption>>(field, nameof(InputMultiSelect.Options));;
+            var labelAny = GetParameter<string>(field, nameof(InputMultiSelect.LabelAny));
+            var anyOrAll = GetParameter<bool>(field, "AnyOrAll");
+            @* ReSharper disable once CSharpWarnings::CS8619 *@
+            <InputMultiSelect Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))" 
+                              AnyOrAll="anyOrAll" LabelAny="@labelAny"
+                              Validators=@field.Validators Options="@options" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+            @* ReSharper restore CSharpWarnings::CS8619 *@
+        }
             break;
         case FormInputType.Slider:
             {
@@ -124,7 +207,7 @@
             {
                 var value = GetValue<bool>(field.Name);
                 bool inverse = GetParameter<bool>(field, nameof(InputSwitch.Inverse));
-                <InputSwitch Field=@field Label="@label" Value="@value" Inverse=@inverse ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                <InputSwitch Field=@field Label="@label" Value="@value" Inverse=@inverse ReadOnly=@readOnly Disabled="@readOnly" ValueChanged="@(x => UpdateValue(field, x))"
                              Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
             break;
@@ -173,9 +256,10 @@
         case FormInputType.Code:
             {
                 var value = GetValue<string>(field.Name);
+                var language = GetParameter<string>(field, nameof(InputCode.Language));
                 <InputCode Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
                            Validators=@field.Validators Variables=@field.Variables Placeholder="@field.Placeholder" HideLabel=@hideLabel 
-                           OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                           OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText Language="@language" />
             }
             break;
         case FormInputType.Schedule:
@@ -189,20 +273,74 @@
         case FormInputType.KeyValue:
             {
                 var value = GetValue<List<KeyValuePair<string, string>>>(field.Name);
+                var options = GetParameter<List<ListOption>>(field, nameof(InputKeyValue.Options));
+                var showVariables = GetParameter<bool>(field, nameof(InputKeyValue.ShowVariables));
+                var allowDuplicates = GetParameter<bool>(field, nameof(InputKeyValue.AllowDuplicates));
+                hideLabel = hideLabel || string.IsNullOrEmpty(Translater.Instant(label));
                 <InputKeyValue Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-                               Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel 
-                               OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+                               Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel Options="@options" AllowDuplicates="@allowDuplicates"
+                               Variables=@field.Variables ShowVariables=@showVariables OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
+            break;
+        case FormInputType.KeyValueInt:
+        {
+            var value = GetValue<List<KeyValuePair<int, string>>>(field.Name);
+            hideLabel = hideLabel || string.IsNullOrEmpty(Translater.Instant(label));
+            var hideKeyValueLabels = GetParameter<bool>(field, nameof(InputKeyValueInt.HideKeyValueLabels));
+            <InputKeyValueInt Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
+                              Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel HideKeyValueLabels="@hideKeyValueLabels"
+                              OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
             break;
         case FormInputType.TextLabel:
             {
-                object oValue = GetValue<object>(field.Name);
-                var pre = GetParameter<bool>(field, nameof(InputTextLabel.Pre));
-                var link = GetParameter<bool>(field, nameof(InputTextLabel.Link));
-                var formatter = GetParameter<string>(field, nameof(InputTextLabel.Formatter));
-                <InputTextLabel Field=@field Label="@label" Value="@oValue" HideLabel=@hideLabel 
-                                Pre=@pre Link=@link Formatter="@formatter" Help=@field.HelpText />
+                var error = GetParameter<bool>(field, nameof(InputTextLabel.Error));
+                if (field.ReadOnlyValue is string strValue)
+                {
+                    <InputTextLabel Label="@label" Value="@strValue" HideLabel=@hideLabel Help=@field.HelpText Error="@error" />
+                }
+                else
+                {
+                    object oValue = GetValue<object>(field.Name);
+                    var pre = GetParameter<bool>(field, nameof(InputTextLabel.Pre));
+                    var link = GetParameter<bool>(field, nameof(InputTextLabel.Link));
+                    var formatter = GetParameter<string>(field, nameof(InputTextLabel.Formatter));
+                    <InputTextLabel Field=@field Label="@label" Value="@oValue" HideLabel=@hideLabel Error="@error"
+                                    Pre=@pre Link=@link Formatter="@formatter" Help=@field.HelpText/>
+                }
             }
+            break;
+        case FormInputType.Date:
+        {
+            var value = GetValue<DateTime>(field.Name);
+            <InputDate Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                       ValueChanged="@(x => UpdateValue(field, x))" HideLabel=@hideLabel 
+                       OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
+        case FormInputType.DateCompare:
+        {
+            var value = GetValue<DateCompareModel>(field.Name);
+            <InputDateCompare Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                            ValueChanged="@(x => UpdateValue(field, x))" HideLabel=@hideLabel 
+                            OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
+        case FormInputType.DateRange:
+        {
+            var value = GetValue<DateRange>(field.Name);
+            <InputDateRange Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                       ValueChanged="@(x => UpdateValue(field, x))" HideLabel=@hideLabel 
+                       OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
+        case FormInputType.Time:
+        {
+            var value = GetValue<TimeSpan>(field.Name);
+            <InputTime Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                           ValueChanged="@(x => UpdateValue(field, x))" HideLabel=@hideLabel 
+                           OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
             break;
         case FormInputType.ExecutedNodes:
             {
@@ -231,6 +369,14 @@
                 <InputTable Field=@field Label="@label" Value="@oValue" HideLabel=@hideLabel TableType=@type Columns=@columns SelectAction=@selectAction />
             }
             break;
+        case FormInputType.Html: 
+            {
+                var html = GetValue<string>(field.Name);
+                <div class="input-html">
+                    @((MarkupString)html)
+                </div>   
+            }
+            break;
         case FormInputType.Label:
             {
                 <div class="input-label">
@@ -242,6 +388,8 @@
             {
                 <div class="input-horizontal-rule"></div>
             }
+            break;
+        case FormInputType.Hidden:
             break;
         default:
             {

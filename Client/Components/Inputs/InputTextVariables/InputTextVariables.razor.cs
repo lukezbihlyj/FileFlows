@@ -1,52 +1,58 @@
-namespace FileFlows.Client.Components.Inputs
+using Microsoft.AspNetCore.Components;
+
+namespace FileFlows.Client.Components.Inputs;
+
+/// <summary>
+/// Input for text that allows for variables
+/// </summary>
+public partial class InputTextVariables : Input<string>
 {
-    using Microsoft.AspNetCore.Components;
-    using System.Collections.Generic;
+    /// <summary>
+    /// The Preview text to show for the rendered variable value
+    /// </summary>
+    private string Preview = string.Empty;
+    
+    /// <summary>
+    /// Gets or sets the variables available
+    /// </summary>
+    [Parameter] public Dictionary<string, object> Variables { get; set; } = new();
 
-    public partial class InputTextVariables : Input<string>
+    /// <summary>
+    /// Gets or sets the value
+    /// </summary>
+    public new string Value
     {
-        private Dictionary<string, object> _Variables = new Dictionary<string, object>();
-
-        [Parameter]
-        public Dictionary<string, object> Variables
+        get => base.Value;
+        set
         {
-            get => _Variables;
-            set { _Variables = value ?? new Dictionary<string, object>(); }
-        }
+            if (base.Value == value)
+                return;
 
-        public new string Value
-        {
-            get => base.Value;
-            set
-            {
-                if (base.Value == value)
-                    return;
-
-                base.Value = value ?? string.Empty;
-                UpdatePreview();
-            }
-        }
-
-
-        private string Preview = string.Empty;
-
-        public override bool Focus() => FocusUid();
-            
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();       
+            base.Value = value ?? string.Empty;
             UpdatePreview();
-        }   
-
-        private void UpdatePreview()
-        {
-            string preview = Plugin.VariablesHelper.ReplaceVariables(this.Value, Variables, false);
-            this.Preview = preview;             
         }
+    }
+    /// <inheritdoc />
+    public override bool Focus() => FocusUid();
+        
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();       
+        UpdatePreview();
+    }   
 
-        private void VariableOnSubmit()
-        {
-            _ = base.OnSubmit.InvokeAsync();
-        }
+    /// <summary>
+    /// Updates the preview text
+    /// </summary>
+    private void UpdatePreview()
+        => Preview = Plugin.VariablesHelper.ReplaceVariables(this.Value, Variables, false);
+
+    /// <summary>
+    /// When the user submits in this field
+    /// </summary>
+    private void VariableOnSubmit()
+    {
+        _ = OnSubmit.InvokeAsync();
     }
 }

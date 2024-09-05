@@ -1,0 +1,28 @@
+.table-item {
+  min-height: 2.5rem;
+}
+
+.title {
+  font-weight: var(--bold, 600);
+}
+
+.message {
+  white-space: pre-wrap;
+}
+
+.icon {
+  align-self: auto;
+  padding-top: 0.25rem;
+}
+.icon.info {
+  color: var(--info);
+}
+.icon.warning {
+  color: var(--yellow);
+}
+.icon.error {
+  color: #d46a29;
+}
+.icon.critical {
+  color: var(--red);
+}

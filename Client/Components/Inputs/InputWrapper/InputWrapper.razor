@@ -1,4 +1,3 @@
-@using Microsoft.Extensions.Logging
 @namespace FileFlows.Client.Components.Inputs
 
 @if(Input?.Visible == false)
@@ -9,13 +8,26 @@
     bool invalid = string.IsNullOrEmpty(Input?.ErrorMessage) == false;
 
 }
-<div x-id="@Input?.Field?.Name" class="row @(NoSpacing ? "mt-0" : "") @(invalid ? "error" : "") @(Input?.Field?.FlexGrow == true ? "flex-grow" : "") @(Input?.HideLabel == true ? "hide-label" : "") @(Input?.Disabled == true ? "disabled" : "")">
+<div x-id="@Input?.Field?.Name" class="row @(NoSpacing ? "mt-0" : "") @(invalid ? "error" : "") 
+@(Input?.Field?.FlexGrow == true ? "flex-grow" : "") 
+@(Input?.HideLabel == true ? "hide-label" : "") 
+@(Input?.Disabled == true ? "disabled" : "")
+     @(Error ? "error-input" : "")
+@(Input?.Field?.ColSpan != null ? $"col-span-{Input.Field.ColSpan.Value}" : "")
+@(Input?.Field?.RowSpan != null ? $"row-span-{Input.Field.RowSpan.Value}" : "")
+">
     @if (Input?.HideLabel != true && Input?.Field?.HideLabel != true)
     {
         <div class="input-label">
             @if (string.IsNullOrEmpty(Input?.Label) == false)
             {
-                <label>@Input.Label</label>
+                <label>
+                @Input.Label
+                @if(string.IsNullOrEmpty(Input?.Field?.CopyValue) == false)
+                {
+                 <i @onclick="CopyToClipboard" class="far fa-clipboard" title="@lblTooltip"></i>
+                }
+                </label>
             }
         </div>
     }
@@ -29,7 +41,10 @@
 @if (invalid && Input?.Disabled != true)
 {
     <div x-id="error-@Input?.Field?.Name" class="row mt-0 error">
-        <div class="input-label"></div>
+        @if (Input?.HideLabel != true)
+        {
+            <div class="input-label"></div>
+        }
         <div class="input-value">
             <span class="error-text">@Input.ErrorMessage</span>
         </div>
@@ -38,7 +53,10 @@
 @if (string.IsNullOrEmpty(HelpHtml) == false)
 {
     <div class="row mt-0 @(invalid ? "error" : "") @(Input?.Disabled == true ? "disabled" : "") @(Input?.HideLabel == true ? "hide-label": "")">
-        <div class="input-label"></div>
+        @if (Input?.HideLabel != true)
+        {
+            <div class="input-label"></div>
+        }
         <div class="input-value">
             <span class="help-text">
                 @((MarkupString)HelpHtml)

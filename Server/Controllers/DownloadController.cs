@@ -1,3 +1,4 @@
+using FileFlows.Server.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileFlows.Server.Controllers;
@@ -6,6 +7,7 @@ namespace FileFlows.Server.Controllers;
 /// Controller to download a node
 /// </summary>
 [Route("/download")]
+[FileFlowsAuthorize]
 public class DownloadController:Controller
 {
     /// <summary>
@@ -20,7 +22,7 @@ public class DownloadController:Controller
         if (System.IO.File.Exists(file) == false)
             return NotFound();
 
-        return new FileStreamResult(System.IO.File.OpenRead(file), "application/octet-stream")
+        return new FileStreamResult(FileOpenHelper.OpenRead_NoLocks(file), "application/octet-stream")
         {
             FileDownloadName = zipName
         };

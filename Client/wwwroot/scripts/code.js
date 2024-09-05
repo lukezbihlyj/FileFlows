@@ -17,53 +17,317 @@ window.ffCode = {
                     genCode,
                     path + '/index.d.ts');
             }
-        //     console.log('at end!!!');
-        //     monaco.editor.createModel(
-        //         "declare class Tester2 { print: function(), multiple: function(any, any), list: function() }",
-        //         "javascript"
-        //     );
-        //     monaco.languages.typescript.javascriptDefaults.addExtraLib(`declare class Car{ 
-        //     start()
-        //     stop()
-        // }`, "Car");
         }
         
         
         monaco.editor.createModel(
-            "const Logger = { ILog: function(...any), DLog: function(...any), WLog: function(...any), ELog: function(...any) }",
+            `const Logger = { 
+    /**
+     * Logs the provided messages as information.
+     * @param {...any} messages - The messages to log.
+     */
+    ILog: function (...messages) { },
+    /**
+     * Logs the provided messages as debug information.
+     * @param {...any} messages - The messages to log.
+     */
+    DLog: function (...messages) { },
+    /**
+     * Logs the provided messages as warnings.
+     * @param {...any} messages - The messages to log.
+     */
+    WLog: function (...messages) { },
+    /**
+     * Logs the provided messages as errors.
+     * @param {...any} messages - The messages to log.
+     */
+    ELog: function (...messages) { }
+  }`,
             "javascript"
         );
 
         monaco.editor.createModel(
-            "const Flow = { " +
-            "CreateDirectoryIfNotExists: function (path:string)," +
-            "GetDirectorySize: function (path: string):number, " +
-            "GetParameter: function (key: string):any, " +
-            "MapPath: function (path: string):string, " +
-            "MoveFile: function (destination: string), " +
-            "ResetWorkingFile: function (), " +
-            "SetWorkingFile: function (filename: string, dontDelete: bool), " +
-            "SetParameter: function (key:string, value:any)," +
-            "NewGuid: function ():string," +
-            "CopyToTemp: function(filename:string):string, " + 
-            "Execute: function(args:{command:string, arguments: string, argumentList:string[], timeout:number, workingDirectory:string}):{completed:bool, exitCode:number, output:string, standardOutput:string, starndardError:string}," +
-            "FileName: string," + 
-            "TempPath:string," +            
-            "TempPathName:string," +
-            "TempPathHost:string," + 
-            "RunnerUid:string," + 
-            "WorkingFile:string," +
-            "WorkingFileName:string, " +
-            "WorkingFileSize:number," +
-            "RelativeFile:string," +
-            "IsDirectory:bool," +
-            "IsDocker:bool," +
-            "IsWindows:bool," +
-            "IsLinux:bool," +
-            "IsMac:bool," +
-            "IsArm:bool," +
-            "LibraryPath:string," +
-            "}",
+            `const CacheStore = {
+        /**
+         * Clears the cache store.
+         */
+        Clear: function() { },
+        
+        /**
+         * Gets an object from the cache store.
+         * @param {string} key - The name of the object to get.
+         * @returns {object} - The value of the object.
+         */
+        Get: function(key:string) { },
+        
+        /**
+         * Gets an integer from the cache store.
+         * @param {string} key - The name of the object to get.
+         * @returns {number} - The value of the integer.
+         */
+        GetInt: function(key:string) { },
+        
+        /**
+         * Gets a boolean from the cache store.
+         * @param {string} key - The name of the object to get.
+         * @returns {boolean} - The value of the boolean.
+         */
+        GetBool: function(key:string) { },
+        
+        /**
+         * Gets a string from the cache store.
+         * @param {string} key - The name of the object to get.
+         * @returns {string} - The value of the string.
+         */
+        GetString: function(key:string) { },
+        
+        /**
+         * Sets an object in the cache store.
+         * @param {string} key - The name of the object to set.
+         * @param {object} value - The value of the object.
+         */
+        Set: function(key:string, value) { },
+        
+        /**
+         * Sets an integer in the cache store.
+         * @param {string} key - The name of the object to set.
+         * @param {number} value - The value of the integer.
+         */
+        SetInt: function(key:string, value:number) { },
+        
+        /**
+         * Sets a string in the cache store.
+         * @param {string} key - The name of the object to set.
+         * @param {string} value - The value of the string.
+         */
+        SetString: function(key:string, value:string) { },
+        
+        /**
+         * Sets a boolean in the cache store.
+         * @param {string} key - The name of the object to set.
+         * @param {boolean} value - The value of the boolean.
+         */
+        SetBool: function(key:string, value:boolean) { }
+    }`,
+            "javascript"
+        );
+
+        monaco.editor.createModel(
+            `const LanguageHelper = {
+        /**
+         * Converts the provided language to its English name.
+         * @param {string} language - The language to convert.
+         * @returns {string} The English name of the language.
+         */
+        GetEnglishFor: function(language) { },
+
+        /**
+         * Retrieves the ISO 639-1 code for the provided language.
+         * @param {string} language - The language.
+         * @returns {string} The ISO 639-1 code for the language.
+         */
+        GetIso1Code: function(language) { },
+
+        /**
+         * Retrieves the ISO 639-2 code for the provided language.
+         * @param {string} language - The language.
+         * @returns {string} The ISO 639-2 code for the language.
+         */
+        GetIso2Code: function(language) { },
+
+        /**
+         * Checks if two languages represent the same language.
+         * @param {string} language1 - The first language code to compare.
+         * @param {string} language2 - The second language code to compare.
+         * @returns {boolean} True if the languages represent the same language, false otherwise.
+         */
+        AreSame: function(language1, language2) { }
+    };
+`,
+        "javascript"
+    );
+
+        monaco.editor.createModel(`
+/**
+ * Sleeps for the given time
+ * @param {number} milliseconds - The number of milliseconds to sleep for
+ */
+Sleep: function (milliseconds) { }`,
+            "javascript"
+        );
+
+        monaco.editor.createModel(
+            `const Flow = { 
+/**
+ * Creates a directory if it does not already exist
+ * @param {string} path - The path of the directory
+ */
+CreateDirectoryIfNotExists: function (path:string) { },
+/**
+ * Gets the size of a directory in bytes
+ * @param {string} path - The path of the directory
+ * @returns {number} - The size of the directory in bytes
+ */
+GetDirectorySize: function (path:string):number { },
+/**
+ * Gets a parameter from the collection, these are generally complex objects set by plugins
+ * @param {string} key - The key of the parameter to get
+ * @returns {object} - The parameter if found
+ */
+GetParameter: function (key:string):any { }, 
+/**
+ * Checks if a plugin is available
+ * @param {string} name - The name of the plugin
+ * @returns {boolean} - True if the plugin is available, otherwise false
+ */
+HasPlugin: function(name:string):boolean { },
+/**
+ * Maps a path to its real path
+ * @param {string} path - The path to map
+ * @returns {string} - The real path
+ */
+MapPath: function (path:string) { }, 
+/**
+ * Moves a file to a destination path
+ * @param {string} destination - The destination path
+ */
+MoveFile: function (destination:string) { }, 
+/**
+ * Resets the working file to the original input file
+ */
+ResetWorkingFile: function () { }, 
+/**
+ * Sets the working file with an optional delete flag
+ * @param {string} filename - The filename of the working file
+ * @param {boolean} dontDelete - True to prevent deletion of the file, false otherwise
+ */
+SetWorkingFile: function (filename:string, dontDelete:boolean) { }, 
+/**
+ * Sets the value of a parameter by its key
+ * @param {string} key - The key of the parameter to set
+ * @param {*} value - The value to set for the parameter
+ */
+SetParameter: function (key:string, value) { }, 
+/**
+ * Generates a new unique identifier (GUID)
+ * @returns {string} - The new GUID
+ */
+NewGuid: function ():string { }, 
+/**
+ * Copies a file to the temporary path
+ * @param {string} filename - The filename to copy to the temporary path
+ * @returns {string} - The temporary path
+ */
+CopyToTemp: function (filename:string):string { }
+/**
+ * Records additional information that will be shown on the processing runner
+ * @param {string} name - The name or label to show
+ * @param {any} value - The value to show next to the name
+ * @param {any} steps - How many steps to keep this information visible for, each flow part change decreases the steps
+ */
+AdditionalInfoRecorder: function (name:string, value:any, steps:number):string { }
+/**
+ * The file name
+ * @type {string}
+ */
+FileName: string, 
+/**
+ * The temporary path
+ * @type {string}
+ */
+TempPath: string, 
+/**
+ * The temporary path name
+ * @type {string}
+ */
+TempPathName: string, 
+/**
+ * The temporary path host
+ * @type {string}
+ */
+TempPathHost: string, 
+/**
+ * The unique identifier of the runner
+ * @type {string}
+ */
+RunnerUid: string, 
+/**
+ * The working file
+ * @type {string}
+ */
+WorkingFile: string, 
+/**
+ * The working file name
+ * @type {string}
+ */
+WorkingFileName: string, 
+/**
+ * The size of the working file
+ * @type {number}
+ */
+WorkingFileSize: number, 
+/**
+ * The relative file path
+ * @type {string}
+ */
+RelativeFile: string, 
+/**
+ * If this flow is running against a directory, if false then it's running against a file
+ * @type {boolean}
+ */
+IsDirectory: boolean, 
+/**
+ * A flag indicating if it's running in a Docker environment
+ * @type {boolean}
+ */
+IsDocker: boolean, 
+/**
+ * A flag indicating if it's running on a Windows OS
+ * @type {boolean}
+ */
+IsWindows: boolean, 
+/**
+ * A flag indicating if it's running on a Linux OS
+ * @type {boolean}
+ */
+IsLinux: boolean, 
+/**
+ * A flag indicating if it's running on a macOS
+ * @type {boolean}
+ */
+IsMac: boolean, 
+/**
+ * A flag indicating if it's running on an ARM architecture
+ * @type {boolean}
+ */
+IsArm: boolean, 
+/**
+ * The library path
+ * @type {string}
+ */
+LibraryPath: string,
+/**
+ * Execute a process and capture the output
+ * you can use arguments for a string argument list, or argumentList which is an string array and will escape the arguments for you correctly
+ * timeout is optional, number of seconds to wait before killing the process
+ * @param {{
+ *   command: string,
+ *   arguments: string,
+ *   argumentList: string[],
+ *   timeout: number,
+ *   workingDirectory: string
+ * }} args - The arguments and options for the command execution
+ * @returns {{
+ *   completed: boolean,
+ *   exitCode: number,
+ *   output: string,
+ *   standardOutput: string,
+ *   standardError: string
+ * }} - The result of the command execution
+ */
+Execute: function (args:{{ command: string, arguments: string, argumentList: string[], timeout: number, workingDirectory: string}}):
+    {{ completed: boolean, exitCode: number, output: string, standardOutput: string, standardError: string }} { }, 
+}`,
             "javascript"
         );
         
@@ -79,11 +343,7 @@ window.ffCode = {
    Extension: string
 };`;
         monaco.languages.typescript.javascriptDefaults.addExtraLib(funFileInfo, 'ff.funFileInfo');
-        
-        monaco.editor.createModel(
-            "const Sleep = function(milliseconds)",
-            "javascript"
-        );
+
 
         if (variables) {
             var actualVaraibles = {};

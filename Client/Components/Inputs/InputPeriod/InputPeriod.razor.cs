@@ -8,14 +8,26 @@ namespace FileFlows.Client.Components.Inputs;
 /// </summary>
 public partial class InputPeriod : Input<int>
 {
+    /// <inheritdoc />
     public override bool Focus() => FocusUid();
 
-    private bool UpdatingValue = false;
-
+    /// <summary>
+    /// Gets or sets the selected period
+    /// </summary>
     private int Period { get; set; }
 
+    /// <summary>
+    /// Gets or sets the number value
+    /// </summary>
     private int Number { get; set; }
 
+    /// <summary>
+    /// Gets or sets if the weeks is shown
+    /// </summary>
+    [Parameter]
+    public bool ShowWeeks { get; set; } = true;
+    
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -24,7 +36,8 @@ public partial class InputPeriod : Input<int>
 
         if (Value > 0)
         {
-            foreach (int p in new [] { 10080, 1440, 60, 1})
+            var ranges = ShowWeeks ? new[] { 10080, 1440, 60, 1 } : new[] { 1440, 60, 1 };
+            foreach (int p in ranges)
             {
                 if (Value % p == 0)
                 {
@@ -44,7 +57,11 @@ public partial class InputPeriod : Input<int>
     }
     
 
-    private async Task ChangeValue(ChangeEventArgs e)
+    /// <summary>
+    /// Changes the value
+    /// </summary>
+    /// <param name="e">the change event</param>
+    private void ChangeValue(ChangeEventArgs e)
     {
         if (int.TryParse(e.Value?.ToString() ?? "", out int value) == false)
             return;
@@ -61,11 +78,14 @@ public partial class InputPeriod : Input<int>
         else if (value < 1)
             value = 1;
         this.Number = value;
-        UpdatingValue = true;
         this.Value = this.Number * this.Period;
         this.ClearError();
     }
 
+    /// <summary>
+    /// Event called when a key is pressed
+    /// </summary>
+    /// <param name="e">the keyboard event</param>
     private async Task OnKeyDown(KeyboardEventArgs e)
     {
         if (e.Code == "Enter")
@@ -74,24 +94,19 @@ public partial class InputPeriod : Input<int>
             await OnClose.InvokeAsync();
     }
     
-    
+    /// <summary>
+    /// Event when the period changed
+    /// </summary>
+    /// <param name="args">the change event</param>
     private void PeriodSelectionChanged(ChangeEventArgs args)
     {
-        UpdatingValue = true;
-        try
+        if (int.TryParse(args?.Value?.ToString(), out int index))
         {
-            if (int.TryParse(args?.Value?.ToString(), out int index))
-            {
-                Period = index;
-                Value = Number * Period;
-            }
-            else
-                Logger.Instance.DLog("Unable to find index of: ",  args?.Value);
+            Period = index;
+            Value = Number * Period;
         }
-        finally
-        {
-            UpdatingValue = false;
-        }
+        else
+            Logger.Instance.DLog("Unable to find index of: ",  args?.Value);
     }
 
 }

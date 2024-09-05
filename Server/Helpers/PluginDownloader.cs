@@ -8,64 +8,35 @@ namespace FileFlows.Server.Helpers;
 /// </summary>
 public class PluginDownloader
 {
-    private List<string> Repositories;
-    
     /// <summary>
     /// Constructs a plugin download
     /// </summary>
-    /// <param name="repositories">the available repositories to download a plugin from</param>
-    public PluginDownloader(List<string> repositories)
+    public PluginDownloader()
     {
-        this.Repositories = repositories;
     }
     
 
     /// <summary>
     /// Downloads a plugin binary from the repository
     /// </summary>
+    /// <param name="version">the version of the plugin to download</param>
     /// <param name="packageName">the package name of the plugin to download</param>
     /// <returns>the download result</returns>
-    internal (bool Success, byte[] Data) Download(string packageName)
+    internal async Task<(bool Success, byte[] Data)> Download(Version version, string packageName)
     {
         Logger.Instance.ILog("Downloading Plugin Package: " + packageName);
-        Version ffVersion = Globals.Version;
-        foreach (string repo in Repositories)
+        Version ffVersion = new Version(Globals.Version);
+        try
         {
-            try
-            {
-                var plugins = HttpHelper.Get<IEnumerable<PluginPackageInfo>>(repo + "?rand=" + DateTime.Now.ToFileTime()).Result;
-                if (plugins.Success == false)
-                {
-                    Logger.Instance.ILog("Plugin repository failed to download.");
-                    continue;
-                }
-
-                var plugin = plugins?.Data?.Where(x => x.Package.Replace(".ffplugin", string.Empty).ToLower() == packageName.Replace(".ffplugin", string.Empty).ToLower())?.FirstOrDefault();
-                if (plugin == null)
-                {
-                    Logger.Instance.ILog("Plugin not found in repository: " + packageName);
-                    continue;
-                }
-
-                if(string.IsNullOrWhiteSpace(plugin.MinimumVersion) == false)
-                {
-                    if (ffVersion < Version.Parse(plugin.MinimumVersion))
-                        continue;
-                }
-
-                string url = repo + "/download/" + packageName;
-                if (url.EndsWith(".ffplugin") == false)
-                    url += ".ffplugin";
-                Logger.Instance.ILog("Downloading plugin from: " + url);
-                var dlResult = HttpHelper.Get<byte[]>(url).Result;
-                if (dlResult.Success)
-                    return (true, dlResult.Data);
-                throw new Exception(dlResult.Body);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.WLog("Failed downloading plugin: " + ex.Message);
-            }
+            string url = Globals.PluginBaseUrl + "/download/" + packageName + $"?version={version}&rand=" + DateTime.UtcNow.ToFileTime();
+            var dlResult = await HttpHelper.Get<byte[]>(url);
+            if (dlResult.Success)
+                return (true, dlResult.Data ?? new byte[] { });
+            throw new Exception(dlResult.Body?.EmptyAsNull() ?? "Unexpected error");
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.WLog($"Failed downloading plugin '{packageName}': " + ex.Message);
         }
         return (false, new byte[0]);
     }

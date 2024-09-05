@@ -27,12 +27,12 @@ public class ConfigCleaner: Worker
             max = Math.Max(revision, max);
         }
 
-        int current = FlowWorker.CurrentConfigurationRevision;
+        int current = FlowWorker.CurrentConfig?.Revision ?? 0;
         foreach (var kv in dirs)
         {
             if (kv.Key == max || kv.Key == current)
                 continue;
-            if (current > 0 && kv.Value.CreationTime > DateTime.Now.AddHours(-12))
+            if (current > 0 && kv.Value.CreationTimeUtc > DateTime.UtcNow.AddHours(-12))
                 continue; // dont delete, something could still be using this
             try
             {

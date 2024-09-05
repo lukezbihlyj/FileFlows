@@ -5,9 +5,10 @@
     overflow: hidden;
     max-height: 100vh;
     position: relative;
-    &:not(.fullwidth){        
-        max-width:1400px;
-    }
+
+    //&:not(.fullwidth){        
+    //    max-width:1400px;
+    //}
 
     &.flex .content {
         display:flex;
@@ -17,7 +18,8 @@
 
 
 @media screen and (min-width: 850px) {  
-    .top-row {        
+    .top-row {
+        width:100%;
         height: 3.5rem;
         display: flex !important;
         align-items: center;
@@ -41,14 +43,17 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         display: flex;
+        font-size: 1.5rem;
+        padding: 0.5rem 0 0 0.5rem;
     }
     .other {
         white-space:nowrap;
         margin-left:1rem;
         margin-right: -0.5rem;
         ::deep button {
-            width:7rem;
-            padding:unset;
+            min-width:7rem;
+            width:fit-content;
+            padding: 0 0.75rem;
         }
         ::deep a {
             width: 7rem;
@@ -74,6 +79,10 @@
         margin-top: .25rem;
         color:var(--accent);
     }
+}
+
+.page-view .top-row .other {
+    margin-right: 2.5rem;
 }
 
 .content {

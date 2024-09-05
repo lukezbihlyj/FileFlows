@@ -5,6 +5,20 @@
     flex-grow:1;
 }
 
+.flow-tabs.contain-tabs {
+    max-height: 100%;
+    overflow: auto;
+    height:100%;
+
+    .flow-tabs-content {
+        overflow: auto;
+        height:100%;
+    }
+    .flow-tab-buttons {
+        margin-bottom:0.5rem;
+    }
+}
+
 .flow-tab-buttons {
     display: flex;
     flex-direction: row;
@@ -20,29 +34,57 @@
     }
 }
 
+.title-only-on-active
+{
+    padding-right: 0.5rem;
+    .tab-button {
+        width: unset !important;
+        flex-grow: 1;
+        &:not(.active) {
+            i {
+                margin:0;
+            }
+        }
+    }
+}
+
 .tab-button {
     width: 8rem;
     overflow-x: hidden;
     text-overflow: ellipsis;
     border-color: var(--input-background) !important;
-    
-    position:relative;
-    bottom:-1px;
-    margin-right:0.25rem;
 
-    &:hover {
-        border-color: var(--accent) !important;
+    position: relative;
+    bottom: -1px;
+    margin-right: 0.25rem;
+
+    i {
+        margin: 0 0.5rem;
     }
 
     &.active {
         border-color: var(--accent) !important;
-        border-bottom:1px solid var(--base) !important;
+        border-bottom: 1px solid var(--base) !important;
     }
-    &:not(.active){
-        font-size:0.7rem !important;
+
+    &:not(.active) {
+        font-size: 0.7rem !important;
+    }
+}
+.flow-tabs:not(.disabled) {
+    .tab-button:hover {
+        border-color: var(--accent) !important;
+    }
+}
+.flow-tabs.disabled {
+    .tab-button.active:hover {
+        box-shadow: none !important;
+        background-image: none !important;    
+        cursor:default;
     }
 }
 
 .flow-tabs-content {
     flex-grow: 1;
 }
+

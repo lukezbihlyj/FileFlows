@@ -1,16 +1,15 @@
-using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 using System.Diagnostics;
-using System.Reactive.Linq;
-using FileFlows.Node.Workers;
-using FileFlows.Server.Helpers;
+using FileFlows.Server.Authentication;
+using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 using FileFlows.Server.Workers;
-using FileFlows.ServerShared.Models;
-using FileFlows.ServerShared.Workers;
+using FileFlows.ServerShared.Models.StatisticModels;
 using FileFlows.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using FileHelper = FileFlows.ServerShared.Helpers.FileHelper;
+using LibraryFileService = FileFlows.Server.Services.LibraryFileService;
+using SettingsService = FileFlows.Server.Services.SettingsService;
+using StatisticService = FileFlows.Server.Services.StatisticService;
 
 namespace FileFlows.Server.Controllers;
 
@@ -18,81 +17,53 @@ namespace FileFlows.Server.Controllers;
 /// System Controller
 /// </summary>
 [Route("/api/system")]
-public class SystemController:Controller
+[FileFlowsAuthorize]
+public class SystemController:BaseController
 {
     /// <summary>
-    /// Gets the version of FileFlows
+    /// Opens a URL in the host OS
     /// </summary>
-    [HttpGet("version")]
-    public string GetVersion() => Globals.Version.ToString();
-
-    /// <summary>
-    /// Gets the version an node update available
-    /// </summary>
-    /// <returns>the version an node update available</returns>
-    [HttpGet("node-update-version")]
-    public string GetNodeUpdateVersion()
+    /// <param name="url">the URL to open</param>
+    [HttpPost("open-url")]
+    public void OpenUrl([FromQuery]string url)
     {
-        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
-            return string.Empty;
-        return Globals.Version.ToString();
+        if (string.IsNullOrWhiteSpace(url))
+            return;
+        if (url.ToLowerInvariant()?.StartsWith("http") != true)
+            return; // dont allow
+        if (Application.UsingWebView == false)
+            return; // only open if using WebView
+        
+        if (OperatingSystem.IsWindows())
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        else if (OperatingSystem.IsMacOS())
+            Process.Start("open", url);
+        else
+            Process.Start(new ProcessStartInfo("xdg-open", url));
     }
     
-    /// <summary>
-    /// Gets an node update available
-    /// </summary>
-    /// <param name="version">the current version of the node</param>
-    /// <param name="windows">if the update is for a windows system</param>
-    /// <returns>if there is a node update available, returns the update</returns>
-    [HttpGet("node-updater-available")]
-    public IActionResult GetNodeUpdater([FromQuery]string version, [FromQuery] bool windows)
-    {
-        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
-            return new ContentResult();
-        if (string.IsNullOrWhiteSpace(version))
-            return new ContentResult();
-        var current = Globals.Version;
-        var node =  new Version(version);
-        if (node >= current)
-            return new ContentResult();
-
-        return GetNodeUpdater(windows);
-    }
-
-    /// <summary>
-    /// Gets the node updater
-    /// </summary>
-    /// <param name="windows">if the update is for a windows system</param>
-    /// <returns>the node updater</returns>
-    [HttpGet("node-updater")]
-    public IActionResult GetNodeUpdater([FromQuery] bool windows)
-    {
-        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
-            return new ContentResult();
-        
-        string updateFile = Path.Combine(DirectoryHelper.BaseDirectory, "Server", "Nodes",
-            $"FileFlows-Node-{Globals.Version}.zip");
-        if (System.IO.File.Exists(updateFile) == false)
-            return new ContentResult();
-
-        return File(System.IO.File.ReadAllBytes(updateFile), "application/zip");
-    }
-
     /// <summary>
     /// Pauses the system
     /// </summary>
     /// <param name="duration">duration in minutes to pause for, any number less than 1 will resume</param>
     [HttpPost("pause")]
+    [FileFlowsAuthorize(UserRole.PauseProcessing)]
     public async Task Pause([FromQuery] int duration)
     {
-        var controller = new SettingsController();
-        var settings = await controller.Get();
+        var service = (SettingsService)ServiceLoader.Load<ISettingsService>();
+        var settings = await service.Get();
         if (duration < 1)
+        {
             settings.PausedUntil = DateTime.MinValue;
+            ClientServiceManager.Instance.SystemPaused(0);
+        }
         else
-            settings.PausedUntil = DateTime.Now.AddMinutes(duration);
-        
-        await controller.Save(settings);
+        {
+            settings.PausedUntil = DateTime.UtcNow.AddMinutes(duration);
+            ClientServiceManager.Instance.SystemPaused(duration);
+        }
+
+        await service.Save(settings, await GetAuditDetails());
     }
 
 
@@ -109,7 +80,7 @@ public class SystemController:Controller
         //info.MemoryUsage = proc.PrivateMemorySize64;
         info.MemoryUsage = GC.GetTotalMemory(true);
         info.CpuUsage = await GetCpuPercentage();
-        var settings = await new SettingsController().Get();
+        var settings = await ServiceLoader.Load<ISettingsService>().Get();
         info.IsPaused = settings.IsPaused;
         info.PausedUntil = settings.PausedUntil;
         return info;
@@ -123,6 +94,8 @@ public class SystemController:Controller
     [HttpGet("history-data/cpu")]
     public IEnumerable<SystemValue<float>> GetCpuData([FromQuery] DateTime? since = null)
     {
+        if (SystemMonitor.Instance == null)
+            return new SystemValue<float>[] { };
         if (since != null)
             return SystemMonitor.Instance.CpuUsage.Where(x => x.Time > since);
         var data = SystemMonitor.Instance.CpuUsage;
@@ -137,6 +110,8 @@ public class SystemController:Controller
     [HttpGet("history-data/memory")]
     public IEnumerable<SystemValue<float>> GetMemoryData([FromQuery] DateTime? since = null)
     {
+        if (SystemMonitor.Instance == null)
+            return new SystemValue<float>[] { };
         if (since != null)
             return SystemMonitor.Instance.MemoryUsage.Where(x => x.Time > since);
         var data = SystemMonitor.Instance.MemoryUsage;
@@ -151,6 +126,8 @@ public class SystemController:Controller
     [HttpGet("history-data/database-connections")]
     public IEnumerable<SystemValue<float>> GetOpenDatabaseConnectionsData([FromQuery] DateTime? since = null)
     {
+        if (SystemMonitor.Instance == null)
+            return new SystemValue<float>[] { };
         if (since != null)
             return SystemMonitor.Instance.OpenDatabaseConnections.Where(x => x.Time > since);
         var data = SystemMonitor.Instance.OpenDatabaseConnections;
@@ -165,6 +142,8 @@ public class SystemController:Controller
     [HttpGet("history-data/temp-storage")]
     public IEnumerable<SystemValue<long>> GetTempStorageData([FromQuery] DateTime? since = null)
     {
+        if (SystemMonitor.Instance == null)
+            return new SystemValue<long>[] { };
         if (since != null)
             return SystemMonitor.Instance.TempStorageUsage.Where(x => x.Time > since);
         var data = SystemMonitor.Instance.TempStorageUsage;
@@ -179,6 +158,8 @@ public class SystemController:Controller
     [HttpGet("history-data/log-storage")]
     public IEnumerable<SystemValue<long>> GetLoggingStorageData([FromQuery] DateTime? since = null)
     {
+        if (SystemMonitor.Instance == null)
+            return new SystemValue<long>[] { };
         if (since != null)
             return SystemMonitor.Instance.LogStorageUsage.Where(x => x.Time > since);
         var data = SystemMonitor.Instance.LogStorageUsage;
@@ -188,7 +169,7 @@ public class SystemController:Controller
     private IEnumerable<SystemValue<T>> EaseData<T>(IEnumerable<SystemValue<T>> data)
     {
         List<SystemValue<T>> eased = new();
-        var dtCutoff = DateTime.Now.AddMinutes(-5);
+        var dtCutoff = DateTime.UtcNow.AddMinutes(-5);
         var recent = data.Where(x => x.Time > dtCutoff);
         var older = data.Where(x => x.Time <= dtCutoff)
             .GroupBy(x => new DateTime(x.Time.Year, x.Time.Month, x.Time.Day, x.Time.Hour, x.Time.Minute, 0))
@@ -213,7 +194,7 @@ public class SystemController:Controller
     [HttpGet("history-data/library-processing-time")]
     public async Task<object> GetLibraryProcessingTime()
     {
-        var data = (await new LibraryFileService().GetLibraryProcessingTimes()).ToArray();
+        var data = (await ServiceLoader.Load<LibraryFileService>().GetLibraryProcessingTimes()).ToArray();
         var dict = data.Select(x => new
         {
             x.Library,
@@ -240,58 +221,45 @@ public class SystemController:Controller
     /// </summary>
     /// <returns></returns>
     [HttpGet("history-data/processing-heatmap")]
-    public async Task<object> GetProcessingHeatMap()
-    {
-        var data = await new LibraryFileService().GetHourProcessingTotals();
-        var results = data.Select((x, index) => new
-        {
-            name = ((DayOfWeek)index).ToString()[..3],
-            data = x.Select(y => new
-            {
-                x = y.Key == 0 ? "12am" : y.Key == 12 ? "12pm" : y.Key > 12 ? (y.Key - 12) + "pm" : y.Key + "am",
-                y = y.Value
-            })
-        }).OrderBy(x =>
-            // arrange the data so its shows monday -> sunday visually
-            x.name == "Mon" ? 7 :
-            x.name == "Tue" ? 6 :
-            x.name == "Wed" ? 5 :
-            x.name == "Thu" ? 4 :
-            x.name == "Fri" ? 3 :
-            x.name == "Sat" ? 2 :
-            1
-        );
-        return results;
-    }
+    public List<HeatmapData> GetProcessingHeatMap()
+        => ServiceLoader.Load<StatisticService>().GetHeatMap(Globals.STAT_PROCESSING_TIMES_HEATMAP);
 
     private async Task<float> GetCpuPercentage()
     {
-        var startTime = DateTime.UtcNow;
-        var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-        var stopWatch = new Stopwatch();
-        stopWatch.Start();
+        try
+        {
+            var startTime = DateTime.UtcNow;
+            var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
 
-        await Task.Delay(100);
+            await Task.Delay(100);
 
-        stopWatch.Stop();
-        var endTime = DateTime.UtcNow;
-        var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+            stopWatch.Stop();
+            var endTime = DateTime.UtcNow;
+            var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
 
-        var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-        var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-        var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
+            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
 
-        var cpuUsagePercentage = (float)(cpuUsageTotal * 100);
-        return cpuUsagePercentage;
+            var cpuUsagePercentage = (float)(cpuUsageTotal * 100);
+            return cpuUsagePercentage;
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
     }
 
     /// <summary>
     /// Restarts FileFlows server
     /// </summary>
     [HttpPost("restart")]
+    [FileFlowsAuthorize(UserRole.Admin)]
     public void Restart()
     {
-        if (Program.Docker == false)
+        if (Application.Docker == false)
         {
             string script = Path.Combine(DirectoryHelper.BaseDirectory, "Server",
                 "restart." + (Globals.IsWindows ? "bat" : "sh"));
@@ -311,15 +279,5 @@ public class SystemController:Controller
         // docker is easy, just stop it and it should auto restart
         WorkerManager.StopWorkers();
         Environment.Exit(99);
-    }
-
-    /// <summary>
-    /// Records the node system statistics to the server
-    /// </summary>
-    /// <param name="args">the node system statistics</param>
-    [HttpPost("node-system-statistics")]
-    public void RecordNodeSystemStatistics([FromBody] NodeSystemStatistics args)
-    {
-        SystemMonitor.Instance.Record(args);
     }
 }

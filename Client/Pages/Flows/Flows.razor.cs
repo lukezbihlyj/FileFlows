@@ -1,25 +1,19 @@
-using System.Reflection;
 using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components;
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Dialogs;
-using FileFlows.Client.Components.Inputs;
-using Microsoft.AspNetCore.Components.Rendering;
-using System.Text.RegularExpressions;
-using FileFlows.Plugin;
 using Microsoft.JSInterop;
-using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using ffFlow = FileFlows.Shared.Models.Flow;
 
 namespace FileFlows.Client.Pages;
 
 public partial class Flows : ListPage<Guid, FlowListModel>
 {
-    [Inject] NavigationManager NavigationManager { get; set; }
-    [Inject] public IJSRuntime jsRuntime { get; set; }
-
-    private NewFlowEditor AddEditor;
+    /// <summary>
+    /// Gets or sets the JavaScript runtime
+    /// </summary>
+    [Inject] private IJSRuntime jsRuntime { get; set; }
+    
     private string TableIdentifier => "Flows-" + this.SelectedType;
 
     public override string ApiUrl => "/api/flow";
@@ -27,59 +21,29 @@ public partial class Flows : ListPage<Guid, FlowListModel>
     private FlowSkyBox<FlowType> Skybox;
 
     private List<FlowListModel> DataStandard = new();
+    private List<FlowListModel> DataSubFlows = new();
     private List<FlowListModel> DataFailure = new();
     private FlowType SelectedType = FlowType.Standard;
 
-    #if(DEBUG)
-    private bool DEBUG = true;
-    #else
-    private bool DEBUG = false;
-    #endif
-
     public override string FetchUrl => ApiUrl + "/list-all";
+    private string lblFailureFlowDescription, lblDefault, lblReadOnly, lblInUse;
 
-
-    async Task Enable(bool enabled, ffFlow flow)
+    protected override void OnInitialized()
     {
-        Blocker.Show();
-        try
-        {
-            await HttpHelper.Put<ffFlow>($"{ApiUrl}/state/{flow.Uid}?enable={enabled}");
-        }
-        finally
-        {
-            Blocker.Hide();
-        }
+        base.OnInitialized();
+        lblFailureFlowDescription = Translater.Instant("Pages.Flows.Messages.FailureFlowDescription");
+        lblDefault = Translater.Instant("Labels.Default");
+        lblReadOnly = Translater.Instant("Labels.ReadOnly");
+        lblInUse = Translater.Instant("Labels.InUse");
     }
 
-    private async void Add()
-    {
-        if (AddEditor == null)
-        {
-            NavigationManager.NavigateTo("flows/" + Guid.Empty);
-            return;
-        }
-        var newFlow = await AddEditor.Show(this.SelectedType);
-        if (newFlow == null)
-            return; // was canceled
-        
-        if (newFlow.Uid != Guid.Empty)
-        {
-            if ((App.Instance.FileFlowsSystem.ConfigurationStatus & ConfigurationStatus.Flows) != ConfigurationStatus.Flows)
-            {
-                // refresh the app configuration status
-                await App.Instance.LoadAppInfo();
-            }
-            // was saved, refresh list
-            await this.Refresh();
-        }
-        else
-        {
-            // edit it
-            App.Instance.NewFlowTemplate = newFlow;
-            NavigationManager.NavigateTo("flows/" + Guid.Empty);
-        }
-    }
+    /// <inheritdoc />
+    protected override string GetAuditTypeName()
+        => typeof(ffFlow).FullName;
+
+
+    private void Add()
+        => NavigationManager.NavigateTo("flows/" + Guid.Empty);
 
     public override async Task<bool> Edit(FlowListModel item)
     {
@@ -97,12 +61,32 @@ public partial class Flows : ListPage<Guid, FlowListModel>
 #if (DEBUG)
         url = "http://localhost:6868" + url;
 #endif
-        await jsRuntime.InvokeVoidAsync("ff.downloadFile", new object[] { url, items.Count() == 1 ? items[0].Name + ".json" : "Flows.zip" });
+
+        if (items.Count == 1)
+        {
+            var result = await HttpHelper.Get<string>(url);
+            if (result.Success == false)
+            {
+                Toast.ShowError(Translater.Instant("Pages.Flows.Messages.FailedToExport"));
+                return;
+            }
+
+            await jsRuntime.InvokeVoidAsync("ff.saveTextAsFile", items[0].Name + ".json", result.Body);
+        }
+        else
+        {
+            var result = await HttpHelper.Get<byte[]>(url);
+            if (result.Success == false)
+            {
+                Toast.ShowError(Translater.Instant("Pages.Flows.Messages.FailedToExport"));
+                return;
+            }
+            await jsRuntime.InvokeVoidAsync("ff.saveByteArrayAsFile", "Flows.zip", result.Data);
+        }
     }
 
     private async Task Import()
     {
-#if (!DEMO)
         var idResult = await ImportDialog.Show();
         string json = idResult.content;
         if (string.IsNullOrEmpty(json))
@@ -122,31 +106,10 @@ public partial class Flows : ListPage<Guid, FlowListModel>
         {
             Blocker.Hide();
         }
-#endif
     }
 
-    private async Task Template()
-    {
-#if (DEBUG)
-
-        var item = Table.GetSelected()?.FirstOrDefault();
-        if (item == null)
-            return;
-        string url = $"/api/flow/template/{item.Uid}";
-        url = "http://localhost:6868" + url;
-        await jsRuntime.InvokeVoidAsync("ff.downloadFile", new object[] { url, item.Name + ".json" });
-#endif
-    }
-
-    private class TemplateSelectParameters
-    {
-        public List<Plugin.ListOption> Options { get; set; }
-    }
-    
-    
     private async Task Duplicate()
     {
-#if (!DEMO)
         Blocker.Show();
         try
         {
@@ -173,7 +136,6 @@ public partial class Flows : ListPage<Guid, FlowListModel>
         {
             Blocker.Hide();
         }
-#endif
     }
 
     protected override Task PostDelete() => Refresh();
@@ -188,23 +150,31 @@ public partial class Flows : ListPage<Guid, FlowListModel>
     {
         this.DataFailure = this.Data.Where(x => x.Type == FlowType.Failure).ToList();
         this.DataStandard = this.Data.Where(x => x.Type == FlowType.Standard).ToList();
+        this.DataSubFlows = this.Data.Where(x => x.Type == FlowType.SubFlow).ToList();
         this.Skybox.SetItems(new List<FlowSkyBoxItem<FlowType>>()
         {
             new ()
             {
-                Name = "Standard Flows",
+                Name = Translater.Instant("Pages.Flows.Labels.StandardFlows"),
                 Icon = "fas fa-sitemap",
                 Count = this.DataStandard.Count,
                 Value = FlowType.Standard
             },
             new ()
             {
-                Name = "Failure Flows",
+                Name = Translater.Instant("Pages.Flows.Labels.SubFlows"),
+                Icon = "fas fa-subway",
+                Count = this.DataSubFlows.Count,
+                Value = FlowType.SubFlow
+            },
+            new ()
+            {
+                Name = Translater.Instant("Pages.Flows.Labels.FailureFlows"),
                 Icon = "fas fa-exclamation-circle",
                 Count = this.DataFailure.Count,
                 Value = FlowType.Failure
             }
-        }, this.SelectedType);
+        }.Where(x => x != null).ToList(), this.SelectedType);
     }
 
     private void SetSelected(FlowSkyBoxItem<FlowType> item)

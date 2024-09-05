@@ -1,10 +1,6 @@
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using BlazorMonaco;
 using Microsoft.JSInterop;
-using System.Collections.Generic;
-using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace FileFlows.Client.Components.Inputs;
@@ -15,24 +11,30 @@ public partial class InputCode : Input<string>, IDisposable
     private string InitialValue;
     
     private MonacoEditor CodeEditor { get; set; }
-
-    private Dictionary<string, object> _Variables = new ();
     
-    [Parameter]
-    public Dictionary<string, object> Variables
-    {
-        get => _Variables;
-        set { _Variables = value ?? new Dictionary<string, object>(); }
-    }
+    /// <summary>
+    /// Gets or sets the language the editor is editing
+    /// </summary>
+    [Parameter] public string Language { get; set; }
 
+    [Parameter] public Dictionary<string, object> Variables { get; set; } = new();
+    
+    private IJSObjectReference jsInputCode;
+    
     private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
     {
+        var language = Language?.EmptyAsNull() ?? "javascript";
+        if (language?.ToLowerInvariant() == "js")
+            language = "javascript";
+        else if (language?.ToLowerInvariant() == "sh")
+            language = "shell";
+        
         return new StandaloneEditorConstructionOptions
         {
             AutomaticLayout = true,
             Minimap = new EditorMinimapOptions { Enabled = false },
             Theme = "vs-dark",
-            Language = "javascript",
+            Language = language,
             Value = this.Value?.Trim() ?? "",
             ReadOnly = this.Editor.ReadOnly
         };
@@ -42,8 +44,19 @@ public partial class InputCode : Input<string>, IDisposable
     {
         _ = Task.Run(async () =>
         {
-            var shared = await HttpHelper.Get<Script[]>("/api/script/all-by-type/shared");
-            await jsRuntime.InvokeVoidAsync("ffCode.initModel", Variables, shared.Success ? shared.Data : null);
+            // var shared = await HttpHelper.Get<Dictionary<string, string>>("/api/script/basic-list?type=Shared");
+            
+            var jsObjectReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", $"./Components/Inputs/InputCode/InputCode.razor.js?v={Globals.Version}");
+            jsInputCode = await jsObjectReference.InvokeAsync<IJSObjectReference>("createInputCode", new object[] { DotNetObjectReference.Create(this) });
+            if (Language == "shell")
+            {
+                await jsInputCode.InvokeVoidAsync("shellEditor");
+            }
+            else
+            {
+                await jsInputCode.InvokeVoidAsync("jsEditor", Variables,
+                    null); //, shared.Success ? shared.Data : null);
+            }
         });
         InitialValue = this.Value;
     }
@@ -54,8 +67,7 @@ public partial class InputCode : Input<string>, IDisposable
         this.Editor.OnCancel += Editor_OnCancel;
         this.Editor.OnClosed += Editor_Closed;
         
-        var dotNetObjRef = DotNetObjectReference.Create(this);
-        jsRuntime.InvokeVoidAsync("ff.codeCaptureSave", new object[] { dotNetObjRef });
+        jsInputCode.InvokeVoidAsync("codeCaptureSave");
         base.OnInitialized();
     }
 
@@ -83,9 +95,9 @@ public partial class InputCode : Input<string>, IDisposable
     private async Task<bool> Editor_OnCancel()
     {
         this.Updating = true;
-        this.Value = await CodeEditor.GetValue();
+        this.Value = await CodeEditor?.GetValue();
         this.Updating = false;
-        if (this.InitialValue != this.Value)
+        if (this.InitialValue?.Trim()?.EmptyAsNull() != this.Value?.Trim()?.EmptyAsNull())
         {
             bool cancel = await Dialogs.Confirm.Show(Translater.Instant("Labels.Confirm"), Translater.Instant("Labels.CancelMessage"));
             if (cancel == false)
@@ -134,9 +146,11 @@ public partial class InputCode : Input<string>, IDisposable
         }
     }
 
-    public void Dispose()
+    /// <inheritdoc />
+    public override void Dispose()
     {
-        jsRuntime.InvokeVoidAsync("ff.codeUncaptureSave");
+        base.Dispose();
+        jsInputCode.InvokeVoidAsync("codeUncaptureSave");
         if (this.Editor != null)
         {
             this.Editor.OnCancel -= Editor_OnCancel;

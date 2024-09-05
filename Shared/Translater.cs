@@ -1,13 +1,8 @@
-namespace FileFlows.Shared;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Jeffijoe.MessageFormat;
-using FileFlows.Plugin;
 using System.Text.Json;
 using System.Dynamic;
+
+namespace FileFlows.Shared;
 
 /// <summary>
 /// Translater is responsible for language translations
@@ -15,8 +10,8 @@ using System.Dynamic;
 public class Translater
 {
     private static MessageFormatter Formatter;
-    private static Dictionary<string, string> Language { get; set; } = new Dictionary<string, string>();
-    private static Regex rgxNeedsTranslating = new Regex(@"^([\w\d_\-]+\.)+[\w\d_\-]+$");
+    private static Dictionary<string, string> Language { get; set; } = new ();
+    private static Regex rgxNeedsTranslating = new (@"^([\w\d_\-]+\.)+[\w\d_\-]+$");
 
 
     /// <summary>
@@ -111,12 +106,12 @@ public class Translater
 
     private static string Lookup(string[] possibleKeys, bool supressWarnings = false)
     {
-        foreach (string key in possibleKeys)
+        foreach (var key in possibleKeys)
         {
-            if (String.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(key))
                 continue;
-            if (Language.ContainsKey(key))
-                return Language[key];
+            if (Language.TryGetValue(key, out var lookup))
+                return lookup;
         }
         if (possibleKeys[0].EndsWith("-Help") || possibleKeys[0].EndsWith("-Placeholder") || possibleKeys[0].EndsWith("-Suffix") || possibleKeys[0].EndsWith("-Prefix") || possibleKeys[0].EndsWith(".Description"))
             return "";
@@ -125,9 +120,9 @@ public class Translater
             return Language["Labels.Name"];
 
         string result = possibleKeys?.FirstOrDefault() ?? "";
-        if(supressWarnings == false)
+        if(supressWarnings == false && result.EndsWith(".UID") == false && result.StartsWith("Flow.Parts.") == false)
             Logger.Instance.WLog("Failed to lookup key: " + result);
-        result = result.Substring(result.LastIndexOf(".") + 1);
+        result = result[(result.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
 
         return result;
     }
@@ -137,10 +132,10 @@ public class Translater
     /// </summary>
     /// <param name="key">The string to translate</param>
     /// <param name="parameters">any translation parameters</param>
-    /// <param name="supressWarnings">if translation warnings should be suppressed and not printed to the log</param>
+    /// <param name="suppressWarnings">if translation warnings should be suppressed and not printed to the log</param>
     /// <returns>the translated string</returns>
-    public static string Instant(string key, object parameters = null, bool supressWarnings = false)
-        => Instant(new[] { key }, parameters, supressWarnings: supressWarnings);
+    public static string Instant(string key, object parameters = null, bool suppressWarnings = false)
+        => Instant(new[] { key }, parameters, suppressWarnings: suppressWarnings);
 
     /// <summary>
     /// Attempts to translate from a range of possible keys.
@@ -148,23 +143,25 @@ public class Translater
     /// </summary>
     /// <param name="possibleKeys">a list of possible translation keys</param>
     /// <param name="parameters">any translation parameters</param>
-    /// <param name="supressWarnings">if translation warnings should be suppressed and not printed to the log</param>
+    /// <param name="suppressWarnings">if translation warnings should be suppressed and not printed to the log</param>
     /// <returns>the translated string</returns>
-    public static string Instant(string[] possibleKeys, object parameters = null, bool supressWarnings = false)
+    public static string Instant(string[] possibleKeys, object parameters = null, bool suppressWarnings = false)
     {
         try
         {
-            string msg = Lookup(possibleKeys, supressWarnings: supressWarnings);
+            string msg = Lookup(possibleKeys, supressWarnings: suppressWarnings);
             if (msg == "")
                 return "";
-            if (parameters is IDictionary<string, object?> dict)
+            if (parameters is IDictionary<string, object> dict)
                 return Formatter.FormatMessage(msg, dict);
 
             return Formatter.FormatMessage(msg, parameters ?? new { });
         }
         catch (Exception ex)
         {
-            if(supressWarnings == false)
+            if (possibleKeys[0].EndsWith(".UID"))
+                return "UID";
+            if(suppressWarnings == false)
                 Logger.Instance.WLog("Failed to translating key: " + possibleKeys[0] + ", " + ex.Message);
             return possibleKeys[0];
         }
@@ -188,6 +185,29 @@ public class Translater
         catch (Exception)
         {
             return @default;
+        }
+    }
+
+    /// <summary>
+    /// Checks if a string can be translated
+    /// </summary>
+    /// <param name="key">the key to translate</param>
+    /// <param name="translation">the translation if succeeded</param>
+    /// <returns>true if can translate</returns>
+    public static bool CanTranslate(string key, out string translation)
+    {
+        translation = string.Empty;
+        try
+        {
+            if (Language.ContainsKey(key) == false)
+                return false;
+            string msg = Language[key];
+            translation = Formatter.FormatMessage(msg, new { });
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
         }
     }
 }

@@ -9,4 +9,42 @@
   max-width: unset;
 }
 
-/*# sourceMappingURL=Editor.razor.css.map */
+.hide-fields-scrollbar ::deep .content > .fields {
+  overflow: hidden;
+}
+
+.flow-element-editor-overlay.background-overlay {
+  z-index: 5;
+}
+
+.flow-element-editor {
+  z-index: 6;
+}
+.flow-element-editor.maximised {
+  left: 0;
+  right: 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+}
+.flow-element-editor.maximised .editor {
+  width: 100%;
+}
+.flow-element-editor .editor {
+  position: unset;
+  top: unset;
+  bottom: unset;
+  left: unset;
+  right: unset;
+  height: 100%;
+}
+.flow-element-editor .editor ::deep .input-label i.fa-clipboard {
+  display: none;
+}
+.flow-element-editor .editor ::deep .input-label:hover i.fa-clipboard {
+  display: unset;
+}
+.flow-element-editor .editor ::deep div[x-id=TrackSelectionOptions] {
+  padding-bottom: 1rem;
+  border-bottom: solid 1px var(--input-background);
+}

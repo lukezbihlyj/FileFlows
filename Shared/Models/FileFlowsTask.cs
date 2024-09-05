@@ -8,7 +8,12 @@ public class FileFlowsTask : FileFlowObject
     /// <summary>
     /// Gets or sets the script this task will execute
     /// </summary>
-    public string Script { get; set; }
+    public Guid Script { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this task is enabled
+    /// </summary>
+    public bool Enabled { get; set; }
 
     /// <summary>
     /// Gets or sets the type of task
@@ -41,7 +46,7 @@ public class FileFlowsTaskRun
     /// <summary>
     /// Gets or sets when the run was executed
     /// </summary>
-    public DateTime RunAt { get; set; } = DateTime.Now;
+    public DateTime RunAt { get; set; } = DateTime.UtcNow;
     
     /// <summary>
     /// Gets the execution log
@@ -50,7 +55,7 @@ public class FileFlowsTaskRun
     /// <summary>
     /// Gets the return value
     /// </summary>
-    public object ReturnValue { get; init; }
+    public object? ReturnValue { get; init; }
 
     /// <summary>
     /// Gets if the script ran successfully

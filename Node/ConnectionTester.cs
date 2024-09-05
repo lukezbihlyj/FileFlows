@@ -1,4 +1,5 @@
-﻿using FileFlows.ServerShared.Models;
+﻿using FileFlows.RemoteServices;
+using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Services;
 
 namespace FileFlows.Node;
@@ -24,7 +25,7 @@ public class ConnectionTester
             address = address.Substring(0, address.IndexOf("/"));
 
         // try the common set of ports protocols
-        foreach (int port in new[] { givenPort, 5151, 5000, 80 }.Distinct())
+        foreach (int port in new[] { givenPort, 19200, 5000, 5151, 80 }.Distinct())
         {
             if (port < 0 || port > 65535)
                 continue;
@@ -33,9 +34,9 @@ public class ConnectionTester
             {
                 try
                 {
-                    var nodeService = new NodeService();
+                    var nodeService = ServiceLoader.Load<INodeService>();
                     string actualUrl = protocol + "://" + address + ":" + port + "/";
-                    var result = nodeService.Register(actualUrl, Environment.MachineName, tempPath, runners, enabled, mappings).Result;
+                    var result = nodeService.Register(actualUrl, Environment.MachineName, tempPath, mappings).Result;
                     if (result == null)
                         return (false, "Failed to register");
                     return (true, actualUrl);

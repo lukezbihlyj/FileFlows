@@ -1,19 +1,10 @@
-﻿using System.ComponentModel.Design;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.RegularExpressions;
-using FileFlows.Shared.Models;
+﻿using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Timers;
 using BlazorContextMenu;
 
@@ -49,7 +40,7 @@ public abstract class FlowTableBase: ComponentBase
 
 }
 
-public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropertyChanged
+public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropertyChanged where TItem : notnull
 {
     
     private FlowContextMenu TableContextMenu { get; set; }
@@ -76,10 +67,16 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
     /// Gets or sets the callback for the filter
     /// </summary>
     [Parameter] public EventCallback<FilterEventArgs> OnFilter { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a disable column function 
+    /// </summary>
+    [Parameter] public Func<TItem, bool> DisableColumn { get; set; } 
 
     private int _TotalItems;
 
 
+#pragma warning disable BL0007
     /// <summary>
     /// Gets or sets the total items, needed for the pager to know how many pages to show
     /// </summary>
@@ -96,6 +93,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
             }
         }
     }
+#pragma warning restore BL0007
 
     /// <summary>
     /// Gets or sets callback when the page size is changed
@@ -107,6 +105,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
     /// </summary>
     [Parameter] public EventCallback<int> OnPageChange { get; set; }
 
+#pragma warning disable BL0007
     /// <summary>
     /// Gets or sets the data
     /// </summary>
@@ -118,9 +117,10 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         {
             if (this._Data == value)
                 return;
-            SetData(value);
+            SetData(value, clearSelected: false);
         }
     }
+#pragma warning restore BL0007
 
     /// <summary>
     /// Gets or sets a table identifier for saving/loading the column information
@@ -135,8 +135,6 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
     /// <param name="filter">[Optional] text for the filter</param>
     public void SetData(List<TItem> value, bool clearSelected = true, string filter = null)
     {
-        if(value?.Any() != true)
-            Logger.Instance.ILog("## SetData to nothing!");
         this._FilterText = filter ?? string.Empty;
         this._Data = value ?? new();
         var jsonOptions = new System.Text.Json.JsonSerializerOptions()
@@ -145,7 +143,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         };
         this.DataDictionary = this._Data.ToDictionary(x => x, x =>
         {
-            string result = JsonSerializer.Serialize(x, jsonOptions);  
+            var result = JsonSerializer.Serialize(x, jsonOptions);  
             return result.ToLowerExplicit();
         });
         if(string.IsNullOrEmpty(filter)) // if we pass in filter, the data is already filtered
@@ -159,7 +157,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
             if (x is IUniqueObject<Guid> unique)
                 return unique.Uid as Guid?;
             return null;
-        }).Where(x => x != null).Select(x => x.Value).ToList();
+        }).Where(x => x != null).Select(x => x!.Value).ToList();
         
         var selection = this.Data.Where(x =>
         {
@@ -182,22 +180,28 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
     /// </summary>
     [Parameter] public EventCallback<TItem> DoubleClick { get; set; }
 
+    /// <summary>
+    /// Gets or sets if the head row should be hidden
+    /// </summary>
+    [Parameter] public bool HideHead { get; set; }
     
-    private Dictionary<TItem, string> _DisplayData = new ();
+    /// <summary>
+    /// Gets or sets if the toolbar should be hidden
+    /// </summary>
+    [Parameter] public bool HideToolbar { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if clicking will clear existing selected items
+    /// </summary>
+    [Parameter] public bool DontClearOnClick { get; set; }
+    
+    /// <summary>
+    /// Gets or sets force selections that the user cannot de-select
+    /// </summary>
+    [Parameter] public List<TItem> ForcedSelection { get; set; }
+    
+    private Dictionary<TItem, string> DisplayData { get; set; } = new ();
 
-    private Dictionary<TItem, string> DisplayData
-    {
-        get => _DisplayData;
-        set
-        {
-            if (value?.Any() != true)
-            {
-                Logger.Instance.ILog("Setting display data to nothing! previous : " + _DisplayData?.Count);
-            }
-
-            _DisplayData = value;
-        }
-    }
     private readonly List<TItem> SelectedItems = new ();
 
     private string CurrentFilter = string.Empty;
@@ -223,7 +227,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         }
     }
 
-    private async void FilterTimerOnElapsed(object sender, ElapsedEventArgs e)
+    private async void FilterTimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
         DisposeFilterTimer();
         await FilterData();
@@ -274,6 +278,17 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
     public IEnumerable<TItem> GetSelected() => new List<TItem>(this.SelectedItems); // clone the list, dont give them the actual one
 
     private string FlowTableHotkey;
+
+    /// <summary>
+    /// Sets the selected items
+    /// </summary>
+    /// <param name="items">the items</param>
+    public void SetSelected(IEnumerable<TItem> items)
+    {
+        SelectedItems.Clear();
+        if(items != null)
+            SelectedItems.AddRange(items);
+    }
 
     protected override void OnInitialized()
     {
@@ -333,16 +348,18 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         this.NotifySelectionChanged();
     }
 
-    internal async Task SetSelectedIndex(int index)
+    internal Task SetSelectedIndex(int index)
     {
         if (index < 0 || index > this.Data.Count - 1)
-            return;
+            return Task.CompletedTask;
         var item = this.Data[index];
         if (SelectedItems.Contains(item) == false)
         {
             this.SelectedItems.Add(item);
             this.NotifySelectionChanged();
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -420,11 +437,24 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         await InvokeAsync(this.StateHasChanged);
     }
 
-    private async Task OnClick(MouseEventArgs e, TItem item)
+    private Task OnClick(MouseEventArgs e, TItem item)
     {
         bool changed = false;
         bool wasSelected = this.SelectedItems.Contains(item);
-        if (e.CtrlKey == false && e.ShiftKey == false)
+
+        if (ForcedSelection?.Contains(item) == true)
+            return Task.CompletedTask;
+        
+        if (e.CtrlKey || e.OffsetX < 35 || DontClearOnClick) // FF-1073 - 35 makes it easier to select multiple without unselecting others
+        {
+            // multiselect changing one item
+            if (wasSelected)
+                this.SelectedItems.Remove(item);
+            else
+                this.SelectedItems.Add(item);
+            changed = true;
+        }
+        else if (e.CtrlKey == false && e.ShiftKey == false)
         {
             // just select/unselect this one
             if(wasSelected && this.SelectedItems.Count == 1)
@@ -436,22 +466,8 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
             }
             changed = true;
         }
-        else if (e.CtrlKey)
-        {
-            // multiselect changing one item
-            if (wasSelected)
-            {
-                this.SelectedItems.Remove(item);
-            }
-            else
-            {
-                this.SelectedItems.Add(item);
-            }
-            changed = true;
-        }
         else
         {
-
             if (wasSelected == false)
             {
                 this.SelectedItems.Add(item);
@@ -491,6 +507,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
             this.NotifySelectionChanged();
 
         this.LastSelected = item;
+        return Task.CompletedTask;
     }
 
     private async Task OnDoubleClick(TItem item)
@@ -506,12 +523,14 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         NotifySelectionChanged(SelectedItems.Cast<object>().ToList());
     }
 
-    private async Task FilterKeyDown(KeyboardEventArgs args)
+    private Task FilterKeyDown(KeyboardEventArgs args)
     {
         if(args.Key == "Escape")
         {
             this.FilterText = String.Empty;
         }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -526,7 +545,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
     /// <param name="size">the new size</param>
     public void TriggerPageSizeChange(int size) => _ = OnPageSizeChange.InvokeAsync(size);
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
@@ -541,9 +560,10 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
         return true;
     }
 
-    private async Task ContextButton(FlowTableButton btn)
+    private Task ContextButton(FlowTableButton btn)
     {
         _ = btn.OnClick();
+        return Task.CompletedTask;
     }
 
     private void ContextMenuPreShow()
@@ -583,7 +603,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
             {
                 Icon = "icon fas fa-table",
                 Label = lblResetLayout,
-                OnClick = () => ResetLayout()
+                OnClick = () => _ = ResetLayout()
             };
             if (items.Last().IsHelpButton)
                 items.Insert(items.Count - 1, reset);
@@ -591,7 +611,7 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
                 items.Add(reset);
         }
 
-        TableContextMenu.SetItems(items);
+        TableContextMenu.SetItems((items ?? new ())!);
     }
 }
 public enum SelectionMode

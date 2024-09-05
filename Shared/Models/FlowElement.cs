@@ -18,6 +18,10 @@ public class FlowElement
     /// Gets or sets the name of the element
     /// </summary>
     public string Name { get; set; }
+    /// <summary>
+    /// Gets or sets if a flow element is read only
+    /// </summary>
+    public bool ReadOnly { get; set; }
 
     /// <summary>
     /// Gets or sets a description for this element, only used by scripts where the description is user defined 
@@ -45,14 +49,13 @@ public class FlowElement
     /// Formats the name and translated if needed
     /// </summary>
     /// <param name="name">the name to format</param>
-    /// <returns>the formateted name</returns>
+    /// <returns>the formatted name</returns>
     public static string FormatName(string name)
     {
-        string translated = Translater.Instant($"Flow.Parts.{name}.Label", supressWarnings: true);
-        if (string.IsNullOrEmpty(translated) == false && translated != "Label")
-            return translated;
+        if (Translater.CanTranslate($"Flow.Parts.{name}.Label", out var translation))
+            return translation;
 
-        name = name[(name.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
+        name = name[(name.LastIndexOf('.') + 1)..];
         string dn = name.Replace("_", " ");
         dn = rgxFormatLabel.Replace(dn, " ");
         return dn;
@@ -125,4 +128,14 @@ public class FlowElement
     /// Gets or sets a message to show when the user tries to use this obsolete node
     /// </summary>
     public virtual string ObsoleteMessage { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the license required by this flow element
+    /// </summary>
+    public virtual LicenseLevel LicenseLevel { get; set; }
+    
+    /// <summary>
+    /// Gets an optional custom color to show
+    /// </summary>
+    public virtual string CustomColor { get; set; }
 }

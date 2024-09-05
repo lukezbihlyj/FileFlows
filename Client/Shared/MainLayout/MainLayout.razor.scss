@@ -9,10 +9,11 @@
 }
 
 .sidebar {
-    background-color: rgba(var(--base-rgb), 0.15);
+    background-color: var(--base);
     border-right:1px solid var(--border-color);
     z-index:3;
 }
+
 
 @media (min-width: 850px) {
     .page {
@@ -24,6 +25,8 @@
         height: 100vh;
         position: sticky;
         top: 0;
+        display:flex;
+        flex-direction: column;
     }
 
     .main {
@@ -34,7 +37,6 @@
         max-width: calc(100% - 3.5rem);
     }
 }
-
 .expand-collapse {
     display:none;
 }
@@ -84,7 +86,10 @@
                 height: 2.5rem;
                 background-size: cover;
                 background-repeat: no-repeat;
-                svg {
+                svg, img {
+                    display:none;
+                }
+                i {
                     display:none;
                 }
             }
@@ -97,7 +102,10 @@
                 padding-left: 0 !important;
 
                 a {
-                    padding-left: 0.75rem !important;
+                    padding-left: 0.4rem !important;
+                    span {
+                        text-align-last: center;
+                    }
                 }
             }
 
@@ -119,7 +127,7 @@
                 }
 
                 &:hover {
-                    width: 10rem;
+                    width: 12rem;
 
                     .text-label {
                         display: unset;

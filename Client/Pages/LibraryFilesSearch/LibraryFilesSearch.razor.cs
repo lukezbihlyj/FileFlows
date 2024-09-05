@@ -1,6 +1,7 @@
 using BlazorDateRangePicker;
 using FileFlows.Client.Components;
 using FileFlows.Client.Shared;
+using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -19,6 +20,11 @@ public partial class LibraryFilesSearch : ListPage<Guid, LibraryFile>
     private bool Searched = false;
     [Inject] private IJSRuntime jsRuntime { get; set; }
     SearchPane SearchPane { get; set; }
+
+    private List<ListOption> StatusOptions;
+    
+    /// <inheritdoc />
+    protected override string DeleteMessage => "Labels.DeleteLibraryFiles";
     
     private readonly LibraryFileSearchModel SearchModel = new()
     {
@@ -29,12 +35,33 @@ public partial class LibraryFilesSearch : ListPage<Guid, LibraryFile>
         LibraryName = string.Empty
     };
     
-    protected async override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         base.OnInitialized();
         this.lblSearch = Translater.Instant("Labels.Search");
         this.Title = Translater.Instant("Pages.LibraryFiles.Title");
         this.lblSearching = Translater.Instant("Labels.Searching");
+        StatusOptions = new List<ListOption>()
+        {
+            new() { Value = null, Label = Translater.Instant("Enums.FileStatus.Any") }
+        }.Union(new List<ListOption>()
+        {
+            new() { Value = FileStatus.Processed, Label = Translater.Instant("Enums.FileStatus.Processed") },
+            new() { Value = FileStatus.Processing, Label = Translater.Instant("Enums.FileStatus.Processing") },
+            new() { Value = FileStatus.Unprocessed, Label = Translater.Instant("Enums.FileStatus.Unprocessed") },
+            new() { Value = FileStatus.FlowNotFound, Label = Translater.Instant("Enums.FileStatus.FlowNotFound") },
+            new()
+            {
+                Value = FileStatus.ProcessingFailed, Label = Translater.Instant("Enums.FileStatus.ProcessingFailed")
+            },
+            new() { Value = FileStatus.Duplicate, Label = Translater.Instant("Enums.FileStatus.Duplicate") },
+            new() { Value = FileStatus.MappingIssue, Label = Translater.Instant("Enums.FileStatus.MappingIssue") },
+            new() { Value = FileStatus.MissingLibrary, Label = Translater.Instant("Enums.FileStatus.MissingLibrary") },
+            new()
+            {
+                Value = FileStatus.ReprocessByFlow, Label = Translater.Instant("Enums.FileStatus.ReprocessByFlow")
+            },
+        }.OrderBy(x => x.Label!.ToLowerInvariant())).ToList();
         MainLayout.Instance.ShowSearch();
     }
 
@@ -69,11 +96,11 @@ public partial class LibraryFilesSearch : ListPage<Guid, LibraryFile>
         SearchModel.ToDate = range.End.Date;
     }
 
-    public override Task Load(Guid selectedUid)
+    public override Task Load(Guid selectedUid, bool showBlocker = true)
     {
         if (Searched == false)
             return Task.CompletedTask;
-        return base.Load(selectedUid);
+        return base.Load(selectedUid, showBlocker: showBlocker);
     }
 
     protected override Task<RequestResult<List<LibraryFile>>> FetchData()

@@ -1,13 +1,15 @@
 ﻿using FileFlows.Server.Helpers;
 using FileFlows.Server.Controllers;
+using FileFlows.Server.Services;
 using FileFlows.ServerShared.Workers;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Workers;
 
 /// <summary>
 /// Worker to update plugins
 /// </summary>
-public class PluginUpdaterWorker : Worker
+public class PluginUpdaterWorker : ServerWorker
 {
     /// <summary>
     /// Constructs a new plugin update worker
@@ -17,12 +19,9 @@ public class PluginUpdaterWorker : Worker
         Trigger();
     }
 
-    /// <summary>
-    /// Executes the worker
-    /// </summary>
-    protected override void Execute()
+    /// <inheritdoc />
+    protected override void ExecuteActual(Settings? settings)
     {
-        var settings = new SettingsController().Get().Result;
 #if (DEBUG)
         settings = null;
 #endif
@@ -30,11 +29,13 @@ public class PluginUpdaterWorker : Worker
             return;
 
         Logger.Instance?.ILog("Plugin Updater started");
-        var controller = new PluginController();
+        var controller = new PluginController(null);
         var plugins = controller.GetAll().Result;
-        var latestPackages = controller.GetPluginPackages().Result;
+        var latestPackagesResult = ServiceLoader.Load<PluginService>().GetPluginPackagesActual().Result;
+        var latestPackages = latestPackagesResult.IsFailed ? new () 
+            : latestPackagesResult.Value;
 
-        var pluginDownloader = new PluginDownloader(controller.GetRepositories());
+        var pluginDownloader = new PluginDownloader();
         
         foreach(var plugin in plugins)
         {
@@ -50,14 +51,14 @@ public class PluginUpdaterWorker : Worker
                     continue;
                 }
 
-                var dlResult = pluginDownloader.Download(package.Package);
+                var dlResult = pluginDownloader.Download(Version.Parse(package.Version), package.Package).Result;
 
                 if (dlResult.Success == false)
                 {
                     Logger.Instance.WLog($"Failed to download package '{plugin.PackageName}' update");
                     continue;
                 }
-                Helpers.PluginScanner.UpdatePlugin(package.Package, dlResult.Data);
+                PluginScanner.UpdatePlugin(package.Package, dlResult.Data);
             }
             catch(Exception ex)
             {

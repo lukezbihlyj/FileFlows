@@ -1,12 +1,11 @@
 using System.Text.Json;
-using FileFlows.ScriptExecution;
 using Logger = FileFlows.Shared.Logger;
-
-namespace FileFlows.Server;
-
 using FileFlows.Plugin;
 using System.Dynamic;
+using FileFlows.ServerShared.Services;
+using FileFlows.Shared.Models;
 
+namespace FileFlows.Server;
 
 /// <summary>
 /// A special node that is not shown in the UI and only created
@@ -23,13 +22,12 @@ public class ScriptNode:Node
     /// <summary>
     /// Gets or sets the model to pass to the node
     /// </summary>
-    public ExpandoObject Model { get; set; }
+    public ExpandoObject? Model { get; set; }
 
     /// <summary>
-    /// Gets or sets the code to execute
+    /// Gets or sets the Script to execute
     /// </summary>
-    public string Code { get; set; }
-
+    public Script? Script { get; set; }
 
     /// <summary>
     /// Executes the script node
@@ -38,11 +36,65 @@ public class ScriptNode:Node
     /// <returns>the output node to call next</returns>
     public override int Execute(NodeParameters args)
     {
-        // will throw exception if invalid
-        var script = new ScriptParser().Parse("ScriptNode", Code);
+        if (Script == null)
+        {
+            args.FailureReason = "Script not found";
+            args.Logger?.ELog(args.FailureReason);
+            return -1;
+        }
 
+        switch (Script.Language)
+        {
+            case ScriptLanguage.JavaScript:
+                return ExecuteJavaScript(args);
+            default:
+                args.Logger?.ILog($"Executing {Script.Language} Script");
+                return ExecuteScript(args);
+        }
+    }
+
+    /// <summary>
+    /// Executes a script
+    /// </summary>
+    /// <param name="args">the NodeParameters passed into this from the flow runner</param>
+    /// <returns>the output node to call next</returns>
+    private int ExecuteScript(NodeParameters args)
+    {
+        var result = args.ScriptExecutor.Execute(new()
+        {
+            Args = args,
+            Logger = args.Logger!,
+            ScriptType = ScriptType.Flow,
+            TempPath = args.TempPath,
+            Code = args.ReplaceVariables(Script!.Code),
+            Language = Script.Language
+        });
+        if (result.Failed(out var error))
+        {
+            args.FailureReason = error;
+            args.Logger?.ELog(error);
+            return -1;
+        }
+
+        if (result.Value > Script.Outputs.Count)
+        {
+            args.FailureReason = "Unexpected output: " + result.Value;
+            args.Logger?.ELog(args.FailureReason);
+            return -1;
+        }
+
+        return result.Value;
+    }
+
+    /// <summary>
+    /// Executes a JavaScript script
+    /// </summary>
+    /// <param name="args">the NodeParameters passed into this from the flow runner</param>
+    /// <returns>the output node to call next</returns>
+    private int ExecuteJavaScript(NodeParameters args)
+    {
         // build up the entry point
-        string epParams = string.Join(", ", script.Parameters?.Select(x => x.Name).ToArray());
+        string epParams = string.Join(", ", Script!.Parameters?.Select(x => x.Name)?.ToArray() ?? []);
         // all scripts must contain the "Script" method we then add this to call that 
         //string entryPoint = $"Script({epParams});";
         string entryPoint = $"var scriptResult = Script({epParams});\nexport const result = scriptResult;";
@@ -51,35 +103,60 @@ public class ScriptNode:Node
         {
             Args = args,
             ScriptType = ScriptType.Flow,
-            //Code = ("try\n{\n\t" + Code.Replace("\n", "\n\t") + "\n\n\t" + entryPoint + "\n} catch (err) { \n\tLogger.ELog(`Error in script [${err.line}]: ${err}`);\n\treturn -1;\n}").Replace("\t", "   ")
-            Code = (Code + "\n\n" + entryPoint).Replace("\t", "   ").Trim(),
+            Logger = args.Logger!,
+            Code = (Script.Code + "\n\n" + entryPoint).Replace("\t", "   ").Trim(),
             AdditionalArguments = new (),
+            NotificationCallback = (severity, title, message) =>
+            {
+                var service = ServiceLoader.Load<INotificationService>();
+                _ = service.Record((NotificationSeverity)severity, title, message);
+            }
         };
 
-        if (script.Parameters?.Any() == true)
+        if (Script.Parameters?.Any() == true)
         {
             var dictModel = Model as IDictionary<string, object>;
-            foreach (var p in script.Parameters) 
+            foreach (var p in Script.Parameters) 
             {
-                var value = dictModel?.ContainsKey(p.Name) == true ? dictModel[p.Name] : null;
-                if (value is JsonElement je && je.ValueKind == JsonValueKind.String)
+                try
                 {
-                    var str = je.GetString();
-                    if (string.IsNullOrWhiteSpace(str) == false)
+                    var value = dictModel?.TryGetValue(p.Name, out var value1) is true ? value1 : null;
+                    if (value is JsonElement je)
                     {
-                        Logger.Instance.ILog("Parameter is string replacing variables: " + str);
-                        string replaced = args.ReplaceVariables(str);
-                        if (replaced != str)
+                        if (je.ValueKind == JsonValueKind.String)
                         {
-                            Logger.Instance.ILog("Variables replaced: " + replaced);
-                            value = replaced;
+                            var str = je.GetString();
+                            if (string.IsNullOrWhiteSpace(str) == false)
+                            {
+                                Logger.Instance.ILog("Parameter is string replacing variables: " + str);
+                                var replaced = args?.ReplaceVariables(str);
+                                if (replaced != str)
+                                {
+                                    Logger.Instance.ILog("Variables replaced: " + replaced);
+                                    value = replaced;
+                                }
+                            }
                         }
+                        else if (je.ValueKind == JsonValueKind.True)
+                            value = true;
+                        else if (je.ValueKind == JsonValueKind.False)
+                            value = false;
+                        else if (je.ValueKind == JsonValueKind.Number)
+                            value = double.Parse(je.ToString());
+                        else if (je.ValueKind == JsonValueKind.Null)
+                            value = null;
                     }
+
+                    execArgs.AdditionalArguments.Add(p.Name, value!);
                 }
-                execArgs.AdditionalArguments.Add(p.Name, value);
+                catch (Exception ex)
+                {
+                    args?.Logger?.WLog("Failed to set parameter: " + p.Name + " => " + ex.Message +
+                                       Environment.NewLine + ex.StackTrace);
+                }
             }
         }
 
-        return args.ScriptExecutor.Execute(execArgs);
+        return args?.ScriptExecutor?.Execute(execArgs) ?? 0;
     }
 }

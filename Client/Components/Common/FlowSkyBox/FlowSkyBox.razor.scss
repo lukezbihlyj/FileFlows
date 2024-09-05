@@ -28,6 +28,11 @@
     .name {
       display:none;
     }
+    &.no-count {
+      .name {
+        display:unset !important;
+      }
+    }
   }
 }
 
@@ -49,7 +54,7 @@
       }
       .count {
         display:block;
-        font-size:3rem;
+        font-size:2.25rem;
         line-height:3rem;
         padding:0;
         margin:0;
@@ -63,6 +68,13 @@
         margin-left: 5.5rem;
         font-size:0.8rem;
         display: unset;
+      }
+      &.no-count {
+        display: flex;
+        align-items: center;
+        .name {
+          font-size: 1.5rem;
+        }
       }
     }
   }

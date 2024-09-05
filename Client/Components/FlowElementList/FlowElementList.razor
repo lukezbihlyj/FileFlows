@@ -1,0 +1,121 @@
+@using FileFlows.Plugin
+@namespace FileFlows.Client.Components
+
+<div class="flow-elements-tab-inner @(App.Instance.IsMobile ? "mobile-view" : string.Empty)">
+    <div class="flow-elements-top">
+        @if (App.Instance.IsMobile)
+        {
+            <div class="mobile-buttons">
+                <button class="add-button" disabled="@string.IsNullOrEmpty(SelectedElement)" @onclick="(() => AddSelectedElement(SelectedElement))">
+                   @lblAdd
+                </button>
+                <button @onclick="() => Close()">@lblClose</button>
+            </div>
+        }
+        <div class="flow-elements-filter">
+            <input @ref="eleFilter" type="text" @bind-value="txtFilter" @bind-value:event="oninput" autocomplete="off" placeholder="@lblFilter" @onkeyup="FilterKeyUp"/>
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+    <div class="flow-elements-middle">
+            @if (Filtered != null)
+            {
+                var groups = Filtered.GroupBy(x =>
+                {
+                    if (GroupIndexRegex.TryMatch(x.Group, out var match))
+                        return match.Groups[1].Value;
+                    return x.Group;
+                }).ToArray();
+                bool accordion = groups.Length > 1; //string.IsNullOrWhiteSpace(txtFilter) && groups.Length > 1;
+                <div class="@(accordion ? "accordion" : "ul")">
+                    @foreach (var grp in groups.OrderByDescending(x => x.Key == DefaultGroup)
+                                  .ThenBy(x => x.Key))
+                    {
+                        bool expanded = grp.Key == SelectedGroup;
+                        var mostCommonFlowType = grp.GroupBy(x => x.Type)
+                            .OrderByDescending(g => g.Count())
+                            .Select(g => g.Key.ToString().ToLower())
+                            .FirstOrDefault() ?? string.Empty;
+                        
+                        <div class="group @(expanded || Filtering ? "expanded" : "collapsed")">
+                            <div class="group-title" @onclick="() => SelectGroup(grp.Key)">
+                                @FlowHelper.FormatLabel(grp.Key.Replace("Nodes", string.Empty))
+                                <span class="count" style="border-color:var(--flow-@(mostCommonFlowType)">@grp.Count()</span>
+                                @if (Filtering == false)
+                                {   
+                                    <i class="@(expanded ? "fas fa-caret-up" : "fas fa-caret-down")" />
+                                }
+                            </div>
+                            <div class="group-items group-items-@grp.Count()">
+                                @foreach (var ele in grp
+                                              .OrderBy(x =>
+                                              {
+                                                  if (GroupIndexRegex.TryMatch(x.Group, out var match))
+                                                      return int.Parse(match.Groups[2].Value);
+                                                  if (grp.Key != "FfmpegBuilderNodes")
+                                                      return (int)x.Type;
+                                                  if (x.Type == FlowElementType.BuildStart)
+                                                      return 1;
+                                                  if (x.Type == FlowElementType.BuildEnd)
+                                                      return 2;
+                                                  if (x.Type == FlowElementType.BuildPart)
+                                                      return 3;
+                                                  return 100 + (int)x.Type;
+                                              }).ThenBy(x => x.DisplayName[(x.DisplayName.IndexOf(":", StringComparison.Ordinal) + 1)..]))
+                                {
+                                    <div id="@ele.Uid" draggable="true" class="flow-element draggable @ele.Type 
+                                    @(ele.Obsolete ? "obsolete" : "") @(ele.LicenseLevel == LicenseLevel.Enterprise  ? "enterprise" : "") 
+                                    ll-@(ele.LicenseLevel.ToString().ToLowerInvariant())
+                                     @(App.Instance.IsMobile && SelectedElement == ele.Uid ? "selected" : "") "
+                                         style="@GetElementStyling(ele)"
+                                        @ondragstart="(e) => DragStart(e, ele)" @onclick="@(() => SelectPart(ele.Uid))">
+                                        <div class="icon-wrapper">
+                                            @if (ele.Icon.StartsWith("svg:"))
+                                            {
+                                                <img src="/icons/@(ele.Icon[4..]).svg" />
+                                            }
+                                            else
+                                            {
+                                                <span class="icon @ele.Icon"></span>
+                                            }
+                                        </div>
+                                        @((ele.Type == FlowElementType.Script) ? FormatName(ele) : ele.DisplayName[(ele.DisplayName.IndexOf(":", StringComparison.Ordinal) + 1)..])
+
+                                        @{
+                                            string ribbonTT = "";
+                                            if (ele.Obsolete)
+                                            {
+                                                ribbonTT = ele.ObsoleteMessage?.EmptyAsNull() ?? lblObsoleteMessage;
+                                            }
+                                            else if (ele.LicenseLevel == LicenseLevel.Enterprise)
+                                            {
+                                                ribbonTT = $"{ele.LicenseLevel} license required";
+                                            }
+                                            else if (ele.LicenseLevel != LicenseLevel.Basic)
+                                            {
+                                                ribbonTT = $"{ele.LicenseLevel} or higher license required";
+                                            }
+                                        }
+
+                                        <div class="ribbon" title="@ribbonTT">
+                                            <div class="ribbon-content">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+    </div>
+    @if (OpenBrowser != null)
+    {
+        <div class="flow-elements-bottom">
+            <button class="btn" @onclick="() => OpenBrowser()">
+                <i class="@OpenBrowserIcon" ></i>
+                @Translater.TranslateIfNeeded(OpenBrowserLabel)
+            </button>
+        </div>
+    }
+</div>

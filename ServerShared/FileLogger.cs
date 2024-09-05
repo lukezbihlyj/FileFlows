@@ -1,4 +1,5 @@
-﻿using FileFlows.Plugin;
+﻿using System.Text.Json;
+using FileFlows.Plugin;
 using FileFlows.Shared;
 
 namespace FileFlows.ServerShared;
@@ -10,10 +11,6 @@ public class FileLogger : ILogWriter
 {
     private string LogPrefix;
     private string LoggingPath;
-    /// <summary>
-    /// If a new file should be created
-    /// </summary>
-    private bool NewFile = false;
 
     private DateOnly LogDate = DateOnly.MinValue;
 
@@ -22,7 +19,7 @@ public class FileLogger : ILogWriter
     /// <summary>
     /// Gets an instance of the FileLogger
     /// </summary>
-    public static FileLogger Instance { get; private set; }
+    public static FileLogger Instance { get; private set; } = null!;
 
     /// <summary>
     /// Creates a file logger
@@ -34,7 +31,6 @@ public class FileLogger : ILogWriter
     {
         this.LoggingPath = loggingPath;
         this.LogPrefix = logPrefix;
-        this.NewFile = true;
         if (register)
         {
             Shared.Logger.Instance.RegisterWriter(this);
@@ -62,12 +58,32 @@ public class FileLogger : ILogWriter
                 _ => ""
             };
 
-            string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + prefix + " -> " + string.Join(
+            string text = string.Join(
                 ", ", args.Select(x =>
-                    x == null ? "null" :
-                    x.GetType().IsPrimitive ? x.ToString() :
-                    x is string ? x.ToString() :
-                    System.Text.Json.JsonSerializer.Serialize(x)));
+                {
+                    if (x == null)
+                        return "null";
+                    if (x.GetType().IsPrimitive)
+                        return x.ToString();
+                    if (x is string str)
+                        return str;
+                    if (x is JsonElement je)
+                    {
+                        if (je.ValueKind == JsonValueKind.True)
+                            return "true";
+                        if (je.ValueKind == JsonValueKind.False)
+                            return "false";
+                        if (je.ValueKind == JsonValueKind.String)
+                            return je.GetString();
+                        if (je.ValueKind == JsonValueKind.Number)
+                            return je.GetInt64().ToString();
+                        return je.ToString();
+                    }
+
+                    return JsonSerializer.Serialize(x);
+                }));
+
+            string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + prefix + " -> " + text;
             if (message.IndexOf((char)0) >= 0)
             {
                 message = message.Replace(new string((char)0, 1), string.Empty);
@@ -180,7 +196,7 @@ public class FileLogger : ILogWriter
             {
                 latestAcceptableFile = fi.FullName;
             }
-            else if (NewFile == false && fi.Length < 10_000_000)
+            else if (fi.Length < 10_000_000)
             {
                 latestAcceptableFile = fi.FullName;
                 break;
@@ -190,7 +206,6 @@ public class FileLogger : ILogWriter
                 break;
             }
         }
-        NewFile = false;
         return latestAcceptableFile;
     }
 }

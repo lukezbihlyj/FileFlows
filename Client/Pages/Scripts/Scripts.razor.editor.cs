@@ -1,13 +1,20 @@
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Inputs;
+using FileFlows.Client.Components.ScriptEditor;
 using FileFlows.Plugin;
 using FileFlows.Shared.Validators;
+using Jint.Native.Json;
+using NPoco.fastJSON;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace FileFlows.Client.Pages;
 
 public partial class Scripts
 {
-    private FileFlows.Client.Components.Dialogs.ImportScript ScriptImporter;
+    /// <summary>
+    /// The script importer
+    /// </summary>
+    private Components.Dialogs.ImportScript ScriptImporter;
 
     /// <summary>
     /// Editor for a Script
@@ -17,78 +24,51 @@ public partial class Scripts
     public override async Task<bool> Edit(Script item)
     {
         this.EditingItem = item;
+        
+        // clone the object so the editor doesnt modify the in memory object
+        var toEdit = new Script();
+        CopyInto(item, toEdit);
+        
+        var editor = new ScriptEditor(Editor, ScriptImporter, saveCallback: Save);
+        var result = await editor.Open(toEdit);
 
-        List<ElementField> fields = new List<ElementField>();
-        bool flowScript = item.Type == ScriptType.Flow;
-
-        if (string.IsNullOrEmpty(item.Code))
+        if (result)
         {
-            item.Code = flowScript ? @"
-/**
- * Description of this script
- * @param {int} NumberParameter Description of this input
- * @output Description of output 1
- * @output Description of output 2
- */
-function Script(NumberParameter)
-{
-    return 1;
-}
-" : @"
-import { FileFlowsApi } from 'Shared/FileFlowsApi';
-
-let ffApi = new FileFlowsApi();
-";
+            // copy the modified stuff back into the source
+            CopyInto(toEdit, item);
         }
-
-        item.Code = item.Code.Replace("\r\n", "\n").Trim();
-
-        bool readOnly = item.Repository || item.Type == ScriptType.Shared;
-        string title = "Pages.Script.Title";
-
-        if (readOnly)
-        {
-            title = Translater.Instant("Pages.Script.Title") + ": " + item.Name;
-        }
-        else
-        {
-            fields.Add(new ElementField
-            {
-                InputType = FormInputType.Text,
-                Name = nameof(item.Name),
-                Validators = flowScript ? new List<FileFlows.Shared.Validators.Validator>
-                {
-                    new FileFlows.Shared.Validators.Required()
-                } : new ()
-            });
-        }
-
-
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Code,
-            Name = "Code",
-            Validators = item.Type == ScriptType.Flow ? new List<FileFlows.Shared.Validators.Validator>
-            {
-                new FileFlows.Shared.Validators.ScriptValidator()
-            } : new List<Validator>()
-        });
-
-        var result = await Editor.Open(new()
-        {
-            TypeName = "Pages.Script", Title = title, Fields = fields, Model = item, Large = true, ReadOnly = readOnly,
-            SaveCallback = Save, HelpUrl = "https://docs.fileflows.com/scripts",
-            AdditionalButtons = new ActionButton[]
-            {
-                new ()
-                {
-                    Label = "Labels.Import", 
-                    Clicked = (sender, e) => OpenImport(sender, e)
-                }
-            }
-        });
-
+        
         return false;
+    }
+
+    /// <summary>
+    /// Copies the values from one script into another for editing
+    /// </summary>
+    /// <param name="source">the source to duplicate</param>
+    /// <param name="destination">the destination</param>
+    private void CopyInto(Script source, Script destination)
+    {
+        destination.Name = source.Name;
+        destination.Description = source.Description;
+        destination.Code = source.Code;
+        destination.Author = source.Author;
+        destination.Type = source.Type;
+        destination.Language = source.Language;
+        //destination.Outputs =  source.Outputs?.Select(x => new ScriptOutput() { Description = x.Description, Index = x.Index })?.ToList() ?? [];
+        destination.Outputs =  source.Outputs?.Select(x => new KeyValuePair<int, string>(x.Key, x.Value))?.ToList() ?? [];
+        destination.Parameters = source.Parameters?.Select(x => new ScriptParameter()
+            { Name = x.Name, Type = x.Type, Description = x.Description })?.ToList() ?? [];
+        destination.Path = source.Path;
+        destination.Repository = source.Repository;
+        destination.Revision = source.Revision;
+        destination.LatestRevision = source.LatestRevision;
+        destination.MinimumVersion = source.MinimumVersion;
+        destination.UsedBy =
+            source.UsedBy?.Select(x => new ObjectReference() { Name = x.Name, Type = x.Type, Uid = x.Uid })?.ToList() ??
+            [];
+        destination.Uid = source.Uid;
+        destination.DateCreated = source.DateCreated;
+        destination.DateModified = source.DateModified;
     }
 
     private async Task OpenImport(object sender, EventArgs e)
@@ -108,9 +88,8 @@ let ffApi = new FileFlowsApi();
             return;
         }
 
-        Logger.Instance.ILog("open import!");
         List<string> import = await ScriptImporter.Show(available);
         Logger.Instance.ILog("Import", import);
-        codeInput.AddImports(import);
+        await codeInput.AddImports(import);
     }
 }

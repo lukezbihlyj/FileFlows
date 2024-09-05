@@ -1,5 +1,7 @@
-using System.Runtime.InteropServices;
+using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
+using FileFlows.Shared.Widgets;
 
 namespace FileFlows.Shared;
 
@@ -48,7 +50,6 @@ public class Logger : ILogger
     /// <param name="args">the arguments for the log message</param>
     public void ELog(params object[] args) => Log(LogType.Error, args);
 
-
     /// <summary>
     /// Gets the last number of log lines
     /// </summary>
@@ -89,21 +90,20 @@ public class Logger : ILogger
                     writer.Log(type, args).Wait();
                 else
                 {
-                    _ = Task.Run(async () =>
+                    try
                     {
-                        try
-                        {
-                            await writer.Log(type, args);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    });
+                        writer.Log(type, args).Wait();
+                    }
+                    catch (Exception)
+                    {
+                         // Ignored
+                    }
                 }
             }
         }
-        catch (Exception) // so cant crash
+        catch (Exception)
         {
+            // so cant crash
         }
     }
 }

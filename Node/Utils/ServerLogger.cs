@@ -1,4 +1,6 @@
 using FileFlows.Plugin;
+using FileFlows.RemoteServices;
+using FileFlows.ServerShared;
 using FileFlows.ServerShared.Services;
 
 namespace FileFlows.Node.Utils;
@@ -23,12 +25,20 @@ public class ServerLogger:ILogWriter
     /// <param name="args">the arguments for the log message</param>
     public Task Log(LogType type, params object[] args)
     {
-        var service = LogService.Load();
-        return service.LogMessage(new()
+        if (string.IsNullOrEmpty(AppSettings.Instance.ServerUrl))
+            return Task.CompletedTask; // not registered
+        
+        // we do not await this!
+        Task.Run(() =>
         {
-            NodeAddress = AppSettings.Instance.HostName,
-            Type = type,
-            Arguments = args
+            var service = ServiceLoader.Load<ILogService>();
+            return service.LogMessage(new()
+            {
+                NodeAddress = AppSettings.Instance.HostName,
+                Type = type,
+                Arguments = args
+            });
         });
+        return Task.CompletedTask;
     }
 }

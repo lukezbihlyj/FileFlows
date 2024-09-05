@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO.Compression;
+using FileFlows.Plugin;
 
 namespace FileFlows.ServerShared.Workers;
 
@@ -13,11 +14,31 @@ public abstract class UpdaterWorker : Worker
     /// </summary>
     public static bool UpdatePending { get; private set; }
 
+    /// <summary>
+    /// Gets the current version
+    /// </summary>
     protected Version CurrentVersion { get; init; }
-
+    
+    /// <summary>
+    /// The name of the updater
+    /// </summary>
     protected readonly string UpdaterName;
 
+    /// <summary>
+    /// The upgrade script prefix
+    /// </summary>
     private readonly string UpgradeScriptPrefix;
+
+    private ILogger _logger = null!;
+
+    /// <summary>
+    /// Gets the logger instance to use in this worker
+    /// </summary>
+    protected ILogger Logger
+    {
+        get => _logger;
+        set => _logger = value;
+    } 
 
     /// <summary>
     /// Constructs an instance of a Update Worker
@@ -27,12 +48,21 @@ public abstract class UpdaterWorker : Worker
     /// <param name="interval">the interval of this worker</param>
     public UpdaterWorker(string upgradeScriptPrefix, ScheduleType schedule, int interval) : base(schedule, interval)
     {
-        CurrentVersion = Globals.Version;
+        CurrentVersion = new Version(Globals.Version);
         this.UpgradeScriptPrefix = upgradeScriptPrefix;
         UpdaterName = this.GetType().Name;
         RunCheck();
     }
 
+    /// <inheritdoc />
+    protected override void Initialize(ScheduleType schedule, int interval)
+    {
+        base.Initialize(schedule, interval);
+        if(_logger == null) // this might have been set a sub class, eg server updater sets this
+            _logger = Shared.Logger.Instance;
+    }
+
+    /// <inheritdoc />
     protected override void Execute()
     {
         RunCheck();
@@ -57,40 +87,41 @@ public abstract class UpdaterWorker : Worker
     /// <summary>
     /// Runs a check for update and if found will download it 
     /// </summary>
+    /// <param name="skipEnabledCheck">if the enabled checks should be skipped</param>
     /// <returns>A update has been downloaded</returns>
-    public bool RunCheck()
+    public bool RunCheck(bool skipEnabledCheck = false)
     {
         if (PreCheck() == false)
             return false;
 
-        Logger.Instance?.ILog($"{UpdaterName}: Checking for update");
+        Logger.ILog($"{UpdaterName}: Checking for update");
         try
         {
 #if(DEBUG)
             return false; // disable during debugging
 #else
-            string updateScript = DownloadUpdate();
+            string updateScript = DownloadUpdate(skipEnabledCheck);
             if (string.IsNullOrEmpty(updateScript))
                 return false;
 
             UpdatePending = true;
             PrepareApplicationShutdown();
-            Logger.Instance.ILog($"{UpdaterName}: Update pending installation");
+            Logger.ILog($"{UpdaterName}: Update pending installation");
             do
             {
-                Logger.Instance.ILog($"{UpdaterName}: Waiting to run update");
+                Logger.ILog($"{UpdaterName}: Waiting to run update");
                 // sleep just in case something has just started
                 Thread.Sleep(10_000);
             } while (CanUpdate() == false);
 
-            Logger.Instance.ILog($"{UpdaterName} - Update about to be installed");
+            Logger.ILog($"{UpdaterName} - Update about to be installed");
             RunUpdateScript(updateScript);
             return true;
 #endif
         }
         catch (Exception ex)
         {
-            Logger.Instance?.ELog($"{UpdaterName} Error: {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            Logger.ELog($"{UpdaterName} Error: {ex.Message}{Environment.NewLine}{ex.StackTrace}");
             return false;
         }
     }
@@ -111,6 +142,12 @@ public abstract class UpdaterWorker : Worker
     {
         
     }
+    
+    /// <summary>
+    /// Called before any upgrade arguments have been added to inject custom ones first
+    /// </summary>
+    /// <param name="startInfo">the process start info</param>
+    protected virtual void PreUpgradeArgumentsAdd(ProcessStartInfo startInfo) {}
 
     private void RunUpdateScript(string updateScript)
     {
@@ -121,10 +158,13 @@ public abstract class UpdaterWorker : Worker
             // if inside docker or systemd we just restart, the restart policy should automatically kick in then run the upgrade script when it starts
             if (Globals.IsDocker == false && Globals.IsSystemd == false)
             {
-                Logger.Instance?.ILog($"{UpdaterName}About to execute upgrade script: " + updateScript);
+                MakeExecutable(updateScript);
+                
+                Logger.ILog($"{UpdaterName}About to execute upgrade script: " + updateScript);
                 var fi = new FileInfo(updateScript);
 
                 var psi = new ProcessStartInfo(updateScript);
+                PreUpgradeArgumentsAdd(psi);
                 psi.ArgumentList.Add(Process.GetCurrentProcess().Id.ToString());
                 psi.WorkingDirectory = fi.DirectoryName;
                 psi.UseShellExecute = true;
@@ -136,9 +176,53 @@ public abstract class UpdaterWorker : Worker
         }
         catch (Exception ex)
         {
-            Logger.Instance?.ELog($"{UpdaterName}: Failed running update script: " + ex.Message);
+            Logger.ELog($"{UpdaterName}: Failed running update script: " + ex.Message);
         }
     }
+    
+    /// <summary>
+    /// Makes the specified file executable by changing its permissions.
+    /// </summary>
+    /// <param name="filename">The filename of the file to make executable.</param>
+    /// <returns>True if the file was made executable successfully, otherwise false.</returns>
+    public bool MakeExecutable(string filename) 
+    {
+        // Check if the operating system supports chmod command
+        if (OperatingSystem.IsLinux() == false && OperatingSystem.IsMacOS() == false && OperatingSystem.IsFreeBSD() == false) 
+            return false;
+
+        try 
+        {
+            Logger.ILog("Making upgrade script executable: " + filename);
+            // Execute the chmod command to make the file executable
+            ProcessStartInfo psi = new ProcessStartInfo {
+                FileName = "/bin/chmod",
+                ArgumentList = { "+x", filename }, // Add +x to make the file executable
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            Process? process = Process.Start(psi);
+            if (process == null)
+                return false;
+            
+            process.WaitForExit();
+
+            // Check the exit code to determine if chmod was successful
+            if (process.ExitCode == 0)
+                return true;
+                
+            Logger.WLog("Failed making file executable: " + process.StandardError.ReadToEnd());
+            return false;
+            
+        } catch (Exception ex) {
+            Logger.WLog($"Error making file executable: {ex.Message}");
+            return false;
+        }
+    }
+    
 
     /// <summary>
     /// Downloads an update
@@ -158,62 +242,67 @@ public abstract class UpdaterWorker : Worker
     /// <returns>if an update is available</returns>
     protected abstract bool GetUpdateAvailable();
 
-    private string DownloadUpdate()
+    /// <summary>
+    /// Downloads the update
+    /// </summary>
+    /// <param name="skipEnabledCheck">if the enabled checks should be skipped</param>
+    /// <returns>the download URL</returns>
+    private string DownloadUpdate(bool skipEnabledCheck)
     {
         try
         {
             if (GetUpdateAvailable() == false)
                 return string.Empty;
             
-            if (GetAutoUpdatesEnabled() == false)
+            if ((skipEnabledCheck || GetAutoUpdatesEnabled()) == false)
                 return string.Empty;
 
-            Logger.Instance?.DLog($"{UpdaterName}: Checking for new update binary");
+            Logger.DLog($"{UpdaterName}: Checking for new update binary");
             string update = DownloadUpdateBinary();
             if (string.IsNullOrEmpty(update))
             {
-                Logger.Instance?.DLog($"{UpdaterName}: No update available");
+                Logger.DLog($"{UpdaterName}: No update available");
                 return string.Empty;
             }
 
-            Logger.Instance?.DLog($"{UpdaterName}: Downloaded update: " + update);
+            Logger.DLog($"{UpdaterName}: Downloaded update: " + update);
 
             var updateDir = new FileInfo(update).DirectoryName;
 
-            Logger.Instance?.ILog($"{UpdaterName}: Extracting update to: " + updateDir);
+            Logger.ILog($"{UpdaterName}: Extracting update to: " + updateDir);
             try
             {
-                ZipFile.ExtractToDirectory(update, updateDir, true);
+                ZipFile.ExtractToDirectory(update, updateDir!, true);
             }
             catch (Exception)
             {
-                Logger.Instance?.ELog($"{UpdaterName}: Failed extract update zip, file likely corrupt during download, deleting update");
+                Logger.ELog($"{UpdaterName}: Failed extract update zip, file likely corrupt during download, deleting update");
                 File.Delete(update);
                 return string.Empty;
             }
 
-            Logger.Instance?.ILog($"{UpdaterName}: Extracted update to: " + updateDir);
+            Logger.ILog($"{UpdaterName}: Extracted update to: " + updateDir);
             // delete the upgrade file after extraction
             File.Delete(update);
-            Logger.Instance?.ILog($"{UpdaterName}: Deleted update file: " + update);
+            Logger.ILog($"{UpdaterName}: Deleted update file: " + update);
 
-            var updateFile = Path.Combine(updateDir, UpgradeScriptPrefix + (Globals.IsWindows ? ".bat" : ".sh"));
+            var updateFile = Path.Combine(updateDir!, UpgradeScriptPrefix + (Globals.IsWindows ? ".bat" : ".sh"));
             if (File.Exists(updateFile) == false)
             {
-                Logger.Instance?.WLog($"{UpdaterName}: No update script found: " + updateFile);
+                Logger.WLog($"{UpdaterName}: No update script found: " + updateFile);
                 return string.Empty;
             }
 
-            Logger.Instance?.ILog($"{UpdaterName}: Update script found: " + updateFile);
+            Logger.ILog($"{UpdaterName}: Update script found: " + updateFile);
 
             if (Globals.IsLinux && FileHelper.MakeExecutable(updateFile) == false)
             {
-                Logger.Instance?.WLog($"{UpdaterName}: Failed to make update script executable");
+                Logger.WLog($"{UpdaterName}: Failed to make update script executable");
                 return string.Empty;
             }
 
-            Logger.Instance?.ILog($"{UpdaterName}: Upgrade directory ready: " + updateDir);
-            Logger.Instance?.ILog($"{UpdaterName}: Upgrade script ready: " + updateFile);
+            Logger.ILog($"{UpdaterName}: Upgrade directory ready: " + updateDir);
+            Logger.ILog($"{UpdaterName}: Upgrade script ready: " + updateFile);
 
             return updateFile;
         }
@@ -221,7 +310,7 @@ public abstract class UpdaterWorker : Worker
         {
             //if (ex.Message == "Object reference not set to an instance of an object")
             //    return string.Empty; // just ignore this error, likely due ot it not being configured yet.
-            Logger.Instance?.ELog($"{UpdaterName}: Failed checking for update: " + ex.Message);
+            Logger.ELog($"{UpdaterName}: Failed checking for update: " + ex.Message);
             return string.Empty;
         }
     }
