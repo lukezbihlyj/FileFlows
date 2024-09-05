@@ -176,7 +176,23 @@ public class FileServerController : Controller
         var result = _localFileService.DirectoryExists(path);
         if (result.IsFailed)
             return StatusCode(500, result.Error);
-        return Ok(true);
+        return Ok(result.Value);
+    }
+
+    /// <summary>
+    /// Checks if a directory is empty at the given path.
+    /// </summary>
+    /// <param name="path">The directory path to check.</param>
+    /// <returns>An IActionResult indicating if the directory is empty.</returns>
+    [HttpPost("directory/empty")]
+    public IActionResult DirectoryEmpty([FromBody] PathRequest path)
+    {
+        if (ValidateRequest(out string message) == false)
+            return StatusCode(503, message?.EmptyAsNull() ?? "File service is currently disabled.");
+        var result = _localFileService.DirectoryEmpty(path);
+        if (result.IsFailed)
+            return StatusCode(500, result.Error);
+        return Ok(result.Value);
     }
 
     /// <summary>

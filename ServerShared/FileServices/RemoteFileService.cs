@@ -146,7 +146,23 @@ public class RemoteFileService : IFileService
             return false;
         }
     }
-    
+
+    /// <inheritdoc />
+    public Result<bool> DirectoryEmpty(string path)
+    {
+        if (FileIsLocal(PreparePath(ref path)))
+            return _localFileService.DirectoryExists(path);
+        try
+        {
+            var result = HttpHelper.Post<bool>(GetUrl("directory/empty"), new { path }).Result;
+            return result.Data;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     /// <inheritdoc />
     public Result<bool> DirectoryDelete(string path, bool recursive = false)
     {

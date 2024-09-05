@@ -122,6 +122,36 @@ public class LocalFileService : IFileService
     }
 
     /// <inheritdoc />
+    public Result<bool> DirectoryEmpty(string path)
+    {
+        if (IsProtectedPath(ref path))
+            return Result<bool>.Fail("Cannot access protected path: " + path);
+        try
+        {
+            if (!Directory.Exists(path))
+                return true; // Path doesn't exist, considered empty
+
+            // Check if the directory has any files or subdirectories
+            if (Directory.EnumerateFileSystemEntries(path).Any())
+                return false; // Directory is not empty
+
+            return true; // Directory is empty
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Result<bool>.Fail("Unauthorized access to path: " + path + " - " + ex.Message);
+        }
+        catch (IOException ex)
+        {
+            return Result<bool>.Fail("IO error while accessing path: " + path + " - " + ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return Result<bool>.Fail("Error while accessing path: " + path + " - " + ex.Message);
+        }
+    }
+
+    /// <inheritdoc />
     public Result<bool> DirectoryDelete(string path, bool recursive = false)
     {
         if (IsProtectedPath(ref path))

@@ -95,6 +95,10 @@ public class MappedFileService : IFileService
     public Result<bool> DirectoryExists(string path)
         => _localFileService.DirectoryExists(Map(path));
 
+    /// <inheritdoc />
+    public Result<bool> DirectoryEmpty(string path)
+        => _localFileService.DirectoryEmpty(Map(path));
+
     /// <summary>
     /// Deletes the specified directory.
     /// </summary>
