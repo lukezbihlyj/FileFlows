@@ -148,13 +148,13 @@ public class RemoteFileService : IFileService
     }
 
     /// <inheritdoc />
-    public Result<bool> DirectoryEmpty(string path)
+    public Result<bool> DirectoryEmpty(string path, string[]? includePatterns = null)
     {
         if (FileIsLocal(PreparePath(ref path)))
             return _localFileService.DirectoryExists(path);
         try
         {
-            var result = HttpHelper.Post<bool>(GetUrl("directory/empty"), new { path }).Result;
+            var result = HttpHelper.Post<bool>(GetUrl("directory/empty"), new { path, includePatterns }).Result;
             return result.Data;
         }
         catch (Exception)

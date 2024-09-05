@@ -122,18 +122,51 @@ public class LocalFileService : IFileService
     }
 
     /// <inheritdoc />
-    public Result<bool> DirectoryEmpty(string path)
+    public Result<bool> DirectoryEmpty(string path, string[]? includePatterns = null)
     {
         if (IsProtectedPath(ref path))
             return Result<bool>.Fail("Cannot access protected path: " + path);
         try
         {
-            if (!Directory.Exists(path))
+            if (Directory.Exists(path) == false)
                 return true; // Path doesn't exist, considered empty
+            
+            // Get all files in the directory
+            var files = Directory.GetFiles(path);
 
-            // Check if the directory has any files or subdirectories
-            if (Directory.EnumerateFileSystemEntries(path).Any())
-                return false; // Directory is not empty
+            // If there are patterns, only count matching files
+            if (includePatterns is { Length: > 0 })
+            {
+                foreach (var file in files)
+                {
+                    foreach (var pattern in includePatterns)
+                    {
+                        try
+                        {
+                            if (System.Text.RegularExpressions.Regex.IsMatch(file, pattern.Trim(),
+                                    System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                            {
+                                Logger?.ILog("Matching file found: " + file);
+                                return false; // File matches, directory is not empty
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // Handle regex exceptions silently
+                        }
+                    }
+                }
+            }
+            else if (files.Length > 0)
+            {
+                // No patterns provided, directory is not empty if any file exists
+                return false;
+            }
+
+            // Check for directories (subdirectories are not affected by includePatterns)
+            var dirs = Directory.GetDirectories(path);
+            if (dirs.Length > 0)
+                return false; // Directory contains subdirectories, not empty
 
             return true; // Directory is empty
         }

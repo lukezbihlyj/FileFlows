@@ -67,6 +67,7 @@ public interface IFileService
     /// Checks if a given directory is empty by verifying the presence of any files or subdirectories.
     /// </summary>
     /// <param name="path">The path of the directory to check. The path is validated against protected directories.</param>
+    /// <param name="includePatterns">An optional list of regular expressions to match against, if these are include a file is only counted if it matches</param>
     /// <returns>
     /// A <see cref="Result{T}"/> containing:
     /// - <c>true</c> if the directory is empty or does not exist.
@@ -76,7 +77,7 @@ public interface IFileService
     /// <exception cref="UnauthorizedAccessException">Thrown when access to the directory is denied.</exception>
     /// <exception cref="IOException">Thrown when an I/O error occurs during the directory check.</exception>
     /// <exception cref="Exception">Thrown for any other errors encountered during directory access.</exception>
-    public Result<bool> DirectoryEmpty(string path);
+    public Result<bool> DirectoryEmpty(string path, string[]? includePatterns = null);
     
     /// <summary>
     /// Deletes a directory

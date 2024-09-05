@@ -182,14 +182,14 @@ public class FileServerController : Controller
     /// <summary>
     /// Checks if a directory is empty at the given path.
     /// </summary>
-    /// <param name="path">The directory path to check.</param>
+    /// <param name="model">The model.</param>
     /// <returns>An IActionResult indicating if the directory is empty.</returns>
     [HttpPost("directory/empty")]
-    public IActionResult DirectoryEmpty([FromBody] PathRequest path)
+    public IActionResult DirectoryEmpty([FromBody] DirectoryEmptyModel model)
     {
         if (ValidateRequest(out string message) == false)
             return StatusCode(503, message?.EmptyAsNull() ?? "File service is currently disabled.");
-        var result = _localFileService.DirectoryEmpty(path);
+        var result = _localFileService.DirectoryEmpty(model.Path, model.IncludePatterns);
         if (result.IsFailed)
             return StatusCode(500, result.Error);
         return Ok(result.Value);
@@ -1007,4 +1007,14 @@ public class FileServerController : Controller
         public DateTime Date { get; set; }
     }
 
+    /// <summary>
+    /// Model for setting file creation or last write time.
+    /// </summary>
+    public class DirectoryEmptyModel : PathRequest
+    {
+        /// <summary>
+        /// Gets or sets patterns to match the files against
+        /// </summary>
+        public string[]? IncludePatterns { get; set; }
+    }
 }
