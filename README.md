@@ -1,7 +1,7 @@
 # FileFlows
 
 [![Donate](https://img.shields.io/badge/Donate-Patreon-blue.svg)](https://www.patreon.com/revenz)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=ZJLFMQSQ6WX3J)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=CT28PFMUMLTU8)
 
 
 Checkout the official website for more information and documentation
