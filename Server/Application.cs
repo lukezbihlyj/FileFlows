@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Net;
 using Avalonia;
+using FileFlows.Charting;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Helpers;
@@ -231,5 +232,6 @@ public class Application
     {
         new ServerShared.FileLogger(DirectoryHelper.LoggingDirectory, "FileFlows");
         new ConsoleLogger();
+        ChartHelper.Logger = Logger.Instance;
     }
 }

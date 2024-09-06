@@ -1,8 +1,12 @@
 using System.Text;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp.Formats.Png;
 
 namespace FileFlows.Charting;
 
+/// <summary>
+/// Image chart base that all image charts inherit from
+/// </summary>
 public abstract class ImageChart
 {
     /// <summary>
@@ -53,30 +57,39 @@ public abstract class ImageChart
     
     static ImageChart ()
     {
-        if (string.IsNullOrEmpty(BaseDirectory))
+        try
         {
-            var dllDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            if (string.IsNullOrEmpty(dllDir))
-                throw new Exception("Failed to find DLL directory");
-            BaseDirectory = new DirectoryInfo(dllDir).Parent?.FullName ?? string.Empty;
-        }
-        
-        TextBrush = new(Color.White);
-        TextPen = Pens.Solid(Color.White, 1);
-        LineColor = Rgba32.ParseHex("#afafaf");
-        
-        if (Font != null)
-            return;
+            if (string.IsNullOrEmpty(BaseDirectory))
+            {
+                var dllDir =
+                    System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                if (string.IsNullOrEmpty(dllDir))
+                    throw new Exception("Failed to find DLL directory");
+                BaseDirectory = new DirectoryInfo(dllDir).Parent?.FullName ?? string.Empty;
+            }
+
+            TextBrush = new(Color.White);
+            TextPen = Pens.Solid(Color.White, 1);
+            LineColor = Rgba32.ParseHex("#afafaf");
+
+            if (Font != null)
+                return;
 #if (DEBUG)
-        var dir = "wwwroot";
+            var dir = "wwwroot";
 #else
         var dir = System.IO.Path.Combine(BaseDirectory, "Server/wwwroot");
 #endif
-        string font = System.IO.Path.Combine(dir, "report-font.ttf");
-        FontCollection collection = new();
-        var family = collection.Add(font);
-        // collection.TryGet("Font Name", out FontFamily font);
-        Font = family.CreateFont(11 * Scale, FontStyle.Regular);
+            string font = System.IO.Path.Combine(dir, "report-font.ttf");
+            FontCollection collection = new();
+            var family = collection.Add(font);
+            // collection.TryGet("Font Name", out FontFamily font);
+            Font = family.CreateFont(11 * Scale, FontStyle.Regular);
+        }
+        catch (Exception ex) when (ChartHelper.Logger != null)
+        {
+            ChartHelper.Logger.ELog(
+                "Error initializing ImageChart: " + ex.Message + Environment.NewLine + ex.StackTrace);
+        }
     }
 
     /// <summary>
