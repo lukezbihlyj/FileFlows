@@ -171,7 +171,7 @@ public class FlowWorker : Worker
         var nodeService = ServiceLoader.Load<INodeService>();
         if (nodeService.GetSystemIsRunning().Result != true)
         {
-            Logger.Instance?.ELog("FileFlows server is paused or not running.");
+            Logger.Instance?.ILog("FileFlows server is paused or not running.");
             return false;
         }
         try

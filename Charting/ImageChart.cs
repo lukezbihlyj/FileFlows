@@ -17,15 +17,15 @@ public abstract class ImageChart
     /// <summary>
     /// The brush used for text
     /// </summary>
-    protected readonly SolidBrush TextBrush = new (Color.White);
+    protected readonly static SolidBrush TextBrush;
     /// <summary>
     /// The pen used for text
     /// </summary>
-    protected readonly Pen TextPen = Pens.Solid(Color.White, 1);
+    protected readonly static Pen TextPen;
     /// <summary>
     /// The color used for lines on the chart
     /// </summary>
-    protected Rgba32 LineColor = Rgba32.ParseHex("#afafaf");
+    protected static Rgba32 LineColor;
     
     /// <summary>
     /// The colors to show on the chart
@@ -61,9 +61,12 @@ public abstract class ImageChart
             BaseDirectory = new DirectoryInfo(dllDir).Parent?.FullName ?? string.Empty;
         }
         
+        TextBrush = new(Color.White);
+        TextPen = Pens.Solid(Color.White, 1);
+        LineColor = Rgba32.ParseHex("#afafaf");
+        
         if (Font != null)
             return;
-        
 #if (DEBUG)
         var dir = "wwwroot";
 #else
