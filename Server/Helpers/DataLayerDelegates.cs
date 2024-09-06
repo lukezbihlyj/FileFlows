@@ -31,6 +31,7 @@ public static class DataLayerDelegates
         }
         catch (Exception ex)
         {
+            Logger.Instance.ELog("Error Generating Line Chart: " + ex.Message + Environment.NewLine + ex.StackTrace);
             return $"<span>Failed generating image: {HttpUtility.HtmlEncode(ex.Message)}</span>";
         }
     }
@@ -48,6 +49,7 @@ public static class DataLayerDelegates
         }
         catch (Exception ex)
         {
+            Logger.Instance.ELog("Error Generating Bar Chart: " + ex.Message + Environment.NewLine + ex.StackTrace);
             return $"<span>Failed generating image: {HttpUtility.HtmlEncode(ex.Message)}</span>";
         }
     }
@@ -65,6 +67,7 @@ public static class DataLayerDelegates
         }
         catch (Exception ex)
         {
+            Logger.Instance.ELog("Error Generating Pie Chart: " + ex.Message + Environment.NewLine + ex.StackTrace);
             return $"<span>Failed generating image: {HttpUtility.HtmlEncode(ex.Message)}</span>";
         }
     }
