@@ -52,7 +52,7 @@ public class ScheduledReportWorker:ServerWorker
                     if ((int)DateTime.Now.DayOfWeek != report.ScheduleInterval)
                         continue;
                     
-                    startLocal = DateTime.Now.Date.AddDays(-71);
+                    startLocal = DateTime.Now.Date.AddDays(-7);
                     endLocal = DateTime.Now.Date.AddMilliseconds(-1);
                     forceSend = report.LastSentUtc < startLocal.ToUniversalTime().AddDays(-1);
                     break;
@@ -107,6 +107,8 @@ public class ScheduledReportWorker:ServerWorker
             model["Direction"] = report.Direction;
             model["StartUtc"] = startLocal.ToUniversalTime();
             model["EndUtc"] = endLocal.ToUniversalTime();
+            
+            Logger.Instance.ILog($"Scheduled Report '{report.Name}' [{startLocal}] to [{endLocal}]");
 
             try
             {
