@@ -54,7 +54,11 @@ public abstract class ImageChart
     protected const float Scale = 2f;
 
     protected static string BaseDirectory;
-    
+   
+    /// <summary>
+    /// Static constructor for the image chart
+    /// </summary>
+    /// <exception cref="Exception">throws an exception if an error occurs</exception>
     static ImageChart ()
     {
         try
