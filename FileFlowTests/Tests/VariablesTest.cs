@@ -1,4 +1,6 @@
-﻿namespace FileFlowTests.Tests;
+﻿using System.Text.Json;
+
+namespace FileFlowTests.Tests;
 
 /// <summary>
 /// Tests for variable replacements
@@ -72,5 +74,104 @@ public class VariablesTest
         var variables = new Dictionary<string, object>();
         variables["movie.Name"] = "Batman";
         Assert.AreEqual("/movies/Batman .mkv", VariablesHelper.ReplaceVariables("/movies/{movie.Name} {movie.Year}.mkv", variables, stripMissing: true));
+    }
+
+    /// <summary>
+    /// Tests a DateTime variable can have its properties access
+    /// </summary>
+    [TestMethod]
+    public void Variables_Date()
+    {
+        var variables = new Dictionary<string, object>();
+        var date = new DateTime(2020, 06, 29, 13, 45, 09);
+        variables["img.DateTaken"] = date;
+        Assert.AreEqual($"Date: {date:yyyy-MM-dd}", VariablesHelper.ReplaceVariables("Date: {img.DateTaken|yyyy-MM-dd}", variables, stripMissing: true));
+        Assert.AreEqual($"Date: {date:yyyy-MM-dd}", VariablesHelper.ReplaceVariables("Date: {img.DateTaken:yyyy-MM-dd}", variables, stripMissing: true));
+        
+        Assert.AreEqual($"Year: {date.Year}", VariablesHelper.ReplaceVariables("Year: {img.DateTaken.Year}", variables, stripMissing: true));
+
+        Assert.AreEqual($"Month: {date.Month}", VariablesHelper.ReplaceVariables("Month: {img.DateTaken.Month}", variables, stripMissing: true));
+
+        Assert.AreEqual($"Day: {date.Day}", VariablesHelper.ReplaceVariables("Day: {img.DateTaken.Day}", variables, stripMissing: true));
+    }
+    
+    
+    /// <summary>
+    /// Tests JsonElement variables can have their properties accessed
+    /// </summary>
+    [TestMethod]
+    public void Variables_JsonElement()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Create a JsonElement object
+        var jsonString = @"{ ""Name"": ""John"", ""Age"": 30, ""Address"": { ""City"": ""New York"", ""Zip"": ""10001"" } }";
+        var jsonDoc = JsonDocument.Parse(jsonString);
+        var jsonElement = jsonDoc.RootElement;
+
+        variables["person"] = jsonElement;
+
+        // Access top-level properties
+        Assert.AreEqual($"Name: John", VariablesHelper.ReplaceVariables("Name: {person.Name}", variables, stripMissing: true));
+        Assert.AreEqual($"Age: 30", VariablesHelper.ReplaceVariables("Age: {person.Age}", variables, stripMissing: true));
+
+        // Access nested properties
+        Assert.AreEqual($"City: New York", VariablesHelper.ReplaceVariables("City: {person.Address.City}", variables, stripMissing: true));
+        Assert.AreEqual($"Zip: 10001", VariablesHelper.ReplaceVariables("Zip: {person.Address.Zip}", variables, stripMissing: true));
+    }
+
+    /// <summary>
+    /// Tests complex object properties and JsonElement within the variables
+    /// </summary>
+    [TestMethod]
+    public void Variables_ComplexObjectsAndJsonElement()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Complex object
+        var complexObj = new
+        {
+            User = new { Name = "Alice", Details = new { Age = 25, Country = "USA" } }
+        };
+        variables["user"] = complexObj;
+
+        // JsonElement object
+        var jsonString = @"{ ""ProductName"": ""Laptop"", ""Price"": 1200.50, ""Specs"": { ""RAM"": ""16GB"", ""Storage"": ""512GB SSD"" } }";
+        var jsonDoc = JsonDocument.Parse(jsonString);
+        var productElement = jsonDoc.RootElement;
+        variables["product"] = productElement;
+
+        // Access complex object properties
+        Assert.AreEqual($"User Name: Alice", VariablesHelper.ReplaceVariables("User Name: {user.User.Name}", variables, stripMissing: true));
+        Assert.AreEqual($"User Age: 25", VariablesHelper.ReplaceVariables("User Age: {user.User.Details.Age}", variables, stripMissing: true));
+        Assert.AreEqual($"Country: USA", VariablesHelper.ReplaceVariables("Country: {user.User.Details.Country}", variables, stripMissing: true));
+
+        // Access JsonElement properties
+        Assert.AreEqual($"Product: Laptop", VariablesHelper.ReplaceVariables("Product: {product.ProductName}", variables, stripMissing: true));
+        Assert.AreEqual($"Price: 1200.50", VariablesHelper.ReplaceVariables("Price: {product.Price}", variables, stripMissing: true));
+
+        // Access nested JsonElement properties
+        Assert.AreEqual($"RAM: 16GB", VariablesHelper.ReplaceVariables("RAM: {product.Specs.RAM}", variables, stripMissing: true));
+        Assert.AreEqual($"Storage: 512GB SSD", VariablesHelper.ReplaceVariables("Storage: {product.Specs.Storage}", variables, stripMissing: true));
+    }
+    
+    
+    /// <summary>
+    /// Tests JsonElement variables with byte sizes and applies the size formatter
+    /// </summary>
+    [TestMethod]
+    public void Variables_JsonElement_WithSizeFormatter()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Create a JsonElement object with RAM and Storage in bytes
+        var jsonString = @"{ ""Specs"": { ""RAM"": 17179869184, ""Storage"": 536870912000 } }"; // 16GB RAM, 500GB Storage
+        var jsonDoc = JsonDocument.Parse(jsonString);
+        var specsElement = jsonDoc.RootElement.GetProperty("Specs");
+        variables["specs"] = specsElement;
+
+        // Test SizeFormatter integration with the RAM and Storage
+        Assert.AreEqual($"RAM: 17.18 GB", VariablesHelper.ReplaceVariables("RAM: {specs.RAM|size}", variables, stripMissing: true));
+        Assert.AreEqual($"Storage: 536.87 GB", VariablesHelper.ReplaceVariables("Storage: {specs.Storage|size}", variables, stripMissing: true));
     }
 }
