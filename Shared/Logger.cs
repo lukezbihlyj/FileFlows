@@ -80,6 +80,11 @@ public class Logger : ILogger
         return writer != null;
     }
 
+    /// <summary>
+    /// Logs a message to all writers
+    /// </summary>
+    /// <param name="type">the type of log message</param>
+    /// <param name="args">the message arguments</param>
     private void Log(LogType type, params object[] args)
     {
         try

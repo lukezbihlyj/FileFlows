@@ -1,5 +1,4 @@
 using System.Text;
-using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp.Formats.Png;
 
 namespace FileFlows.Charting;
@@ -46,6 +45,9 @@ public abstract class ImageChart
         "#2e8b57", "#d2691e", "#ff1493", "#00ced1", "#b22222",
         "#daa520", "#5f9ea0", "#7f007f", "#808000", "#3cb371"
     ];
+    /// <summary>
+    /// The font to use in the charts
+    /// </summary>
     protected static Font Font;
 
     /// <summary>
@@ -53,6 +55,9 @@ public abstract class ImageChart
     /// </summary>
     protected const float Scale = 2f;
 
+    /// <summary>
+    /// The base application directory to load the resources from
+    /// </summary>
     protected static string BaseDirectory;
    
     /// <summary>
