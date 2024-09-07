@@ -174,4 +174,84 @@ public class VariablesTest
         Assert.AreEqual($"RAM: 17.18 GB", VariablesHelper.ReplaceVariables("RAM: {specs.RAM|size}", variables, stripMissing: true));
         Assert.AreEqual($"Storage: 536.87 GB", VariablesHelper.ReplaceVariables("Storage: {specs.Storage|size}", variables, stripMissing: true));
     }
+    
+    
+    /// <summary>
+    /// Tests dictionary variables with nested keys and verifies proper replacement
+    /// </summary>
+    [TestMethod]
+    public void Variables_Dictionary()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Create a dictionary with nested keys
+        var nestedDict = new Dictionary<string, object>
+        {
+            { "User", new Dictionary<string, object>
+                {
+                    { "Name", "Alice" },
+                    { "Details", new Dictionary<string, object>
+                        {
+                            { "Age", 30 },
+                            { "Country", "Canada" }
+                        }
+                    }
+                }
+            }
+        };
+        variables["user"] = nestedDict;
+
+        // Test nested dictionary values
+        Assert.AreEqual($"User Name: Alice", VariablesHelper.ReplaceVariables("User Name: {user.User.Name}", variables, stripMissing: true));
+        Assert.AreEqual($"User Age: 30", VariablesHelper.ReplaceVariables("User Age: {user.User.Details.Age}", variables, stripMissing: true));
+        Assert.AreEqual($"User Country: Canada", VariablesHelper.ReplaceVariables("User Country: {user.User.Details.Country}", variables, stripMissing: true));
+
+        // Test if non-existent keys are handled properly with stripMissing
+        Assert.AreEqual($"No Age Info:", VariablesHelper.ReplaceVariables("No Age Info: {user.User.Details.NonExistentKey}", variables, stripMissing: true));
+        Assert.AreEqual($"Default:", VariablesHelper.ReplaceVariables("Default: {user.User.Details.NonExistentKey|size}", variables, stripMissing: true));
+    }
+    
+    
+    /// <summary>
+    /// Tests dictionary variables with nested keys and verifies proper replacement
+    /// </summary>
+    [TestMethod]
+    public void Variables_Dictionary_2()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Create a nested dictionary
+        var nestedDict = new Dictionary<string, object>
+        {
+            { "User", new Dictionary<string, object>
+                {
+                    { "Name", "Alice" },
+                    { "Details", new Dictionary<string, object>
+                        {
+                            { "Age", 30 },
+                            { "Country", "Canada" }
+                        }
+                    }
+                }
+            }
+        };
+        variables["user"] = nestedDict;
+
+        var result = VariablesHelper.ReplaceVariables("Default: {user.User.Details.NonExistentKey|size}", variables, stripMissing: true);
+        Assert.AreEqual("Default:", result, $"Expected 'Default:', but got '{result}'.");
+
+        // Test nested dictionary values
+        result = VariablesHelper.ReplaceVariables("User Name: {user.User.Name}", variables, stripMissing: true);
+        Assert.AreEqual("User Name: Alice", result, $"Expected 'User Name: Alice', but got '{result}'.");
+
+        result = VariablesHelper.ReplaceVariables("User Age: {user.User.Details.Age}", variables, stripMissing: true);
+        Assert.AreEqual("User Age: 30", result, $"Expected 'User Age: 30', but got '{result}'.");
+
+        result = VariablesHelper.ReplaceVariables("User Country: {user.User.Details.Country}", variables, stripMissing: true);
+        Assert.AreEqual("User Country: Canada", result, $"Expected 'User Country: Canada', but got '{result}'.");
+
+        // Test handling of non-existent keys with stripMissing
+        result = VariablesHelper.ReplaceVariables("No Age Info: {user.User.Details.NonExistentKey}", variables, stripMissing: true);
+        Assert.AreEqual("No Age Info:", result, $"Expected 'No Age Info:', but got '{result}'.");
+    }
 }

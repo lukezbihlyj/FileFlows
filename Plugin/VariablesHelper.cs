@@ -63,7 +63,7 @@ public class VariablesHelper
             if (string.IsNullOrWhiteSpace(strValue))
             {
                 // Collapse spaces if the variable is replaced with an empty string
-                input = Regex.Replace(input, $@"\s*\{Regex.Escape(match.Value)}\s*", " ");
+                input = Regex.Replace(input, $@"\s*{Regex.Escape(match.Value)}\s*", " ");
             }
             else
             {
@@ -153,6 +153,18 @@ public class VariablesHelper
                 else
                 {
                     return null;  // Property not found
+                }
+            }
+            // Handle IDictionary
+            else if (obj is IDictionary<string, object> dictionary)
+            {
+                if (dictionary.TryGetValue(part, out object? nestedValue))
+                {
+                    obj = nestedValue;
+                }
+                else
+                {
+                    return null;  // Key not found
                 }
             }
             else
