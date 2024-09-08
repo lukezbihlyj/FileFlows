@@ -330,6 +330,31 @@ public class VariablesTest
     }
 
     [TestMethod]
+    public void TestReplaceVariables_FileName()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "file.Name", @"C:\Users\John\Files - Test" }
+        };
+        string input = "Path: {file.Name}";
+        string expected = @"Path: C:\Users\John\Files - Test";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+    [TestMethod]
+    public void TestReplaceVariables_FolderName()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "folder.Name", @"C:\Users\John\Files - Test" }
+        };
+        string input = "Path: {folder.Name}";
+        string expected = @"Path: C:\Users\John\Files - Test";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
     public void TestReplaceVariables_CleanSpecialCharacters_FileNameVariable()
     {
         var variables = new Dictionary<string, object>
