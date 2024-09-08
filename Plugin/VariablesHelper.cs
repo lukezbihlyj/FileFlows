@@ -48,12 +48,14 @@ public class VariablesHelper
             if(encoder != null)
                 strValue = encoder(strValue);
             
-            if (cleanSpecialCharacters && variableName != null && variableName.Contains('.') 
-                && variableName.StartsWith("file.") == false && variableName.StartsWith("folder.") == false)
+            if (cleanSpecialCharacters && variablePath != null
+                && variablePath.StartsWith("file.") == false && variablePath.StartsWith("folder.") == false)
             {
                 // we dont want to replace user variables they set themselves, eg they may have set "DestPath" or something in the Function node
                 // so we dont want to replace that, or any of the file/folder variables
                 // but other nodes generate variables based on metadata, and that metadata may contain a /,\,: which would break a filename
+                strValue = strValue.Replace(":/", "-");
+                strValue = strValue.Replace(":\\", "-");
                 strValue = strValue.Replace("/", "-");
                 strValue = strValue.Replace("\\", "-");
                 strValue = strValue.Replace(":", " - ");

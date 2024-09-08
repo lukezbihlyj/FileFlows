@@ -313,4 +313,149 @@ public class VariablesTest
         string result8 = VariablesHelper.ReplaceVariables(input8, variables, stripMissing: true);
         Assert.AreEqual(expected8, result8, $"Expected '{expected8}', but got '{result8}'.");
     }
+    
+    [TestMethod]
+    public void TestReplaceVariables_CleanSpecialCharacters_PathVariable()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "pathVariable", "C:/Users/John/Files:Test" }
+        };
+
+        // Case 1: Clean special characters in a path variable
+        string input = "Path: {pathVariable}";
+        string expected = "Path: C-Users-John-Files - Test";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_CleanSpecialCharacters_FileNameVariable()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "file.Name", "file.txt" }
+        };
+
+        // Case 2: No cleaning needed for file name variable
+        string input = "File: {file.Name}";
+        string expected = "File: file.txt";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_CleanSpecialCharacters_FolderPathVariable()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "folder.Path", "C:/Folder" }
+        };
+
+        // Case 3: No cleaning needed for folder path variable
+        string input = "Folder: {folder.Path}";
+        string expected = "Folder: C:/Folder";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_CleanSpecialCharacters_MissingVariable()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Case 4: Clean special characters with missing variable (should replace with empty)
+        string input = "Missing: {nonExistentVariable}";
+        string expected = "Missing:";
+        string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: true, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_CleanSpecialCharacters_SpaceHandling()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "pathVariable", "C:/Users/John/Files:Test" }
+        };
+
+        // Case 5: Clean special characters with space handling
+        string input = "Path [{pathVariable}]";
+        string expected = "Path [C-Users-John-Files - Test]";
+        string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: true, cleanSpecialCharacters: true);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_NoSpecialCharacterCleaning_PathVariable()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "pathVariable", "C:/Users/John/Files:Test" }
+        };
+
+        // Case 6: No special characters cleaned
+        string input = "Path: {pathVariable}";
+        string expected = "Path: C:/Users/John/Files:Test";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_NoSpecialCharacterCleaning_FileNameVariable()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "file.Name", "file.txt" }
+        };
+
+        // Case 7: No special characters cleaned for file name
+        string input = "File: {file.Name}";
+        string expected = "File: file.txt";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_NoSpecialCharacterCleaning_FolderPathVariable()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "folder.Path", "C:/Folder" }
+        };
+
+        // Case 8: No special characters cleaned for folder path
+        string input = "Folder: {folder.Path}";
+        string expected = "Folder: C:/Folder";
+        string result = VariablesHelper.ReplaceVariables(input, variables, cleanSpecialCharacters: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_NoSpecialCharacterCleaning_MissingVariable()
+    {
+        var variables = new Dictionary<string, object>();
+
+        // Case 9: Handling missing variable without special character cleaning
+        string input = "Missing: {nonExistentVariable}";
+        string expected = "Missing:";
+        string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: true, cleanSpecialCharacters: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    [TestMethod]
+    public void TestReplaceVariables_NoSpecialCharacterCleaning_SpaceHandling()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "pathVariable", "C:/Users/John/Files:Test" }
+        };
+
+        // Case 10: No special characters cleaned with space handling
+        string input = "Path [{pathVariable}]";
+        string expected = "Path [C:/Users/John/Files:Test]";
+        string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: true, cleanSpecialCharacters: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+    
 }
