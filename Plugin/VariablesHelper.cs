@@ -63,6 +63,8 @@ public class VariablesHelper
             if (string.IsNullOrWhiteSpace(strValue))
             {
                 // Collapse spaces if the variable is replaced with an empty string
+                input = input.Replace("(" + match.Value + ")", match.Value);
+                input = input.Replace("[" + match.Value + "]", match.Value);
                 input = Regex.Replace(input, $@"\s*{Regex.Escape(match.Value)}\s*", " ");
             }
             else

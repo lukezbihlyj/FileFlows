@@ -254,4 +254,63 @@ public class VariablesTest
         result = VariablesHelper.ReplaceVariables("No Age Info: {user.User.Details.NonExistentKey}", variables, stripMissing: true);
         Assert.AreEqual("No Age Info:", result, $"Expected 'No Age Info:', but got '{result}'.");
     }
+    
+    
+    /// <summary>
+    /// Tests that empty brackets and parentheses are removed when the variable is missing or empty.
+    /// </summary>
+    [TestMethod]
+    public void Variables_RemoveEmptyBracketsAndParentheses()
+    {
+        var variables = new Dictionary<string, object>();
+        variables["existingVariable"] = "Alice";
+
+        // Case 1: Brackets with missing variable
+        string input1 = "text [{missingVariable}]";
+        string expected1 = "text";
+        string result1 = VariablesHelper.ReplaceVariables(input1, variables, stripMissing: true);
+        Assert.AreEqual(expected1, result1, $"Expected '{expected1}', but got '{result1}'.");
+
+        // Case 2: Parentheses with missing variable
+        string input2 = "text ({missingVariable})";
+        string expected2 = "text";
+        string result2 = VariablesHelper.ReplaceVariables(input2, variables, stripMissing: true);
+        Assert.AreEqual(expected2, result2, $"Expected '{expected2}', but got '{result2}'.");
+
+        // Case 3: Brackets with missing variable and additional text
+        string input3 = "text [{missingVariable}] end";
+        string expected3 = "text end";
+        string result3 = VariablesHelper.ReplaceVariables(input3, variables, stripMissing: true);
+        Assert.AreEqual(expected3, result3, $"Expected '{expected3}', but got '{result3}'.");
+
+        // Case 4: Parentheses with missing variable and additional text
+        string input4 = "text ({missingVariable}) end";
+        string expected4 = "text end";
+        string result4 = VariablesHelper.ReplaceVariables(input4, variables, stripMissing: true);
+        Assert.AreEqual(expected4, result4, $"Expected '{expected4}', but got '{result4}'.");
+
+        // Case 5: Brackets with existing variable
+        string input5 = "text [{existingVariable}]";
+        string expected5 = "text [Alice]";
+        string result5 = VariablesHelper.ReplaceVariables(input5, variables, stripMissing: true);
+        Assert.AreEqual(expected5, result5, $"Expected '{expected5}', but got '{result5}'.");
+
+        // Case 6: Parentheses with existing variable
+        string input6 = "text ({existingVariable})";
+        string expected6 = "text (Alice)";
+        string result6 = VariablesHelper.ReplaceVariables(input6, variables, stripMissing: true);
+        Assert.AreEqual(expected6, result6, $"Expected '{expected6}', but got '{result6}'.");
+
+        // Case 7: Brackets with existing variable and additional text
+        string input7 = "text [{existingVariable}] end";
+        string expected7 = "text [Alice] end";
+        string result7 = VariablesHelper.ReplaceVariables(input7, variables, stripMissing: true);
+        Assert.AreEqual(expected7, result7, $"Expected '{expected7}', but got '{result7}'.");
+
+        // Case 8: Parentheses with existing variable and additional text
+        string input8 = "text ({existingVariable}) end";
+        string expected8 = "text (Alice) end";
+        string result8 = VariablesHelper.ReplaceVariables(input8, variables, stripMissing: true);
+        Assert.AreEqual(expected8, result8, $"Expected '{expected8}', but got '{result8}'.");
+    }
 }
