@@ -73,4 +73,12 @@ public class TestLogger : ILogger
     /// <returns>the entire log</returns>
     public override string ToString()
         => string.Join(Environment.NewLine, Messages);
+
+    /// <summary>
+    /// True if the log contains the text
+    /// </summary>
+    /// <param name="text">the text to check for</param>
+    /// <returns>true if the log contains it</returns>
+    public bool Contains(string text)
+        => !string.IsNullOrEmpty(text) && Messages.Any(x => x.Contains(text, StringComparison.InvariantCultureIgnoreCase));
 }

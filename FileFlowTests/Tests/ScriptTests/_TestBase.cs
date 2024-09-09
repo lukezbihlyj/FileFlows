@@ -3,7 +3,7 @@ namespace FileFlowTests.Tests.ScriptTests;
 /// <summary>
 /// Test base for script tests
 /// </summary>
-public abstract class ScriptTest
+public abstract class ScriptTest : TestBase
 {
     
     /// <summary>
