@@ -423,4 +423,43 @@ return 1;
         Assert.AreEqual(1, result);
         Assert.AreEqual("hevc_qsv -preset slow -tune film -global_quality 19 -look_ahead 1", args.Variables["VideoCodecParameters"]);
     }
+    
+    
+
+    [TestMethod]
+    public void Function_Exec_Callback()
+    {
+        Function pm = new Function();
+        pm.Code = $@"
+// Define the callback functions in C#
+var executeArgs = new ExecuteArgs();
+executeArgs.Command = 'ping';
+executeArgs.ArgumentList = [
+    '-c',
+    '2',
+    '8.8.8.8'
+];
+
+// Set up the callback output
+let standardError = false;
+let standardOutput = false;
+executeArgs.add_Output((line) => {{
+    Logger.ILog(""Standard Output: "" + line);
+    standardOutput = true;
+}});
+executeArgs.add_Error((line) => {{
+    Logger.ILog(""Error Output: "" + line);
+    standardError = true;
+}});
+
+Flow.Execute(executeArgs);
+
+Logger.ILog('standardOutput: ' + standardOutput);
+Logger.ILog('standardError: ' + standardError);
+
+return standardOutput || standardError ? 1 : 2;
+";
+        var result = pm.Execute(Args);
+        Assert.AreEqual(1, result);
+    }
 }

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using Jint;
 using Jint.Runtime;
+using Jint.Runtime.Interop;
 
 namespace FileFlows.ScriptExecution;
 
@@ -136,7 +137,8 @@ public class Executor
                 tcode = Regex.Replace(tcode, keyRegex, replacement);
             }
 
-            tcode = tcode.Replace("Flow.Execute(", "Execute(");
+            // remove this for FF-1663: ability to get output from the execute process while its running
+            //tcode = tcode.Replace("Flow.Execute(", "Execute(");
 
             if (tcode.StartsWith("function") == false && tcode.IndexOf("export const result", StringComparison.Ordinal) < 0)
             {
@@ -177,6 +179,7 @@ public class Executor
                     Logger.WLog("No Shared Directory for scripts defined.");
                 }
             })
+
             .SetValue("Logger", Logger)
             .SetValue("Variables", Variables)
             .SetValue("Sleep", (int milliseconds) => Thread.Sleep(milliseconds))
@@ -196,18 +199,21 @@ public class Executor
                 throw new MissingVariableException();
             })
             .SetValue("Hostname", Environment.MachineName)
-            .SetValue("Execute", (object eArgs) => {
-               var jsonOptions = new JsonSerializerOptions()
-               {
-                   PropertyNameCaseInsensitive = true
-               };
-               var eeARgs = JsonSerializer.Deserialize<ProcessExecuteArgs>(JsonSerializer.Serialize(eArgs), jsonOptions) ?? new ProcessExecuteArgs();
-               var result = processExecutor.Execute(eeARgs);
-               Logger.ILog("Exit Code: " + (result.ExitCode?.ToString() ?? "null"));
-               return result;
-            })
+            // .SetValue("Execute", (object eArgs) => {
+            //    var jsonOptions = new JsonSerializerOptions()
+            //    {
+            //        PropertyNameCaseInsensitive = true
+            //    };
+            //    var eeARgs = JsonSerializer.Deserialize<ProcessExecuteArgs>(JsonSerializer.Serialize(eArgs), jsonOptions) ?? new ProcessExecuteArgs();
+            //    var result = processExecutor.Execute(eeARgs);
+            //    Logger.ILog("Exit Code: " + (result.ExitCode?.ToString() ?? "null"));
+            //    return result;
+            // })
             .SetValue(nameof(FileInfo), new Func<string, FileInfo>((string file) => new FileInfo(file)))
             .SetValue(nameof(DirectoryInfo), new Func<string, DirectoryInfo>((string path) => new DirectoryInfo(path)));
+            
+            // Expose the ExecuteArgs type to Jint
+            engine.SetValue("ExecuteArgs", TypeReference.CreateTypeReference(engine, typeof(ExecuteArgs)));
 
             foreach (var arg in AdditionalArguments ?? new())
             {

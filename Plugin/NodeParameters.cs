@@ -858,7 +858,6 @@ public class NodeParameters
         return result;
     }
 
-
     /// <summary>
     /// Gets a new guid as a string
     /// </summary>
