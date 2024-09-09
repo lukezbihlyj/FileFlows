@@ -24,6 +24,7 @@ public class Program
     }
 
     #if(DEBUG)
+    private static bool assemblyResolverDone = false;
     /// <summary>
     /// Used for debugging to capture full log and test the full log update method
     /// </summary>
@@ -31,6 +32,17 @@ public class Program
     /// <returns>the exit code and full log</returns>
     public static (int ExitCode, string Log) RunWithLog(string[] args)
     {
+        if (assemblyResolverDone == false)
+        {
+            assemblyResolverDone = true;
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                if (args.Name.StartsWith("FileFlows.Plugin"))
+                    return typeof(Plugin.IPlugin).Assembly;
+                return null;
+            };
+        }
+
         RunInstance instance = new();
         int exitCode = instance.Run(args);
         return (exitCode,instance.Logger.ToString());

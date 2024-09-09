@@ -83,7 +83,8 @@ public class SQLiteConnectorNewConnection : IDatabaseConnector
             // Converters.UtcDateConverter.UseInstance()
         };
         db.Execute("PRAGMA synchronous=FULL;");
-        return new DatabaseConnection(db, false);
+        var dbConn = new DatabaseConnection(db, true);
+        return dbConn;
     }
     
     /// <inheritdoc />
