@@ -258,7 +258,7 @@ return 1;
             Large = true,
             ReadOnly = readOnly,
             SaveCallback = SaveCallback ?? Save, HelpUrl = "https://fileflows.com/docs/webconsole/extensions/scripts",
-            AdditionalButtons = readOnly || item.Language != ScriptLanguage.JavaScript ? null : new ActionButton[]
+            AdditionalButtons = readOnly || item.Language != ScriptLanguage.JavaScript || item.Type == ScriptType.Shared ? null : new ActionButton[]
             {
                 new ()
                 {
