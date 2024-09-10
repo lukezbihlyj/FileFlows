@@ -1,14 +1,9 @@
 @namespace FileFlows.Client.Components.Inputs
-@inherits Input<object>
+@inherits Input<string>
 
 <InputWrapper Input="@this">
     <div class="combobox-wrapper">
-        <input type="text" list="comboOptions" @bind="SelectedLabel" class="combobox-input" />
-        <datalist id="comboOptions">
-            @foreach (var option in Options)
-            {
-            <option value="@option.Label">@option.Value</option>
-            }
-        </datalist>
+        <input id="@Uid" @bind="Value" placeholder="Select or type..." />
     </div>
+    <span>Value: @Value</span>
 </InputWrapper>

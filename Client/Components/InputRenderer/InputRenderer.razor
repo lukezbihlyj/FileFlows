@@ -236,6 +236,15 @@
                              ShowDescription=@showDescription HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
             break;
+        case FormInputType.Combobox:
+            {
+                var value = GetValue<string>(field.Name, "");
+                var options = GetParameter<List<FileFlows.Plugin.ListOption>>(field, "Options");
+                <InputCombobox Field=@field Label="@label" Value="@value" ReadOnly=@readOnly Options=@options
+                             ValueChanged="@(x => UpdateValue(field, x))" Placeholder="@field.Placeholder" 
+                             HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+            }
+            break;
         case FormInputType.File:
             {
                 var value = GetValue<string>(field.Name, "");

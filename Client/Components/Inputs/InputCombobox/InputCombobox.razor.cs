@@ -1,38 +1,43 @@
 using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace FileFlows.Client.Components.Inputs;
 
 /// <summary>
 /// Input combobox 
 /// </summary>
-public partial class InputCombobox : Input<object>
+public partial class InputCombobox : Input<string>
 {
     /// <summary>
     /// Gets or sets teh options in the combobox
     /// </summary>
     [Parameter]
     public List<ListOption> Options { get; set; }
-    private string SelectedLabel
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        get => Options.FirstOrDefault(o => o.Value?.Equals(Value) ?? false)?.Label ?? string.Empty;
-        set
+        if (firstRender)
         {
-            var selectedOption = Options.FirstOrDefault(o => o.Label == value);
-            if (selectedOption != null)
-            {
-                Value = selectedOption.Value;
-            }
+            var jsObjectReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import",
+                $"./Components/Inputs/InputCombobox/InputCombobox.razor.js?v={Globals.Version}");
+            await jsObjectReference.InvokeVoidAsync("createInputCombobox", DotNetObjectReference.Create(this), Uid.ToString(),
+                Options.Select(x => x.Label).ToList());
         }
     }
+    
 
     /// <summary>
-    /// Called when the value is changed
+    /// Updates the value from JavaScript
     /// </summary>
-    /// <param name="e">the event args</param>
-    private void OnValueChange(ChangeEventArgs e)
+    /// <param name="value">the updated value</param>
+    /// <returns>a task to await</returns>
+    [JSInvokable]
+    public Task UpdateValue(string value)
     {
-        var selectedLabel = e.Value?.ToString();
-        SelectedLabel = selectedLabel ?? string.Empty;
+        Value = value;
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 }
