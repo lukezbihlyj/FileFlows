@@ -1,24 +1,22 @@
 using FileFlows.Plugin.Helpers;
 
-namespace FileFlowTests.Tests.AuditTests;
+namespace FileFlowTests.Tests;
 
 /// <summary>
 /// Contains unit tests for the <see cref="StringHelper"/> class.
 /// </summary>
 [TestClass]
-public class StringHelperTests
+public class StringHelperTests : TestBase
 {
-    private TestLogger _logger;
+    /// <summary>
+    /// The string helper instance to use
+    /// </summary>
     private StringHelper _stringHelper;
 
-    /// <summary>
-    /// Initializes the test environment before each test method is run.
-    /// </summary>
-    [TestInitialize]
-    public void Setup()
+    /// <inheritdoc />
+    protected override void TestStarting()
     {
-        _logger = new TestLogger();
-        _stringHelper = new StringHelper(_logger);
+        _stringHelper = new StringHelper(Logger);
     }
 
     /// <summary>
@@ -107,8 +105,8 @@ public class StringHelperTests
     [TestMethod]
     public void Matches_RegexMatch_ReturnsTrue()
     {
-        Assert.IsTrue(_stringHelper.Matches("^abc$", "abc")); // Regex pattern
-        Assert.IsFalse(_stringHelper.Matches("[invalid", "abc")); // Invalid regex pattern
+        Assert.IsTrue(_stringHelper.Matches("/^abc$/", "abc")); // Regex pattern
+        Assert.IsFalse(_stringHelper.Matches("/[invalid/", "abc")); // Invalid regex pattern
     }
 
     /// <summary>
@@ -117,7 +115,7 @@ public class StringHelperTests
     [TestMethod]
     public void Matches_RegexNegation_ReturnsTrue()
     {
-        Assert.IsTrue(_stringHelper.Matches("!^abc$", "xyz")); // Regex negation
-        Assert.IsFalse(_stringHelper.Matches("!^abc$", "abc")); // Regex negation
+        Assert.IsTrue(_stringHelper.Matches("!/^abc$/", "xyz")); // Regex negation
+        Assert.IsFalse(_stringHelper.Matches("!/^abc$/", "abc")); // Regex negation
     }
 }

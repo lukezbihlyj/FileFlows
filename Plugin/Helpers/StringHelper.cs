@@ -14,9 +14,10 @@ public class StringHelper(ILogger _logger)
     /// <param name="input">The input string to check.</param>
     /// <returns>True if the input is a regular expression, otherwise false.</returns>
     public static bool IsRegex(string input)
-    {
-        return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
-    }
+        => input.StartsWith('/') && input.EndsWith('/') && input.Length > 2;
+    // {
+    //     return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
+    // }
 
     /// <summary>
     /// Checks if a value matches a specified match expression.
@@ -100,6 +101,9 @@ public class StringHelper(ILogger _logger)
         // Handle regex
         try
         {
+            if (matchExpression.StartsWith("/") && matchExpression.EndsWith("/"))
+                matchExpression = matchExpression[1..^1];
+            
             var rgx = new Regex(matchExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
             bool matchesRegex = rgx.IsMatch(value);
             _logger?.ILog($"Match found: '{value}' matches pattern '{matchExpression}'" + (invert ? " (negated)" : ""));
