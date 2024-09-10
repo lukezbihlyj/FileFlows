@@ -74,6 +74,11 @@ public partial class InputTextArea : Input<string>
         //#endif
     }
     
+    /// <summary>
+    /// Updates the value from JavaScript
+    /// </summary>
+    /// <param name="value">the updated value</param>
+    /// <returns>a task to await</returns>
     [JSInvokable("updateValue")]
     public Task UpdateValue(string value)
     {
