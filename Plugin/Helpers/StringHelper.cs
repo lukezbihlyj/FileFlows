@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace FileFlows.Plugin.Helpers;
@@ -18,6 +19,35 @@ public class StringHelper(ILogger _logger)
     // {
     //     return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
     // }
+    
+    /// <summary>
+    /// Matches an object, if value is a boolean then 1 or true will match true, and 0 or false will match false
+    /// </summary>
+    /// <param name="matchExpression">the match expression</param>
+    /// <param name="value">the value</param>
+    /// <returns>true if matches, otherwise false</returns>
+    public bool Matches(string matchExpression, object? value)
+    {
+        if (value is JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind == JsonValueKind.False)
+                value = false;
+            else if (jsonElement.ValueKind == JsonValueKind.True)
+                value = true;
+            else if (jsonElement.ValueKind == JsonValueKind.Null)
+                value = null;
+        }
+        
+        if (value is bool bValue)
+        {
+            if (matchExpression is "1" or "^0")
+                return bValue;
+            if (matchExpression is "0" or "^1")
+                return !bValue;
+        }
+
+        return Matches(matchExpression, value.ToString());
+    }
 
     /// <summary>
     /// Checks if a value matches a specified match expression.

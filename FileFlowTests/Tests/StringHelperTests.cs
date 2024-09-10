@@ -127,5 +127,7 @@ public class StringHelperTests : TestBase
     {
         Assert.IsTrue(_stringHelper.Matches("*bobby drake*", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
         Assert.IsTrue(_stringHelper.Matches("!*robert drake*", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
+        Assert.IsTrue(_stringHelper.Matches("/.*batman.*/", "Superman vs Batman (2017)"));
+            
     }
 }
