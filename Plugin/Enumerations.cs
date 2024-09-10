@@ -183,7 +183,11 @@ public enum FormInputType
     /// <summary>
     /// Key Value Int
     /// </summary>
-    KeyValueInt = 41
+    KeyValueInt = 41,
+    /// <summary>
+    /// Comobobox
+    /// </summary>
+    Combobox = 42
 }
 
 

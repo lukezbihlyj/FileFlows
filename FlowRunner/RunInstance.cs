@@ -114,11 +114,19 @@ public class RunInstance
             LogInfo("Docker: " + Globals.IsDocker);
 
             string workingDir = Path.Combine(tempPath, "Runner-" + Uid);
+            #if(DEBUG)
+            if (string.IsNullOrWhiteSpace(parameters.RunnerTempPath) == false)
+                workingDir = Path.Combine(tempPath, parameters.RunnerTempPath);
+            #endif
             WorkingDirectory = workingDir;
             LogInfo("Working Directory: " + workingDir);
             try
             {
-                Directory.CreateDirectory(workingDir);
+                if (Directory.Exists(workingDir) == false)
+                {
+                    Directory.CreateDirectory(workingDir);
+                    LogInfo("Created Directory: " + workingDir);
+                }
             }
             catch (Exception ex) when (Globals.IsDocker)
             {
@@ -130,8 +138,6 @@ public class RunInstance
                 LogError("==========================================================================================");
                 return 1;
             }
-
-            LogInfo("Created Directory: " + workingDir);
 
             var libfileUid = parameters.LibraryFile;
             HttpHelper.Client = HttpHelper.GetDefaultHttpClient(RemoteService.ServiceBaseUrl);

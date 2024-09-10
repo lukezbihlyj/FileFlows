@@ -294,6 +294,9 @@ public class FlowWorker : Worker
                 runnerParameters.IsDocker = Globals.IsDocker;
                 runnerParameters.IsInternalServerNode = isServer;
                 runnerParameters.Hostname = isServer ? null : Hostname;
+                #if(DEBUG)
+                runnerParameters.RunnerTempPath = "ff-debug-mode"; 
+                #endif
                 string json = JsonSerializer.Serialize(runnerParameters);
                 string randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", 20)
                     .Select(s => s[new Random().Next(s.Length)]).ToArray());

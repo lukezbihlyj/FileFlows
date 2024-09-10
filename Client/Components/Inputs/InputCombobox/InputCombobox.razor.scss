@@ -1,0 +1,26 @@
+.combobox-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  .combobox-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #66afe9;
+      outline: none;
+      box-shadow: 0 0 5px rgba(102, 175, 233, 0.6);
+    }
+  }
+
+  datalist {
+    option {
+      padding: 0.5rem;
+    }
+  }
+}
