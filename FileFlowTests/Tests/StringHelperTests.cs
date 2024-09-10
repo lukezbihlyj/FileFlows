@@ -118,4 +118,14 @@ public class StringHelperTests : TestBase
         Assert.IsTrue(_stringHelper.Matches("!/^abc$/", "xyz")); // Regex negation
         Assert.IsFalse(_stringHelper.Matches("!/^abc$/", "abc")); // Regex negation
     }
+
+    /// <summary>
+    /// Test method for regex negation.
+    /// </summary>
+    [TestMethod]
+    public void Matches_Basic_String()
+    {
+        Assert.IsTrue(_stringHelper.Matches("*bobby drake*", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
+        Assert.IsTrue(_stringHelper.Matches("!*robert drake*", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
+    }
 }
