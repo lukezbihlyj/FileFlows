@@ -255,8 +255,8 @@ public class LibraryController : BaseController
                 {
                     Enabled = true,
                     FileSizeDetectionInterval = jst.FileSizeDetectionInterval,
-                    Filter = jst.Filter ?? string.Empty,
-                    ExclusionFilter = jst.ExclusionFilter ?? string.Empty,
+                    Filters = jst.Filters?.Any() == true ? jst.Filters : string.IsNullOrWhiteSpace(jst.Filter) == false ? [jst.Filter] : [],
+                    ExclusionFilters = jst.ExclusionFilters?.Any() == true ? jst.ExclusionFilters : string.IsNullOrWhiteSpace(jst.ExclusionFilter) == false ? [jst.ExclusionFilter] : [],
                     Extensions = jst.Extensions?.OrderBy(x => x.ToLowerInvariant())?.ToList(),
                     UseFingerprinting = jst.UseFingerprint,
                     Name = name,

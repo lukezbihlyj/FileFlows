@@ -29,9 +29,19 @@ class LibraryTemplate
     public string[] Extensions { get; set; }
     
     /// <summary>
+    /// Gets or sets the filters for this template
+    /// </summary>
+    public string[] Filters { get; set; }
+    
+    /// <summary>
     /// Gets or sets the filter for this template
     /// </summary>
     public string Filter { get; set; }
+    
+    /// <summary>
+    /// Gets or sets filters to determine if a file should be excluded
+    /// </summary>
+    public string[] ExclusionFilters { get; set; }
     
     /// <summary>
     /// Gets or sets filter to determine if a file should be excluded

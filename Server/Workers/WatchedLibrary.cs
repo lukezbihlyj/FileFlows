@@ -1,13 +1,16 @@
 ﻿using FileFlows.Plugin;
 using FileFlows.Shared.Models;
 using System.ComponentModel;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
+using FileFlows.Plugin.Helpers;
 using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
 using FileHelper = FileFlows.ServerShared.Helpers.FileHelper;
+using TimeHelper = FileFlows.ServerShared.Helpers.TimeHelper;
 
 namespace FileFlows.Server.Workers;
 
@@ -20,6 +23,8 @@ public class WatchedLibrary:IDisposable
     /// The file system watcher that watches for file system events
     /// </summary>
     private FileSystemWatcher Watcher;
+
+    private StringHelper _StringHelper;
     
     /// <summary>
     /// Gets or sets the library being watched
@@ -68,6 +73,7 @@ public class WatchedLibrary:IDisposable
         this.Logger = logger;
         this.Library = library;
         this.UseScanner = library.Scan;
+        this._StringHelper = new(logger);
 
         if (Directory.Exists(library.Path) == false)
         {
@@ -568,23 +574,33 @@ public class WatchedLibrary:IDisposable
 
     private bool IsMatch(string input)
     {
-        if (string.IsNullOrWhiteSpace(Library.ExclusionFilter) == false)
+        if (Library.ExclusionFilters?.Any() == true)
         {
-            try
+            foreach (var filter in Library.ExclusionFilters)
             {
-                if (new Regex(Library.ExclusionFilter, RegexOptions.IgnoreCase).IsMatch(input))
+                if (string.IsNullOrWhiteSpace(filter))
+                    continue;
+                if (_StringHelper.Matches(filter, input))
+                {
+                    Logger.ILog($"Exclusion Filter Match [{filter}]: {input}");
                     return false;
+                }
             }
-            catch (Exception) { }
         }
-        
-        if (string.IsNullOrWhiteSpace(Library.Filter) == false)
+
+        if (Library.Filters?.Any() == true)
         {
-            try
+            foreach (var filter in Library.Filters)
             {
-                return new Regex(Library.Filter, RegexOptions.IgnoreCase).IsMatch(input);
+                if (string.IsNullOrWhiteSpace(filter))
+                    continue;
+                if (_StringHelper.Matches(filter, input))
+                {
+                    Logger.ILog($"Inclusion Filter Match [{filter}]: {input}");
+                    return true;
+                }
             }
-            catch (Exception) { }
+            return false;
         }
 
         if (Library.Extensions?.Any() != true)
