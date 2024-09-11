@@ -44,6 +44,7 @@ public class StringHelper(ILogger _logger)
                 return bValue;
             if (matchExpression is "0" or "^1")
                 return !bValue;
+            value = value.ToString().ToLowerInvariant();
         }
 
         return Matches(matchExpression, value.ToString());
