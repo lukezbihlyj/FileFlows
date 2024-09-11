@@ -87,8 +87,8 @@ public class StringHelper(ILogger _logger)
         matchExpression = matchExpression?.Trim() ?? string.Empty;
         value = value?.Trim() ?? string.Empty;
         
-        _logger.ILog("Testing match expression: " + matchExpression);
-        _logger.ILog("Testing match value: " + value);
+        _logger?.ILog("Testing match expression: " + matchExpression);
+        _logger?.ILog("Testing match value: " + value);
 
         bool invert = false;
 
@@ -96,8 +96,8 @@ public class StringHelper(ILogger _logger)
         {
             invert = true;
             matchExpression = matchExpression[1..];
-            _logger.ILog("Expression is inverted");
-            _logger.ILog("Match expression: " + matchExpression);
+            _logger?.ILog("Expression is inverted");
+            _logger?.ILog("Match expression: " + matchExpression);
         }
 
         // Handle exact match
@@ -129,6 +129,15 @@ public class StringHelper(ILogger _logger)
             bool endsWith = value.EndsWith(matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
             _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !endsWith : endsWith;
+        }
+        
+        if((matchExpression.Equals("false", StringComparison.InvariantCultureIgnoreCase) && value == "0") || 
+           (matchExpression.Equals("true", StringComparison.InvariantCultureIgnoreCase) && value == "1") ||
+           (matchExpression.Equals("0", StringComparison.InvariantCultureIgnoreCase) && value == "false") || 
+           (matchExpression.Equals("1", StringComparison.InvariantCultureIgnoreCase) && value == "true"))
+        {
+            _logger?.ILog("Boolean match found");
+            return !invert;
         }
 
         if (IsRegex(matchExpression) == false)
