@@ -66,7 +66,7 @@ public class MathHelper(ILogger _logger)
             // between
             var values = operation.Split(["><"], StringSplitOptions.None);
             var low = double.Parse(values[0]);
-            var high = double.Parse(values[0]);
+            var high = double.Parse(values[1]);
             bool between = value >= low && value <= high;
             _logger.ILog($"Between: {value} is{(between ? "" : " NOT")} between {low} and {high}");
             return between;
@@ -77,13 +77,13 @@ public class MathHelper(ILogger _logger)
             // not between
             var values = operation.Split(["<>"], StringSplitOptions.None);
             var low = double.Parse(values[0]);
-            var high = double.Parse(values[0]);
+            var high = double.Parse(values[1]);
             bool notBetween = value < low || value > high;
             _logger.ILog($"NotBetween: {value} is{(notBetween ? " NOT" : "")} between {low} and {high}");
             return notBetween;
         }
         
-        const double tolerance = 0.05;
+        const double tolerance = 0.01;
 
         if (operation.Length > 2)
         {
@@ -92,17 +92,17 @@ public class MathHelper(ILogger _logger)
                 case "<=":
                 {
                     var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
-                    var result = value <= comparison + tolerance;
+                    var result = value <= comparison;
                     _logger.ILog(
-                        $"LessOrEqual: {value} is{(result ? "" : " NOT")} less or equal to {comparison} with tolerance {tolerance}");
+                        $"LessOrEqual: {value} is{(result ? "" : " NOT")} less or equal to {comparison}");
                     return result;
                 }
                 case ">=":
                 {
                     var comparison = Convert.ToDouble(AdjustComparisonValue(operation[2..].Trim()));
-                    var result = value >= comparison - tolerance;
+                    var result = value >= comparison;
                     _logger.ILog(
-                        $"GreaterOrEqual: {value} is{(result ? "" : " NOT")} greater or equal to {comparison} with tolerance {tolerance}");
+                        $"GreaterOrEqual: {value} is{(result ? "" : " NOT")} greater or equal to {comparison}");
                     return result;
                 }
                 case "==":
@@ -131,17 +131,17 @@ public class MathHelper(ILogger _logger)
                 case "<":
                 {
                     var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
-                    var result = value < comparison + tolerance;
+                    var result = value < comparison;
                     _logger.ILog(
-                        $"LessThan: {value} is{(result ? "" : " NOT")} less than {comparison} with tolerance {tolerance}");
+                        $"LessThan: {value} is{(result ? "" : " NOT")} less than {comparison}");
                     return result;
                 }
                 case ">":
                 {
                     var comparison = Convert.ToDouble(AdjustComparisonValue(operation[1..].Trim()));
-                    var result = value > comparison - tolerance;
+                    var result = value > comparison;
                     _logger.ILog(
-                        $"GreaterThan: {value} is{(result ? "" : " NOT")} greater than {comparison} with tolerance {tolerance}");
+                        $"GreaterThan: {value} is{(result ? "" : " NOT")} greater than {comparison}");
                     return result;
                 }
                 case "=":
