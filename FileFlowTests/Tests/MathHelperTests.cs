@@ -109,6 +109,7 @@ public class MathHelperTests : TestBase
     {
         Assert.IsTrue(_mathHelper.IsTrue("==5", 5.005)); // within tolerance of 0.01
         Assert.IsFalse(_mathHelper.IsTrue("==5", 5.02)); // outside tolerance
+        Assert.IsTrue(_mathHelper.IsTrue("==5.1", 5.0999999)); // within tolerance of 0.01
     }
 
     /// <summary>
