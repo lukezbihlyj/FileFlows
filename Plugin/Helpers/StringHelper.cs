@@ -86,6 +86,9 @@ public class StringHelper(ILogger _logger)
     {
         matchExpression = matchExpression?.Trim() ?? string.Empty;
         value = value?.Trim() ?? string.Empty;
+        
+        _logger.ILog("Testing match expression: " + matchExpression);
+        _logger.ILog("Testing match value: " + value);
 
         bool invert = false;
 
@@ -93,6 +96,8 @@ public class StringHelper(ILogger _logger)
         {
             invert = true;
             matchExpression = matchExpression[1..];
+            _logger.ILog("Expression is inverted");
+            _logger.ILog("Match expression: " + matchExpression);
         }
 
         // Handle exact match
