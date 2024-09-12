@@ -624,6 +624,54 @@ public class LanguageHelper
             return false;
         }
     }
+
+    /// <summary>
+    /// Tests if a language
+    /// </summary>
+    /// <param name="comparison">the string comparison eg /en|fr/</param>
+    /// <param name="value">the value of the language, eg en, or english, or eng etc</param>
+    /// <returns>true if matches, otherwise false</returns>
+    public static bool Matches(NodeParameters args, string comparison, string value)
+    {
+        comparison = args.ReplaceVariables(comparison.Replace("{orig}", "{OriginalLanguage}"), stripMissing: false);
+        if (args.Variables.TryGetValue("OriginalLanguage", out var oOrigLanguage) && oOrigLanguage is string origLanguage &&
+            string.IsNullOrWhiteSpace(origLanguage) == false)
+        {
+            comparison = comparison.Replace("OriginalLanguage", origLanguage, StringComparison.InvariantCultureIgnoreCase);
+            comparison = comparison.Replace("original", origLanguage);
+            comparison = comparison.Replace("orig", origLanguage);
+        }
+        
+        string iso1 = GetIso1Code(value);
+        string iso2 = GetIso2Code(value);
+        string english = GetEnglishFor(value);
+        var iso1Matches = ValueMatch(comparison, iso1);
+        var iso2Matches = ValueMatch(comparison, iso2);
+        var engMatches = ValueMatch(comparison, english);
+        
+        bool anyMatches = iso1Matches || iso2Matches || engMatches;
+        if(anyMatches == false)
+        {
+            args.Logger.ILog("Language does not match: " + value);
+            return false;
+        }
+        if(iso1Matches)
+            args.Logger?.ILog($"Language ISO-1 match found: '{iso1}' vs '{comparison}'");
+        if(iso2Matches)
+            args.Logger?.ILog($"Language ISO-2 match found: '{iso2}' vs '{comparison}'");
+        if(engMatches)
+            args.Logger?.ILog($"Language English match found: '{english}' vs '{comparison}'");
+        return true;
+
+        bool ValueMatch(string pattern, string value)
+        {
+            if (string.IsNullOrWhiteSpace(pattern))
+                return false;
+            if (string.IsNullOrEmpty(value))
+                return false;
+            return args.StringHelper.Matches(pattern, value);
+        }
+    }
     
     class LanguageDefintion
     {
