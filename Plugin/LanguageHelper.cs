@@ -633,6 +633,25 @@ public class LanguageHelper
     /// <returns>true if matches, otherwise false</returns>
     public static bool Matches(NodeParameters args, string comparison, string value)
     {
+        if (Regex.IsMatch(comparison, @"^/([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+)(\|([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+))*?/$"))
+        {
+            // Remove the leading and trailing slashes
+            string innerContent = comparison.Trim('/');
+
+            // Split the inner content by '|'
+            var languages = innerContent.Split('|');
+
+            // Loop through each language
+            foreach (var language in languages)
+            {
+                // Process each individual language
+                if(Matches(args, language, value))
+                    return true;
+            }
+
+            return false;
+        }
+        
         comparison = args.ReplaceVariables(comparison.Replace("{orig}", "{OriginalLanguage}"), stripMissing: false);
         if (args.Variables.TryGetValue("OriginalLanguage", out var oOrigLanguage) && oOrigLanguage is string origLanguage &&
             string.IsNullOrWhiteSpace(origLanguage) == false)
