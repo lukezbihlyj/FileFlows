@@ -612,21 +612,23 @@ public partial class Flow : ComponentBase, IDisposable
                             if (variableOptions == null)
                             {
                                 variableOptions = new List<ListOption>();
-                                var variableResult = await HttpHelper.Get<Variable[]>($"/api/variable");
-                                if (variableResult.Success)
+                                variableOptions.AddRange(variables.Select(x => new ListOption()
                                 {
-                                    variableOptions = variableResult.Data?.OrderBy(x => x.Name)?.Select(x =>
-                                        new ListOption
-                                        {
-                                            Label = x.Name,
-                                            Value = new ObjectReference
+                                    Label = x.Key,
+                                    Value = x.Key
+                                }));
+                                var variableResult = await HttpHelper.Get<Variable[]>($"/api/variable");
+                                if (variableResult.Success && variableResult.Data?.Any() == true)
+                                {
+                                    variableOptions.AddRange(variableResult.Data.OrderBy(x => x.Name).Select(x =>
+                                            new ListOption
                                             {
-                                                Name = x.Name,
-                                                Uid = x.Uid,
-                                                Type = x.GetType().FullName
-                                            }
-                                        })?.ToList() ?? new List<ListOption>();
+                                                Label = x.Name,
+                                                Value = x.Name
+                                            }));
                                 }
+
+                                variableOptions = variableOptions.OrderBy(x => x.Label.ToLowerInvariant()).ToList();
 
                             }
 
