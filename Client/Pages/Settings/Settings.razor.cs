@@ -179,25 +179,6 @@ public partial class Settings : InputRegister
         lblFileServerDescription = Translater.Instant("Pages.Settings.Fields.FileServer.Description");
         mdSecurityDescription = RenderMarkdown("Pages.Settings.Fields.Security.Description");
         
-        if(LicensedFor(LicenseFlags.ExternalDatabase))
-        {
-            DbTypes =
-            [
-                new() { Label = "SQLite", Value = DatabaseType.Sqlite },
-                new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
-                new() { Label = "MySQL", Value = DatabaseType.MySql },
-                new() { Label = "Postgres", Value = DatabaseType.Postgres },
-                new() { Label = "SQL Server", Value = DatabaseType.SqlServer }
-            ];
-        }
-        else
-        {
-            DbTypes =
-            [
-                new() { Label = "SQLite", Value = DatabaseType.Sqlite },
-                new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection }
-            ];
-        }
         InitSecurityModes();
         Blocker.Show("Loading Settings");
         try
@@ -302,6 +283,27 @@ public partial class Settings : InputRegister
 
             if (Model != null && string.IsNullOrWhiteSpace(Model.AccessToken))
                 Model.AccessToken = Guid.NewGuid().ToString("N");
+            
+            
+            if(LicensedFor(LicenseFlags.ExternalDatabase))
+            {
+                DbTypes =
+                [
+                    new() { Label = "SQLite", Value = DatabaseType.Sqlite },
+                    new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
+                    new() { Label = "MySQL", Value = DatabaseType.MySql },
+                    new() { Label = "Postgres", Value = DatabaseType.Postgres },
+                    new() { Label = "SQL Server", Value = DatabaseType.SqlServer }
+                ];
+            }
+            else
+            {
+                DbTypes =
+                [
+                    new() { Label = "SQLite", Value = DatabaseType.Sqlite },
+                    new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection }
+                ];
+            }
         }
 
         this.StateHasChanged();
