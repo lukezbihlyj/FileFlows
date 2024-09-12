@@ -762,7 +762,7 @@
         "Priority": "Priority",
         "Priority-Help": "The priority with which files should be processed. If a higher priority library has files waiting to be processed, those will be done first.",
         "Filters": "Filters",
-        "Filters-Help": "Optional list of filters to run against the the full nam of the files.",
+        "Filters-Help": "Optional list of filters to run against the the full name of the files.",
         "ExclusionFilters":"Exclusions",
         "ExclusionFilters-Help":"Optional list of inclusions to run against the full name of the files.",
         "ExcludeHidden": "Exclude Hidden",
