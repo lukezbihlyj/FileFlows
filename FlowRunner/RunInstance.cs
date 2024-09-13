@@ -136,7 +136,7 @@ public class RunInstance
                     "Failed to create working directory, this is likely caused by the mapped '/temp' directory is missing or has become unavailable from the host machine");
                 LogError(ex.Message);
                 LogError("==========================================================================================");
-                return 1;
+                return (int)FileStatus.ProcessingFailed;
             }
 
             var libfileUid = parameters.LibraryFile;
