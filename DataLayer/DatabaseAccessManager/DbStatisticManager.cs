@@ -106,12 +106,14 @@ internal  class DbStatisticManager : BaseManager
             string whereClause = "";
 
             if (string.IsNullOrWhiteSpace(name) == false)
-                whereClause += (string.IsNullOrWhiteSpace(whereClause) ? " " : " AND ") + Wrap(nameof(DbStatistic.Name)) + " = @0";
+                whereClause += Wrap(nameof(DbStatistic.Name)) + " = @0";
 
             Logger.ILog(
                 $"Deleting DbStatistics{(!string.IsNullOrWhiteSpace(whereClause) ? $" with conditions: {whereClause}" : "")}");
             using var db = await DbConnector.GetDb();
-            await db.Db.ExecuteAsync("delete from " + Wrap(nameof(DbStatistic)) + " where " + whereClause, name);
+            bool deleted = await db.Db.ExecuteAsync("delete from " + Wrap(nameof(DbStatistic)) + " where " + whereClause, name) > 0;
+            if(deleted)
+                Logger.ILog($"Successfully deleted statistic '{name}'");
         }
     }
 }
