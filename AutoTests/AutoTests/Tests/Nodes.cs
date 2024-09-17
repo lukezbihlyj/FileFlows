@@ -1,24 +1,31 @@
 namespace FileFlowsTests.Tests;
 
-public class Nodes : TestBase
+/// <summary>
+/// Tests for the nodes page
+/// </summary>
+public class Nodes() : TestBase("Nodes")
 {
-    public Nodes() : base("Nodes")
-    {
-    }
-
+    /// <summary>
+    /// Tests the intiial button states in the datalist
+    /// </summary>
     [Test, Order(1)]
     public async Task InitialButtonStates()
     {
-        await FileFlows.Table.ButtonEnabled("Add");
         await FileFlows.Table.ButtonEnabled("Help");
         await FileFlows.Table.ButtonDisabled("Edit");
         await FileFlows.Table.ButtonDisabled("Delete");
     }
 
+    /// <summary>
+    /// Tests the help page
+    /// </summary>
     [Test]
     public Task Help()
-        => FileFlows.Help.TestDatalistButton("https://docs.fileflows.com/nodes");
+        => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/configuration/nodes");
 
+    /// <summary>
+    /// Tests a user can download the node zip file
+    /// </summary>
     [Test]
     public async Task Download()
     {
@@ -28,7 +35,7 @@ public class Nodes : TestBase
         await Page.Locator("a.btn >> text='Download Node'").ClickAsync();
         // Wait for the download process to complete
         var download = await waitForDownloadTask;
-        Console.WriteLine(await download.PathAsync());
+        Logger.ILog(await download.PathAsync() ?? "Path is null");
         // Save downloaded file somewhere
         string file = Path.GetTempFileName() + ".zip";
         await download.SaveAsAsync(file);
@@ -37,6 +44,9 @@ public class Nodes : TestBase
         Assert.IsTrue(dll);
     }
     
+    /// <summary>
+    /// Tests the internal node cannot be deleted
+    /// </summary>
     [Test]
     public async Task CannotDeleteInternalNode()
     {

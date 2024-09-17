@@ -1,13 +1,16 @@
 namespace FileFlowsTests.Tests.FlowTests;
 
-public abstract class FlowTest:TestBase
+/// <summary>
+/// A flow test that test the flow editor and processing
+/// </summary>
+public abstract class FlowTest():TestBase("Flows")
 {
-    protected FlowTest() : base("Flows")
-    {
-    }
-
-    protected readonly string TempPath = Path.GetTempPath();
-
+    /// <summary>
+    /// Creates a flow
+    /// </summary>
+    /// <param name="name">the name of the flow</param>
+    /// <param name="template">the template to use</param>
+    /// <param name="parameters">the parameters to fill out</param>
     protected async Task CreateFlow(string name, string template, IEnumerable<FlowField> parameters)
     {
         await GotoPage("Flows");
@@ -36,6 +39,11 @@ public abstract class FlowTest:TestBase
         await SelectItem(name);
     }
 
+    /// <summary>
+    /// Creates a library
+    /// </summary>
+    /// <param name="library">the library</param>
+    /// <param name="scan">if the library should be scanned</param>
     protected async Task CreateLibrary(Library library, bool scan = false)
     {
         await GotoPage("Libraries");
@@ -79,8 +87,23 @@ public abstract class FlowTest:TestBase
             await TableButtonClick("Rescan");
     }
 
+    /// <summary>
+    /// Selects a flow part
+    /// </summary>
+    /// <param name="name">the name of the flow part</param>
+    /// <returns>the task to await</returns>
     public Task FlowPartSelect(string name) => FileFlows.Flow.Select(name);
+    /// <summary>
+    /// Edits a flow part
+    /// </summary>
+    /// <param name="name">the name of the flow part</param>
+    /// <returns>the task to await</returns>
     public Task FlowPartEdit(string name) => FileFlows.Flow.Edit(name);
+    /// <summary>
+    /// Deletes a flow part
+    /// </summary>
+    /// <param name="name">the name of the flow part</param>
+    /// <returns>the task to await</returns>
     public Task FlowPartDelete(string name) => FileFlows.Flow.Delete(name);
 
 }

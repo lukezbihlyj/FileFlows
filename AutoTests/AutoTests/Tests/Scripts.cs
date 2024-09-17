@@ -1,11 +1,13 @@
 namespace FileFlowsTests.Tests;
 
-public class Scripts: TestBase
+/// <summary>
+/// Tests for the script page
+/// </summary>
+public class Scripts(): TestBase("Scripts")
 {
-    public Scripts() : base("Scripts")
-    {
-    }
-
+    /// <summary>
+    /// Tests the intial button states of the datalist
+    /// </summary>
     [Test]
     public async Task InitialButtonStates()
     {
@@ -21,26 +23,33 @@ public class Scripts: TestBase
         await FileFlows.Table.ButtonDisabled("Used By");
     }
 
+    /// <summary>
+    /// Tests the help button
+    /// </summary>
     [Test]
     public Task Help()
-        => FileFlows.Help.TestDatalistButton("https://docs.fileflows.com/scripts");
+        => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/extensions/scripts");
 
+    /// <summary>
+    /// Tests importing and exporting a script
+    /// </summary>
     [Test]
     public async Task ImportExport()
     {
         string name = Guid.NewGuid().ToString();
         string tempFile = Path.Combine(Path.GetTempPath(), name + ".js");
-        string js = @"
+        string js = $@"
 /**
- * Description of this script
- * @param {int} NumberParameter Description of this input
+ * @name {name}
+ * @description Description of this script
+ * @param {{int}} NumberParameter Description of this input
  * @output Description of output 1
  * @output Description of output 2
  */
 function Script(NumberParameter)
-{
+{{
     return 1;
-}
+}}
 ".Trim();
         await File.WriteAllTextAsync(tempFile, js);
         
@@ -59,7 +68,7 @@ function Script(NumberParameter)
         await TableButtonClick("Export");
         // Wait for the download process to complete
         var download = await waitForDownloadTask;
-        Console.WriteLine(await download.PathAsync());
+        Logger.ILog(await download.PathAsync() ?? "No path");
         // Save downloaded file somewhere
         string file = Path.GetTempFileName() + ".js";
         await download.SaveAsAsync(file);
@@ -69,10 +78,14 @@ function Script(NumberParameter)
     }
     
     
+    /// <summary>
+    /// Tests an invalid script is rejected
+    /// </summary>
     [Test]
     public async Task InvalidScript()
     {
         await TableButtonClick("Add");
+        await Page.Locator(".flow-modal .flow-modal-footer button >> text=Next").ClickAsync();
         await SetText("Name", "Invalid Script");
         await TestCode(@"
 function NotValid() { 
@@ -85,7 +98,7 @@ function NotValid() {
  */
 function NotValid() { 
     return 1; 
-}", "No output parameters found");
+}", "No comment parameters found");
         
         await TestCode(@"
 /**
@@ -93,25 +106,29 @@ function NotValid() {
  */
 function NotValid() { 
     return 1; 
-}", "No output parameters found");
+}", "No comment parameters found");
 
         async Task TestCode(string code, string error)
         {
             await SetCode(code.Trim());
             await ButtonClick("Save");
-            await Expect(Page.Locator($".error-text:has-text(\"{error}\")")).ToHaveCountAsync(1);
+            await Expect(Page.Locator($".toast-message .message:has-text(\"{error}\")")).ToHaveCountAsync(1);
         }
     }
 
+    /// <summary>
+    /// Tests a basic script is accepted
+    /// </summary>
     [Test]
     public async Task BasicScript()
     {
         await TableButtonClick("Add");
+        await Page.Locator(".flow-modal .flow-modal-footer button >> text=Next").ClickAsync();
         string name = Guid.NewGuid().ToString();
         await SetText("Name", name);
         await SetCode(@"
 /**
- * Not valid
+ * Valid script
  * @output the output
  */
 function Script() { 
@@ -121,12 +138,16 @@ function Script() {
         await SelectItem(name);
     }
     
+    /// <summary>
+    /// Tests the script repository
+    /// </summary>
     [Test]
     public async Task ScriptRepository()
     {
         await TableButtonClick("Repository");
         await SelectItem("Video - Resolution", sideEditor: true);
         await TableButtonClick("Download", sideEditor: true);
+        await FileFlows.Editor.ButtonClick("Close");
         await SelectItem("Video - Resolution");
     }
 }

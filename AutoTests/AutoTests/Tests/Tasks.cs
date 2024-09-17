@@ -1,11 +1,13 @@
 namespace FileFlowsTests.Tests;
 
-public class Tasks : TestBase
+/// <summary>
+/// Tests for the tasks page
+/// </summary>
+public class Tasks() : TestBase("Tasks")
 {
-    public Tasks() : base("Tasks")
-    {
-    }
-
+    /// <summary>
+    /// Tests the initial button states
+    /// </summary>
     [Test]
     public async Task InitialButtonStates()
     {
@@ -15,10 +17,16 @@ public class Tasks : TestBase
         await FileFlows.Table.ButtonDisabled("Delete");
     }
 
+    /// <summary>
+    /// Tests the help page
+    /// </summary>
     [Test]
     public Task Help()
-        => FileFlows.Help.TestDatalistButton("https://docs.fileflows.com/tasks");
+        => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/system/tasks");
 
+    /// <summary>
+    /// Tests adding/editing/deleting a task
+    /// </summary>
     [Test]
     public async Task AddEditDelete()
     {
@@ -26,6 +34,7 @@ public class Tasks : TestBase
         await GotoPage("Scripts");
         await SkyBox("System Scripts");
         await TableButtonClick("Add");
+        await Page.Locator(".flow-modal .flow-modal-footer button >> text=Next").ClickAsync();
         await SetText("Name", testScript);
         await ButtonClick("Save");
         await SelectItem(testScript);

@@ -1,11 +1,10 @@
 namespace FileFlowsTests.Tests;
 
-public class Processing : TestBase
+/// <summary>
+/// Tests for processing files
+/// </summary>
+public class Processing() : TestBase("Flows")
 {
-    public Processing() : base("Flows")
-    {
-    }
-    
     
     [Test]
     public async Task ProcesssToH264()

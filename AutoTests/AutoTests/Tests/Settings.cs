@@ -1,12 +1,14 @@
 namespace FileFlowsTests.Tests;
 
-public class Settings : TestBase
+/// <summary>
+/// Tests for the settings page
+/// </summary>
+public class Settings() : TestBase("Settings")
 {
-    public Settings() : base("Settings")
-    {
-    }
-
+    /// <summary>
+    /// Tests the help URL
+    /// </summary>
     [Test]
     public Task Help()
-        => FileFlows.Help.TestButton("https://docs.fileflows.com/settings");
+        => FileFlows.Help.TestButton("https://fileflows.com/docs/webconsole/admin/settings");
 }

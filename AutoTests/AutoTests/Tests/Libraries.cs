@@ -1,12 +1,13 @@
 namespace FileFlowsTests.Tests;
 
-public class Libraries : TestBase
+/// <summary>
+/// Library page tests
+/// </summary>
+public class Libraries() : TestBase("Libraries")
 {
-    public Libraries() : base("Libraries")
-    {
-    }
-    
-    
+    /// <summary>
+    /// Tests the initial button states in the datalist
+    /// </summary>
     [Test]
     public async Task InitialButtonStates()
     {
@@ -17,7 +18,10 @@ public class Libraries : TestBase
         await FileFlows.Table.ButtonDisabled("Rescan");
     }
 
+    /// <summary>
+    /// Tests the help page
+    /// </summary>
     [Test]
     public Task Help()
-        => FileFlows.Help.TestDatalistButton("https://docs.fileflows.com/libraries");
+        => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/configuration/libraries");
 }

@@ -1,11 +1,13 @@
 namespace FileFlowsTests.Tests;
 
-public class Variables : TestBase
+/// <summary>
+/// Tests for the variables page
+/// </summary>
+public class Variables() : TestBase("Variables")
 {
-    public Variables() : base("Variables")
-    {
-    }
-
+    /// <summary>
+    /// Tests the initial button states
+    /// </summary>
     [Test]
     public async Task InitialButtonStates()
     {
@@ -15,10 +17,16 @@ public class Variables : TestBase
         await FileFlows.Table.ButtonDisabled("Delete");
     }
 
+    /// <summary>
+    /// Tests the help
+    /// </summary>
     [Test]
     public Task Help()
-        => FileFlows.Help.TestDatalistButton("https://docs.fileflows.com/variables");
+        => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/extensions/variables");
 
+    /// <summary>
+    /// Tests adding/editing/deleting a variable
+    /// </summary>
     [Test]
     public async Task AddEditDelete()
     {

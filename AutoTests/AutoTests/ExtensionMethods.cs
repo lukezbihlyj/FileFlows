@@ -1,5 +1,8 @@
 namespace FileFlowsTests;
 
+/// <summary>
+/// Extension methods
+/// </summary>
 internal static class ExtensionMethods
 {
     /// <summary>

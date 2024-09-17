@@ -39,6 +39,11 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     private string RecordingsDirectory { get; set; }
 
     /// <summary>
+    /// Gets the temporary path to use in the test
+    /// </summary>
+    protected string TempPath { get; private set; }
+
+    /// <summary>
     /// A random to use in the tests
     /// </summary>
     protected Random rand = new Random(DateTime.Now.Millisecond);
@@ -56,24 +61,30 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     [SetUp]
     public async Task Setup()
     {
-        var tempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
+        TempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
         var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
         
-        RecordingsDirectory = Path.Combine(tempPath, "recordings", TestContext.CurrentContext.Test.FullName);
+        RecordingsDirectory = Path.Combine(TempPath, "recordings", TestContext.CurrentContext.Test.FullName);
         if (Directory.Exists(RecordingsDirectory) == false)
             Directory.CreateDirectory(RecordingsDirectory);
         #if(DEBUG)
         Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
-            Headless = false // This makes the browser window visible
+            Headless = false, // This makes the browser window visible
+            Args = new[] { "--window-size=1920,1080" } // This sets the window size
         });
         #else
         Browser = await Playwright.Chromium.LaunchAsync();
         #endif
         Context = await Browser.NewContextAsync(new()
         {
+            ViewportSize = new ViewportSize
+            {
+                Width = 1920, 
+                Height = 1080
+            },
             RecordVideoDir = RecordingsDirectory + "/",
-            RecordVideoSize = new RecordVideoSize() { Width = 1280, Height = 720 },
+            RecordVideoSize = new RecordVideoSize() { Width = 1920, Height = 1080 },
             IgnoreHTTPSErrors = true,
             Permissions = new []
             {

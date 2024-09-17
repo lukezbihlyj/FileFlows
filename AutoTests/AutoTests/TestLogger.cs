@@ -5,6 +5,9 @@ namespace FileFlowsTests;
 /// </summary>
 public class TestLogger : ILogger
 {
+    /// <summary>
+    /// Messages received
+    /// </summary>
     private readonly List<string> Messages = new();
 
     /// <summary>
