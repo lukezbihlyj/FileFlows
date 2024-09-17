@@ -73,7 +73,7 @@ public class ServerUpdater : UpdaterWorker
             schedule = ScheduleType.Minute;
         }
 
-        var updateUrl = Environment.GetEnvironmentVariable("AutoUpdateUrl");
+        var updateUrl = Globals.AutoUpdateUrl?.EmptyAsNull() ?? Environment.GetEnvironmentVariable("AutoUpdateUrl");
         if (string.IsNullOrEmpty(updateUrl) == false)
         {
             if (updateUrl.EndsWith("/"))

@@ -126,4 +126,9 @@ public class Globals
     /// The processing total files statistic
     /// </summary>
     public const string STAT_TOTAL_FILES = "TOTAL_FILES";
+    
+    /// <summary>
+    /// Optional URL to use for auto updates
+    /// </summary>
+    public static string? AutoUpdateUrl { get; set; }
 }
