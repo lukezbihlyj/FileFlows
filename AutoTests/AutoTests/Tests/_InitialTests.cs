@@ -24,7 +24,7 @@ public class InitialTests() : TestBase("")
         Assert.IsFalse(await FileFlows.InitialConfiguration.PreviousButtonShown());
         Assert.IsFalse(await FileFlows.InitialConfiguration.FinishButtonShown());
         Assert.IsTrue(await FileFlows.InitialConfiguration.NextButtonShown());
-        
+            
         await FileFlows.InitialConfiguration.NextClick();
         Assert.AreEqual("End-User License Agreement of FileFlows", await FileFlows.InitialConfiguration.GetPageTitle());
         Assert.IsTrue(await FileFlows.InitialConfiguration.PreviousButtonShown());

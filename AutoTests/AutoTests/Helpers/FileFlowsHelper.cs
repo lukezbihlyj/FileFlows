@@ -63,9 +63,12 @@ public class FileFlowsHelper
     /// Constructs a new instance of the FileFlows Helper
     /// </summary>
     /// <param name="test">the test using this helper</param>
-    public FileFlowsHelper(TestBase test)
+    /// <param name="baseUrl">the base URL of the FileFlows server</param>
+    public FileFlowsHelper(TestBase test, string baseUrl)
     {
-        BaseUrl = Environment.GetEnvironmentVariable("FileFlowsUrl")?.EmptyAsNull() ?? "http://localhost:5276/";
+        BaseUrl = baseUrl;
+        if (BaseUrl.EndsWith('/') == false)
+            BaseUrl += '/';
         this.Page = test.Page;
         this.InitialConfiguration = new(test);
         this.Tab = new (test);

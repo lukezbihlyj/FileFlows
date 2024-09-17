@@ -56,10 +56,12 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     [SetUp]
     public async Task Setup()
     {
-        var tempPath = Environment.GetEnvironmentVariable("FF_TEMP_PATH");
-        if (string.IsNullOrWhiteSpace(tempPath))
-            tempPath = Path.GetTempPath();
+        var tempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
+        var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
+        
         RecordingsDirectory = Path.Combine(tempPath, "recordings", TestContext.CurrentContext.Test.FullName);
+        if (Directory.Exists(RecordingsDirectory) == false)
+            Directory.CreateDirectory(RecordingsDirectory);
         #if(DEBUG)
         Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
@@ -90,8 +92,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
             else
                 Logger.ILog(msg.Text);
         };
-        
-        FileFlows = new FileFlowsHelper(this);
+        FileFlows = new FileFlowsHelper(this, ffBaseUrl);
         await FileFlows.Open();
         if(string.IsNullOrWhiteSpace(PageName) == false)
             await FileFlows.GotoPage(PageName);
