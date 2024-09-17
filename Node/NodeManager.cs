@@ -185,7 +185,7 @@ public class NodeManager
         if(result.Uid != CommonVariables.InternalNodeUid) // internal node uid is already set elsewhere to a unique UID for security
             RemoteService.NodeUid = result.Uid;
         RemoteService.ServiceBaseUrl = settings.ServerUrl;
-        if (RemoteService.ServiceBaseUrl.EndsWith("/"))
+        if (RemoteService.ServiceBaseUrl.EndsWith('/'))
             RemoteService.ServiceBaseUrl = RemoteService.ServiceBaseUrl[..^1];
 
         Logger.Instance?.ILog("Successfully registered node");

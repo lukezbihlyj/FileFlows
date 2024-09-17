@@ -4,8 +4,14 @@ using NUnit.Framework.Internal;
 
 namespace FileFlowsTests.Tests.FlowTests.Video;
 
+/// <summary>
+/// Scaling video tests
+/// </summary>
 public class Scaling:VideoTest
 {
+    /// <summary>
+    /// Downscales a video
+    /// </summary>
     [Test]
     public async Task Downscale()
     {
@@ -18,6 +24,9 @@ public class Scaling:VideoTest
         );
     }
 
+    /// <summary>
+    /// Upscales a video
+    /// </summary>
     [Test]
     public async Task Upscale()
     {
