@@ -129,7 +129,7 @@ public partial class InitialConfig : ComponentBase
 
         AvailablePlugins = request.Data.OrderBy(x => x.Installed ? 0 : 1)
             .ThenBy(x => x.Name.ToLowerInvariant()).ToList();
-        ForcedPlugins = AvailablePlugins.Where(x => x.Installed).ToList();
+        ForcedPlugins = AvailablePlugins.Where(x => x.Installed || x.Name.StartsWith("Basic", StringComparison.InvariantCultureIgnoreCase)).ToList();
     }
 
     /// <summary>
