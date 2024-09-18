@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <AssemblyName>FileFlows.AutoTests</AssemblyName>
         <RootNamespace>FileFlows.AutoTests</RootNamespace>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <ItemGroup>

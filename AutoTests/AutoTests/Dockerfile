@@ -1,20 +1,26 @@
-FROM mcr.microsoft.com/playwright/dotnet:v1.47.0-noble
+FROM mcr.microsoft.com/playwright:v1.26.0-focal AS base
 
+# Install dotnet SDK
+RUN wget https://dot.net/v1/dotnet-install.sh  && \
+    bash dotnet-install.sh -c 8.0 --install-dir /dotnet && \
+    rm -f dotnet-install.sh && \
+    chmod 775 /dotnet    
+
+# Copy the application files
 COPY /FileFlows /app/FileFlows
 COPY /AutoTests /app/AutoTests
+COPY /docker-entrypoint.sh /app/docker-entrypoint.sh
 
-# Start the FileFlows server
-# Ensure the server runs in the background
-RUN dotnet /app/FileFlows/Server/FileFlows.dll &
+EXPOSE 5276
+EXPOSE 19222
 
-# Wait for the server to fully start up (this could be replaced with a more reliable check)
-RUN sleep 20
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-# Run the tests
-RUN dotnet test /app/AutoTests/FileFlows.AutoTests.dll --filter FullyQualifiedName=FileFlowsTests.Tests.InitialTests
+# Create directories for logs and test results
+RUN mkdir -p /app/FileFlows/Logs /app/tests-results
 
-# Stop the server after tests are completed
-RUN pkill -f 'dotnet /app/FileFlows/Server/FileFlows.dll'
+# Make the entrypoint script executable
+RUN chmod +x /app/docker-entrypoint.sh
 
 # Ensure the container exits after the tests are done
-CMD ["echo", "Tests completed"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
