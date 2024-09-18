@@ -9,7 +9,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     /// <summary>
     /// The test logger
     /// </summary>
-    public readonly TestLogger Logger = new ();
+    public readonly TestLogger Logger;
     /// <summary>
     /// Gest the FileFlows Helper
     /// </summary>
@@ -61,6 +61,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     [SetUp]
     public async Task Setup()
     {
+        Logger.Writer = TestContext.WriteLine;
         TempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
         var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
         Logger.ILog("FF Base URL: " + ffBaseUrl);
@@ -144,6 +145,9 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         {
             Assert.Fail("Blazor Error: " + ConsoleErrors);
         }
+
+        if (Directory.Exists(RecordingsDirectory) == false)
+            return;
 
         var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
         if (videoFile == null)

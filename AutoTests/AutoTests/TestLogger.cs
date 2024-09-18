@@ -1,13 +1,11 @@
 namespace FileFlowsTests;
 
+
 /// <summary>
 /// A logger for tests that stores the logs in memory
 /// </summary>
 public class TestLogger : ILogger
 {
-    /// <summary>
-    /// Messages received
-    /// </summary>
     private readonly List<string> Messages = new();
 
     /// <summary>
@@ -68,7 +66,7 @@ public class TestLogger : ILogger
     /// <summary>
     /// Gets or sets an optional writer
     /// </summary>
-    public Action<string> Writer { get; set; }
+    public Action<string> Writer { get; set; } = null!;
 
     /// <summary>
     /// Returns the entire log as a string
@@ -78,10 +76,10 @@ public class TestLogger : ILogger
         => string.Join(Environment.NewLine, Messages);
 
     /// <summary>
-    /// True if the log contains the text
+    /// Checks if the log contains the text
     /// </summary>
     /// <param name="text">the text to check for</param>
-    /// <returns>true if the log contains it</returns>
+    /// <returns>true if it contains it, otherwise false</returns>
     public bool Contains(string text)
-        => !string.IsNullOrEmpty(text) && Messages.Any(x => x.Contains(text, StringComparison.InvariantCultureIgnoreCase));
+        => Messages.Any(x => x.Contains(text));
 }
