@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm -rf test-results > /dev/null 2>&1 &
+rm -rf logs > /dev/null 2>&1 &
+
 # Build the Docker image
 echo Building Docker Image
 docker build -f Dockerfile -t fileflows-autotests --build-arg TZ=Pacific/Auckland .
