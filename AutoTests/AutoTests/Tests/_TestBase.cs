@@ -130,29 +130,29 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         await Context.CloseAsync();
         await Browser.CloseAsync();
 
-        if (failed == false && blazorError == false)
+        // if (failed == false && blazorError == false)
+        // {
+        //     try
+        //     {
+        //         Directory.Delete(RecordingsDirectory, true);
+        //     }
+        //     catch (Exception)
+        //     {
+        //     }
+        // }
+
+        if (Directory.Exists(RecordingsDirectory))
         {
-            try
-            {
-                Directory.Delete(RecordingsDirectory, true);
-            }
-            catch (Exception)
-            {
-            }
+            var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
+            if (videoFile == null)
+                return;
+            File.Move(videoFile, Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"));
         }
 
         if (failed == false && blazorError)
         {
             Assert.Fail("Blazor Error: " + ConsoleErrors);
         }
-
-        if (Directory.Exists(RecordingsDirectory) == false)
-            return;
-
-        var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
-        if (videoFile == null)
-            return;
-        File.Move(videoFile, Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"));
     }
 
     protected Task GotoPage(string name) => FileFlows.GotoPage(name);
