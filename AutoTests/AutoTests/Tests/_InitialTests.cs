@@ -11,7 +11,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
-    [Test, Order(11)]
+    [Test, Order(1)]
     public async Task InitialConfiguration()
     {
         await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
