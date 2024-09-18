@@ -9,4 +9,9 @@ docker build -f Dockerfile -t fileflows-autotests --build-arg TZ=Pacific/Aucklan
 
 # Run the container
 echo Running Docker image
-docker run --rm -p 19222:5276 -v "$(pwd)/logs:/app/FileFlows/Logs" -v "$(pwd)/test-results:/app/tests-results" fileflows-autotests
+docker run --rm \
+    -p 19222:5276 \
+    -v "$(pwd)/logs:/app/FileFlows/Logs" \
+    -v "$(pwd)/test-results:/app/tests-results" \
+    -e FF_TEMP_PATH=/app/tests-results \
+    fileflows-autotests
