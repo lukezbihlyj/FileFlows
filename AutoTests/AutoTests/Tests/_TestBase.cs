@@ -9,7 +9,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     /// <summary>
     /// The test logger
     /// </summary>
-    public readonly TestLogger Logger;
+    public readonly TestLogger Logger = new();
     /// <summary>
     /// Gest the FileFlows Helper
     /// </summary>
