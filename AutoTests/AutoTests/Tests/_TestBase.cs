@@ -148,7 +148,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
         if (videoFile == null)
             return;
-        File.Move(videoFile, Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.ID + ".webm"));
+        File.Move(videoFile, Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"));
     }
 
     protected Task GotoPage(string name) => FileFlows.GotoPage(name);
