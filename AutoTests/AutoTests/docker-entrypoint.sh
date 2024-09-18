@@ -39,6 +39,3 @@ wait_for_server
 
 # Stop the server after tests are completed
 kill $SERVER_PID || true
-
-# Indicate that tests have completed
-echo "Tests complete"
