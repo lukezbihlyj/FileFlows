@@ -144,6 +144,11 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         {
             Assert.Fail("Blazor Error: " + ConsoleErrors);
         }
+
+        var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
+        if (videoFile == null)
+            return;
+        File.Move(videoFile, Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.ID + ".webm"));
     }
 
     protected Task GotoPage(string name) => FileFlows.GotoPage(name);
