@@ -178,8 +178,8 @@ public class InitialTests() : TestBase("")
     
         var licenseEmail = Environment.GetEnvironmentVariable("FF_LICENSE_EMAIL") ?? string.Empty;
         var licenseKey = Environment.GetEnvironmentVariable("FF_LICENSE_KEY") ?? string.Empty;
-        Assert.IsFalse(string.IsNullOrWhiteSpace(licenseEmail));
-        Assert.IsFalse(string.IsNullOrWhiteSpace(licenseKey));
+        Assert.IsFalse(string.IsNullOrWhiteSpace(licenseEmail), "License Email is not set");
+        Assert.IsFalse(string.IsNullOrWhiteSpace(licenseKey), "License Key is not set");
     
         await Page.Locator("input[placeholder='License Email']").FillAsync(licenseEmail);
         await Page.Locator("input[placeholder='License Key']").FillAsync(licenseKey);
