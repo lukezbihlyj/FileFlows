@@ -7,7 +7,7 @@ namespace FileFlowsTests.Helpers.UiComponents;
 public class Flow(TestBase test) : UiComponent(test)
 {
     private ILocator FlowElement(string label)
-        => Page.Locator($"#flow-parts .flow-part:has-text(\"{label}\") .draggable");
+        => Page.Locator($".flow-parts .flow-part:has-text(\"{label}\") .draggable");
 
     public Task Select(string label)
         => FlowElement(label).ClickAsync();

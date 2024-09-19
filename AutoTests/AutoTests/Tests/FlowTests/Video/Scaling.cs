@@ -17,7 +17,7 @@ public class Scaling:VideoTest
     {
         await Test(
             "Downscale",
-            TestFiles.AnimeSampleMkv,
+            TestFiles.TestVideo1,
             "480p",
             "1280x960",
             "640x480"
@@ -32,7 +32,7 @@ public class Scaling:VideoTest
     {
         await Test(
             "Upscale",
-            TestFiles.BigBuckBunny480p30sMp4,
+            TestFiles.TestVideo1,
             "720p",
             "854x480",
             "1280x720",

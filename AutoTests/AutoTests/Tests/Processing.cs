@@ -38,6 +38,6 @@ public class Processing() : TestBase("Flows")
         await Task.Delay(5);
 
         await GotoPage("Files");
-        await ItemExists(TestFiles.BasicMkv);
+        await ItemExists(TestFiles.TestVideo1);
     }
 }

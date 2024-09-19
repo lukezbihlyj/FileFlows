@@ -175,8 +175,9 @@ public abstract class TestBase(string PageName): PlaywrightTest()
                 var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
                 if (videoFile == null)
                     return;
-                File.Move(videoFile,
-                    Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"), true);
+                var outputVideo = Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"); 
+                File.Move(videoFile, outputVideo, true);
+                Logger.ILog("Output Video: " + outputVideo);
             }
         }
         catch (Exception ex)
