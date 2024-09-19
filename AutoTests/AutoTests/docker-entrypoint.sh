@@ -35,7 +35,21 @@ popd
 wait_for_server
 
 # Run the tests
-/dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll --filter FullyQualifiedName=FileFlowsTests.Tests.InitialTests --logger "trx;LogFileName=/app/tests-results/test-results.trx"
+/dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
+  --filter FullyQualifiedName=FileFlowsTests.Tests.InitialTests \
+  --logger "trx;LogFileName=/app/tests-results/InitialTests.trx"
+
+# Check if InitialTests passed
+if [ $? -eq 0 ]; then
+    echo "InitialTests passed. Running other tests..."
+
+    # Step 2: Run all other tests excluding InitialTests and append to the same log file
+    /dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
+        --filter "FullyQualifiedName~FileFlowsTests.Tests.InitialTests" \
+        --logger "trx;LogFileName=/app/tests-results/AutoTests.trx"
+else
+    echo "InitialTests failed. Not running other tests."
+fi
 
 # Stop the server after tests are completed
 kill $SERVER_PID || true
