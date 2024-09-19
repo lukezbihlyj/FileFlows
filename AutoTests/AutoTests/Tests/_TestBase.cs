@@ -4,7 +4,7 @@ using NUnit.Framework.Interfaces;
 
 namespace FileFlowsTests.Tests;
 
-[Parallelizable(ParallelScope.All)]
+//[Parallelizable(ParallelScope.All)]
 public abstract class TestBase(string PageName): PlaywrightTest()
 {
     /// <summary>
