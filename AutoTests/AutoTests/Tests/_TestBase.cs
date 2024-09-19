@@ -158,7 +158,8 @@ public abstract class TestBase(string PageName): PlaywrightTest()
             if(Browser != null)
                 await Browser.CloseAsync();
 
-            if (Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
+            var outputVideo = Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"); 
+            if (outputVideo != TestFiles.TestVideo1 && Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
                 blazorError == false)
             {
                 try
@@ -175,7 +176,6 @@ public abstract class TestBase(string PageName): PlaywrightTest()
                 var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
                 if (videoFile == null)
                     return;
-                var outputVideo = Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"); 
                 File.Move(videoFile, outputVideo, true);
                 Logger.ILog("Output Video: " + outputVideo);
             }
