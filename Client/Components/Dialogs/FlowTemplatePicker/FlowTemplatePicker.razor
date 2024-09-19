@@ -10,7 +10,7 @@
                 <div class="top-level-tag">
                     @foreach (var tag in Tags)
                     {
-                        if (tag.IndexOf(":") > 0)
+                        if (tag.IndexOf(":", StringComparison.Ordinal) > 0)
                         {
                             continue;
                         }
@@ -28,7 +28,7 @@
                 }
             </div>
             <div class="filter">
-                <input type="text" placeholder="@lblFilter" @bind-value="FilterText" @bind-value:event="oninput" @onkeydown="FilterKeyDown" autocomplete="off" />
+                <input type="text" id="flow-template-picker-filter" placeholder="@lblFilter" @bind-value="FilterText" @bind-value:event="oninput" @onkeydown="FilterKeyDown" autocomplete="off" />
                 <i class="fas fa-search" @onclick="() => Filter()"></i>
             </div>
         </div>
@@ -59,9 +59,9 @@
         </div>
         </Body>
         <Footer>
-            <button @onclick=@Open class="btn-open" disabled="@(Selected?.Path?.StartsWith("local:") != true)">@lblOpen</button>
-            <button @onclick=@New disabled="@(Selected == null)">@lblNext &gt;</button>
-            <button @onclick=@Cancel>@lblCancel</button>
+            <button id="flow-template-picker-button-open" @onclick=@Open class="btn-open" disabled="@(Selected?.Path?.StartsWith("local:") != true)">@lblOpen</button>
+            <button id="flow-template-picker-button-next" @onclick=@New disabled="@(Selected == null)">@lblNext &gt;</button>
+            <button id="flow-template-picker-button-close" @onclick=@Cancel>@lblCancel</button>
         </Footer>
     </Modal>
 }

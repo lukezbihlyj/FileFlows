@@ -16,8 +16,8 @@ public abstract class FlowTest():TestBase("Flows")
         await GotoPage("Flows");
         await TableButtonClick("Add");
         await EditorTitle("Add Flow");
+        await SelectTemplate(template);
         await SetText("Name", name);
-        await SetSelect("Template", template);
         var flowFields = parameters as FlowField[] ?? parameters.ToArray();
         if (flowFields?.Any() == true)
         {
@@ -105,5 +105,21 @@ public abstract class FlowTest():TestBase("Flows")
     /// <param name="name">the name of the flow part</param>
     /// <returns>the task to await</returns>
     public Task FlowPartDelete(string name) => FileFlows.Flow.Delete(name);
+
+
+    /// <summary>
+    /// Selects a template in the flow template wizard
+    /// </summary>
+    /// <param name="name">the name of the template</param>
+    protected async Task SelectTemplate(string name)
+    {
+        var txtFilter = Page.Locator("#flow-template-picker-filter");
+        await txtFilter.FillAsync(name);
+        await txtFilter.PressAsync("Enter");
+
+        await Page.Locator($".template[x-name='{name}']").ClickAsync();
+
+        await Page.Locator("flow-template-picker-button-next").ClickAsync();
+    }
 
 }

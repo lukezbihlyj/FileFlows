@@ -42,7 +42,7 @@ public class Scaling:VideoTest
 
     private async Task Test(string flowName, string input, string targetResolution, string inputResolution, string outputResolution, bool force = false)
     {
-        string shortName = input.Substring(input.LastIndexOf("/") + 1);
+        string shortName = input[(input.LastIndexOf('/') + 1)..];
         flowName = RandomName(flowName);
         string libName = "Library For " + flowName;
         await CreateFlow(flowName, "Convert Video", new FlowField[]

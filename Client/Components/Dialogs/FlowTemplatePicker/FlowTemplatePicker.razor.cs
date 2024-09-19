@@ -207,6 +207,8 @@ public partial class FlowTemplatePicker : ComponentBase
         FilteredTemplates = Templates.Where(x =>
                 x.Name?.ToLowerInvariant().Contains(text) == true || x.Description?.ToLowerInvariant().Contains(text) == true || x.Author?.ToLowerInvariant().Contains(text) == true)
             .ToList();
+        // clear the selected tag
+        SelectedTag = string.Empty;
     }
     
     /// <summary>
