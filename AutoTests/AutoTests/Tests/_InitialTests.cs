@@ -112,8 +112,6 @@ public class InitialTests() : TestBase("")
     [Test, Order(30)]
     public async Task FlowPointer()
     {
-        await FileFlows.GotoPage("Dashboard");
-    
         await Expect(Page.Locator(".nav-item.flows .not-configured-pointer")).ToHaveCountAsync(1);
         await FileFlows.GotoPage("Flows");
         await Expect(Page.Locator(".pointer-add >> text='Add'")).ToHaveCountAsync(1);
