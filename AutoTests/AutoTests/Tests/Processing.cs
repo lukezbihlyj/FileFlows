@@ -7,7 +7,7 @@ public class Processing() : TestBase("Flows")
 {
     
     [Test]
-    public async Task ProcesssToH264()
+    public async Task ProcessToH264()
     {
         const string FlowName = "Process To H264";
         const string LibraryName = "Library for " + FlowName;
