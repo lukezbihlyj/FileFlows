@@ -15,8 +15,8 @@ public abstract class FlowTest():TestBase("Flows")
     {
         await GotoPage("Flows");
         await TableButtonClick("Add");
-        await EditorTitle("Add Flow");
         await SelectTemplate(template);
+        await EditorTitle(template);
         await SetText("Name", name);
         var flowFields = parameters as FlowField[] ?? parameters.ToArray();
         if (flowFields?.Any() == true)
