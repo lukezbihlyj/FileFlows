@@ -50,6 +50,7 @@ public class InitialTests() : TestBase("")
         var ffmpeg6 = dockerMods.FirstOrDefault(x => x.Name == "FFmpeg6");
         Assert.IsNotNull(ffmpeg6, "FFmpeg6 DockerMod is not found.");
         Assert.IsTrue(ffmpeg6!.Checked, "FFmpeg6 DockerMod is not checked by default.");
+        await FileFlows.InitialConfiguration.ClearAllItems(); // we dont want this DockerMod installed
         await FileFlows.InitialConfiguration.NextClick();
 
         Assert.IsFalse(await FileFlows.InitialConfiguration.NextButtonShown(), "Next Button is shown when it should not be present");
@@ -57,6 +58,23 @@ public class InitialTests() : TestBase("")
 
         await FileFlows.InitialConfiguration.FinishClick();
         await Page.WaitForSelectorAsync(".sidebar .nav-menu-footer .version-info");
+    }
+
+    /// <summary>
+    /// Sets the FFmpeg paths
+    /// </summary>
+    [Test, Order(10)] 
+    public async Task SetFFmpegPath()
+    {
+        await FileFlows.GotoPage("Variables");
+        await DoubleClickItem("ffmpeg");
+        await SetTextArea("Value", "/tools/ffmpeg/ffmpeg");
+        await ButtonClick("Save");
+        await Task.Delay(500);
+        await DoubleClickItem("ffprobe");
+        await SetTextArea("Value", "/tools/ffmpeg/ffprobe");
+        await ButtonClick("Save");
+        await Task.Delay(500);
     }
     
     /// <summary>
