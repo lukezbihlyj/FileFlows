@@ -134,10 +134,16 @@ public abstract class TestBase(string PageName): PlaywrightTest()
 
             if (Page != null)
             {
-                blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
+                try
+                {
+                    blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
 
-                // Make sure to close, so that videos are saved.
-                await Page.CloseAsync();
+                    // Make sure to close, so that videos are saved.
+                    await Page.CloseAsync();
+                }
+                catch (Exception)
+                {
+                }
             }
             if(Context != null)
                 await Context.CloseAsync();
