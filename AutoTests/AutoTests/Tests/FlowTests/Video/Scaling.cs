@@ -49,29 +49,20 @@ public class Scaling:VideoTest
         {
             new("Video Codec", "H.264", InputType.Select),
             new("Output File", "Save to Folder", InputType.Select),
-            new("Destination", TempPath),
-            new("Downscale Video", targetResolution, InputType.Select)
+            new("Destination Folder", TempPath),
+            new("Downscale", targetResolution, InputType.Select)
         });
 
         if (force)
         {
-            await DoubleClickItem(flowName);
-            await FlowPartEdit("Downscale If Needed");
+            // await DoubleClickItem(flowName);
+            await FlowPartEdit(targetResolution);
             await SetText("Name", "Scale Video");
             await SetToggle("Force", true);
             await ButtonClick("Save");
 
-
-            // await FlowPartEdit("FFMPEG Builder: Executor");
-            // await SetToggle("HardwareDecoding", false);
-            // await ButtonClick("Save");
-
-            // await FlowPartEdit("Video Encode");
-            // await SetToggle("HardwareEncoding", false);
-            // await ButtonClick("Save");
-
             await Task.Delay(500); // so editor can close and actual save button can be reached
-            await Page.Locator(".other > .save-button").ClickAsync();
+            await Page.Locator(".flows-tab-button.active .fa-save").ClickAsync();
             await Task.Delay(1000); // give it a chance to save
         }
 
