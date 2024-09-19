@@ -119,7 +119,7 @@ public abstract class FlowTest():TestBase("Flows")
 
         await Page.Locator($".template[x-name='{name}']").ClickAsync();
 
-        await Page.Locator("flow-template-picker-button-next").ClickAsync();
+        await Page.Locator("#flow-template-picker-button-next").ClickAsync();
     }
 
 }
