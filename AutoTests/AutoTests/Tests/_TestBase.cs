@@ -121,32 +121,41 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         bool failed = TestContext.CurrentContext.Result.Outcome == ResultState.Failure ||
                       TestContext.CurrentContext.Result.Outcome == ResultState.Error;
         bool blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
-        
-        if (failed)
-            await Task.Delay(5000); // for recording padding
-
-        // Make sure to close, so that videos are saved.
-        await Page.CloseAsync();
-        await Context.CloseAsync();
-        await Browser.CloseAsync();
-
-        if (Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false && blazorError == false)
+        try
         {
-            try
+
+            if (failed)
+                await Task.Delay(5000); // for recording padding
+
+            // Make sure to close, so that videos are saved.
+            await Page.CloseAsync();
+            await Context.CloseAsync();
+            await Browser.CloseAsync();
+
+            if (Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
+                blazorError == false)
             {
-                Directory.Delete(RecordingsDirectory, true);
+                try
+                {
+                    Directory.Delete(RecordingsDirectory, true);
+                }
+                catch (Exception)
+                {
+                }
             }
-            catch (Exception)
+
+            if (Directory.Exists(RecordingsDirectory))
             {
+                var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
+                if (videoFile == null)
+                    return;
+                File.Move(videoFile,
+                    Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"), true);
             }
         }
-
-        if (Directory.Exists(RecordingsDirectory))
+        catch (Exception ex)
         {
-            var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
-            if (videoFile == null)
-                return;
-            File.Move(videoFile, Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"));
+            Logger.ELog("TearDown error: " + ex.Message + Environment.NewLine + ex.StackTrace);
         }
 
         if (failed == false && blazorError)
