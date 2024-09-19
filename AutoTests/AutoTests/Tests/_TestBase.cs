@@ -121,12 +121,13 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     {
         bool failed = TestContext.CurrentContext.Result.Outcome == ResultState.Failure ||
                       TestContext.CurrentContext.Result.Outcome == ResultState.Error;
-        bool blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
+        bool blazorError = false;
         try
         {
-
             if (failed)
                 await Task.Delay(5000); // for recording padding
+            
+            blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
 
             // Make sure to close, so that videos are saved.
             await Page.CloseAsync();
