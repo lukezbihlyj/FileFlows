@@ -102,7 +102,7 @@ public class InitialConfiguration(TestBase test) : UiComponent(test)
     {
         List<InitialConfigItem> items = new();
         var rows = Page.Locator(".flow-wizard-content .flow-page.active .flowtable-data .flowtable-row");
-        await rows.WaitForAsync(new LocatorWaitForOptions()
+        await rows.First.WaitForAsync(new LocatorWaitForOptions()
         {
             State = WaitForSelectorState.Visible
         });
