@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components;
@@ -129,7 +130,7 @@ public partial class InitialConfig : ComponentBase
 
         AvailablePlugins = request.Data.OrderBy(x => x.Installed ? 0 : 1)
             .ThenBy(x => x.Name.ToLowerInvariant()).ToList();
-        ForcedPlugins = AvailablePlugins.Where(x => x.Installed || x.Name.StartsWith("Basic", StringComparison.InvariantCultureIgnoreCase)).ToList();
+        ForcedPlugins = AvailablePlugins.Where(x => x.Installed).ToList();
     }
 
     /// <summary>
@@ -211,6 +212,7 @@ public partial class InitialConfig : ComponentBase
         {
             InitDone = true;
             
+            PluginTable.SetSelected(AvailablePlugins.Where(x => x.Name is "Basic" or "Audio" or "Video" or "Image" or "Web").ToArray());
             DockerModTable.SetSelected(AvailableDockerMods.Where(x => x.Default == true).ToArray());
         }
     }
