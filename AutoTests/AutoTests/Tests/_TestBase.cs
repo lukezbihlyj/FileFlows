@@ -126,13 +126,18 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         {
             if (failed)
                 await Task.Delay(5000); // for recording padding
-            
-            blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
 
-            // Make sure to close, so that videos are saved.
-            await Page.CloseAsync();
-            await Context.CloseAsync();
-            await Browser.CloseAsync();
+            if (Page != null)
+            {
+                blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
+
+                // Make sure to close, so that videos are saved.
+                await Page.CloseAsync();
+            }
+            if(Context != null)
+                await Context.CloseAsync();
+            if(Browser != null)
+                await Browser.CloseAsync();
 
             if (Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
                 blazorError == false)
