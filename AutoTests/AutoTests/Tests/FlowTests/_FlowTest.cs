@@ -36,7 +36,6 @@ public abstract class FlowTest():TestBase("Flows")
         }
 
         await ButtonClick("Save");
-        await SelectItem(name);
     }
 
     /// <summary>
