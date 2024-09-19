@@ -137,12 +137,20 @@ public abstract class TestBase(string PageName): PlaywrightTest()
                 try
                 {
                     blazorError = await Page.Locator("#blazor-error-ui").IsVisibleAsync();
-
-                    // Make sure to close, so that videos are saved.
-                    await Page.CloseAsync();
                 }
                 catch (Exception)
                 {
+                    // Ignored
+                }
+
+                try
+                {
+                    // Make sure to close, so that videos are saved.
+                    await Page.CloseAsync();
+                }
+                catch (Exception ex)
+                {
+                    Logger.ELog("Page Closing failed: " + ex.Message);
                 }
             }
             if(Context != null)
