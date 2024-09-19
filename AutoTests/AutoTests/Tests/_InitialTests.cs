@@ -190,7 +190,6 @@ public class InitialTests() : TestBase("")
     
         await FileFlows.Tab.Exists("Logging");
         await FileFlows.Tab.Exists("License");
-        await FileFlows.Tab.Exists("Internal Node");
         await FileFlows.Tab.Exists("Database");
         await FileFlows.Tab.Exists("Updates");
         await FileFlows.Tab.Exists("Advanced");
