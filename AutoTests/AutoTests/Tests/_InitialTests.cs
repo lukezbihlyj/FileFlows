@@ -6,6 +6,7 @@ namespace FileFlowsTests.Tests;
 /// Initial tests the configures FileFlows.
 /// And performs test on an un-configured system
 /// </summary>
+[NonParallelizable]
 public class InitialTests() : TestBase("")
 {
     /// <summary>
