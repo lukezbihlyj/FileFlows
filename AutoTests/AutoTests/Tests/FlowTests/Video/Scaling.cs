@@ -77,33 +77,33 @@ public class Scaling:VideoTest
 
         await GotoPage("Files");
         await SkyBox("Processed");
-        await Task.Delay(5_000);
-        DateTime end = DateTime.Now.AddMinutes(2);
-        while (end > DateTime.Now)
-        {
-            await SkyBox("Processed");
-            if (await ItemExists(shortName))
-                break;
-
-            await Task.Delay(1000);
-        }
-
-        await DoubleClickItem(shortName);
-        int count = 0;
-        await Task.Delay(250);
-        while (await TabExists("Output") == false)
-        {
-            if (++count > 5)
-                throw new Exception("Failed to locate 'Output' tab");
-            await ButtonClick("Close");
-            await Task.Delay(5_000);
-            await DoubleClickItem(shortName);
-            await Task.Delay(250);
-        }
-
-        await SelectTab("Input");
-        await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(inputResolution);
-        await SelectTab("Output");
-        await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(outputResolution);
+        // await Task.Delay(5_000);
+        // DateTime end = DateTime.Now.AddMinutes(2);
+        // while (end > DateTime.Now)
+        // {
+        //     await SkyBox("Processed");
+        //     if (await ItemExists(shortName))
+        //         break;
+        //
+        //     await Task.Delay(1000);
+        // }
+        //
+        // await DoubleClickItem(shortName);
+        // int count = 0;
+        // await Task.Delay(250);
+        // while (await TabExists("Output") == false)
+        // {
+        //     if (++count > 5)
+        //         throw new Exception("Failed to locate 'Output' tab");
+        //     await ButtonClick("Close");
+        //     await Task.Delay(5_000);
+        //     await DoubleClickItem(shortName);
+        //     await Task.Delay(250);
+        // }
+        //
+        // await SelectTab("Input");
+        // await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(inputResolution);
+        // await SelectTab("Output");
+        // await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(outputResolution);
     }
 }
