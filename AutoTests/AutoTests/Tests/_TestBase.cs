@@ -130,16 +130,16 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         await Context.CloseAsync();
         await Browser.CloseAsync();
 
-        // if (failed == false && blazorError == false)
-        // {
-        //     try
-        //     {
-        //         Directory.Delete(RecordingsDirectory, true);
-        //     }
-        //     catch (Exception)
-        //     {
-        //     }
-        // }
+        if (Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false && blazorError == false)
+        {
+            try
+            {
+                Directory.Delete(RecordingsDirectory, true);
+            }
+            catch (Exception)
+            {
+            }
+        }
 
         if (Directory.Exists(RecordingsDirectory))
         {

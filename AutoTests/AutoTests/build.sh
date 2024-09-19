@@ -19,4 +19,7 @@ docker run --rm \
     -v "/home/john/appdata/felix$(pwd)/logs:/app/FileFlows/Logs" \
     -v "/home/john/appdata/felix$(pwd)/test-results:/app/tests-results" \
     -e FF_TEMP_PATH=/app/tests-results \
+    -e FF_LICENSE_EMAIL=$FF_LICENSE_EMAIL \
+    -e FF_LICENSE_KEY=$FF_LICENSE_KEY \
+    -e KEEP_PASSED_VIDEOS=$KEEP_PASSED_VIDEOS \
     fileflows-autotests

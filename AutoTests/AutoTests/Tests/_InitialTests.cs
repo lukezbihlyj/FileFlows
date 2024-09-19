@@ -176,8 +176,8 @@ public class InitialTests() : TestBase("")
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("License");
     
-        var licenseEmail = Environment.GetEnvironmentVariable("LicenseEmail") ?? string.Empty;
-        var licenseKey = Environment.GetEnvironmentVariable("LicenseKey") ?? string.Empty;
+        var licenseEmail = Environment.GetEnvironmentVariable("FF_LICENSE_EMAIL") ?? string.Empty;
+        var licenseKey = Environment.GetEnvironmentVariable("FF_LICENSE_KEY") ?? string.Empty;
         Assert.IsFalse(string.IsNullOrWhiteSpace(licenseEmail));
         Assert.IsFalse(string.IsNullOrWhiteSpace(licenseKey));
     
