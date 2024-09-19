@@ -66,20 +66,25 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         TempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
         var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
         Logger.ILog("FF Base URL: " + ffBaseUrl);
-        Logger.ILog("Temp Path: " + ffBaseUrl);
+        Logger.ILog("Temp Path: " + TempPath);
         RecordingsDirectory = Path.Combine(TempPath, "recordings", TestContext.CurrentContext.Test.FullName);
         if (Directory.Exists(RecordingsDirectory) == false)
             Directory.CreateDirectory(RecordingsDirectory);
         Logger.ILog("Recordings Path: " + RecordingsDirectory);
-        #if(DEBUG)
-        Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        if (Environment.GetEnvironmentVariable("DOCKER") == "1")
         {
-            Headless = false, // This makes the browser window visible
-            Args = new[] { "--window-size=1920,1080" } // This sets the window size
-        });
-        #else
-        Browser = await Playwright.Chromium.LaunchAsync();
-        #endif
+            Logger.ILog("Running in Docker");
+            Browser = await Playwright.Chromium.LaunchAsync();
+        }
+        else
+        {
+            Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = false, // This makes the browser window visible
+                Args = new[] { "--window-size=1920,1080" } // This sets the window size
+            });
+        }
+
         Context = await Browser.NewContextAsync(new()
         {
             ViewportSize = new ViewportSize

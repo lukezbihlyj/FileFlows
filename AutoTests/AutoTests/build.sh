@@ -23,4 +23,5 @@ docker run --rm \
     -e FF_LICENSE_KEY=$FF_LICENSE_KEY \
     -e KEEP_PASSED_VIDEOS=$KEEP_PASSED_VIDEOS \
     -e FFURL=$FF_URL \
+    -e DOCKER=1 \
     fileflows-autotests
