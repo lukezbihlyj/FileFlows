@@ -45,7 +45,7 @@ if [ $? -eq 0 ]; then
 
     # Step 2: Run all other tests excluding InitialTests and append to the same log file
     /dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
-        --filter "FullyQualifiedName!=FileFlowsTests.Tests.InitialTests" \
+        --filter FullyQualifiedName!=FileFlowsTests.Tests.InitialTests \
         --logger "trx;LogFileName=/app/tests-results/AutoTests.trx"
 else
     echo "InitialTests failed. Not running other tests."
