@@ -153,10 +153,30 @@ public abstract class TestBase(string PageName): PlaywrightTest()
                     Logger.ELog("Page Closing failed: " + ex.Message);
                 }
             }
-            if(Context != null)
-                await Context.CloseAsync();
-            if(Browser != null)
-                await Browser.CloseAsync();
+
+            if (Context != null)
+            {
+                try
+                {
+                    await Context.CloseAsync();
+                }
+                catch (Exception ex)
+                {
+                    Logger.ELog("Context Closing failed: " + ex.Message);
+                }
+            }
+
+            if (Browser != null)
+            {
+                try
+                {
+                    await Browser.CloseAsync();
+                }
+                catch (Exception ex)
+                {
+                    Logger.ELog("Browser Closing failed: " + ex.Message);
+                }
+            }
 
             var outputVideo = Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"); 
             if (outputVideo != TestFiles.TestVideo1 && Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
