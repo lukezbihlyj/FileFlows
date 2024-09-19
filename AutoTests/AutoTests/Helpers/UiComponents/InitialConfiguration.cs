@@ -102,6 +102,10 @@ public class InitialConfiguration(TestBase test) : UiComponent(test)
     {
         List<InitialConfigItem> items = new();
         var rows = Page.Locator(".flow-wizard-content .flow-page.active .flowtable-data .flowtable-row");
+        await rows.WaitForAsync(new LocatorWaitForOptions()
+        {
+            State = WaitForSelectorState.Visible
+        });
 
         // Get the count of rows and iterate through each row
         int rowCount = await rows.CountAsync();
