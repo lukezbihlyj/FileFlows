@@ -170,6 +170,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     protected Task TableButtonClick(string name, bool sideEditor = false) => FileFlows.Table.ButtonClick(name, sideEditor: sideEditor);
     protected Task EditorTitle(string title) => FileFlows.Editor.Title(title);
     protected Task SetText(string name, string value) => FileFlows.Inputs.SetText(name, value);
+    protected Task SetArray(string name, string[] values) => FileFlows.Inputs.SetArray(name, values);
     protected Task SetTextArea(string name, string value) => FileFlows.Inputs.SetTextArea(name, value);
     protected Task SetSelect(string name, string value) => FileFlows.Inputs.SetSelect(name, value);
     protected Task SetNumber(string name, int value) => FileFlows.Inputs.SetNumber(name, value);

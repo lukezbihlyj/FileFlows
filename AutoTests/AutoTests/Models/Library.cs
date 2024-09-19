@@ -10,8 +10,8 @@ public class Library
     public LibraryProcessingOrder? ProcessingOrder { get; set; }
     public int? HoldMinutes { get; set; }
     public bool? Enabled { get; set; }
-    public string? Filter { get; set; }
-    public string ExclusionFilter { get; set; }
+    public string[]? Filters { get; set; }
+    public string[]? ExclusionFilters { get; set; }
     public bool? UseFingerprinting { get; set; }
     public bool? Scan { get; set; }
 }

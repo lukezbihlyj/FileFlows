@@ -13,6 +13,7 @@ public class Inputs:UiComponent
 
     public Task SetText(string name, string value)
         => Input(name, "input[type=text]").FillAsync(value);
+    
     public Task SetTextArea(string name, string value)
         => Input(name, "textarea").FillAsync(value);
     
@@ -21,6 +22,22 @@ public class Inputs:UiComponent
     public Task SetNumber(string name, int value)
         => Input(name, "input[type=number]").FillAsync(value.ToString());
 
+
+    /// <summary>
+    /// Sest the values in a array
+    /// </summary>
+    /// <param name="name">the name of the field</param>
+    /// <param name="values">the values</param>
+    public async Task SetArray(string name, string[] values)
+    {
+        var input = Input(name, "input[type=text]");
+        foreach (var value in values)
+        {
+            await input.FillAsync(value);
+            await input.PressAsync("Enter");
+        }
+    }
+    
     public async Task SetToggle(string name, bool value)
     {
         var input = Input(name, "input[type=checkbox]");

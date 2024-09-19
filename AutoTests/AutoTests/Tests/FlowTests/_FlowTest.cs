@@ -70,10 +70,10 @@ public abstract class FlowTest():TestBase("Flows")
             await SetToggle("Enabled", library.Enabled.Value);
 
         await SelectTab("Advanced");
-        if (library.Filter != null)
-            await SetText("Filter", library.Filter);
-        if (library.ExclusionFilter != null)
-            await SetText("ExclusionFilter", library.ExclusionFilter);
+        if (library.Filters?.Length > 0)
+            await SetArray("Filter", library.Filters);
+        if (library.ExclusionFilters?.Length > 0)
+            await SetArray("ExclusionFilter", library.ExclusionFilters);
         if (library.UseFingerprinting != null)
             await SetToggle("UseFingerprinting", library.UseFingerprinting.Value);
         if (library.Scan != null)

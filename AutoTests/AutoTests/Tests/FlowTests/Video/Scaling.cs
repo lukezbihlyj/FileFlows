@@ -71,7 +71,7 @@ public class Scaling:VideoTest
             Name = libName,
             Flow = flowName,
             Path = TestFiles.TestPath,
-            Filter = Regex.Escape(input),
+            Filters = ["/" + Regex.Escape(input) + "/"],
             Template = "Video Library"
         }, scan: true);
 
