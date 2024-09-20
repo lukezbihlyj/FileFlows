@@ -23,7 +23,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     /// <summary>
     /// Gets the browser instance
     /// </summary>
-    public IBrowser Browser { get; private set; }
+    public static IBrowser Browser { get; private set; }
     /// <summary>
     /// Gets the page intsance
     /// </summary>
@@ -71,18 +71,21 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         if (Directory.Exists(RecordingsDirectory) == false)
             Directory.CreateDirectory(RecordingsDirectory);
         Logger.ILog("Recordings Path: " + RecordingsDirectory);
-        if (Environment.GetEnvironmentVariable("DOCKER") == "1")
+        if (Browser == null)
         {
-            Logger.ILog("Running in Docker");
-            Browser = await Playwright.Chromium.LaunchAsync();
-        }
-        else
-        {
-            Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            if (Environment.GetEnvironmentVariable("DOCKER") == "1")
             {
-                Headless = false, // This makes the browser window visible
-                Args = new[] { "--window-size=1920,1080" } // This sets the window size
-            });
+                Logger.ILog("Running in Docker");
+                Browser = await Playwright.Chromium.LaunchAsync();
+            }
+            else
+            {
+                Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+                {
+                    Headless = false, // This makes the browser window visible
+                    Args = new[] { "--window-size=1920,1080" } // This sets the window size
+                });
+            }
         }
 
         Context = await Browser.NewContextAsync(new()
@@ -163,18 +166,6 @@ public abstract class TestBase(string PageName): PlaywrightTest()
                 catch (Exception ex)
                 {
                     Logger.ELog("Context Closing failed: " + ex.Message);
-                }
-            }
-
-            if (Browser != null)
-            {
-                try
-                {
-                    await Browser.CloseAsync();
-                }
-                catch (Exception ex)
-                {
-                    Logger.ELog("Browser Closing failed: " + ex.Message);
                 }
             }
 
