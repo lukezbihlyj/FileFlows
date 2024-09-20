@@ -121,4 +121,23 @@ public abstract class FlowTest():TestBase("Flows")
         await Page.Locator("#flow-template-picker-button-next").ClickAsync();
     }
 
+    /// <summary>
+    /// Downloads a file log
+    /// </summary>
+    /// <returns>the file log</returns>
+    protected async Task<string> DownloadLog()
+    {
+        // Start the task of waiting for the download
+        var waitForDownloadTask = Page.WaitForDownloadAsync();
+        // Perform the action that initiates download
+        await Page.Locator("button >> text='Download Log'").ClickAsync();
+        // Wait for the download process to complete
+        var download = await waitForDownloadTask;
+        Logger.ILog(await download.PathAsync() ?? "Path is null");
+        // Save downloaded file somewhere
+        string file = Path.GetTempFileName() + ".log";
+        await download.SaveAsAsync(file);
+        return await File.ReadAllTextAsync(file);
+    }
+
 }

@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using System.Net;
-using NUnit.Framework.Internal;
-
 namespace FileFlowsTests.Tests.FlowTests.Video;
 
 /// <summary>
@@ -89,6 +85,11 @@ public class Scaling:VideoTest
         }
         
         await DoubleClickItem(shortName);
+
+        string log = await DownloadLog();
+        Logger.ILog(new string('-', 100) + Environment.NewLine + log);
+        Logger.ILog(new string('-', 100));
+        
         int count = 0;
         await Task.Delay(250);
         while (await TabExists("Output") == false)
@@ -102,7 +103,7 @@ public class Scaling:VideoTest
         }
         
         await SelectTab("Input");
-        await Task.Delay(250);
+        await Task.Delay(1000);
         await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(inputResolution);
         await SelectTab("Output");
         await Task.Delay(250);
