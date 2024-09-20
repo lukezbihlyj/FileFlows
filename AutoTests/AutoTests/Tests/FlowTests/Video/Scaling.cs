@@ -50,7 +50,7 @@ public class Scaling:VideoTest
             new("Video Codec", "H.264", InputType.Select),
             new("Output File", "Save to Folder", InputType.Select),
             new("Destination Folder", TempPath),
-            new("Downscale", targetResolution, InputType.Select)
+            new("Downscale", targetResolution.ToLower(), InputType.Select)
         });
 
         if (force)
