@@ -8,35 +8,36 @@ public class Scaling:VideoTest
     /// <summary>
     /// Downscales a video
     /// </summary>
-    [Test]
+    [Test, Order(1)]
     public async Task Downscale()
     {
-        await Test(
+        var outputFile = await Test(
             "Downscale",
             TestFiles.TestVideo1,
             "480P",
             "1920x1080",
-            "640x480"
+            "640x360"
         );
+        File.Move(outputFile, Path.Combine(TempPath, "downscaled.mkv"));
     }
 
     /// <summary>
     /// Upscales a video
     /// </summary>
-    [Test]
+    [Test, Order(2)]
     public async Task Upscale()
     {
         await Test(
             "Upscale",
-            TestFiles.TestVideo1,
-            "4K",
-            "1920x1080",
-            "3840x2160",
+            Path.Combine(TempPath, "downscaled.mkv"),
+            "720P",
+            "640x360",
+            "1280x720",
             force: true
         );
     }
 
-    private async Task Test(string flowName, string input, string targetResolution, string inputResolution, string outputResolution, bool force = false)
+    private async Task<string> Test(string flowName, string input, string targetResolution, string inputResolution, string outputResolution, bool force = false)
     {
         flowName = RandomName(flowName);
         string libName = "Library For " + flowName;
@@ -105,5 +106,7 @@ public class Scaling:VideoTest
         await SelectTab("Output");
         await Task.Delay(250);
         await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(outputResolution);
+
+        return Path.Combine(TempPath, shortName);
     }
 }
