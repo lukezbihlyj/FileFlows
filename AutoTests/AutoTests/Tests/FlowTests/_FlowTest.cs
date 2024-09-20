@@ -41,10 +41,18 @@ public abstract class FlowTest():TestBase("Flows")
     /// <summary>
     /// Creates a library
     /// </summary>
+    /// <param name="file">the file to base the library around</param>
     /// <param name="library">the library</param>
     /// <param name="scan">if the library should be scanned</param>
-    protected async Task CreateLibrary(Library library, bool scan = false)
+    /// <returns>the result</returns>
+    protected async Task<string> CreateLibrary(string file, Library library, bool scan = false)
     {
+        string libPath = Path.Combine(TempPath, "lig-" + Guid.NewGuid());
+        Directory.CreateDirectory(libPath);
+        string shortName = Guid.NewGuid() + new FileInfo(file).Extension;
+        File.Copy(file, Path.Combine(libPath, shortName));
+        library.Path = libPath;
+        
         await GotoPage("Libraries");
         await TableButtonClick("Add");
         await EditorTitle("Library");
@@ -84,6 +92,8 @@ public abstract class FlowTest():TestBase("Flows")
 
         if (scan)
             await TableButtonClick("Rescan");
+
+        return shortName;
     }
 
     /// <summary>

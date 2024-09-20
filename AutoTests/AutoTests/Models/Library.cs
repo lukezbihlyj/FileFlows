@@ -4,7 +4,7 @@ public class Library
 {
     public string Name { get; init; }
     public string? Template { get; set; }
-    public string Path { get; init; }
+    public string Path { get; set; }
     public string Flow { get; init; }
     public LibraryPriority? Priority { get; set; }
     public LibraryProcessingOrder? ProcessingOrder { get; set; }

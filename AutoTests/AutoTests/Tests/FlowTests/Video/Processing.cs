@@ -18,7 +18,7 @@ public class Processing() : VideoTest
         
         const string LibraryName = "Library for " + FlowName;
 
-        await CreateLibrary(new()
+        string shortName = await CreateLibrary(TestFiles.TestVideo1, new()
         {
             Name = LibraryName,
             Flow = FlowName,
@@ -30,6 +30,6 @@ public class Processing() : VideoTest
         await Task.Delay(5);
 
         await GotoPage("Files");
-        await ItemExists(TestFiles.TestVideo1);
+        await ItemExists(shortName);
     }
 }

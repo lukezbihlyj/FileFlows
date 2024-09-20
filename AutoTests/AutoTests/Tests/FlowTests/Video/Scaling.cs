@@ -38,10 +38,6 @@ public class Scaling:VideoTest
 
     private async Task Test(string flowName, string input, string targetResolution, string inputResolution, string outputResolution, bool force = false)
     {
-        string libPath = Path.Combine(TempPath, "lig-" + Guid.NewGuid());
-        Directory.CreateDirectory(libPath);
-        string shortName = Guid.NewGuid() + new FileInfo(input).Extension;
-        File.Copy(input, Path.Combine(libPath, shortName));
         flowName = RandomName(flowName);
         string libName = "Library For " + flowName;
         await CreateFlow(flowName, "Convert Video", new FlowField[]
@@ -65,11 +61,10 @@ public class Scaling:VideoTest
             await Task.Delay(1000); // give it a chance to save
         }
 
-        await CreateLibrary(new()
+        string shortName = await CreateLibrary(input, new()
         {
             Name = libName,
             Flow = flowName,
-            Path = libPath,
             Template = "Video Library"
         }, scan: true);
 
