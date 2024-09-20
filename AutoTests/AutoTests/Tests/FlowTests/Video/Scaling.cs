@@ -19,7 +19,7 @@ public class Scaling:VideoTest
             "Downscale",
             TestFiles.TestVideo1,
             "480p",
-            "1280x960",
+            "1920x1080",
             "640x480"
         );
     }
@@ -33,9 +33,9 @@ public class Scaling:VideoTest
         await Test(
             "Upscale",
             TestFiles.TestVideo1,
-            "720p",
-            "854x480",
-            "1280x720",
+            "4K",
+            "1920x1080",
+            "3840x2160",
             force: true
         );
     }
