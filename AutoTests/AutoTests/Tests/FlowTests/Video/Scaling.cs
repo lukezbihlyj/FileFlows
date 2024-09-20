@@ -107,6 +107,6 @@ public class Scaling:VideoTest
         await Task.Delay(250);
         await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(outputResolution);
 
-        return Path.Combine(TempPath, shortName);
+        return Path.Combine(TempPath, shortName.Replace(".webm", ".mkv"));
     }
 }
