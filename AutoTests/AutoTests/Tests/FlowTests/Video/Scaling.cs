@@ -18,7 +18,7 @@ public class Scaling:VideoTest
         await Test(
             "Downscale",
             TestFiles.TestVideo1,
-            "480p",
+            "480P",
             "1920x1080",
             "640x480"
         );
@@ -102,8 +102,10 @@ public class Scaling:VideoTest
         }
         
         await SelectTab("Input");
+        await Task.Delay(250);
         await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(inputResolution);
         await SelectTab("Output");
+        await Task.Delay(250);
         await Expect(Page.Locator(".flow-tab.active .md-Resolution .value")).ToHaveTextAsync(outputResolution);
     }
 }
