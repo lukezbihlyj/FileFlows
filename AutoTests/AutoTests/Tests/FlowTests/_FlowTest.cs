@@ -11,31 +11,41 @@ public abstract class FlowTest():TestBase("Flows")
     /// <param name="name">the name of the flow</param>
     /// <param name="template">the template to use</param>
     /// <param name="parameters">the parameters to fill out</param>
-    protected async Task CreateFlow(string name, string template, IEnumerable<FlowField> parameters)
+    protected async Task CreateFlow(string name, string template, FlowField[]? parameters = null)
     {
         await GotoPage("Flows");
         await TableButtonClick("Add");
         await SelectTemplate(template);
-        await EditorTitle(template);
-        await SetText("Name", name);
-        var flowFields = parameters as FlowField[] ?? parameters.ToArray();
-        if (flowFields?.Any() == true)
+        if (parameters?.Length > 0)
         {
-            foreach (var field in flowFields)
+            await EditorTitle(template);
+            await SetText("Name", name);
+            var flowFields = parameters as FlowField[] ?? parameters.ToArray();
+            if (flowFields?.Any() == true)
             {
-                switch (field.Type)
+                foreach (var field in flowFields)
                 {
-                    case InputType.Text:
-                        await SetText(field.Name.Replace(" ", string.Empty), (string)field.Value); break;
-                    case InputType.Select:
-                        await SetSelect(field.Name.Replace(" ", string.Empty), (string)field.Value); break;   
-                    case InputType.Toggle:
-                        await SetToggle(field.Name.Replace(" ", string.Empty), (bool)field.Value); break;
+                    switch (field.Type)
+                    {
+                        case InputType.Text:
+                            await SetText(field.Name.Replace(" ", string.Empty), (string)field.Value);
+                            break;
+                        case InputType.Select:
+                            await SetSelect(field.Name.Replace(" ", string.Empty), (string)field.Value);
+                            break;
+                        case InputType.Toggle:
+                            await SetToggle(field.Name.Replace(" ", string.Empty), (bool)field.Value);
+                            break;
+                    }
                 }
             }
-        }
 
-        await ButtonClick("Save");
+            await ButtonClick("Save");
+        }
+        else
+        {
+            await FileFlows.Flow.SetTitle(name);
+        }
     }
 
     /// <summary>
@@ -47,7 +57,7 @@ public abstract class FlowTest():TestBase("Flows")
     /// <returns>the result</returns>
     protected async Task<string> CreateLibrary(string file, Library library, bool scan = false)
     {
-        string libPath = Path.Combine(TempPath, "lig-" + Guid.NewGuid());
+        string libPath = Path.Combine(TempPath, "lib-" + Guid.NewGuid());
         Directory.CreateDirectory(libPath);
         string shortName = Guid.NewGuid() + new FileInfo(file).Extension;
         File.Copy(file, Path.Combine(libPath, shortName));
@@ -96,6 +106,41 @@ public abstract class FlowTest():TestBase("Flows")
         return shortName;
     }
 
+
+    /// <summary>
+    /// Creates a folder library
+    /// </summary>
+    /// <param name="name">the name of the library</param>
+    /// <param name="flow">the flow to use</param>
+    /// <param name="scan">if the library should be scanned</param>
+    /// <param name="libPath">Optional library path to use, else one will be created</param>
+    /// <returns>the full path to the library</returns>
+    protected async Task<string> CreateFolderLibrary(string name, string flow, bool scan = false, string? libPath = null)
+    {
+        if (libPath == null)
+        {
+            string shortName = "lib-" + Guid.NewGuid();
+            libPath = Path.Combine(TempPath, shortName);
+            Directory.CreateDirectory(libPath);
+        }
+
+        await GotoPage("Libraries");
+        await TableButtonClick("Add");
+        await EditorTitle("Library");
+        await SetSelect("Template", "Folders");
+        await SetText("Name", name);
+        await SetText("Path", libPath);
+        await SetSelect("Flow", flow);
+
+        
+        await ButtonClick("Save");
+        await SelectItem(name);
+
+        if (scan)
+            await TableButtonClick("Rescan");
+
+        return libPath;
+    }
     /// <summary>
     /// Selects a flow part
     /// </summary>
@@ -150,4 +195,39 @@ public abstract class FlowTest():TestBase("Flows")
         return await File.ReadAllTextAsync(file);
     }
 
+    
+    
+    /// <summary>
+    /// Recursively copies all contents from the source directory to the target directory.
+    /// </summary>
+    /// <param name="sourceDir">The path of the source directory</param>
+    /// <param name="targetDir">The path of the target directory</param>
+    private void CopyDirectory(string sourceDir, string targetDir)
+    {
+        // Get the directory info for the source directory
+        var dir = new DirectoryInfo(sourceDir);
+    
+        // Ensure the source directory exists
+        if (!dir.Exists)
+        {
+            throw new DirectoryNotFoundException($"Source directory not found: {sourceDir}");
+        }
+
+        // Create the target directory if it doesn't exist
+        Directory.CreateDirectory(targetDir);
+
+        // Copy all files from the source to the target directory
+        foreach (FileInfo file in dir.GetFiles())
+        {
+            string targetFilePath = Path.Combine(targetDir, file.Name);
+            file.CopyTo(targetFilePath, true);
+        }
+
+        // Recursively copy subdirectories
+        foreach (DirectoryInfo subDir in dir.GetDirectories())
+        {
+            string newTargetDir = Path.Combine(targetDir, subDir.Name);
+            CopyDirectory(subDir.FullName, newTargetDir); // Recursion for subdirectories
+        }
+    }
 }

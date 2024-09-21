@@ -106,15 +106,26 @@ public class FileFlowsHelper
         {
             HasTextString = name
         }).WaitForAsync();
-        
+
         var dismissButton = Page.Locator(".update-available .dismiss");
 
-        // Check if the element exists and click it if present
-        if (await dismissButton.CountAsync() > 0)
+        try
         {
+            // Wait for up to 500ms for the dismiss button to become visible
+            await dismissButton.WaitForAsync(new LocatorWaitForOptions()
+            {
+                Timeout = 500,
+                State = WaitForSelectorState.Visible
+            });
+
+            // If the button becomes visible, click it
             await dismissButton.ClickAsync();
         }
-
+        catch (TimeoutException)
+        {
+            // If the timeout occurs, it means the button didn't become visible
+            // Do nothing, since we don't want to throw an exception
+        }
         
     }
 

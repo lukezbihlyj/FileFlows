@@ -1,5 +1,8 @@
 namespace FileFlowsTests.Tests.FlowTests.Video;
 
-public abstract class VideoTest:FlowTest
+/// <summary>
+/// Base Class for video tests
+/// </summary>
+public abstract class VideoTest : FlowTest
 {
 }
