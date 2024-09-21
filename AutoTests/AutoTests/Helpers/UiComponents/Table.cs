@@ -26,21 +26,23 @@ public class Table : UiComponent
     //         + $".flowtable-row:has(span:text('{name}')) .flowtable-select input[type=checkbox]");
 
     public async Task Select(string name, bool sideEditor = false)
-    {
-        await UnSelect(name, sideEditor);
-        var locator = ItemLocator(name, sideEditor);
-        // var chk = await locator.IsCheckedAsync();
-        // if(chk == false)
-            await locator.First.ClickAsync();
-    }
+        => await SelectItem(name, true, sideEditor);
+
     public async Task UnSelect(string name, bool sideEditor = false)
+        => await SelectItem(name, false, sideEditor);
+    
+    public async Task SelectItem(string name, bool selectIt, bool sideEditor = false)
     {
         var locator = Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
-                 + $".flowtable-row:has(span:text('{name}')) .flowtable-select input[type=checkbox]");
+                                   + $".flowtable-row:has(span:text('{name}')) .flowtable-select input[type=checkbox]");
 
         var chk = await locator.IsCheckedAsync();
         if(chk)
             await locator.First.ClickAsync();
+        
+        if(selectIt)
+            await locator.First.ClickAsync();
+        
     }
 
     public async Task<bool> Exists(string name, bool sideEditor = false)

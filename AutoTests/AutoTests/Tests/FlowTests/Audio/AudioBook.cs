@@ -53,10 +53,12 @@ public class AudioBook : AudioTest
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
         await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
         string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
+        string originalBookPath = libPath + "/" + BOOK_NAME;
+        Assert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
         
         // Test processing
         await TestBookExists(BOOK_NAME, outputPath);
-        Assert.IsFalse(Directory.Exists(libPath), "Failed to delete original files");
+        Assert.IsFalse(Directory.Exists(originalBookPath), "Failed to delete original files: " + originalBookPath);
     }
     
 
@@ -109,6 +111,14 @@ public class AudioBook : AudioTest
         string log = await DownloadLog();
         Logger.ILog(new string('-', 100) + Environment.NewLine + log);
         Logger.ILog(new string('-', 100));
+
+        int count = 0;
+        while (++count < 20)
+        {
+            if (File.Exists(outputPath))
+                break;
+            await Task.Delay(100);
+        }
 
         Assert.IsTrue(File.Exists(outputPath), "Book failed to be created: " + outputPath);
     }
