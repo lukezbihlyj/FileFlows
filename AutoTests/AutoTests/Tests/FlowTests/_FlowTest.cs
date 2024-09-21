@@ -134,6 +134,7 @@ public abstract class FlowTest():TestBase("Flows")
 
         
         await ButtonClick("Save");
+        await Task.Delay(500);
         await SelectItem(name);
 
         if (scan)
