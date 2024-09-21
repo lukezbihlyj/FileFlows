@@ -6,7 +6,7 @@ public class AudioBook : AudioTest
     /// Manually creates an audiobook flow and tests it
     /// </summary>
     [Test, Order(1)]
-    public async Task CreateBook()
+    public async Task CreateBookManually()
     {
         // create flow
         var flowName = RandomName("Create Audio Book");
@@ -26,19 +26,71 @@ public class AudioBook : AudioTest
         await FileFlows.Flow.Save();
 
         // Create library
-        string libPath = Path.Combine(TempPath, "lib-audio-book-" + Guid.NewGuid());
-        var bookFolder = Path.Combine(libPath, BOOK_NAME);
-        Directory.CreateDirectory(bookFolder);
-        await GenerateRandomAudio(Path.Combine(bookFolder, "01. Introduction.mp3"));
-        await GenerateRandomAudio(Path.Combine(bookFolder, "02. Flows.mp3"));
-        await GenerateRandomAudio(Path.Combine(bookFolder, "03. Libraries.mp3"));
-        await GenerateRandomAudio(Path.Combine(bookFolder, "04. Variables.mp3"));
-        await GenerateRandomAudio(Path.Combine(bookFolder, "05. Conclusion.mp3"));
-        
+        string libPath = await CreateAudioBookLibrary(BOOK_NAME);
         await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
         
+        // Test processing
+        await TestBookExists(BOOK_NAME, OUTPUT_PATH);
+    }
+
+    /// <summary>
+    /// Creates a book replacing the original
+    /// </summary>
+    [Test, Order(1)]
+    public async Task CreateBook_Template_ReplaceOriginal()
+    {
+        // create flow
+        var flowName = RandomName("Audio Book Replace Original");
+        const string BOOK_NAME = "The Book Replacer";
+            
+        string libName = "Library For " + flowName;
+        await CreateFlow(flowName, "Create Audio Book", [
+            new("Output Path", "Replace Original", InputType.Select),
+            new("DeleteSourceFiles1", true, InputType.Toggle)
+        ]);
+
+        // Create library
+        string libPath = await CreateAudioBookLibrary(BOOK_NAME);
+        await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
+        string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
         
         // Test processing
+        await TestBookExists(BOOK_NAME, outputPath);
+        Assert.IsFalse(Directory.Exists(libPath), "Failed to delete original files");
+    }
+    
+
+    /// <summary>
+    /// Creates a book replacing the original
+    /// </summary>
+    [Test, Order(1)]
+    public async Task CreateBook_Template_SaveToFolder()
+    {
+        // create flow
+        var flowName = RandomName("Audio Book Save To Folder");
+        const string BOOK_NAME = "The Book in the new Folder";
+
+        string destFolder = Path.Combine(TempPath, Guid.NewGuid().ToString());
+        
+        string libName = "Library For " + flowName;
+        await CreateFlow(flowName, "Create Audio Book", [
+            new("Output Path", "Save To Folder", InputType.Select),
+            new("Destination Path", destFolder, InputType.Text),
+            new("DeleteSourceFiles2", false, InputType.Toggle)
+        ]);
+
+        // Create library
+        string libPath = await CreateAudioBookLibrary(BOOK_NAME);
+        await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
+        string outputPath = $"{destFolder}/{BOOK_NAME}.m4b";
+        
+        // Test processing
+        await TestBookExists(BOOK_NAME, outputPath);
+        Assert.IsTrue(Directory.Exists(libPath), "Original files no longer exist when they should.");
+    }
+    
+    private async Task TestBookExists(string bookName, string outputPath)
+    {
         await GotoPage("Files");
         await SkyBox("Processed");
         await Task.Delay(5_000);
@@ -46,19 +98,31 @@ public class AudioBook : AudioTest
         while (end > DateTime.Now)
         {
             await SkyBox("Processed");
-            if (await ItemExists(BOOK_NAME))
+            if (await ItemExists(bookName))
                 break;
         
             await Task.Delay(1000);
         }
         
-        await DoubleClickItem(BOOK_NAME);
+        await DoubleClickItem(bookName);
 
         string log = await DownloadLog();
         Logger.ILog(new string('-', 100) + Environment.NewLine + log);
         Logger.ILog(new string('-', 100));
 
-        Assert.IsTrue(File.Exists(OUTPUT_PATH), "Book failed to be created: " + OUTPUT_PATH);
+        Assert.IsTrue(File.Exists(outputPath), "Book failed to be created: " + outputPath);
     }
-    
+
+    private async Task<string> CreateAudioBookLibrary(string bookName)
+    {
+        var libPath =Path.Combine(TempPath, "lib-audio-book-" + Guid.NewGuid());
+        var bookFolder = Path.Combine(libPath, bookName);
+        Directory.CreateDirectory(bookFolder);
+        await GenerateRandomAudio(Path.Combine(bookFolder, "01. Introduction.mp3"));
+        await GenerateRandomAudio(Path.Combine(bookFolder, "02. Flows.mp3"));
+        await GenerateRandomAudio(Path.Combine(bookFolder, "03. Libraries.mp3"));
+        await GenerateRandomAudio(Path.Combine(bookFolder, "04. Variables.mp3"));
+        await GenerateRandomAudio(Path.Combine(bookFolder, "05. Conclusion.mp3"));
+        return libPath;
+    }
 }
