@@ -98,9 +98,17 @@ public class FileFlowsHelper
     /// Goes to a specific page by its nav menu link
     /// </summary>
     /// <param name="name">the name of the page</param>
-    public async Task GotoPage(string name)
+    public async Task GotoPage(string name, bool forceLoad = false)
     {
         await Page.Locator($".nav-item.{(name == "Files" ? "library-files" : name.ToLower())} a").ClickAsync();
+        await Task.Delay(250);
+        if (forceLoad)
+            await Page.ReloadAsync();
+        
+        await Page.Locator(".blocker").WaitForAsync(new LocatorWaitForOptions()
+        {
+            State = WaitForSelectorState.Detached
+        });
         
         await Page.Locator(".top-row .title", new ()
         {

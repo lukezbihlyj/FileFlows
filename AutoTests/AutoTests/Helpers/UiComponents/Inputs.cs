@@ -55,7 +55,7 @@ public class Inputs:UiComponent
     {   
         var modifier = "Control";
         var newPage = await Context.NewPageAsync();
-        var html = HttpUtility.HtmlEncode(code);
+        var html = HttpUtility.HtmlEncode(code).Replace("\n", "<br>");
         await newPage.SetContentAsync($"<div contenteditable>{html}</div>");
         await newPage.FocusAsync("div");
         await newPage.Keyboard.PressAsync($"{modifier}+KeyA");

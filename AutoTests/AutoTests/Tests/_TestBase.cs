@@ -202,7 +202,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
         }
     }
 
-    protected Task GotoPage(string name) => FileFlows.GotoPage(name);
+    protected Task GotoPage(string name, bool forceLoad = false) => FileFlows.GotoPage(name, forceLoad);
     protected Task SkyBox(string name, bool waitFor = false) => FileFlows.SkyBox(name, waitFor);
     protected Task TableButtonClick(string name, bool sideEditor = false) => FileFlows.Table.ButtonClick(name, sideEditor: sideEditor);
     protected Task EditorTitle(string title) => FileFlows.Editor.Title(title);

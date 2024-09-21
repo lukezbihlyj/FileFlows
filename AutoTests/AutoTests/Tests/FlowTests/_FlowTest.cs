@@ -121,7 +121,7 @@ public abstract class FlowTest():TestBase("Flows")
     protected async Task<string> CreateBasicLibrary(string name, string flow, string libPath, string template = "File", 
         bool scan = false, bool fingerprinting = false)
     {
-        await GotoPage("Libraries");
+        await GotoPage("Libraries", forceLoad: true);
         await TableButtonClick("Add");
         await EditorTitle("Library");
         await SetSelect("Template", template);

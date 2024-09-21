@@ -65,7 +65,6 @@ public class Flow(TestBase test) : UiComponent(test)
         await filter.FillAsync(fullName);
         await filter.PressAsync("Enter");
         var ele = Page.Locator($".flow-elements .flow-element.{fullName.Replace(".", "-")}");
-        await ele.HighlightAsync();
         var canvas = Page.Locator(".flow-parts.show canvas");
         await ele.DragToAsync(canvas, new()
         {
