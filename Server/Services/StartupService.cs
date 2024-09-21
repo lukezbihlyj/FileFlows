@@ -308,12 +308,15 @@ public class StartupService
         if (upgradeRequired.Failed(out error))
             return Result<bool>.Fail(error);
 
-        bool needsUpgrade = upgradeRequired.Value.Required; 
+        bool needsUpgrade = upgradeRequired.Value.Required;
 
         if (needsUpgrade == false)
+        {
+            upgrader.EnsureColumnsExist(appSettingsService);
             return true;
-        
-        
+        }
+
+
         UpdateStatus("Backing up old database...");
         upgrader.Backup(upgradeRequired.Value.Current, appSettingsService.Settings, (details) =>
         {

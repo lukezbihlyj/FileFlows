@@ -225,4 +225,13 @@ public class Upgrader
         Logger.Instance.ILog("Finished checking upgrade scripts");
         return true;
     }
+
+    /// <summary>
+    /// Ensures the expected columns exist
+    /// </summary>
+    public void EnsureColumnsExist(AppSettingsService appSettingsService)
+    {
+        var manager = GetUpgradeManager(appSettingsService.Settings);
+        new DatabaseValidator(Logger.Instance, appSettingsService, manager).EnsureColumnsExist().Wait();
+    }
 }

@@ -154,6 +154,12 @@ public class UpgradeManager
         => new Upgrade_24_09_2().Run(logger, dbType, connectionString);
     
     /// <summary>
+    /// Ensures the columns exist
+    /// </summary>
+    public async Task<Result<bool>> EnsureColumnsExist(ILogger logger, DatabaseType dbType, string connectionString)
+        => await new DatabaseValidator().EnsureColumnsExist(logger, dbType, connectionString);
+    
+    /// <summary>
     /// Legacy settings which has the version in the settings model
     /// </summary>
     class LegacySettings
