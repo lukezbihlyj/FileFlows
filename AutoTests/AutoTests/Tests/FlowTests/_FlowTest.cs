@@ -124,6 +124,7 @@ public abstract class FlowTest():TestBase("Flows")
         await GotoPage("Libraries", forceLoad: true);
         await TableButtonClick("Add");
         await EditorTitle("Library");
+        await Task.Delay(250);
         await SetSelect("Template", template);
         await SetText("Name", name);
         await SetText("Path", libPath);
