@@ -19,7 +19,7 @@ public class Table : UiComponent
 
     private ILocator ItemLocator(string name, bool sideEditor = false)
         => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
-            + $".flowtable-row span:text('{name}')");
+            + $".flowtable-row span:text('{name}')").Locator("..").Locator("..").Locator("..").Locator("..").Locator("..");
 
     // private ILocator ItemLocator(string name, bool sideEditor = false)
     //     => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
