@@ -203,7 +203,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     }
 
     protected Task GotoPage(string name) => FileFlows.GotoPage(name);
-    protected Task SkyBox(string name) => FileFlows.SkyBox(name);
+    protected Task SkyBox(string name, bool waitFor = false) => FileFlows.SkyBox(name, waitFor);
     protected Task TableButtonClick(string name, bool sideEditor = false) => FileFlows.Table.ButtonClick(name, sideEditor: sideEditor);
     protected Task EditorTitle(string title) => FileFlows.Editor.Title(title);
     protected Task SetText(string name, string value) => FileFlows.Inputs.SetText(name, value);
@@ -228,6 +228,9 @@ public abstract class TestBase(string PageName): PlaywrightTest()
 
     protected Task<bool> ItemExists(string name, bool sideEditor = false)
         => FileFlows.Table.Exists(name, sideEditor);
+
+    protected Task<bool> WaitForExists(string name, bool sideEditor = false, int timeout = 30000)
+        => FileFlows.Table.WaitForExists(name, sideEditor, timeout);
 
     protected Task SelectTab(string name) => FileFlows.Tab.Click(name);
 

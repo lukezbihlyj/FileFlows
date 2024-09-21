@@ -47,6 +47,31 @@ public class Table : UiComponent
 
     public async Task<bool> Exists(string name, bool sideEditor = false)
         => await ItemLocator(name, sideEditor).CountAsync() > 0; 
+    
+    /// <summary>
+    /// Waits for a skybox item to exist by its name.
+    /// </summary>
+    /// <param name="name">The name of the item to check.</param>
+    /// <param name="sideEditor">Whether to check within the side editor (optional).</param>
+    /// <param name="timeout">The maximum time to wait for the item to exist (in milliseconds).</param>
+    /// <returns>True if the item exists within the timeout, otherwise false.</returns>
+    public async Task<bool> WaitForExists(string name, bool sideEditor = false, int timeout = 30000)
+    {
+        var locator = ItemLocator(name, sideEditor);
+
+        try
+        {
+            // Wait for the item to be visible within the timeout (default is 30 seconds)
+            await locator.WaitForAsync(new LocatorWaitForOptions { Timeout = timeout });
+            return true; // Item exists
+        }
+        catch (TimeoutException)
+        {
+            // If the timeout is reached and the item is not found, return false
+            return false;
+        }
+    }
+
 
     public Task ItemDoesNotExist(string name, bool sideEditor = false)
         => Expect(ItemLocator(name, sideEditor)).ToHaveCountAsync(0);

@@ -27,7 +27,7 @@ public class AudioBook : AudioTest
 
         // Create library
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-        await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folder");
         
         // Test processing
         await TestBookExists(BOOK_NAME, OUTPUT_PATH);
@@ -51,7 +51,7 @@ public class AudioBook : AudioTest
 
         // Create library
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-        await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folder");
         string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
         string originalBookPath = libPath + "/" + BOOK_NAME;
         Assert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
@@ -83,7 +83,7 @@ public class AudioBook : AudioTest
 
         // Create library
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-        await CreateFolderLibrary(libName, flowName, libPath: libPath, scan: true);
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folder");
         string outputPath = $"{destFolder}/{BOOK_NAME}.m4b";
         
         // Test processing
@@ -93,24 +93,7 @@ public class AudioBook : AudioTest
     
     private async Task TestBookExists(string bookName, string outputPath)
     {
-        await GotoPage("Files");
-        await SkyBox("Processed");
-        await Task.Delay(5_000);
-        DateTime end = DateTime.Now.AddMinutes(2);
-        while (end > DateTime.Now)
-        {
-            await SkyBox("Processed");
-            if (await ItemExists(bookName))
-                break;
-        
-            await Task.Delay(1000);
-        }
-        
-        await DoubleClickItem(bookName);
-
-        string log = await DownloadLog();
-        Logger.ILog(new string('-', 100) + Environment.NewLine + log);
-        Logger.ILog(new string('-', 100));
+        await CheckFileProcessed(bookName);
 
         int count = 0;
         while (++count < 20)

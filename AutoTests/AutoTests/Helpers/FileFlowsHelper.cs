@@ -133,7 +133,43 @@ public class FileFlowsHelper
     /// Clicks a sky box item by its name
     /// </summary>
     /// <param name="name">the name of the skybox item to click</param>
+    /// <param name="waitFor">If it should be waited for</param>
     /// <returns>the task to await</returns>
-    public Task SkyBox(string name)
-        => Page.Locator($".skybox-item.{name.Dehumanize()} ").ClickAsync();
+    public async Task SkyBox(string name, bool waitFor = false)
+    {
+        var locator = Page.Locator($".skybox-item.{name.Dehumanize()}");
+        if (waitFor)
+        {
+            // Wait for the item to appear, retrying every 500ms for up to 30 seconds.
+            var maxWaitTime = TimeSpan.FromSeconds(30);
+            var retryInterval = TimeSpan.FromMilliseconds(500);
+            var startTime = DateTime.Now;
+
+            while (DateTime.Now - startTime < maxWaitTime)
+            {
+                // Check if the item exists
+                if (await locator.CountAsync() > 0)
+                {
+                    break; // Item exists, proceed to click
+                }
+                else
+                {
+                    // If it doesn't exist, click the first .skybox-item to refresh the list
+                    var firstItemLocator = Page.Locator(".skybox-item").First;
+                    await firstItemLocator.ClickAsync();
+
+                    // Wait for a short period before retrying
+                    await Task.Delay(retryInterval);
+                }
+            }
+
+            // If the skybox item still doesn't exist after the max wait time, throw an exception
+            if (await locator.CountAsync() == 0)
+            {
+                throw new Exception($"Skybox item '{name}' not found after {maxWaitTime.TotalSeconds} seconds.");
+            }
+        }
+
+        await locator.ClickAsync();
+    }
 }

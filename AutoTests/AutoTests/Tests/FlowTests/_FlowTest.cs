@@ -45,6 +45,7 @@ public abstract class FlowTest():TestBase("Flows")
         else
         {
             await FileFlows.Flow.SetTitle(name);
+            await FileFlows.Flow.Save();
         }
     }
 
@@ -112,33 +113,42 @@ public abstract class FlowTest():TestBase("Flows")
     /// </summary>
     /// <param name="name">the name of the library</param>
     /// <param name="flow">the flow to use</param>
+    /// <param name="libPath">library path to use, else one will be created</param>
+    /// <param name="template">the template to use</param>
     /// <param name="scan">if the library should be scanned</param>
-    /// <param name="libPath">Optional library path to use, else one will be created</param>
+    /// <param name="fingerprinting">If the library should do fingerprinting</param>
     /// <returns>the full path to the library</returns>
-    protected async Task<string> CreateFolderLibrary(string name, string flow, bool scan = false, string? libPath = null)
+    protected async Task<string> CreateBasicLibrary(string name, string flow, string libPath, string template = "File", 
+        bool scan = false, bool fingerprinting = false)
     {
-        if (libPath == null)
-        {
-            string shortName = "lib-" + Guid.NewGuid();
-            libPath = Path.Combine(TempPath, shortName);
-            Directory.CreateDirectory(libPath);
-        }
-
         await GotoPage("Libraries");
         await TableButtonClick("Add");
         await EditorTitle("Library");
-        await SetSelect("Template", "Folders");
+        await SetSelect("Template", template);
         await SetText("Name", name);
         await SetText("Path", libPath);
         await SetSelect("Flow", flow);
 
+        if (fingerprinting)
+        {
+            await SelectTab("Advanced");
+            await SetToggle("UseFingerprinting", fingerprinting);
+        }
         
         await ButtonClick("Save");
         await Task.Delay(500);
         await SelectItem(name);
 
         if (scan)
-            await TableButtonClick("Rescan");
+        {
+            try
+            {
+                await TableButtonClick("Rescan");
+            }
+            catch (Exception)
+            {
+            }
+        }
 
         return libPath;
     }
@@ -230,5 +240,31 @@ public abstract class FlowTest():TestBase("Flows")
             string newTargetDir = Path.Combine(targetDir, subDir.Name);
             CopyDirectory(subDir.FullName, newTargetDir); // Recursion for subdirectories
         }
+    }
+
+    /// <summary>
+    /// Checks if a file was processed
+    /// </summary>
+    /// <param name="fileName">the name of the file (or folder)</param>
+    protected async Task CheckFileProcessed(string fileName)
+    {
+        await GotoPage("Files");
+        await SkyBox("Processed");
+        await Task.Delay(5_000);
+        DateTime end = DateTime.Now.AddMinutes(2);
+        while (end > DateTime.Now)
+        {
+            await SkyBox("Processed");
+            if (await ItemExists(fileName))
+                break;
+        
+            await Task.Delay(1000);
+        }
+        
+        await DoubleClickItem(fileName);
+
+        string log = await DownloadLog();
+        Logger.ILog(new string('-', 100) + Environment.NewLine + log);
+        Logger.ILog(new string('-', 100));
     }
 }

@@ -1549,6 +1549,9 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
                 if (model.BottomOfQueue)
                     file.DateCreated = DateTime.UtcNow;
             }
+            else if(file.Status == FileStatus.Duplicate)
+                file.Status = FileStatus.Unprocessed;
+                
 
             if (model.Mode == ReprocessModel.CustomVariablesMode.Replace)
                 file.CustomVariables = model.CustomVariables ?? new ();
