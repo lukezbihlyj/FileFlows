@@ -27,7 +27,7 @@ public class AudioBook : AudioTest
 
         // Create library
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folder");
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folders");
         
         // Test processing
         await TestBookExists(BOOK_NAME, OUTPUT_PATH);
@@ -51,7 +51,7 @@ public class AudioBook : AudioTest
 
         // Create library
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folder");
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folders");
         string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
         string originalBookPath = libPath + "/" + BOOK_NAME;
         Assert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
@@ -83,7 +83,7 @@ public class AudioBook : AudioTest
 
         // Create library
         string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folder");
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folders");
         string outputPath = $"{destFolder}/{BOOK_NAME}.m4b";
         
         // Test processing

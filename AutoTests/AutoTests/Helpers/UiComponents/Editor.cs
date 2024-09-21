@@ -1,10 +1,7 @@
 namespace FileFlowsTests.Helpers.UiComponents;
 
-public class Editor : UiComponent
+public class Editor(TestBase test, FileFlowsHelper fileFlowsHelper)  : UiComponent(test)
 {
-    public Editor(TestBase test) : base(test)
-    {
-    }
 
     private ILocator Button(string name) 
         => Page.Locator($".vi-container .top-row button >> text='{name}'").Last;
@@ -17,6 +14,9 @@ public class Editor : UiComponent
     public async Task ButtonEnabled(string name)
         => Assert.IsTrue(await Button(name).IsEnabledAsync());
 
-    public Task Title(string title)
-        => Expect(Page.Locator($".vi-container .top-row .title >> text='{title}'")).ToHaveCountAsync(1);
+    public async Task Title(string title)
+    {
+        await Expect(Page.Locator($".vi-container .top-row .title >> text='{title}'")).ToHaveCountAsync(1);
+        await fileFlowsHelper.WaitForBlockerToDisappear();
+    }
 }

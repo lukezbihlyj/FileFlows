@@ -76,7 +76,7 @@ public class FileFlowsHelper
         this.Toast = new (test);
         this.MessageBox = new (test);
         this.Inputs = new (test);
-        this.Editor = new (test);
+        this.Editor = new (test, this);
         this.Help = new (test);
         this.Flow = new (test);
         this.FlowTemplateDialog = new(test);
@@ -92,6 +92,7 @@ public class FileFlowsHelper
         {
             State =  WaitForSelectorState.Detached
         });
+        await WaitForBlockerToDisappear();
     }
 
     /// <summary>
@@ -104,11 +105,7 @@ public class FileFlowsHelper
         await Task.Delay(250);
         if (forceLoad)
             await Page.ReloadAsync();
-        
-        await Page.Locator(".blocker").WaitForAsync(new LocatorWaitForOptions()
-        {
-            State = WaitForSelectorState.Detached
-        });
+        await WaitForBlockerToDisappear();
         
         await Page.Locator(".top-row .title", new ()
         {
@@ -179,5 +176,32 @@ public class FileFlowsHelper
         }
 
         await locator.ClickAsync();
+        await WaitForBlockerToDisappear();
     }
+    
+    /// <summary>
+    /// Waits for a blocker to disappear
+    /// </summary>
+    /// <param name="timeout">the timeout</param>
+    /// <exception cref="Exception">if the blocker doesnt disappear</exception>
+    public async Task WaitForBlockerToDisappear(int timeout = 30000)
+    {
+        try
+        {
+            // Wait until the blocker is hidden or removed
+            await Task.Delay(100);
+            var blockerLocator = Page.Locator(".blocker");
+            await blockerLocator.WaitForAsync(new()
+            {
+                State = WaitForSelectorState.Detached,
+                Timeout = timeout
+            });
+        }
+        catch (TimeoutException)
+        {
+            // Blocker didn't disappear within the timeout
+            throw new Exception("Blocker did not disappear within the timeout.");
+        }
+    }
+
 }
