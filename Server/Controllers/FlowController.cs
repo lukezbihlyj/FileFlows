@@ -953,6 +953,8 @@ public class FlowController : BaseController
         variables["library.Name"] = "My Library";
         variables["library.Path"] = "/library/path";
         variables["temp"] = "/node-temp";
+        variables["time.processing"] = new TimeSpan(1, 2, 3).ToString();
+        variables["time.now"] = DateTime.Now.ToShortTimeString();
 
         //p.FlowElementUid == FileFlows.VideoNodes.DetectBlackBars
         var flowElements = await GetElements(Guid.Empty, (FlowType)(-1));

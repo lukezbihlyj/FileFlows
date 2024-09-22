@@ -449,6 +449,7 @@ public class Runner
     /// <param name="logger">the logger used to log messages</param>
     private void RunActual(FlowLogger logger)
     {
+        VariablesHelper.StartedAt = DateTime.Now;
         nodeParameters = new NodeParameters(Info.LibraryFile.Name, logger,
             Info.IsDirectory, Info.LibraryPath, fileService: FileService.Instance)
         {

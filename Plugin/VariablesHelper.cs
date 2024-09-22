@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 
 namespace FileFlows.Plugin;
@@ -10,6 +11,11 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class VariablesHelper
 {
+    /// <summary>
+    /// The time this was started at.
+    /// </summary>
+    public static DateTime? StartedAt { get; set; }
+    
     /// <summary>
     /// Replaces variables in a given string
     /// </summary>
@@ -109,6 +115,11 @@ public class VariablesHelper
     /// </returns>
     public static object? ResolveVariable(Dictionary<string, object> variables, string variablePath)
     {
+        if (variablePath == "time.processing" && StartedAt != null)
+            return DateTime.Now.Subtract(StartedAt.Value).ToString();
+        if (variablePath == "time.now")
+            return DateTime.Now.ToShortTimeString();
+        
         // Split the path into parts
         string[] parts = variablePath.Split('.');
     
