@@ -117,6 +117,8 @@ public class VariablesHelper
     {
         if (variablePath == "time.processing" && StartedAt != null)
             return DateTime.Now.Subtract(StartedAt.Value).ToString();
+        if (variablePath == "time.processingRaw" && StartedAt != null)
+            return DateTime.Now.Subtract(StartedAt.Value);
         if (variablePath == "time.now")
             return DateTime.Now.ToShortTimeString();
         
