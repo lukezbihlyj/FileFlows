@@ -51,6 +51,7 @@ public class Program
                 return Assembly.LoadFrom(assemblyPath);
             }
         }
+        instance?.LogInfo("Not manually loading: " + requestedAssembly.Name);
 
         // Return null if not resolved
         return null;
