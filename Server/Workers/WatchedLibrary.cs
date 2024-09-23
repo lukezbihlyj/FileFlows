@@ -909,10 +909,13 @@ public class WatchedLibrary:IDisposable
         }
 
 
-        foreach (var subdir in subDirs)
+        if (Library.TopLevelOnly == false)
         {
-            foreach (var file in GetFiles(subdir))
-                yield return file;
+            foreach (var subdir in subDirs)
+            {
+                foreach (var file in GetFiles(subdir))
+                    yield return file;
+            }
         }
 
         FileInfo[] files;
