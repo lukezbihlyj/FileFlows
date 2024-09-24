@@ -68,7 +68,9 @@ public class TelemetryReporter : ServerWorker
             data.FilesProcessed = filesProcessed;
             var repo = ServiceLoader.Load<RepositoryService>().GetRepository().Result ?? new ();
             var repoScripts = repo.FlowScripts.Union(repo.SharedScripts).Union(repo.SystemScripts)
-                .Select(x => x.Name).Distinct().ToList();
+                .Where(x => x.Uid != null)
+                .DistinctBy(x => x.Uid)
+                .ToDictionary(x => x.Uid!.Value, x => x);
             
             var flows = ServiceLoader.Load<FlowService>().GetAllAsync().Result;
             var dictNodes = new Dictionary<string, int>();
@@ -80,9 +82,10 @@ public class TelemetryReporter : ServerWorker
                     continue;
                 if (fp.FlowElementUid.StartsWith("Script:"))
                 {
-                    string name = fp.FlowElementUid[7..];
-                    if (repoScripts.Contains(name) == false)
+                    string uid = fp.FlowElementUid[7..];
+                    if (Guid.TryParse(uid, out var guid) == false || repoScripts.TryGetValue(guid, out var rs) == false)
                         continue;
+                    fp.FlowElementUid = "Script:" + rs.Name; // so we get the name of the script in telemetry
                 }
                 if (!dictNodes.TryAdd(fp.FlowElementUid, 1))
                     dictNodes[fp.FlowElementUid] += 1;
