@@ -1,10 +1,11 @@
 @namespace FileFlows.Client.Components.Dialogs
+@inherits VisibleEscapableComponent
 
 <Modal Title="@Title" Visible="Visible">
     <Body>
         <span class="message">@Message</span>
     </Body>
     <Footer>
-        <button id="@btnOkUid" @onclick=@Close>@lblOk</button>
+        <button id="@btnOkUid" @onclick=@Cancel>@lblOk</button>
     </Footer>
 </Modal>

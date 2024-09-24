@@ -6,7 +6,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// A prompt for the user to select how long to pause execution for
 /// </summary>
-public partial class PausePrompt : ComponentBase, IDisposable
+public partial class PausePrompt : VisibleEscapableComponent
 {
     private string lblOk, lblCancel;
     private string Message, Title;
@@ -29,8 +29,6 @@ public partial class PausePrompt : ComponentBase, IDisposable
 
     private static PausePrompt Instance { get; set; }
 
-    private bool Visible { get; set; }
-
     private int Value { get; set; }
 
     private string Uid = System.Guid.NewGuid().ToString();
@@ -46,16 +44,6 @@ public partial class PausePrompt : ComponentBase, IDisposable
         this.Title = Translater.Instant("Dialogs.PauseDialog.Title");
         this.Message = Translater.Instant("Dialogs.PauseDialog.Message");
         Instance = this;
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
     }
     
     /// <summary>
@@ -99,15 +87,9 @@ public partial class PausePrompt : ComponentBase, IDisposable
         await Task.CompletedTask;
     }
 
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         Instance.ShowTask.TrySetResult(0);
-        await Task.CompletedTask;
-    }
-
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

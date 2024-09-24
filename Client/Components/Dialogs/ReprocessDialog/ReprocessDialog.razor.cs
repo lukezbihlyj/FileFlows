@@ -6,16 +6,12 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Dialog used to reprocess files
 /// </summary>
-public partial class ReprocessDialog : ComponentBase, IDisposable
+public partial class ReprocessDialog : VisibleEscapableComponent
 {
     /// <summary>
     /// Gets or sets if this is in the process options mode
     /// </summary>
     public bool ProcessOptionsMode { get; set; }
-    /// <summary>
-    /// Gets or sets if this dialog is visible
-    /// </summary>
-    private bool Visible { get; set; }
     /// <summary>
     /// Gets or sets ths blocker to use
     /// </summary>
@@ -104,21 +100,6 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
             new () { Label = lblMerge, Value = ReprocessModel.CustomVariablesMode.Merge },
             new () { Label = lblReplace, Value = ReprocessModel.CustomVariablesMode.Replace },
         ];
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-
-    /// <summary>
-    /// Escaped is pressed
-    /// </summary>
-    /// <param name="args">the escape arguments</param>
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
     }
     
     /// <summary>
@@ -160,11 +141,10 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
     /// <summary>
     /// Cancels the dialog
     /// </summary>
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         ShowTask.TrySetResult(new ());
-        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -207,14 +187,6 @@ public partial class ReprocessDialog : ComponentBase, IDisposable
         
         ShowTask.TrySetResult(true);
         await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Disposes of the component
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
     
     /// <summary>

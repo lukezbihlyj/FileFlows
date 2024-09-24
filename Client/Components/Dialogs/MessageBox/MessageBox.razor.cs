@@ -9,7 +9,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Message box popup with an OK button 
 /// </summary>
-public partial class MessageBox : ComponentBase, IDisposable
+public partial class MessageBox : VisibleEscapableComponent
 {
     /// <summary>
     /// Gets or sets th e javascrpt runtime
@@ -23,7 +23,6 @@ public partial class MessageBox : ComponentBase, IDisposable
 
     private static MessageBox Instance { get; set; }
 
-    private bool Visible { get; set; }
     private bool focused = false;
 
     /// <summary>
@@ -32,21 +31,7 @@ public partial class MessageBox : ComponentBase, IDisposable
     protected override void OnInitialized()
     {
         this.lblOk = Translater.Instant("Labels.Ok");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
-    }
-
-    /// <summary>
-    /// Closes the message box on escape
-    /// </summary>
-    /// <param name="args">the arguments from the event</param>
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Close();
-            this.StateHasChanged();
-        }
     }
 
     /// <summary>
@@ -105,18 +90,9 @@ public partial class MessageBox : ComponentBase, IDisposable
     /// <summary>
     /// Closes the message box
     /// </summary>
-    private async void Close()
+    public override void Cancel()
     {
         this.Visible = false;
         Instance.ShowTask.TrySetResult();
-        await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Disposes of this component
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

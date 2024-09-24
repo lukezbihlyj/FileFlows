@@ -140,10 +140,10 @@ public partial class InputCode : Input<string>, IDisposable
 
             await OnSubmit.InvokeAsync();
         }
-        else if (e.Code == "Escape")
-        {
-            await OnClose.InvokeAsync();
-        }
+        // else if (e.Code == "Escape")
+        // {
+        //     await OnClose.InvokeAsync();
+        // }
     }
 
     /// <inheritdoc />

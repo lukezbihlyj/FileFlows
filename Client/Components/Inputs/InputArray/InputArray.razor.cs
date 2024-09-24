@@ -30,10 +30,10 @@ public partial class InputArray : Input<string[]>
             {
                 _ = this.OnSubmit.InvokeAsync();
             }
-            else if (e.Code == "Escape")
-            {
-                _ = OnClose.InvokeAsync();
-            }
+            // else if (e.Code == "Escape")
+            // {
+            //     _ = OnClose.InvokeAsync();
+            // }
             else if (e.Code == "Enter" || (EnterOnSpace && e.Code == "Space"))
             {
                 if (Add(InputText))

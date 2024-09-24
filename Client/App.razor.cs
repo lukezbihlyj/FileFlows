@@ -48,9 +48,35 @@ public partial class App : ComponentBase
     public delegate void EscapePushed(OnEscapeArgs args);
 
     /// <summary>
-    /// Event that is fired when the escape key is pushed
+    /// Instance of the escape event publisher.
     /// </summary>
-    public event EscapePushed OnEscapePushed;
+    public EscapeEventPublisher OnEscapePublisher { get; } = new();
+    /// <summary>
+    /// A list of the already subscribed listeners
+    /// </summary>
+    private readonly HashSet<EscapePushedEventHandler> _subscribedHandlers = new();
+    /// <summary>
+    /// Expose the OnEscapePushed event.
+    /// </summary>
+    public event EscapePushedEventHandler OnEscapePushed
+    {
+        add
+        {
+            // Only add the handler if it's not already in the set
+            if (_subscribedHandlers.Add(value))
+            {
+                OnEscapePublisher.OnEscapePushed += value;
+            }
+        }
+        remove
+        {
+            if (_subscribedHandlers.Remove(value))
+            {
+                OnEscapePublisher.OnEscapePushed -= value;
+            }
+        }
+    }
+
 
     // public FileFlowsStatus FileFlowsSystem { get; private set; }
     
@@ -175,7 +201,7 @@ public partial class App : ComponentBase
     [JSInvokable]
     public void OnEscape(OnEscapeArgs args)
     {
-        OnEscapePushed?.Invoke(args);
+        OnEscapePublisher.RaiseEscapePushed();
     }
     
     
@@ -228,4 +254,9 @@ public class OnEscapeArgs
     /// Gets if the log partial viewer is open 
     /// </summary>
     public bool HasLogPartialViewer { get; init; }
+    
+    /// <summary>
+    /// Gets or sets if propagation should be stopped
+    /// </summary>
+    public bool StopPropagation { get; set; }
 }

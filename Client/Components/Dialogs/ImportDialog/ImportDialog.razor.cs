@@ -9,7 +9,7 @@ using System.IO;
 
 namespace FileFlows.Client.Components.Dialogs;
 
-public partial class ImportDialog : ComponentBase, IDisposable
+public partial class ImportDialog : VisibleEscapableComponent
 {
     private string lblImport, lblCancel, lblBrowse;
     private string Message, Title;
@@ -18,9 +18,6 @@ public partial class ImportDialog : ComponentBase, IDisposable
     private string FileName { get; set; }
     private bool HasFile { get; set; }
     private static ImportDialog Instance { get; set; }
-
-    private bool Visible { get; set; }
-
     private string Value { get; set; }
 
     private string[] Extensions = new[] { "json" };
@@ -39,18 +36,7 @@ public partial class ImportDialog : ComponentBase, IDisposable
         this.Title = Translater.Instant("Dialogs.Import.Title");
         this.Message = Translater.Instant("Dialogs.Import.Message");
         Instance = this;
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
     }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
-    }
-
 
     public static Task<(string filename, string content)> Show(params string[] extensions)
     {
@@ -80,11 +66,10 @@ public partial class ImportDialog : ComponentBase, IDisposable
         await Task.CompletedTask;
     }
 
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         Instance.ShowTask.TrySetResult((string.Empty, string.Empty));
-        await Task.CompletedTask;
     }
 
     private async Task LoadFile(InputFileChangeEventArgs e)
@@ -101,10 +86,5 @@ public partial class ImportDialog : ComponentBase, IDisposable
         this.Value = await reader.ReadToEndAsync();
         this.HasFile = string.IsNullOrWhiteSpace(this.Value) == false;
         this.StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

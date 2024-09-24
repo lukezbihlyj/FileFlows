@@ -6,7 +6,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Dialog for choosing a script language
 /// </summary>
-public partial class ScriptLanguagePicker : ComponentBase, IDisposable
+public partial class ScriptLanguagePicker : VisibleEscapableComponent
 {
     private string lblNext, lblCancel, lblJavaScriptDescription, lblBatchDescription, lblCSharpDescription, lblPowerShellDescription, lblShellDescription;
     private string Title;
@@ -16,11 +16,6 @@ public partial class ScriptLanguagePicker : ComponentBase, IDisposable
     /// Gets or sets the language
     /// </summary>
     private ScriptLanguage Language { get; set; }
-    
-    /// <summary>
-    /// Gets or sets if this dialog is visible
-    /// </summary>
-    private bool Visible { get; set; }
     
     /// <inheritdoc />
     protected override void OnInitialized()
@@ -33,20 +28,6 @@ public partial class ScriptLanguagePicker : ComponentBase, IDisposable
         lblPowerShellDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.PowerShellDescription");
         lblShellDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.ShellDescription");
         Title = Translater.Instant("Dialogs.ScriptLanguage.Title");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-    /// <summary>
-    /// Escaped is pressed
-    /// </summary>
-    /// <param name="args">the escape arguments</param>
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
     }
     
     /// <summary>
@@ -66,11 +47,10 @@ public partial class ScriptLanguagePicker : ComponentBase, IDisposable
     /// <summary>
     /// Cancels the dialog
     /// </summary>
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         ShowTask.TrySetResult(Result<ScriptLanguage>.Fail("Canceled"));
-        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -82,15 +62,6 @@ public partial class ScriptLanguagePicker : ComponentBase, IDisposable
         ShowTask.TrySetResult(Language);
         await Task.CompletedTask;
     }
-
-    /// <summary>
-    /// Disposes of the component
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
-    }
-    
     
     private void SetLanguage(ScriptLanguage language, bool close = false)
     {

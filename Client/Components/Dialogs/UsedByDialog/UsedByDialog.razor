@@ -1,5 +1,5 @@
-@using FileFlows.Plugin
 @namespace FileFlows.Client.Components.Dialogs
+@inherits VisibleEscapableComponent
 
 <Modal Title="@lblTitle" Visible="Visible" Styling="width: min(650px, 90vw);">
 
@@ -23,6 +23,6 @@
         </table>
     </Body>
     <Footer>
-        <button @onclick=@Close>@lblClose</button>
+        <button @onclick=@Cancel>@lblClose</button>
     </Footer>
 </Modal>

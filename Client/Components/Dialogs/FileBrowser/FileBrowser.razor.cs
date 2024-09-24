@@ -13,7 +13,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// A file browser that lets a user picks a file or folder
 /// </summary>
-public partial class FileBrowser : ComponentBase, IDisposable
+public partial class FileBrowser : VisibleEscapableComponent
 {
     private string lblSelect, lblCancel;
     private string Title;
@@ -34,11 +34,6 @@ public partial class FileBrowser : ComponentBase, IDisposable
     [Inject] private ProfileService ProfileService { get; set; }
     
     /// <summary>
-    /// Gets or sets if this dialog is visible
-    /// </summary>
-    private bool Visible { get; set; }
-
-    /// <summary>
     /// The API url to call
     /// </summary>
     private const string API_URL = "/api/file-browser";
@@ -58,21 +53,7 @@ public partial class FileBrowser : ComponentBase, IDisposable
         this.lblSelect = Translater.Instant("Labels.Select");
         this.lblCancel = Translater.Instant("Labels.Cancel");
         lblShowHidden = Translater.Instant("Labels.ShowHidden");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
-    }
-
-    /// <summary>
-    /// Escaped is pressed
-    /// </summary>
-    /// <param name="args">the escape arguments</param>
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
     }
 
     /// <summary>
@@ -116,11 +97,10 @@ public partial class FileBrowser : ComponentBase, IDisposable
     /// <summary>
     /// Cancels the dialog
     /// </summary>
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         Instance.ShowTask.TrySetResult("");
-        await Task.CompletedTask;
     }
 
     private async Task SetSelected(FileBrowserItem item)
@@ -165,13 +145,5 @@ public partial class FileBrowser : ComponentBase, IDisposable
         return await HttpHelper.Get<List<FileBrowserItem>>($"{API_URL}?includeFiles={DirectoryMode == false}" +
         $"&start={Uri.EscapeDataString(path)}" +
         string.Join("", Extensions?.Select(x => "&extensions=" + Uri.EscapeDataString(x))?.ToArray() ?? new string[] { }));
-    }
-
-    /// <summary>
-    /// Disposes of the component
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

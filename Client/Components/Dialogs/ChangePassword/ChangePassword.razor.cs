@@ -7,7 +7,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Change password dialog
 /// </summary>
-public partial class ChangePassword: ComponentBase, IDisposable
+public partial class ChangePassword: VisibleEscapableComponent
 {
     /// <summary>
     /// Gets or sets the javascript runtime
@@ -24,11 +24,6 @@ public partial class ChangePassword: ComponentBase, IDisposable
     /// Saving the password
     /// </summary>
     private bool saving = false;
-
-    /// <summary>
-    /// Gets or sets if the component is visible
-    /// </summary>
-    private bool Visible { get; set; }
     /// <summary>
     /// if the input requires a focus event
     /// </summary>
@@ -43,20 +38,6 @@ public partial class ChangePassword: ComponentBase, IDisposable
         lblOldPassword = Translater.Instant("Dialogs.ChangePassword.OldPassword");
         lblNewPassword = Translater.Instant("Dialogs.ChangePassword.NewPassword"); 
         lblNewPasswordConfirm = Translater.Instant("Dialogs.ChangePassword.NewPasswordConfirm");
-        App.Instance.OnEscapePushed += OnEscapePushed;
-    }
-
-    /// <summary>
-    /// Event fired when escaped key is pushed
-    /// </summary>
-    /// <param name="args">the arguments</param>
-    private void OnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            StateHasChanged();
-        }
     }
     
     /// <summary>
@@ -132,19 +113,10 @@ public partial class ChangePassword: ComponentBase, IDisposable
     /// <summary>
     /// Cancels the password change
     /// </summary>
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         ShowTask.TrySetResult();
-        await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Disposes the component
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= OnEscapePushed;
     }
     
     /// <summary>

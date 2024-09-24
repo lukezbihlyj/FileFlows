@@ -23,7 +23,27 @@ public partial class Editor : EditorBase, IDisposable
 
     private readonly List<ActionButton> AdditionalButtons = new();
 
-    public bool Visible { get; set; }
+    /// <summary>
+    /// The visible value
+    /// </summary>
+    private bool _Visible;
+    /// <summary>
+    /// Gtes or sets if this is visible
+    /// </summary>
+    public bool Visible
+    {
+        get => _Visible;
+        set
+        {
+            if (_Visible == value)
+                return;
+            if(value)
+                App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
+            else
+                App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
+            _Visible = value;
+        }
+    }
 
     public string Title { get; set; }
     public string HelpUrl { get; set; }
@@ -109,7 +129,6 @@ public partial class Editor : EditorBase, IDisposable
         lblHelp = Translater.Instant("Labels.Help");
         lblNext = Translater.Instant("Labels.Next");
         this.Maximised = false;
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
     }
 
     private void InstanceOnOnEscapePushed(OnEscapeArgs args)

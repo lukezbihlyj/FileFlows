@@ -7,15 +7,13 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Confirm dialog that prompts the user for confirmation 
 /// </summary>
-public partial class UsedByDialog : ComponentBase, IDisposable
+public partial class UsedByDialog : VisibleEscapableComponent
 {
     private string lblTitle, lblClose, lblName, lblType;
     TaskCompletionSource ShowTask;
     private List<ObjectReference> UsedBy;
 
     private static UsedByDialog Instance { get; set; }
-
-    private bool Visible { get; set; }
 
     protected override void OnInitialized()
     {
@@ -24,16 +22,6 @@ public partial class UsedByDialog : ComponentBase, IDisposable
         this.lblName = Translater.TranslateIfNeeded("Labels.Name");
         this.lblType = Translater.TranslateIfNeeded("Labels.Type");
         Instance = this;
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Close();
-            this.StateHasChanged();
-        }
     }
 
     /// <summary>
@@ -59,21 +47,15 @@ public partial class UsedByDialog : ComponentBase, IDisposable
         return Instance.ShowTask.Task;
     }
 
-    private async void Close()
+    public override void Cancel()
     {
         this.Visible = false;
         Instance.ShowTask.SetResult();
-        await Task.CompletedTask;
     }
 
     private string GetTypeName(string type)
     {
         type = type.Substring(type.LastIndexOf(".") + 1);
         return Translater.Instant($"Pages.{type}.Title");
-    }
-
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

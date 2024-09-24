@@ -1,4 +1,5 @@
 @namespace FileFlows.Client.Components.Dialogs
+@inherits VisibleEscapableComponent
 
 <Modal Title="@Title" Visible="Visible">
 
@@ -14,6 +15,6 @@
     </Body>
     <Footer>
         <button id="@btnYesUid" @onclick=@Yes disabled="@(RequireSwitch && ShowSwitch && SwitchState == false)">@lblYes</button>
-        <button id="@btnNoUid" @onclick=@No>@lblNo</button>
+        <button id="@btnNoUid" @onclick=@Cancel>@lblNo</button>
     </Footer>
 </Modal>
