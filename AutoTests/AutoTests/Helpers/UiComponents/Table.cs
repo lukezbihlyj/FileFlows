@@ -46,7 +46,16 @@ public class Table : UiComponent
     }
 
     public async Task<bool> Exists(string name, bool sideEditor = false)
-        => await ItemLocator(name, sideEditor).CountAsync() > 0; 
+    {
+        try
+        {
+            return await ItemLocator(name, sideEditor).CountAsync() > 0;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
     
     /// <summary>
     /// Waits for a skybox item to exist by its name.
