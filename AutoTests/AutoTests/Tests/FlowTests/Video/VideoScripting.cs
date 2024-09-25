@@ -26,12 +26,11 @@ return 1");
         
         string LibraryName = "Library for " + FlowName;
 
-        string shortName = await CreateLibrary(TestFiles.TestVideo1, new()
+        await CreateLibrary(TestFiles.TestVideo1, new()
         {
             Name = LibraryName,
             Flow = FlowName,
             Path = TestFiles.TestPath,
-            Filters = ["/" + Regex.Escape("InitialConfiguration.webm") + "/"],
             Template = "Video Library"
         }, scan: true);
 
