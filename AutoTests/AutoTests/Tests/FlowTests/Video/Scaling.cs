@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests.FlowTests.Video;
 /// <summary>
 /// Scaling video tests
 /// </summary>
-public class Scaling:VideoTest
+public class Scaling : VideoTest
 {
     /// <summary>
     /// Downscales a video

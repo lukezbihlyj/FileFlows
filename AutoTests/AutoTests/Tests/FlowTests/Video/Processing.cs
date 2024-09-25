@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests.FlowTests.Video;
 /// <summary>
 /// Tests for processing files
 /// </summary>
-public class Processing() : VideoTest
+public class Processing : VideoTest
 {
     [Test]
     public async Task ProcessToH264()
