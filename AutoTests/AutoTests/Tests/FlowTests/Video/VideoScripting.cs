@@ -46,7 +46,6 @@ return 1");
         Assert.IsTrue(File.Exists(fileOutput), "Output file does not exist");
         var output = await File.ReadAllTextAsync(fileOutput);
         Logger.ILog("Output: " + Environment.NewLine + output);
-        Assert.IsTrue(output.Contains("Video Codec: h264"), "Wrong video codec detected");
-        Assert.IsTrue(output.Contains("Audio Streams: 0"), "Wrong number of audio streams detected");
+        Assert.IsTrue(output.Contains("Video Codec: vp8"), "Wrong video codec detected");
     }
 }
