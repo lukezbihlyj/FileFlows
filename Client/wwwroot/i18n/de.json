@@ -3,8 +3,8 @@
   "Labels": {
     "VersionNumber": "Version: {version}",
     "Version": "Version",
-    "Loading": "",
-    "Installed": "",
+    "Loading": "Lädt",
+    "Installed": "Installiert",
     "Save": "Speichern",
     "Saving": "Speichert",
     "Execute": "Ausführen",
@@ -15,9 +15,9 @@
     "Yes": "Ja",
     "No": "Nein",
     "Ok": "OK",
-    "And": "",
-    "Any": "",
-    "All": "",
+    "And": "Und",
+    "Any": "Beliebig",
+    "All": "Alle",
     "About": "Über",
     "Pause": "Verarbeitung pausieren",
     "Paused": "Verarbeitung fortsetzen",
@@ -42,15 +42,15 @@
     "Refresh": "Aktualisieren",
     "Download": "Download",
     "Default": "Default",
-    "Repository": "",
+    "Repository": "Repository",
     "Type": "Typ",
     "Scripts": "Scripte",
     "Plugins": "Plugins",
     "SubFlow": "Sub Flow",
     "SubFlows": "Sub Flows",
-    "ShowHidden": "",
+    "ShowHidden": "Versteckte anzeigen",
     "DownloadLog": "Log herunterladen",
-    "DownloadLogShort": "",
+    "DownloadLogShort": "Log herunterladen",
     "UnsavedChanges": "Nicht gespeicherte Änderungen",
     "Enabled": "Aktivieren",
     "Export": "Exportieren",
@@ -58,10 +58,10 @@
     "Browse": "Durchsuche",
     "Rescan": "Rescan",
     "Reprocess": "Reprocess",
-    "Reset": "",
+    "Reset": "Zurücksetzen",
     "Revisions": "Revisionen",
-    "Audit": "",
-    "NoAuditHistoryAvailable": "",
+    "Audit": "Prüfung",
+    "NoAuditHistoryAvailable": "Keine Prüfungshistorie verfügbar",
     "Restore": "Wiederherstellen",
     "RestoredMessage": "{type} wiederhergestellt",
     "RestoredFailedMessage": "Fehler beim Wiederherstellen von {type}",
@@ -144,7 +144,7 @@
     "FlowElements": "Flow Elements",
     "ChangePassword": "Passwort ändern",
     "Logout": "Abmelden",
-    "AdminRequired": "",
+    "AdminRequired": "Administrator erforderlich",
     "ObsoleteConfirm": {
       "Title": "Veralteter Node",
       "Message": "Es wird empfohlen, zu einem anderen Node zu wechseln.",
@@ -157,42 +157,42 @@
       "Yesterday": "Gestern",
       "Last24Hours": "Letzte 24 Stunden",
       "Last3Days": "Letzte 3 Tage",
-      "Last7Days": "",
-      "Last31Days": "",
-      "Last3Months": "",
-      "Last6Months": "",
-      "Last12Months": ""
+      "Last7Days": "Letzte 7 Tage",
+      "Last31Days": "Letzte 31 Tage",
+      "Last3Months": "Letzte 3 Monate",
+      "Last6Months": "Letzte 6 Monate",
+      "Last12Months": "Letzte 12 Monate"
     }
   },
   "AuditActions": {
-    "SettingsUpdated": "",
-    "Added": "",
-    "Updated": "",
-    "Deleted": "",
-    "Login": "",
-    "LoginFailed": "",
-    "ChangePassword": "",
-    "PasswordResetRequest": "",
-    "PasswordReset": ""
+    "SettingsUpdated": "Einstellungen aktualisiert",
+    "Added": "Hinzugefügt",
+    "Updated": "Aktualisiert",
+    "Deleted": "Gelöscht",
+    "Login": "Anmeldung",
+    "LoginFailed": "Anmeldung fehlgeschlagen",
+    "ChangePassword": "Passwort geändert",
+    "PasswordResetRequest": "Passwort-Zurücksetzung angefordert",
+    "PasswordReset": "Passwort zurückgesetzt"
   },
   "Dialogs": {
     "AuditEntry": {
-      "ViewerTitle": "",
+      "ViewerTitle": "Prüfungseintrag",
       "Columns": {
-        "Value": "",
-        "Field": ""
+        "Value": "Wert",
+        "Field": "Feld"
       }
     },
     "AddFile": {
-      "Title": "",
-      "Description": "",
+      "Title": "Datei hinzufügen",
+      "Description": "Beschreibung",
       "Fields": {
-        "Mode": "",
-        "Flow": "",
-        "Node": "",
-        "AnyNode": "",
-        "List": "",
-        "Raw": ""
+        "Mode": "Modus",
+        "Flow": "Fluss",
+        "Node": "Node",
+        "AnyNode": "Beliebiger Node",
+        "List": "Liste",
+        "Raw": "Roh"
       }
     },
     "ChangePassword": {
@@ -201,9 +201,9 @@
       "OldPassword": "Altes Passwort",
       "NewPassword": "Neues Passwort",
       "NewPasswordConfirm": "Bestätigen",
-      "InvalidPassword": "",
-      "MinimumLength": "",
-      "Changed": ""
+      "InvalidPassword": "Ungültiges Passwort",
+      "MinimumLength": "Mindestlänge",
+      "Changed": "Passwort erfolgreich geändert"
     },
     "FileBrowser": {
       "FileTitle": "Eine Datei auswählen",
@@ -224,27 +224,27 @@
       "Message": "Wählen Sie die Zeitspanne aus, für die die Verarbeitung unterbrochen werden soll.\nHinweis: Die aktuellen Flows werden weiterhin ausgeführt, aber keine weiteren Flows werden ausgeführt, bis die Zeit abgelaufen ist."
     },
     "ReprocessDialog": {
-      "Title": "",
-      "Description": "",
+      "Title": "Erneut verarbeiten",
+      "Description": "Verarbeiten Sie die ausgewählte(n) Datei(en) erneut mit den folgenden Parametern",
       "ProcessOptions": {
-        "Title": "",
-        "Description": ""
+        "Title": "Verarbeitungsoptionen",
+        "Description": "Ändern Sie die Verarbeitungsparameter für die ausgewählte(n) Datei(en)"
       },
       "Fields": {
-        "Flow": "",
-        "Node": "",
-        "AnyNode": "",
-        "SameFlow": "",
-        "Position": "",
-        "BottomOfQueue": "",
-        "TopOfQueue": "",
-        "CustomVariablesMode": "",
-        "Original": "",
-        "Merge": "",
-        "Replace": "",
-        "CustomVariables": "",
-        "CustomVariablesKey": "",
-        "CustomVariablesValue": ""
+        "Flow": "Fluss",
+        "Node": "Knoten",
+        "AnyNode": "Beliebiger Knoten",
+        "SameFlow": "Keine Änderung",
+        "Position": "Position",
+        "BottomOfQueue": "Ende der Warteschlange",
+        "TopOfQueue": "Anfang der Warteschlange",
+        "CustomVariablesMode": "Benutzerdefinierte Variablen",
+        "Original": "Ursprüngliche benutzerdefinierte Variablen verwenden",
+        "Merge": "Benutzerdefinierte Variablen mit den ursprünglichen zusammenführen",
+        "Replace": "Ursprüngliche benutzerdefinierte Variablen ersetzen",
+        "CustomVariables": "Benutzerdefinierte Variablen",
+        "CustomVariablesKey": "Benutzerdefinierte Variable",
+        "CustomVariablesValue": "Wert"
       }
     },
     "ResumeDialog": {
@@ -252,13 +252,13 @@
       "Message": "Sind Sie sicher, dass Sie die Bearbeitung fortsetzen wollen?"
     },
     "ScriptLanguage": {
-      "Title": "",
+      "Title": "Skriptsprache",
       "Labels": {
-        "JavaScriptDescription": "",
-        "BatchDescription": "",
-        "CSharpDescription": "",
-        "PowerShellDescription": "",
-        "ShellDescription": ""
+        "JavaScriptDescription": "JavaScript-Skripte werden im FileFlows-Runner ausgeführt, sodass Sie Variablen lesen und schreiben sowie auf alle Hilfsfunktionen innerhalb von FileFlows zugreifen können.",
+        "BatchDescription": "Batch-Dateien können nur auf Windows-Systemen ausgeführt werden. Sie können grundlegende Variablen lesen, aber keine FileFlows-Objekte während der Ausführung aktualisieren oder darauf zugreifen.",
+        "CSharpDescription": "C#-Skripte können auf mehr Teile von FileFlows zugreifen und sind die mächtigsten. Sie verwenden dieselbe Sprache wie FileFlows und ermöglichen eine größere Systeminteraktion.",
+        "PowerShellDescription": "PowerShell-Skripte können nur auf Windows-Systemen ausgeführt werden. Sie können grundlegende Variablen lesen, aber keine FileFlows-Objekte während der Ausführung aktualisieren oder darauf zugreifen.",
+        "ShellDescription": "Shell-Skripte werden auf Unix-basierten Systemen (Linux, MacOS, Docker) ausgeführt. Sie können grundlegende Variablen lesen, aber keine FileFlows-Objekte während der Ausführung aktualisieren oder darauf zugreifen."
       }
     },
     "FlowTemplatePicker": {
@@ -267,14 +267,14 @@
   },
   "Enums": {
     "AuditAction": {
-      "Added": "",
-      "Updated": "",
-      "Deleted": "",
-      "Login": "",
-      "LoginFailed": "",
-      "ChangePassword": "",
-      "PasswordResetRequest": "",
-      "PasswordReset": ""
+      "Added": "Hinzugefügt",
+      "Updated": "Aktualisiert",
+      "Deleted": "Gelöscht",
+      "Login": "Anmeldung",
+      "LoginFailed": "Anmeldung fehlgeschlagen",
+      "ChangePassword": "Passwort ändern",
+      "PasswordResetRequest": "Passwort-Zurücksetzungsanfrage",
+      "PasswordReset": "Passwort zurückgesetzt"
     },
     "Days": {
       "Monday": "Montag",
@@ -293,21 +293,21 @@
       "Sun": "So"
     },
     "DateCompareMode": {
-      "Any": "",
-      "GreaterThan": "",
-      "LessThan": "",
-      "Between": "",
-      "NotBetween": "",
-      "After": "",
-      "Before": ""
+      "Any": "Beliebig",
+      "GreaterThan": "Größer als",
+      "LessThan": "Kleiner als",
+      "Between": "Zwischen",
+      "NotBetween": "Nicht zwischen",
+      "After": "Nach",
+      "Before": "Vor"
     },
     "FilesSortBy": {
-      "Size": "",
-      "SizeDesc": "",
-      "Savings": "",
-      "SavingsDesc": "",
-      "Time": "",
-      "TimeDesc": ""
+      "Size": "Größe",
+      "SizeDesc": "Größe absteigend",
+      "Savings": "Ersparnis",
+      "SavingsDesc": "Ersparnis absteigend",
+      "Time": "Zeit",
+      "TimeDesc": "Zeit absteigend"
     },
     "FileStatus": {
       "Any": "",
@@ -330,10 +330,10 @@
       "SubFlow": "Unter Flow"
     },
     "LogType": {
-      "Debug": "",
-      "Error": "",
-      "Info": "",
-      "Warning": ""
+      "Debug": "Debug",
+      "Error": "Fehler",
+      "Info": "Info",
+      "Warning": "Warnung"
     },
     "MatchRange": {
       "Any": "Beliebig",
@@ -345,20 +345,20 @@
       "Before": ""
     },
     "MathValue": {
-      "Equals": "",
-      "NotEquals": "",
-      "GreaterThan": "",
-      "LessThan": "",
-      "Between": "",
-      "NotBetween": "",
-      "GreaterThanOrEqual": "",
-      "LessThanOrEqual": ""
+      "Equals": "Gleich",
+      "NotEquals": "Ungleich",
+      "GreaterThan": "Größer als",
+      "LessThan": "Kleiner als",
+      "Between": "Zwischen",
+      "NotBetween": "Nicht zwischen",
+      "GreaterThanOrEqual": "Größer oder gleich",
+      "LessThanOrEqual": "Kleiner oder gleich"
     },
     "Periods": {
-      "Minutes": "",
-      "Hours": "",
-      "Days": "",
-      "Weeks": ""
+      "Minutes": "Minuten",
+      "Hours": "Stunden",
+      "Days": "Tage",
+      "Weeks": "Wochen"
     },
     "ProcessingOrder": {
       "AsFound": "Gefunden (Standard)",
@@ -385,42 +385,42 @@
       "VersionMismatch": "Versionskonflikt"
     },
     "ReportDirection": {
-      "Inbound": "",
-      "Outbound": ""
+      "Inbound": "Eingehend",
+      "Outbound": "Ausgehend"
     },
     "ReportSchedule": {
-      "Daily": "",
-      "Weekly": "",
-      "Monthly": ""
+      "Daily": "Täglich",
+      "Weekly": "Wöchentlich",
+      "Monthly": "Monatlich"
     },
     "SecurityMode": {
       "Off": "None",
       "Local": "Local Users",
-      "OpenIdConnect": ""
+      "OpenIdConnect": "Open ID Connect"
     },
     "TaskType": {
-      "FileAdded": "",
-      "FileProcessed": "",
-      "FileProcessing": "",
-      "FileProcessFailed": "",
-      "FileProcessSuccess": "",
-      "FileFlowsServerUpdating": "",
-      "FileFlowsServerUpdateAvailable": ""
+      "FileAdded": "Datei Hinzugefügt",
+      "FileProcessed": "Datei Verarbeitet",
+      "FileProcessing": "Datei Verarbeitung",
+      "FileProcessFailed": "Verarbeitung Fehlgeschlagen",
+      "FileProcessSuccess": "Verarbeitung Erfolgreich",
+      "FileFlowsServerUpdating": "Server Wird Aktualisiert",
+      "FileFlowsServerUpdateAvailable": "Update Verfügbar"
     },
     "UserRole": {
-      "Files": "",
-      "Flows": "",
-      "Libraries": "",
-      "Nodes": "",
-      "Plugins": "",
-      "Scripts": "",
-      "Variables": "",
-      "Revisions": "",
-      "Tasks": "",
-      "Webhooks": "",
-      "Log": "",
-      "PauseProcessing": "",
-      "DockerMods": ""
+      "Files": "Dateien",
+      "Flows": "Flows",
+      "Libraries": "Bibliotheken",
+      "Nodes": "Nodes",
+      "Plugins": "Plugins",
+      "Scripts": "Scripts",
+      "Variables": "Variablen",
+      "Revisions": "Überarbeitungen",
+      "Tasks": "Aufgaben",
+      "Webhooks": "Webhooks",
+      "Log": "Log",
+      "PauseProcessing": "Verarbeitung Pausieren",
+      "DockerMods": "DockerMods"
     }
   },
   "ErrorMessages": {
@@ -623,19 +623,19 @@
       }
     },
     "DockerMod": {
-      "Title": "",
-      "Plural": "",
+      "Title": "DockerMod",
+      "Plural": "DockerMods",
       "Labels": {
-        "UpdateAvailable": "",
-        "Revision": ""
+        "UpdateAvailable": "Update Verfügbar",
+        "Revision": "Revision"
       },
       "Messages": {
-        "Updating": "",
-        "FailedToExport": ""
+        "Updating": "Aktualisieren",
+        "FailedToExport": "Exportieren fehlgeschlagen."
       },
       "Fields": {
-        "Description": "",
-        "Code": ""
+        "Description": "Beschreibung",
+        "Code": "Code"
       }
     },
     "Flow": {
@@ -716,7 +716,7 @@
         "Duplicated": "Flow ''{name}'' dupliziert",
         "DeleteUsed": "Sie können keinen Flow löschen, die gerade in Gebrauch ist.",
         "LoadingTemplates": "Lade Templates",
-        "FailedToExport": "",
+        "FailedToExport": "Exportieren von Flow(s) fehlgeschlagen.",
         "FailureFlowDescription": "Das ist ein spezieller Fluss-Typ, der ausgeführt wird, wenn ein beliebiger Fluss fehlschlägt. FileFlows sucht nach dem 'Standard' Fehlerfluss, der verwendet werden soll, wenn ein Fluss fehlschlägt. Falls nicht gefunden, wird die Verarbeitung sofort gestoppt."
       }
     },
@@ -724,18 +724,18 @@
       "Title": "Bibliotheken",
       "Messages": {
         "DeleteConfirm": "Sind Sie sicher, dass Sie die ausgewählten {count, plural, one {library} other {libraries}} löschen möchten?",
-        "KeepLibraryFiles": "",
+        "KeepLibraryFiles": "Dateien in der Datenbank für Statistiken beibehalten",
         "Reprocess": {
           "Title": "Ausgewählte Bibliotheken nachbearbeiten",
           "Message": "Sind Sie sicher, dass Sie mit der erneuten Verarbeitung der ausgewählten Bibliotheken fortfahren möchten? Mit dieser Aktion werden alle Dateien als unverarbeitet markiert und ihre erneute Verarbeitung wird eingeleitet. Bitte beachten Sie, dass diese Aktion nicht rückgängig gemacht werden kann."
         },
         "Reset": {
-          "Title": "",
-          "Message": ""
+          "Title": "Ausgewählte Bibliotheken zurücksetzen",
+          "Message": "Sind Sie sicher, dass Sie mit dem Zurücksetzen der ausgewählten Bibliotheken fortfahren möchten?\n\nDiese Aktion entfernt alle Dateien und initiiert einen erneuten Scan. Bitte beachten Sie, dass diese Aktion nicht rückgängig gemacht werden kann."
         }
       },
       "Labels": {
-        "Files": ""
+        "Files": "{TotalString} {TotalFiles, plural, one {File} other {Files}}"
       },
       "ErrorMessages": {
         "NoFlows": "Es sind keine Flows konfiguriert.\nErstellen Sie einen Flows, bevor Sie eine Bibliothek hinzufügen oder aktualisieren."
@@ -757,10 +757,10 @@
         "Folders-Help": "Wenn diese Bibliothek Ordner statt Dateien verarbeitet, bedeutet dies nicht, dass Unterordner gescannt werden, da eine Bibliothek dies bereits tut. Es bedeutet, dass ein Ordnerobjekt statt einzelner Dateien verarbeitet wird.",
         "Priority": "Priorität",
         "Priority-Help": "Die Priorität, mit der Dateien verarbeitet werden sollen. Wenn in einer Bibliothek mit höherer Priorität Dateien auf ihre Verarbeitung warten, werden diese zuerst bearbeitet.",
-        "Filters": "",
-        "Filters-Help": "",
-        "ExclusionFilters": "",
-        "ExclusionFilters-Help": "",
+        "Filters": "Filter",
+        "Filters-Help": "Optionale Liste von Filtern, die gegen den vollständigen Namen der Dateien ausgeführt werden sollen.",
+        "ExclusionFilters": "Ausschlüsse",
+        "ExclusionFilters-Help": "Optionale Liste von Ausschlüssen, die gegen den vollständigen Namen der Dateien ausgeführt werden sollen.",
         "ExcludeHidden": "Versteckte Dateien ausschließen",
         "ExcludeHidden-Help": "Wenn aktiviert, werden versteckte Dateien und Ordner nicht gescannt.",
         "UseFingerprinting": "Fingerabdrücke verwenden",
@@ -787,8 +787,8 @@
         "ProcessingOrder-Help": "Die Reihenfolge, in der die Dateien von dieser Bibliothek verarbeitet werden.",
         "SkipFileAccessTests": "Dateizugriffstests überspringen",
         "SkipFileAccessTests-Help": "Wenn diese Option aktiviert ist, prüft die Bibliothek nicht, ob sie die Datei lesen oder schreiben kann, bevor sie sie in die Warteschlange für Dateien aufnimmt.",
-        "TopLevelOnly": "",
-        "TopLevelOnly-Help": "",
+        "TopLevelOnly": "Nur oberste Ebene",
+        "TopLevelOnly-Help": "Nur Dateien im Stammverzeichnis scannen, keine Unterordner werden durchsucht.",
         "HoldMinutes": "Minuten warten",
         "HoldMinutes-Suffix": "Minuten",
         "HoldMinutes-Help": "Halten Sie optional alle in dieser Bibliothek gefundenen Dateien für diese Anzahl von Minuten zurück, bevor Sie sie verarbeiten.  Jede Datei wird für diese Zeitspanne zurückgehalten.",
@@ -820,7 +820,7 @@
       "Tabs": {
         "OriginalMetadata": "Original Datei",
         "FinalMetadata": "Geänderte Datei",
-        "CustomVariables": ""
+        "CustomVariables": "Benutzerdefinierte Variablen"
       },
       "Fields": {
         "Name": "Original Datei",
@@ -859,41 +859,41 @@
         "ScanTriggered": "Ausgelöstes Scannen für alle aktivierten Bibliotheken"
       },
       "Messages": {
-        "FailedToReprocess": "",
-        "FailedToDownloadLog": "",
-        "ReprocessingFile": ""
+        "FailedToReprocess": "Wiederverarbeitung fehlgeschlagen",
+        "FailedToDownloadLog": "Protokoll konnte nicht heruntergeladen werden",
+        "ReprocessingFile": "Datei zur Wiederverarbeitung gesendet"
       }
     },
     "Log": {
-      "Title": "Log",
+      "Title": "Protokoll",
       "Labels": {
-        "AutoRefresh": "Automatisch aktualisieren",
-        "FailedToDownloadLog": "",
-        "NoMatchingData": ""
+        "AutoRefresh": "Automatische Aktualisierung",
+        "FailedToDownloadLog": "Protokoll konnte nicht heruntergeladen werden.",
+        "NoMatchingData": "Keine übereinstimmenden Daten"
       },
       "Fields": {
-        "Text": "",
-        "IncludeHigherSeverity": "",
-        "Source": "",
-        "File": "",
-        "Severity": "",
-        "Nodes": ""
+        "Text": "Text",
+        "IncludeHigherSeverity": "Höhere Schweregrade einbeziehen",
+        "Source": "Quelle",
+        "File": "Datei",
+        "Severity": "Schweregrad",
+        "Nodes": "Knoten"
       }
     },
     "Login": {
       "Messages": {
-        "InvalidUsernameOrPassword": "",
-        "PasswordReset": "",
-        "LockedOut": ""
+        "InvalidUsernameOrPassword": "Ungültiger Benutzername oder Passwort",
+        "PasswordReset": "Passwort zurücksetzen",
+        "LockedOut": "Zu viele falsche Anmeldeversuche, Sie sind derzeit gesperrt."
       },
       "Fields": {
-        "Username": "",
-        "Password": "",
-        "UsernameOrEmail": "",
-        "ForgotPassword": "",
-        "Login": "",
-        "Reset": "",
-        "Cancel": ""
+        "Username": "Benutzername",
+        "Password": "Passwort",
+        "UsernameOrEmail": "Benutzername oder E-Mail",
+        "ForgotPassword": "Passwort vergessen?",
+        "Login": "Anmelden",
+        "Reset": "Zurücksetzen",
+        "Cancel": "Abbrechen"
       }
     },
     "Nodes": {
@@ -918,61 +918,61 @@
       }
     },
     "Reporting": {
-      "Title": "",
+      "Title": "Berichterstattung",
       "Labels": {
-        "Reports": "",
-        "ScheduledReports": ""
+        "Reports": "Berichte",
+        "ScheduledReports": "Geplant"
       }
     },
     "Report": {
       "Buttons": {
-        "Back": "",
-        "Generate": ""
+        "Back": "Zurück",
+        "Generate": "Generieren"
       },
       "Messages": {
-        "FailedToFindReport": "",
-        "FailedToGenerateReport": "",
-        "NoMatchingData": "",
-        "ReportEmailed": ""
+        "FailedToFindReport": "Bericht konnte nicht gefunden werden.",
+        "FailedToGenerateReport": "Bericht konnte nicht generiert werden.",
+        "NoMatchingData": "Keine übereinstimmenden Daten",
+        "ReportEmailed": "Der Bericht wird an ''{email}'' gesendet, sobald er generiert wurde."
       },
       "Labels": {
-        "Combined": ""
+        "Combined": "Kombiniert"
       },
       "Fields": {
-        "Library": "",
-        "Period": "",
-        "Direction": "",
-        "Flow": "",
-        "Email": "",
-        "Email-Placeholder": "",
-        "Statistic": "",
-        "Node": ""
+        "Library": "Bibliothek",
+        "Period": "Zeitraum",
+        "Direction": "Richtung",
+        "Flow": "Flow",
+        "Email": "E-Mail",
+        "Email-Placeholder": "Geben Sie eine E-Mail-Adresse ein",
+        "Statistic": "Statistik",
+        "Node": "Knoten"
       }
     },
     "ScheduledReport": {
-      "Title": "",
+      "Title": "Geplanter Bericht",
       "Labels": {
-        "LastSent": "",
-        "Never": ""
+        "LastSent": "Zuletzt gesendet",
+        "Never": "Nie"
       },
       "Fields": {
-        "Name-Help": "",
-        "Report": "",
-        "Report-Help": "",
-        "Recipients": "",
-        "Recipients-Help": "",
-        "Schedule": "",
-        "Schedule-Help": "",
-        "Enabled": "",
-        "Enabled-Help": "",
-        "DayOfMonth": "",
-        "DayOfMonth-Help": "",
-        "DayOfWeek": "",
-        "DayOfWeek-Help": "",
-        "Direction": "",
-        "Nodes": "",
-        "Libraries": "",
-        "Flows": ""
+        "Name-Help": "Der Name des Berichts, dieser erscheint im Betreff der gesendeten E-Mail.",
+        "Report": "Bericht",
+        "Report-Help": "Der Bericht, der gesendet wird.",
+        "Recipients": "Empfänger",
+        "Recipients-Help": "Eine Liste von E-Mail-Adressen, die diesen Bericht erhalten, wenn er ausgeführt wird.",
+        "Schedule": "Zeitplan",
+        "Schedule-Help": "Wann dieser Bericht generiert und an die Empfänger gesendet wird.",
+        "Enabled": "Aktiviert",
+        "Enabled-Help": "Dieser geplante Bericht wird nur ausgeführt, wenn er aktiviert ist.",
+        "DayOfMonth": "Tag des Monats",
+        "DayOfMonth-Help": "Der Tag des Monats, an dem dieser Bericht ausgeführt wird. Wenn der ausgewählte Tag außerhalb des Monats liegt (z.B. der 31. im Februar), wird der Bericht am letzten Tag des Monats ausgeführt.",
+        "DayOfWeek": "Tag der Woche",
+        "DayOfWeek-Help": "Der Wochentag, an dem dieser geplante Bericht gesendet wird. Dies umfasst Daten für die 7 Tage vor diesem Tag.",
+        "Direction": "Richtung",
+        "Nodes": "Knoten",
+        "Libraries": "Bibliotheken",
+        "Flows": "Flows"
       }
     },
     "Widget": {
@@ -1030,10 +1030,10 @@
         "DontChangeOwner-Help": "Wenn diese Option aktiviert ist, ändert der Knoten den Eigentümer aller neu erstellten Dateien in die PGID und PUID, die in den Umgebungsvariablen definiert sind. Wenn diese Umgebungsvariablen nicht gesetzt sind, wird der Eigentümer geändert in ''users:nobody''.",
         "DontSetPermissions": "Berechtigungen festlegen",
         "DontSetPermissions-Help": "Wenn diese Option aktiviert ist, werden die Dateiberechtigungen für alle neu erstellten Dateien festgelegt.",
-        "PermissionsFiles": "",
-        "PermissionsFiles-Help": "",
-        "PermissionsFolders": "",
-        "PermissionsFolders-Help": "",
+        "PermissionsFiles": "Dateiberechtigungen",
+        "PermissionsFiles-Help": "Die Berechtigungen, die für neu erstellte Dateien festgelegt werden sollen.",
+        "PermissionsFolders": "Ordnerberechtigungen",
+        "PermissionsFolders-Help": "Die Berechtigungen, die für neu erstellte Ordner festgelegt werden sollen.",
         "ProcessingDescription": "Damit können Sie konfigurieren, was dieser Node verarbeiten kann. Beispielsweise können Sie diesen Node darauf beschränken, nur bestimmte Bibliotheken oder eine maximale Dateigröße zu verarbeiten, wenn es sich um einen Node mit geringerer Leistung handelt.",
         "AllLibraries": "Alle Bibliotheken",
         "AllLibraries-Help": "Welche Bibliotheken dieser Node verarbeiten wird.",
@@ -1095,23 +1095,23 @@
     },
     "Script": {
       "Title": "Script",
-      "LanguageTitle": "",
+      "LanguageTitle": "{Language} Script",
       "Messages": {
-        "FailedToExport": ""
+        "FailedToExport": "Exportieren fehlgeschlagen."
       },
       "Fields": {
-        "Name": "",
-        "Description": "",
+        "Name": "Name",
+        "Description": "Beschreibung",
         "Code": "Code",
-        "Outputs": "",
-        "OutputsKey": "",
-        "OutputsValue": ""
+        "Outputs": "Ausgaben",
+        "OutputsKey": "Ausgabe",
+        "OutputsValue": "Beschreibung"
       }
     },
     "Settings": {
       "Title": "Einstellungen",
       "Labels": {
-        "Email": "",
+        "Email": "Email",
         "Database": "Datenbank",
         "System": "System",
         "Restart": "FileFlows neu starten",
@@ -1128,7 +1128,7 @@
           "NoPassword": "Passwort ist erforderlich",
           "TestSuccess": "Erfolgreich mit der Datenbank verbunden",
           "TestingDatabase": "Testen der Datenbankverbindung",
-          "DontBackupOnUpgrade": ""
+          "DontBackupOnUpgrade": "Das Deaktivieren automatischer Datenbank-Backups bedeutet, dass während der Anwendungsupdates kein Backup erstellt wird. Es ist wichtig sicherzustellen, dass Sie eine alternative Methode zur externen Sicherung Ihrer Datenbank haben, um Ihre Daten zu schützen.\n\nSind Sie sicher, dass Sie diese Backups deaktivieren möchten?"
         },
         "Restart": {
           "Title": "FileFlows neu starten",
@@ -1157,9 +1157,9 @@
         "AutoUpdatePlugins-Help": "Wenn diese Option aktiviert ist, werden Plugins routinemäßig auf Aktualisierungen überprüft, und wenn Aktualisierungen gefunden werden, werden sie automatisch heruntergeladen.",
         "AutoUpdateNodes": "Auto-Update-Nodes",
         "AutoUpdateNodes-Help": "Wenn diese Funktion aktiviert ist, werden externe Nodes automatisch aktualisiert, wenn der FileFlows-Server aktualisiert wird.  Das bedeutet, dass Sie in einer verteilten Umgebung nur die FileFlows-Server-Instanz aktualisieren müssen.",
-        "DelayBetweenNextFile": "",
-        "DelayBetweenNextFile-Help": "",
-        "DelayBetweenNextFile-Suffix": "",
+        "DelayBetweenNextFile": "Verzögerung Zwischen Dateien",
+        "DelayBetweenNextFile-Help": "Die Verzögerung in Millisekunden, die gewartet werden soll, bevor eine neue Datei angefordert wird. Wenn diese Verzögerung auf null gesetzt ist, wird sofort eine neue Datei angefordert. Wenn die Verzögerung zu kurz ist, funktionieren Funktionen wie Lastenausgleich und Begrenzungen für Bibliotheksausführer möglicherweise nicht richtig, da eine Datei möglicherweise nicht vollständig gestartet ist, bevor die nächste Anfrage gestellt wird.",
+        "DelayBetweenNextFile-Suffix": "millisekunden",
         "LogQueueMessages": "Warteschlangenmeldungen protokollieren",
         "LogQueueMessages-Help": "Dies führt zu einer übermäßigen Protokollierung aller Dateien, die sich in der Warteschlange des Bibliotheksüberwachers befinden. Schalten Sie diese Option ein, wenn Sie Probleme mit nicht angezeigten Dateien haben, und schalten Sie sie anschließend wieder aus, um zu vermeiden, dass Ihre Protokolldateien mit übermäßiger Protokollierung gefüllt werden.",
         "LoggingPath": "Logging-Verzeichnis",
@@ -1182,10 +1182,10 @@
         "ProcessFileCheckInterval": "Intervall für die Dateiprüfung",
         "ProcessFileCheckInterval-Help": "Wie oft wird geprüft, ob eine neue Datei zur Verarbeitung in den Verarbeitungsknoten vorliegt.",
         "ProcessFileCheckInterval-Suffix": "Sekunden",
-        "Language": "",
-        "Language-Help": "",
-        "DockerModsOnServer": "",
-        "DockerModsOnServer-Help": "",
+        "Language": "Sprache",
+        "Language-Help": "Die Sprache, die im System verwendet wird.",
+        "DockerModsOnServer": "DockerMods Auf Server",
+        "DockerModsOnServer-Help": "DockerMods sollten automatisch beim Serverstart oder bei spezifischer Aktivierung ausgeführt werden. Andernfalls werden sie nur ausgeführt, wenn ein Workflow initiiert wird.",
         "Database": {
           "Description": "Hier können Sie konfigurieren, welche Datenbank FileFlows verwenden soll.\nHinweis: Alle Änderungen hier erfordern einen Neustart von FileFlows, damit es Ihre Daten migrieren und ggf. die neue Datenbank erstellen kann.",
           "Type": "Typ",
@@ -1194,9 +1194,9 @@
           "Server-Help": "Die Adresse des Datenbankservers und der Port oder die benannte Instanz, falls erforderlich.",
           "Port": "Port",
           "Port-Help": "Der Standard-Port für MySQL ist 3306.",
-          "Port-Help-Postgres": "",
-          "Port-Help-MySql": "",
-          "Port-Help-SQLServer": "",
+          "Port-Help-Postgres": "Der Standard-Port für Postgres ist 5432.",
+          "Port-Help-MySql": "Der Standard-Port für MySQL ist 3306.",
+          "Port-Help-SQLServer": "Der Standard-Port für SQL Server ist 1433.",
           "Name": "Name",
           "Name-Help": "Der Name der zu erstellenden Datenbank, wenn leer gelassen, wird ''FileFlows'' verwendet.",
           "User": "Benutzer",
@@ -1205,16 +1205,16 @@
           "Password-Help": "Das Passwort des Benutzers für die Verbindung zur Datenbank.",
           "RecreateDatabase": "Datenbank wiederherstellen",
           "RecreateDatabase-Help": "Wenn diese Option aktiviert ist, wird die neue Datenbank, falls sie bereits existiert, gelöscht und neu erstellt.  Ist die Option deaktiviert und die Datenbank existiert bereits, werden keine Daten migriert und die neue Datenbank wird einfach so verwendet, wie sie ist.",
-          "DontBackupOnUpgrade": "",
-          "DontBackupOnUpgrade-Help": ""
+          "DontBackupOnUpgrade": "Bei Upgrade nicht sichern",
+          "DontBackupOnUpgrade-Help": "Datenbanksicherungen beinhalten das Kopieren aller Daten Ihrer Datenbank in eine SQLite-Datei, was zeitaufwändig sein kann. Wenn Sie Ihre externe Datenbank bereits auf andere Weise sichern, können Sie diesen Prozess deaktivieren."
         },
         "FileServer": {
           "Description": "Dies ermöglicht es externen Nodes eine Datei zur Verarbeitung herunterzuladen, ohne sie zuzuordnen.\n\nDamit werden Ihre Dateien über Ihr Netzwerk offengelegt.",
           "Enabled": "Aktiviert",
           "FilePermissions": "Dateiberechtigungen",
           "FilePermissions-Help": "Optionale Berechtigungen für erstellte oder geänderte Dateien oder Ordner.",
-          "FolderPermissions": "",
-          "FolderPermissions-Help": "",
+          "FolderPermissions": "Ordnerberechtigungen",
+          "FolderPermissions-Help": "Optionale Berechtigungen für erstellte oder geänderte Ordner.",
           "OwnerGroup": "Owner Group",
           "OwnerGroup-Placeholder": "users:nobody",
           "OwnerGroup-Help": "Optionale Eigentümer:Gruppe zum Ändern des Eigentümers von erstellten oder geänderten Dateien oder Ordnern",
@@ -1226,50 +1226,49 @@
           "Key": "Lizenzschlüssel",
           "Email": "Lizenz E-Mail",
           "Status": "Status",
-          "Level": "",
+          "Level": "Stufe",
           "ProcessingNodes": "Processing Nodes",
           "Flags": "Besonderheiten",
           "ExpiryDate": "Verfallsdatum",
           "Files": "Dateien"
-        },
-        "Smtp": {
-          "Server": "",
-          "Server-Help": "",
-          "Port": "",
-          "Port-Help": "",
-          "Security": "",
-          "Security-Help": "",
-          "User": "",
-          "User-Help": "",
-          "Password": "",
-          "Password-Help": "",
-          "From": "",
-          "From-Help": "",
-          "FromAddress": "",
-          "FromAddress-Help": ""
+        },"Smtp": {
+          "Server": "Server",
+          "Server-Help": "Der E-Mail-Server",
+          "Port": "Port",
+          "Port-Help": "Der E-Mail-Server-Port",
+          "Security": "Sicherheit",
+          "Security-Help": "Die Sicherheit, die beim Versenden von E-Mails verwendet wird",
+          "User": "Benutzer",
+          "User-Help": "Ein optionaler Benutzername, von dem E-Mails gesendet werden",
+          "Password": "Passwort",
+          "Password-Help": "Das Passwort für den SMTP-Benutzer",
+          "From": "Von",
+          "From-Help": "Der Name des Benutzers, von dem die E-Mails gesendet werden",
+          "FromAddress": "Von Adresse",
+          "FromAddress-Help": "Die E-Mail-Adresse des Benutzers, von dem die E-Mails gesendet werden"
         },
         "Security": {
-          "Title": "",
-          "Mode": "",
-          "Mode-Help": "",
-          "AccessToken": "",
-          "AccessToken-Help": "",
-          "TokenExpiryMinutes": "",
-          "TokenExpiryMinutes-Help": "",
-          "Description": "",
-          "Authority": "",
-          "Authority-Help": "",
-          "ClientId": "",
-          "ClientId-Help": "",
-          "ClientSecret": "",
-          "ClientSecret-Help": "",
-          "CallbackAddress": "",
-          "CallbackAddress-Help": "",
-          "MaxAttempts": "",
-          "MaxAttempts-Help": "",
-          "LockoutMinutes": "",
-          "LockoutMinutes-Suffix": "",
-          "LockoutMinutes-Help": ""
+          "Title": "Sicherheit",
+          "Mode": "Modus",
+          "Mode-Help": "Benutzerauthentifizierung aktivieren, um auf FileFlows zuzugreifen.\nWenn aktiviert, müssen sich Benutzer anmelden, und Verarbeitungsknoten benötigen das API-Token, um auf den Server zuzugreifen.",
+          "AccessToken": "Zugriffstoken",
+          "AccessToken-Help": "Zugriffstoken, das von Verarbeitungsknoten verwendet wird, um sich mit dem Server zu verbinden.",
+          "TokenExpiryMinutes": "Ablauf des Tokens",
+          "TokenExpiryMinutes-Help": "Die Dauer des Anmeldungstokens, bevor es abläuft.",
+          "Description": "Die Konfiguration der Benutzersicherheit erfordert, dass sich Benutzer anmelden und Verarbeitungsknoten das Zugriffstoken bereitstellen, um sich zu verbinden.\n\n[Benutzer](/users) müssen hinzugefügt werden, bevor sie sich anmelden oder bevor Sie diese Funktion nutzen können.",
+          "Authority": "Behörde",
+          "Authority-Help": "Geben Sie die URL des Open ID Connect-Anbieters ein (z. B. https://accounts.google.com/).",
+          "ClientId": "Client-ID",
+          "ClientId-Help": "Die Client-ID, die beim Open ID Connect-Anbieter registriert ist.",
+          "ClientSecret": "Client-Geheimnis",
+          "ClientSecret-Help": "Das Client-Geheimnis, das beim Open ID Connect-Anbieter registriert ist.",
+          "CallbackAddress": "Rückrufadresse",
+          "CallbackAddress-Help": "Eine optionale Rückrufadresse, die Sie verwenden können, um die Standardadresse zu überschreiben, an die der Client gesendet wird.\nZum Beispiel, wenn Sie hinter einem Reverse-Proxy sind und FileFlows über HTTP lauscht, der Rückruf jedoch über HTTPS erfolgen sollte.",
+          "MaxAttempts": "Maximale Versuche",
+          "MaxAttempts-Help": "Die maximale Anzahl von Anmeldeversuchen, die der Benutzer hat, bevor er vorübergehend blockiert wird.",
+          "LockoutMinutes": "Sperrdauer",
+          "LockoutMinutes-Suffix": "Minuten",
+          "LockoutMinutes-Help": "Die Dauer, für die der Benutzer gesperrt wird, bevor er einen neuen Anmeldeversuch unternehmen kann."
         }
       }
     },
@@ -1291,64 +1290,63 @@
       "Single": "Benutzer",
       "Messages": {
         "CannotDeleteYourself": "Du kannst dich nicht selbst löschen.",
-        "EmailInUse": ""
+        "EmailInUse": "Die E-Mail-Adresse ''{email}'' wird bereits von einem anderen Benutzer ''{user}'' verwendet."
       },
       "Labels": {
-        "LastLoggedIn": "",
-        "Address": "",
-        "Never": "",
-        "Administrator": ""
+        "LastLoggedIn": "Zuletzt angemeldet",
+        "Address": "Adresse",
+        "Never": "Nie",
+        "Administrator": "Administrator"
       },
       "Fields": {
         "IsAdmin": "Administrator",
-        "Email": "",
-        "Password": "",
-        "Roles": ""
+        "Email": "E-Mail",
+        "Password": "Passwort",
+        "Roles": "Rollen"
       }
-    },
-    "AccessControl": {
-      "Title": "",
-      "Single": "",
+    },"AccessControl": {
+      "Title": "Zugriffskontrolle",
+      "Single": "Zugriffskontrolleneintrag",
       "Columns": {
-        "Start": "",
-        "End": "",
-        "Allow": ""
+        "Start": "Start",
+        "End": "Ende",
+        "Allow": "Erlauben"
       },
       "Buttons": {
-        "MoveUp": "",
-        "MoveDown": ""
+        "MoveUp": "Nach oben verschieben",
+        "MoveDown": "Nach unten verschieben"
       },
       "Messages": {
-        "InvalidIPAddress": "",
-        "FamilyMismatch": "",
-        "EndMustBeGreaterThan": "",
-        "MoveFailed": ""
+        "InvalidIPAddress": "'{address}' ist keine gültige IP-Adresse.",
+        "FamilyMismatch": "Die Start- und End-IP-Adressen müssen vom gleichen Typ sein.",
+        "EndMustBeGreaterThan": "Die Endadresse muss größer sein als die Startadresse.",
+        "MoveFailed": "Verschieben der Einträge fehlgeschlagen."
       },
       "Labels": {
-        "Console": "",
-        "Remote": ""
+        "Console": "Web-Konsole",
+        "Remote": "Remote / Verarbeitungs-Knoten"
       },
       "Fields": {
-        "Description": "",
-        "Description-Placeholder": "",
-        "Start": "",
-        "Start-Help": "",
-        "End": "",
-        "End-Placeholder": "",
-        "End-Help": "",
-        "Allow": "",
-        "Allow-Help": ""
+        "Description": "Beschreibung",
+        "Description-Placeholder": "Eine optionale Beschreibung für diesen Eintrag",
+        "Start": "Startadresse",
+        "Start-Help": "Die Start-IP-Adresse kann entweder IPv4 oder IPv6 sein.",
+        "End": "Endadresse",
+        "End-Placeholder": "Optionale Endadresse",
+        "End-Help": "Optionale End-IP-Adresse, muss größer sein als die Startadresse, wenn sie festgelegt ist, und vom gleichen Typ sein. Andernfalls wird dieser Endwert ignoriert.",
+        "Allow": "Erlauben",
+        "Allow-Help": "Ob dieser Zugriffskontrolleneintrag auf das System zugreifen darf oder nicht."
       }
     },
     "Audit": {
-      "Title": "",
+      "Title": "Audit-Protokoll",
       "Columns": {
-        "Date": "",
-        "Type": "",
-        "Action": "",
-        "Operator": "",
-        "IPAddress": "",
-        "Summary": ""
+        "Date": "Datum",
+        "Type": "Typ",
+        "Action": "Aktion",
+        "Operator": "Operator",
+        "IPAddress": "IP-Adresse",
+        "Summary": "Zusammenfassung"
       }
     },
     "FileFlowsTask": {
@@ -1370,15 +1368,15 @@
       }
     },
     "Notifications": {
-      "Title": ""
+      "Title": "Benachrichtigungen"
     },
     "RepositoryObject": {
-      "Title": "",
+      "Title": "Repository-Objekt",
       "Fields": {
-        "Author": "",
-        "Revision": "",
-        "Description": "",
-        "Code": ""
+        "Author": "Autor",
+        "Revision": "Revision",
+        "Description": "Beschreibung",
+        "Code": "Code"
       }
     },
     "Task": {
@@ -1420,7 +1418,7 @@
   },
   "Inputs": {
     "InputDateCompare": {
-      "Help": ""
+      "Help": "*Größer als*: Übereinstimmung, wenn das Datum älter als der angegebene Zeitraum ist.\n*Kleiner als*: Übereinstimmung, wenn das Datum neuer als der angegebene Zeitraum ist.\n*Zwischen*: Übereinstimmung, wenn das Datum im angegebenen Bereich liegt.\n*Vor*: Übereinstimmung, wenn das Datum vor dem angegebenen Datum liegt.\n*Nach*: Übereinstimmung, wenn das Datum nach dem angegebenen Datum liegt."
     }
   },
   "Validators": {
