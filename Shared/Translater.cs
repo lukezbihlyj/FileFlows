@@ -85,6 +85,12 @@ public class Translater
         return dict;
     }
 
+    /// <summary>
+    /// Fills a dictoinary from an expando object
+    /// </summary>
+    /// <param name="dict">the dictionary to fill</param>
+    /// <param name="expando">the expando to use</param>
+    /// <param name="prefix">the prefix for any newly added keys</param>
     private static void FillDictionaryFromExpando(Dictionary<string, string> dict, ExpandoObject expando, string prefix)
     {
         IDictionary<string, object> dictExpando = expando as IDictionary<string, object>;
@@ -99,10 +105,14 @@ public class Translater
 
         }
     }
+    /// <summary>
+    /// Joins a string
+    /// </summary>
+    /// <param name="prefix">the prefix, coudl be empty</param>
+    /// <param name="name">the name</param>
+    /// <returns>the joined string</returns>
     private static string Join(string prefix, string name)
-    {
-        return (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
-    }
+        => (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
 
     private static string Lookup(string[] possibleKeys, bool supressWarnings = false)
     {
