@@ -424,166 +424,166 @@
     }
   },
   "ErrorMessages": {
-    "UnexpectedError": "",
-    "SaveFailed": "",
-    "DeleteFailed": "",
-    "NotFound": "",
-    "NameInUse": "",
-    "NameRequired": "",
-    "DuplicatesFound": "",
-    "NoFlowSpecified": "",
-    "CannotDeleteInternalNode": "",
-    "NotAllFilesCouldBeDeleted": "",
-    "SetFileStatus": "",
-    "BothMathValuesRequired": ""
+    "UnexpectedError": "Ocurrió un error inesperado",
+    "SaveFailed": "Error al guardar",
+    "DeleteFailed": "Error al eliminar",
+    "NotFound": "Elemento no encontrado",
+    "NameInUse": "El nombre ya está en uso",
+    "NameRequired": "Se requiere un nombre",
+    "DuplicatesFound": "Se encontraron duplicados",
+    "NoFlowSpecified": "No se especificó un flujo, debes seleccionar un flujo para crear una biblioteca",
+    "CannotDeleteInternalNode": "No puedes eliminar el nodo de procesamiento interno.",
+    "NotAllFilesCouldBeDeleted": "No todos los archivos pudieron ser eliminados.\nConsulta el registro para más información.",
+    "SetFileStatus": "Error al establecer el estado del archivo",
+    "BothMathValuesRequired": "Ambos valores deben ser ingresados"
   },
   "Times": {
-    "Never": "",
-    "SecondsAgo": "",
-    "MinutesAgo": "",
-    "HoursAgo": "",
-    "DaysAgo": ""
+    "Never": "Nunca",
+    "SecondsAgo": "hace {num} {num, plural, one {segundo} other {segundos}}",
+    "MinutesAgo": "hace {num} {num, plural, one {minuto} other {minutos}}",
+    "HoursAgo": "hace {num} {num, plural, one {hora} other {horas}}",
+    "DaysAgo": "hace {num} {num, plural, one {día} other {días}}"
   },
   "MenuGroups": {
-    "Overview": "",
-    "Configuration": "",
-    "Extensions": "",
-    "System": "",
-    "Security": "",
-    "Information": "",
-    "User": "",
-    "Admin": ""
+    "Overview": "Resumen",
+    "Configuration": "Configuración",
+    "Extensions": "Extensiones",
+    "System": "Sistema",
+    "Security": "Seguridad",
+    "Information": "Información",
+    "User": "Usuario",
+    "Admin": "Administrador"
   },
   "Widgets": {
-    "CPUUsage": "",
-    "MemoryUsage": "",
-    "DatabaseConnections": "",
-    "TemporaryFileStorage": "",
-    "ProcessingNodes": "",
-    "Processing": "",
-    "Upcoming": "",
-    "Codecs": "",
-    "AudioCodecs": "",
-    "VideoCodecs": "",
-    "VideoResolutions": "",
-    "RecentlyFinished": "",
-    "ProcessingTimes": "",
-    "VideoContainers": "",
-    "AudioContainers": "",
-    "StorageSaved": "",
-    "Decoders": "",
-    "Encoders": "",
-    "DecoderParameters": "",
-    "LogStorage": "",
-    "LibraryProcessingTimes": "",
-    "ImageFormats": "",
-    "ComicFormats": "",
-    "ComicPages": "",
-    "NVIDIASMI": "",
-    "CurrentRevision": ""
+    "CPUUsage": "Uso de CPU",
+    "MemoryUsage": "Uso de Memoria",
+    "DatabaseConnections": "Conexiones a la Base de Datos",
+    "TemporaryFileStorage": "Almacenamiento Temporal de Archivos",
+    "ProcessingNodes": "Nodos de Procesamiento",
+    "Processing": "Procesando",
+    "Upcoming": "Próximamente",
+    "Codecs": "Códecs",
+    "AudioCodecs": "Códecs de Audio",
+    "VideoCodecs": "Códecs de Video",
+    "VideoResolutions": "Resoluciones de Video",
+    "RecentlyFinished": "Finalizados Recientemente",
+    "ProcessingTimes": "Tiempos de Procesamiento",
+    "VideoContainers": "Contenedores de Video",
+    "AudioContainers": "Contenedores de Audio",
+    "StorageSaved": "Almacenamiento Ahorrado",
+    "Decoders": "Decodificadores",
+    "Encoders": "Codificadores",
+    "DecoderParameters": "Parámetros de Decodificación",
+    "LogStorage": "Almacenamiento de Registros",
+    "LibraryProcessingTimes": "Tiempos de Procesamiento de la Biblioteca",
+    "ImageFormats": "Formatos de Imagen",
+    "ComicFormats": "Formatos de Cómic",
+    "ComicPages": "Páginas de Cómic",
+    "NVIDIASMI": "NVIDIA SMI",
+    "CurrentRevision": "Revisión Actual"
   },
   "Flow": {
     "ErrorMessages": {
-      "NoParts": "",
-      "NoInput": "",
-      "TooManyInputNodes": ""
+      "NoParts": "No hay partes del flujo específicas, debes tener algunas partes para guardar un flujo",
+      "NoInput": "No hay nodo de entrada específico, cada flujo necesita un nodo de entrada",
+      "TooManyInputNodes": "Solo puedes tener un nodo de entrada"
     },
     "Parts": {
-      "Color": "",
-      "Color-Placeholder": "",
+      "Color": "Color",
+      "Color-Placeholder": "Color Personalizado",
       "FileExtension": {
         "Fields": {
-          "Extensions": "",
-          "Extensions-Help": ""
+          "Extensions": "Extensiones",
+          "Extensions-Help": "Una lista de extensiones que, si coinciden, se enviarán al primer nodo de salida; de lo contrario, se usará el segundo nodo de salida."
         }
       }
     }
   },
   "Templates": {
     "Groups": {
-      "Books": "",
-      "DownloadClients": "",
-      "DVR": "",
-      "General": ""
+      "Books": "Libros",
+      "DownloadClients": "Clientes de Descarga",
+      "DVR": "DVR",
+      "General": "General"
     },
     "Flows": {
       "ConvertComic": {
-        "Name": "",
-        "Description": ""
+        "Name": "Convertir Cómic",
+        "Description": "Un flujo que convertirá cómics de CBR, CBZ, CB7, PDF, GZ, BZ2 a CBZ o PDF."
       },
       "ConvertImage": {
-        "Name": "",
-        "Description": ""
+        "Name": "Convertir Imagen",
+        "Description": "Un flujo que convierte imágenes."
       },
       "ConvertVideo": {
-        "Name": "",
-        "Description": ""
+        "Name": "Convertir Video",
+        "Description": "Un flujo que convertirá un archivo de video a otro formato."
       },
       "File": {
-        "Name": "",
-        "Description": ""
+        "Name": "Archivo",
+        "Description": "Una plantilla de archivo en blanco con un solo elemento de flujo de entrada ''Archivo de Entrada''."
       },
       "Folder": {
-        "Name": "",
-        "Description": ""
+        "Name": "Carpeta",
+        "Description": "Una plantilla de carpeta en blanco con un solo elemento de flujo de entrada ''Carpeta de Entrada''.\n\nNOTA: Esta plantilla solo debe usarse para procesar una Carpeta en lugar de Archivos. Procesar una Carpeta tiene limitaciones de procesamiento, ya que se está procesando la Carpeta y no los archivos contenidos en esa carpeta."
       },
       "FailureFlow": {
-        "Name": "",
-        "Description": ""
+        "Name": "Flujo de Fallo",
+        "Description": "Flujo básico de fallo que se ejecutará cuando un flujo falle por cualquier motivo."
       },
       "ImageFile": {
-        "Name": "",
-        "Description": ""
+        "Name": "Archivo de Imagen",
+        "Description": "Una plantilla de Imagen en blanco con un solo elemento de flujo de entrada ''Archivo de Imagen''."
       },
       "AudioFile": {
-        "Name": "",
-        "Description": ""
+        "Name": "Archivo de Audio",
+        "Description": "Una plantilla de Audio en blanco con un solo elemento de flujo de entrada ''Archivo de Audio''."
       },
       "VideoFile": {
-        "Name": "",
-        "Description": ""
+        "Name": "Archivo de Video",
+        "Description": "Una plantilla de Video en blanco con un solo elemento de flujo de entrada ''Archivo de Video''."
       }
     },
     "Libraries": {
       "AudioBookLibrary": {
-        "Name": "",
-        "Description": ""
+        "Name": "Biblioteca de Libros de Audio",
+        "Description": "Biblioteca de libros de audio que busca archivos de libros de audio comunes."
       },
       "ComicLibrary": {
-        "Name": "",
-        "Description": ""
+        "Name": "Biblioteca de Cómics",
+        "Description": "Biblioteca de cómics que busca archivos de cómics comunes."
       },
       "eBookLibrary": {
-        "Name": "",
-        "Description": ""
+        "Name": "Biblioteca de eBooks",
+        "Description": "Biblioteca de eBooks que busca archivos de eBooks comunes."
       },
       "ImageLibrary": {
-        "Name": "",
-        "Description": ""
+        "Name": "Biblioteca de Imágenes",
+        "Description": "Biblioteca de imágenes que busca archivos de imagen comunes."
       },
       "MusicLibrary": {
-        "Name": "",
-        "Description": ""
+        "Name": "Biblioteca de Música",
+        "Description": "Biblioteca de música que busca archivos de música comunes."
       },
       "PlexDVR": {
-        "Name": "",
-        "Description": ""
+        "Name": "Plex DVR",
+        "Description": "Biblioteca para monitorear grabaciones de Plex DVR para que puedas convertirlas automáticamente después de que se hayan completado."
       },
       "SABnzbdMusic": {
-        "Name": "",
-        "Description": ""
+        "Name": "SABnzbd Música",
+        "Description": "Biblioteca para monitorear un directorio de descargas 'completas' de SABnzbd.\n\nEsta biblioteca puede usar un flujo para convertir música a un formato objetivo y colocar esos archivos de música en una carpeta de destino, por ejemplo, 'convertido'.\n\nLa aplicación que instruyó a SABnzbd a realizar la descarga puede monitorear la carpeta 'convertida' para archivos completados."
       },
       "SABnzbdVideos": {
-        "Name": "",
-        "Description": ""
+        "Name": "SABnzbd Videos",
+        "Description": "Biblioteca para monitorear un directorio de descargas 'completas' de SABnzbd.\n\nEsta biblioteca puede usar un flujo para convertir videos a un formato objetivo y colocar esos videos en una carpeta de destino, por ejemplo, 'convertido'.\n\nLa aplicación que instruyó a SABnzbd a realizar la descarga puede monitorear la carpeta 'convertida' para archivos completados."
       },
       "SamplesTrailersPreviews": {
-        "Name": "",
-        "Description": ""
+        "Name": "Muestras/Tráilers/Previews",
+        "Description": "Encuentra archivos de video de muestras, tráilers o previas en un directorio para que puedas eliminarlos si es necesario.\nÚtil para una biblioteca de 'SABnzbd Videos' para que la carpeta se pueda eliminar de manera limpia después de que se procese el archivo principal."
       },
       "VideoLibrary": {
-        "Name": "",
-        "Description": ""
+        "Name": "Biblioteca de Videos",
+        "Description": "Biblioteca de video que busca archivos de video comunes."
       }
     }
   },
