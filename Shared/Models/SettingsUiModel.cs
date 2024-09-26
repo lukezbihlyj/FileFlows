@@ -103,4 +103,9 @@ public class SettingsUiModel:Settings
     /// </summary>
     public bool DockerModsOnServer { get; set; }
 
+    /// <summary>
+    /// Gets or sets the language options
+    /// </summary>
+    public List<ListOption> LanguageOptions { get; set; } = new();
+
 }

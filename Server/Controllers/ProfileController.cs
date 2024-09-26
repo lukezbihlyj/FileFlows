@@ -80,6 +80,7 @@ public class ProfileController : Controller
         #if(DEBUG)
         profile.HasDockerInstances = true;
         #endif
+        profile.Language = settings.Language?.ToLowerInvariant() == "en" ? null : settings.Language?.EmptyAsNull(); 
 
         return Ok(profile);
     }

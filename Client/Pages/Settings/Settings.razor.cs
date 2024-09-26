@@ -80,15 +80,6 @@ public partial class Settings : InputRegister
     };
 
     /// <summary>
-    /// The languages available in the system
-    /// </summary>
-    private readonly List<ListOption> LanguageOptions = new()
-    {
-        new() { Label = "English", Value = "en" },
-        new() { Label = "Deutsch", Value = "de" },
-    };
-
-    /// <summary>
     /// The security options
     /// </summary>
     private List<ListOption> SecurityOptions;
