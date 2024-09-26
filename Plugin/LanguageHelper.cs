@@ -633,54 +633,67 @@ public class LanguageHelper
     /// <returns>true if matches, otherwise false</returns>
     public static bool Matches(NodeParameters args, string comparison, string value)
     {
-        if (Regex.IsMatch(comparison, @"^/([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+)(\|([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+))*?/$"))
+        bool inverse = comparison.StartsWith('!');
+        if (inverse)
+            comparison = comparison[1..];
+        bool result = RunComparison();
+        return inverse ? !result : result;
+        
+        bool RunComparison ()
         {
-            // Remove the leading and trailing slashes
-            string innerContent = comparison.Trim('/');
-
-            // Split the inner content by '|'
-            var languages = innerContent.Split('|');
-
-            // Loop through each language
-            foreach (var language in languages)
+            if (Regex.IsMatch(comparison,
+                    @"^/([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+)(\|([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+))*?/$"))
             {
-                // Process each individual language
-                if(Matches(args, language, value))
-                    return true;
+                // Remove the leading and trailing slashes
+                string innerContent = comparison.Trim('/');
+
+                // Split the inner content by '|'
+                var languages = innerContent.Split('|');
+
+                // Loop through each language
+                foreach (var language in languages)
+                {
+                    // Process each individual language
+                    if (Matches(args, language, value))
+                        return true;
+                }
+
+                return false;
             }
 
-            return false;
+            comparison = args.ReplaceVariables(comparison.Replace("{orig}", "{OriginalLanguage}"), stripMissing: false);
+            if (args.Variables.TryGetValue("OriginalLanguage", out var oOrigLanguage) &&
+                oOrigLanguage is string origLanguage &&
+                string.IsNullOrWhiteSpace(origLanguage) == false)
+            {
+                comparison = comparison.Replace("OriginalLanguage", origLanguage,
+                    StringComparison.InvariantCultureIgnoreCase);
+                comparison = comparison.Replace("original", origLanguage);
+                comparison = comparison.Replace("orig", origLanguage);
+            }
+
+            string iso1 = GetIso1Code(value);
+            string iso2 = GetIso2Code(value);
+            string english = GetEnglishFor(value);
+            var iso1Matches = ValueMatch(comparison, iso1);
+            var iso2Matches = ValueMatch(comparison, iso2);
+            var engMatches = ValueMatch(comparison, english);
+
+            bool anyMatches = iso1Matches || iso2Matches || engMatches;
+            if (anyMatches == false)
+            {
+                args.Logger.ILog("Language does not match: " + value);
+                return false;
+            }
+
+            if (iso1Matches)
+                args.Logger?.ILog($"Language ISO-1 match found: '{iso1}' vs '{comparison}'");
+            if (iso2Matches)
+                args.Logger?.ILog($"Language ISO-2 match found: '{iso2}' vs '{comparison}'");
+            if (engMatches)
+                args.Logger?.ILog($"Language English match found: '{english}' vs '{comparison}'");
+            return true;
         }
-        
-        comparison = args.ReplaceVariables(comparison.Replace("{orig}", "{OriginalLanguage}"), stripMissing: false);
-        if (args.Variables.TryGetValue("OriginalLanguage", out var oOrigLanguage) && oOrigLanguage is string origLanguage &&
-            string.IsNullOrWhiteSpace(origLanguage) == false)
-        {
-            comparison = comparison.Replace("OriginalLanguage", origLanguage, StringComparison.InvariantCultureIgnoreCase);
-            comparison = comparison.Replace("original", origLanguage);
-            comparison = comparison.Replace("orig", origLanguage);
-        }
-        
-        string iso1 = GetIso1Code(value);
-        string iso2 = GetIso2Code(value);
-        string english = GetEnglishFor(value);
-        var iso1Matches = ValueMatch(comparison, iso1);
-        var iso2Matches = ValueMatch(comparison, iso2);
-        var engMatches = ValueMatch(comparison, english);
-        
-        bool anyMatches = iso1Matches || iso2Matches || engMatches;
-        if(anyMatches == false)
-        {
-            args.Logger.ILog("Language does not match: " + value);
-            return false;
-        }
-        if(iso1Matches)
-            args.Logger?.ILog($"Language ISO-1 match found: '{iso1}' vs '{comparison}'");
-        if(iso2Matches)
-            args.Logger?.ILog($"Language ISO-2 match found: '{iso2}' vs '{comparison}'");
-        if(engMatches)
-            args.Logger?.ILog($"Language English match found: '{english}' vs '{comparison}'");
-        return true;
 
         bool ValueMatch(string pattern, string value)
         {
