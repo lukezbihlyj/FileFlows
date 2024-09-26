@@ -187,66 +187,405 @@
       "Title": "Añadir Archivo",
       "Description": "Añadir archivos o URLs manualmente para procesamiento.",
       "Fields": {
-        "Source": "Fuente",
-        "Url": "URL",
-        "FilePath": "Ruta del Archivo",
-        "RegexPattern": "Patrón Regex",
-        "Reason": "Razón"
+        "Mode": "",
+        "Flow": "",
+        "Node": "",
+        "AnyNode": "",
+        "List": "",
+        "Raw": ""
+      }
+    },
+    "ChangePassword": {
+      "Title": "",
+      "PasswordMismatch": "",
+      "OldPassword": "",
+      "NewPassword": "",
+      "NewPasswordConfirm": "",
+      "InvalidPassword": "",
+      "MinimumLength": "",
+      "Changed": ""
+    },
+    "FileBrowser": {
+      "FileTitle": "",
+      "DirectoryTitle": ""
+    },
+    "Import": {
+      "Title": "",
+      "Message": ""
+    },
+    "ImportScript": {
+      "Title": "",
+      "Messages": {
+        "NoMoreImports": ""
+      }
+    },
+    "PauseDialog": {
+      "Title": "",
+      "Message": ""
+    },
+    "ReprocessDialog": {
+      "Title": "",
+      "Description": "",
+      "ProcessOptions": {
+        "Title": "",
+        "Description": ""
       },
-      "Error": {
-        "NoFile": "No se ha proporcionado una URL o ruta de archivo.",
-        "InvalidUrl": "La URL proporcionada no es válida.",
-        "InvalidFilePath": "La ruta del archivo proporcionada no es válida.",
-        "NoReason": "Se requiere una razón."
-      }
-    },
-    "HttpResponse": {
-      "Title": "Respuesta HTTP",
-      "Description": "Muestra la respuesta del servidor después de realizar una llamada HTTP.",
       "Fields": {
-        "Method": "Método",
-        "Status": "Estado",
-        "Body": "Cuerpo"
+        "Flow": "",
+        "Node": "",
+        "AnyNode": "",
+        "SameFlow": "",
+        "Position": "",
+        "BottomOfQueue": "",
+        "TopOfQueue": "",
+        "CustomVariablesMode": "",
+        "Original": "",
+        "Merge": "",
+        "Replace": "",
+        "CustomVariables": "",
+        "CustomVariablesKey": "",
+        "CustomVariablesValue": ""
       }
     },
-    "Prompt": {
-      "Title": "Solicitud",
-      "Text": "Texto de la solicitud"
+    "ResumeDialog": {
+      "Title": "",
+      "Message": ""
     },
-    "Restart": {
-      "Title": "Reiniciar",
-      "Message": "¿Está seguro de que desea reiniciar?"
+    "ScriptLanguage": {
+      "Title": "",
+      "Labels": {
+        "JavaScriptDescription": "",
+        "BatchDescription": "",
+        "CSharpDescription": "",
+        "PowerShellDescription": "",
+        "ShellDescription": ""
+      }
     },
-    "License": {
-      "Title": "Licencia",
-      "Message": "¿Está seguro de que desea aceptar la licencia?"
-    },
-    "Error": {
-      "Title": "Error",
-      "Message": "Ocurrió un error: {error}"
-    },
-    "Success": {
-      "Title": "Éxito",
-      "Message": "{action} completado con éxito"
+    "FlowTemplatePicker": {
+      "Title": ""
     }
   },
-  "Dashboard": {
-    "FlowStatistics": "Estadísticas de Flujos",
-    "ProcessingStatistics": "Estadísticas de Procesamiento",
-    "CompletedStatistics": "Estadísticas Completadas"
+  "Enums": {
+    "AuditAction": {
+      "Added": "",
+      "Updated": "",
+      "Deleted": "",
+      "Login": "",
+      "LoginFailed": "",
+      "ChangePassword": "",
+      "PasswordResetRequest": "",
+      "PasswordReset": ""
+    },
+    "Days": {
+      "Monday": "",
+      "Tuesday": "",
+      "Wednesday": "",
+      "Thursday": "",
+      "Friday": "",
+      "Saturday": "",
+      "Sunday": "",
+      "Mon": "",
+      "Tue": "",
+      "Wed": "",
+      "Thu": "",
+      "Fri": "",
+      "Sat": "",
+      "Sun": ""
+    },
+    "DateCompareMode": {
+      "Any": "",
+      "GreaterThan": "",
+      "LessThan": "",
+      "Between": "",
+      "NotBetween": "",
+      "After": "",
+      "Before": ""
+    },
+    "FilesSortBy": {
+      "Size": "",
+      "SizeDesc": "",
+      "Savings": "",
+      "SavingsDesc": "",
+      "Time": "",
+      "TimeDesc": ""
+    },
+    "FileStatus": {
+      "Any": "",
+      "OnHold": "",
+      "Disabled": "",
+      "OutOfSchedule": "",
+      "Processed": "",
+      "Processing": "",
+      "Unprocessed": "",
+      "FlowNotFound": "",
+      "ProcessingFailed": "",
+      "Duplicate": "",
+      "MappingIssue": "",
+      "MissingLibrary": "",
+      "ReprocessByFlow": ""
+    },
+    "FlowType": {
+      "Standard": "",
+      "Failure": "",
+      "SubFlow": ""
+    },
+    "LogType": {
+      "Debug": "",
+      "Error": "",
+      "Info": "",
+      "Warning": ""
+    },
+    "MatchRange": {
+      "Any": "",
+      "GreaterThan": "",
+      "LessThan": "",
+      "Between": "",
+      "NotBetween": "",
+      "After": "",
+      "Before": ""
+    },
+    "MathValue": {
+      "Equals": "",
+      "NotEquals": "",
+      "GreaterThan": "",
+      "LessThan": "",
+      "Between": "",
+      "NotBetween": "",
+      "GreaterThanOrEqual": "",
+      "LessThanOrEqual": ""
+    },
+    "Periods": {
+      "Minutes": "",
+      "Hours": "",
+      "Days": "",
+      "Weeks": ""
+    },
+    "ProcessingOrder": {
+      "AsFound": "",
+      "Alphabetical": "",
+      "LargestFirst": "",
+      "NewestFirst": "",
+      "OldestFirst": "",
+      "Random": "",
+      "SmallestFirst": ""
+    },
+    "ProcessingPriority": {
+      "Lowest": "",
+      "Low": "",
+      "Normal": "",
+      "High": "",
+      "Highest": ""
+    },
+    "ProcessingNodeStatus": {
+      "Offline": "",
+      "Idle": "",
+      "Processing": "",
+      "Disabled": "",
+      "OutOfSchedule": "",
+      "VersionMismatch": ""
+    },
+    "ReportDirection": {
+      "Inbound": "",
+      "Outbound": ""
+    },
+    "ReportSchedule": {
+      "Daily": "",
+      "Weekly": "",
+      "Monthly": ""
+    },
+    "SecurityMode": {
+      "Off": "",
+      "Local": "",
+      "OpenIdConnect": ""
+    },
+    "TaskType": {
+      "FileAdded": "",
+      "FileProcessed": "",
+      "FileProcessing": "",
+      "FileProcessFailed": "",
+      "FileProcessSuccess": "",
+      "FileFlowsServerUpdating": "",
+      "FileFlowsServerUpdateAvailable": ""
+    },
+    "UserRole": {
+      "Files": "",
+      "Flows": "",
+      "Libraries": "",
+      "Nodes": "",
+      "Plugins": "",
+      "Scripts": "",
+      "Variables": "",
+      "Revisions": "",
+      "Tasks": "",
+      "Webhooks": "",
+      "Log": "",
+      "PauseProcessing": "",
+      "DockerMods": ""
+    }
+  },
+  "ErrorMessages": {
+    "UnexpectedError": "",
+    "SaveFailed": "",
+    "DeleteFailed": "",
+    "NotFound": "",
+    "NameInUse": "",
+    "NameRequired": "",
+    "DuplicatesFound": "",
+    "NoFlowSpecified": "",
+    "CannotDeleteInternalNode": "",
+    "NotAllFilesCouldBeDeleted": "",
+    "SetFileStatus": "",
+    "BothMathValuesRequired": ""
+  },
+  "Times": {
+    "Never": "",
+    "SecondsAgo": "",
+    "MinutesAgo": "",
+    "HoursAgo": "",
+    "DaysAgo": ""
+  },
+  "MenuGroups": {
+    "Overview": "",
+    "Configuration": "",
+    "Extensions": "",
+    "System": "",
+    "Security": "",
+    "Information": "",
+    "User": "",
+    "Admin": ""
+  },
+  "Widgets": {
+    "CPUUsage": "",
+    "MemoryUsage": "",
+    "DatabaseConnections": "",
+    "TemporaryFileStorage": "",
+    "ProcessingNodes": "",
+    "Processing": "",
+    "Upcoming": "",
+    "Codecs": "",
+    "AudioCodecs": "",
+    "VideoCodecs": "",
+    "VideoResolutions": "",
+    "RecentlyFinished": "",
+    "ProcessingTimes": "",
+    "VideoContainers": "",
+    "AudioContainers": "",
+    "StorageSaved": "",
+    "Decoders": "",
+    "Encoders": "",
+    "DecoderParameters": "",
+    "LogStorage": "",
+    "LibraryProcessingTimes": "",
+    "ImageFormats": "",
+    "ComicFormats": "",
+    "ComicPages": "",
+    "NVIDIASMI": "",
+    "CurrentRevision": ""
   },
   "Flow": {
-    "BasicSettings": "Configuraciones Básicas",
-    "AdvancedSettings": "Configuraciones Avanzadas",
-    "StartNode": "Nodo de Inicio",
-    "FinishNode": "Nodo de Fin",
-    "Map": "Mapa",
-    "Trigger": "Disparador"
+    "ErrorMessages": {
+      "NoParts": "",
+      "NoInput": "",
+      "TooManyInputNodes": ""
+    },
+    "Parts": {
+      "Color": "",
+      "Color-Placeholder": "",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "",
+          "Extensions-Help": ""
+        }
+      }
+    }
   },
   "Templates": {
-    "SaveAsTemplate": "Guardar como Plantilla",
-    "LoadTemplate": "Cargar Plantilla",
-    "TemplatesAvailable": "Plantillas Disponibles"
+    "Groups": {
+      "Books": "",
+      "DownloadClients": "",
+      "DVR": "",
+      "General": ""
+    },
+    "Flows": {
+      "ConvertComic": {
+        "Name": "",
+        "Description": ""
+      },
+      "ConvertImage": {
+        "Name": "",
+        "Description": ""
+      },
+      "ConvertVideo": {
+        "Name": "",
+        "Description": ""
+      },
+      "File": {
+        "Name": "",
+        "Description": ""
+      },
+      "Folder": {
+        "Name": "",
+        "Description": ""
+      },
+      "FailureFlow": {
+        "Name": "",
+        "Description": ""
+      },
+      "ImageFile": {
+        "Name": "",
+        "Description": ""
+      },
+      "AudioFile": {
+        "Name": "",
+        "Description": ""
+      },
+      "VideoFile": {
+        "Name": "",
+        "Description": ""
+      }
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Name": "",
+        "Description": ""
+      },
+      "ComicLibrary": {
+        "Name": "",
+        "Description": ""
+      },
+      "eBookLibrary": {
+        "Name": "",
+        "Description": ""
+      },
+      "ImageLibrary": {
+        "Name": "",
+        "Description": ""
+      },
+      "MusicLibrary": {
+        "Name": "",
+        "Description": ""
+      },
+      "PlexDVR": {
+        "Name": "",
+        "Description": ""
+      },
+      "SABnzbdMusic": {
+        "Name": "",
+        "Description": ""
+      },
+      "SABnzbdVideos": {
+        "Name": "",
+        "Description": ""
+      },
+      "SamplesTrailersPreviews": {
+        "Name": "",
+        "Description": ""
+      },
+      "VideoLibrary": {
+        "Name": "",
+        "Description": ""
+      }
+    }
   },
   "Inputs": {
     "InputDateCompare": {
@@ -893,60 +1232,88 @@
           "AllowList-Placeholder": "Si se deja vacío, se permitirán todas las rutas excepto las del sistema.",
           "AllowList-Help": "Una lista separada por nuevas líneas de rutas que se permiten acceder al servidor de archivos expuesto.\nEstas son las ubicaciones a las que se puede leer/escribir de forma remota.\nNota: Todas las rutas de la biblioteca están automáticamente permitidas."
         },
-        "Logging": {
-          "Description": "Aquí puede configurar cómo y dónde se registran las acciones.",
-          "FileLogging": "Registrar en un archivo",
-          "FileLogging-Help": "Registrar la salida en un archivo, lo que puede ser útil para la depuración.",
-          "LogFile": "Archivo de registro",
-          "LogFile-Help": "El archivo donde se debe registrar la salida.",
-          "ConsoleLogging": "Registrar en la consola",
-          "ConsoleLogging-Help": "Registrar la salida en la consola web.",
-          "LogLevel": "Nivel de registro",
-          "LogLevel-Help": "El nivel de detalle a registrar, DEBUG es el más detallado y ERROR es el menos detallado."
+        "License": {
+          "Key": "",
+          "Email": "",
+          "Status": "",
+          "Level": "",
+          "ProcessingNodes": "",
+          "Flags": "",
+          "ExpiryDate": "",
+          "Files": ""
         },
-        "Update": {
-          "UpdateAvailable": "Actualización disponible"
-        }
-      },
-      "Confirm": {
-        "Restart": "¿Está seguro de que desea reiniciar?",
-        "Remove": "¿Está seguro de que desea eliminar esto?",
-        "Database": {
-          "Recreate": "¿Está seguro de que desea recrear la base de datos?"
+        "Smtp": {
+          "Server": "",
+          "Server-Help": "",
+          "Port": "",
+          "Port-Help": "",
+          "Security": "",
+          "Security-Help": "",
+          "User": "",
+          "User-Help": "",
+          "Password": "",
+          "Password-Help": "",
+          "From": "",
+          "From-Help": "",
+          "FromAddress": "",
+          "FromAddress-Help": ""
+        },
+        "Security": {
+          "Title": "",
+          "Mode": "",
+          "Mode-Help": "",
+          "AccessToken": "",
+          "AccessToken-Help": "",
+          "TokenExpiryMinutes": "",
+          "TokenExpiryMinutes-Help": "",
+          "Description": "",
+          "Authority": "",
+          "Authority-Help": "",
+          "ClientId": "",
+          "ClientId-Help": "",
+          "ClientSecret": "",
+          "ClientSecret-Help": "",
+          "CallbackAddress": "",
+          "CallbackAddress-Help": "",
+          "MaxAttempts": "",
+          "MaxAttempts-Help": "",
+          "LockoutMinutes": "",
+          "LockoutMinutes-Suffix": "",
+          "LockoutMinutes-Help": ""
         }
       }
     },
-    "Estadísticas": {
-      "Título": "Estadísticas"
+    "Statistics": {
+      "Title": ""
     },
-    "Tareas": {
-      "Título": "Tareas",
-      "Mensajes": {
-        "NoScripts": "No se encontraron scripts para crear una tarea.",
-        "NoHistory": "Esta tarea no tiene historial de ejecución disponible."
+    "Tasks": {
+      "Title": "",
+      "Messages": {
+        "NoScripts": "",
+        "NoHistory": ""
       },
-      "Botones": {
-        "EditScript": "Editar Script"
+      "Buttons": {
+        "EditScript": ""
       }
     },
-    "Usuarios": {
-      "Título": "Usuarios",
-      "Singular": "Usuario",
-      "Mensajes": {
-        "CannotDeleteYourself": "No puedes eliminarte a ti mismo.",
-        "EmailInUse": "La dirección de correo electrónico ''{email}'' ya está en uso por otro usuario ''{user}''."
+    "Users": {
+      "Title": "",
+      "Single": "",
+      "Messages": {
+        "CannotDeleteYourself": "",
+        "EmailInUse": ""
       },
-      "Etiquetas": {
-        "LastLoggedIn": "Último Inicio de Sesión",
-        "Address": "Dirección",
-        "Never": "Nunca",
-        "Administrator": "Administrador"
+      "Labels": {
+        "LastLoggedIn": "",
+        "Address": "",
+        "Never": "",
+        "Administrator": ""
       },
-      "Campos": {
-        "IsAdmin": "Administrador",
-        "Email": "Correo Electrónico",
-        "Password": "Contraseña",
-        "Roles": "Roles"
+      "Fields": {
+        "IsAdmin": "",
+        "Email": "",
+        "Password": "",
+        "Roles": ""
       }
     },
     "AccessControl": {

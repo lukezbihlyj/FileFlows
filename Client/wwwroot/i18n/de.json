@@ -310,7 +310,7 @@
       "TimeDesc": "Zeit absteigend"
     },
     "FileStatus": {
-      "Any": "",
+      "Any": "Alle",
       "OnHold": "Gehalten",
       "Disabled": "Deaktiviert",
       "OutOfSchedule": "Außerhalb des Zeitplans",
@@ -341,8 +341,8 @@
       "LessThan": "Kleiner als",
       "Between": "zwischen",
       "NotBetween": "Nicht zwischen",
-      "After": "",
-      "Before": ""
+      "After": "Nach",
+      "Before": "Vor"
     },
     "MathValue": {
       "Equals": "Gleich",
@@ -435,7 +435,7 @@
     "CannotDeleteInternalNode": "Sie können den internen Node nicht löschen!",
     "NotAllFilesCouldBeDeleted": "Es konnten nicht alle Dateien gelöscht werden.\nWeitere Informationen finden Sie im Protokoll.",
     "SetFileStatus": "Dateistatus konnte nicht gesetzt werden",
-    "BothMathValuesRequired": ""
+    "BothMathValuesRequired": "Beide Werte müssen eingegeben werden"
   },
   "Times": {
     "Never": "Nie",
@@ -449,10 +449,10 @@
     "Configuration": "Konfiguration",
     "Extensions": "Erweiterungen",
     "System": "System",
-    "Security": "",
+    "Security": "Sicherheit",
     "Information": "Informationen",
     "User": "User",
-    "Admin": ""
+    "Admin": "Admin"
   },
   "Widgets": {
     "CPUUsage": "CPU-Auslastung",
@@ -858,7 +858,7 @@
       "Buttons": {
         "Ignore": "ignorieren",
         "Process": "Prozess",
-        "ProcessOptions": "",
+        "ProcessOptions": "Verarbeitungsoptionen",
         "View": "Ansicht",
         "MoveToTop": "Nach oben bewegen",
         "Reprocess": "Wiederholen",
@@ -1241,7 +1241,8 @@
           "Flags": "Besonderheiten",
           "ExpiryDate": "Verfallsdatum",
           "Files": "Dateien"
-        },"Smtp": {
+        },
+        "Smtp": {
           "Server": "Server",
           "Server-Help": "Der E-Mail-Server",
           "Port": "Port",
@@ -1314,7 +1315,8 @@
         "Password": "Passwort",
         "Roles": "Rollen"
       }
-    },"AccessControl": {
+    },
+    "AccessControl": {
       "Title": "Zugriffskontrolle",
       "Single": "Zugriffskontrolleneintrag",
       "Columns": {
