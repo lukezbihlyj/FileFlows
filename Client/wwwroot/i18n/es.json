@@ -1,0 +1,1064 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "VersionNumber": "Versión: {version}",
+    "Version": "Versión",
+    "Loading": "Cargando",
+    "Installed": "Instalado",
+    "Save": "Guardar",
+    "Saving": "Guardando",
+    "Execute": "Ejecutar",
+    "Executing": "Ejecutando",
+    "Cancel": "Cancelar",
+    "Close": "Cerrar",
+    "Select": "Seleccionar",
+    "Yes": "Sí",
+    "No": "No",
+    "Ok": "Aceptar",
+    "And": "Y",
+    "Any": "Cualquiera",
+    "All": "Todos",
+    "About": "Acerca de",
+    "Pause": "Pausar Procesamiento",
+    "Paused": "Reanudar Procesamiento",
+    "PausedWithTime": "Reanudar En",
+    "None": "Ninguno",
+    "Add": "Añadir",
+    "Edit": "Editar",
+    "EditSubFlow": "Editar Sub Flujo",
+    "Open": "Abrir",
+    "Clear": "Limpiar",
+    "Next": "Siguiente",
+    "Remove": "Eliminar",
+    "Copy": "Copiar",
+    "Paste": "Pegar",
+    "Redo": "Rehacer",
+    "Undo": "Deshacer",
+    "Fields": "Campos",
+    "Duplicate": "Duplicar",
+    "ResetLayout": "Restablecer Diseño",
+    "UsedBy": "Usado Por",
+    "Update": "Actualizar",
+    "Refresh": "Actualizar",
+    "Download": "Descargar",
+    "Default": "Predeterminado",
+    "Repository": "Repositorio",
+    "Type": "Tipo",
+    "Scripts": "Scripts",
+    "Plugins": "Complementos",
+    "SubFlow": "Sub Flujo",
+    "SubFlows": "Sub Flujos",
+    "ShowHidden": "Mostrar Ocultos",
+    "DownloadLog": "Descargar Registro",
+    "DownloadLogShort": "Registro",
+    "UnsavedChanges": "Cambios No Guardados",
+    "Enabled": "Habilitado",
+    "Export": "Exportar",
+    "Import": "Importar",
+    "Browse": "Examinar",
+    "Rescan": "Reescanear",
+    "Reprocess": "Reprocesar",
+    "Reset": "Restablecer",
+    "Revisions": "Revisiones",
+    "Audit": "Auditar",
+    "NoAuditHistoryAvailable": "No hay historial de auditoría disponible",
+    "Restore": "Restaurar",
+    "RestoredMessage": "{type} restaurado",
+    "RestoredFailedMessage": "No se pudo restaurar {type}",
+    "Restoring": "Restaurando",
+    "Help": "Ayuda",
+    "Discord": "Discord",
+    "Forum": "Foro",
+    "License": "Licencia",
+    "Name": "Nombre",
+    "Status": "Estado",
+    "When": "Cuándo",
+    "Size": "Tamaño",
+    "Advanced": "Avanzado",
+    "Search": "Buscar",
+    "Searching": "Buscando",
+    "Filter": "Filtrar",
+    "FilterPlaceholder": "Filtrar (/)",
+    "Run": "Ejecutar",
+    "RunHistory": "Historial de Ejecución",
+    "LastRun": "Última Ejecución",
+    "Never": "Nunca",
+    "Trigger": "Disparar",
+    "RunAt": "Ejecutar En",
+    "Success": "Éxito",
+    "ReturnCode": "Código de Retorno",
+    "Log": "Registro",
+    "View": "Ver",
+    "Delete": "Eliminar",
+    "Deleting": "Eliminando",
+    "DeleteItems": "¿Está seguro de que desea eliminar el {count, plural, one {elemento} other {elementos}} seleccionado?",
+    "DeleteLibraryFiles": "¿Está seguro de que desea eliminar el {count, plural, one {archivo} other {archivos}} seleccionado?\n\nNota: Esto no eliminará el {count, plural, one {archivo} other {archivos}} del disco, {count, plural, one {se} other {se}} eliminará solo de la base de datos de FileFlows.",
+    "DeleteLibraryFilesPhysicallySwitch": "Eliminar archivos del disco",
+    "DeleteLibraryFilesPhysicallyMessage": "¿Está seguro de que desea eliminar el {count, plural, one {archivo} other {archivos}} seleccionado?\n\nNota: Esto eliminará permanentemente el {count, plural, one {archivo} other {archivos}} del disco y no se puede deshacer.",
+    "CancelItems": "¿Está seguro de que desea cancelar el {count, plural, one {elemento} other {elementos}} seleccionado?",
+    "CancelMessage": "¿Está seguro de que desea cancelar y perder cualquier cambio no guardado?",
+    "Confirm": "Confirmar",
+    "Prompt": "Solicitar",
+    "SelectOne": "Seleccionar Uno",
+    "Increase": "Aumentar",
+    "Decrease": "Disminuir",
+    "SpaceSavings": "{size} ahorrados, {items} elementos",
+    "SpaceIncrease": "{size} incremento, {items} elementos",
+    "Total": "Total",
+    "Other": "Otro",
+    "UpdateAvailable": "Nueva versión disponible {version}",
+    "Output": "Salida",
+    "Input": "Entrada",
+    "Node": "Nodo",
+    "BaseCodeOn": "Usar Plantilla de Código",
+    "CopyToClipboard": "Copiar al portapapeles",
+    "CopiedToClipboard": "Copiado ''{text}'' al portapapeles.",
+    "Test": "Probar",
+    "LogPartialNotAvailable": "No se pudo encontrar registro parcial para el nodo.",
+    "ViewLog": "Ver Registro",
+    "SetStatusProcessed": "Marcar como Procesado",
+    "CommunityFlows": "Flujos Comunitarios",
+    "Properties": "Propiedades",
+    "MissingDependencies": "Dependencias Faltantes",
+    "MissingDependenciesMessage": "Los siguientes complementos faltantes deben ser descargados antes de usar esta plantilla:\n\n#LIST#",
+    "NoFilesCurrentlyProcessing": "No hay archivos procesándose actualmente",
+    "ProcessingPaused": "El procesamiento está actualmente pausado",
+    "NoFilesRecentlyFinished": "No hay archivos finalizados recientemente",
+    "NoUpcomingFiles": "No hay archivos próximos",
+    "Failed": "Fallido",
+    "MappingIssue": "Problema de Mapeo",
+    "Number": "Número",
+    "Percent": "Porcentaje",
+    "Pixels": "Píxeles",
+    "ReadOnly": "Solo Lectura",
+    "InUse": "En Uso",
+    "Running": "Ejecutando",
+    "PossibilityDisconnected": "Posiblemente Desconectado",
+    "Disconnected": "Desconectado",
+    "LastScanned": "Último Escaneo",
+    "Savings": "Ahorros",
+    "Flow": "Flujo",
+    "ForceProcessing": "Forzar Procesamiento",
+    "Settings": "Configuraciones",
+    "FlowElement": "Elemento de Flujo",
+    "FlowElements": "Elementos de Flujo",
+    "ChangePassword": "Cambiar Contraseña",
+    "Logout": "Cerrar Sesión",
+    "AdminRequired": "Se requiere administrador para completar la instalación.",
+    "ObsoleteConfirm": {
+      "Title": "Elemento de Flujo Obsoleto",
+      "Message": "Se recomienda que cambie a un elemento de flujo diferente.",
+      "Question": "Este elemento de flujo ahora es obsoleto y será eliminado pronto. ¿Está seguro de que desea usar esto?"
+    },
+    "DateRanges": {
+      "Live": "En Vivo",
+      "AnyTime": "Cualquier Momento",
+      "Today": "Hoy",
+      "Yesterday": "Ayer",
+      "Last24Hours": "Últimas 24 Horas",
+      "Last3Days": "Últimos 3 Días",
+      "Last7Days": "Últimos 7 Días",
+      "Last31Days": "Últimos 31 Días",
+      "Last3Months": "Últimos 3 Meses",
+      "Last6Months": "Últimos 6 Meses",
+      "Last12Months": "Últimos 12 Meses"
+    }
+  },
+  "AuditActions": {
+    "SettingsUpdated": "Configuraciones actualizadas",
+    "Added": "{Type} ''{Name}'' añadido",
+    "Updated": "{Type} ''{Name}'' actualizado",
+    "Deleted": "{Type} ''{Name}'' eliminado",
+    "Login": "Usuario ''{User}'' inició sesión",
+    "LoginFailed": "Inicio de sesión del usuario ''{User}'' fallido",
+    "ChangePassword": "El usuario ''{User}'' cambió la contraseña",
+    "PasswordResetRequest": "El usuario ''{User}'' solicitó un restablecimiento de contraseña",
+    "PasswordReset": "El usuario ''{User}'' restableció su contraseña"
+  },
+  "Dialogs": {
+    "AuditEntry": {
+      "ViewerTitle": "Cambios",
+      "Columns": {
+        "Value": "Valor",
+        "Field": "Campo"
+      }
+    },
+    "AddFile": {
+      "Title": "Añadir Archivo",
+      "Description": "Añadir archivos o URLs manualmente para procesamiento.",
+      "Fields": {
+        "Source": "Fuente",
+        "Url": "URL",
+        "FilePath": "Ruta del Archivo",
+        "RegexPattern": "Patrón Regex",
+        "Reason": "Razón"
+      },
+      "Error": {
+        "NoFile": "No se ha proporcionado una URL o ruta de archivo.",
+        "InvalidUrl": "La URL proporcionada no es válida.",
+        "InvalidFilePath": "La ruta del archivo proporcionada no es válida.",
+        "NoReason": "Se requiere una razón."
+      }
+    },
+    "HttpResponse": {
+      "Title": "Respuesta HTTP",
+      "Description": "Muestra la respuesta del servidor después de realizar una llamada HTTP.",
+      "Fields": {
+        "Method": "Método",
+        "Status": "Estado",
+        "Body": "Cuerpo"
+      }
+    },
+    "Prompt": {
+      "Title": "Solicitud",
+      "Text": "Texto de la solicitud"
+    },
+    "Restart": {
+      "Title": "Reiniciar",
+      "Message": "¿Está seguro de que desea reiniciar?"
+    },
+    "License": {
+      "Title": "Licencia",
+      "Message": "¿Está seguro de que desea aceptar la licencia?"
+    },
+    "Error": {
+      "Title": "Error",
+      "Message": "Ocurrió un error: {error}"
+    },
+    "Success": {
+      "Title": "Éxito",
+      "Message": "{action} completado con éxito"
+    }
+  },
+  "Dashboard": {
+    "FlowStatistics": "Estadísticas de Flujos",
+    "ProcessingStatistics": "Estadísticas de Procesamiento",
+    "CompletedStatistics": "Estadísticas Completadas"
+  },
+  "Flow": {
+    "BasicSettings": "Configuraciones Básicas",
+    "AdvancedSettings": "Configuraciones Avanzadas",
+    "StartNode": "Nodo de Inicio",
+    "FinishNode": "Nodo de Fin",
+    "Map": "Mapa",
+    "Trigger": "Disparador"
+  },
+  "Templates": {
+    "SaveAsTemplate": "Guardar como Plantilla",
+    "LoadTemplate": "Cargar Plantilla",
+    "TemplatesAvailable": "Plantillas Disponibles"
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*Mayor Que*: Coincide si la fecha es más antigua que el período dado.\n*Menor Que*: Coincide si la fecha es más reciente que el período dado.\n*Entre*: Coincide si la fecha está dentro del rango especificado.\n*Antes*: Coincide si la fecha es anterior a la fecha especificada.\n*Después*: Coincide si la fecha es posterior a la fecha especificada."
+    }
+  },
+  "Validators": {
+    "Required": "Requerido",
+    "Range": "Debe estar entre {Minimum} y {Maximum}",
+    "Pattern": "No es válido"
+  },
+  "Pages": {
+    "Dashboard": {
+      "Title": "Tablero",
+      "Labels": {
+        "ShrinkageTitle": "Almacenamiento Ahorrado",
+        "FinalSize": "Tamaño Final",
+        "OriginalSize": "Tamaño Original",
+        "Savings": "Ahorros",
+        "AddWidget": "Agregar Widget"
+      },
+      "ErrorMessages": {
+        "LogFailed": "No se pudo recuperar el registro para el trabajador",
+        "FailedToCreate": "No se pudo crear el tablero"
+      },
+      "Messages": {
+        "CancelMessage": "¿Está seguro de que desea cancelar el trabajador para {RelativeFile}?",
+        "Waiting": "Esperando un archivo para procesar",
+        "DeleteDashboard": "¿Está seguro de que desea eliminar el tablero actual?\n\nEsto no se puede deshacer.",
+        "DeleteWidget": "¿Está seguro de que desea eliminar este Widget?"
+      },
+      "Fields": {
+        "Log": "Registro",
+        "Node": "Nodo",
+        "CurrentStep": "Paso",
+        "File": "Archivo",
+        "Overall": "Total",
+        "Current": "Actual",
+        "Uid": "UID",
+        "Library": "Biblioteca",
+        "ProcessingTime": "Tiempo de Procesamiento",
+        "Upcoming": "Próximo",
+        "RecentlyFinished": "Recientemente Terminado",
+        "WorkingFile": "Archivo en Proceso"
+      }
+    },
+    "DockerMod": {
+      "Title": "DockerMod",
+      "Plural": "DockerMods",
+      "Labels": {
+        "UpdateAvailable": "Actualización Disponible",
+        "Revision": "Revisión"
+      },
+      "Messages": {
+        "Updating": "Actualizando",
+        "FailedToExport": "No se pudo exportar."
+      },
+      "Fields": {
+        "Description": "Descripción",
+        "Code": "Código"
+      }
+    },
+    "Flow": {
+      "Title": "Flujo",
+      "Labels": {
+        "EditFlow": "Flujo: {Name}",
+        "FlowProperties": "Propiedades del Flujo",
+        "SubFlowHelp": "Para agregar campos de entrada a un subflujo y poder pasar parámetros personalizados a este subflujo, créalos en la pestaña `Campos`.\n\nUn subflujo debe tener una única `Entrada`, que puede ser cualquier elemento de flujo de entrada válido, por ejemplo, `Archivo de Entrada`, `Archivo de Video`, etc.",
+        "OpenScriptBrowser": "Abrir Navegador de Scripts",
+        "SubFlowBrowser": "Navegador de Sub Flujos",
+        "OpenSubFlowBrowser": "Abrir Navegador de Sub Flujos"
+      },
+      "Messages": {
+        "Close": "¿Está seguro de que desea salir y perder todos los cambios no guardados?",
+        "LoadingFlow": "Cargando Flujo",
+        "FailedToLoadFlow": "No se pudo cargar el flujo."
+      },
+      "Fields": {
+        "Variables": "Variables",
+        "Tags": "Etiquetas",
+        "MinimumVersion": "Versión Mínima",
+        "VariablesKey": "Nombre",
+        "VariablesValue": "Valor",
+        "Description": "Descripción.",
+        "Author": "Autor",
+        "Author-Help": "Opcionalmente especifique el autor de este flujo.",
+        "Outputs": "Salidas",
+        "OutputsKey": "Salida",
+        "OutputsValue": "Descripción",
+        "Outputs-Help": "El número de salidas que tiene este subflujo. Este es el número de salidas que estarán disponibles al usar este subflujo en otro flujo.",
+        "Field": {
+          "Description": "Una descripción opcional que se mostrará con este campo. Este puede ser un texto de ayuda para el campo.",
+          "FlowElementField": "Campo del Elemento",
+          "FlowElementField-Help": "Opcional, establezca esto en el formato '{Uid}.{FieldName}', por ejemplo, ''53a72207-34a2-4b71-b3d8-8b12764a85fe.Force'' para establecer un campo en un elemento de flujo directamente. Consulte la ayuda para más información.",
+          "Required": "Requerido",
+          "Required-Help": "Si este valor es requerido y debe ser establecido.",
+          "Default": "Predeterminado",
+          "Minimum": "Mínimo",
+          "Maximum": "Máximo",
+          "Inverse": "Inverso",
+          "Inverse-Help": "Si los valores del control deslizante deben ser invertidos, mostrando los valores más bajos a la derecha.",
+          "Options": "Opciones",
+          "DeleteIfEmpty": "Eliminar Si Está Vacío",
+          "DeleteIfEmpty-Help": "Si se agregan valores aquí y el usuario selecciona 'Eliminar Original', la carpeta también se eliminará si no hay ningún archivo que coincida con cualquiera de estas expresiones regulares.",
+          "Options-Help": "Una matriz de opciones de lista, para establecer una etiqueta y un valor, use un separador | por ejemplo `etiqueta|valor`",
+          "IfName": "Si",
+          "IfName-Help": "Si esto solo debe mostrarse al usuario si otro valor coincide con estas condiciones.",
+          "IfValue": "Si Valor",
+          "IfValue-Help": "El valor con el que comparar, puede ser una expresión regular. Para booleanos use verdadero o falso.",
+          "IfNot": "Si No",
+          "IfNot-Help": "Si el valor debe ser invertido y solo debe mostrarse si el valor no coincide."
+        }
+      }
+    },
+    "Flows": {
+      "Title": "Flujos",
+      "Template": {
+        "Title": "Agregar Flujo",
+        "Fields": {
+          "PageDescription": "Seleccione una plantilla en la que basar el flujo, esto le ayudará a comenzar con un flujo.",
+          "Template": "Plantilla"
+        }
+      },
+      "Buttons": {
+        "Repository": "Repositorio"
+      },
+      "Labels": {
+        "FailureFlows": "Flujos de Fallo",
+        "StandardFlows": "Flujos Estándar",
+        "SubFlows": "Sub Flujos"
+      },
+      "Fields": {
+        "Author": "Autor",
+        "Template": "Plantilla"
+      },
+      "Messages": {
+        "FlowImported": "Flujo ''{name}'' importado",
+        "Duplicated": "Flujo ''{name}'' duplicado",
+        "DeleteUsed": "No puede eliminar un flujo que está en uso",
+        "LoadingTemplates": "Cargando Plantillas",
+        "FailedToExport": "No se pudo exportar el/los flujo(s).",
+        "FailureFlowDescription": "Este es un tipo de flujo especial que se ejecutará si cualquier flujo falla.\nFileFlows buscará el Flujo de Fallo 'Predeterminado' para usar si un flujo falla, si no se encuentra, el procesamiento se detendrá inmediatamente."
+      }
+    },
+    "Libraries": {
+      "Title": "Bibliotecas",
+      "Messages": {
+        "DeleteConfirm": "¿Está seguro de que desea eliminar la {count, plural, one {biblioteca} other {bibliotecas}} seleccionada?",
+        "KeepLibraryFiles": "Retener archivos en la base de datos para estadísticas",
+        "Reprocess": {
+          "Title": "Reprocesar Bibliotecas Seleccionadas",
+          "Message": "¿Está seguro de que desea continuar con el reprocesamiento de las bibliotecas seleccionadas?\n\nEsta acción marcará todos los archivos como no procesados e iniciará su reprocesamiento. Tenga en cuenta que esta acción no se puede deshacer."
+        },
+        "Reset": {
+          "Title": "Restablecer Bibliotecas Seleccionadas",
+          "Message": "¿Está seguro de que desea continuar con el restablecimiento de las bibliotecas seleccionadas?\n\nEsta acción eliminará todos los archivos e iniciará un nuevo escaneo. Tenga en cuenta que esta acción no se puede deshacer."
+        }
+      },
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {Archivo} other {Archivos}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "No hay flujos configurados.\nCree un flujo antes de agregar o actualizar una biblioteca."
+      }
+    },
+    "Library": {
+      "Title": "Biblioteca",
+      "Labels": {
+        "CreationTime": "Hora de Creación",
+        "LastWriteTime": "Última Hora de Escritura"
+      },
+      "Fields": {
+        "Template": "Plantilla",
+        "Name": "Nombre",
+        "Path": "Ruta",
+        "Enabled": "Habilitado",
+        "Flow": "Flujo",
+        "Folders": "Carpetas",
+        "Folders-Help": "Si esta biblioteca procesa Carpetas en lugar de Archivos.\nEsto no significa escanear subcarpetas, una biblioteca ya lo hará.\nEsto significa que se procesará un objeto Carpeta en lugar de archivos individuales.",
+        "Priority": "Prioridad",
+        "Priority-Help": "La prioridad con la que se deben procesar los archivos. Si una biblioteca de mayor prioridad tiene archivos esperando para ser procesados, estos se harán primero.",
+        "Filters": "Filtros",
+        "Filters-Help": "Lista opcional de filtros para ejecutar contra el nombre completo de los archivos.",
+        "ExclusionFilters": "Exclusiones",
+        "ExclusionFilters-Help": "Lista opcional de inclusiones para ejecutar contra el nombre completo de los archivos.",
+        "ExcludeHidden": "Excluir Ocultos",
+        "ExcludeHidden-Help": "Cuando está habilitado, los archivos y carpetas ocultos no se escanearán",
+        "UseFingerprinting": "Usar Huellas Digitales",
+        "UseFingerprinting-Help": "Cuando está habilitado, se ejecutará una suma de verificación contra los archivos al ser importados y después de que se complete un flujo. Cualquier archivo con suma de verificación coincidente se omitirá en futuras importaciones de la biblioteca.",
+        "WaitTimeSeconds": "Tiempo de Espera",
+        "WaitTimeSeconds-Suffix": "segundos",
+        "WaitTimeSeconds-Help": "El número de segundos que deben pasar desde la última vez que se escribió un cambio en esta carpeta para que se escanee en la biblioteca.",
+        "ScanInterval": "Intervalo de Escaneo",
+        "ScanInterval-Suffix": "Segundos",
+        "ScanInterval-Help": "El tiempo más corto posible en segundos entre escaneos. No se garantiza escanear en este intervalo cada vez, ya que otro escaneo podría estar en progreso.",
+        "FileSizeDetectionInterval": "Intervalo de Detección de Tamaño de Archivo",
+        "FileSizeDetectionInterval-Suffix": "Segundos",
+        "FileSizeDetectionInterval-Help": "El tiempo en segundos para esperar para volver a verificar el tamaño del archivo durante el escaneo de la biblioteca. Use esto si otra aplicación puede estar escribiendo en un archivo en partes, por ejemplo, una aplicación PVR que escribe partes de una grabación cada 20 segundos.",
+        "Schedule": "Horario",
+        "Schedule-Help": "Este horario se ejecuta en la zona horaria configurada en la configuración.",
+        "ScheduleDescription": "Esto le permite configurar cuándo estará activa esta biblioteca.\n\nEl escáner de la biblioteca no se ejecutará contra esta biblioteca ni se procesarán archivos fuera del horario.\n",
+        "Scan": "Escanear",
+        "Scan-Help": "Cuando el escaneo está habilitado, la biblioteca se escaneará rutinariamente en busca de nuevo contenido.\nCuando está deshabilitado, la biblioteca escuchará eventos del sistema de archivos para detectar nuevos archivos.\nEs mejor dejar esto desactivado a menos que tenga problemas con archivos que no se detectan.",
+        "UpdateMovedFiles": "Actualizar Archivos Movidos",
+        "UpdateMovedFiles-Help": "Cuando está habilitado, si se detecta que un archivo se ha movido dentro de la misma biblioteca, el archivo original se actualizará para apuntar a este nuevo archivo.\nDe lo contrario, cuando está deshabilitado, se agregará un duplicado en su lugar.\n\nSe detectará que un archivo se ha movido si el archivo original no existe y se encuentra un nuevo archivo con la misma firma.",
+        "ReprocessRecreatedFiles": "Reprocesar Archivos Recreados",
+        "ReprocessRecreatedFiles-Help": "Cuando está habilitado, si se detecta un archivo con una hora de creación diferente a la registrada, el archivo se configurará automáticamente para reprocesarse.\nEsto es útil en una biblioteca de archivos descargados, donde puede descargar el mismo archivo varias veces y desea procesarlo cada vez.",
+        "ProcessingOrder": "Orden de Procesamiento",
+        "ProcessingOrder-Help": "El orden en que se procesarán los archivos en esta biblioteca.",
+        "SkipFileAccessTests": "Omitir Pruebas de Acceso a Archivos",
+        "SkipFileAccessTests-Help": "Cuando está habilitado, la biblioteca no probará si puede leer o escribir en el archivo antes de agregarlo a la cola de Archivos.",
+        "TopLevelOnly": "Solo Nivel Superior",
+        "TopLevelOnly-Help": "Solo escanear archivos en la raíz del directorio y no se buscarán subcarpetas.",
+        "HoldMinutes": "Minutos de Retención",
+        "HoldMinutes-Suffix": "minutos",
+        "HoldMinutes-Help": "Opcionalmente retener cualquier archivo encontrado en esta biblioteca durante esta cantidad de minutos antes de procesarlos. Cada archivo se retendrá durante esta cantidad de tiempo.",
+        "DetectionDescription": "Aquí puede configurar una biblioteca para detectar solo archivos que coincidan con los patrones dados.\n\nPor ejemplo, esto le permite incluir solo archivos que son\n\t- Archivos que se crearon hace menos de 7 días\n\t- Archivos que se escribieron por última vez entre 3 y 7 días atrás\n\t- Tamaño de archivo mayor a 1 gigabyte",
+        "DetectFileCreation": "Creación de Archivo",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileCreationDate": "",
+        "DetectFileLastWritten": "Última Escritura de Archivo",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileSize": "Tamaño de Archivo",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "FullScanDisabled": "Deshabilitar Escaneo Completo",
+        "FullScanDisabled-Help": "El propósito del escaneo completo es detectar cualquier archivo que pueda ser omitido por los eventos de observación del sistema de archivos.",
+        "FullScanIntervalMinutes": "Intervalo de Escaneo Completo",
+        "FullScanIntervalMinutes-Help": "El intervalo en el que debe realizarse un escaneo completo de esta biblioteca",
+        "DownloadsDirectory": "Directorio de Descargas",
+        "DownloadsDirectory-Help": "Un directorio especial donde si se redescubre un archivo que se ha procesado con éxito en esta carpeta, ese archivo se reprocesará automáticamente.\nEsto es útil si vuelve a descargar un archivo.",
+        "MaxRunners": "Máximo de Ejecutores",
+        "MaxRunners-Help": "El máximo de ejecutores que pueden procesar archivos en esta biblioteca al mismo tiempo.\nEstablecer en 0 para ilimitado.",
+        "Extensions": "Extensiones",
+        "Extensions-Help": "Una lista opcional de extensiones para incluir en esta biblioteca.\nSi se deja en blanco, se incluirán todos los archivos, a menos que se defina un filtro o filtro de exclusión en la pestaña `Avanzado`."
+      }
+    },
+    "LibraryFile": {
+      "Tabs": {
+        "OriginalMetadata": "Entrada",
+        "FinalMetadata": "Salida",
+        "CustomVariables": "Variables Personalizadas"
+      },
+      "Fields": {
+        "Name": "Archivo Original",
+        "Log": "Registro",
+        "OriginalSize": "Tamaño Original",
+        "OriginalSizeSuffix": "Bytes",
+        "FinalSize": "Tamaño Final",
+        "FinalSizeSuffix": "Bytes",
+        "Fingerprint": "Huella Digital",
+        "CreationTime": "Fecha de Creación",
+        "Library": "Biblioteca",
+        "Status": "Estado",
+        "Flow": "Flujo",
+        "ProcessingTime": "Tiempo de Procesamiento",
+        "OutputPath": "Ruta de Salida",
+        "FailureReason": "Razón de Fallo",
+        "ExecutedNodes": "Nodos Ejecutados",
+        "Node": "Nodo de Procesamiento",
+        "FinalMetadata": "Metadatos Finales",
+        "OriginalMetadata": "Metadatos Originales"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "Archivos",
+      "Buttons": {
+        "Ignore": "Ignorar",
+        "Process": "Procesar",
+        "ProcessOptions": "Opciones de Procesamiento",
+        "View": "Ver",
+        "MoveToTop": "Mover al Principio",
+        "Reprocess": "Reprocesar",
+        "Unhold": "Liberar",
+        "ToggleForce": "Alternar Forzar Procesamiento"
+      },
+      "Labels": {
+        "ScanTriggered": "Escaneo activado para todas las bibliotecas habilitadas"
+      },
+      "Messages": {
+        "FailedToReprocess": "Error al reprocesar",
+        "FailedToDownloadLog": "Error al descargar el registro",
+        "ReprocessingFile": "Archivo enviado para reprocesamiento"
+      }
+    },
+    "Log": {
+      "Title": "Registro",
+      "Labels": {
+        "AutoRefresh": "Actualización Automática",
+        "FailedToDownloadLog": "Error al descargar el registro.",
+        "NoMatchingData": "No hay datos coincidentes"
+      },
+      "Fields": {
+        "Text": "Texto",
+        "IncludeHigherSeverity": "Incluir Mayor Severidad",
+        "Source": "Fuente",
+        "File": "Archivo",
+        "Severity": "Severidad",
+        "Nodes": "Nodos"
+      }
+    },
+    "Login": {
+      "Messages": {
+        "InvalidUsernameOrPassword": "Nombre de usuario o contraseña inválidos",
+        "PasswordReset": "Restablecimiento de Contraseña",
+        "LockedOut": "Demasiados intentos de inicio de sesión incorrectos, actualmente está bloqueado."
+      },
+      "Fields": {
+        "Username": "Nombre de Usuario",
+        "Password": "Contraseña",
+        "UsernameOrEmail": "Nombre de Usuario o Correo Electrónico",
+        "ForgotPassword": "¿Olvidó su Contraseña?",
+        "Login": "Iniciar Sesión",
+        "Reset": "Restablecer",
+        "Cancel": "Cancelar"
+      }
+    },
+    "Nodes": {
+      "Title": "Nodos",
+      "Labels": {
+        "FileFlowsServer": "Nodo de Procesamiento Interno",
+        "Address": "Dirección",
+        "Internal": "Interno",
+        "Runners": "Ejecutores",
+        "Version": "Versión",
+        "DownloadNode": "Nodo de Descarga",
+        "UpgradeRequired": "Actualización Requerida",
+        "UpgradeRequiredHint": "El Servidor y los Nodos deben estar en la misma versión",
+        "FilesProcessed": "Archivos Procesados",
+        "PossiblyDisconnected": "Posiblemente Desconectado",
+        "Disconnected": "Desconectado"
+      },
+      "Fields": {
+        "FlowRunners": "Ejecutores de Flujo",
+        "Address": "Dirección",
+        "Enabled": "Habilitado"
+      }
+    },
+    "Reporting": {
+      "Title": "Informes",
+      "Labels": {
+        "Reports": "Informes",
+        "ScheduledReports": "Programados"
+      }
+    },
+    "Report": {
+      "Buttons": {
+        "Back": "Atrás",
+        "Generate": "Generar"
+      },
+      "Messages": {
+        "FailedToFindReport": "No se pudo encontrar el informe.",
+        "FailedToGenerateReport": "No se pudo generar el informe.",
+        "NoMatchingData": "No hay datos coincidentes",
+        "ReportEmailed": "El informe será enviado por correo a ''{email}'' una vez generado."
+      },
+      "Labels": {
+        "Combined": "Combinado"
+      },
+      "Fields": {
+        "Library": "Biblioteca",
+        "Period": "Período",
+        "Direction": "Dirección",
+        "Flow": "Flujo",
+        "Email": "Correo Electrónico",
+        "Email-Placeholder": "Ingrese una dirección de correo electrónico",
+        "Statistic": "Estadística",
+        "Node": "Nodo"
+      }
+    },
+    "ScheduledReport": {
+      "Title": "Informe Programado",
+      "Labels": {
+        "LastSent": "Último Enviado",
+        "Never": "Nunca"
+      },
+      "Fields": {
+        "Name-Help": "El nombre del informe, esto aparecerá en el asunto del correo enviado.",
+        "Report": "Informe",
+        "Report-Help": "El informe que será enviado.",
+        "Recipients": "Destinatarios",
+        "Recipients-Help": "Una lista de direcciones de correo electrónico que recibirán este informe cuando se ejecute.",
+        "Schedule": "Horario",
+        "Schedule-Help": "Cuándo se generará y enviará este informe a los destinatarios.",
+        "Enabled": "Habilitado",
+        "Enabled-Help": "Este informe programado solo se ejecutará si está habilitado.",
+        "DayOfMonth": "Día del Mes",
+        "DayOfMonth-Help": "El día del mes para ejecutar este informe. Si el día seleccionado está fuera del mes (por ejemplo, 31 en febrero), el informe se ejecutará el último día del mes.",
+        "DayOfWeek": "Día de la Semana",
+        "DayOfWeek-Help": "El día de la semana para enviar este informe programado. Esto incluirá datos de los 7 días anteriores a este día.",
+        "Direction": "Dirección",
+        "Nodes": "Nodos",
+        "Libraries": "Bibliotecas",
+        "Flows": "Flujos"
+      }
+    },
+    "Widget": {
+      "Title": "Widget",
+      "Fields": {
+        "CpuUsage": "Uso de CPU",
+        "MemoryUsage": "Uso de Memoria",
+        "TempStorage": "Almacenamiento Temporal",
+        "LogStorage": "Almacenamiento de Registros",
+        "FilesUpcoming": "Próximos",
+        "FilesRecentlyFinished": "Recientemente Terminados",
+        "StorageSaved": "Almacenamiento Ahorrado",
+        "LibraryProcessingTimes": "Tiempos de Procesamiento de Biblioteca [Segundos por Megabyte]",
+        "ProcessingTimes": "Tiempos de Procesamiento",
+        "Codecs": "Códecs",
+        "AudioCodecs": "Códecs de Audio",
+        "VideoCodecs": "Códecs de Video",
+        "VideoContainers": "Contenedor de Video",
+        "AudioContainers": "Contenedor de Audio",
+        "VideoResolution": "Resolución de Video",
+        "OpenDatabaseConnections": "Conexiones de Base de Datos Abiertas",
+        "ComicFormats": "Formatos de Cómic",
+        "ComicPages": "Páginas de Cómic",
+        "ImageFormats": "Formatos de Imagen",
+        "NvidiaSmi": "NVIDIA SMI",
+        "Processing": "Procesando",
+        "ProcessingNodes": "Nodos de Procesamiento"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "Nodo",
+      "Fields": {
+        "InternalProcessingNodeDescription": "Este es el nodo de procesamiento incorporado en FileFlows.\n\nEste nodo te permite ejecutar FileFlows sin preocuparte por instalar otros nodos en sistemas remotos y te permite usar FileFlows como una aplicación autónoma.\n\nPuedes continuar usando este nodo interno y nodos de procesamiento adicionales si lo deseas, o puedes deshabilitar este nodo y usar solo nodos adicionales.",
+        "TempPath": "Directorio Temporal",
+        "TempPath-Help": "Este directorio será utilizado por los flujos para crear archivos temporales mientras se procesa el flujo, este directorio se limpiará regularmente, así que no guardes nada importante aquí.",
+        "FlowRunners": "Ejecutores de Flujo",
+        "FlowRunners-Help": "El número de instancias de ejecutores de flujo disponibles para ejecutar un flujo.",
+        "Address": "Dirección",
+        "Address-Help": "La dirección (nombre de host o dirección IP) del nodo. No deberías cambiar esto a menos que hayas cambiado la dirección del nodo. Por ejemplo, si has cambiado el nombre del equipo del nodo de procesamiento.",
+        "Enabled": "Habilitado",
+        "MappingsDescription": "Los mapeos te permiten mapear una ruta desde el servidor a una ubicación en el nodo.\n\nPor ejemplo, puedes mapear Server:'/usr/local/bin/ffmpeg' a Node:'C:\\Utils\\ffmpeg\\ffmpeg.exe'\n\nDebes agregar mapeos para todas las bibliotecas y herramientas que serán necesarias para ejecutar en el sistema remoto.",
+        "Mappings": "Mapeos",
+        "MappingsKey": "Servidor",
+        "MappingsValue": "Nodo",
+        "VariablesDescription": "Las variables te permiten configurar variables avanzadas para establecer en un nodo de procesamiento.",
+        "Variables": "Variables",
+        "VariablesKey": "Nombre",
+        "VariablesValue": "Valor",
+        "Priority": "Prioridad",
+        "Priority-Help": "Cuanto mayor sea el número, mayor será la prioridad. Los nodos con una prioridad más alta serán favorecidos y se les asignarán archivos para procesar primero, a menos que esos nodos estén fuera de horario, deshabilitados o en su máximo de ejecutores.",
+        "Schedule": "Horario",
+        "Schedule-Help": "Este horario se ejecuta en la zona horaria del nodo",
+        "ScheduleDescription": "Esto te permite configurar cuándo estará activo este nodo.\n\nEl nodo no procesará ningún archivo fuera de este horario configurado.\n",
+        "DontChangeOwner": "Cambiar Propietario",
+        "DontChangeOwner-Help": "Cuando está marcado, el nodo cambiará el propietario de cualquier archivo recién creado a los valores PGID y PUID definidos en las variables ambientales.\nSi estas variables ambientales no están configuradas, el propietario se cambiará a ''users:nobody''.",
+        "DontSetPermissions": "Establecer Permisos",
+        "DontSetPermissions-Help": "Cuando está marcado, se establecerán permisos de archivo en cualquier archivo recién creado",
+        "PermissionsFiles": "Permisos de Archivos",
+        "PermissionsFiles-Help": "Los permisos para establecer en cualquier archivo recién creado.",
+        "PermissionsFolders": "Permisos de Carpetas",
+        "PermissionsFolders-Help": "Los permisos para establecer en cualquier carpeta recién creada.",
+        "ProcessingDescription": "Esto te permite configurar qué puede procesar este Nodo de Procesamiento.\n\nPor ejemplo, podrías limitar este nodo para que solo procese ciertas bibliotecas o un tamaño máximo de archivo si este nodo es de menor potencia.",
+        "AllLibraries": "Todas las Bibliotecas",
+        "AllLibraries-Help": "Qué bibliotecas procesará este nodo",
+        "Libraries": "Bibliotecas",
+        "Libraries-Help": "Selecciona qué bibliotecas puede procesar este nodo",
+        "MaxFileSizeMb": "Tamaño Máximo de Archivo",
+        "MaxFileSizeMb-Suffix": "MB",
+        "MaxFileSizeMb-Help": "El tamaño máximo de archivo que este Nodo de Procesamiento puede procesar. Si se establece en 0, no habrá límite.",
+        "PreExecuteScript": "Script de Pre-Ejecución",
+        "PreExecuteScript-Help": "Un script que se ejecutará antes de que se procese cualquier archivo. El resultado de este script debe ser 1 para que pase, cualquier otro valor y el nodo no procesará un archivo.",
+        "CopyMappings": "Copiar Mapeos",
+        "ProcessFileCheckInterval": "Intervalo de Verificación de Archivos",
+        "ProcessFileCheckInterval-Help": "Con qué frecuencia verificar un nuevo archivo para procesar en los nodos de procesamiento.\nEstablecer en 0 para usar el valor del sistema.",
+        "ProcessFileCheckInterval-Suffix": "segundos"
+      }
+    },
+    "Plugins": {
+      "Title": "Plugins",
+      "Labels": {
+        "PluginBrowser": "Navegador de Plugins"
+      },
+      "Messages": {
+        "UpdatingPlugins": "Actualizando Plugins",
+        "DeleteUsed": "No puedes eliminar un plugin que está en uso",
+        "DeletePlugins": "¿Estás seguro de que deseas eliminar el/los plugin(s) seleccionado(s) {count, plural, one {plugin} other {plugins}}?"
+      },
+      "Fields": {
+        "Authors": "Autores",
+        "Version": "Versión",
+        "Url": "Página Principal",
+        "Description": "Descripción",
+        "Elements": "Nodos"
+      }
+    },
+    "Revisions": {
+      "Title": "Revisiones"
+    },
+    "Scripts": {
+      "Title": "Scripts",
+      "Messages": {
+        "Imported": "Script ''{name}'' importado",
+        "Duplicated": "Scripts ''{name}'' duplicados",
+        "DeleteSystem": "No puedes eliminar un script del sistema",
+        "DeleteUsed": "No puedes eliminar un script que está en uso",
+        "NoRepositoryScriptsToUpdate": "No hay scripts del repositorio seleccionados para actualizar"
+      },
+      "Labels": {
+        "ScriptBrowser": "Repositorio de Scripts",
+        "UpdatingScripts": "Actualizando Scripts",
+        "UpdateAvailable": "Actualización Disponible"
+      },
+      "Buttons": {
+        "ScriptBrowser": "Repositorio",
+        "UpdateAllScripts": "Actualizar Todos los Scripts"
+      },
+      "Fields": {
+        "Code": "Código"
+      }
+    },
+    "Script": {
+      "Title": "Script",
+      "LanguageTitle": "Script de {Language}",
+      "Messages": {
+        "FailedToExport": "Error al exportar."
+      },
+      "Fields": {
+        "Name": "Nombre",
+        "Description": "Descripción",
+        "Code": "Código",
+        "Outputs": "Salidas",
+        "OutputsKey": "Salida",
+        "OutputsValue": "Descripción"
+      }
+    },
+    "Settings": {
+      "Title": "Configuraciones",
+      "Labels": {
+        "Email": "Correo electrónico",
+        "Database": "Base de datos",
+        "System": "Sistema",
+        "Restart": "Reiniciar FileFlows",
+        "Logging": "Registro",
+        "CheckNow": "Comprobar ahora",
+        "Updates": "Actualizaciones",
+        "FileServer": "Servidor de archivos"
+      },
+      "Messages": {
+        "Database": {
+          "NoServer": "Se requiere un servidor",
+          "NoDatabase": "Se requiere un nombre",
+          "NoUser": "Se requiere un usuario",
+          "NoPassword": "Se requiere una contraseña",
+          "TestSuccess": "Conexión a la base de datos exitosa",
+          "TestingDatabase": "Probando conexión a la base de datos",
+          "DontBackupOnUpgrade": "Desactivar las copias de seguridad automáticas de la base de datos significa que no se realizará ninguna copia de seguridad durante las actualizaciones de la aplicación. Es importante asegurarse de tener un método alternativo para respaldar su base de datos externamente para proteger sus datos.\n\n¿Está seguro de que desea desactivar estas copias de seguridad?"
+        },
+        "Restart": {
+          "Title": "Reiniciar FileFlows",
+          "Message": "¿Está seguro de que desea reiniciar FileFlows?\n\nSus configuraciones se guardarán automáticamente primero.\n\nNota: Asegúrese de que no haya flujos en ejecución."
+        },
+        "DisableTelemetryConfirm": {
+          "Title": "Desactivar Telemetría",
+          "Message": "¿Está seguro de que desea desactivar la telemetría?\n\nTenga la seguridad de que no se registra ninguna información personal. Los datos enviados incluyen información sobre los elementos de flujo en uso, los complementos utilizados, así como el número total de archivos fallidos y procesados.\n\nEsta información nos ayuda a comprender las preferencias de los usuarios e informa nuestras decisiones sobre la desactivación de elementos de flujo no utilizados."
+        },
+        "Update": {
+          "Title": "Actualización disponible",
+          "Message": "Hay una nueva actualización disponible, ¿le gustaría descargarla e instalarla?",
+          "NotAvailable": "No hay actualizaciones disponibles",
+          "Downloading": "La actualización se está descargando",
+          "Failed": "Error al comprobar si hay una actualización"
+        }
+      },
+      "Fields": {
+        "Telemetry": "Telemetría",
+        "Telemetry-Help": "La telemetría es útil para saber qué dispositivos necesitamos soportar, qué partes de Flow son las más utilizadas y en qué deberíamos centrarnos en el desarrollo.\nNo se envía información sobre sus archivos ni información identificativa.",
+        "KeepFailedFlowTempFiles": "Conservar archivos temporales fallidos",
+        "KeepFailedFlowTempFiles-Help": "Activar esta opción conservará los archivos temporales utilizados por un flujo en caso de fallo, evitando que se eliminen automáticamente.\nÚselo con precaución.",
+        "AutoUpdate": "Actualización automática",
+        "AutoUpdate-Help": "Cuando está habilitado, FileFlows se comprobará rutinariamente en busca de actualizaciones y, si se encuentra una actualización, se descargará e instalará automáticamente.",
+        "AutoUpdatePlugins": "Actualización automática de complementos",
+        "AutoUpdatePlugins-Help": "Cuando está habilitado, los complementos se comprobarán rutinariamente en busca de actualizaciones, y si se encuentran actualizaciones, se descargarán automáticamente.",
+        "AutoUpdateNodes": "Actualización automática de nodos",
+        "AutoUpdateNodes-Help": "Cuando está habilitado, los nodos externos se actualizarán automáticamente cuando se actualice el servidor de FileFlows. Esto significa que solo tendrá que actualizar la instancia del servidor de FileFlows en un entorno distribuido.",
+        "DelayBetweenNextFile": "Retraso entre archivos",
+        "DelayBetweenNextFile-Help": "El retraso en milisegundos para esperar entre el inicio de un archivo y la solicitud de uno nuevo. Configurar este retraso a cero significa que se solicitará inmediatamente un nuevo archivo. Si el retraso es demasiado corto, características como el equilibrio de carga y los límites del corredor de biblioteca pueden no funcionar correctamente, ya que un archivo puede no haberse iniciado completamente antes de la siguiente solicitud.",
+        "DelayBetweenNextFile-Suffix": "milisegundos",
+        "LogQueueMessages": "Registrar mensajes de cola",
+        "LogQueueMessages-Help": "Esto provocará un registro excesivo de todos los archivos que se coloquen en cola/descolocan en el observador de biblioteca.\nActívelo si tiene problemas con archivos que no aparecen, desactívelo nuevamente después para evitar llenar sus archivos de registro con registros excesivos.",
+        "LoggingPath": "Directorio de registro",
+        "LoggingPath-Help": "Aquí se crearán los archivos de registro.",
+        "LogFileRetention": "Retención de archivos de registro",
+        "LogFileRetention-Suffix": "Días",
+        "LogFileRetention-Help": "Cuánto tiempo deben conservarse los archivos de registro antes de ser eliminados.",
+        "LogEveryRequest": "Registrar cada solicitud",
+        "LogEveryRequest-Help": "Si se debe registrar cada solicitud al servidor.",
+        "PluginRepositoryUrls": "Repositorios de complementos",
+        "PluginRepositoryUrls-Help": "Una lista separada por líneas de URLs de repositorios de complementos a utilizar al buscar complementos.\nEl orden es importante, si varios repositorios contienen el mismo complemento, se utilizará el primer repositorio como su fuente.\nEl repositorio predeterminado siempre se agregará al final de esta lista.",
+        "CheckForUpdateNow": "Comprobar actualización",
+        "CheckForUpdateNow-Help": "Comprobar si hay una actualización ahora y, si se encuentra, descargar la actualización e instalarla cuando no haya flujos en ejecución.",
+        "ShowFileAddedNotifications": "Notificaciones de archivo agregado",
+        "ShowFileAddedNotifications-Help": "Si se debe mostrar una notificación en el toast en la consola web cuando se ha encontrado un archivo y se ha agregado a la cola.",
+        "HideProcessingStartedNotifications": "Notificaciones de procesamiento iniciado",
+        "HideProcessingStartedNotifications-Help": "Si se debe mostrar una notificación en el toast en la consola web cuando un archivo comienza a procesarse",
+        "HideProcessingFinishedNotifications": "Notificaciones de procesamiento terminado",
+        "HideProcessingFinishedNotifications-Help": "Si se debe mostrar una notificación en el toast en la consola web cuando un archivo termina de procesarse",
+        "ProcessFileCheckInterval": "Intervalo de verificación de archivos",
+        "ProcessFileCheckInterval-Help": "Con qué frecuencia verificar un nuevo archivo para procesar en los nodos de procesamiento.",
+        "ProcessFileCheckInterval-Suffix": "segundos",
+        "Language": "Idioma",
+        "Language-Help": "El idioma que se utilizará en el sistema.",
+        "DockerModsOnServer": "DockerMods en el servidor",
+        "DockerModsOnServer-Help": "DockerMods debe ejecutarse automáticamente al iniciar el servidor o cuando se habilite específicamente. De lo contrario, solo se ejecutarán cuando se inicie un flujo de trabajo.",
+        "Database": {
+          "Description": "Aquí puede configurar qué base de datos utilizará FileFlows.\nNota: Cualquier cambio aquí requerirá que reinicie FileFlows para que pueda migrar sus datos y, si es necesario, crear la nueva base de datos.",
+          "Type": "Tipo",
+          "Type-Help": "El tipo de base de datos a utilizar, el tipo predeterminado es SQLite, que no requiere configuración adicional.",
+          "Server": "Servidor",
+          "Server-Help": "La dirección del servidor de base de datos y el puerto o instancia nombrada si es necesario",
+          "Port": "Puerto",
+          "Port-Help": "El puerto predeterminado para MySQL es 3306",
+          "Port-Help-Postgres": "El puerto predeterminado para Postgres es 5432",
+          "Port-Help-MySql": "El puerto predeterminado para MySQL es 3306",
+          "Port-Help-SQLServer": "El puerto predeterminado para SQL Server es 1433",
+          "Name": "Nombre",
+          "Name-Help": "El nombre de la base de datos a crear, si se deja en blanco se utilizará 'FileFlows'",
+          "User": "Usuario",
+          "User-Help": "El usuario utilizado para conectarse a la base de datos",
+          "Password": "Contraseña",
+          "Password-Help": "La contraseña del usuario para conectarse a la base de datos",
+          "RecreateDatabase": "Recrear base de datos",
+          "RecreateDatabase-Help": "Cuando está habilitado, si la nueva base de datos ya existe, se eliminará y se recreará. De lo contrario, si está desactivado y la base de datos ya existe, no se migrará ningún dato y la nueva base de datos se utilizará tal como está.",
+          "DontBackupOnUpgrade": "No hacer copia de seguridad en la actualización",
+          "DontBackupOnUpgrade-Help": "Las copias de seguridad de la base de datos implican copiar todos sus datos de base de datos en un archivo SQLite, lo que puede llevar tiempo. Si ya hace copias de seguridad de su base de datos externa por otros medios, puede optar por desactivar este proceso."
+        },
+        "FileServer": {
+          "Description": "Esto permite que nodos de procesamiento externos descarguen un archivo para su procesamiento sin mapeo.\n\nEsto expone tus archivos a través de tu red, así que desactívalo si no estás en una red de confianza.",
+          "Enabled": "Habilitado",
+          "FilePermissions": "Permisos de Archivo",
+          "FilePermissions-Help": "Permisos opcionales para otorgar a los archivos creados o modificados.",
+          "FolderPermissions": "Permisos de Carpeta",
+          "FolderPermissions-Help": "Permisos opcionales para otorgar a las carpetas creadas o modificadas.",
+          "OwnerGroup": "Grupo Propietario",
+          "OwnerGroup-Placeholder": "users:nobody",
+          "OwnerGroup-Help": "Propietario:grupo opcional para cambiar el propietario de los archivos o carpetas creados o modificados.",
+          "AllowList": "Rutas Permitidas",
+          "AllowList-Placeholder": "Si se deja vacío, se permitirán todas las rutas excepto las del sistema.",
+          "AllowList-Help": "Una lista separada por nuevas líneas de rutas que se permiten acceder al servidor de archivos expuesto.\nEstas son las ubicaciones a las que se puede leer/escribir de forma remota.\nNota: Todas las rutas de la biblioteca están automáticamente permitidas."
+        },
+        "Logging": {
+          "Description": "Aquí puede configurar cómo y dónde se registran las acciones.",
+          "FileLogging": "Registrar en un archivo",
+          "FileLogging-Help": "Registrar la salida en un archivo, lo que puede ser útil para la depuración.",
+          "LogFile": "Archivo de registro",
+          "LogFile-Help": "El archivo donde se debe registrar la salida.",
+          "ConsoleLogging": "Registrar en la consola",
+          "ConsoleLogging-Help": "Registrar la salida en la consola web.",
+          "LogLevel": "Nivel de registro",
+          "LogLevel-Help": "El nivel de detalle a registrar, DEBUG es el más detallado y ERROR es el menos detallado."
+        },
+        "Update": {
+          "UpdateAvailable": "Actualización disponible"
+        }
+      },
+      "Confirm": {
+        "Restart": "¿Está seguro de que desea reiniciar?",
+        "Remove": "¿Está seguro de que desea eliminar esto?",
+        "Database": {
+          "Recreate": "¿Está seguro de que desea recrear la base de datos?"
+        }
+      }
+    },
+    "Estadísticas": {
+      "Título": "Estadísticas"
+    },
+    "Tareas": {
+      "Título": "Tareas",
+      "Mensajes": {
+        "NoScripts": "No se encontraron scripts para crear una tarea.",
+        "NoHistory": "Esta tarea no tiene historial de ejecución disponible."
+      },
+      "Botones": {
+        "EditScript": "Editar Script"
+      }
+    },
+    "Usuarios": {
+      "Título": "Usuarios",
+      "Singular": "Usuario",
+      "Mensajes": {
+        "CannotDeleteYourself": "No puedes eliminarte a ti mismo.",
+        "EmailInUse": "La dirección de correo electrónico ''{email}'' ya está en uso por otro usuario ''{user}''."
+      },
+      "Etiquetas": {
+        "LastLoggedIn": "Último Inicio de Sesión",
+        "Address": "Dirección",
+        "Never": "Nunca",
+        "Administrator": "Administrador"
+      },
+      "Campos": {
+        "IsAdmin": "Administrador",
+        "Email": "Correo Electrónico",
+        "Password": "Contraseña",
+        "Roles": "Roles"
+      }
+    },
+    "AccessControl": {
+      "Title": "Control de Acceso",
+      "Single": "Entrada de Control de Acceso",
+      "Columns": {
+        "Start": "Inicio",
+        "End": "Fin",
+        "Allow": "Permitir"
+      },
+      "Buttons": {
+        "MoveUp": "Mover Arriba",
+        "MoveDown": "Mover Abajo"
+      },
+      "Messages": {
+        "InvalidIPAddress": "'{address}' no es una dirección IP válida.",
+        "FamilyMismatch": "Las direcciones IP de inicio y fin deben ser del mismo tipo.",
+        "EndMustBeGreaterThan": "La dirección final debe ser mayor que la dirección de inicio.",
+        "MoveFailed": "Error al mover las entradas."
+      },
+      "Labels": {
+        "Console": "Consola Web",
+        "Remote": "Remoto / Nodos de Procesamiento"
+      },
+      "Fields": {
+        "Description": "Descripción",
+        "Description-Placeholder": "Una descripción opcional para describir esta entrada",
+        "Start": "Dirección de Inicio",
+        "Start-Help": "La dirección IP de inicio puede ser IPv4 o IPv6.",
+        "End": "Dirección de Fin",
+        "End-Placeholder": "Dirección final opcional",
+        "End-Help": "Dirección IP final opcional, debe ser mayor que la dirección de inicio si se establece y del mismo tipo. De lo contrario, este valor final será ignorado.",
+        "Allow": "Permitir",
+        "Allow-Help": "Si esta entrada de control de acceso tiene permiso para acceder al sistema o no."
+      }
+    },
+    "Audit": {
+      "Title": "Registro de Auditoría",
+      "Columns": {
+        "Date": "Fecha",
+        "Type": "Tipo",
+        "Action": "Acción",
+        "Operator": "Operador",
+        "IPAddress": "Dirección IP",
+        "Summary": "Resumen"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "Tarea"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "Historial de Tareas",
+      "Fields": {
+        "RunHistory": "Historial"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "Ejecución de Tarea",
+      "Fields": {
+        "RunAt": "Ejecutar En",
+        "Success": "Éxito",
+        "ReturnValue": "Valor de Retorno",
+        "Log": "Registro"
+      }
+    },
+    "Notifications": {
+      "Title": "Notificaciones"
+    },
+    "RepositoryObject": {
+      "Title": "Objeto del Repositorio",
+      "Fields": {
+        "Author": "Autor",
+        "Revision": "Revisión",
+        "Description": "Descripción",
+        "Code": "Código"
+      }
+    },
+    "Task": {
+      "Title": "Tarea",
+      "Fields": {
+        "Script": "Script",
+        "Script-Help": "El script que se ejecutará según el horario configurado.",
+        "Schedule": "Horario",
+        "Schedule-Help": "Cuándo debe ejecutarse este script.",
+        "CustomSchedule": "Horario Personalizado",
+        "CustomSchedule-Help": "Esta tarea se ejecutará una vez por cada bloque de 15 minutos al inicio de ese bloque.",
+        "Type": "Tipo",
+        "Type-Help": "El tipo de tarea. Las tareas basadas en tiempo se ejecutarán a las horas configuradas. Otras tareas son basadas en eventos.",
+        "TimeSchedule": "Horario",
+        "TimeSchedule-Help": "Cuándo se ejecutará la tarea."
+      }
+    },
+    "Variables": {
+      "Title": "Variables"
+    },
+    "Variable": {
+      "Title": "Variable"
+    },
+    "Webhook": {
+      "Title": "Webhook",
+      "Fields": {
+        "Route": "Ruta",
+        "Method": "Método",
+        "Code": "Código"
+      }
+    },
+    "Webhooks": {
+      "Title": "Webhooks",
+      "Columns": {
+        "Method": "Método",
+        "Route": "Ruta"
+      }
+    }
+  }
+}

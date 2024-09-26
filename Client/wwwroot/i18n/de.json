@@ -587,6 +587,16 @@
       }
     }
   },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*Größer als*: Übereinstimmung, wenn das Datum älter als der angegebene Zeitraum ist.\n*Kleiner als*: Übereinstimmung, wenn das Datum neuer als der angegebene Zeitraum ist.\n*Zwischen*: Übereinstimmung, wenn das Datum im angegebenen Bereich liegt.\n*Vor*: Übereinstimmung, wenn das Datum vor dem angegebenen Datum liegt.\n*Nach*: Übereinstimmung, wenn das Datum nach dem angegebenen Datum liegt."
+    }
+  },
+  "Validators": {
+    "Required": "Erforderlich",
+    "Range": "Muss zwischen {Minimum} und {Maximum} liegen",
+    "Pattern": "Ist nicht gültig"
+  },
   "Pages": {
     "Dashboard": {
       "Title": "Dashboard",
@@ -1415,15 +1425,5 @@
         "Route": "Route"
       }
     }
-  },
-  "Inputs": {
-    "InputDateCompare": {
-      "Help": "*Größer als*: Übereinstimmung, wenn das Datum älter als der angegebene Zeitraum ist.\n*Kleiner als*: Übereinstimmung, wenn das Datum neuer als der angegebene Zeitraum ist.\n*Zwischen*: Übereinstimmung, wenn das Datum im angegebenen Bereich liegt.\n*Vor*: Übereinstimmung, wenn das Datum vor dem angegebenen Datum liegt.\n*Nach*: Übereinstimmung, wenn das Datum nach dem angegebenen Datum liegt."
-    }
-  },
-  "Validators": {
-    "Required": "Erforderlich",
-    "Range": "Muss zwischen {Minimum} und {Maximum} liegen",
-    "Pattern": "Ist nicht gültig"
   }
 }
