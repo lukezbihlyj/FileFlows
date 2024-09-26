@@ -47,7 +47,7 @@
     "Scripts": "Scripts",
     "Plugins": "Complementos",
     "SubFlow": "Sub Flujo",
-    "SubFlows": "Sub Flujos",
+    "SubFlows": "Sub Flows",
     "ShowHidden": "Mostrar Ocultos",
     "DownloadLog": "Descargar Registro",
     "DownloadLogShort": "Registro",
@@ -117,7 +117,7 @@
     "LogPartialNotAvailable": "No se pudo encontrar registro parcial para el nodo.",
     "ViewLog": "Ver Registro",
     "SetStatusProcessed": "Marcar como Procesado",
-    "CommunityFlows": "Flujos Comunitarios",
+    "CommunityFlows": "Flows Comunitarios",
     "Properties": "Propiedades",
     "MissingDependencies": "Dependencias Faltantes",
     "MissingDependenciesMessage": "Los siguientes complementos faltantes deben ser descargados antes de usar esta plantilla:\n\n#LIST#",
@@ -184,243 +184,243 @@
       }
     },
     "AddFile": {
-      "Title": "Añadir Archivo",
-      "Description": "Añadir archivos o URLs manualmente para procesamiento.",
+      "Title": "Agregar Archivo",
+      "Description": "Agregar manualmente archivos o URLs para su procesamiento.",
       "Fields": {
-        "Mode": "",
-        "Flow": "",
-        "Node": "",
-        "AnyNode": "",
-        "List": "",
-        "Raw": ""
+        "Mode": "Modo de Entrada",
+        "Flow": "Flujo",
+        "Node": "Nodo",
+        "AnyNode": "Cualquier Nodo",
+        "List": "Lista",
+        "Raw": "Entrada Masiva (Bloque de Texto)"
       }
     },
     "ChangePassword": {
-      "Title": "",
-      "PasswordMismatch": "",
-      "OldPassword": "",
-      "NewPassword": "",
-      "NewPasswordConfirm": "",
-      "InvalidPassword": "",
-      "MinimumLength": "",
-      "Changed": ""
+      "Title": "Cambiar Contraseña",
+      "PasswordMismatch": "Las contraseñas no coinciden.",
+      "OldPassword": "Contraseña Anterior",
+      "NewPassword": "Nueva Contraseña",
+      "NewPasswordConfirm": "Confirmar",
+      "InvalidPassword": "La contraseña anterior es inválida",
+      "MinimumLength": "La nueva contraseña es demasiado corta",
+      "Changed": "Contraseña cambiada"
     },
     "FileBrowser": {
-      "FileTitle": "",
-      "DirectoryTitle": ""
+      "FileTitle": "Seleccionar un Archivo",
+      "DirectoryTitle": "Seleccionar un Directorio"
     },
     "Import": {
-      "Title": "",
-      "Message": ""
+      "Title": "Importar Flujo",
+      "Message": "Selecciona un flujo exportado para importar en el sistema."
     },
     "ImportScript": {
-      "Title": "",
+      "Title": "Importar Script",
       "Messages": {
-        "NoMoreImports": ""
+        "NoMoreImports": "No hay más importaciones disponibles para este script"
       }
     },
     "PauseDialog": {
-      "Title": "",
-      "Message": ""
+      "Title": "Pausar Procesamiento",
+      "Message": "Selecciona la cantidad de tiempo para pausar el procesamiento.\nNota: Los flows actuales continuarán ejecutándose, pero no se ejecutarán otros flows hasta que se cumpla este tiempo."
     },
     "ReprocessDialog": {
-      "Title": "",
-      "Description": "",
+      "Title": "Reprocesar",
+      "Description": "Reprocesar el(los) archivo(s) seleccionado(s) utilizando los siguientes parámetros",
       "ProcessOptions": {
-        "Title": "",
-        "Description": ""
+        "Title": "Opciones de Proceso",
+        "Description": "Modificar los parámetros de procesamiento para el(los) archivo(s) seleccionado(s)"
       },
       "Fields": {
-        "Flow": "",
-        "Node": "",
-        "AnyNode": "",
-        "SameFlow": "",
-        "Position": "",
-        "BottomOfQueue": "",
-        "TopOfQueue": "",
-        "CustomVariablesMode": "",
-        "Original": "",
-        "Merge": "",
-        "Replace": "",
-        "CustomVariables": "",
-        "CustomVariablesKey": "",
-        "CustomVariablesValue": ""
+        "Flow": "Flujo",
+        "Node": "Nodo",
+        "AnyNode": "Cualquier Nodo",
+        "SameFlow": "Sin cambios",
+        "Position": "Posición",
+        "BottomOfQueue": "Final de la cola",
+        "TopOfQueue": "Inicio de la cola",
+        "CustomVariablesMode": "Variables Personalizadas",
+        "Original": "Usar variables personalizadas originales",
+        "Merge": "Fusionar variables personalizadas con originales",
+        "Replace": "Reemplazar variables personalizadas originales",
+        "CustomVariables": "Variables Personalizadas",
+        "CustomVariablesKey": "Variable Personalizada",
+        "CustomVariablesValue": "Valor"
       }
     },
     "ResumeDialog": {
-      "Title": "",
-      "Message": ""
+      "Title": "Reanudar Procesamiento",
+      "Message": "¿Estás seguro de que quieres reanudar el procesamiento?"
     },
     "ScriptLanguage": {
-      "Title": "",
+      "Title": "Lenguaje de Script",
       "Labels": {
-        "JavaScriptDescription": "",
-        "BatchDescription": "",
-        "CSharpDescription": "",
-        "PowerShellDescription": "",
-        "ShellDescription": ""
+        "JavaScriptDescription": "Los scripts de JavaScript se ejecutan dentro del ejecutor de FileFlows, lo que te permite leer y escribir variables y acceder a todas las funciones auxiliares dentro de FileFlows.",
+        "BatchDescription": "Los archivos por lotes solo se pueden ejecutar en sistemas Windows. Pueden leer variables básicas pero no pueden actualizar ni acceder a objetos de FileFlows durante la ejecución.",
+        "CSharpDescription": "Los scripts de C# pueden interactuar con más partes de FileFlows y son los más poderosos. Usando el mismo lenguaje que FileFlows, permiten una mayor interacción con el sistema.",
+        "PowerShellDescription": "Los scripts de PowerShell solo se pueden ejecutar en sistemas Windows. Pueden leer variables básicas pero no pueden actualizar ni acceder a objetos de FileFlows durante la ejecución.",
+        "ShellDescription": "Los scripts de Shell se ejecutan en sistemas basados en Unix (Linux, MacOS, Docker). Pueden leer variables básicas pero no pueden actualizar ni acceder a objetos de FileFlows durante la ejecución."
       }
     },
     "FlowTemplatePicker": {
-      "Title": ""
+      "Title": "Selecciona una plantilla para empezar"
     }
   },
   "Enums": {
     "AuditAction": {
-      "Added": "",
-      "Updated": "",
-      "Deleted": "",
-      "Login": "",
-      "LoginFailed": "",
-      "ChangePassword": "",
-      "PasswordResetRequest": "",
-      "PasswordReset": ""
+      "Added": "Añadido",
+      "Updated": "Actualizado",
+      "Deleted": "Eliminado",
+      "Login": "Iniciar sesión",
+      "LoginFailed": "Error de inicio de sesión",
+      "ChangePassword": "Cambiar contraseña",
+      "PasswordResetRequest": "Solicitud de restablecimiento de contraseña",
+      "PasswordReset": "Restablecimiento de contraseña"
     },
     "Days": {
-      "Monday": "",
-      "Tuesday": "",
-      "Wednesday": "",
-      "Thursday": "",
-      "Friday": "",
-      "Saturday": "",
-      "Sunday": "",
-      "Mon": "",
-      "Tue": "",
-      "Wed": "",
-      "Thu": "",
-      "Fri": "",
-      "Sat": "",
-      "Sun": ""
+      "Monday": "Lunes",
+      "Tuesday": "Martes",
+      "Wednesday": "Miércoles",
+      "Thursday": "Jueves",
+      "Friday": "Viernes",
+      "Saturday": "Sábado",
+      "Sunday": "Domingo",
+      "Mon": "Lun",
+      "Tue": "Mar",
+      "Wed": "Mié",
+      "Thu": "Jue",
+      "Fri": "Vie",
+      "Sat": "Sáb",
+      "Sun": "Dom"
     },
     "DateCompareMode": {
-      "Any": "",
-      "GreaterThan": "",
-      "LessThan": "",
-      "Between": "",
-      "NotBetween": "",
-      "After": "",
-      "Before": ""
+      "Any": "Cualquiera",
+      "GreaterThan": "Mayor que",
+      "LessThan": "Menor que",
+      "Between": "Entre",
+      "NotBetween": "No entre",
+      "After": "Después",
+      "Before": "Antes"
     },
     "FilesSortBy": {
-      "Size": "",
-      "SizeDesc": "",
-      "Savings": "",
-      "SavingsDesc": "",
-      "Time": "",
-      "TimeDesc": ""
+      "Size": "Tamaño",
+      "SizeDesc": "Tamaño Descendente",
+      "Savings": "Ahorros",
+      "SavingsDesc": "Ahorros Descendentes",
+      "Time": "Tiempo",
+      "TimeDesc": "Tiempo Descendente"
     },
     "FileStatus": {
-      "Any": "",
-      "OnHold": "",
-      "Disabled": "",
-      "OutOfSchedule": "",
-      "Processed": "",
-      "Processing": "",
-      "Unprocessed": "",
-      "FlowNotFound": "",
-      "ProcessingFailed": "",
-      "Duplicate": "",
-      "MappingIssue": "",
-      "MissingLibrary": "",
-      "ReprocessByFlow": ""
+      "Any": "Cualquiera",
+      "OnHold": "En Espera",
+      "Disabled": "Deshabilitado",
+      "OutOfSchedule": "Fuera de Horario",
+      "Processed": "Procesado",
+      "Processing": "Procesando",
+      "Unprocessed": "No procesado",
+      "FlowNotFound": "Flujo No Encontrado",
+      "ProcessingFailed": "Error de Procesamiento",
+      "Duplicate": "Duplicado",
+      "MappingIssue": "Problema de Mapeo",
+      "MissingLibrary": "Biblioteca Faltante",
+      "ReprocessByFlow": "Reprocesar por Flujo"
     },
     "FlowType": {
-      "Standard": "",
-      "Failure": "",
-      "SubFlow": ""
+      "Standard": "Estándar",
+      "Failure": "Fallo",
+      "SubFlow": "Subflujo"
     },
     "LogType": {
-      "Debug": "",
-      "Error": "",
-      "Info": "",
-      "Warning": ""
+      "Debug": "Depuración",
+      "Error": "Error",
+      "Info": "Información",
+      "Warning": "Advertencia"
     },
     "MatchRange": {
-      "Any": "",
-      "GreaterThan": "",
-      "LessThan": "",
-      "Between": "",
-      "NotBetween": "",
-      "After": "",
-      "Before": ""
+      "Any": "Cualquiera",
+      "GreaterThan": "Mayor que",
+      "LessThan": "Menor que",
+      "Between": "Entre",
+      "NotBetween": "No entre",
+      "After": "Después",
+      "Before": "Antes"
     },
     "MathValue": {
-      "Equals": "",
-      "NotEquals": "",
-      "GreaterThan": "",
-      "LessThan": "",
-      "Between": "",
-      "NotBetween": "",
-      "GreaterThanOrEqual": "",
-      "LessThanOrEqual": ""
+      "Equals": "Igual a",
+      "NotEquals": "No igual a",
+      "GreaterThan": "Mayor que",
+      "LessThan": "Menor que",
+      "Between": "Entre",
+      "NotBetween": "No entre",
+      "GreaterThanOrEqual": "Mayor o Igual",
+      "LessThanOrEqual": "Menor o Igual"
     },
     "Periods": {
-      "Minutes": "",
-      "Hours": "",
-      "Days": "",
-      "Weeks": ""
+      "Minutes": "Minutos",
+      "Hours": "Horas",
+      "Days": "Días",
+      "Weeks": "Semanas"
     },
     "ProcessingOrder": {
-      "AsFound": "",
-      "Alphabetical": "",
-      "LargestFirst": "",
-      "NewestFirst": "",
-      "OldestFirst": "",
-      "Random": "",
-      "SmallestFirst": ""
+      "AsFound": "Como se encontró (Por defecto)",
+      "Alphabetical": "Alfabético",
+      "LargestFirst": "Más grande primero",
+      "NewestFirst": "Más nuevo primero",
+      "OldestFirst": "Más antiguo primero",
+      "Random": "Aleatorio",
+      "SmallestFirst": "Más pequeño primero"
     },
     "ProcessingPriority": {
-      "Lowest": "",
-      "Low": "",
-      "Normal": "",
-      "High": "",
-      "Highest": ""
+      "Lowest": "Más bajo",
+      "Low": "Bajo",
+      "Normal": "Normal",
+      "High": "Alto",
+      "Highest": "Más alto"
     },
     "ProcessingNodeStatus": {
-      "Offline": "",
-      "Idle": "",
-      "Processing": "",
-      "Disabled": "",
-      "OutOfSchedule": "",
-      "VersionMismatch": ""
+      "Offline": "Desconectado",
+      "Idle": "Inactivo",
+      "Processing": "Procesando",
+      "Disabled": "Deshabilitado",
+      "OutOfSchedule": "Fuera de Horario",
+      "VersionMismatch": "Incompatibilidad de Versión"
     },
     "ReportDirection": {
-      "Inbound": "",
-      "Outbound": ""
+      "Inbound": "Entrante",
+      "Outbound": "Saliente"
     },
     "ReportSchedule": {
-      "Daily": "",
-      "Weekly": "",
-      "Monthly": ""
+      "Daily": "Diario",
+      "Weekly": "Semanal",
+      "Monthly": "Mensual"
     },
     "SecurityMode": {
-      "Off": "",
-      "Local": "",
-      "OpenIdConnect": ""
+      "Off": "Ninguno",
+      "Local": "Usuarios Locales",
+      "OpenIdConnect": "Open ID Connect"
     },
     "TaskType": {
-      "FileAdded": "",
-      "FileProcessed": "",
-      "FileProcessing": "",
-      "FileProcessFailed": "",
-      "FileProcessSuccess": "",
-      "FileFlowsServerUpdating": "",
-      "FileFlowsServerUpdateAvailable": ""
+      "FileAdded": "Archivo Añadido",
+      "FileProcessed": "Archivo Procesado",
+      "FileProcessing": "Procesando Archivo",
+      "FileProcessFailed": "Error en el Proceso",
+      "FileProcessSuccess": "Proceso Exitoso",
+      "FileFlowsServerUpdating": "Actualizando Servidor",
+      "FileFlowsServerUpdateAvailable": "Actualización Disponible"
     },
     "UserRole": {
-      "Files": "",
-      "Flows": "",
-      "Libraries": "",
-      "Nodes": "",
-      "Plugins": "",
-      "Scripts": "",
-      "Variables": "",
-      "Revisions": "",
-      "Tasks": "",
-      "Webhooks": "",
-      "Log": "",
-      "PauseProcessing": "",
-      "DockerMods": ""
+      "Files": "Archivos",
+      "Flows": "Flows",
+      "Libraries": "Bibliotecas",
+      "Nodes": "Nodos",
+      "Plugins": "Complementos",
+      "Scripts": "Scripts",
+      "Variables": "Variables",
+      "Revisions": "Revisiones",
+      "Tasks": "Tareas",
+      "Webhooks": "Webhooks",
+      "Log": "Registro",
+      "PauseProcessing": "Pausar Procesamiento",
+      "DockerMods": "Modificaciones Docker"
     }
   },
   "ErrorMessages": {
@@ -655,8 +655,8 @@
         "FlowProperties": "Propiedades del Flujo",
         "SubFlowHelp": "Para agregar campos de entrada a un subflujo y poder pasar parámetros personalizados a este subflujo, créalos en la pestaña `Campos`.\n\nUn subflujo debe tener una única `Entrada`, que puede ser cualquier elemento de flujo de entrada válido, por ejemplo, `Archivo de Entrada`, `Archivo de Video`, etc.",
         "OpenScriptBrowser": "Abrir Navegador de Scripts",
-        "SubFlowBrowser": "Navegador de Sub Flujos",
-        "OpenSubFlowBrowser": "Abrir Navegador de Sub Flujos"
+        "SubFlowBrowser": "Navegador de Sub Flows",
+        "OpenSubFlowBrowser": "Abrir Navegador de Sub Flows"
       },
       "Messages": {
         "Close": "¿Está seguro de que desea salir y perder todos los cambios no guardados?",
@@ -701,7 +701,7 @@
       }
     },
     "Flows": {
-      "Title": "Flujos",
+      "Title": "Flows",
       "Template": {
         "Title": "Agregar Flujo",
         "Fields": {
@@ -713,9 +713,9 @@
         "Repository": "Repositorio"
       },
       "Labels": {
-        "FailureFlows": "Flujos de Fallo",
-        "StandardFlows": "Flujos Estándar",
-        "SubFlows": "Sub Flujos"
+        "FailureFlows": "Flows de Fallo",
+        "StandardFlows": "Flows Estándar",
+        "SubFlows": "Sub Flows"
       },
       "Fields": {
         "Author": "Autor",
@@ -748,7 +748,7 @@
         "Files": "{TotalString} {TotalFiles, plural, one {Archivo} other {Archivos}}"
       },
       "ErrorMessages": {
-        "NoFlows": "No hay flujos configurados.\nCree un flujo antes de agregar o actualizar una biblioteca."
+        "NoFlows": "No hay flows configurados.\nCree un flujo antes de agregar o actualizar una biblioteca."
       }
     },
     "Library": {
@@ -982,7 +982,7 @@
         "Direction": "Dirección",
         "Nodes": "Nodos",
         "Libraries": "Bibliotecas",
-        "Flows": "Flujos"
+        "Flows": "Flows"
       }
     },
     "Widget": {
@@ -1017,7 +1017,7 @@
       "Fields": {
         "InternalProcessingNodeDescription": "Este es el nodo de procesamiento incorporado en FileFlows.\n\nEste nodo te permite ejecutar FileFlows sin preocuparte por instalar otros nodos en sistemas remotos y te permite usar FileFlows como una aplicación autónoma.\n\nPuedes continuar usando este nodo interno y nodos de procesamiento adicionales si lo deseas, o puedes deshabilitar este nodo y usar solo nodos adicionales.",
         "TempPath": "Directorio Temporal",
-        "TempPath-Help": "Este directorio será utilizado por los flujos para crear archivos temporales mientras se procesa el flujo, este directorio se limpiará regularmente, así que no guardes nada importante aquí.",
+        "TempPath-Help": "Este directorio será utilizado por los flows para crear archivos temporales mientras se procesa el flujo, este directorio se limpiará regularmente, así que no guardes nada importante aquí.",
         "FlowRunners": "Ejecutores de Flujo",
         "FlowRunners-Help": "El número de instancias de ejecutores de flujo disponibles para ejecutar un flujo.",
         "Address": "Dirección",
@@ -1142,7 +1142,7 @@
         },
         "Restart": {
           "Title": "Reiniciar FileFlows",
-          "Message": "¿Está seguro de que desea reiniciar FileFlows?\n\nSus configuraciones se guardarán automáticamente primero.\n\nNota: Asegúrese de que no haya flujos en ejecución."
+          "Message": "¿Está seguro de que desea reiniciar FileFlows?\n\nSus configuraciones se guardarán automáticamente primero.\n\nNota: Asegúrese de que no haya flows en ejecución."
         },
         "DisableTelemetryConfirm": {
           "Title": "Desactivar Telemetría",
@@ -1182,7 +1182,7 @@
         "PluginRepositoryUrls": "Repositorios de complementos",
         "PluginRepositoryUrls-Help": "Una lista separada por líneas de URLs de repositorios de complementos a utilizar al buscar complementos.\nEl orden es importante, si varios repositorios contienen el mismo complemento, se utilizará el primer repositorio como su fuente.\nEl repositorio predeterminado siempre se agregará al final de esta lista.",
         "CheckForUpdateNow": "Comprobar actualización",
-        "CheckForUpdateNow-Help": "Comprobar si hay una actualización ahora y, si se encuentra, descargar la actualización e instalarla cuando no haya flujos en ejecución.",
+        "CheckForUpdateNow-Help": "Comprobar si hay una actualización ahora y, si se encuentra, descargar la actualización e instalarla cuando no haya flows en ejecución.",
         "ShowFileAddedNotifications": "Notificaciones de archivo agregado",
         "ShowFileAddedNotifications-Help": "Si se debe mostrar una notificación en el toast en la consola web cuando se ha encontrado un archivo y se ha agregado a la cola.",
         "HideProcessingStartedNotifications": "Notificaciones de procesamiento iniciado",
@@ -1233,87 +1233,87 @@
           "AllowList-Help": "Una lista separada por nuevas líneas de rutas que se permiten acceder al servidor de archivos expuesto.\nEstas son las ubicaciones a las que se puede leer/escribir de forma remota.\nNota: Todas las rutas de la biblioteca están automáticamente permitidas."
         },
         "License": {
-          "Key": "",
-          "Email": "",
-          "Status": "",
-          "Level": "",
-          "ProcessingNodes": "",
-          "Flags": "",
-          "ExpiryDate": "",
-          "Files": ""
+          "Key": "Clave de Licencia",
+          "Email": "Correo Electrónico de Licencia",
+          "Status": "Estado",
+          "Level": "Nivel",
+          "ProcessingNodes": "Nodos de Procesamiento",
+          "Flags": "Características",
+          "ExpiryDate": "Fecha de Expiración",
+          "Files": "Archivos"
         },
         "Smtp": {
-          "Server": "",
-          "Server-Help": "",
-          "Port": "",
-          "Port-Help": "",
-          "Security": "",
-          "Security-Help": "",
-          "User": "",
-          "User-Help": "",
-          "Password": "",
-          "Password-Help": "",
-          "From": "",
-          "From-Help": "",
-          "FromAddress": "",
-          "FromAddress-Help": ""
+          "Server": "Servidor",
+          "Server-Help": "El servidor de correo electrónico",
+          "Port": "Puerto",
+          "Port-Help": "El puerto del servidor de correo electrónico",
+          "Security": "Seguridad",
+          "Security-Help": "La seguridad a utilizar al enviar correos electrónicos",
+          "User": "Usuario",
+          "User-Help": "Un nombre de usuario opcional para enviar correos electrónicos",
+          "Password": "Contraseña",
+          "Password-Help": "La contraseña del usuario SMTP",
+          "From": "De",
+          "From-Help": "El nombre del usuario desde el cual se enviarán los correos electrónicos",
+          "FromAddress": "Dirección de",
+          "FromAddress-Help": "La dirección de correo electrónico del usuario desde el cual se enviarán los correos electrónicos"
         },
         "Security": {
-          "Title": "",
-          "Mode": "",
-          "Mode-Help": "",
-          "AccessToken": "",
-          "AccessToken-Help": "",
-          "TokenExpiryMinutes": "",
-          "TokenExpiryMinutes-Help": "",
-          "Description": "",
-          "Authority": "",
-          "Authority-Help": "",
-          "ClientId": "",
-          "ClientId-Help": "",
-          "ClientSecret": "",
-          "ClientSecret-Help": "",
-          "CallbackAddress": "",
-          "CallbackAddress-Help": "",
-          "MaxAttempts": "",
-          "MaxAttempts-Help": "",
-          "LockoutMinutes": "",
-          "LockoutMinutes-Suffix": "",
-          "LockoutMinutes-Help": ""
+          "Title": "Seguridad",
+          "Mode": "Modo",
+          "Mode-Help": "Habilitar la autenticación de usuarios para acceder a FileFlows.\nCuando está habilitado, los usuarios deberán iniciar sesión y los nodos de procesamiento requerirán el Token API para acceder al servidor.",
+          "AccessToken": "Token de Acceso",
+          "AccessToken-Help": "Token de acceso utilizado por los nodos de procesamiento para conectarse al servidor",
+          "TokenExpiryMinutes": "Expiración del Token",
+          "TokenExpiryMinutes-Help": "La duración del token de inicio de sesión antes de que expire.",
+          "Description": "Configurar la seguridad del usuario requerirá que los usuarios inicien sesión y que los nodos de procesamiento proporcionen el Token de Acceso para conectarse.\n\n[Los Usuarios](/users) deben ser añadidos antes de que puedan iniciar sesión o antes de que puedas usar esta característica.",
+          "Authority": "Autoridad",
+          "Authority-Help": "Ingresa la URL del proveedor de Open ID Connect (por ejemplo, https://accounts.google.com/).",
+          "ClientId": "ID de Cliente",
+          "ClientId-Help": "El ID de cliente registrado con el proveedor de Open ID Connect.",
+          "ClientSecret": "Secreto de Cliente",
+          "ClientSecret-Help": "El secreto de cliente registrado con el proveedor de Open ID Connect.",
+          "CallbackAddress": "Dirección de Callback",
+          "CallbackAddress-Help": "Una dirección de callback opcional, puedes usarla para anular la dirección predeterminada a la que se enviará al cliente.\n Por ejemplo, si estás detrás de un proxy inverso y FileFlows está escuchando en HTTP, pero el callback debería ocurrir en HTTPS.",
+          "MaxAttempts": "Máximos Intentos",
+          "MaxAttempts-Help": "El número máximo de intentos de inicio de sesión permitidos al usuario antes de que se le bloquee temporalmente",
+          "LockoutMinutes": "Duración del Bloqueo",
+          "LockoutMinutes-Suffix": "minutos",
+          "LockoutMinutes-Help": "La duración por la cual el usuario estará bloqueado antes de que pueda intentar iniciar sesión nuevamente."
         }
       }
     },
     "Statistics": {
-      "Title": ""
+      "Title": "Estadísticas"
     },
     "Tasks": {
-      "Title": "",
+      "Title": "Tareas",
       "Messages": {
-        "NoScripts": "",
-        "NoHistory": ""
+        "NoScripts": "No se encontraron scripts para crear una tarea.",
+        "NoHistory": "Esta tarea no tiene historial de ejecución disponible."
       },
       "Buttons": {
-        "EditScript": ""
+        "EditScript": "Editar Script"
       }
     },
     "Users": {
-      "Title": "",
-      "Single": "",
+      "Title": "Usuarios",
+      "Single": "Usuario",
       "Messages": {
-        "CannotDeleteYourself": "",
-        "EmailInUse": ""
+        "CannotDeleteYourself": "No puedes eliminarte a ti mismo.",
+        "EmailInUse": "La dirección de correo electrónico ''{email}'' ya está en uso por otro usuario ''{user}''."
       },
       "Labels": {
-        "LastLoggedIn": "",
-        "Address": "",
-        "Never": "",
-        "Administrator": ""
+        "LastLoggedIn": "Último Inicio de Sesión",
+        "Address": "Dirección",
+        "Never": "Nunca",
+        "Administrator": "Administrador"
       },
       "Fields": {
-        "IsAdmin": "",
-        "Email": "",
-        "Password": "",
-        "Roles": ""
+        "IsAdmin": "Administrador",
+        "Email": "Correo Electrónico",
+        "Password": "Contraseña",
+        "Roles": "Roles"
       }
     },
     "AccessControl": {
@@ -1330,9 +1330,9 @@
       },
       "Messages": {
         "InvalidIPAddress": "'{address}' no es una dirección IP válida.",
-        "FamilyMismatch": "Las direcciones IP de inicio y fin deben ser del mismo tipo.",
-        "EndMustBeGreaterThan": "La dirección final debe ser mayor que la dirección de inicio.",
-        "MoveFailed": "Error al mover las entradas."
+        "FamilyMismatch": "Las direcciones IP de inicio y fin deben ser del mismo tipo",
+        "EndMustBeGreaterThan": "La dirección final debe ser mayor que la dirección inicial",
+        "MoveFailed": "Error al mover las entradas"
       },
       "Labels": {
         "Console": "Consola Web",
@@ -1342,8 +1342,8 @@
         "Description": "Descripción",
         "Description-Placeholder": "Una descripción opcional para describir esta entrada",
         "Start": "Dirección de Inicio",
-        "Start-Help": "La dirección IP de inicio puede ser IPv4 o IPv6.",
-        "End": "Dirección de Fin",
+        "Start-Help": "La dirección IP de inicio puede ser IPv4 o IPv6",
+        "End": "Dirección Final",
         "End-Placeholder": "Dirección final opcional",
         "End-Help": "Dirección IP final opcional, debe ser mayor que la dirección de inicio si se establece y del mismo tipo. De lo contrario, este valor final será ignorado.",
         "Allow": "Permitir",
@@ -1373,7 +1373,7 @@
     "FileFlowsTaskRun": {
       "Title": "Ejecución de Tarea",
       "Fields": {
-        "RunAt": "Ejecutar En",
+        "RunAt": "Ejecutado En",
         "Success": "Éxito",
         "ReturnValue": "Valor de Retorno",
         "Log": "Registro"
@@ -1395,15 +1395,15 @@
       "Title": "Tarea",
       "Fields": {
         "Script": "Script",
-        "Script-Help": "El script que se ejecutará según el horario configurado.",
+        "Script-Help": "El script a ejecutar en el horario configurado",
         "Schedule": "Horario",
-        "Schedule-Help": "Cuándo debe ejecutarse este script.",
+        "Schedule-Help": "Cuándo debe ejecutarse este script",
         "CustomSchedule": "Horario Personalizado",
-        "CustomSchedule-Help": "Esta tarea se ejecutará una vez por cada bloque de 15 minutos al inicio de ese bloque.",
+        "CustomSchedule-Help": "Esta tarea se ejecutará una vez por bloque de 15 minutos al inicio de ese bloque",
         "Type": "Tipo",
-        "Type-Help": "El tipo de tarea. Las tareas basadas en tiempo se ejecutarán a las horas configuradas. Otras tareas son basadas en eventos.",
+        "Type-Help": "El tipo de tarea. Las tareas basadas en tiempo se ejecutarán en los horarios configurados. Otras tareas son basadas en eventos",
         "TimeSchedule": "Horario",
-        "TimeSchedule-Help": "Cuándo se ejecutará la tarea."
+        "TimeSchedule-Help": "Cuándo se ejecutará la tarea"
       }
     },
     "Variables": {
