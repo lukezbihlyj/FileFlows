@@ -21,15 +21,6 @@ wait_for_server() {
     return 1
 }
 
-# Function to check if --all argument is passed
-run_all_tests=false
-for arg in "$@"; do
-    if [ "$arg" == "--all" ]; then
-        run_all_tests=true
-        break
-    fi
-done
-
 # Start the FileFlows server in the background
 pushd /app/FileFlows/Server
 nohup /dotnet/dotnet FileFlows.Server.dll --urls=http://*:5276/ --docker > /dev/null 2>&1 &
@@ -52,7 +43,7 @@ wait_for_server
 if [ $? -eq 0 ]; then
     echo "InitialTests passed. Running other tests..."
 
-    if [ "$run_all_tests" = true ]; then
+    if [ "$RunAllTests" = "1" ]; then
       # Step 2: Run all other tests excluding InitialTests and append to the same log file
       /dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
           --filter FullyQualifiedName!=FileFlowsTests.Tests.InitialTests \
