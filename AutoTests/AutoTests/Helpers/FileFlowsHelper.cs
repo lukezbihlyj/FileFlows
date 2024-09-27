@@ -135,7 +135,7 @@ public class FileFlowsHelper
             // If the button becomes visible, click it
             await dismissButton.ClickAsync();
         }
-        catch (TimeoutException)
+        catch (Exception)
         {
             // If the timeout occurs, it means the button didn't become visible
             // Do nothing, since we don't want to throw an exception
