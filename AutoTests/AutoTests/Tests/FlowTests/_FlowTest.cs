@@ -249,6 +249,7 @@ public abstract class FlowTest():TestBase("Flows")
     /// <param name="fileName">the name of the file (or folder)</param>
     protected async Task CheckFileProcessed(string fileName)
     {
+        Logger.ILog("Checking file processed: " + fileName);
         await GotoPage("Files");
         await SkyBox("Processed");
         await Task.Delay(5_000);
