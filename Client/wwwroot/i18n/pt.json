@@ -397,7 +397,8 @@
       "Local": "Usuários Locais",
       "Off": "Nenhum",
       "OpenIdConnect": "Open ID Connect"
-    },"TaskType": {
+    },
+    "TaskType": {
       "FileAdded": "Arquivo Adicionado",
       "FileFlowsServerUpdateAvailable": "Atualização Disponível",
       "FileFlowsServerUpdating": "Servidor Atualizando",
@@ -421,7 +422,6 @@
       "Variables": "Variáveis",
       "Webhooks": "Webhooks"
     }
-
   },
   "ErrorMessages": {
     "BothMathValuesRequired": "Ambos os valores devem ser inseridos",

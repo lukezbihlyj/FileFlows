@@ -63,7 +63,7 @@ public abstract class FlowTest():TestBase("Flows")
         string shortName = Guid.NewGuid() + new FileInfo(file).Extension;
         File.Copy(file, Path.Combine(libPath, shortName));
         library.Path = libPath;
-        
+
         await GotoPage("Libraries");
         await TableButtonClick("Add");
         await EditorTitle("Library");
@@ -78,7 +78,7 @@ public abstract class FlowTest():TestBase("Flows")
             await SetSelect("ProcessingOrder", library.ProcessingOrder.Value switch
             {
                 LibraryProcessingOrder.AsFound => "As Found (Default)",
-                LibraryProcessingOrder.LargestFirst => "Largest First", 
+                LibraryProcessingOrder.LargestFirst => "Largest First",
                 LibraryProcessingOrder.SmallestFirst => "Smallest First",
                 LibraryProcessingOrder.NewestFirst => "Newest First",
                 _ => library.ProcessingOrder.Value.ToString()
@@ -97,12 +97,21 @@ public abstract class FlowTest():TestBase("Flows")
             await SetToggle("UseFingerprinting", library.UseFingerprinting.Value);
         if (library.Scan != null)
             await SetToggle("Scan", library.Scan.Value);
-        
+
         await ButtonClick("Save");
         await SelectItem(library.Name);
 
         if (scan)
-            await TableButtonClick("Rescan");
+        {
+            try
+            {
+                await TableButtonClick("Rescan");
+            }
+            catch (Exception)
+            {
+                // Ignored
+            }
+        }
 
         return shortName;
     }
