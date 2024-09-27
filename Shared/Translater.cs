@@ -1,6 +1,7 @@
 using Jeffijoe.MessageFormat;
 using System.Text.Json;
 using System.Dynamic;
+using System.Text.Encodings.Web;
 
 namespace FileFlows.Shared;
 
@@ -9,8 +10,19 @@ namespace FileFlows.Shared;
 /// </summary>
 public class Translater
 {
+    /// <summary>
+    /// Formatter for formatting messages.
+    /// </summary>
     private static MessageFormatter Formatter;
+
+    /// <summary>
+    /// Dictionary containing language translations.
+    /// </summary>
     private static Dictionary<string, string> Language { get; set; } = new ();
+
+    /// <summary>
+    /// Regular expression to check if a string needs translating.
+    /// </summary>
     private static Regex rgxNeedsTranslating = new (@"^([\w\d_\-]+\.)+[\w\d_\-]+$");
 
 
@@ -114,6 +126,12 @@ public class Translater
     private static string Join(string prefix, string name)
         => (string.IsNullOrEmpty(prefix) ? name : prefix + "." + name);
 
+    /// <summary>
+    /// Looks up a translation for a list of possible keys.
+    /// </summary>
+    /// <param name="possibleKeys">The possible keys to look up</param>
+    /// <param name="supressWarnings">If warnings should be suppressed</param>
+    /// <returns>The translation if found, otherwise the first key</returns>
     private static string Lookup(string[] possibleKeys, bool supressWarnings = false)
     {
         foreach (var key in possibleKeys)
@@ -219,5 +237,57 @@ public class Translater
         {
             return false;
         }
+    }
+    
+    
+    /// <summary>
+    /// Reorders a language JSON file so that keys are sorted alphabetically.
+    /// Keys with children appear below keys that are just string values.
+    /// </summary>
+    /// <param name="json">The JSON string to reorder</param>
+    /// <returns>The reordered JSON string</returns>
+    public static string ReorderJson(string json)
+    {
+        var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+        var orderedDictionary = OrderDictionary(dictionary);
+        return JsonSerializer.Serialize(orderedDictionary, new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Prevents escaping Unicode characters
+        });
+    }
+    
+    /// <summary>
+    /// Orders a dictionary so that keys are sorted alphabetically.
+    /// Keys with string values appear first, followed by keys with nested dictionaries.
+    /// The group "Labels" will appear before any other group.
+    /// </summary>
+    /// <param name="dictionary">The dictionary to order</param>
+    /// <returns>The ordered dictionary</returns>
+    private static Dictionary<string, object> OrderDictionary(Dictionary<string, object> dictionary)
+    {
+        var ordered = new Dictionary<string, object>();
+
+        // Add string values next
+        foreach (var kvp in dictionary.Where(kvp => kvp.Value is JsonElement element && element.ValueKind == JsonValueKind.String).OrderBy(kvp => kvp.Key))
+        {
+            ordered[kvp.Key] = kvp.Value;
+        }
+        
+        // Add "Labels" group first if it exists
+        if (dictionary.TryGetValue("Labels", out var labelsValue) && labelsValue is JsonElement labelsElement && labelsElement.ValueKind == JsonValueKind.Object)
+        {
+            var nestedDict = JsonSerializer.Deserialize<Dictionary<string, object>>(labelsElement.GetRawText());
+            ordered["Labels"] = OrderDictionary(nestedDict);
+        }
+
+        // Add other nested dictionaries
+        foreach (var kvp in dictionary.Where(kvp => kvp.Key != "Labels" && kvp.Value is JsonElement element && element.ValueKind == JsonValueKind.Object).OrderBy(kvp => kvp.Key))
+        {
+            var nestedDict = JsonSerializer.Deserialize<Dictionary<string, object>>(kvp.Value.ToString());
+            ordered[kvp.Key] = OrderDictionary(nestedDict);
+        }
+
+        return ordered;
     }
 }
