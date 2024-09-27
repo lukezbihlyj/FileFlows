@@ -5,6 +5,7 @@ namespace FileFlowsTests.Tests;
 /// And performs test on an un-configured system
 /// </summary>
 [TestClass]
+[TestCategory("InitialTests")]
 public class InitialTests : TestBase
 {
     /// <summary>
