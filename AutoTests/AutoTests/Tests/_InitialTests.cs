@@ -197,33 +197,25 @@ public class InitialTests() : TestBase("")
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("Advanced");
-    
-        await FileFlows.Inputs.SetSelect("Language", "Español");
-        await Page.Locator("#settings-save").ClickAsync();
-        await Task.Delay(500);
-        await FileFlows.WaitForBlockerToDisappear();
-        await FileFlows.GotoPage("Configuraciones");
-        await FileFlows.Tab.Click("Avanzado");
-        
-        await FileFlows.Inputs.SetSelect("Language", "Deutsch");
-        await Page.Locator("#settings-save").ClickAsync();
-        await Task.Delay(500);
-        await FileFlows.WaitForBlockerToDisappear();
-        await FileFlows.GotoPage("Einstellungen");
-        await FileFlows.Tab.Click("Erweitert");
-        
-        await FileFlows.Inputs.SetSelect("Language", "Português");
-        await Page.Locator("#settings-save").ClickAsync();
-        await Task.Delay(500);
-        await FileFlows.WaitForBlockerToDisappear();
-        await FileFlows.GotoPage("Configurações");
-        await FileFlows.Tab.Click("Avançado");
-        
-        await FileFlows.Inputs.SetSelect("Language", "English");
-        await Page.Locator("#settings-save").ClickAsync();
-        await FileFlows.GotoPage("Settings");
-        await Task.Delay(500);
-        await FileFlows.WaitForBlockerToDisappear();
+
+        foreach (var lang in
+                 new [] {
+                     ("Español", "Configuraciones", "Avanzado"),
+                     ("Deutsch", "Einstellungen", "Erweitert"),
+                     ("Português", "Configurações", "Avançado"),
+                     ("Français", "Paramètres", "Avancé"),
+                     // English Last to Rest it
+                     ("English", "Settings", "Advanced")
+                 })
+        {
+            Logger.ILog("Testing Language: " + lang.Item1);
+            await FileFlows.Inputs.SetSelect("Language", lang.Item1);
+            await Page.Locator("#settings-save").ClickAsync();
+            await Task.Delay(500);
+            await FileFlows.WaitForBlockerToDisappear();
+            await FileFlows.GotoPage(lang.Item2);
+            await FileFlows.Tab.Click(lang.Item3);
+        }
     }
     
     [Test, Order(90)]

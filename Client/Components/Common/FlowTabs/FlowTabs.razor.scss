@@ -49,7 +49,8 @@
 }
 
 .tab-button {
-    width: 8rem;
+    min-width: 8rem;
+    width:fit-content;
     overflow-x: hidden;
     text-overflow: ellipsis;
     border-color: var(--input-background) !important;
