@@ -397,19 +397,31 @@
       "Local": "Usuários Locais",
       "Off": "Nenhum",
       "OpenIdConnect": "Open ID Connect"
-    },
-    "TaskType": {
+    },"TaskType": {
       "FileAdded": "Arquivo Adicionado",
       "FileFlowsServerUpdateAvailable": "Atualização Disponível",
-      "FileFlowsServerUpdating": "Atualizando Servidor",
-      "FileModified": "Arquivo Modificado",
-      "FilesChanged": "Arquivos Modificados",
-      "FilesUpdated": "Arquivos Atualizados",
-      "FlowScheduled": "Flow Agendado",
-      "LibraryScan": "Verificação da Biblioteca",
-      "LogTruncated": "Log Truncado",
-      "ScriptScheduled": "Script Agendado"
+      "FileFlowsServerUpdating": "Servidor Atualizando",
+      "FileProcessed": "Arquivo Processado",
+      "FileProcessFailed": "Falha no Processamento",
+      "FileProcessing": "Processando Arquivo",
+      "FileProcessSuccess": "Processamento Bem-Sucedido"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "Arquivos",
+      "Flows": "Flows",
+      "Libraries": "Bibliotecas",
+      "Log": "Log",
+      "Nodes": "Nós",
+      "PauseProcessing": "Pausar Processamento",
+      "Plugins": "Plugins",
+      "Revisions": "Revisões",
+      "Scripts": "Scripts",
+      "Tasks": "Tarefas",
+      "Variables": "Variáveis",
+      "Webhooks": "Webhooks"
     }
+
   },
   "ErrorMessages": {
     "BothMathValuesRequired": "Ambos os valores devem ser inseridos",
@@ -768,70 +780,65 @@
         "OriginalSizeSuffix": "Bytes",
         "OutputPath": "Caminho de Saída",
         "ProcessingTime": "Tempo de Processamento",
-        "ProcessingTimeSuffix": "segundos",
-        "Status": "Status",
-        "TotalTime": "Tempo Total",
-        "TotalTimeSuffix": "segundos"
+        "Status": "Status"
       },
-      "Status": {
-        "Failed": "Falhou",
-        "Processing": "Processando",
-        "Skipped": "Ignorado",
-        "Success": "Sucesso",
-        "Waiting": "Aguardando"
+      "Tabs": {
+        "CustomVariables": "Variáveis Personalizadas",
+        "FinalMetadata": "Saída",
+        "OriginalMetadata": "Entrada"
       }
     },
     "LibraryFiles": {
-      "Title": "Files",
+      "Title": "Arquivos",
       "Labels": {
-        "ScanTriggered": "Scanned triggered for all enabled libraries"
+        "ScanTriggered": "Escaneamento acionado para todas as bibliotecas habilitadas"
       },
       "Buttons": {
-        "Ignore": "Ignore",
-        "MoveToTop": "Move To Top",
-        "Process": "Process",
-        "ProcessOptions": "Process Options",
-        "Reprocess": "Reprocess",
-        "ToggleForce": "Toggle Force Processing",
-        "Unhold": "Release",
-        "View": "View"
+        "Ignore": "Ignorar",
+        "MoveToTop": "Mover Para o Topo",
+        "Process": "Processar",
+        "ProcessOptions": "Opções de Processamento",
+        "Reprocess": "Reprocessar",
+        "ToggleForce": "Alternar Processamento Forçado",
+        "Unhold": "Liberar",
+        "View": "Ver"
       },
       "Messages": {
-        "FailedToDownloadLog": "Failed to download log",
-        "FailedToReprocess": "Failed to reprocess",
-        "ReprocessingFile": "File sent for reprocessing"
+        "FailedToDownloadLog": "Falha ao baixar o log",
+        "FailedToReprocess": "Falha ao reprocessar",
+        "ReprocessingFile": "Arquivo enviado para reprocessamento"
       }
     },
     "Log": {
       "Title": "Log",
       "Labels": {
-        "AutoRefresh": "Auto Refresh",
-        "FailedToDownloadLog": "Failed to download log.",
-        "NoMatchingData": "No matching data"
+        "AutoRefresh": "Atualização Automática",
+        "FailedToDownloadLog": "Falha ao baixar o log.",
+        "NoMatchingData": "Nenhum dado correspondente"
       },
       "Fields": {
-        "File": "File",
-        "IncludeHigherSeverity": "Include Higher Severity",
-        "Nodes": "Nodes",
-        "Severity": "Severity",
-        "Source": "Source",
-        "Text": "Text"
+        "File": "Arquivo",
+        "IncludeHigherSeverity": "Incluir Maior Severidade",
+        "Nodes": "Nós",
+        "Severity": "Severidade",
+        "Source": "Fonte",
+        "Text": "Texto"
       }
     },
     "Login": {
       "Fields": {
-        "Cancel": "Cancel",
-        "ForgotPassword": "Forgot Password?",
-        "Login": "Login",
-        "Password": "Password",
-        "Reset": "Reset",
-        "Username": "Username",
-        "UsernameOrEmail": "Username or Email"
+        "Cancel": "Cancelar",
+        "ForgotPassword": "Esqueceu a Senha?",
+        "Login": "Entrar",
+        "Password": "Senha",
+        "Reset": "Redefinir",
+        "Username": "Nome de Usuário",
+        "UsernameOrEmail": "Nome de Usuário ou Email"
       },
       "Messages": {
-        "InvalidUsernameOrPassword": "Invalid username or password",
-        "LockedOut": "Too many incorrect login attempts, you are currently locked out.",
-        "PasswordReset": "Password Reset"
+        "InvalidUsernameOrPassword": "Nome de usuário ou senha inválidos",
+        "LockedOut": "Muitas tentativas de login incorretas, você está atualmente bloqueado.",
+        "PasswordReset": "Redefinição de Senha"
       }
     },
     "Nodes": {
@@ -1002,12 +1009,11 @@
         "Description": "Descrição",
         "Name": "Nome",
         "Outputs": "Saídas",
-        "Result": "Resultado",
-        "Variables": "Variáveis"
+        "OutputsKey": "Saída",
+        "OutputsValue": "Descrição"
       },
       "Messages": {
-        "FailedToRunScript": "Falha ao executar o script.",
-        "ScriptNameNotValid": "O nome do script não é válido. O nome deve ser único e não deve conter caracteres inválidos."
+        "FailedToExport": "Falha ao exportar."
       }
     },
     "Scripts": {
@@ -1130,32 +1136,6 @@
           "ProcessingNodes": "Nós de Processamento",
           "Status": "Status"
         },
-        "Messages": {
-          "Database": {
-            "DontBackupOnUpgrade": "Desativar backups automáticos do banco de dados significa que nenhum backup será realizado durante as atualizações do aplicativo. É importante garantir que você tenha um método alternativo para fazer backup do seu banco de dados externamente para proteger seus dados.\n\nVocê tem certeza de que deseja desativar esses backups?",
-            "NoDatabase": "Nome é obrigatório",
-            "NoPassword": "Senha é obrigatória",
-            "NoServer": "Servidor é obrigatório",
-            "NoUser": "Usuário é obrigatório",
-            "TestingDatabase": "Testando Conexão com o Banco de Dados",
-            "TestSuccess": "Conectado com sucesso ao banco de dados."
-          },
-          "DisableTelemetryConfirm": {
-            "Message": "Você tem certeza de que deseja desativar a telemetria?\n\nFique tranquilo, nenhuma informação pessoal é registrada. Os dados enviados incluem informações sobre os elementos do fluxo em uso, plugins utilizados, bem como o número total de arquivos que falharam e foram processados.\n\nEssas informações nos ajudam a entender as preferências dos usuários e informam nossas decisões sobre a descontinuação de elementos de fluxo não utilizados.",
-            "Title": "Desativar Telemetria"
-          },
-          "Restart": {
-            "Message": "Você tem certeza de que deseja reiniciar o FileFlows?\n\nSuas configurações serão salvas automaticamente primeiro.\n\nNota: Certifique-se de que não há fluxos em execução.",
-            "Title": "Reiniciar FileFlows"
-          },
-          "Update": {
-            "Downloading": "A atualização está sendo baixada.",
-            "Failed": "Falha ao verificar atualizações.",
-            "Message": "Uma nova atualização está disponível, você gostaria de baixar e instalá-la?",
-            "NotAvailable": "Nenhuma atualização disponível.",
-            "Title": "Atualização Disponível"
-          }
-        },
         "Security": {
           "AccessToken": "Token de Acesso",
           "AccessToken-Help": "Token de acesso usado pelos nós de processamento para se conectar ao servidor.",
@@ -1194,6 +1174,32 @@
           "Server-Help": "O servidor de email.",
           "User": "Usuário",
           "User-Help": "Um nome de usuário opcional para enviar emails."
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "Desativar backups automáticos do banco de dados significa que nenhum backup será realizado durante as atualizações do aplicativo. É importante garantir que você tenha um método alternativo para fazer backup do seu banco de dados externamente para proteger seus dados.\n\nVocê tem certeza de que deseja desativar esses backups?",
+          "NoDatabase": "O nome é obrigatório",
+          "NoPassword": "A senha é obrigatória",
+          "NoServer": "O servidor é obrigatório",
+          "NoUser": "O usuário é obrigatório",
+          "TestingDatabase": "Testando Conexão com o Banco de Dados",
+          "TestSuccess": "Conectado ao banco de dados com sucesso"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "Você tem certeza de que deseja desativar a telemetria?\n\nFique tranquilo, nenhuma informação pessoal é registrada. Os dados enviados incluem informações sobre os elementos de fluxo em uso, plugins utilizados, bem como o número total de arquivos falhados e processados.\n\nEssas informações nos ajudam a entender as preferências dos usuários e informam nossas decisões sobre a descontinuação de elementos de fluxo não utilizados.",
+          "Title": "Desativar Telemetria"
+        },
+        "Restart": {
+          "Message": "Você tem certeza de que deseja reiniciar o FileFlows?\n\nSuas configurações serão salvas automaticamente primeiro.\n\nNota: Certifique-se de que não há fluxos em execução.",
+          "Title": "Reiniciar FileFlows"
+        },
+        "Update": {
+          "Downloading": "Atualização sendo baixada",
+          "Failed": "Falha ao verificar uma atualização",
+          "Message": "Uma nova atualização está disponível, você gostaria de baixar e instalá-la?",
+          "NotAvailable": "Nenhuma atualização disponível",
+          "Title": "Atualização Disponível"
         }
       }
     },
