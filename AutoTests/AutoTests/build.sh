@@ -12,6 +12,15 @@ mkdir -p "$(pwd)/test-results"
 echo Building Docker Image
 docker build -f Dockerfile -t fileflows-autotests --build-arg TZ=Pacific/Auckland .
 
+# Check for --all argument
+RunAllTestsEnv=""
+for arg in "$@"; do
+    if [ "$arg" == "--all" ]; then
+        RunAllTestsEnv="-e RunAllTests=1"
+        break
+    fi
+done
+
 # Run the container
 echo Running Docker image
 docker run --rm \
@@ -25,4 +34,5 @@ docker run --rm \
     -e KEEP_PASSED_VIDEOS=$KEEP_PASSED_VIDEOS \
     -e FFURL=$FF_URL \
     -e DOCKER=1 \
+    $RunAllTestsEnv \
     fileflows-autotests
