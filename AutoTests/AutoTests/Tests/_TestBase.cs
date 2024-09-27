@@ -1,12 +1,18 @@
 using System.Text;
 using FileFlowsTests.Helpers;
-using NUnit.Framework.Interfaces;
+using Microsoft.Playwright.MSTest;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FileFlowsTests.Tests;
 
 //[Parallelizable(ParallelScope.All)]
-public abstract class TestBase(string PageName): PlaywrightTest()
+public abstract class TestBase: PageTest
 {
+    /// <summary>
+    /// Optional page name to go to when starting
+    /// </summary>
+    protected virtual string PageName => "";
+    
     /// <summary>
     /// The test logger
     /// </summary>
@@ -16,33 +22,56 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     /// </summary>
     protected Helpers.FileFlowsHelper FileFlows { get; private set; }
 
-    /// <summary>
-    /// Gets the browser context
-    /// </summary>
-    public IBrowserContext Context { get; private set; }
-    /// <summary>
-    /// Gets the browser instance
-    /// </summary>
-    public static IBrowser Browser { get; private set; }
-    /// <summary>
-    /// Gets the page intsance
-    /// </summary>
-    public IPage Page { get; private set; }
+    // /// <summary>
+    // /// Gets the browser context
+    // /// </summary>
+    // public IBrowserContext Context { get; private set; }
+    // /// <summary>
+    // /// Gets the browser instance
+    // /// </summary>
+    // public static IBrowser Browser { get; private set; }
+    // /// <summary>
+    // /// Gets the page intsance
+    // /// </summary>
+    // public IPage Page { get; private set; }
 
     /// <summary>
     /// Any console errors
     /// </summary>
     private readonly StringBuilder ConsoleErrors = new();
-    
+
+    private string _RecordingsDirectory;
+
     /// <summary>
     /// Gets or sets the recordings directory
     /// </summary>
-    private string RecordingsDirectory { get; set; }
+    private string RecordingsDirectory
+    {
+        get
+        {
+            if(string.IsNullOrWhiteSpace(_RecordingsDirectory))
+                _RecordingsDirectory = Path.Combine(TempPath, "recordings",
+                    TestContext.FullyQualifiedTestClassName + "." + TestContext.TestName);
+            return _RecordingsDirectory;
+        }
+    }
 
+    private string _TempPath;
     /// <summary>
     /// Gets the temporary path to use in the test
     /// </summary>
-    protected string TempPath { get; private set; }
+    protected string TempPath
+    {
+        get
+        {
+            if (_TempPath == null)
+            {
+                _TempPath = Environment.GetEnvironmentVariable("FF_TEMP_PATH")?.EmptyAsNull() ?? Path.GetTempPath();
+            }
+
+            return _TempPath;
+        }
+    }
 
     /// <summary>
     /// A random to use in the tests
@@ -56,40 +85,12 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     /// <returns>the random name</returns>
     protected string RandomName(string prefix) => prefix + " " + rand.Next(1, 100_000);
     
-    /// <summary>
-    /// Sets up the tests
-    /// </summary>
-    [SetUp]
-    public async Task Setup()
-    {
-        Logger.Writer = TestContext.WriteLine;
-        TempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
-        var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
-        Logger.ILog("FF Base URL: " + ffBaseUrl);
-        Logger.ILog("Temp Path: " + TempPath);
-        RecordingsDirectory = Path.Combine(TempPath, "recordings", TestContext.CurrentContext.Test.FullName);
-        if (Directory.Exists(RecordingsDirectory) == false)
-            Directory.CreateDirectory(RecordingsDirectory);
-        Logger.ILog("Recordings Path: " + RecordingsDirectory);
-        if (Browser == null)
-        {
-            if (Environment.GetEnvironmentVariable("DOCKER") == "1")
-            {
-                Logger.ILog("Running in Docker");
-                Browser = await Playwright.Chromium.LaunchAsync();
-            }
-            else
-            {
-                Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
-                {
-                    Headless = false, // This makes the browser window visible
-                    Args = new[] { "--window-size=1920,1080" } // This sets the window size
-                });
-            }
-        }
 
-        Context = await Browser.NewContextAsync(new()
+    public override BrowserNewContextOptions ContextOptions()
+    {
+        return new BrowserNewContextOptions()
         {
+            ColorScheme = ColorScheme.Dark,
             ViewportSize = new ViewportSize
             {
                 Width = 1920, 
@@ -102,8 +103,56 @@ public abstract class TestBase(string PageName): PlaywrightTest()
             {
                 "clipboard-read", "clipboard-write"
             }
-        });
-        Page = await Context.NewPageAsync();
+        };
+    }
+    
+    /// <summary>
+    /// Sets up the tests
+    /// </summary>
+    [TestInitialize]
+    public async Task TestSetup()
+    {
+        await base.Setup();
+        Logger.Writer = TestContext.WriteLine;
+        var ffBaseUrl = Environment.GetEnvironmentVariable("FileFlowsUrl")?.EmptyAsNull()  ?? "http://localhost:5276/";
+        Logger.ILog("FF Base URL: " + ffBaseUrl);
+        Logger.ILog("Temp Path: " + TempPath);
+        if (Directory.Exists(RecordingsDirectory) == false)
+            Directory.CreateDirectory(RecordingsDirectory);
+        Logger.ILog("Recordings Path: " + RecordingsDirectory);
+        // if (Browser == null)
+        // {
+        //     if (Environment.GetEnvironmentVariable("DOCKER") == "1")
+        //     {
+        //         Logger.ILog("Running in Docker");
+        //         Browser = await Playwright.Chromium.LaunchAsync();
+        //     }
+        //     else
+        //     {
+        //         Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        //         {
+        //             Headless = false, // This makes the browser window visible
+        //             Args = new[] { "--window-size=1920,1080" } // This sets the window size
+        //         });
+        //     }
+        // }
+        //
+        // Context = await Browser.NewContextAsync(new()
+        // {
+        //     ViewportSize = new ViewportSize
+        //     {
+        //         Width = 1920, 
+        //         Height = 1080
+        //     },
+        //     RecordVideoDir = RecordingsDirectory + "/",
+        //     RecordVideoSize = new RecordVideoSize() { Width = 1920, Height = 1080 },
+        //     IgnoreHTTPSErrors = true,
+        //     Permissions = new []
+        //     {
+        //         "clipboard-read", "clipboard-write"
+        //     }
+        // });
+        // Page = await Context.NewPageAsync();
 
         Page.Console += (_, msg) =>
         {
@@ -124,15 +173,14 @@ public abstract class TestBase(string PageName): PlaywrightTest()
     /// <summary>
     /// Tears down the tests/cleans it up
     /// </summary>
-    [TearDown]
-    public async Task TearDown()
+    [TestCleanup]
+    public async Task TestBaseDown()
     {
-        bool failed = TestContext.CurrentContext.Result.Outcome == ResultState.Failure ||
-                      TestContext.CurrentContext.Result.Outcome == ResultState.Error;
         bool blazorError = false;
         try
         {
-            if (failed)
+            await base.Teardown();
+            if (TestOK == false)
                 await Task.Delay(5000); // for recording padding
 
             if (Page != null)
@@ -169,26 +217,31 @@ public abstract class TestBase(string PageName): PlaywrightTest()
                 }
             }
 
-            var outputVideo = Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"); 
-            if (outputVideo != TestFiles.TestVideo1 && Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
-                blazorError == false)
+            if (string.IsNullOrWhiteSpace(RecordingsDirectory) == false)
             {
-                try
+                var outputVideo = Path.Combine(RecordingsDirectory,
+                    TestContext.FullyQualifiedTestClassName + "." + TestContext.TestName + ".webm");
+                if (outputVideo != TestFiles.TestVideo1 &&
+                    Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && TestOK &&
+                    blazorError == false)
                 {
-                    Directory.Delete(RecordingsDirectory, true);
+                    try
+                    {
+                        Directory.Delete(RecordingsDirectory, true);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
-                catch (Exception)
-                {
-                }
-            }
 
-            if (Directory.Exists(RecordingsDirectory))
-            {
-                var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
-                if (videoFile == null)
-                    return;
-                File.Move(videoFile, outputVideo, true);
-                Logger.ILog("Output Video: " + outputVideo);
+                if (Directory.Exists(RecordingsDirectory))
+                {
+                    var videoFile = Directory.GetFiles(RecordingsDirectory, "*.webm").FirstOrDefault();
+                    if (videoFile == null)
+                        return;
+                    File.Move(videoFile, outputVideo, true);
+                    Logger.ILog("Output Video: " + outputVideo);
+                }
             }
         }
         catch (Exception ex)
@@ -196,7 +249,7 @@ public abstract class TestBase(string PageName): PlaywrightTest()
             Logger.ELog("TearDown error: " + ex.Message + Environment.NewLine + ex.StackTrace);
         }
 
-        if (failed == false && blazorError)
+        if (TestOK && blazorError)
         {
             Assert.Fail("Blazor Error: " + ConsoleErrors);
         }

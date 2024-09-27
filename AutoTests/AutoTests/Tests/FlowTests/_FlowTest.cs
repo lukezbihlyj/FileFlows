@@ -3,8 +3,11 @@ namespace FileFlowsTests.Tests.FlowTests;
 /// <summary>
 /// A flow test that test the flow editor and processing
 /// </summary>
-public abstract class FlowTest():TestBase("Flows")
+public abstract class FlowTest:TestBase
 {
+    /// <inheritdoc />
+    protected override string PageName => "Flows";
+
     /// <summary>
     /// Creates a flow
     /// </summary>

@@ -3,12 +3,15 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the variables page
 /// </summary>
-public class Variables() : TestBase("Variables")
+[TestClass]
+public class Variables : TestBase
 {
+    /// <inheritdoc />
+    protected override string PageName => "Variables";
     /// <summary>
     /// Tests the initial button states
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Add");
@@ -20,14 +23,14 @@ public class Variables() : TestBase("Variables")
     /// <summary>
     /// Tests the help
     /// </summary>
-    [Test]
+    [TestMethod]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/extensions/variables");
 
     /// <summary>
     /// Tests adding/editing/deleting a variable
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task AddEditDelete()
     {
         string name = Guid.NewGuid().ToString();

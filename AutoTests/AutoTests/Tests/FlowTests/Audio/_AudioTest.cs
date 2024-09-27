@@ -7,7 +7,6 @@ namespace FileFlowsTests.Tests.FlowTests.Audio;
 /// </summary>
 public abstract class AudioTest : FlowTest
 {
-    
     /// <summary>
     /// Generates a random audio file (white noise) using FFmpeg.
     /// </summary>

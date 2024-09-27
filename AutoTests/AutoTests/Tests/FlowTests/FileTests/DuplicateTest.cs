@@ -3,6 +3,7 @@ namespace FileFlowsTests.Tests.FlowTests.FileTests;
 /// <summary>
 /// Tests duplicates are detected and can be run
 /// </summary>
+[TestClass]
 public class DuplicateTest : FileTest
 {
     static string duplicateFile = Guid.NewGuid() + ".duplicate";
@@ -10,7 +11,7 @@ public class DuplicateTest : FileTest
     /// <summary>
     /// Manually creates an audiobook flow and tests it
     /// </summary>
-    [Test, Order(1)]
+    [TestMethod, Priority(1)]
     public async Task DuplicateDetected()
     {
         var flowName = RandomName("Duplicate Flow");
@@ -29,7 +30,7 @@ public class DuplicateTest : FileTest
     /// <summary>
     /// Manually creates an audiobook flow and tests it
     /// </summary>
-    [Test, Order(2)]
+    [TestMethod, Priority(2)]
     public async Task DuplicateProcessed()
     {
         await GotoPage("Files");

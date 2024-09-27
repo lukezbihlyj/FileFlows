@@ -1,18 +1,16 @@
-using FileFlowsTests.Helpers.UiComponents;
-
 namespace FileFlowsTests.Tests;
 
 /// <summary>
 /// Initial tests the configures FileFlows.
 /// And performs test on an un-configured system
 /// </summary>
-//[NonParallelizable]
-public class InitialTests() : TestBase("")
+[TestClass]
+public class InitialTests : TestBase
 {
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
-    [Test, Order(1)]
+    [TestMethod, Priority(1)]
     public async Task InitialConfiguration()
     {
         await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
@@ -63,7 +61,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Sets the FFmpeg paths
     /// </summary>
-    [Test, Order(10)] 
+    [TestMethod, Priority(10)] 
     public async Task SetFFmpegPath()
     {
         await FileFlows.GotoPage("Variables");
@@ -80,7 +78,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
-    [Test, Order(11)]
+    [TestMethod, Priority(11)]
     public async Task LicenseUnlicensed()
     {
         await FileFlows.GotoPage("Settings");
@@ -94,7 +92,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Tests the tabs in settings are only the expected tabs
     /// </summary>
-    [Test, Order(12)]
+    [TestMethod, Priority(12)]
     public async Task UnlicensedTabs()
     {
         await FileFlows.GotoPage("Settings");
@@ -116,7 +114,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Tests that if a user tries to add a library before adding a flow, they are stopped with a toast error message
     /// </summary>
-    [Test, Order(20)]
+    [TestMethod, Priority(20)]
     public async Task LibraryNoFlows()
     {
         await FileFlows.GotoPage("Libraries");
@@ -128,7 +126,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Tests the pointer is shown for step 1.
     /// </summary>
-    [Test, Order(30)]
+    [TestMethod, Priority(30)]
     public async Task FlowPointer()
     {
         await Expect(Page.Locator(".nav-item.flows .not-configured-pointer")).ToHaveCountAsync(1);
@@ -139,7 +137,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Tests creating a flow
     /// </summary>
-    [Test, Order(31)]
+    [TestMethod, Priority(31)]
     public async Task FlowCreate()
     {
         await FileFlows.GotoPage("Flows");
@@ -162,7 +160,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Creates a library
     /// </summary>
-    [Test, Order(40)]
+    [TestMethod, Priority(40)]
     public async Task LibraryCreate()
     {
         await FileFlows.GotoPage("Libraries");
@@ -182,7 +180,7 @@ public class InitialTests() : TestBase("")
         await Expect(Page.Locator(".pointer-add >> text='Add'")).ToHaveCountAsync(0);
     }
     
-    [Test, Order(80)]
+    [TestMethod, Priority(80)]
     public async Task CheckUnLicensedPages()
     {
         await Expect(Page.Locator("a[href='tasks']")).ToHaveCountAsync(0);
@@ -192,7 +190,7 @@ public class InitialTests() : TestBase("")
     /// <summary>
     /// Tests language can be changed
     /// </summary>
-    [Test, Order(81)]
+    [TestMethod, Priority(81)]
     public async Task ChangeLanguage()
     {
         await FileFlows.GotoPage("Settings");
@@ -218,7 +216,7 @@ public class InitialTests() : TestBase("")
         }
     }
     
-    [Test, Order(90)]
+    [TestMethod, Priority(90)]
     public async Task EnterLicense()
     {
         await FileFlows.GotoPage("Settings");
@@ -246,7 +244,7 @@ public class InitialTests() : TestBase("")
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(1);
     }
     
-    [Test, Order(100)]
+    [TestMethod, Priority(100)]
     public async Task TasksNoScript()
     {
         await GotoPage("Tasks");
@@ -254,7 +252,7 @@ public class InitialTests() : TestBase("")
         await ToastError("No scripts found to create a task for.");
     }
     
-    [Test, Order(101)]
+    [TestMethod, Priority(101)]
     public async Task GotifyFileProcessed()
     {
         await GotoPage("Scripts");

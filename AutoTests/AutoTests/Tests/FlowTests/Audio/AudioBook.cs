@@ -1,11 +1,12 @@
 namespace FileFlowsTests.Tests.FlowTests.Audio;
 
+[TestClass]
 public class AudioBook : AudioTest
 {
     /// <summary>
     /// Manually creates an audiobook flow and tests it
     /// </summary>
-    [Test, Order(1)]
+    [TestMethod, Priority(1)]
     public async Task CreateBookManually()
     {
         // create flow
@@ -36,7 +37,7 @@ public class AudioBook : AudioTest
     /// <summary>
     /// Creates a book replacing the original
     /// </summary>
-    [Test, Order(1)]
+    [TestMethod, Priority(1)]
     public async Task CreateBook_Template_ReplaceOriginal()
     {
         // create flow
@@ -65,7 +66,7 @@ public class AudioBook : AudioTest
     /// <summary>
     /// Creates a book replacing the original
     /// </summary>
-    [Test, Order(1)]
+    [TestMethod, Priority(1)]
     public async Task CreateBook_Template_SaveToFolder()
     {
         // create flow

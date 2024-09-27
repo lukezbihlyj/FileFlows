@@ -3,12 +3,13 @@ namespace FileFlowsTests.Tests.FlowTests.FileTests;
 /// <summary>
 /// Tests a failure flow
 /// </summary>
+[TestClass]
 public class FailureTest : FileTest
 {
     /// <summary>
     /// Manually creates an audiobook flow and tests it
     /// </summary>
-    [Test, Order(1)]
+    [TestMethod, Priority(1)]
     public async Task FailureFlow()
     {
         string failureOutput = Path.Combine(TempPath, $"failure-output-{Guid.NewGuid()}.log");

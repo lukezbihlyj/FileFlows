@@ -3,9 +3,10 @@ namespace FileFlowsTests.Tests.FlowTests.Video;
 /// <summary>
 /// Tests for processing files
 /// </summary>
+[TestClass]
 public class Processing : VideoTest
 {
-    [Test]
+    [TestMethod]
     public async Task ProcessToH264()
     {
         const string FlowName = "Process To H264";

@@ -3,12 +3,15 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the script page
 /// </summary>
-public class Scripts(): TestBase("Scripts")
+[TestClass]
+public class Scripts: TestBase
 {
+    /// <inheritdoc />
+    protected override string PageName => "Scripts";
     /// <summary>
     /// Tests the intial button states of the datalist
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Add");
@@ -26,14 +29,14 @@ public class Scripts(): TestBase("Scripts")
     /// <summary>
     /// Tests the help button
     /// </summary>
-    [Test]
+    [TestMethod]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/extensions/scripts");
 
     /// <summary>
     /// Tests importing and exporting a script
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task ImportExport()
     {
         string name = Guid.NewGuid().ToString();
@@ -81,7 +84,7 @@ function Script(NumberParameter)
     /// <summary>
     /// Tests an invalid script is rejected
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task InvalidScript()
     {
         await TableButtonClick("Add");
@@ -119,7 +122,7 @@ function NotValid() {
     /// <summary>
     /// Tests a basic script is accepted
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task BasicScript()
     {
         await TableButtonClick("Add");
@@ -141,7 +144,7 @@ function Script() {
     /// <summary>
     /// Tests the script repository
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task ScriptRepository()
     {
         await TableButtonClick("Repository");

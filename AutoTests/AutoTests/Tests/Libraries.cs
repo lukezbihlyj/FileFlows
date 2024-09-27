@@ -3,12 +3,15 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Library page tests
 /// </summary>
-public class Libraries() : TestBase("Libraries")
+[TestClass]
+public class Libraries : TestBase
 {
+    /// <inheritdoc />
+    protected override string PageName => "Libraries";
     /// <summary>
     /// Tests the initial button states in the datalist
     /// </summary>
-    [Test]
+    [TestMethod]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Add");
@@ -21,7 +24,7 @@ public class Libraries() : TestBase("Libraries")
     /// <summary>
     /// Tests the help page
     /// </summary>
-    [Test]
+    [TestMethod]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/configuration/libraries");
 }

@@ -3,9 +3,10 @@ namespace FileFlowsTests.Tests.FlowTests.Video;
 /// <summary>
 /// Tests vidoe scripting
 /// </summary>
+[TestClass]
 public class VideoScripting : VideoTest
 {
-    [Test]
+    [TestMethod]
     public async Task VideoVariablesInFunctionTest()
     {
         string fileOutput = Path.Combine(TempPath, $"video-variables-in-function-output-{Guid.NewGuid()}.log");
