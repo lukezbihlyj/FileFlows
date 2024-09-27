@@ -745,7 +745,6 @@
         "ScanInterval-Help": "Le temps le plus court possible en secondes entre les scans. Il n'est pas garanti de scanner à cet intervalle à chaque fois, car un autre scan pourrait être en cours.",
         "ScanInterval-Suffix": "Secondes",
         "Schedule": "Planification",
-        "Schedule-Help": "Cette planification s'exécute dans le fuseau horaire configuré sous paramètres.",
         "ScheduleDescription": "Cela vous permet de configurer quand cette bibliothèque sera active.\n\nLe scanner de bibliothèque ne s'exécutera pas contre cette bibliothèque et aucun fichier ne sera traité en dehors de la planification.",
         "SkipFileAccessTests": "Ignorer les Tests d'Accès aux Fichiers",
         "SkipFileAccessTests-Help": "Lorsqu'il est activé, la bibliothèque ne testera pas si elle peut lire ou écrire dans le fichier avant de l'ajouter à la file des Fichiers.",

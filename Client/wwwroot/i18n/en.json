@@ -745,7 +745,6 @@
         "ScanInterval-Help": "The shortest possible time in seconds between scans.  It is not guaranteed to scan at this interval each time, as another scan might be in progress.",
         "ScanInterval-Suffix": "Seconds",
         "Schedule": "Schedule",
-        "Schedule-Help": "This schedule runs in the timezone configured under settings.",
         "ScheduleDescription": "This allows you to configure when this library will be active.\n\nThe library scanner will not run against this library nor will any files be processed outside of the schedule.\n",
         "SkipFileAccessTests": "Skip File Access Tests",
         "SkipFileAccessTests-Help": "When enabled, the library will not test if it can read or write to the file before adding it to the Files queue.",

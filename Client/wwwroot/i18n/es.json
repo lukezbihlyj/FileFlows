@@ -745,7 +745,6 @@
         "ScanInterval-Help": "El tiempo más corto posible en segundos entre escaneos. No se garantiza escanear en este intervalo cada vez, ya que otro escaneo podría estar en progreso.",
         "ScanInterval-Suffix": "Segundos",
         "Schedule": "Horario",
-        "Schedule-Help": "Este horario se ejecuta en la zona horaria configurada en la configuración.",
         "ScheduleDescription": "Esto le permite configurar cuándo estará activa esta biblioteca.\n\nEl escáner de la biblioteca no se ejecutará contra esta biblioteca ni se procesarán archivos fuera del horario.\n",
         "SkipFileAccessTests": "Omitir Pruebas de Acceso a Archivos",
         "SkipFileAccessTests-Help": "Cuando está habilitado, la biblioteca no probará si puede leer o escribir en el archivo antes de agregarlo a la cola de Archivos.",
