@@ -305,7 +305,7 @@ public partial class NavMenu : IDisposable
         try
         {
             string currentRoute = NavigationManager.Uri[NavigationManager.BaseUri.Length..];
-            Active = MenuItems.SelectMany(x => x.Items).FirstOrDefault(x => x.Url == currentRoute);
+            Active = MenuItems.SelectMany(x => x.Items).FirstOrDefault(x => x?.Url == currentRoute);
             if (Active == null)
             {
                 if (NavigationManager.Uri.Contains("/flows"))

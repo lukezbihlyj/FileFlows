@@ -123,7 +123,7 @@ public class LanguageHelper
             new () {English = "Land Dayak languages",French = "dayak, langues",German = "Dajakisch",Iso2 = "day"},
             new () {English = "Delaware",French = "delaware",German = "Delaware-Sprache",Iso2 = "del"},
             new () {English = "Slave (Athapascan)",French = "esclave (athapascan)",German = "Slave-Sprache",Iso2 = "den"},
-            new () {English = "German",French = "allemand",German = "Deutsch", Iso2 = "deu", Iso1 = "de", Aliases = new [] { "ger" }},
+            new () {English = "German",French = "allemand",German = "Deutsch", Iso2 = "deu", Iso1 = "de", Aliases = [ "ger" ], NativeName = "Deutsch"},
             new () {English = "Dogrib",French = "dogrib",German = "Dogrib-Sprache",Iso2 = "dgr"},
             new () {English = "Dinka",French = "dinka",German = "Dinka-Sprache",Iso2 = "din"},
             new () {English = "Divehi",French = "maldivien",German = "Maledivisch",Iso2 = "div",Iso1 = "dv"},
@@ -140,7 +140,7 @@ public class LanguageHelper
             new () {English = "Ekajuk",French = "ekajuk",German = "Ekajuk",Iso2 = "eka"},
             new () {English = "Greek, Modern (1453-)",French = "grec moderne (apr\u00E8s 1453)",German = "Neugriechisch",Iso2 = "ell",Iso1 = "el"},
             new () {English = "Elamite",French = "\u00E9lamite",German = "Elamisch",Iso2 = "elx"},
-            new () {English = "English",French = "anglais",German = "Englisch",Iso2 = "eng",Iso1 = "en"},
+            new () {English = "English",French = "anglais",German = "Englisch",Iso2 = "eng",Iso1 = "en" , NativeName = "English"},
             new () {English = "English, Middle (1100-1500)",French = "anglais moyen (1100-1500)",German = "Mittelenglisch",Iso2 = "enm"},
             new () {English = "Esperanto",French = "esp\u00E9ranto",German = "Esperanto",Iso2 = "epo",Iso1 = "eo"},
             new () {English = "Estonian",French = "estonien",German = "Estnisch",Iso2 = "est",Iso1 = "et"},
@@ -170,7 +170,6 @@ public class LanguageHelper
             new () {English = "Gbaya",French = "gbaya",German = "Gbaya-Sprache",Iso2 = "gba"},
             new () {English = "Germanic languages",French = "Germaniques, langues",German = "Germanische Sprachen (Andere)",Iso2 = "gem"},
             new () {English = "Georgian",French = "g\u00E9orgien",German = "Georgisch",Iso2 = "kat",Iso1 = "ka"},
-            new () {English = "German",French = "allemand",German = "Deutsch",Iso2 = "deu",Iso1 = "de"},
             new () {English = "Geez",French = "gu\u00E8ze",German = "Alt\u00E4thiopisch",Iso2 = "gez"},
             new () {English = "Gilbertese",French = "kiribati",German = "Gilbertesisch",Iso2 = "gil"},
             new () {English = "Gaelic",French = "ga\u00E9lique",German = "G\u00E4lisch-Schottisch",Iso2 = "gla",Iso1 = "gd"},
@@ -376,7 +375,7 @@ public class LanguageHelper
             new () {English = "Pali",French = "pali",German = "Pali",Iso2 = "pli",Iso1 = "pi"},
             new () {English = "Polish",French = "polonais",German = "Polnisch",Iso2 = "pol",Iso1 = "pl"},
             new () {English = "Pohnpeian",French = "pohnpei",German = "Ponapeanisch",Iso2 = "pon"},
-            new () {English = "Portuguese",French = "portugais",German = "Portugiesisch",Iso2 = "por",Iso1 = "pt"},
+            new () {English = "Portuguese",French = "portugais",German = "Portugiesisch",Iso2 = "por",Iso1 = "pt", NativeName = "Português"},
             new () {English = "Portuguese (Brazil)", French = "Portugais (Brésil)", German = "Portugiesisch (Brasilien)", Iso2 = "por-BR", Iso1 = "pt-BR"},
             new () {English = "Prakrit languages",French = "pr\u00E2krit, langues",German = "Prakrit",Iso2 = "pra"},
             new () {English = "Proven\u00E7al, Old (to 1500)",French = "proven\u00E7al ancien (jusqu\u0027\u00E0 1500)",German = "Altokzitanisch",Iso2 = "pro"},
@@ -431,7 +430,7 @@ public class LanguageHelper
             new () {English = "Somali",French = "somali",German = "Somali",Iso2 = "som",Iso1 = "so"},
             new () {English = "Songhai languages",French = "songhai, langues",German = "Songhai-Sprache",Iso2 = "son"},
             new () {English = "Sotho, Southern",French = "sotho du Sud",German = "S\u00FCd-Sotho-Sprache",Iso2 = "sot",Iso1 = "st"},
-            new () {English = "Spanish",French = "espagnol",German = "Spanisch",Iso2 = "spa",Iso1 = "es"},
+            new () {English = "Spanish",French = "espagnol",German = "Spanisch",Iso2 = "spa",Iso1 = "es", NativeName = "Español"},
             new () {English = "Spanish (Latin America)", French = "Espagnol (Amérique latine) ", German = "Spanisch (Lateinamerika)", Iso2 = "spa-419", Iso1 = "es-419"},
             new () {English = "Albanian",French = "albanais",German = "Albanisch",Iso2 = "sqi",Iso1 = "sq"},
             new () {English = "Sardinian",French = "sarde",German = "Sardisch",Iso2 = "srd",Iso1 = "sc"},
@@ -558,6 +557,17 @@ public class LanguageHelper
     {     
         var lang = FindLanguage(language);
         return lang?.English?.EmptyAsNull() ?? language;
+    }
+
+    /// <summary>
+    /// Gets the native name for a language
+    /// </summary>
+    /// <param name="language">the language to get the native name for</param>
+    /// <returns>the native name of a language</returns>
+    public static string GetNativeName(string language)
+    {
+        var lang = FindLanguage(language);
+        return lang?.NativeName?.EmptyAsNull() ?? lang?.English?.EmptyAsNull() ?? language;
     }
     
     /// <summary>
@@ -705,14 +715,46 @@ public class LanguageHelper
         }
     }
     
+    /// <summary>
+    /// Represents a language definition with various properties such as English, French, German names, 
+    /// ISO-639-1 and ISO-639-2 codes, native name, and aliases.
+    /// </summary>
     class LanguageDefintion
     {
+        /// <summary>
+        /// Gets or sets the English name of the language.
+        /// </summary>
         public string English { get; set; }
+
+        /// <summary>
+        /// Gets or sets the French name of the language.
+        /// </summary>
         public string French { get; set; }
+
+        /// <summary>
+        /// Gets or sets the German name of the language.
+        /// </summary>
         public string German { get; set; }
+
+        /// <summary>
+        /// Gets or sets the native name of the language.
+        /// </summary>
+        public string NativeName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ISO-639-1 code of the language.
+        /// </summary>
         public string Iso1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ISO-639-2 code of the language.
+        /// </summary>
         public string Iso2 { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the aliases of the language.
+        /// </summary>
         public string[] Aliases { get; set; }
     }
+    
 }

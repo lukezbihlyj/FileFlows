@@ -101,7 +101,7 @@ public class FileFlowsHelper
     /// <param name="name">the name of the page</param>
     public async Task GotoPage(string name, bool forceLoad = false)
     {
-        await Page.Locator($".nav-item.{(name == "Files" ? "library-files" : name.ToLower())} a").ClickAsync();
+        await Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'").ClickAsync();// .{(name == "Files" ? "library-files" : name.ToLower())} a").ClickAsync();
         await Task.Delay(250);
         if (forceLoad)
             await Page.ReloadAsync();
@@ -112,6 +112,15 @@ public class FileFlowsHelper
             HasTextString = name
         }).WaitForAsync();
 
+        await DismissUpdateAvailable();
+        
+    }
+
+    /// <summary>
+    /// Dismisses the update available banner if it is present
+    /// </summary>
+    public async Task DismissUpdateAvailable()
+    {
         var dismissButton = Page.Locator(".update-available .dismiss");
 
         try
@@ -131,7 +140,6 @@ public class FileFlowsHelper
             // If the timeout occurs, it means the button didn't become visible
             // Do nothing, since we don't want to throw an exception
         }
-        
     }
 
     /// <summary>

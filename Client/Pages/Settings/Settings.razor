@@ -8,7 +8,7 @@
 <PageView>
 
     <Head>
-        <button @onclick=@Save>
+        <button id="settings-save" @onclick=@Save>
             @if(IsSaving)
             {
                 @lblSaving
@@ -86,7 +86,7 @@
                         </div>
                     </FlowTab>
                     <FlowTab Title="@lblAdvanced">
-                        <InputSelect @bind-Value="@Language" Options=@Model.LanguageOptions Label="Pages.Settings.Fields.Language" AllowClear="false" />
+                        <InputSelect CustomXID="Language" @bind-Value="@Language" Options=@Model.LanguageOptions Label="Pages.Settings.Fields.Language" AllowClear="false" />
                         <InputNumber @bind-Value="@Model.DelayBetweenNextFile" Label="Pages.Settings.Fields.DelayBetweenNextFile" Min=0 Max=60000 />
                         @{
                             if (Model.ProcessFileCheckInterval < 5)

@@ -189,6 +189,38 @@ public class InitialTests() : TestBase("")
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(0);
     }
     
+    /// <summary>
+    /// Tests language can be changed
+    /// </summary>
+    [Test, Order(81)]
+    public async Task ChangeLanguage()
+    {
+        await FileFlows.GotoPage("Settings");
+        await FileFlows.Tab.Click("Advanced");
+    
+        await FileFlows.Inputs.SetSelect("Language", "Español");
+        await Page.Locator("#settings-save").ClickAsync();
+        await Task.Delay(500);
+        await FileFlows.WaitForBlockerToDisappear();
+        
+        await FileFlows.GotoPage("Configuraciones");
+        await FileFlows.Tab.Click("Avanzado");
+        
+        await FileFlows.Inputs.SetSelect("Language", "Deutsch");
+        await Page.Locator("#settings-save").ClickAsync();
+        await Task.Delay(500);
+        await FileFlows.WaitForBlockerToDisappear();
+        
+        await FileFlows.GotoPage("Einstellungen");
+        await FileFlows.Tab.Click("Erweitert");
+        
+        await FileFlows.Inputs.SetSelect("Language", "English");
+        await Page.Locator("#settings-save").ClickAsync();
+        await FileFlows.GotoPage("Settings");
+        await Task.Delay(500);
+        await FileFlows.WaitForBlockerToDisappear();
+    }
+    
     [Test, Order(90)]
     public async Task EnterLicense()
     {

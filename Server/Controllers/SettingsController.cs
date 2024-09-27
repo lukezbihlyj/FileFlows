@@ -135,7 +135,7 @@ public class SettingsController : BaseController
             var parts = file.Name.Split('.');
             if (parts.Length != 2)
                 continue;
-            var langName = LanguageHelper.GetEnglishFor(parts[0]);
+            var langName = LanguageHelper.GetNativeName(parts[0]);
             options.Add(new ListOption
             {
                 Value = parts[0],
