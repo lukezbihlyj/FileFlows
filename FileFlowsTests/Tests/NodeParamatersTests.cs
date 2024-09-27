@@ -33,4 +33,24 @@ public class NodeParamatersTests: TestBase
         Assert.AreEqual("original.mkv", nodeParameters.Variables["file.Orig.Name"]);
         Assert.AreEqual("original", nodeParameters.Variables["file.Orig.NameNoExtension"]);
     }
+
+    [TestMethod]
+    public void VariablesTests()
+    {
+        
+        var original = Path.Combine(TempPath, "original.mkv");
+        File.WriteAllText(original, "test");
+        
+        var nodeParameters = new NodeParameters(original, Logger, false, @"C:\media", new LocalFileService());
+
+        var file = Path.Combine(TempPath, "somefile.mp4");
+        File.WriteAllText(file, "test");
+        
+        nodeParameters.InitFile(file);
+        
+        Assert.AreEqual("Path", nodeParameters.ReplaceVariables("Path{missing}", true));
+        Assert.AreEqual("Pathmissing", nodeParameters.ReplaceVariables("Path{missing}", false));
+        Assert.AreEqual("", nodeParameters.ReplaceVariables("{missing}", true));
+        Assert.AreEqual("missing", nodeParameters.ReplaceVariables("{missing}", false));
+    }
 }

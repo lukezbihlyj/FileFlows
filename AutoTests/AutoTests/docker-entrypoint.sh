@@ -36,7 +36,7 @@ wait_for_server
 
 # Run the tests
 /dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
-  --filter FullyQualifiedName=FileFlowsTests.Tests.InitialTests \
+  --filter TestCategory=InitialTests \
   --logger "trx;LogFileName=/app/tests-results/InitialTests.trx"
 
 # Check if InitialTests passed
@@ -46,7 +46,7 @@ if [ $? -eq 0 ]; then
     if [ "$RunAllTests" = "1" ]; then
       # Step 2: Run all other tests excluding InitialTests and append to the same log file
       /dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
-          --filter FullyQualifiedName!=FileFlowsTests.Tests.InitialTests \
+          --filter TestCategory!=InitialTests \
           --logger "trx;LogFileName=/app/tests-results/AutoTests.trx"
     else
         echo "Skipping other tests as --all argument is not passed."
