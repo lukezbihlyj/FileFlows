@@ -121,10 +121,9 @@ public class FileFlowsHelper
     /// </summary>
     public async Task DismissUpdateAvailable()
     {
-        var dismissButton = Page.Locator(".update-available .dismiss");
-
         try
         {
+            var dismissButton = Page.Locator(".update-available .dismiss");
             // Wait for up to 500ms for the dismiss button to become visible
             await dismissButton.WaitForAsync(new LocatorWaitForOptions()
             {
