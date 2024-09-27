@@ -101,7 +101,10 @@ public class FileFlowsHelper
     /// <param name="name">the name of the page</param>
     public async Task GotoPage(string name, bool forceLoad = false)
     {
-        await Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'").ClickAsync();// .{(name == "Files" ? "library-files" : name.ToLower())} a").ClickAsync();
+        var locator = Page.Locator($".nav-item .{(name == "Files" ? "library-files" : name.ToLower())} a");
+        if(await locator.CountAsync() == 0) 
+            locator = Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'");
+        await locator.ClickAsync();
         await Task.Delay(250);
         if (forceLoad)
             await Page.ReloadAsync();
