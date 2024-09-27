@@ -202,7 +202,6 @@ public class InitialTests() : TestBase("")
         await Page.Locator("#settings-save").ClickAsync();
         await Task.Delay(500);
         await FileFlows.WaitForBlockerToDisappear();
-        
         await FileFlows.GotoPage("Configuraciones");
         await FileFlows.Tab.Click("Avanzado");
         
@@ -210,9 +209,15 @@ public class InitialTests() : TestBase("")
         await Page.Locator("#settings-save").ClickAsync();
         await Task.Delay(500);
         await FileFlows.WaitForBlockerToDisappear();
-        
         await FileFlows.GotoPage("Einstellungen");
         await FileFlows.Tab.Click("Erweitert");
+        
+        await FileFlows.Inputs.SetSelect("Language", "Português");
+        await Page.Locator("#settings-save").ClickAsync();
+        await Task.Delay(500);
+        await FileFlows.WaitForBlockerToDisappear();
+        await FileFlows.GotoPage("Configurações");
+        await FileFlows.Tab.Click("Avançado");
         
         await FileFlows.Inputs.SetSelect("Language", "English");
         await Page.Locator("#settings-save").ClickAsync();
