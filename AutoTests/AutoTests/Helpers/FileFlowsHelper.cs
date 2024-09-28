@@ -79,7 +79,7 @@ public class FileFlowsHelper
         this.Page = test.Page;
         this.InitialConfiguration = new(test);
         this.Tab = new (test);
-        this.Table = new (test);
+        this.Table = new (test, logger);
         this.Toast = new (test);
         this.MessageBox = new (test);
         this.Inputs = new (test);

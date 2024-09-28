@@ -174,8 +174,9 @@ public abstract class TestBase: PageTest
     /// Tears down the tests/cleans it up
     /// </summary>
     [TestCleanup]
-    public async Task TestBaseDown()
+    public async Task TestBaseCleanup()
     {
+        Logger.ILog("TestBase Cleanup");
         bool blazorError = false;
         try
         {
@@ -215,7 +216,9 @@ public abstract class TestBase: PageTest
                     Logger.ELog("Context Closing failed: " + ex.Message);
                 }
             }
+            Logger.ILog("TestBase Cleanup: Calling base.TearDown");
             await base.Teardown();
+            Logger.ILog("TestBase Cleanup: Called base.TearDown");
             
             if (string.IsNullOrWhiteSpace(RecordingsDirectory) == false)
             {
@@ -251,6 +254,7 @@ public abstract class TestBase: PageTest
 
         if (TestOK && blazorError)
         {
+            Logger.ILog("TestBase Cleanup: Failing test due to Blazor Error");
             Assert.Fail("Blazor Error: " + ConsoleErrors);
         }
     }

@@ -1,11 +1,7 @@
 namespace FileFlowsTests.Helpers.UiComponents;
 
-public class Table : UiComponent
+public class Table(TestBase test, ILogger logger) : UiComponent(test)
 {
-    public Table(TestBase test) : base(test)
-    {
-    }
-
     private ILocator Button(string name, bool sideEditor = false) 
         => Page.Locator((sideEditor ? ".vi-container " : "") + $".flowtable-button >> text='{name}'");
     
@@ -49,10 +45,17 @@ public class Table : UiComponent
     {
         try
         {
-            return await ItemLocator(name, sideEditor).CountAsync() > 0;
+            logger.ILog("Check table item exists: " + name);
+            bool exists = await ItemLocator(name, sideEditor).CountAsync() > 0;
+            if(exists)
+                logger.ILog("Table item exists: " + name);
+            else
+                logger.ILog("Table item does not exist: " + name);
+            return exists;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.WLog("Failed checking table item exists:" + ex.Message);
             return false;
         }
     }
