@@ -179,10 +179,9 @@ public abstract class TestBase: PageTest
         bool blazorError = false;
         try
         {
-            await base.Teardown();
             if (TestOK == false)
                 await Task.Delay(5000); // for recording padding
-
+            
             if (Page != null)
             {
                 try
@@ -216,7 +215,8 @@ public abstract class TestBase: PageTest
                     Logger.ELog("Context Closing failed: " + ex.Message);
                 }
             }
-
+            await base.Teardown();
+            
             if (string.IsNullOrWhiteSpace(RecordingsDirectory) == false)
             {
                 var outputVideo = Path.Combine(RecordingsDirectory,
