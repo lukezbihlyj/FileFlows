@@ -52,6 +52,7 @@ public abstract class FlowTest:TestBase
             await FileFlows.Flow.SetTitle(name);
             await FileFlows.Flow.Save();
         }
+        Logger.ILog($"Flwo '{name}' created");
     }
 
     /// <summary>
@@ -63,6 +64,7 @@ public abstract class FlowTest:TestBase
     /// <returns>the result</returns>
     protected async Task<string> CreateLibrary(string file, Library library, bool scan = false)
     {
+        Logger.ILog($"Creating Library '{library.Name}'");
         string libPath = Path.Combine(TempPath, "lib-" + Guid.NewGuid());
         Directory.CreateDirectory(libPath);
         string shortName = Guid.NewGuid() + new FileInfo(file).Extension;
@@ -118,6 +120,7 @@ public abstract class FlowTest:TestBase
             }
         }
 
+        Logger.ILog($"Created Library '{library.Name}'");
         return shortName;
     }
 
