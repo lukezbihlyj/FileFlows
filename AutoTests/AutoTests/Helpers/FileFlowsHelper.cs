@@ -1,5 +1,6 @@
 using FileFlowsTests.Tests;
 using Humanizer;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 
 namespace FileFlowsTests.Helpers;
 
@@ -58,15 +59,21 @@ public class FileFlowsHelper
     /// Gets the base URL for FileFlows eg http://192.168.1.10:19200/
     /// </summary>
     public string BaseUrl { get;init; }
+    
+    /// <summary>
+    /// Gets the logger to use
+    /// </summary>
+    public ILogger Logger { get; init; }
 
     /// <summary>
     /// Constructs a new instance of the FileFlows Helper
     /// </summary>
     /// <param name="test">the test using this helper</param>
     /// <param name="baseUrl">the base URL of the FileFlows server</param>
-    public FileFlowsHelper(TestBase test, string baseUrl)
+    public FileFlowsHelper(TestBase test, string baseUrl, ILogger logger)
     {
         BaseUrl = baseUrl;
+        Logger = logger;
         if (BaseUrl.EndsWith('/') == false)
             BaseUrl += '/';
         this.Page = test.Page;
@@ -101,22 +108,26 @@ public class FileFlowsHelper
     /// <param name="name">the name of the page</param>
     public async Task GotoPage(string name, bool forceLoad = false)
     {
+        Logger.ILog("GotoPage: " + name);
         var locator = Page.Locator($".nav-item .{(name == "Files" ? "library-files" : name.ToLower())} a");
         if(await locator.CountAsync() == 0) 
             locator = Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'");
         await locator.ClickAsync();
+        Logger.ILog("Clicked Page Link: " + name);
         await Task.Delay(250);
         if (forceLoad)
             await Page.ReloadAsync();
         await WaitForBlockerToDisappear();
         
+        Logger.ILog("Waiting for top row text: " + name);
         await Page.Locator(".top-row .title", new ()
         {
             HasTextString = name
         }).WaitForAsync();
 
+        Logger.ILog("Dismissing update available if present");
         await DismissUpdateAvailable();
-        
+        Logger.ILog("GotoPage complete: " + name);
     }
 
     /// <summary>

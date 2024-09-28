@@ -164,7 +164,7 @@ public abstract class TestBase: PageTest
             else
                 Logger.ILog(msg.Text);
         };
-        FileFlows = new FileFlowsHelper(this, ffBaseUrl);
+        FileFlows = new FileFlowsHelper(this, ffBaseUrl, Logger);
         await FileFlows.Open();
         if(string.IsNullOrWhiteSpace(PageName) == false)
             await FileFlows.GotoPage(PageName);
