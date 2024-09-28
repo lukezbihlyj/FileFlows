@@ -1,13 +1,19 @@
 using System.Text;
 using FileFlowsTests.Helpers;
-using Microsoft.Playwright.MSTest;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FileFlowsTests.Tests;
 
 //[Parallelizable(ParallelScope.All)]
-public abstract class TestBase: PageTest
+public abstract class TestBase //: PageTest
 {
+    
+    public TestContext TestContext { get; set; }
+    public IPlaywright Playwright { get; private set; }
+    public IBrowser Browser { get; private set; }
+    public IBrowserContext Context { get; private set; } 
+    public IPage Page { get; private set; }
+    private string RecordingPath;
+    
     /// <summary>
     /// Optional page name to go to when starting
     /// </summary>
@@ -86,11 +92,55 @@ public abstract class TestBase: PageTest
     protected string RandomName(string prefix) => prefix + " " + rand.Next(1, 100_000);
     
 
-    public override BrowserNewContextOptions ContextOptions()
+    // public override BrowserNewContextOptions ContextOptions()
+    // {
+    //     return new BrowserNewContextOptions()
+    //     {
+    //         ColorScheme = ColorScheme.Dark,
+    //         ViewportSize = new ViewportSize
+    //         {
+    //             Width = 1920, 
+    //             Height = 1080
+    //         },
+    //         RecordVideoDir = RecordingsDirectory + "/",
+    //         RecordVideoSize = new RecordVideoSize() { Width = 1920, Height = 1080 },
+    //         IgnoreHTTPSErrors = true,
+    //         Permissions = new []
+    //         {
+    //             "clipboard-read", "clipboard-write"
+    //         }
+    //     };
+    // }
+    
+    /// <summary>
+    /// Sets up the tests
+    /// </summary>
+    [TestInitialize]
+    public async Task TestSetup()
     {
-        return new BrowserNewContextOptions()
+        Logger.Writer = TestContext.WriteLine;
+        var ffBaseUrl = Environment.GetEnvironmentVariable("FileFlowsUrl")?.EmptyAsNull()  ?? "http://localhost:5276/";
+        Logger.ILog("FF Base URL: " + ffBaseUrl);
+        Logger.ILog("Temp Path: " + TempPath);
+        if (Directory.Exists(RecordingsDirectory) == false)
+            Directory.CreateDirectory(RecordingsDirectory);
+        Logger.ILog("Recordings Path: " + RecordingsDirectory);
+        Playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+        if (Environment.GetEnvironmentVariable("DOCKER") == "1")
         {
-            ColorScheme = ColorScheme.Dark,
+            Logger.ILog("Running in Docker");
+            Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions { Headless = true });
+        }
+        else
+        {
+            Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = false, // This makes the browser window visible
+                Args = new[] { "--window-size=1920,1080" } // This sets the window size
+            });
+        }
+        Context = await Browser.NewContextAsync(new BrowserNewContextOptions
+        {
             ViewportSize = new ViewportSize
             {
                 Width = 1920, 
@@ -103,23 +153,9 @@ public abstract class TestBase: PageTest
             {
                 "clipboard-read", "clipboard-write"
             }
-        };
-    }
-    
-    /// <summary>
-    /// Sets up the tests
-    /// </summary>
-    [TestInitialize]
-    public async Task TestSetup()
-    {
-        await base.Setup();
-        Logger.Writer = TestContext.WriteLine;
-        var ffBaseUrl = Environment.GetEnvironmentVariable("FileFlowsUrl")?.EmptyAsNull()  ?? "http://localhost:5276/";
-        Logger.ILog("FF Base URL: " + ffBaseUrl);
-        Logger.ILog("Temp Path: " + TempPath);
-        if (Directory.Exists(RecordingsDirectory) == false)
-            Directory.CreateDirectory(RecordingsDirectory);
-        Logger.ILog("Recordings Path: " + RecordingsDirectory);
+        });
+
+        Page = await Context.NewPageAsync();
         // if (Browser == null)
         // {
         //     if (Environment.GetEnvironmentVariable("DOCKER") == "1")
@@ -171,6 +207,11 @@ public abstract class TestBase: PageTest
     }
     
     /// <summary>
+    /// Gets if the test was OK
+    /// </summary>
+    private bool TestOK => TestContext.CurrentTestOutcome is UnitTestOutcome.Passed or UnitTestOutcome.Inconclusive;
+    
+    /// <summary>
     /// Tears down the tests/cleans it up
     /// </summary>
     [TestCleanup]
@@ -216,9 +257,6 @@ public abstract class TestBase: PageTest
                     Logger.ELog("Context Closing failed: " + ex.Message);
                 }
             }
-            Logger.ILog("TestBase Cleanup: Calling base.TearDown");
-            await base.Teardown();
-            Logger.ILog("TestBase Cleanup: Called base.TearDown");
             
             if (string.IsNullOrWhiteSpace(RecordingsDirectory) == false)
             {
@@ -301,4 +339,27 @@ public abstract class TestBase: PageTest
 
     protected Task ToastError(string error)
         => FileFlows.Toast.Error(error);
+    
+    
+    
+
+    /// <summary>
+    /// Exposes the Playwright Expect function for assertions.
+    /// </summary>
+    /// <param name="locator">Locator of the element to expect.</param>
+    /// <returns>The assertion object for the locator.</returns>
+    protected static ILocatorAssertions Expect(ILocator locator)
+    {
+        return Assertions.Expect(locator);
+    }
+
+    /// <summary>
+    /// Creates a Playwright locator for the specified selector.
+    /// </summary>
+    /// <param name="selector">The selector to locate the element.</param>
+    /// <returns>Locator object for the element.</returns>
+    protected ILocator GetLocator(string selector)
+    {
+        return Page.Locator(selector);
+    }
 }
