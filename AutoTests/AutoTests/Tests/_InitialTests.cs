@@ -212,7 +212,15 @@ public class InitialTests : TestBase
             await Page.Locator("#settings-save").ClickAsync();
             await Task.Delay(500);
             await FileFlows.WaitForBlockerToDisappear();
-            await FileFlows.GotoPage(lang.Item2);
+
+            await Page.Locator(".nav-item.settings a").ClickAsync();
+            await FileFlows.WaitForBlockerToDisappear();
+            Logger.ILog("Waiting for top row text: " + lang.Item2);
+            await Page.Locator(".top-row .title", new ()
+            {
+                HasTextString = lang.Item2
+            }).WaitForAsync();
+
             await FileFlows.Tab.Click(lang.Item3);
         }
     }

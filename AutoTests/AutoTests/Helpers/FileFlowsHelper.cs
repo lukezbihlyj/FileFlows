@@ -111,11 +111,10 @@ public class FileFlowsHelper
         Logger.ILog("GotoPage: " + name);
         try
         {
-            string selector = $".nav-item .{(name == "Files" ? "library-files" : name.ToLower())} a";
+            ILocator? locator = null;
+            string selector = $".nav-item.{(name == "Files" ? "library-files" : name.ToLower())} a";
             Logger.ILog("Selector: " + selector);
-            var locator = Page.Locator(selector);
-            if (await locator.CountAsync() == 0)
-                locator = Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'");
+            locator = Page.Locator(selector);
             await locator.ClickAsync();
         }
         catch (Exception ex)
