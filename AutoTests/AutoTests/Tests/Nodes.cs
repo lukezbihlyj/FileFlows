@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the nodes page
 /// </summary>
-[TestClass]
+//[TestClass]
 public class Nodes : TestBase
 {
     /// <inheritdoc />
@@ -11,7 +11,7 @@ public class Nodes : TestBase
     /// <summary>
     /// Tests the intiial button states in the datalist
     /// </summary>
-    [TestMethod, Priority(1)]
+    [Test, Order(1)]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Help");
@@ -22,14 +22,14 @@ public class Nodes : TestBase
     /// <summary>
     /// Tests the help page
     /// </summary>
-    [TestMethod]
+    [Test]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/configuration/nodes");
 
     /// <summary>
     /// Tests a user can download the node zip file
     /// </summary>
-    [TestMethod]
+    [Test]
     public async Task Download()
     {
         // Start the task of waiting for the download
@@ -50,7 +50,7 @@ public class Nodes : TestBase
     /// <summary>
     /// Tests the internal node cannot be deleted
     /// </summary>
-    [TestMethod]
+    [Test]
     public async Task CannotDeleteInternalNode()
     {
         await FileFlows.Table.Select("Internal Processing Node");

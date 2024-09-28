@@ -3,13 +3,13 @@ namespace FileFlowsTests.Tests.FlowTests.Video;
 /// <summary>
 /// Scaling video tests
 /// </summary>
-[TestClass]
+//[TestClass]
 public class Scaling : VideoTest
 {
     /// <summary>
     /// Downscales a video
     /// </summary>
-    [TestMethod, Priority(1)]
+    [Test, Order(1)]
     public async Task Downscale()
     {
         var outputFile = await Test(
@@ -25,7 +25,7 @@ public class Scaling : VideoTest
     /// <summary>
     /// Upscales a video
     /// </summary>
-    [TestMethod, Priority(2)]
+    [Test, Order(2)]
     public async Task Upscale()
     {
         await Test(

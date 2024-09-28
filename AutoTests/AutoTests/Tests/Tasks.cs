@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the tasks page
 /// </summary>
-[TestClass]
+//[TestClass]
 public class Tasks : TestBase
 {
     /// <inheritdoc />
@@ -11,7 +11,7 @@ public class Tasks : TestBase
     /// <summary>
     /// Tests the initial button states
     /// </summary>
-    [TestMethod]
+    [Test]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Add");
@@ -23,14 +23,14 @@ public class Tasks : TestBase
     /// <summary>
     /// Tests the help page
     /// </summary>
-    [TestMethod]
+    [Test]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/system/tasks");
 
     /// <summary>
     /// Tests adding/editing/deleting a task
     /// </summary>
-    [TestMethod]
+    [Test]
     public async Task AddEditDelete()
     {
         string testScript = Guid.NewGuid().ToString();

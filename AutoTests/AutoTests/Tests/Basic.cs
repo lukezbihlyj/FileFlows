@@ -1,11 +1,11 @@
 namespace FileFlowsTests.Tests;
 
-[TestClass]
+//[TestClass]
 public class Basic :TestBase
 {
 
     
-    [TestMethod]
+    [Test]
     public async Task BasicTest()
     {
         await Page.GotoAsync("http://goolge.com");

@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the plugins page
 /// </summary>
-[TestClass]
+//[TestClass]
 public class Plugins : TestBase
 {
     /// <inheritdoc />
@@ -11,7 +11,7 @@ public class Plugins : TestBase
     /// <summary>
     /// Tests the inital button states
     /// </summary>
-    [TestMethod, Priority(1)]
+    [Test, Order(1)]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Add");
@@ -26,14 +26,14 @@ public class Plugins : TestBase
     /// <summary>
     /// Tests the help page
     /// </summary>
-    [TestMethod, Priority(2)]
+    [Test, Order(2)]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/extensions/plugins");
 
     /// <summary>
     /// Tests adding a plugin
     /// </summary>
-    [TestMethod, Priority(3)]
+    [Test, Order(3)]
     public async Task Add()
     {
         await TableButtonClick("Add");
@@ -61,7 +61,7 @@ public class Plugins : TestBase
     /// <summary>
     /// Tests using the email task
     /// </summary>
-    [TestMethod, Priority(4)]
+    [Test, Order(4)]
     public async Task EmailTask()
     {
         string name = RandomName("EmailTask");

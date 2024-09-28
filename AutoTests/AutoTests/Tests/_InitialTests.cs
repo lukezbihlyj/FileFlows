@@ -4,14 +4,14 @@ namespace FileFlowsTests.Tests;
 /// Initial tests the configures FileFlows.
 /// And performs test on an un-configured system
 /// </summary>
-[TestClass]
-[TestCategory("InitialTests")]
+//[TestClass]
+//[TestCategory("InitialTests")]
 public class InitialTests : TestBase
 {
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
-    [TestMethod, Priority(1)]
+    [Test, Order(1)]
     public async Task InitialConfiguration()
     {
         await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
@@ -62,7 +62,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Sets the FFmpeg paths
     /// </summary>
-    [TestMethod, Priority(10)] 
+    [Test, Order(10)] 
     public async Task SetFFmpegPath()
     {
         await FileFlows.GotoPage("Variables");
@@ -79,7 +79,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
-    [TestMethod, Priority(11)]
+    [Test, Order(11)]
     public async Task LicenseUnlicensed()
     {
         await FileFlows.GotoPage("Settings");
@@ -93,7 +93,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests the tabs in settings are only the expected tabs
     /// </summary>
-    [TestMethod, Priority(12)]
+    [Test, Order(12)]
     public async Task UnlicensedTabs()
     {
         await FileFlows.GotoPage("Settings");
@@ -115,7 +115,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests that if a user tries to add a library before adding a flow, they are stopped with a toast error message
     /// </summary>
-    [TestMethod, Priority(20)]
+    [Test, Order(20)]
     public async Task LibraryNoFlows()
     {
         await FileFlows.GotoPage("Libraries");
@@ -127,7 +127,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests the pointer is shown for step 1.
     /// </summary>
-    [TestMethod, Priority(30)]
+    [Test, Order(30)]
     public async Task FlowPointer()
     {
         await Expect(Page.Locator(".nav-item.flows .not-configured-pointer")).ToHaveCountAsync(1);
@@ -138,7 +138,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests creating a flow
     /// </summary>
-    [TestMethod, Priority(31)]
+    [Test, Order(31)]
     public async Task FlowCreate()
     {
         await FileFlows.GotoPage("Flows");
@@ -161,7 +161,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Creates a library
     /// </summary>
-    [TestMethod, Priority(40)]
+    [Test, Order(40)]
     public async Task LibraryCreate()
     {
         await FileFlows.GotoPage("Libraries");
@@ -181,7 +181,7 @@ public class InitialTests : TestBase
         await Expect(Page.Locator(".pointer-add >> text='Add'")).ToHaveCountAsync(0);
     }
     
-    [TestMethod, Priority(80)]
+    [Test, Order(80)]
     public async Task CheckUnLicensedPages()
     {
         await Expect(Page.Locator("a[href='tasks']")).ToHaveCountAsync(0);
@@ -191,7 +191,7 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests language can be changed
     /// </summary>
-    [TestMethod, Priority(81)]
+    [Test, Order(81)]
     public async Task ChangeLanguage()
     {
         await FileFlows.GotoPage("Settings");
@@ -225,7 +225,7 @@ public class InitialTests : TestBase
         }
     }
     
-    [TestMethod, Priority(90)]
+    [Test, Order(90)]
     public async Task EnterLicense()
     {
         await FileFlows.GotoPage("Settings");
@@ -253,7 +253,7 @@ public class InitialTests : TestBase
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(1);
     }
     
-    [TestMethod, Priority(100)]
+    [Test, Order(100)]
     public async Task TasksNoScript()
     {
         await GotoPage("Tasks");
@@ -261,7 +261,7 @@ public class InitialTests : TestBase
         await ToastError("No scripts found to create a task for.");
     }
     
-    [TestMethod, Priority(101)]
+    [Test, Order(101)]
     public async Task GotifyFileProcessed()
     {
         await GotoPage("Scripts");

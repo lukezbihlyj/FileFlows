@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the settings page
 /// </summary>
-[TestClass]
+//[TestClass]
 public class Settings : TestBase
 {
     /// <inheritdoc />
@@ -11,7 +11,7 @@ public class Settings : TestBase
     /// <summary>
     /// Tests the help URL
     /// </summary>
-    [TestMethod]
+    [Test]
     public Task Help()
         => FileFlows.Help.TestButton("https://fileflows.com/docs/webconsole/admin/settings");
 }

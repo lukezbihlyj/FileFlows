@@ -3,7 +3,7 @@ namespace FileFlowsTests.Tests;
 /// <summary>
 /// Tests for the flows page
 /// </summary>
-[TestClass]
+//[TestClass]
 public class Flows : TestBase
 {
     /// <inheritdoc />
@@ -12,7 +12,7 @@ public class Flows : TestBase
     /// <summary>
     /// Tests the initial button states
     /// </summary>
-    [TestMethod]
+    [Test]
     public async Task InitialButtonStates()
     {
         await FileFlows.Table.ButtonEnabled("Add");
@@ -29,7 +29,7 @@ public class Flows : TestBase
     /// <summary>
     /// Tests the help
     /// </summary>
-    [TestMethod]
+    [Test]
     public Task Help()
         => FileFlows.Help.TestDatalistButton("https://fileflows.com/docs/webconsole/configuration/flows");
 }
