@@ -134,8 +134,9 @@ public abstract class TestBase : PlaywrightTest
     [TearDown]
     public async Task TearDown()
     {
-        bool failed = TestContext.CurrentContext.Result.Outcome == ResultState.Failure ||
-                      TestContext.CurrentContext.Result.Outcome == ResultState.Error;
+        bool passed = TestContext.CurrentContext.Result.Outcome == ResultState.Success ||
+                      TestContext.CurrentContext.Result.Outcome == ResultState.NotRunnable;
+        bool failed = !passed;
         bool blazorError = false;
         try
         {
@@ -164,17 +165,17 @@ public abstract class TestBase : PlaywrightTest
                 }
             }
 
-            if (Context != null)
-            {
-                try
-                {
-                    await Context.CloseAsync();
-                }
-                catch (Exception ex)
-                {
-                    Logger.ELog("Context Closing failed: " + ex.Message);
-                }
-            }
+            // if (Context != null)
+            // {
+            //     try
+            //     {
+            //         await Context.CloseAsync();
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         Logger.ELog("Context Closing failed: " + ex.Message);
+            //     }
+            // }
 
             var outputVideo = Path.Combine(RecordingsDirectory, TestContext.CurrentContext.Test.FullName + ".webm"); 
             if (outputVideo != TestFiles.TestVideo1 && Environment.GetEnvironmentVariable("KEEP_PASSED_VIDEOS") == "false" && failed == false &&
