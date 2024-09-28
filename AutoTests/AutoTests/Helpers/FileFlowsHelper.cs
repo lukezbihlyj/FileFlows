@@ -109,10 +109,24 @@ public class FileFlowsHelper
     public async Task GotoPage(string name, bool forceLoad = false)
     {
         Logger.ILog("GotoPage: " + name);
-        var locator = Page.Locator($".nav-item .{(name == "Files" ? "library-files" : name.ToLower())} a");
-        if(await locator.CountAsync() == 0) 
-            locator = Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'");
-        await locator.ClickAsync();
+        try
+        {
+            string selector = $".nav-item .{(name == "Files" ? "library-files" : name.ToLower())} a";
+            Logger.ILog("Selector: " + selector);
+            var locator = Page.Locator(selector);
+            if (await locator.CountAsync() == 0)
+                locator = Page.Locator($"#ul-nav-menu .nav-item a >> text='{name}'");
+            await locator.ClickAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Failed to click page link: " + name + " " + ex.Message);
+            var selector = $"#ul-nav-menu .nav-item a >> text='{name}'";  
+            Logger.WLog("Using secondary selector: " + selector);
+            var locator = Page.Locator(selector);
+            await locator.ClickAsync();
+        }
+
         Logger.ILog("Clicked Page Link: " + name);
         await Task.Delay(250);
         if (forceLoad)
