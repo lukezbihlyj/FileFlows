@@ -44,6 +44,8 @@ public abstract class FlowTest:TestBase
             }
 
             await ButtonClick("Save");
+            await Task.Delay(100);
+            await FileFlows.WaitForBlockerToDisappear();
         }
         else
         {
