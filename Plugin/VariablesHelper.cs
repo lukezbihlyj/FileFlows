@@ -115,6 +115,7 @@ public class VariablesHelper
     /// </returns>
     public static object? ResolveVariable(Dictionary<string, object> variables, string variablePath)
     {
+        // Any additional changes here add to the ScribanRenderer
         if (variablePath == "time.processing" && StartedAt != null)
             return DateTime.Now.Subtract(StartedAt.Value).ToString();
         if (variablePath == "time.processingRaw" && StartedAt != null)
