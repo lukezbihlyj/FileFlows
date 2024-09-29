@@ -17,9 +17,33 @@ public class Program
     [STAThread] // need for Photino.net on windows
     public static void Main(string[] args)
     {
-        #if(DEBUG)
-        var i18nDirectory = Path.Combine("..", "Client", "wwwroot", "i18n");
-        var jsonFiles = Directory.GetFiles(i18nDirectory, "*.json");
+#if(DEBUG)
+        FixTranslations(Path.Combine("..", "Client", "wwwroot", "i18n"));
+        var pluginsDir = Path.Combine("..", "..", "FileFlowsPlugins");
+        if (Directory.Exists(pluginsDir))
+        {
+            foreach (var pluginDir in Directory.GetDirectories(pluginsDir))
+            {
+                FixTranslations(Path.Combine(pluginDir, "i18n"));
+            }
+        }
+#endif
+        
+        if (CommandLine.Process(args))
+            return;
+        
+        Application app = ServiceLoader.Provider.GetRequiredService<Application>();
+        ServerShared.Services.SharedServiceLoader.Loader = type => ServiceLoader.Provider.GetRequiredService(type);
+        app.Run(args);
+    }
+
+
+#if DEBUG
+    private static void FixTranslations(string directory)
+    {
+        if (Directory.Exists(directory) == false)
+            return;
+        var jsonFiles = Directory.GetFiles(directory, "*.json");
 
         foreach (var jsonFile in jsonFiles)
         {
@@ -29,14 +53,7 @@ public class Program
             var reorderedJson = Translater.ReorderJson(jsonContent);
             File.WriteAllText(jsonFile, reorderedJson);
         }
-        #endif
-        
-        if (CommandLine.Process(args))
-            return;
-        
-        Application app = ServiceLoader.Provider.GetRequiredService<Application>();
-        ServerShared.Services.SharedServiceLoader.Loader = type => ServiceLoader.Provider.GetRequiredService(type);
-        app.Run(args);
     }
+#endif
     
 }
