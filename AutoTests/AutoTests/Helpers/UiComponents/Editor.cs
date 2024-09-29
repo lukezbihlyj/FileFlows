@@ -10,9 +10,9 @@ public class Editor(TestBase test, FileFlowsHelper fileFlowsHelper)  : UiCompone
         => Button(name).ClickAsync();
 
     public async Task ButtonDisabled(string name)
-        => Assert.IsTrue(await Button(name).IsDisabledAsync());
+        => ClassicAssert.IsTrue(await Button(name).IsDisabledAsync());
     public async Task ButtonEnabled(string name)
-        => Assert.IsTrue(await Button(name).IsEnabledAsync());
+        => ClassicAssert.IsTrue(await Button(name).IsEnabledAsync());
 
     public async Task Title(string title)
     {

@@ -44,9 +44,9 @@ return 1");
             await Task.Delay(250);
         }
         
-        Assert.IsTrue(File.Exists(fileOutput), "Output file does not exist");
+        ClassicAssert.IsTrue(File.Exists(fileOutput), "Output file does not exist");
         var output = await File.ReadAllTextAsync(fileOutput);
         Logger.ILog("Output: " + Environment.NewLine + output);
-        Assert.IsTrue(output.Contains("Video Codec: vp8"), "Wrong video codec detected");
+        ClassicAssert.IsTrue(output.Contains("Video Codec: vp8"), "Wrong video codec detected");
     }
 }

@@ -24,7 +24,7 @@ public class DuplicateTest : FileTest
         await Task.Delay(10_000);
         await GotoPage("Files");
         await SkyBox("Duplicate", waitFor: true);
-        Assert.IsTrue(await WaitForExists(duplicateFile), $"Failed to locate duplicate item '{duplicateFile}'");
+        ClassicAssert.IsTrue(await WaitForExists(duplicateFile), $"Failed to locate duplicate item '{duplicateFile}'");
     }
     
     /// <summary>
@@ -35,7 +35,7 @@ public class DuplicateTest : FileTest
     {
         await GotoPage("Files");
         await SkyBox("Duplicate", waitFor: true);
-        Assert.IsTrue(await WaitForExists(duplicateFile), $"Failed to locate duplicate item '{duplicateFile}'");
+        ClassicAssert.IsTrue(await WaitForExists(duplicateFile), $"Failed to locate duplicate item '{duplicateFile}'");
         
         await SelectItem(duplicateFile);
         await TableButtonClick("Process");

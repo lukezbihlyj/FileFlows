@@ -55,11 +55,11 @@ public class AudioBook : AudioTest
         await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folders");
         string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
         string originalBookPath = libPath + "/" + BOOK_NAME;
-        Assert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
+        ClassicAssert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
         
         // Test processing
         await TestBookExists(BOOK_NAME, outputPath);
-        Assert.IsFalse(Directory.Exists(originalBookPath), "Failed to delete original files: " + originalBookPath);
+        ClassicAssert.IsFalse(Directory.Exists(originalBookPath), "Failed to delete original files: " + originalBookPath);
     }
     
 
@@ -89,7 +89,7 @@ public class AudioBook : AudioTest
         
         // Test processing
         await TestBookExists(BOOK_NAME, outputPath);
-        Assert.IsTrue(Directory.Exists(libPath), "Original files no longer exist when they should.");
+        ClassicAssert.IsTrue(Directory.Exists(libPath), "Original files no longer exist when they should.");
     }
     
     private async Task TestBookExists(string bookName, string outputPath)
@@ -104,7 +104,7 @@ public class AudioBook : AudioTest
             await Task.Delay(100);
         }
 
-        Assert.IsTrue(File.Exists(outputPath), "Book failed to be created: " + outputPath);
+        ClassicAssert.IsTrue(File.Exists(outputPath), "Book failed to be created: " + outputPath);
     }
 
     private async Task<string> CreateAudioBookLibrary(string bookName)

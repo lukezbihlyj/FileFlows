@@ -77,7 +77,7 @@ function Script(NumberParameter)
         await download.SaveAsAsync(file);
 
         string dlContent = await File.ReadAllTextAsync(file);
-        Assert.AreEqual(js, dlContent);
+        ClassicAssert.AreEqual(js, dlContent);
     }
     
     

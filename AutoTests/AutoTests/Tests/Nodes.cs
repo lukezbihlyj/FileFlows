@@ -44,7 +44,7 @@ public class Nodes : TestBase
         await download.SaveAsAsync(file);
         ZipArchive zip = ZipFile.Open(file, ZipArchiveMode.Read);
         bool dll = zip.Entries.Any(x => x.Name == "FileFlows.Node.dll");
-        Assert.IsTrue(dll);
+        ClassicAssert.IsTrue(dll);
     }
     
     /// <summary>

@@ -61,10 +61,10 @@ return 1");
             await Task.Delay(250);
             count++;
         }
-        Assert.IsTrue(File.Exists(failureOutput), "Failed to create failure file: " + failureOutput);
+        ClassicAssert.IsTrue(File.Exists(failureOutput), "Failed to create failure file: " + failureOutput);
         string content = await File.ReadAllTextAsync(failureOutput);
         Logger.ILog("Failure Output: " + Environment.NewLine + new string('-', 100) + Environment.NewLine + content.Trim() + Environment.NewLine + new string('-', 100));
         
-        Assert.IsTrue(content.Contains($"Failure Reason: {failureReason}"), $"Failure reason not found in file: {failureReason}");
+        ClassicAssert.IsTrue(content.Contains($"Failure Reason: {failureReason}"), $"Failure reason not found in file: {failureReason}");
     }
 }

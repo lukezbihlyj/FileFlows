@@ -15,45 +15,45 @@ public class InitialTests : TestBase
     public async Task InitialConfiguration()
     {
         await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
-        Assert.IsTrue(await FileFlows.InitialConfiguration.Shown(), "The Initial Configuration should be shown.");
-        Assert.AreEqual("Welcome to FileFlows", await FileFlows.InitialConfiguration.GetPageTitle());
-        Assert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("EULA"), "The EULA page should be enabled");
-        Assert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Plugins"), "The Plugins page should be disabled");
-        Assert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("DockerMods"), "The DockerMods page should be disabled");
-        Assert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Finish"), "The Finish page should be disabled");
-        Assert.IsFalse(await FileFlows.InitialConfiguration.PreviousButtonShown(), "The Previous button should not be shown");
-        Assert.IsFalse(await FileFlows.InitialConfiguration.FinishButtonShown(), "The Finish button should not be shown");
-        Assert.IsTrue(await FileFlows.InitialConfiguration.NextButtonShown(), "The Next button should be shown");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.Shown(), "The Initial Configuration should be shown.");
+        ClassicAssert.AreEqual("Welcome to FileFlows", await FileFlows.InitialConfiguration.GetPageTitle());
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("EULA"), "The EULA page should be enabled");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Plugins"), "The Plugins page should be disabled");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("DockerMods"), "The DockerMods page should be disabled");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Finish"), "The Finish page should be disabled");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PreviousButtonShown(), "The Previous button should not be shown");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.FinishButtonShown(), "The Finish button should not be shown");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.NextButtonShown(), "The Next button should be shown");
             
         await FileFlows.InitialConfiguration.NextClick();
-        Assert.AreEqual("End-User License Agreement of FileFlows", await FileFlows.InitialConfiguration.GetPageTitle());
-        Assert.IsTrue(await FileFlows.InitialConfiguration.PreviousButtonShown(), "The previous button should be shown and it is not.");
-        Assert.IsTrue(await FileFlows.InitialConfiguration.NextDisabled(), "Next Button should be disabled until the EULA is accepted.");
+        ClassicAssert.AreEqual("End-User License Agreement of FileFlows", await FileFlows.InitialConfiguration.GetPageTitle());
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.PreviousButtonShown(), "The previous button should be shown and it is not.");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.NextDisabled(), "Next Button should be disabled until the EULA is accepted.");
         await FileFlows.InitialConfiguration.AcceptEula();
-        Assert.IsFalse(await FileFlows.InitialConfiguration.NextDisabled(), "Next Button should not be disabled");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.NextDisabled(), "Next Button should not be disabled");
         await FileFlows.InitialConfiguration.NextClick();
         
-        Assert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("Plugins"), "Plugins Page is not enabled");
-        Assert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("DockerMods"), "DockerMods Page is not enabled");
-        Assert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("Finish"), "Finish Page is not enabled");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("Plugins"), "Plugins Page is not enabled");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("DockerMods"), "DockerMods Page is not enabled");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("Finish"), "Finish Page is not enabled");
         
-        Assert.AreEqual("Choose which plugins to install", await FileFlows.InitialConfiguration.GetPageTitle());
+        ClassicAssert.AreEqual("Choose which plugins to install", await FileFlows.InitialConfiguration.GetPageTitle());
         var plugins = await FileFlows.InitialConfiguration.GetItems();
         var basic = plugins.FirstOrDefault(x => x.Name == "Basic");
-        Assert.IsNotNull(basic, "Basic Plugin is not found.");
-        Assert.IsTrue(basic!.Checked, "Basic Plugin is not checked by default.");
+        ClassicAssert.IsNotNull(basic, "Basic Plugin is not found.");
+        ClassicAssert.IsTrue(basic!.Checked, "Basic Plugin is not checked by default.");
         await FileFlows.InitialConfiguration.NextClick();
 
-        Assert.AreEqual("Choose which DockerMods to install", await FileFlows.InitialConfiguration.GetPageTitle());
+        ClassicAssert.AreEqual("Choose which DockerMods to install", await FileFlows.InitialConfiguration.GetPageTitle());
         var dockerMods = await FileFlows.InitialConfiguration.GetItems();
         var ffmpeg6 = dockerMods.FirstOrDefault(x => x.Name == "FFmpeg6");
-        Assert.IsNotNull(ffmpeg6, "FFmpeg6 DockerMod is not found.");
-        Assert.IsTrue(ffmpeg6!.Checked, "FFmpeg6 DockerMod is not checked by default.");
+        ClassicAssert.IsNotNull(ffmpeg6, "FFmpeg6 DockerMod is not found.");
+        ClassicAssert.IsTrue(ffmpeg6!.Checked, "FFmpeg6 DockerMod is not checked by default.");
         await FileFlows.InitialConfiguration.ClearAllItems(); // we dont want this DockerMod installed
         await FileFlows.InitialConfiguration.NextClick();
 
-        Assert.IsFalse(await FileFlows.InitialConfiguration.NextButtonShown(), "Next Button is shown when it should not be present");
-        Assert.IsTrue(await FileFlows.InitialConfiguration.FinishButtonShown(), "Finish Button is not shown.");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.NextButtonShown(), "Next Button is shown when it should not be present");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.FinishButtonShown(), "Finish Button is not shown.");
 
         await FileFlows.InitialConfiguration.FinishClick();
         await Page.WaitForSelectorAsync(".sidebar .nav-menu-footer .version-info");
@@ -120,7 +120,7 @@ public class InitialTests : TestBase
     {
         await FileFlows.GotoPage("Libraries");
         await FileFlows.Table.ButtonClick("Add");
-        Assert.AreEqual("There are no flows configured. Create a flow before adding or updating a library.", 
+        ClassicAssert.AreEqual("There are no flows configured. Create a flow before adding or updating a library.", 
             await FileFlows.Toast.GetError());
     }
     
@@ -146,7 +146,7 @@ public class InitialTests : TestBase
     
         var templates = await FileFlows.FlowTemplateDialog.GetTemplates();
         var templateFile = templates.FirstOrDefault(x => x.Name == "File");
-        Assert.IsNotNull(templateFile);
+        ClassicAssert.IsNotNull(templateFile);
     
         await FileFlows.FlowTemplateDialog.Select("File");
     
@@ -233,8 +233,8 @@ public class InitialTests : TestBase
     
         var licenseEmail = Environment.GetEnvironmentVariable("FF_LICENSE_EMAIL") ?? string.Empty;
         var licenseKey = Environment.GetEnvironmentVariable("FF_LICENSE_KEY") ?? string.Empty;
-        Assert.IsFalse(string.IsNullOrWhiteSpace(licenseEmail), "License Email is not set");
-        Assert.IsFalse(string.IsNullOrWhiteSpace(licenseKey), "License Key is not set");
+        ClassicAssert.IsFalse(string.IsNullOrWhiteSpace(licenseEmail), "License Email is not set");
+        ClassicAssert.IsFalse(string.IsNullOrWhiteSpace(licenseKey), "License Key is not set");
     
         await Page.Locator("input[placeholder='License Email']").FillAsync(licenseEmail);
         await Page.Locator("input[placeholder='License Key']").FillAsync(licenseKey);

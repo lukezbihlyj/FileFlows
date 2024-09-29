@@ -18,6 +18,6 @@ public class Help:UiComponent
             await locator.ClickAsync();
         });
         await newPage.WaitForLoadStateAsync();
-        Assert.AreEqual(target, newPage.Url);
+        ClassicAssert.AreEqual(target, newPage.Url);
     }
 }

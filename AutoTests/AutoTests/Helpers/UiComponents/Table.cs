@@ -1,3 +1,5 @@
+using NUnit.Framework.Legacy;
+
 namespace FileFlowsTests.Helpers.UiComponents;
 
 public class Table(TestBase test, ILogger logger) : UiComponent(test)
@@ -9,9 +11,9 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         => Button(name, sideEditor).ClickAsync();
 
     public async Task ButtonDisabled(string name, bool sideEditor = false)
-        => Assert.IsTrue(await Button(name, sideEditor).IsDisabledAsync());
+        => ClassicAssert.IsTrue(await Button(name, sideEditor).IsDisabledAsync());
     public async Task ButtonEnabled(string name, bool sideEditor = false)
-        => Assert.IsTrue(await Button(name, sideEditor).IsEnabledAsync());
+        => ClassicAssert.IsTrue(await Button(name, sideEditor).IsEnabledAsync());
 
     private ILocator ItemLocator(string name, bool sideEditor = false)
         => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")

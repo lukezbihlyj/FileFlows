@@ -11,3 +11,4 @@ global using System.IO;
 global using System.IO.Compression;
 global using FileFlowsTests.Tests;
 global using FileFlowsTests.Models;
+global using NUnit.Framework.Legacy;

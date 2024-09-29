@@ -83,7 +83,15 @@ public abstract class TestBase : PlaywrightTest
             if (Environment.GetEnvironmentVariable("DOCKER") == "1")
             {
                 Logger.ILog("Running in Docker");
-                Browser = await Playwright.Chromium.LaunchAsync();
+                Browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
+                {
+                    Headless = true,
+                    Args = new[]
+                    {
+                        "--disable-gpu",
+                        "--no-sandbox"
+                    }
+                });
             }
             else
             {
