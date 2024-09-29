@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.26.0-focal AS base
+FROM mcr.microsoft.com/playwright:v1.47.0-focal AS base
 
 # Install dotnet SDK
 RUN wget https://dot.net/v1/dotnet-install.sh  && \
