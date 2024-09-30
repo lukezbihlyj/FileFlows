@@ -1,4 +1,5 @@
 @namespace FileFlows.Client.Components.Inputs
+@using FileFlows.Client.Models
 @inherits Input<object>
 
 <InputWrapper Input="@this">
@@ -18,6 +19,19 @@
                         foreach (var opt in group.Value)
                         {
                             ++index;
+                            if (opt is IconListOption iconListOption)
+                            {
+                                if (string.IsNullOrWhiteSpace(iconListOption.IconUrl) == false)
+                                {
+                                    <option selected=@(SelectedIndex == index ? "selected" : null) value="@(index)"><img src="@iconListOption.IconUrl"/> @opt.Label</option>
+                                    continue;
+                                }
+                                if (string.IsNullOrWhiteSpace(iconListOption.IconCss) == false)
+                                {
+                                    <option selected=@(SelectedIndex == index ? "selected" : null) value="@(index)"><i class="@iconListOption.IconCss"/> @opt.Label</option>
+                                    continue;
+                                }
+                            }
                             <option selected=@(SelectedIndex == index ? "selected" : null) value="@(index)">@opt.Label</option>
                         }
                     }
@@ -27,6 +41,19 @@
                             @foreach (var opt in group.Value)
                             {
                                 ++index;
+                                if (opt is IconListOption iconListOption)
+                                {
+                                    if (string.IsNullOrWhiteSpace(iconListOption.IconUrl) == false)
+                                    {
+                                        <option selected=@(SelectedIndex == index ? "selected" : null) value="@(index)"><img src="@iconListOption.IconUrl"/> @opt.Label</option>
+                                        continue;
+                                    }
+                                    if (string.IsNullOrWhiteSpace(iconListOption.IconCss) == false)
+                                    {
+                                        <option selected=@(SelectedIndex == index ? "selected" : null) value="@(index)"><i class="@iconListOption.IconCss"/> @opt.Label</option>
+                                        continue;
+                                    }
+                                }
                                 <option selected=@(SelectedIndex == index ? "selected" : null) value="@(index)">@opt.Label</option>
                             }
                         </optgroup>

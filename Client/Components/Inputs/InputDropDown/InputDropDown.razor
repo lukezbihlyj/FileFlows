@@ -1,0 +1,82 @@
+@namespace FileFlows.Client.Components.Inputs
+@using FileFlows.Client.Models
+@inherits Input<object>
+
+<InputWrapper Input="@this">
+    <div class="dropdown">
+        <button @onclick="ToggleDropdown" class="dropdown-button dd-btn">
+            @SelectedOption
+        </button>
+        <ul class="dropdown-menu" style="display: @(IsOpen ? "block" : "none")">
+            @if (AllowClear)
+            {
+                <li @onclick="() => SelectOption(null)" class="select-one">
+                    @lblSelectOne
+                </li>
+            }
+            @{
+                int index = -1;
+                foreach (var group in Groups)
+                {
+                    if (group.Key == string.Empty)
+                    {
+                        foreach (var opt in group.Value)
+                        {
+                            ++index;
+                            <li @onclick="() => SelectOption(opt)" class="@(SelectedIndex == index ? "selected" : "")">
+                                @if (opt is IconListOption iconListOption)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(iconListOption.IconUrl))
+                                    {
+                                        <img src="@iconListOption.IconUrl" class="option-image" /> @opt.Label
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(iconListOption.IconCss))
+                                    {
+                                        <i class="@iconListOption.IconCss" /> @opt.Label
+                                    }
+                                    else
+                                    {
+                                        @opt.Label
+                                    }
+                                }
+                                else
+                                {
+                                    @opt.Label
+                                }
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="optgroup-label">@group.Key</li>
+                        @foreach (var opt in group.Value)
+                        {
+                            ++index;
+                            <li @onclick="() => SelectOption(opt)" class="@(SelectedIndex == index ? "selected" : "")">
+                                @if (opt is IconListOption iconListOption)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(iconListOption.IconUrl))
+                                    {
+                                        <img src="@iconListOption.IconUrl" class="option-image" /> @opt.Label
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(iconListOption.IconCss))
+                                    {
+                                        <i class="@iconListOption.IconCss" /> @opt.Label
+                                    }
+                                    else
+                                    {
+                                        @opt.Label
+                                    }
+                                }
+                                else
+                                {
+                                    @opt.Label
+                                }
+                            </li>
+                        }
+                    }
+                }
+            }
+        </ul>
+    </div>
+</InputWrapper>

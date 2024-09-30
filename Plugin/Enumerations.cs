@@ -187,7 +187,11 @@ public enum FormInputType
     /// <summary>
     /// Comobobox
     /// </summary>
-    Combobox = 42
+    Combobox = 42,
+    /// <summary>
+    /// A drop down is a modern select, with support for icons
+    /// </summary>
+    DropDown = 43
 }
 
 

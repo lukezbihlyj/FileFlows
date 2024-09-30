@@ -236,6 +236,17 @@
                              ShowDescription=@showDescription HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
             break;
+        case FormInputType.DropDown:
+        {
+            var value = GetValue<object>(field.Name, "");
+            bool allowClear = GetParameter<bool>(field, nameof(InputSelect.AllowClear), true);
+            bool showDescription= GetParameter<bool>(field, nameof(InputSelect.ShowDescription), true);
+            var options = GetParameter<List<FileFlows.Plugin.ListOption>>(field, "Options");
+            <InputDropDown Field=@field Label="@label" Value="@value" ReadOnly=@readOnly Options=@options AllowClear=@allowClear
+                         ValueChanged="@(x => UpdateValue(field, x))" Placeholder="@field.Placeholder" 
+                         ShowDescription=@showDescription HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
         case FormInputType.Combobox:
             {
                 var value = GetValue<string>(field.Name, "");

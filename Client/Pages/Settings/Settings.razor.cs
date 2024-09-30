@@ -1,4 +1,5 @@
 using System.Text;
+using FileFlows.Client.Models;
 
 namespace FileFlows.Client.Pages;
 
@@ -54,6 +55,11 @@ public partial class Settings : InputRegister
     private DatabaseType OriginalDbType;
 
     private SettingsUiModel Model { get; set; } = new ();
+
+    /// <summary>
+    /// The language options
+    /// </summary>
+    private List<IconListOption> LanguageOptions = new ();
     private string LicenseFlagsString = string.Empty;
     // indicates if the page has rendered or not
     private DateTime firstRenderedAt = DateTime.MaxValue;
@@ -262,6 +268,14 @@ public partial class Settings : InputRegister
         if (response.Success)
         {
             this.Model = response.Data;
+            LanguageOptions = response.Data.LanguageOptions?.Select(x =>
+                new IconListOption()
+                {
+                    Label = x.Label,
+                    Value = x.Value,
+                    IconUrl = $"/icons/flags/{x.Value}.svg"
+                }
+            ).ToList();
             LicenseFlagsString = LicenseFlagsToString(Model.LicenseFlags);
             this.OriginalServer = this.Model?.DbServer;
             this.OriginalDatabase = this.Model?.DbName;
