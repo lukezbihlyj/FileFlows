@@ -177,13 +177,23 @@
   },
   "Dialogs": {
     "AddFile": {
-      "Description": "手动添加文件或URL进行处理。",
+      "Description": "手动添加文件或网址以进行处理。",
       "Title": "添加文件",
-      "Fields": {}
+      "Fields": {
+        "AnyNode": "任何节点",
+        "Flow": "流程",
+        "List": "列表",
+        "Mode": "输入模式",
+        "Node": "节点",
+        "Raw": "批量输入（文本块）"
+      }
     },
     "AuditEntry": {
-      "ViewerTitle": "更改",
-      "Columns": {}
+      "ViewerTitle": "变更",
+      "Columns": {
+        "Field": "字段",
+        "Value": "值"
+      }
     },
     "ChangePassword": {
       "Changed": "密码已更改",
@@ -208,17 +218,37 @@
     },
     "ImportScript": {
       "Title": "导入脚本",
-      "Messages": {}
+      "Messages": {
+        "NoMoreImports": "该脚本没有其他可用的导入"
+      }
     },
     "PauseDialog": {
       "Message": "选择暂停处理的时间。\n注意：当前流将继续执行，但在此时间结束之前不会执行其他流。",
       "Title": "暂停处理"
     },
     "ReprocessDialog": {
-      "Description": "使用以下参数重新处理所选文件",
+      "Description": "使用以下参数重新处理选定的文件",
       "Title": "重新处理",
-      "Fields": {},
-      "ProcessOptions": {}
+      "Fields": {
+        "AnyNode": "任何节点",
+        "BottomOfQueue": "队列底部",
+        "CustomVariables": "自定义变量",
+        "CustomVariablesKey": "自定义变量",
+        "CustomVariablesMode": "自定义变量",
+        "CustomVariablesValue": "值",
+        "Flow": "流程",
+        "Merge": "将自定义变量与原始变量合并",
+        "Node": "节点",
+        "Original": "使用原始自定义变量",
+        "Position": "位置",
+        "Replace": "替换原始自定义变量",
+        "SameFlow": "无变化",
+        "TopOfQueue": "队列顶部"
+      },
+      "ProcessOptions": {
+        "Description": "修改所选文件的处理参数",
+        "Title": "处理选项"
+      }
     },
     "ResumeDialog": {
       "Message": "您确定要恢复处理吗？",
@@ -226,7 +256,13 @@
     },
     "ScriptLanguage": {
       "Title": "脚本语言",
-      "Labels": {}
+      "Labels": {
+        "BatchDescription": "批处理文件只能在Windows系统上运行。它们可以读取基本变量，但在执行过程中无法更新或访问FileFlows对象。",
+        "CSharpDescription": "C#脚本可以与FileFlows的更多部分交互，是最强大的。使用与FileFlows相同的语言，它们允许更大的系统交互。",
+        "JavaScriptDescription": "JavaScript脚本在FileFlows运行器中执行，允许您读取和写入变量，并访问FileFlows中的所有辅助函数。",
+        "PowerShellDescription": "PowerShell脚本只能在Windows系统上运行。它们可以读取基本变量，但在执行过程中无法更新或访问FileFlows对象。",
+        "ShellDescription": "Shell脚本在基于Unix的系统（Linux、MacOS、Docker）上运行。它们可以读取基本变量，但在执行过程中无法更新或访问FileFlows对象。"
+      }
     }
   },
   "Enums": {
@@ -403,14 +439,19 @@
   },
   "Flow": {
     "ErrorMessages": {
-      "NoInput": "未指定输入节点，每个流需要一个输入节点",
-      "NoParts": "未指定流部分，您必须有一些部分才能保存流",
+      "NoInput": "没有指定输入节点，每个流程需要一个输入节点",
+      "NoParts": "没有指定流程部分，您必须有一些部分才能保存流程",
       "TooManyInputNodes": "您只能有一个输入节点"
     },
     "Parts": {
       "Color": "颜色",
       "Color-Placeholder": "自定义颜色",
-      "FileExtension": {}
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "扩展名",
+          "Extensions-Help": "一系列扩展名，如果匹配，将输出到第一个输出节点，否则将使用第二个输出节点。"
+        }
+      }
     }
   },
   "Inputs": {
@@ -1070,27 +1111,6 @@
           "User": "用户",
           "User-Help": "用于连接到数据库的用户"
         },
-        "Email": {
-          "Description": "配置 FileFlows 使用的 SMTP 设置，您可以通过这些设置发送电子邮件。",
-          "Enabled": "启用",
-          "Host": "主机",
-          "Host-Help": "邮件服务器的主机名或 IP 地址",
-          "Password": "密码",
-          "Password-Help": "连接到 SMTP 服务器的用户的密码",
-          "Port": "端口",
-          "Port-Help": "连接到 SMTP 服务器的端口（默认端口为 587），请检查您的服务器配置",
-          "Security": "安全",
-          "Security-Help": "邮件服务器的安全连接类型（例如：SSL、TLS 或未加密）。",
-          "Subject": "主题",
-          "Subject-Help": "当由 FileFlows 发送电子邮件时使用的默认主题",
-          "User": "用户",
-          "User-Help": "连接到 SMTP 服务器的用户",
-          "Security-Options": {
-            "None": "没有",
-            "Ssl": "SSL",
-            "Tls": "TLS"
-          }
-        },
         "FileServer": {
           "AllowList": "允许路径",
           "AllowList-Help": "允许由暴露的文件服务器访问的新行分隔路径列表。\n这些是可以远程读取/写入的位置。\n注意：所有库路径自动允许。",
@@ -1134,12 +1154,51 @@
           "MaxAttempts-Help": "用户在暂时被阻止之前允许的最大登录尝试次数",
           "Mode": "模式",
           "Mode-Help": "启用用户身份验证以访问 FileFlows。\n启用后，用户将必须登录，处理节点将需要 API 令牌才能访问服务器。",
-          "ProtectedUrls": "受保护的 URL",
-          "ProtectedUrls-Help": "您希望保护的所有其他 URL 的换行分隔列表（例如：/api/，/webhook/）。如果使用默认的 '/api/' URL，这将自动保护 API。",
-          "RequireHttps": "要求 HTTPS",
-          "RequireHttps-Help": "是否必须通过 HTTPS 访问文件流。",
-          "UseJwt": "使用 JWT",
-          "UseJwt-Help": "如果启用，用户身份验证将使用 JSON Web 令牌，允许用户和节点同时有效访问文件流 API。"
+          "Title": "安全性",
+          "TokenExpiryMinutes": "令牌过期时间",
+          "TokenExpiryMinutes-Help": "登录令牌在过期之前的持续时间。"
+        },
+        "Smtp": {
+          "From": "发件人",
+          "From-Help": "发送电子邮件的用户名称",
+          "FromAddress": "发件人地址",
+          "FromAddress-Help": "发送电子邮件的用户的电子邮件地址",
+          "Password": "密码",
+          "Password-Help": "SMTP 用户的密码",
+          "Port": "端口",
+          "Port-Help": "电子邮件服务器端口",
+          "Security": "安全性",
+          "Security-Help": "发送电子邮件时使用的安全性",
+          "Server": "服务器",
+          "Server-Help": "电子邮件服务器",
+          "User": "用户",
+          "User-Help": "可选的用户名，用于发送电子邮件"
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "关闭自动数据库备份意味着在应用程序更新期间不会进行备份。确保您有其他方法来外部备份数据库，以保护您的数据非常重要。\n\n您确定要关闭这些备份吗？",
+          "NoDatabase": "名称是必填项",
+          "NoPassword": "密码是必填项",
+          "NoServer": "服务器是必填项",
+          "NoUser": "用户是必填项",
+          "TestingDatabase": "正在测试数据库连接",
+          "TestSuccess": "成功连接到数据库"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "您确定要禁用遥测吗？\n\n请放心，未记录任何个人信息。发送的数据包括正在使用的流元素信息、使用的插件，以及失败和处理的文件总数。\n\n这些信息帮助我们了解用户偏好，并为我们关于废弃未使用的流元素的决策提供参考。",
+          "Title": "禁用遥测"
+        },
+        "Restart": {
+          "Message": "您确定要重新启动 FileFlows 吗？\n\n您的设置将首先自动保存。\n\n注意：确保没有流在执行。",
+          "Title": "重新启动 FileFlows"
+        },
+        "Update": {
+          "Downloading": "升级正在下载",
+          "Failed": "检查更新失败",
+          "Message": "有新的更新可用，您要下载并安装吗？",
+          "NotAvailable": "没有可用的更新",
+          "Title": "可用更新"
         }
       }
     },
