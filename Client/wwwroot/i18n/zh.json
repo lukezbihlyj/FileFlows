@@ -1070,6 +1070,27 @@
           "User": "用户",
           "User-Help": "用于连接到数据库的用户"
         },
+        "Email": {
+          "Description": "配置 FileFlows 使用的 SMTP 设置，您可以通过这些设置发送电子邮件。",
+          "Enabled": "启用",
+          "Host": "主机",
+          "Host-Help": "邮件服务器的主机名或 IP 地址",
+          "Password": "密码",
+          "Password-Help": "连接到 SMTP 服务器的用户的密码",
+          "Port": "端口",
+          "Port-Help": "连接到 SMTP 服务器的端口（默认端口为 587），请检查您的服务器配置",
+          "Security": "安全",
+          "Security-Help": "邮件服务器的安全连接类型（例如：SSL、TLS 或未加密）。",
+          "Subject": "主题",
+          "Subject-Help": "当由 FileFlows 发送电子邮件时使用的默认主题",
+          "User": "用户",
+          "User-Help": "连接到 SMTP 服务器的用户",
+          "Security-Options": {
+            "None": "没有",
+            "Ssl": "SSL",
+            "Tls": "TLS"
+          }
+        },
         "FileServer": {
           "AllowList": "允许路径",
           "AllowList-Help": "允许由暴露的文件服务器访问的新行分隔路径列表。\n这些是可以远程读取/写入的位置。\n注意：所有库路径自动允许。",
@@ -1119,27 +1140,6 @@
           "RequireHttps-Help": "是否必须通过 HTTPS 访问文件流。",
           "UseJwt": "使用 JWT",
           "UseJwt-Help": "如果启用，用户身份验证将使用 JSON Web 令牌，允许用户和节点同时有效访问文件流 API。"
-        },
-        "Email": {
-          "Description": "配置 FileFlows 使用的 SMTP 设置，您可以通过这些设置发送电子邮件。",
-          "Enabled": "启用",
-          "Host": "主机",
-          "Host-Help": "邮件服务器的主机名或 IP 地址",
-          "Password": "密码",
-          "Password-Help": "连接到 SMTP 服务器的用户的密码",
-          "Port": "端口",
-          "Port-Help": "连接到 SMTP 服务器的端口（默认端口为 587），请检查您的服务器配置",
-          "Security": "安全",
-          "Security-Help": "邮件服务器的安全连接类型（例如：SSL、TLS 或未加密）。",
-          "Security-Options": {
-            "None": "没有",
-            "Ssl": "SSL",
-            "Tls": "TLS"
-          },
-          "Subject": "主题",
-          "Subject-Help": "当由 FileFlows 发送电子邮件时使用的默认主题",
-          "User": "用户",
-          "User-Help": "连接到 SMTP 服务器的用户"
         }
       }
     },

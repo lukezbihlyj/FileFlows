@@ -175,7 +175,6 @@
     "SettingsUpdated": "Instellingen bijgewerkt",
     "Updated": "{Type} ''{Name}'' bijgewerkt"
   },
-
   "Dialogs": {
     "AddFile": {
       "Description": "Voeg handmatig bestanden of URL's toe voor verwerking.",
@@ -687,7 +686,6 @@
         }
       }
     },
-
     "Library": {
       "Title": "Bibliotheek",
       "Labels": {

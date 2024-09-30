@@ -1426,45 +1426,5 @@
     "VideoCodecs": "Video Codecs",
     "VideoContainers": "Video Containers",
     "VideoResolutions": "Video Resolutions"
-  },
-  "Times": {
-    "DaysAgo": "{num} {num, plural, one {dag} other {dagar}} sedan",
-    "HoursAgo": "{num} {num, plural, one {timme} other {timmar}} sedan",
-    "MinutesAgo": "{num} {num, plural, one {minut} other {minuter}} sedan",
-    "Never": "Aldrig",
-    "SecondsAgo": "{num} {num, plural, one {sekund} other {sekunder}} sedan"
-  },
-  "Validators": {
-    "Pattern": "Är inte giltig",
-    "Range": "Måste vara mellan {Minimum} och {Maximum}",
-    "Required": "Obligatorisk"
-  },
-  "Widgets": {
-    "AudioCodecs": "Ljudcodecs",
-    "AudioContainers": "Ljudcontainrar",
-    "Codecs": "Codecs",
-    "ComicFormats": "Serietidningsformat",
-    "ComicPages": "Serietidningssidor",
-    "CPUUsage": "CPU-användning",
-    "CurrentRevision": "Nuvarande revision",
-    "DatabaseConnections": "Databasanslutningar",
-    "DecoderParameters": "Dekoderparametrar",
-    "Decoders": "Dekodrar",
-    "Encoders": "Kodare",
-    "ImageFormats": "Bildformat",
-    "LibraryProcessingTimes": "Biblioteksbehandlingstider",
-    "LogStorage": "Logglagring",
-    "MemoryUsage": "Minneanvändning",
-    "NVIDIASMI": "NVIDIA SMI",
-    "Processing": "Bearbetning",
-    "ProcessingNodes": "Bearbetningsnoder",
-    "ProcessingTimes": "Bearbetningstider",
-    "RecentlyFinished": "Nyligen avslutad",
-    "StorageSaved": "Lagring sparad",
-    "TemporaryFileStorage": "Tillfällig fillagring",
-    "Upcoming": "Kommande",
-    "VideoCodecs": "Videocodecs",
-    "VideoContainers": "Videcontainrar",
-    "VideoResolutions": "Videoupplösningar"
   }
 }
