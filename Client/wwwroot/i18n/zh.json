@@ -1,0 +1,1371 @@
+{
+  "ProductName": "文件流",
+  "Labels": {
+    "About": "关于",
+    "Add": "添加",
+    "AdminRequired": "需要管理员完成安装。",
+    "Advanced": "高级",
+    "All": "全部",
+    "And": "和",
+    "Any": "任何",
+    "Audit": "审计",
+    "BaseCodeOn": "使用代码模板",
+    "Browse": "浏览",
+    "Cancel": "取消",
+    "CancelItems": "您确定要取消所选的 {count, plural, one {项目} other {项目}} 吗？",
+    "CancelMessage": "您确定要取消并丢失任何未保存的更改吗？",
+    "ChangePassword": "更改密码",
+    "Clear": "清除",
+    "Close": "关闭",
+    "CommunityFlows": "社区流",
+    "Confirm": "确认",
+    "CopiedToClipboard": "已将 ''{text}'' 复制到剪贴板。",
+    "Copy": "复制",
+    "CopyToClipboard": "复制到剪贴板",
+    "Decrease": "减少",
+    "Default": "默认",
+    "Delete": "删除",
+    "DeleteItems": "您确定要删除所选的 {count, plural, one {项目} other {项目}} 吗？",
+    "DeleteLibraryFiles": "您确定要删除所选的 {count, plural, one {文件} other {文件}} 吗？\n\n注意，这不会从磁盘中删除 {count, plural, one {文件} other {文件}}，{count, plural, one {它} other {它们}} 只会从文件流数据库中删除。",
+    "DeleteLibraryFilesPhysicallyMessage": "您确定要从磁盘中永久删除所选的 {count, plural, one {文件} other {文件}} 吗？\n\n注意，这将永久删除 {count, plural, one {文件} other {文件}}，无法撤销。",
+    "DeleteLibraryFilesPhysicallySwitch": "从磁盘中删除文件",
+    "Deleting": "正在删除",
+    "Disconnected": "已断开连接",
+    "Discord": "Discord",
+    "Download": "下载",
+    "DownloadLog": "下载日志",
+    "DownloadLogShort": "日志",
+    "Duplicate": "重复",
+    "Edit": "编辑",
+    "EditSubFlow": "编辑子流",
+    "Enabled": "已启用",
+    "Execute": "执行",
+    "Executing": "正在执行",
+    "Export": "导出",
+    "Failed": "失败",
+    "Fields": "字段",
+    "Filter": "过滤",
+    "FilterPlaceholder": "过滤 (/)",
+    "Flow": "流",
+    "FlowElement": "流元素",
+    "FlowElements": "流元素",
+    "ForceProcessing": "强制处理",
+    "Forum": "论坛",
+    "Help": "帮助",
+    "Import": "导入",
+    "Increase": "增加",
+    "Input": "输入",
+    "Installed": "已安装",
+    "InUse": "正在使用",
+    "LastRun": "上次运行",
+    "LastScanned": "上次扫描",
+    "License": "许可证",
+    "Loading": "加载中",
+    "Log": "日志",
+    "Logout": "登出",
+    "LogPartialNotAvailable": "无法找到节点的部分日志。",
+    "MappingIssue": "映射问题",
+    "MissingDependencies": "缺少依赖项",
+    "MissingDependenciesMessage": "在使用此模板之前，必须下载以下缺少的插件：\n\n#LIST#",
+    "Name": "名称",
+    "Never": "从不",
+    "Next": "下一个",
+    "No": "否",
+    "NoAuditHistoryAvailable": "没有可用的审计历史",
+    "Node": "节点",
+    "NoFilesCurrentlyProcessing": "当前没有文件正在处理",
+    "NoFilesRecentlyFinished": "最近没有完成的文件",
+    "None": "无",
+    "NoUpcomingFiles": "没有即将处理的文件",
+    "Number": "数字",
+    "Ok": "确定",
+    "Open": "打开",
+    "Other": "其他",
+    "Output": "输出",
+    "Paste": "粘贴",
+    "Pause": "暂停处理",
+    "Paused": "恢复处理",
+    "PausedWithTime": "恢复时间",
+    "Percent": "百分比",
+    "Pixels": "像素",
+    "Plugins": "插件",
+    "PossibilityDisconnected": "可能已断开连接",
+    "ProcessingPaused": "处理已暂停",
+    "Prompt": "提示",
+    "Properties": "属性",
+    "ReadOnly": "只读",
+    "Redo": "重做",
+    "Refresh": "刷新",
+    "Remove": "移除",
+    "Repository": "存储库",
+    "Reprocess": "重新处理",
+    "Rescan": "重新���描",
+    "Reset": "重置",
+    "ResetLayout": "重置布局",
+    "Restore": "恢复",
+    "RestoredFailedMessage": "恢复 {type} 失败",
+    "RestoredMessage": "{type} 已恢复",
+    "Restoring": "正在恢复",
+    "ReturnCode": "返回代码",
+    "Revisions": "修订",
+    "Run": "运行",
+    "RunAt": "运行于",
+    "RunHistory": "运行历史",
+    "Running": "正在运行",
+    "Save": "保存",
+    "Saving": "正在保存",
+    "Savings": "节省",
+    "Scripts": "脚本",
+    "Search": "搜索",
+    "Searching": "正在搜索",
+    "Select": "选择",
+    "SelectOne": "选择一个",
+    "SetStatusProcessed": "标记为已处理",
+    "Settings": "设置",
+    "ShowHidden": "显示隐藏",
+    "Size": "大小",
+    "SpaceIncrease": "{size} 增加，{items} 项目",
+    "SpaceSavings": "{size} 节省，{items} 项目",
+    "Status": "状态",
+    "SubFlow": "子流",
+    "SubFlows": "子流",
+    "Success": "成功",
+    "Test": "测试",
+    "Total": "总计",
+    "Trigger": "触发",
+    "Type": "类型",
+    "Undo": "撤销",
+    "UnsavedChanges": "未保存的更改",
+    "Update": "更新",
+    "UpdateAvailable": "新版本可用 {version}",
+    "UsedBy": "使用者",
+    "Version": "版本",
+    "VersionNumber": "版本：{version}",
+    "View": "查看",
+    "ViewLog": "查看日志",
+    "When": "时间",
+    "Yes": "是",
+    "DateRanges": {
+      "AnyTime": "任何时间",
+      "Last12Months": "过去12个月",
+      "Last24Hours": "过去24小时",
+      "Last31Days": "过去31天",
+      "Last3Days": "过去3天",
+      "Last3Months": "过去3个月",
+      "Last6Months": "过去6个月",
+      "Last7Days": "过去7天",
+      "Live": "实时",
+      "Today": "今天",
+      "Yesterday": "昨天"
+    },
+    "ObsoleteConfirm": {
+      "Message": "建议您切换到其他流元素。",
+      "Question": "此流元素已过时并将很快被移除。您确定要使用它吗？",
+      "Title": "过时的流元素"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' 已添加",
+    "ChangePassword": "用户 ''{User}'' 更改了密码",
+    "Deleted": "{Type} ''{Name}'' 已删除",
+    "Login": "用户 ''{User}'' 已登录",
+    "LoginFailed": "用户 ''{User}'' 登录失败",
+    "PasswordReset": "用户 ''{User}'' 重置了密码",
+    "PasswordResetRequest": "用户 ''{User}'' 请求重置密码",
+    "SettingsUpdated": "设置已更新",
+    "Updated": "{Type} ''{Name}'' 已更新"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "手动添加文件或URL进行处理。",
+      "Title": "添加文件",
+      "Fields": {}
+    },
+    "AuditEntry": {
+      "ViewerTitle": "更改",
+      "Columns": {}
+    },
+    "ChangePassword": {
+      "Changed": "密码已更改",
+      "InvalidPassword": "旧密码无效",
+      "MinimumLength": "新密码太短",
+      "NewPassword": "新密码",
+      "NewPasswordConfirm": "确认新密码",
+      "OldPassword": "旧密码",
+      "PasswordMismatch": "密码不匹配。",
+      "Title": "更改密码"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "选择目录",
+      "FileTitle": "选择文件"
+    },
+    "FlowTemplatePicker": {
+      "Title": "选择一个模板开始"
+    },
+    "Import": {
+      "Message": "选择一个导出的流导入系统。",
+      "Title": "导入流"
+    },
+    "ImportScript": {
+      "Title": "导入脚本",
+      "Messages": {}
+    },
+    "PauseDialog": {
+      "Message": "选择暂停处理的时间。\n注意：当前流将继续执行，但在此时间结束之前不会执行其他流。",
+      "Title": "暂停处理"
+    },
+    "ReprocessDialog": {
+      "Description": "使用以下参数重新处理所选文件",
+      "Title": "重新处理",
+      "Fields": {},
+      "ProcessOptions": {}
+    },
+    "ResumeDialog": {
+      "Message": "您确定要恢复处理吗？",
+      "Title": "恢复处理"
+    },
+    "ScriptLanguage": {
+      "Title": "脚本语言",
+      "Labels": {}
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "已添加",
+      "ChangePassword": "更改密码",
+      "Deleted": "已删除",
+      "Login": "登录",
+      "LoginFailed": "登录失败",
+      "PasswordReset": "重置密码",
+      "PasswordResetRequest": "请求重置密码",
+      "Updated": "已更新"
+    },
+    "DateCompareMode": {
+      "After": "之后",
+      "Any": "任何",
+      "Before": "之前",
+      "Between": "之间",
+      "GreaterThan": "大于",
+      "LessThan": "小于",
+      "NotBetween": "不在之间"
+    },
+    "Days": {
+      "Fri": "周五",
+      "Friday": "星期五",
+      "Mon": "周一",
+      "Monday": "星期一",
+      "Sat": "周六",
+      "Saturday": "星期六",
+      "Sun": "周���",
+      "Sunday": "星期日",
+      "Thu": "周四",
+      "Thursday": "星期四",
+      "Tue": "周二",
+      "Tuesday": "星期二",
+      "Wed": "周三",
+      "Wednesday": "星期三"
+    },
+    "FilesSortBy": {
+      "Savings": "节省",
+      "SavingsDesc": "节省降序",
+      "Size": "大小",
+      "SizeDesc": "大小降序",
+      "Time": "时间",
+      "TimeDesc": "时间降序"
+    },
+    "FileStatus": {
+      "Any": "任何",
+      "Disabled": "已禁用",
+      "Duplicate": "重复",
+      "FlowNotFound": "未找到流",
+      "MappingIssue": "映射问题",
+      "MissingLibrary": "缺少库",
+      "OnHold": "暂停",
+      "OutOfSchedule": "超出计划",
+      "Processed": "已处理",
+      "Processing": "处理中",
+      "ProcessingFailed": "处理失败",
+      "ReprocessByFlow": "按流重新处理",
+      "Unprocessed": "未处理"
+    },
+    "FlowType": {
+      "Failure": "失败",
+      "Standard": "标准",
+      "SubFlow": "子流"
+    },
+    "LogType": {
+      "Debug": "调试",
+      "Error": "错误",
+      "Info": "信息",
+      "Warning": "警告"
+    },
+    "MatchRange": {
+      "After": "之后",
+      "Any": "任何",
+      "Before": "之前",
+      "Between": "之间",
+      "GreaterThan": "大于",
+      "LessThan": "小于",
+      "NotBetween": "不在之间"
+    },
+    "MathValue": {
+      "Between": "之间",
+      "Equals": "等于",
+      "GreaterThan": "大于",
+      "GreaterThanOrEqual": "大于或等于",
+      "LessThan": "小于",
+      "LessThanOrEqual": "小于或等于",
+      "NotBetween": "不在之间",
+      "NotEquals": "不等于"
+    },
+    "Periods": {
+      "Days": "天",
+      "Hours": "小时",
+      "Minutes": "分钟",
+      "Weeks": "周"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "已禁用",
+      "Idle": "空闲",
+      "Offline": "离线",
+      "OutOfSchedule": "超出计划",
+      "Processing": "处理中",
+      "VersionMismatch": "版本不匹配"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "按字母顺序",
+      "AsFound": "按发现顺序（默认）",
+      "LargestFirst": "最大优先",
+      "NewestFirst": "最新优先",
+      "OldestFirst": "最旧优先",
+      "Random": "随机",
+      "SmallestFirst": "最小优先"
+    },
+    "ProcessingPriority": {
+      "High": "高",
+      "Highest": "最高",
+      "Low": "低",
+      "Lowest": "最低",
+      "Normal": "正常"
+    },
+    "ReportDirection": {
+      "Inbound": "入站",
+      "Outbound": "出站"
+    },
+    "ReportSchedule": {
+      "Daily": "每日",
+      "Monthly": "每月",
+      "Weekly": "每周"
+    },
+    "SecurityMode": {
+      "Local": "本地用户",
+      "Off": "无",
+      "OpenIdConnect": "Open ID Connect"
+    },
+    "TaskType": {
+      "FileAdded": "文件已添加",
+      "FileFlowsServerUpdateAvailable": "更新可用",
+      "FileFlowsServerUpdating": "服务器正在更新",
+      "FileProcessed": "文件已处理",
+      "FileProcessFailed": "处理失败",
+      "FileProcessing": "文件处理中",
+      "FileProcessSuccess": "处理成功"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "文件",
+      "Flows": "流",
+      "Libraries": "库",
+      "Log": "日志",
+      "Nodes": "节点",
+      "PauseProcessing": "暂停处理",
+      "Plugins": "插件",
+      "Revisions": "修订",
+      "Scripts": "脚本",
+      "Tasks": "任务",
+      "Variables": "变量",
+      "Webhooks": "Webhooks"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "必须输入两个值",
+    "CannotDeleteInternalNode": "您不能删除内部处理节点。",
+    "DeleteFailed": "删除失败",
+    "DuplicatesFound": "发现重复项",
+    "NameInUse": "名称已被使用",
+    "NameRequired": "名称是必需的",
+    "NoFlowSpecified": "未指定流，您必须选择一个流来创建库",
+    "NotAllFilesCouldBeDeleted": "并非所有文件都能被删除。\n有关更多信息，请参阅日志。",
+    "NotFound": "未找到项目",
+    "SaveFailed": "保存失败",
+    "SetFileStatus": "设置文件状态失败",
+    "UnexpectedError": "发生意外错误"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "未指定输入节点，每个流需要一个输入节点",
+      "NoParts": "未指定流部分，您必须有一些部分才能保存流",
+      "TooManyInputNodes": "您只能有一个输入节点"
+    },
+    "Parts": {
+      "Color": "颜色",
+      "Color-Placeholder": "自定义颜色",
+      "FileExtension": {}
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*大于*：如果日期早于给定的时间段，则匹配。\n*小于*：如果日期晚于给定的时间段，则匹配。\n*之间*：如果日期在指定范围内，则匹配。\n*之前*：如果日期早于指定日期，则匹配。\n*之后*：如果日期晚于指定日期，则匹配。"
+    }
+  },
+  "MenuGroups": {
+    "Admin": "管理员",
+    "Configuration": "配置",
+    "Extensions": "扩展",
+    "Information": "信息",
+    "Overview": "概述",
+    "Security": "安全",
+    "System": "系统",
+    "User": "用户"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "访问控制条目",
+      "Title": "访问控制",
+      "Labels": {
+        "Console": "Web 控制台",
+        "Remote": "远程 / 处理节点"
+      },
+      "Buttons": {
+        "MoveDown": "下移",
+        "MoveUp": "上移"
+      },
+      "Columns": {
+        "Allow": "允许",
+        "End": "结束",
+        "Start": "开始"
+      },
+      "Fields": {
+        "Allow": "允许",
+        "Allow-Help": "此访问控制条目是否允许访问系统。",
+        "Description": "描述",
+        "Description-Placeholder": "可选的描述用于说明此条目",
+        "End": "结束地址",
+        "End-Help": "可选的结束 IP 地址，必须大于起始地址并且为同一类型。否则此结束值将被忽略。",
+        "End-Placeholder": "可选的结束地址",
+        "Start": "开始地址",
+        "Start-Help": "起始 IP 地址可以是 IPv4 或 IPv6"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "结束地址必须大于起始地址",
+        "FamilyMismatch": "起始地址和结束地址必须是相同类型",
+        "InvalidIPAddress": "'{address}' 不是有效的 IP 地址。",
+        "MoveFailed": "移动条目失败"
+      }
+    },
+    "Audit": {
+      "Title": "审计日志",
+      "Columns": {
+        "Action": "操作",
+        "Date": "日期",
+        "IPAddress": "IP 地址",
+        "Operator": "操作员",
+        "Summary": "摘要",
+        "Type": "类型"
+      }
+    },
+    "Dashboard": {
+      "Title": "仪表板",
+      "Labels": {
+        "AddWidget": "添加小部件",
+        "FinalSize": "最终大小",
+        "OriginalSize": "原始大小",
+        "Savings": "节省",
+        "ShrinkageTitle": "存储已节省"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "创建仪表板失败",
+        "LogFailed": "获取工作日志失败"
+      },
+      "Fields": {
+        "Current": "当前",
+        "CurrentStep": "步骤",
+        "File": "文件",
+        "Library": "库",
+        "Log": "日志",
+        "Node": "节点",
+        "Overall": "总体",
+        "ProcessingTime": "处理时间",
+        "RecentlyFinished": "最近完成",
+        "Uid": "UID",
+        "Upcoming": "即将到来",
+        "WorkingFile": "正在处理的文件"
+      },
+      "Messages": {
+        "CancelMessage": "你确定要取消 {RelativeFile} 的工作吗？",
+        "DeleteDashboard": "你确定要删除当前的仪表板吗？\n\n此操作无法撤销。",
+        "DeleteWidget": "你确定要删除此小部件吗？",
+        "Waiting": "等待处理文件"
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMods",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "修订",
+        "UpdateAvailable": "有更新可用"
+      },
+      "Fields": {
+        "Code": "代码",
+        "Description": "描述"
+      },
+      "Messages": {
+        "FailedToExport": "导出失败。",
+        "Updating": "更新中"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "任务"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "任务历史",
+      "Fields": {
+        "RunHistory": "历史"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "任务运行",
+      "Fields": {
+        "Log": "日志",
+        "ReturnValue": "返回值",
+        "RunAt": "运行时间",
+        "Success": "成功"
+      }
+    },
+    "Flow": {
+      "Title": "流程",
+      "Labels": {
+        "EditFlow": "流程: {Name}",
+        "FlowProperties": "流程属性",
+        "OpenScriptBrowser": "打开脚本浏览器",
+        "OpenSubFlowBrowser": "打开子流程浏览器",
+        "SubFlowBrowser": "子流程浏览器",
+        "SubFlowHelp": "要向子流程添加输入字段以便传递自定义参数，请在 `字段` 选项卡中创建这些字段。\n\n子流程必须有一个 `输入`，可以是任何有效的输入流程元素，例如 `输入文件`、`视频文件`等。"
+      },
+      "Fields": {
+        "Author": "作者",
+        "Author-Help": "可选地指定此流程的作者。",
+        "Description": "描述。",
+        "MinimumVersion": "最低版本",
+        "Outputs": "输出",
+        "Outputs-Help": "此子流程具有的输出数量。当在其他流程中使用此子流程时，这就是可用的输出数量",
+        "OutputsKey": "输出",
+        "OutputsValue": "描述",
+        "Tags": "标签",
+        "Variables": "变量",
+        "VariablesKey": "名称",
+        "VariablesValue": "值",
+        "Field": {
+          "Default": "默认",
+          "DeleteIfEmpty": "如果为空则删除",
+          "DeleteIfEmpty-Help": "如果在这里添加了任何值，并且用户选择了“删除原件”，如果没有与这些正则表达式匹配的文件，该文件夹也将被删除。",
+          "Description": "此字段可显示的可选描述。这可以是字段的帮助文本。",
+          "FlowElementField": "元素字段",
+          "FlowElementField-Help": "可选的，以 '{Uid}.{FieldName}' 格式设置，例如 '53a72207-34a2-4b71-b3d8-8b12764a85fe.Force' 直接设置流程元素中的字段。有关更多信息，请参阅帮助。",
+          "IfName": "如果",
+          "IfName-Help": "如果另一个值匹配这些条件，是否只显示给用户。",
+          "IfNot": "如果不是",
+          "IfNot-Help": "是否应该反转值并且只在值不匹配时显示。",
+          "IfValue": "如果值",
+          "IfValue-Help": "要匹配的值，可以是正则表达式。对于布尔值，使用 true 或 false。",
+          "Inverse": "反转",
+          "Inverse-Help": "如果滑块值应该反转，较低的值显示在右侧。",
+          "Maximum": "最大值",
+          "Minimum": "最小值",
+          "Options": "选项",
+          "Options-Help": "一个列表选项数组，使用 | 分隔符设置标签和值，例如 `label|value`",
+          "Required": "必填",
+          "Required-Help": "如果此值是必需的并且必须设置。"
+        }
+      },
+      "Messages": {
+        "Close": "你确定要离开并丢失所有未保存的更改吗？",
+        "FailedToLoadFlow": "加载流程失败。",
+        "LoadingFlow": "加载流程中"
+      }
+    },
+    "Flows": {
+      "Title": "流程",
+      "Labels": {
+        "FailureFlows": "失败流程",
+        "StandardFlows": "标准流程",
+        "SubFlows": "子流程"
+      },
+      "Buttons": {
+        "Repository": "存储库"
+      },
+      "Fields": {
+        "Author": "作者",
+        "Template": "模板"
+      },
+      "Messages": {
+        "DeleteUsed": "你不能删除正在使用的流程",
+        "Duplicated": "流程 ''{name}'' 已复制",
+        "FailedToExport": "导出流程失败。",
+        "FailureFlowDescription": "这是一个特殊的流程类型，如果任何流程失败，将执行此流程。\n如果没有找到“默认”失败流程，FileFlows 将立即停止处理。",
+        "FlowImported": "流程 ''{name}'' 已导入",
+        "LoadingTemplates": "加载模板中"
+      },
+      "Template": {
+        "Title": "添加流程",
+        "Fields": {
+          "PageDescription": "选择一个模板作为流程的基础，这将帮助你开始创建流程。",
+          "Template": "模板"
+        }
+      }
+    },
+    "Libraries": {
+      "Title": "库",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {文件} other {文件}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "没有配置流。\n在添加或更新库之前，请先创建一个流。"
+      },
+      "Messages": {
+        "DeleteConfirm": "您确定要删除所选的 {count, plural, one {库} other {库}} 吗？",
+        "KeepLibraryFiles": "保留数据库中的文件以便统计",
+        "Reprocess": {
+          "Message": "您确定要继续重新处理选定的库吗？\n\n此操作将标记所有文件为未处理并启动重新处理。请注意，此操作无法撤消。",
+          "Title": "重新处理选定的库"
+        },
+        "Reset": {
+          "Message": "您确定要继续重置选定的库吗？\n\n此操作将删除所有文件并启动重新扫描。请注意，此操作无法撤消。",
+          "Title": "重置选定的库"
+        }
+      }
+    },
+    "Library": {
+      "Title": "库",
+      "Labels": {
+        "CreationTime": "创建时间",
+        "LastWriteTime": "最后写入时间"
+      },
+      "Fields": {
+        "DetectFileCreation": "文件创建",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "文件最后写入",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "文件大小",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "在这里，您可以配置一个库，以仅检测与给定模式匹配的文件。\n\n例如，这允许您仅包含以下文件\n\t- 在 7 天内创建的文件\n\t- 在 3 到 7 天之间最后写入的文件\n\t- 文件大小大于 1 GB",
+        "DownloadsDirectory": "下载目录",
+        "DownloadsDirectory-Help": "一个特殊目录，如果在此文件夹中重新发现一个已经成功处理的文件，该文件将自动重新处理。\n这在您重新下载文件时非常有用。",
+        "Enabled": "启用",
+        "ExcludeHidden": "排除隐藏",
+        "ExcludeHidden-Help": "启用时，将不会扫描隐藏文件和文件夹",
+        "ExclusionFilters": "排除",
+        "ExclusionFilters-Help": "可选的排除列表，用于与文件的完整名称进行匹配。",
+        "Extensions": "扩展名",
+        "Extensions-Help": "包含在此库中的文件的可选扩展名列表。\n如果留空，将包含所有文件，除非在 `高级` 选项卡上定义了过滤器或排除过滤器。",
+        "FileSizeDetectionInterval": "文件检测间隔",
+        "FileSizeDetectionInterval-Help": "在库扫描程序中等待重新检查文件大小的时间（以秒为单位）。如果其他应用程序可能以块的形式写入文件，例如每 20 秒写入一部分录音的 PVR 应用程序，请使用此选项。",
+        "FileSizeDetectionInterval-Suffix": "秒",
+        "Filters": "过滤器",
+        "Filters-Help": "可选的过滤器列表，用于与文件的完整名称进行匹配。",
+        "Flow": "流",
+        "Folders": "文件夹",
+        "Folders-Help": "如果此库处理文件夹而不是文件。\n这并不意味着要扫描子文件夹，库会自动执行此操作。\n这意味着将处理文件夹对象，而不是单个文件。",
+        "FullScanDisabled": "禁用完整扫描",
+        "FullScanDisabled-Help": "完整扫描的预期目的是捕获文件系统监视事件可能遗漏的任何文件。",
+        "FullScanIntervalMinutes": "完整扫描间隔",
+        "FullScanIntervalMinutes-Help": "应该进行此库完整扫描的间隔",
+        "HoldMinutes": "保留分钟数",
+        "HoldMinutes-Help": "可选地将在此库中找到的任何文件保留此分钟数，然后再处理它们。每个文件将保留此时间。",
+        "HoldMinutes-Suffix": "分钟",
+        "MaxRunners": "最大运行者",
+        "MaxRunners-Help": "可以同时处理此库中文件的最大运行者。\n设置为 0 表示无限制。",
+        "Name": "名称",
+        "Path": "路径",
+        "Priority": "优先级",
+        "Priority-Help": "处理文件的优先级。如果具有更高优先级的库有文件等待处理，则将首先处理这些文件。",
+        "ProcessingOrder": "处理顺序",
+        "ProcessingOrder-Help": "此库将处理文件的顺序。",
+        "ReprocessRecreatedFiles": "重新处理重新创建的文件",
+        "ReprocessRecreatedFiles-Help": "启用时，如果一个文件在被重新检测到时与记录的创建时间不同，则该文件将自动设置为重新处理。\n这在下载文件的库中非常有用，您可能会多次下载相同的文件并希望每次都处理它。",
+        "Scan": "扫描",
+        "Scan-Help": "启用扫描时，库将定期扫描以获取新内容。\n禁用时，库将监听文件系统事件以检测新文件。\n除非您遇到未检测到文件的问题，否则最好保持关闭状态。",
+        "ScanInterval": "扫描间隔",
+        "ScanInterval-Help": "扫描之间的最短时间（以秒为单位）。不能保证每次都在此间隔扫描，因为可能正在进行其他扫描。",
+        "ScanInterval-Suffix": "秒",
+        "Schedule": "计划",
+        "ScheduleDescription": "这允许您配置此库的活动时间。\n\n库扫描程序将不会对该库运行，也不会在计划外处理任何文件。\n",
+        "SkipFileAccessTests": "跳过文件访问测试",
+        "SkipFileAccessTests-Help": "启用时，库在将文件添加到文件队列之前不会测试是否可以读取或写入该文件。",
+        "Template": "模板",
+        "TopLevelOnly": "仅顶层",
+        "TopLevelOnly-Help": "仅扫描目录根中的文件，不会搜索子文件夹。",
+        "UpdateMovedFiles": "更新已移动文件",
+        "UpdateMovedFiles-Help": "启用时，如果在同一库中检测到文件已移动，则将更新原始文件以指向此新文件。\n否则在禁用时，将添加重复文件。\n\n如果原始文件不存在并且找到具有相同签名的新文件，则将检测到文件已移动。",
+        "UseFingerprinting": "使用指纹识别",
+        "UseFingerprinting-Help": "启用时，文件在导入时以及流完成后将进行校验和检查。任何匹配的校验和文件将被跳过，不会在未来的库导入中出现。",
+        "WaitTimeSeconds": "等待时间",
+        "WaitTimeSeconds-Help": "在扫描该文件夹到库之前，必须经过的秒数，最后一次更改写入该文件夹。",
+        "WaitTimeSeconds-Suffix": "秒"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "创建日期",
+        "ExecutedNodes": "执行节点",
+        "FailureReason": "失败原因",
+        "FinalMetadata": "最终元数据",
+        "FinalSize": "最终大小",
+        "FinalSizeSuffix": "字节",
+        "Fingerprint": "指纹",
+        "Flow": "流",
+        "Library": "库",
+        "Log": "日志",
+        "Name": "原始文件",
+        "Node": "处理节点",
+        "OriginalMetadata": "原始元数据",
+        "OriginalSize": "原始大小",
+        "OriginalSizeSuffix": "字节",
+        "OutputPath": "输出路径",
+        "ProcessingTime": "处理时间",
+        "Status": "状态"
+      },
+      "Tabs": {
+        "CustomVariables": "自定义变量",
+        "FinalMetadata": "输出",
+        "OriginalMetadata": "输入"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "文件",
+      "Labels": {
+        "ScanTriggered": "为所有启用的库触发扫描"
+      },
+      "Buttons": {
+        "Ignore": "忽略",
+        "MoveToTop": "移动到顶部",
+        "Process": "处理",
+        "ProcessOptions": "处理选项",
+        "Reprocess": "重新处理",
+        "ToggleForce": "切换强制处理",
+        "Unhold": "释放",
+        "View": "查看"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "下载日志失败",
+        "FailedToReprocess": "重新处理失败",
+        "ReprocessingFile": "文件已发送重新处理"
+      }
+    },
+    "Log": {
+      "Title": "日志",
+      "Labels": {
+        "AutoRefresh": "自动刷新",
+        "FailedToDownloadLog": "下载日志失败。",
+        "NoMatchingData": "没有匹配的数据"
+      },
+      "Fields": {
+        "File": "文件",
+        "IncludeHigherSeverity": "包含更高严重性",
+        "Nodes": "节点",
+        "Severity": "严重性",
+        "Source": "来源",
+        "Text": "文本"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "取消",
+        "ForgotPassword": "忘记密码？",
+        "Login": "登录",
+        "Password": "密码",
+        "Reset": "重置",
+        "Username": "用户名",
+        "UsernameOrEmail": "用户名或电子邮件"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "无效的用户名或密码",
+        "LockedOut": "尝试登录次数过多，您当前被锁定。",
+        "PasswordReset": "密码重置"
+      }
+    },
+    "Nodes": {
+      "Title": "节点",
+      "Labels": {
+        "Address": "地址",
+        "Disconnected": "已断开连接",
+        "DownloadNode": "下载节点",
+        "FileFlowsServer": "内部处理节点",
+        "FilesProcessed": "已处理文件",
+        "Internal": "内部",
+        "PossiblyDisconnected": "可能已断开连接",
+        "Runners": "运行程序",
+        "UpgradeRequired": "需要升级",
+        "UpgradeRequiredHint": "服务器和节点必须在同一版本",
+        "Version": "版本"
+      },
+      "Fields": {
+        "Address": "地址",
+        "Enabled": "启用",
+        "FlowRunners": "流程运行程序"
+      }
+    },
+    "Notifications": {
+      "Title": "通知"
+    },
+    "Plugins": {
+      "Title": "插件",
+      "Labels": {
+        "PluginBrowser": "插件浏览器"
+      },
+      "Fields": {
+        "Authors": "作者",
+        "Description": "描述",
+        "Elements": "节点",
+        "Url": "主页",
+        "Version": "版本"
+      },
+      "Messages": {
+        "DeletePlugins": "您确定要删除所选的 {count, plural, one {插件} other {插件}} 吗？",
+        "DeleteUsed": "您不能删除正在使用的插件",
+        "UpdatingPlugins": "正在更新插件"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "节点",
+      "Fields": {
+        "Address": "地址",
+        "Address-Help": "节点的地址（主机名或IP地址）。除非您更改了节点的地址，否则不应更改此项。例如，如果您更改了处理节点的计算机名称。",
+        "AllLibraries": "所有库",
+        "AllLibraries-Help": "此节点将处理哪些库",
+        "CopyMappings": "复制映射",
+        "DontChangeOwner": "更改所有者",
+        "DontChangeOwner-Help": "选中后，节点将将任何新创建文件的所有者更改为环境值中定义的PGID和PUID。\n如果未设置这些环境变量，所有者将更改为 ''users:nobody''。",
+        "DontSetPermissions": "设置权限",
+        "DontSetPermissions-Help": "选中后，将在任何新创建的文件上设置文件权限",
+        "Enabled": "启用",
+        "FlowRunners": "流程运行程序",
+        "FlowRunners-Help": "可用于执行流程的流程运行程序实例的数量。",
+        "InternalProcessingNodeDescription": "这是FileFlows中的内置处理节点。\n\n此节点允许您运行FileFlows，而无需担心在远程系统上安装任何其他节点，并允许您将FileFlows用作自包含的应用程序。\n\n如果愿意，您可以继续使用此内部节点和附加处理节点，或者您可以禁用此节点，仅使用附加节点。",
+        "Libraries": "库",
+        "Libraries-Help": "选择此节点可以处理哪些库",
+        "Mappings": "映射",
+        "MappingsDescription": "映射允许您将服务器的路径映射到节点上的位置。\n\n例如，您可以将Server:'/usr/local/bin/ffmpeg'映射到Node:'C:\\Utils\\ffmpeg\\ffmpeg.exe'\n\n您应该为所有需要在远程系统上运行的库和工具添加映射。",
+        "MappingsKey": "服务器",
+        "MappingsValue": "节点",
+        "MaxFileSizeMb": "最大文件大小",
+        "MaxFileSizeMb-Help": "此处理节点可以处理的最大文件大小。如果设置为0，则没有限制。",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "文件权限",
+        "PermissionsFiles-Help": "新创建的文件上要设置的权限。",
+        "PermissionsFolders": "文件夹权限",
+        "PermissionsFolders-Help": "新创建的文件夹上要设置的权限。",
+        "PreExecuteScript": "预执行脚本",
+        "PreExecuteScript-Help": "在处理任何文件之前运行的脚本。此脚本的结果必须为1才能通过，否则节点将不会处理文件。",
+        "Priority": "优先级",
+        "Priority-Help": "数字越高，优先级越高。优先级较高的节点将优先处理文件，除非这些节点超出计划、禁用或达到其最大运行程序。",
+        "ProcessFileCheckInterval": "文件检查间隔",
+        "ProcessFileCheckInterval-Help": "处理节点中检查新文件的频率。\n设置为0以使用系统值。",
+        "ProcessFileCheckInterval-Suffix": "秒",
+        "ProcessingDescription": "这允许您配置此处理节点可以处理的内容。\n\n例如，如果此节点是低功耗节点，您可以限制此节点仅处理某些库或最大文件大小。",
+        "Schedule": "计划",
+        "Schedule-Help": "此计划在节点的时区运行",
+        "ScheduleDescription": "这允许您配置此节点的活动时间。\n\n节点在此配置的计划之外将不会处理任何文件。\n",
+        "TempPath": "临时目录",
+        "TempPath-Help": "此目录将用于在处理流程时创建临时文件，此目录将定期清理，因此请勿在此处保留重要内容。",
+        "Variables": "变量",
+        "VariablesDescription": "变量让您配置要在处理节点上设置的高级变量。",
+        "VariablesKey": "名称",
+        "VariablesValue": "值"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "组合"
+      },
+      "Buttons": {
+        "Back": "返回",
+        "Generate": "生成"
+      },
+      "Fields": {
+        "Direction": "方向",
+        "Email": "电子邮件",
+        "Email-Placeholder": "输入电子邮件地址",
+        "Flow": "流程",
+        "Library": "库",
+        "Node": "节点",
+        "Period": "周期",
+        "Statistic": "统计"
+      },
+      "Messages": {
+        "FailedToFindReport": "未能找到报告。",
+        "FailedToGenerateReport": "未能生成报告。",
+        "NoMatchingData": "没有匹配的数据",
+        "ReportEmailed": "报告将在生成后发送到 ''{email}''。"
+      }
+    },
+    "Reporting": {
+      "Title": "报告",
+      "Labels": {
+        "Reports": "报告",
+        "ScheduledReports": "计划报告"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "仓库对象",
+      "Fields": {
+        "Author": "作者",
+        "Code": "代码",
+        "Description": "描述",
+        "Revision": "修订版"
+      }
+    },
+    "Revisions": {
+      "Title": "修订版"
+    },
+    "ScheduledReport": {
+      "Title": "计划报告",
+      "Labels": {
+        "LastSent": "最后发送",
+        "Never": "从不"
+      },
+      "Fields": {
+        "DayOfMonth": "月份中的天",
+        "DayOfMonth-Help": "运行此报告的月份中的天。如果选择的天数超出该月份（例如，二月的31号），报告将在该月份的最后一天运行。",
+        "DayOfWeek": "星期几",
+        "DayOfWeek-Help": "发送此计划报告的星期几。这将包括前7天的数据。",
+        "Direction": "方向",
+        "Enabled": "启用",
+        "Enabled-Help": "此计划报告只有在启用时才会运行。",
+        "Flows": "流程",
+        "Libraries": "库",
+        "Name-Help": "报告的名称，这将出现在发送的电子邮件主题中。",
+        "Nodes": "节点",
+        "Recipients": "收件人",
+        "Recipients-Help": "将在执行此报告时接收报告的电子邮件地址列表。",
+        "Report": "报告",
+        "Report-Help": "将要发送的报告。",
+        "Schedule": "计划",
+        "Schedule-Help": "此报告将在何时生成并发送给收件人。"
+      }
+    },
+    "Script": {
+      "LanguageTitle": "{Language} 脚本",
+      "Title": "脚本",
+      "Fields": {
+        "Code": "代码",
+        "Description": "描述",
+        "Name": "名称",
+        "Outputs": "输出",
+        "OutputsKey": "输出",
+        "OutputsValue": "描述"
+      },
+      "Messages": {
+        "FailedToExport": "导出失败。"
+      }
+    },
+    "Scripts": {
+      "Title": "脚本",
+      "Labels": {
+        "ScriptBrowser": "脚本仓库",
+        "UpdateAvailable": "可用更新",
+        "UpdatingScripts": "正在更新脚本"
+      },
+      "Buttons": {
+        "ScriptBrowser": "仓库",
+        "UpdateAllScripts": "更新所有脚本"
+      },
+      "Fields": {
+        "Code": "代码"
+      },
+      "Messages": {
+        "DeleteSystem": "您不能删除系统脚本",
+        "DeleteUsed": "您不能删除正在使用的脚本",
+        "Duplicated": "脚本 ''{name}'' 重复",
+        "Imported": "脚本 ''{name}'' 导入",
+        "NoRepositoryScriptsToUpdate": "没有选定的仓库脚本可供更新"
+      }
+    },
+    "Settings": {
+      "Title": "设置",
+      "Labels": {
+        "CheckNow": "立即检查",
+        "Database": "数据库",
+        "Email": "电子邮件",
+        "FileServer": "文件服务器",
+        "Logging": "日志记录",
+        "Restart": "重新启动 FileFlows",
+        "System": "系统",
+        "Updates": "更新"
+      },
+      "Fields": {
+        "AutoUpdate": "自动更新",
+        "AutoUpdate-Help": "启用时，FileFlows 将定期检查更新，如果找到更新，将自动下载并安装。",
+        "AutoUpdateNodes": "自动更新节点",
+        "AutoUpdateNodes-Help": "启用时，外部节点将在 FileFlows 服务器更新时自动更新。这意味着您只需在分布式环境中更新 FileFlows 服务器实例。",
+        "AutoUpdatePlugins": "自动更新插件",
+        "AutoUpdatePlugins-Help": "启用时，插件将定期检查更新，如果找到更新，将自动下载。",
+        "CheckForUpdateNow": "检查更新",
+        "CheckForUpdateNow-Help": "现在检查更新，如果找到，将下载更新并在没有执行任何 Flows 时安装。",
+        "DelayBetweenNextFile": "文件之间的延迟",
+        "DelayBetweenNextFile-Help": "在开始一个文件和请求新文件之间等待的毫秒延迟。将此延迟设置为零意味着它将立即请求新文件。如果延迟太短，负载均衡和库运行程序限制等功能可能无法正常工作，因为一个文件可能在下一个请求之前尚未完全启动。",
+        "DelayBetweenNextFile-Suffix": "毫秒",
+        "DockerModsOnServer": "服务器上的 DockerMods",
+        "DockerModsOnServer-Help": "DockerMods 应在服务器启动时或特定启用时自动运行。否则，它们只会在工作流启动时执行。",
+        "HideProcessingFinishedNotifications": "处理完成通知",
+        "HideProcessingFinishedNotifications-Help": "当文件处理完成时，是否应该在 Web 控制台中显示通知。",
+        "HideProcessingStartedNotifications": "处理开始通知",
+        "HideProcessingStartedNotifications-Help": "当文件开始处理时，是否应该在 Web 控制台中显示通知。",
+        "KeepFailedFlowTempFiles": "保留失败的临时文件",
+        "KeepFailedFlowTempFiles-Help": "启用此选项将保留流使用的临时文件，以防出现故障，防止它们被自动删除。\n请谨慎使用。",
+        "Language": "语言",
+        "Language-Help": "系统将使用的语言。",
+        "LogEveryRequest": "记录每个请求",
+        "LogEveryRequest-Help": "是否应该记录对服务器的每个请求。",
+        "LogFileRetention": "日志文件保留",
+        "LogFileRetention-Help": "日志文件应保留多长时间，直到它们被删除。",
+        "LogFileRetention-Suffix": "天",
+        "LoggingPath": "日志目录",
+        "LoggingPath-Help": "日志文件将在此处创建。",
+        "LogQueueMessages": "记录队列消息",
+        "LogQueueMessages-Help": "这将导致库观察器中所有文件的排队/出队进行过度记录。\n如果您在文件未出现时遇到问题，请开启此功能，然后关闭以避免日志文件填充过多记录。",
+        "PluginRepositoryUrls": "插件仓库",
+        "PluginRepositoryUrls-Help": "用于搜索插件的插件仓库 URL 的换行分隔列表。\n顺序很重要，如果多个仓库包含相同的插件，将使用第一个仓库作为其来源。\n默认仓库将始终添加到此列表的末尾。",
+        "ProcessFileCheckInterval": "文件检查间隔",
+        "ProcessFileCheckInterval-Help": "在处理节点中检查新文件的频率。",
+        "ProcessFileCheckInterval-Suffix": "秒",
+        "ShowFileAddedNotifications": "文件添加通知",
+        "ShowFileAddedNotifications-Help": "当找到文件并将其添加到队列时，是否应该在 Web 控制台中显示通知。",
+        "Telemetry": "遥测",
+        "Telemetry-Help": "遥测有助于了解我们需要支持哪些设备，哪些 Flow 部件使用最频繁，以及我们应重点开发的领域。\n不会发送有关您的文件或身份信息的信息。",
+        "Database": {
+          "Description": "在这里您可以配置 FileFlows 将使用的数据库。\n注意：此处的任何更改都将要求您重新启动 FileFlows，以便它可以迁移您的数据，并在必要时创建新的数据库。",
+          "DontBackupOnUpgrade": "升级时不备份",
+          "DontBackupOnUpgrade-Help": "数据库备份涉及将所有数据库数据复制到一个 SQLite 文件，这可能会耗时。如果您已经通过其他方式备份外部数据库，您可以选择禁用此过程。",
+          "Name": "名称",
+          "Name-Help": "要创建的数据库的名称，如果留空，将使用 'FileFlows'",
+          "Password": "密码",
+          "Password-Help": "连接到数据库的用户密码",
+          "Port": "端口",
+          "Port-Help": "MySQL 的默认端口为 3306",
+          "Port-Help-MySql": "MySQL 的默认端口为 3306",
+          "Port-Help-Postgres": "Postgres 的默认端口为 5432",
+          "Port-Help-SQLServer": "SQL Server 的默认端口为 1433",
+          "RecreateDatabase": "重新创建数据库",
+          "RecreateDatabase-Help": "启用时，如果新数据库已存在，它将被删除并重新创建。否则，如果关闭，且数据库已存在，则不会迁移数据，新数据库将按原样使用。",
+          "Server": "服务器",
+          "Server-Help": "数据库服务器的地址和端口或命名实例（如果需要）",
+          "Type": "类型",
+          "Type-Help": "要使用的数据库类型，默认类型为 SQLite，无需额外的设置或配置",
+          "User": "用户",
+          "User-Help": "用于连接到数据库的用户"
+        },
+        "FileServer": {
+          "AllowList": "允许路径",
+          "AllowList-Help": "允许由暴露的文件服务器访问的新行分隔路径列表。\n这些是可以远程读取/写入的位置。\n注意：所有库路径自动允许。",
+          "AllowList-Placeholder": "如果留空，将允许所有但系统路径。",
+          "Description": "这允许外部处理节点下载文件进行处理，而无需映射。\n\n这会在您的网络上公开您的文件，因此如果不在受信任的网络上，请禁用。",
+          "Enabled": "启用",
+          "FilePermissions": "文件权限",
+          "FilePermissions-Help": "给予创建或修改文件的可选权限。",
+          "FolderPermissions": "文件夹权限",
+          "FolderPermissions-Help": "给予创建或修改文件夹的可选权限。",
+          "OwnerGroup": "所有者组",
+          "OwnerGroup-Help": "用于更改创建或修改的文件或文件夹所有者的可选所有者：组",
+          "OwnerGroup-Placeholder": "users:nobody"
+        },
+        "License": {
+          "Email": "许可证电子邮件",
+          "ExpiryDate": "到期日期",
+          "Files": "文件",
+          "Flags": "功能",
+          "Key": "许可证密钥",
+          "Level": "级别",
+          "ProcessingNodes": "处理节点",
+          "Status": "状态"
+        },
+        "Security": {
+          "AccessToken": "访问令牌",
+          "AccessToken-Help": "处理节点用于连接到服务器的访问令牌",
+          "Authority": "权限",
+          "Authority-Help": "输入 Open ID 连接提供程序的 URL（例如：https://accounts.google.com/）。",
+          "CallbackAddress": "回调地址",
+          "CallbackAddress-Help": "一个可选的回调地址，您可以使用此地址覆盖默认地址，以将其发送到客户端。\n例如，如果您在反向代理后面，而 FileFlows 正在监听 HTTP，但回调应发生在 HTTPS 上。",
+          "ClientId": "客户端 ID",
+          "ClientId-Help": "在 Open ID 连接提供程序注册的客户端 ID。",
+          "ClientSecret": "客户端密钥",
+          "ClientSecret-Help": "在 Open ID 连接提供程序注册的客户端密钥。",
+          "Description": "配置用户安全性将要求用户登录，处理节点提供访问令牌以连接。\n\n[用户](/users) 必须在登录或使用此功能之前添加。",
+          "LockoutMinutes": "锁定持续时间",
+          "LockoutMinutes-Help": "用户在可以重新尝试登录之前将被锁定的持续时间。",
+          "LockoutMinutes-Suffix": "分钟",
+          "MaxAttempts": "最大尝试次数",
+          "MaxAttempts-Help": "用户在暂时被阻止之前允许的最大登录尝试次数",
+          "Mode": "模式",
+          "Mode-Help": "启用用户身份验证以访问 FileFlows。\n启用后，用户将必须登录，处理节点将需要 API 令牌才能访问服务器。",
+          "ProtectedUrls": "受保护的 URL",
+          "ProtectedUrls-Help": "您希望保护的所有其他 URL 的换行分隔列表（例如：/api/，/webhook/）。如果使用默认的 '/api/' URL，这将自动保护 API。",
+          "RequireHttps": "要求 HTTPS",
+          "RequireHttps-Help": "是否必须通过 HTTPS 访问文件流。",
+          "UseJwt": "使用 JWT",
+          "UseJwt-Help": "如果启用，用户身份验证将使用 JSON Web 令牌，允许用户和节点同时有效访问文件流 API。"
+        },
+        "Email": {
+          "Description": "配置 FileFlows 使用的 SMTP 设置，您可以通过这些设置发送电子邮件。",
+          "Enabled": "启用",
+          "Host": "主机",
+          "Host-Help": "邮件服务器的主机名或 IP 地址",
+          "Password": "密码",
+          "Password-Help": "连接到 SMTP 服务器的用户的密码",
+          "Port": "端口",
+          "Port-Help": "连接到 SMTP 服务器的端口（默认端口为 587），请检查您的服务器配置",
+          "Security": "安全",
+          "Security-Help": "邮件服务器的安全连接类型（例如：SSL、TLS 或未加密）。",
+          "Security-Options": {
+            "None": "没有",
+            "Ssl": "SSL",
+            "Tls": "TLS"
+          },
+          "Subject": "主题",
+          "Subject-Help": "当由 FileFlows 发送电子邮件时使用的默认主题",
+          "User": "用户",
+          "User-Help": "连接到 SMTP 服务器的用户"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "统计"
+    },
+    "Task": {
+      "Title": "任务",
+      "Fields": {
+        "CustomSchedule": "自定义计划",
+        "CustomSchedule-Help": "此任务将在每个 15 分钟块的开始运行一次",
+        "Schedule": "计划",
+        "Schedule-Help": "此脚本应在何时执行",
+        "Script": "脚本",
+        "Script-Help": "在配置的计划下执行的脚本",
+        "TimeSchedule": "计划",
+        "TimeSchedule-Help": "任务将运行的时间",
+        "Type": "类型",
+        "Type-Help": "此任务的类型。基于时间的任务将在配置的时间运行。其他任务是基于事件的"
+      }
+    },
+    "Tasks": {
+      "Title": "任务",
+      "Buttons": {
+        "EditScript": "编辑脚本"
+      },
+      "Messages": {
+        "NoHistory": "此任务没有可用的运行历史记录。",
+        "NoScripts": "未找到可为其创建任务的脚本。"
+      }
+    },
+    "Users": {
+      "Single": "用户",
+      "Title": "用户",
+      "Labels": {
+        "Address": "地址",
+        "Administrator": "管理员",
+        "LastLoggedIn": "最后登录",
+        "Never": "从未"
+      },
+      "Fields": {
+        "Email": "电子邮件",
+        "IsAdmin": "管理员",
+        "Password": "密码",
+        "Roles": "角色"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "您无法删除自己。",
+        "EmailInUse": "电子邮件地址 ''{email}'' 已被另一个用户 ''{user}'' 使用。"
+      }
+    },
+    "Variable": {
+      "Title": "变量"
+    },
+    "Variables": {
+      "Title": "变量"
+    },
+    "Webhook": {
+      "Title": "Webhook",
+      "Fields": {
+        "Code": "代码",
+        "Method": "方法",
+        "Route": "路由"
+      }
+    },
+    "Webhooks": {
+      "Title": "Webhooks",
+      "Columns": {
+        "Method": "方法",
+        "Route": "路由"
+      }
+    },
+    "Widget": {
+      "Title": "小部件",
+      "Fields": {
+        "AudioCodecs": "音频编解码器",
+        "AudioContainers": "音频容器",
+        "Codecs": "编解码器",
+        "ComicFormats": "漫画格式",
+        "ComicPages": "漫画页",
+        "CpuUsage": "CPU 使用率",
+        "FilesRecentlyFinished": "最近完成",
+        "FilesUpcoming": "即将到来",
+        "ImageFormats": "图像格式",
+        "LibraryProcessingTimes": "库处理时间 [每兆字节秒数]",
+        "LogStorage": "日志存储",
+        "MemoryUsage": "内存使用率",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "打开的数据库连接",
+        "Processing": "处理中",
+        "ProcessingNodes": "处理节点",
+        "ProcessingTimes": "处理时间",
+        "StorageSaved": "节省存储",
+        "TempStorage": "临时存储",
+        "VideoCodecs": "视频编解码器",
+        "VideoContainers": "视频容器",
+        "VideoResolution": "视频分辨率"
+      }
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "一个空白的音频模板，包含一个''音频文件''输入流元素。",
+        "Name": "音频文件"
+      },
+      "ConvertComic": {
+        "Description": "一个将漫画书从 CBR、CBZ、CB7、PDF、GZ、BZ2 转换为 CBZ 或 PDF 的流。",
+        "Name": "转换漫画"
+      },
+      "ConvertImage": {
+        "Description": "一个转换图像的流。",
+        "Name": "转换图像"
+      },
+      "ConvertVideo": {
+        "Description": "一个将视频文件转换为另一种格式的流。",
+        "Name": "转换视频"
+      },
+      "FailureFlow": {
+        "Description": "基本故障流，当流因任何原因失败时执行。",
+        "Name": "失败流"
+      },
+      "File": {
+        "Description": "一个空白文件模板，包含一个''输入文件''输入流元素。",
+        "Name": "文件"
+      },
+      "Folder": {
+        "Description": "一个空白文件夹模板，包含一个''输入文件夹''输入流元素。\n\n注意：此模板应仅用于处理文件夹而不是文件。处理文件夹有处理限制，因为处理的是文件夹而不是该文件夹中的文件。",
+        "Name": "文件夹"
+      },
+      "ImageFile": {
+        "Description": "一个空白图像模板，包含一个''图像文件''输入流元素。",
+        "Name": "图像文件"
+      },
+      "VideoFile": {
+        "Description": "一个空白图像模板，包含一个''视频文件''输入流元素。",
+        "Name": "视频文件"
+      }
+    },
+    "Groups": {
+      "Books": "书籍",
+      "DownloadClients": "下载客户端",
+      "DVR": "数字视频录制",
+      "General": "常规"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "音频书库，搜索常见音频书文件",
+        "Name": "音频书库"
+      },
+      "ComicLibrary": {
+        "Description": "漫画库，搜索常见漫画书文件",
+        "Name": "漫画库"
+      },
+      "eBookLibrary": {
+        "Description": "电子书库，搜索常见电子书文件",
+        "Name": "电子书库"
+      },
+      "ImageLibrary": {
+        "Description": "图像库，搜索常见图像文件",
+        "Name": "图像库"
+      },
+      "MusicLibrary": {
+        "Description": "音乐库，搜索常见音乐文件",
+        "Name": "音乐库"
+      },
+      "PlexDVR": {
+        "Description": "库，用于监控 Plex DVR 录音，以便您在录音完成后自动转换这些文件。",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "库，用于监控 SABnzbd 的“完成”下载目录。\n\n此库可以使用流将音乐转换为目标格式，并将这些音乐文件放入目标文件夹，例如“已转换”。\n\n指示 SABnzbd 进行下载的应用程序可以监控“已转换”文件夹中的已完成文件。",
+        "Name": "SABnzbd 音乐"
+      },
+      "SABnzbdVideos": {
+        "Description": "库，用于监控 SABnzbd 的“完成”下载目录。\n\n此库可以使用流将视频转换为目标格式，并将这些视频放入目标文件夹，例如“已转换”。\n\n指示 SABnzbd 进行下载的应用程序可以监控“已转换”文件夹中的已完成文件。",
+        "Name": "SABnzbd 视频"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "在目录中查找任何样本、预告片或预览视频文件，以便在必要时删除它们。\n对匹配的 'SABnzbd 视频' 库非常有用，以便在处理主文件后可以干净地删除该文件夹。",
+        "Name": "样本/预告片/预览"
+      },
+      "VideoLibrary": {
+        "Description": "视频库，搜索常见视频文件",
+        "Name": "视频库"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {天} other {天}} 前",
+    "HoursAgo": "{num} {num, plural, one {小时} other {小时}} 前",
+    "MinutesAgo": "{num} {num, plural, one {分钟} other {分钟}} 前",
+    "Never": "从不",
+    "SecondsAgo": "{num} {num, plural, one {秒} other {秒}} 前"
+  },
+  "Validators": {
+    "Pattern": "无效",
+    "Range": "必须在 {Minimum} 和 {Maximum} 之间",
+    "Required": "必填"
+  },
+  "Widgets": {
+    "AudioCodecs": "音频编码器",
+    "AudioContainers": "音频容器",
+    "Codecs": "编码器",
+    "ComicFormats": "漫画格式",
+    "ComicPages": "漫画页面",
+    "CPUUsage": "CPU 使用率",
+    "CurrentRevision": "当前版本",
+    "DatabaseConnections": "数据库连接",
+    "DecoderParameters": "解码器参数",
+    "Decoders": "解码器",
+    "Encoders": "编码器",
+    "ImageFormats": "图像格式",
+    "LibraryProcessingTimes": "库处理时间",
+    "LogStorage": "日志存储",
+    "MemoryUsage": "内存使用率",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "处理中",
+    "ProcessingNodes": "处理节点",
+    "ProcessingTimes": "处理时间",
+    "RecentlyFinished": "最近完成",
+    "StorageSaved": "已节省存储",
+    "TemporaryFileStorage": "临时文件存储",
+    "Upcoming": "即将到来",
+    "VideoCodecs": "视频编码器",
+    "VideoContainers": "视频容器",
+    "VideoResolutions": "视频分辨率"
+  }
+}

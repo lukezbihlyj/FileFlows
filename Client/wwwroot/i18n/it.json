@@ -1,0 +1,1430 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "About": "Informazioni",
+    "Add": "Aggiungi",
+    "AdminRequired": "Amministratore necessario per completare l'installazione.",
+    "Advanced": "Avanzato",
+    "All": "Tutti",
+    "And": "E",
+    "Any": "Qualsiasi",
+    "Audit": "Audit",
+    "BaseCodeOn": "Utilizza Modello di Codice",
+    "Browse": "Sfoglia",
+    "Cancel": "Annulla",
+    "CancelItems": "Sei sicuro di voler annullare il {count, plural, one {prodotto} other {prodotti}} selezionato?",
+    "CancelMessage": "Sei sicuro di voler annullare e perdere eventuali modifiche non salvate?",
+    "ChangePassword": "Cambia Password",
+    "Clear": "Pulisci",
+    "Close": "Chiudi",
+    "CommunityFlows": "Flussi della Comunità",
+    "Confirm": "Conferma",
+    "CopiedToClipboard": "Copia ''{text}'' negli appunti.",
+    "Copy": "Copia",
+    "CopyToClipboard": "Copia negli appunti",
+    "Decrease": "Diminuisci",
+    "Default": "Predefinito",
+    "Delete": "Elimina",
+    "DeleteItems": "Sei sicuro di voler eliminare il {count, plural, one {prodotto} other {prodotti}} selezionato?",
+    "DeleteLibraryFiles": "Sei sicuro di voler rimuovere il {count, plural, one {file} other {file}} selezionato?\n\nNota: questo non eliminerà il {count, plural, one {file} other {file}} dal disco, {count, plural, one {verrà} other {verranno}} solo rimosso dal database di FileFlows.",
+    "DeleteLibraryFilesPhysicallyMessage": "Sei sicuro di voler eliminare fisicamente il {count, plural, one {file} other {file}} selezionato?\n\nNota: questo eliminerà permanentemente il {count, plural, one {file} other {file}} dal disco e non potrà essere annullato.",
+    "DeleteLibraryFilesPhysicallySwitch": "Elimina file dal disco",
+    "Deleting": "Eliminando",
+    "Disconnected": "Disconnesso",
+    "Discord": "Discord",
+    "Download": "Scarica",
+    "DownloadLog": "Scarica Log",
+    "DownloadLogShort": "Log",
+    "Duplicate": "Duplica",
+    "Edit": "Modifica",
+    "EditSubFlow": "Modifica Sotto Flusso",
+    "Enabled": "Abilitato",
+    "Execute": "Esegui",
+    "Executing": "Esecuzione",
+    "Export": "Esporta",
+    "Failed": "Fallito",
+    "Fields": "Campi",
+    "Filter": "Filtra",
+    "FilterPlaceholder": "Filtra (/)",
+    "Flow": "Flusso",
+    "FlowElement": "Elemento di Flusso",
+    "FlowElements": "Elementi di Flusso",
+    "ForceProcessing": "Forza Elaborazione",
+    "Forum": "Forum",
+    "Help": "Aiuto",
+    "Import": "Importa",
+    "Increase": "Aumenta",
+    "Input": "Input",
+    "Installed": "Installato",
+    "InUse": "In Uso",
+    "LastRun": "Ultima Esecuzione",
+    "LastScanned": "Ultima Scansione",
+    "License": "Licenza",
+    "Loading": "Caricamento",
+    "Log": "Log",
+    "Logout": "Disconnetti",
+    "LogPartialNotAvailable": "Impossibile trovare il log parziale per il nodo.",
+    "MappingIssue": "Problema di Mappatura",
+    "MissingDependencies": "Dipendenze Mancanti",
+    "MissingDependenciesMessage": "I seguenti plugin mancanti devono essere scaricati prima di utilizzare questo modello:\n\n#LIST#",
+    "Name": "Nome",
+    "Never": "Mai",
+    "Next": "Avanti",
+    "No": "No",
+    "NoAuditHistoryAvailable": "Nessuna cronologia audit disponibile",
+    "Node": "Nodo",
+    "NoFilesCurrentlyProcessing": "Nessun file attualmente in elaborazione",
+    "NoFilesRecentlyFinished": "Nessun file recentemente completato",
+    "None": "Nessuno",
+    "NoUpcomingFiles": "Nessun file in arrivo",
+    "Number": "Numero",
+    "Ok": "OK",
+    "Open": "Apri",
+    "Other": "Altro",
+    "Output": "Output",
+    "Paste": "Incolla",
+    "Pause": "Metti in Pausa Elaborazione",
+    "Paused": "Riprendi Elaborazione",
+    "PausedWithTime": "Riprendi In",
+    "Percent": "Percentuale",
+    "Pixels": "Pixel",
+    "Plugins": "Plugin",
+    "PossibilityDisconnected": "Possibilmente Disconnesso",
+    "ProcessingPaused": "L'elaborazione è attualmente in pausa",
+    "Prompt": "Prompt",
+    "Properties": "Proprietà",
+    "ReadOnly": "Sola Lettura",
+    "Redo": "Ripeti",
+    "Refresh": "Aggiorna",
+    "Remove": "Rimuovi",
+    "Repository": "Repository",
+    "Reprocess": "Rielabora",
+    "Rescan": "Ripeti Scansione",
+    "Reset": "Ripristina",
+    "ResetLayout": "Ripristina Layout",
+    "Restore": "Ripristina",
+    "RestoredFailedMessage": "Ripristino di {type} non riuscito",
+    "RestoredMessage": "{type} ripristinato",
+    "Restoring": "Ripristinando",
+    "ReturnCode": "Codice di Ritorno",
+    "Revisions": "Revisioni",
+    "Run": "Esegui",
+    "RunAt": "Esegui A",
+    "RunHistory": "Cronologia Esecuzioni",
+    "Running": "In Esecuzione",
+    "Save": "Salva",
+    "Saving": "Salvataggio",
+    "Savings": "Risparmi",
+    "Scripts": "Script",
+    "Search": "Cerca",
+    "Searching": "Ricerca",
+    "Select": "Seleziona",
+    "SelectOne": "Seleziona Uno",
+    "SetStatusProcessed": "Contrassegna come Elaborato",
+    "Settings": "Impostazioni",
+    "ShowHidden": "Mostra Nascosti",
+    "Size": "Dimensione",
+    "SpaceIncrease": "{size} aumento, {items} prodotti",
+    "SpaceSavings": "{size} salvati, {items} prodotti",
+    "Status": "Stato",
+    "SubFlow": "Sotto Flusso",
+    "SubFlows": "Sotto Flussi",
+    "Success": "Successo",
+    "Test": "Test",
+    "Total": "Totale",
+    "Trigger": "Attivatore",
+    "Type": "Tipo",
+    "Undo": "Annulla",
+    "UnsavedChanges": "Modifiche Non Salvate",
+    "Update": "Aggiorna",
+    "UpdateAvailable": "Nuova versione disponibile {version}",
+    "UsedBy": "Usato Da",
+    "Version": "Versione",
+    "VersionNumber": "Versione: {version}",
+    "View": "Visualizza",
+    "ViewLog": "Visualizza Log",
+    "When": "Quando",
+    "Yes": "Sì",
+    "DateRanges": {
+      "AnyTime": "Qualsiasi Momento",
+      "Last12Months": "Ultimi 12 Mesi",
+      "Last24Hours": "Ultime 24 Ore",
+      "Last31Days": "Ultimi 31 Giorni",
+      "Last3Days": "Ultimi 3 Giorni",
+      "Last3Months": "Ultimi 3 Mesi",
+      "Last6Months": "Ultimi 6 Mesi",
+      "Last7Days": "Ultimi 7 Giorni",
+      "Live": "Live",
+      "Today": "Oggi",
+      "Yesterday": "Ieri"
+    },
+    "ObsoleteConfirm": {
+      "Message": "Si consiglia di passare a un elemento di flusso diverso.",
+      "Question": "Questo elemento di flusso è ora obsoleto e verrà presto rimosso. Sei sicuro di volerlo utilizzare?",
+      "Title": "Elemento di Flusso Obsoleto"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' aggiunto",
+    "ChangePassword": "Utente ''{User}'' ha cambiato la password",
+    "Deleted": "{Type} ''{Name}'' eliminato",
+    "Login": "Utente ''{User}'' ha effettuato l'accesso",
+    "LoginFailed": "Accesso utente ''{User}'' non riuscito",
+    "PasswordReset": "Utente ''{User}'' ha reimpostato la propria password",
+    "PasswordResetRequest": "Utente ''{User}'' ha richiesto una reimpostazione della password",
+    "SettingsUpdated": "Impostazioni aggiornate",
+    "Updated": "{Type} ''{Name}'' aggiornato"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "Aggiungi manualmente file o URL per l'elaborazione.",
+      "Title": "Aggiungi File",
+      "Fields": {
+        "AnyNode": "Qualsiasi Nodo",
+        "Flow": "Flusso",
+        "List": "Elenco",
+        "Mode": "Modalità Input",
+        "Node": "Nodo",
+        "Raw": "Input Bulk (Blocco di Testo)"
+      }
+    },
+    "AuditEntry": {
+      "ViewerTitle": "Modifiche",
+      "Columns": {
+        "Field": "Campo",
+        "Value": "Valore"
+      }
+    },
+    "ChangePassword": {
+      "Changed": "Password cambiata",
+      "InvalidPassword": "La vecchia password è invalida",
+      "MinimumLength": "La nuova password è troppo corta",
+      "NewPassword": "Nuova Password",
+      "NewPasswordConfirm": "Conferma",
+      "OldPassword": "Vecchia Password",
+      "PasswordMismatch": "Le password non corrispondono.",
+      "Title": "Cambia Password"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "Seleziona una Directory",
+      "FileTitle": "Seleziona un File"
+    },
+    "FlowTemplatePicker": {
+      "Title": "Seleziona un modello da cui partire"
+    },
+    "Import": {
+      "Message": "Seleziona un flusso esportato da importare nel sistema.",
+      "Title": "Importa Flusso"
+    },
+    "ImportScript": {
+      "Title": "Importa Script",
+      "Messages": {
+        "NoMoreImports": "Non ci sono ulteriori import disponibili per questo script"
+      }
+    },
+    "PauseDialog": {
+      "Message": "Seleziona la durata della pausa per l'elaborazione.\nNota: I flussi attuali continueranno ad essere eseguiti, ma nessun altro flusso verrà eseguito fino a quando non sarà scaduto questo tempo.",
+      "Title": "Metti in Pausa l'Elaborazione"
+    },
+    "ReprocessDialog": {
+      "Description": "Riprocessa il file/i file selezionati utilizzando i seguenti parametri",
+      "Title": "Riprocessa",
+      "Fields": {
+        "AnyNode": "Qualsiasi Nodo",
+        "BottomOfQueue": "Fondo della coda",
+        "CustomVariables": "Variabili Personalizzate",
+        "CustomVariablesKey": "Variabile Personalizzata",
+        "CustomVariablesMode": "Variabili Personalizzate",
+        "CustomVariablesValue": "Valore",
+        "Flow": "Flusso",
+        "Merge": "Unisci variabili personalizzate con l'originale",
+        "Node": "Nodo",
+        "Original": "Usa variabili personalizzate originali",
+        "Position": "Posizione",
+        "Replace": "Sostituisci le variabili personalizzate originali",
+        "SameFlow": "Nessuna modifica",
+        "TopOfQueue": "Inizio della coda"
+      },
+      "ProcessOptions": {
+        "Description": "Modifica i parametri di elaborazione per il file/i file selezionati",
+        "Title": "Opzioni di Elaborazione"
+      }
+    },
+    "ResumeDialog": {
+      "Message": "Sei sicuro di voler riprendere l'elaborazione?",
+      "Title": "Riprendi l'Elaborazione"
+    },
+    "ScriptLanguage": {
+      "Title": "Lingua dello Script",
+      "Labels": {
+        "BatchDescription": "I file batch possono essere eseguiti solo su sistemi Windows. Possono leggere variabili di base ma non possono aggiornare o accedere agli oggetti FileFlows durante l'esecuzione.",
+        "CSharpDescription": "Gli script C# possono interagire con più parti di FileFlows e sono i più potenti. Utilizzando la stessa lingua di FileFlows, consentono una maggiore interazione con il sistema.",
+        "JavaScriptDescription": "Gli script JavaScript vengono eseguiti all'interno del runner di FileFlows, consentendo di leggere e scrivere variabili e accedere a tutte le funzioni di supporto all'interno di FileFlows.",
+        "PowerShellDescription": "Gli script PowerShell possono essere eseguiti solo su sistemi Windows. Possono leggere variabili di base ma non possono aggiornare o accedere agli oggetti FileFlows durante l'esecuzione.",
+        "ShellDescription": "Gli script Shell vengono eseguiti su sistemi Unix-based (Linux, MacOS, Docker). Possono leggere variabili di base ma non possono aggiornare o accedere agli oggetti FileFlows durante l'esecuzione."
+      }
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "Aggiunto",
+      "ChangePassword": "Cambia Password",
+      "Deleted": "Cancellato",
+      "Login": "Accesso",
+      "LoginFailed": "Accesso Fallito",
+      "PasswordReset": "Reset della Password",
+      "PasswordResetRequest": "Richiesta di Reset della Password",
+      "Updated": "Aggiornato"
+    },
+    "DateCompareMode": {
+      "After": "Dopo",
+      "Any": "Qualsiasi",
+      "Before": "Prima",
+      "Between": "Tra",
+      "GreaterThan": "Maggiore di",
+      "LessThan": "Minore di",
+      "NotBetween": "Non Tra"
+    },
+    "Days": {
+      "Fri": "Ven",
+      "Friday": "Venerdì",
+      "Mon": "Lun",
+      "Monday": "Lunedì",
+      "Sat": "Sab",
+      "Saturday": "Sabato",
+      "Sun": "Dom",
+      "Sunday": "Domenica",
+      "Thu": "Gio",
+      "Thursday": "Giovedì",
+      "Tue": "Mar",
+      "Tuesday": "Martedì",
+      "Wed": "Mer",
+      "Wednesday": "Mercoledì"
+    },
+    "FilesSortBy": {
+      "Savings": "Risparmi",
+      "SavingsDesc": "Risparmi Decrescenti",
+      "Size": "Dimensione",
+      "SizeDesc": "Dimensione Decrescente",
+      "Time": "Tempo",
+      "TimeDesc": "Tempo Decrescente"
+    },
+    "FileStatus": {
+      "Any": "Qualsiasi",
+      "Disabled": "Disabilitato",
+      "Duplicate": "Duplicato",
+      "FlowNotFound": "Flusso Non Trovato",
+      "MappingIssue": "Problema di Mappatura",
+      "MissingLibrary": "Libreria Mancante",
+      "OnHold": "In Attesa",
+      "OutOfSchedule": "Fuori Programma",
+      "Processed": "Elaborato",
+      "Processing": "In Elaborazione",
+      "ProcessingFailed": "Elaborazione Fallita",
+      "ReprocessByFlow": "Ri-elabora per Flusso",
+      "Unprocessed": "Non Elaborato"
+    },
+    "FlowType": {
+      "Failure": "Fallimento",
+      "Standard": "Standard",
+      "SubFlow": "Sotto Flusso"
+    },
+    "LogType": {
+      "Debug": "Debug",
+      "Error": "Errore",
+      "Info": "Informazioni",
+      "Warning": "Avviso"
+    },
+    "MatchRange": {
+      "After": "Dopo",
+      "Any": "Qualsiasi",
+      "Before": "Prima",
+      "Between": "Tra",
+      "GreaterThan": "Maggiore di",
+      "LessThan": "Minore di",
+      "NotBetween": "Non Tra"
+    },
+    "MathValue": {
+      "Between": "Tra",
+      "Equals": "Uguale",
+      "GreaterThan": "Maggiore di",
+      "GreaterThanOrEqual": "Maggiore o Uguale",
+      "LessThan": "Minore di",
+      "LessThanOrEqual": "Minore o Uguale",
+      "NotBetween": "Non Tra",
+      "NotEquals": "Non Uguale"
+    },
+    "Periods": {
+      "Days": "Giorni",
+      "Hours": "Ore",
+      "Minutes": "Minuti",
+      "Weeks": "Settimane"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "Disabilitato",
+      "Idle": "Inattivo",
+      "Offline": "Offline",
+      "OutOfSchedule": "Fuori Programma",
+      "Processing": "In Elaborazione",
+      "VersionMismatch": "Versione Incompatibile"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "Alfabetico",
+      "AsFound": "Come Trovato (Predefinito)",
+      "LargestFirst": "Più Grande Prima",
+      "NewestFirst": "Più Nuovo Prima",
+      "OldestFirst": "Più Vecchio Prima",
+      "Random": "Casuale",
+      "SmallestFirst": "Più Piccolo Prima"
+    },
+    "ProcessingPriority": {
+      "High": "Alto",
+      "Highest": "Molto Alto",
+      "Low": "Basso",
+      "Lowest": "Molto Basso",
+      "Normal": "Normale"
+    },
+    "ReportDirection": {
+      "Inbound": "In Entrata",
+      "Outbound": "In Uscita"
+    },
+    "ReportSchedule": {
+      "Daily": "Giornaliero",
+      "Monthly": "Mensile",
+      "Weekly": "Settimanale"
+    },
+    "SecurityMode": {
+      "Local": "Utenti Locali",
+      "Off": "Nessuno",
+      "OpenIdConnect": "Open ID Connect"
+    },
+    "TaskType": {
+      "FileAdded": "File Aggiunto",
+      "FileFlowsServerUpdateAvailable": "Aggiornamento Disponibile",
+      "FileFlowsServerUpdating": "Aggiornamento del Server",
+      "FileProcessed": "File Elaborato",
+      "FileProcessFailed": "Elaborazione Fallita",
+      "FileProcessing": "Elaborazione del File",
+      "FileProcessSuccess": "Elaborazione Riuscita"
+    },
+    "UserRole": {
+      "DockerMods": "Modifiche Docker",
+      "Files": "File",
+      "Flows": "Flussi",
+      "Libraries": "Librerie",
+      "Log": "Log",
+      "Nodes": "Nodi",
+      "PauseProcessing": "Metti in Pausa Elaborazione",
+      "Plugins": "Plugin",
+      "Revisions": "Revisioni",
+      "Scripts": "Script",
+      "Tasks": "Attività",
+      "Variables": "Variabili",
+      "Webhooks": "Webhook"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "Entrambi i valori devono essere inseriti",
+    "CannotDeleteInternalNode": "Non puoi eliminare il nodo di elaborazione interno.",
+    "DeleteFailed": "Eliminazione fallita",
+    "DuplicatesFound": "Duplicati trovati",
+    "NameInUse": "Il nome è già in uso",
+    "NameRequired": "Il nome è obbligatorio",
+    "NoFlowSpecified": "Nessun flusso specificato, devi selezionare un flusso per creare una libreria",
+    "NotAllFilesCouldBeDeleted": "Non tutti i file potrebbero essere eliminati.\nVedi il log per ulteriori informazioni.",
+    "NotFound": "Elemento non trovato",
+    "SaveFailed": "Salvataggio fallito",
+    "SetFileStatus": "Impossibile impostare lo stato del file",
+    "UnexpectedError": "Si è verificato un errore imprevisto"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "Nessun nodo di input specifico, ogni flusso ha bisogno di un nodo di input",
+      "NoParts": "Nessuna parte del flusso specifica, devi avere alcune parti per salvare un flusso",
+      "TooManyInputNodes": "Puoi avere solo un nodo di input"
+    },
+    "Parts": {
+      "Color": "Colore",
+      "Color-Placeholder": "Colore personalizzato",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "Estensioni",
+          "Extensions-Help": "Un elenco di estensioni che, se corrispondono, verranno inviate al primo nodo di output, altrimenti verrà utilizzato il secondo nodo di output."
+        }
+      }
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*Maggiore di*: Corrisponde se la data è più vecchia del periodo dato.\n*Minore di*: Corrisponde se la data è più recente del periodo dato.\n*Tra*: Corrisponde se la data è compresa nell'intervallo specificato.\n*Prima*: Corrisponde se la data è precedente alla data specificata.\n*Dopo*: Corrisponde se la data è successiva alla data specificata."
+    }
+  },
+  "MenuGroups": {
+    "Admin": "Amministrazione",
+    "Configuration": "Configurazione",
+    "Extensions": "Estensioni",
+    "Information": "Informazioni",
+    "Overview": "Panoramica",
+    "Security": "Sicurezza",
+    "System": "Sistema",
+    "User": "Utente"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "Voce di controllo accessi",
+      "Title": "Controllo Accessi",
+      "Labels": {
+        "Console": "Console Web",
+        "Remote": "Remoto / Nodii di Elaborazione"
+      },
+      "Buttons": {
+        "MoveDown": "Sposta Giù",
+        "MoveUp": "Sposta Su"
+      },
+      "Columns": {
+        "Allow": "Consenti",
+        "End": "Indirizzo di Fine",
+        "Start": "Indirizzo di Inizio"
+      },
+      "Fields": {
+        "Allow": "Consenti",
+        "Allow-Help": "Indica se questa voce di controllo accessi è autorizzata ad accedere al sistema o meno.",
+        "Description": "Descrizione",
+        "Description-Placeholder": "Una descrizione facoltativa per descrivere questa voce",
+        "End": "Indirizzo di Fine",
+        "End-Help": "Indirizzo IP di fine opzionale, deve essere maggiore dell'indirizzo di inizio se impostato e dello stesso tipo. Altrimenti, questo valore finale verrà ignorato.",
+        "End-Placeholder": "Indirizzo finale opzionale",
+        "Start": "Indirizzo di Inizio",
+        "Start-Help": "L'indirizzo IP di inizio può essere sia IPv4 che IPv6"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "L'indirizzo di fine deve essere maggiore dell'indirizzo di inizio",
+        "FamilyMismatch": "Gli indirizzi IP di inizio e di fine devono essere dello stesso tipo",
+        "InvalidIPAddress": "'{address}' non è un indirizzo IP valido.",
+        "MoveFailed": "Impossibile spostare le voci"
+      }
+    },
+    "Audit": {
+      "Title": "Registro Audit",
+      "Columns": {
+        "Action": "Azione",
+        "Date": "Data",
+        "IPAddress": "Indirizzo IP",
+        "Operator": "Operatore",
+        "Summary": "Riepilogo",
+        "Type": "Tipo"
+      }
+    },
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Labels": {
+        "AddWidget": "Aggiungi Widget",
+        "FinalSize": "Dimensione Finale",
+        "OriginalSize": "Dimensione Originale",
+        "Savings": "Risparmi",
+        "ShrinkageTitle": "Spazio di Archiviazione Risparmiato"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "Creazione della dashboard fallita",
+        "LogFailed": "Impossibile recuperare il log per il lavoratore"
+      },
+      "Fields": {
+        "Current": "Attuale",
+        "CurrentStep": "Passaggio",
+        "File": "File",
+        "Library": "Libreria",
+        "Log": "Log",
+        "Node": "Nodo",
+        "Overall": "Totale",
+        "ProcessingTime": "Tempo di Elaborazione",
+        "RecentlyFinished": "Recentemente Completato",
+        "Uid": "UID",
+        "Upcoming": "Prossimo",
+        "WorkingFile": "File di Lavoro"
+      },
+      "Messages": {
+        "CancelMessage": "Sei sicuro di voler annullare il lavoratore per {RelativeFile}?",
+        "DeleteDashboard": "Sei sicuro di voler eliminare la dashboard attuale?\n\nQuesta operazione non può essere annullata.",
+        "DeleteWidget": "Sei sicuro di voler rimuovere questo Widget?",
+        "Waiting": "In attesa di un file da elaborare"
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMod",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "Revisione",
+        "UpdateAvailable": "Aggiornamento Disponibile"
+      },
+      "Fields": {
+        "Code": "Codice",
+        "Description": "Descrizione"
+      },
+      "Messages": {
+        "FailedToExport": "Esportazione fallita.",
+        "Updating": "Aggiornamento in corso"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "Compito"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "Cronologia Compiti",
+      "Fields": {
+        "RunHistory": "Cronologia"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "Esecuzione Compito",
+      "Fields": {
+        "Log": "Log",
+        "ReturnValue": "Valore di Ritorno",
+        "RunAt": "Eseguito Il",
+        "Success": "Successo"
+      }
+    },
+    "Flow": {
+      "Title": "Flusso",
+      "Labels": {
+        "EditFlow": "Flusso: {Name}",
+        "FlowProperties": "Proprietà del Flusso",
+        "OpenScriptBrowser": "Apri il Browser degli Script",
+        "OpenSubFlowBrowser": "Apri il Browser dei Sottoflussi",
+        "SubFlowBrowser": "Browser dei Sottoflussi",
+        "SubFlowHelp": "Per aggiungere campi di input a un sottoflusso per poter passare parametri personalizzati a questo sottoflusso, crea questi nella scheda `Campi`.\n\nUn sottoflusso deve avere un singolo `Input` che può essere qualsiasi elemento di flusso di input valido, ad esempio `Input File`, `Video File`, ecc."
+      },
+      "Fields": {
+        "Author": "Autore",
+        "Author-Help": "Specifica facoltativamente l'autore di questo flusso.",
+        "Description": "Descrizione.",
+        "MinimumVersion": "Versione Minima",
+        "Outputs": "Output",
+        "Outputs-Help": "Il numero di output che ha questo sottoflusso. Questo è il numero di output disponibili quando si utilizza questo sottoflusso in un altro flusso.",
+        "OutputsKey": "Output",
+        "OutputsValue": "Descrizione",
+        "Tags": "Tag",
+        "Variables": "Variabili",
+        "VariablesKey": "Nome",
+        "VariablesValue": "Valore",
+        "Field": {
+          "Default": "Predefinito",
+          "DeleteIfEmpty": "Elimina se Vuoto",
+          "DeleteIfEmpty-Help": "Se vengono aggiunti valori qui e l'utente seleziona 'Elimina Originale', la cartella verrà eliminata anche se non ci sono file che corrispondono a nessuna di queste espressioni regolari.",
+          "Description": "Una descrizione facoltativa da mostrare con questo campo. Questo può essere un testo di aiuto per il campo.",
+          "FlowElementField": "Campo Elemento",
+          "FlowElementField-Help": "Facoltativo, impostalo nel formato '{Uid}.{FieldName}' ad esempio ''53a72207-34a2-4b71-b3d8-8b12764a85fe.Force'' per impostare un campo in un elemento di flusso direttamente. Vedi l'aiuto per ulteriori informazioni.",
+          "IfName": "Se",
+          "IfName-Help": "Se questo dovrebbe essere mostrato all'utente solo se un altro valore corrisponde a queste condizioni.",
+          "IfNot": "Se Non",
+          "IfNot-Help": "Se il valore dovrebbe essere invertito e dovrebbe mostrare solo se il valore non corrisponde.",
+          "IfValue": "Se Valore",
+          "IfValue-Help": "Il valore da confrontare, può essere un'espressione regolare. Per i booleani usa vero o falso.",
+          "Inverse": "Inverso",
+          "Inverse-Help": "Se i valori del cursore devono essere invertiti con valori inferiori mostrati a destra.",
+          "Maximum": "Massimo",
+          "Minimum": "Minimo",
+          "Options": "Opzioni",
+          "Options-Help": "Un array di opzioni di elenco, per impostare un'etichetta e un valore usa un separatore | ad esempio `etichetta|valore`",
+          "Required": "Richiesto",
+          "Required-Help": "Se questo valore è obbligatorio e deve essere impostato."
+        }
+      },
+      "Messages": {
+        "Close": "Sei sicuro di voler uscire e perdere tutte le modifiche non salvate?",
+        "FailedToLoadFlow": "Impossibile caricare il flusso.",
+        "LoadingFlow": "Caricamento Flusso"
+      }
+    },
+    "Flows": {
+      "Title": "Flussi",
+      "Labels": {
+        "FailureFlows": "Flussi di Errore",
+        "StandardFlows": "Flussi Standard",
+        "SubFlows": "Sottoflussi"
+      },
+      "Buttons": {
+        "Repository": "Repository"
+      },
+      "Fields": {
+        "Author": "Autore",
+        "Template": "Modello"
+      },
+      "Messages": {
+        "DeleteUsed": "Non puoi eliminare un flusso che è in uso",
+        "Duplicated": "Flusso ''{name}'' duplicato",
+        "FailedToExport": "Impossibile esportare il flusso(i).",
+        "FailureFlowDescription": "Questo è un tipo speciale di flusso che verrà eseguito se un flusso fallisce.\nFileFlows cercherà il Flusso di Errore 'Predefinito' da utilizzare se un flusso fallisce, se non trovato allora l'elaborazione si fermerà immediatamente.",
+        "FlowImported": "Flusso ''{name}'' importato",
+        "LoadingTemplates": "Caricamento Modelli"
+      },
+      "Template": {
+        "Title": "Aggiungi Flusso",
+        "Fields": {
+          "PageDescription": "Seleziona un modello su cui basare il flusso, questo ti aiuterà a iniziare con un flusso.",
+          "Template": "Modello"
+        }
+      }
+    },
+    "Libraries": {
+      "Title": "Librerie",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {File} other {Files}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "Non ci sono flussi configurati.\nCrea un flusso prima di aggiungere o aggiornare una libreria."
+      },
+      "Messages": {
+        "DeleteConfirm": "Sei sicuro di voler eliminare i {count, plural, one {libreria} other {librerie}} selezionati?",
+        "KeepLibraryFiles": "Mantieni i file nel database per le statistiche",
+        "Reprocess": {
+          "Message": "Sei sicuro di voler procedere con la riprocessazione delle librerie selezionate?\n\nQuesta azione segnerà tutti i file come non elaborati e avvierà la loro riprocessazione. Si prega di notare che questa azione non può essere annullata.",
+          "Title": "Riprocessa Librerie Selezionate"
+        },
+        "Reset": {
+          "Message": "Sei sicuro di voler procedere con il ripristino delle librerie selezionate?\n\nQuesta azione rimuoverà tutti i file e avvierà una nuova scansione. Si prega di notare che questa azione non può essere annullata.",
+          "Title": "Ripristina Librerie Selezionate"
+        }
+      }
+    },
+    "Library": {
+      "Title": "Biblioteca",
+      "Labels": {
+        "CreationTime": "Data di Creazione",
+        "LastWriteTime": "Data Ultima Scrittura"
+      },
+      "Fields": {
+        "DetectFileCreation": "Creazione File",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "Ultima Scrittura File",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "Dimensione File",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "Qui puoi configurare una biblioteca per rilevare solo i file che corrispondono ai modelli specificati.\n\nAd esempio, questo ti consente di includere solo i file che sono\n\t- File creati meno di 7 giorni fa\n\t- File che sono stati scritti per l'ultima volta tra 3 e 7 giorni fa\n\t- La dimensione del file è superiore a 1 gigabyte",
+        "DownloadsDirectory": "Cartella Download",
+        "DownloadsDirectory-Help": "Una cartella speciale in cui se un file che è stato elaborato con successo viene riscoperto in questa cartella, quel file verrà automaticamente rielaborato.\nQuesto è utile se riscarichi un file.",
+        "Enabled": "Abilitato",
+        "ExcludeHidden": "Escludi Nascosti",
+        "ExcludeHidden-Help": "Quando abilitato, i file e le cartelle nascosti non verranno scansionati",
+        "ExclusionFilters": "Esclusioni",
+        "ExclusionFilters-Help": "Elenco facoltativo di inclusioni da eseguire contro il nome completo dei file.",
+        "Extensions": "Estensioni",
+        "Extensions-Help": "Un elenco facoltativo di estensioni per i file da includere in questa biblioteca.\nSe lasciato vuoto, tutti i file saranno inclusi, a meno che non sia definito un filtro o un filtro di esclusione nella scheda `Avanzate`.",
+        "FileSizeDetectionInterval": "Intervallo di Rilevamento File",
+        "FileSizeDetectionInterval-Help": "Il tempo in secondi da attendere per riesaminare la dimensione del file durante lo scanner della biblioteca. Utilizza questo se un'altra applicazione potrebbe scrivere a un file in blocchi, ad esempio un'applicazione PVR che scrive parti di una registrazione ogni 20 secondi.",
+        "FileSizeDetectionInterval-Suffix": "Secondi",
+        "Filters": "Filtri",
+        "Filters-Help": "Elenco facoltativo di filtri da eseguire contro il nome completo dei file.",
+        "Flow": "Flusso",
+        "Folders": "Cartelle",
+        "Folders-Help": "Se questa biblioteca elabora Cartelle invece di File.\nQuesto non significa scansionare le sottocartelle, una biblioteca lo farà già.\nQuesto significa che verrà elaborato un oggetto Cartella invece di file singoli.",
+        "FullScanDisabled": "Disabilita Scansione Completa",
+        "FullScanDisabled-Help": "Lo scopo della scansione completa è di catturare eventuali file che potrebbero essere mancati dagli eventi di monitoraggio del file system.",
+        "FullScanIntervalMinutes": "Intervallo Scansione Completa",
+        "FullScanIntervalMinutes-Help": "L'intervallo in cui dovrebbe avere luogo una scansione completa di questa biblioteca",
+        "HoldMinutes": "Attendere Minuti",
+        "HoldMinutes-Help": "Facoltativamente, mantieni qualsiasi file trovato in questa biblioteca per questo numero di minuti prima di elaborarli. Ogni file verrà trattenuto per questo periodo di tempo.",
+        "HoldMinutes-Suffix": "minuti",
+        "MaxRunners": "Max Esecutori",
+        "MaxRunners-Help": "Il numero massimo di esecutori che possono elaborare file in questa biblioteca contemporaneamente.\nImposta a 0 per illimitato.",
+        "Name": "Nome",
+        "Path": "Percorso",
+        "Priority": "Priorità",
+        "Priority-Help": "La priorità con cui i file devono essere elaborati. Se una biblioteca di priorità superiore ha file in attesa di elaborazione, questi verranno elaborati per primi.",
+        "ProcessingOrder": "Ordine di Elaborazione",
+        "ProcessingOrder-Help": "L'ordine in cui i file verranno elaborati da questa biblioteca.",
+        "ReprocessRecreatedFiles": "Rielaborare File Ricreati",
+        "ReprocessRecreatedFiles-Help": "Quando abilitato, se un file viene rivelato con un orario di creazione diverso da quello registrato, il file sarà automaticamente impostato per la rielaborazione.\nQuesto è utile in una biblioteca di file scaricati, dove potresti scaricare lo stesso file più volte e desiderare di elaborarlo ogni volta.",
+        "Scan": "Scansione",
+        "Scan-Help": "Quando la scansione è abilitata, la biblioteca verrà regolarmente scansionata per nuovi contenuti.\nQuando disabilitata, la biblioteca ascolterà gli eventi del file system per rilevare nuovi file.\nÈ meglio lasciare questa opzione disattivata a meno che tu non abbia problemi con i file non rilevati.",
+        "ScanInterval": "Intervallo di Scansione",
+        "ScanInterval-Help": "Il tempo più breve possibile in secondi tra le scansioni. Non è garantito che venga eseguita la scansione a questo intervallo ogni volta, poiché potrebbe essere in corso un'altra scansione.",
+        "ScanInterval-Suffix": "Secondi",
+        "Schedule": "Pianifica",
+        "ScheduleDescription": "Questo ti consente di configurare quando questa biblioteca sarà attiva.\n\nLo scanner della biblioteca non verrà eseguito contro questa biblioteca né i file verranno elaborati al di fuori della pianificazione.\n",
+        "SkipFileAccessTests": "Salta Test di Accesso ai File",
+        "SkipFileAccessTests-Help": "Quando abilitato, la biblioteca non testerà se può leggere o scrivere sul file prima di aggiungerlo alla coda dei file.",
+        "Template": "Modello",
+        "TopLevelOnly": "Solo Livello Superiore",
+        "TopLevelOnly-Help": "Scansiona solo i file nella radice della directory e nessuna sottocartella sarà cercata.",
+        "UpdateMovedFiles": "Aggiorna File Spostati",
+        "UpdateMovedFiles-Help": "Quando abilitato, se un file è stato rilevato come spostato all'interno della stessa biblioteca, il file originale verrà aggiornato per puntare a questo nuovo file.\nAltrimenti, quando disabilitato, verrà invece aggiunto un duplicato.\n\nUn file sarà rilevato come spostato se il file originale non esiste e viene trovato un nuovo file con la stessa firma.",
+        "UseFingerprinting": "Utilizza Fingerprinting",
+        "UseFingerprinting-Help": "Quando abilitato, i file avranno eseguito un checksum quando vengono importati e dopo che un flusso è stato completato. Qualsiasi file con checksum corrispondente verrà saltato dalle future importazioni nella biblioteca.",
+        "WaitTimeSeconds": "Tempo di Attesa",
+        "WaitTimeSeconds-Help": "Il numero di secondi che devono passare dall'ultima modifica scritta in questa cartella affinché venga scansionata nella biblioteca.",
+        "WaitTimeSeconds-Suffix": "secondi"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "Data di Creazione",
+        "ExecutedNodes": "Nodi Eseguiti",
+        "FailureReason": "Motivo del Fallimento",
+        "FinalMetadata": "Metadati Finali",
+        "FinalSize": "Dimensione Finale",
+        "FinalSizeSuffix": "Bytes",
+        "Fingerprint": "Fingerprint",
+        "Flow": "Flusso",
+        "Library": "Biblioteca",
+        "Log": "Log",
+        "Name": "File Originale",
+        "Node": "Nodo di Elaborazione",
+        "OriginalMetadata": "Metadati Originali",
+        "OriginalSize": "Dimensione Originale",
+        "OriginalSizeSuffix": "Bytes",
+        "OutputPath": "Percorso di Uscita",
+        "ProcessingTime": "Tempo di Elaborazione",
+        "Status": "Stato"
+      },
+      "Tabs": {
+        "CustomVariables": "Variabili Personalizzate",
+        "FinalMetadata": "Output",
+        "OriginalMetadata": "Input"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "File",
+      "Labels": {
+        "ScanTriggered": "Scansione attivata per tutte le librerie abilitate"
+      },
+      "Buttons": {
+        "Ignore": "Ignora",
+        "MoveToTop": "Sposta in alto",
+        "Process": "Elabora",
+        "ProcessOptions": "Opzioni di elaborazione",
+        "Reprocess": "Rielabora",
+        "ToggleForce": "Attiva/Disattiva Elaborazione Forzata",
+        "Unhold": "Rilascia",
+        "View": "Visualizza"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "Impossibile scaricare il log",
+        "FailedToReprocess": "Impossibile rielaborare",
+        "ReprocessingFile": "File inviato per la rielaborazione"
+      }
+    },
+    "Log": {
+      "Title": "Log",
+      "Labels": {
+        "AutoRefresh": "Aggiornamento automatico",
+        "FailedToDownloadLog": "Impossibile scaricare il log.",
+        "NoMatchingData": "Nessun dato corrispondente"
+      },
+      "Fields": {
+        "File": "File",
+        "IncludeHigherSeverity": "Includi gravità superiore",
+        "Nodes": "Nodi",
+        "Severity": "Gravità",
+        "Source": "Fonte",
+        "Text": "Testo"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "Annulla",
+        "ForgotPassword": "Hai dimenticato la password?",
+        "Login": "Accesso",
+        "Password": "Password",
+        "Reset": "Ripristina",
+        "Username": "Nome utente",
+        "UsernameOrEmail": "Nome utente o Email"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "Nome utente o password non validi",
+        "LockedOut": "Troppi tentativi di accesso errati, attualmente sei bloccato.",
+        "PasswordReset": "Ripristino della password"
+      }
+    },
+    "Nodes": {
+      "Title": "Nodi",
+      "Labels": {
+        "Address": "Indirizzo",
+        "Disconnected": "Disconnesso",
+        "DownloadNode": "Nodo di download",
+        "FileFlowsServer": "Nodo di elaborazione interno",
+        "FilesProcessed": "File elaborati",
+        "Internal": "Interno",
+        "PossiblyDisconnected": "Possibilmente disconnesso",
+        "Runners": "Esecutori",
+        "UpgradeRequired": "Aggiornamento richiesto",
+        "UpgradeRequiredHint": "Il server e i nodi devono essere sulla stessa versione",
+        "Version": "Versione"
+      },
+      "Fields": {
+        "Address": "Indirizzo",
+        "Enabled": "Abilitato",
+        "FlowRunners": "Esecutori di flusso"
+      }
+    },
+    "Notifications": {
+      "Title": "Notifiche"
+    },
+    "Plugins": {
+      "Title": "Plugin",
+      "Labels": {
+        "PluginBrowser": "Browser Plugin"
+      },
+      "Fields": {
+        "Authors": "Autori",
+        "Description": "Descrizione",
+        "Elements": "Nodi",
+        "Url": "Pagina principale",
+        "Version": "Versione"
+      },
+      "Messages": {
+        "DeletePlugins": "Sei sicuro di voler eliminare il {count, plural, one {plugin} other {plugin}} selezionato?",
+        "DeleteUsed": "Non puoi eliminare un plugin che è in uso",
+        "UpdatingPlugins": "Aggiornamento plugin"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "Nodo",
+      "Fields": {
+        "Address": "Indirizzo",
+        "Address-Help": "L'indirizzo (hostname o indirizzo IP) del nodo. Non dovresti modificarlo a meno che tu non abbia cambiato l'indirizzo del nodo. Ad esempio, se hai cambiato il nome del computer del nodo di elaborazione.",
+        "AllLibraries": "Tutte le librerie",
+        "AllLibraries-Help": "Quali librerie questo nodo elaborerà",
+        "CopyMappings": "Copia Mappature",
+        "DontChangeOwner": "Cambia Proprietario",
+        "DontChangeOwner-Help": "Se selezionato, il nodo cambierà il proprietario di tutti i file creati di recente al PGID e PUID definiti nei valori ambientali.\nSe queste variabili ambientali non sono impostate, il proprietario sarà cambiato in ''users:nobody''.",
+        "DontSetPermissions": "Imposta Permessi",
+        "DontSetPermissions-Help": "Se selezionato, i permessi dei file saranno impostati su tutti i file creati di recente",
+        "Enabled": "Abilitato",
+        "FlowRunners": "Esecutori di flusso",
+        "FlowRunners-Help": "Il numero di istanze di esecutore di flusso disponibili per eseguire un flusso.",
+        "InternalProcessingNodeDescription": "Questo è il nodo di elaborazione integrato in FileFlows.\n\nQuesto nodo ti consente di eseguire FileFlows senza preoccuparti di installare altri nodi su sistemi remoti e ti consente di utilizzare FileFlows come un'applicazione autonoma.\n\nPuoi continuare a utilizzare questo nodo interno e nodi di elaborazione aggiuntivi se lo desideri, oppure puoi disabilitare questo nodo e utilizzare solo nodi aggiuntivi.",
+        "Libraries": "Librerie",
+        "Libraries-Help": "Seleziona quali librerie questo nodo può elaborare",
+        "Mappings": "Mappature",
+        "MappingsDescription": "Le mappature ti consentono di mappare un percorso dal server a una posizione sul nodo.\n\nAd esempio, puoi mappare Server:'/usr/local/bin/ffmpeg' a Nodo:'C:\\Utils\\ffmpeg\\ffmpeg.exe'\n\nDevi aggiungere mappature per tutte le librerie e gli strumenti necessari per funzionare sul sistema remoto.",
+        "MappingsKey": "Server",
+        "MappingsValue": "Nodo",
+        "MaxFileSizeMb": "Dimensione massima file",
+        "MaxFileSizeMb-Help": "La dimensione massima del file che questo nodo di elaborazione può elaborare. Se impostato a 0, non ci sarà alcun limite.",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "Permessi file",
+        "PermissionsFiles-Help": "I permessi da impostare su tutti i file creati di recente.",
+        "PermissionsFolders": "Permessi cartelle",
+        "PermissionsFolders-Help": "I permessi da impostare su tutte le cartelle create di recente.",
+        "PreExecuteScript": "Script Pre-Esclusione",
+        "PreExecuteScript-Help": "Uno script che verrà eseguito prima di elaborare un file. Il risultato di questo script deve essere 1 affinché passi; in caso contrario, il nodo non elaborerà il file.",
+        "Priority": "Priorità",
+        "Priority-Help": "Maggiore è il numero, maggiore è la priorità. I nodi con una priorità più alta saranno privilegiati e riceveranno i file da elaborare per primi, a meno che quei nodi non siano fuori programma, disabilitati o al massimo degli esecutori.",
+        "ProcessFileCheckInterval": "Intervallo di controllo file",
+        "ProcessFileCheckInterval-Help": "Con quale frequenza controllare un nuovo file da elaborare nei nodi di elaborazione.\nImposta a 0 per utilizzare il valore di sistema.",
+        "ProcessFileCheckInterval-Suffix": "secondi",
+        "ProcessingDescription": "Questo ti consente di configurare cosa può elaborare questo nodo di elaborazione.\n\nAd esempio, potresti limitare questo nodo a elaborare solo determinate librerie o una dimensione massima del file se questo nodo è un nodo a bassa potenza.",
+        "Schedule": "Programma",
+        "Schedule-Help": "Questo programma funziona nel fuso orario del nodo",
+        "ScheduleDescription": "Questo ti consente di configurare quando questo nodo sarà attivo.\n\nIl nodo non elaborerà alcun file al di fuori di questo programma configurato.\n",
+        "TempPath": "Directory Temp",
+        "TempPath-Help": "Questa directory sarà utilizzata dai flussi per creare file temporanei mentre il flusso viene elaborato; questa directory verrà pulita regolarmente, quindi non tenere nulla di importante qui.",
+        "Variables": "Variabili",
+        "VariablesDescription": "Le variabili ti consentono di configurare variabili avanzate da impostare su un nodo di elaborazione.",
+        "VariablesKey": "Nome",
+        "VariablesValue": "Valore"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "Combinato"
+      },
+      "Buttons": {
+        "Back": "Indietro",
+        "Generate": "Genera"
+      },
+      "Fields": {
+        "Direction": "Direzione",
+        "Email": "Email",
+        "Email-Placeholder": "Inserisci un indirizzo email",
+        "Flow": "Flusso",
+        "Library": "Libreria",
+        "Node": "Nodo",
+        "Period": "Periodo",
+        "Statistic": "Statistica"
+      },
+      "Messages": {
+        "FailedToFindReport": "Impossibile trovare il report.",
+        "FailedToGenerateReport": "Impossibile generare il report.",
+        "NoMatchingData": "Nessun dato corrispondente",
+        "ReportEmailed": "Il report sarà inviato via email a ''{email}'' una volta generato."
+      }
+    },
+    "Reporting": {
+      "Title": "Reportistica",
+      "Labels": {
+        "Reports": "Report",
+        "ScheduledReports": "Pianificati"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "Oggetto Repository",
+      "Fields": {
+        "Author": "Autore",
+        "Code": "Codice",
+        "Description": "Descrizione",
+        "Revision": "Revisione"
+      }
+    },
+    "Revisions": {
+      "Title": "Revisioni"
+    },
+    "ScheduledReport": {
+      "Title": "Report Pianificato",
+      "Labels": {
+        "LastSent": "Ultimo Inviato",
+        "Never": "Mai"
+      },
+      "Fields": {
+        "DayOfMonth": "Giorno Del Mese",
+        "DayOfMonth-Help": "Il giorno del mese per eseguire questo report. Se il giorno selezionato è al di fuori del mese (ad esempio, 31 a febbraio), il report verrà eseguito l'ultimo giorno del mese.",
+        "DayOfWeek": "Giorno Della Settimana",
+        "DayOfWeek-Help": "Il giorno della settimana per inviare questo report pianificato. Questo includerà i dati per i 7 giorni precedenti a questo giorno.",
+        "Direction": "Direzione",
+        "Enabled": "Abilitato",
+        "Enabled-Help": "Questo report pianificato verrà eseguito solo se è abilitato.",
+        "Flows": "Flussi",
+        "Libraries": "Librerie",
+        "Name-Help": "Il nome del report, apparirà nell'oggetto dell'email inviata.",
+        "Nodes": "Nodi",
+        "Recipients": "Destinatari",
+        "Recipients-Help": "Un elenco di indirizzi email che riceveranno questo report quando viene eseguito.",
+        "Report": "Report",
+        "Report-Help": "Il report che verrà inviato.",
+        "Schedule": "Pianificazione",
+        "Schedule-Help": "Quando questo report sarà generato e inviato via email ai destinatari."
+      }
+    },
+    "Script": {
+      "LanguageTitle": "Script {Language}",
+      "Title": "Script",
+      "Fields": {
+        "Code": "Codice",
+        "Description": "Descrizione",
+        "Name": "Nome",
+        "Outputs": "Output",
+        "OutputsKey": "Output",
+        "OutputsValue": "Descrizione"
+      },
+      "Messages": {
+        "FailedToExport": "Esportazione non riuscita."
+      }
+    },
+    "Scripts": {
+      "Title": "Script",
+      "Labels": {
+        "ScriptBrowser": "Repository di Script",
+        "UpdateAvailable": "Aggiornamento Disponibile",
+        "UpdatingScripts": "Aggiornamento Script"
+      },
+      "Buttons": {
+        "ScriptBrowser": "Repository",
+        "UpdateAllScripts": "Aggiorna Tutti Gli Script"
+      },
+      "Fields": {
+        "Code": "Codice"
+      },
+      "Messages": {
+        "DeleteSystem": "Non puoi eliminare uno script di sistema",
+        "DeleteUsed": "Non puoi eliminare uno script che è in uso",
+        "Duplicated": "Script ''{name}'' duplicati",
+        "Imported": "Script ''{name}'' importato",
+        "NoRepositoryScriptsToUpdate": "Nessuno script del repository selezionato per l'aggiornamento"
+      }
+    },
+    "Settings": {
+      "Title": "Impostazioni",
+      "Labels": {
+        "CheckNow": "Controlla Adesso",
+        "Database": "Database",
+        "Email": "Email",
+        "FileServer": "Server di File",
+        "Logging": "Registrazione",
+        "Restart": "Riavvia FileFlows",
+        "System": "Sistema",
+        "Updates": "Aggiornamenti"
+      },
+      "Fields": {
+        "AutoUpdate": "Aggiornamento Automatico",
+        "AutoUpdate-Help": "Quando abilitato, FileFlows verrà controllato regolarmente per gli aggiornamenti e, se viene trovato un aggiornamento, verrà scaricato e installato automaticamente.",
+        "AutoUpdateNodes": "Aggiornamento Automatico dei Nod",
+        "AutoUpdateNodes-Help": "Quando abilitato, i nodi esterni si aggiorneranno automaticamente quando il server FileFlows si aggiorna. Ciò significa che dovrai aggiornare solo l'istanza del server FileFlows in un ambiente distribuito.",
+        "AutoUpdatePlugins": "Aggiornamento Automatico dei Plugin",
+        "AutoUpdatePlugins-Help": "Quando abilitato, i plugin verranno controllati regolarmente per gli aggiornamenti e, se vengono trovati aggiornamenti, verranno scaricati automaticamente.",
+        "CheckForUpdateNow": "Controlla Aggiornamenti",
+        "CheckForUpdateNow-Help": "Controlla un aggiornamento ora e, se trovato, scaricherà l'aggiornamento e lo installerà quando non ci sono Flows in esecuzione.",
+        "DelayBetweenNextFile": "Ritardo Tra i File",
+        "DelayBetweenNextFile-Help": "Il ritardo in millisecondi da attendere tra l'inizio di un file e la richiesta di uno nuovo. Impostare questo ritardo a zero significa che verrà immediatamente richiesta una nuova file. Se il ritardo è troppo breve, funzionalità come il bilanciamento del carico e i limiti del runner della libreria potrebbero non funzionare correttamente, poiché un file potrebbe non essere completamente avviato prima della richiesta successiva.",
+        "DelayBetweenNextFile-Suffix": "millisecondi",
+        "DockerModsOnServer": "DockerMods sul Server",
+        "DockerModsOnServer-Help": "I DockerMods devono essere eseguiti automaticamente all'avvio del server o quando specificamente abilitati. Altrimenti, verranno eseguiti solo quando viene avviato un flusso di lavoro.",
+        "HideProcessingFinishedNotifications": "Notifiche di Elaborazione Completata",
+        "HideProcessingFinishedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando un file ha terminato l'elaborazione",
+        "HideProcessingStartedNotifications": "Notifiche di Elaborazione Iniziata",
+        "HideProcessingStartedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando un file inizia a essere elaborato",
+        "KeepFailedFlowTempFiles": "Mantieni File Temporanei Falliti",
+        "KeepFailedFlowTempFiles-Help": "Abilitando questa opzione verranno mantenuti i file temporanei utilizzati da un flusso in caso di fallimento, impedendo la loro eliminazione automatica.\nUsa con cautela.",
+        "Language": "Lingua",
+        "Language-Help": "La lingua che verrà utilizzata nel sistema.",
+        "LogEveryRequest": "Registra Ogni Richiesta",
+        "LogEveryRequest-Help": "Se ogni richiesta al server deve essere registrata.",
+        "LogFileRetention": "Conservazione dei File di Registro",
+        "LogFileRetention-Help": "Per quanto tempo i file di registro devono essere mantenuti prima di essere eliminati.",
+        "LogFileRetention-Suffix": "Giorni",
+        "LoggingPath": "Directory di Registrazione",
+        "LoggingPath-Help": "Qui verranno creati i file di registro.",
+        "LogQueueMessages": "Registra Messaggi della Coda",
+        "LogQueueMessages-Help": "Ciò comporterà una registrazione eccessiva di tutti i file in coda/dequeuati nel watcher della libreria.\nAttivalo se hai problemi con i file che non appaiono, disattivalo di nuovo in seguito per evitare di riempire i tuoi file di registro con registrazioni eccessive.",
+        "PluginRepositoryUrls": "Repository di Plugin",
+        "PluginRepositoryUrls-Help": "Un elenco separato da righe di URL dei repository di plugin da utilizzare quando si cerca plugin.\nL'ordine è importante; se più repository contengono lo stesso plugin, verrà utilizzato come sorgente il primo repository.\nIl repository predefinito sarà sempre aggiunto alla fine di questo elenco.",
+        "ProcessFileCheckInterval": "Intervallo di Controllo dei File",
+        "ProcessFileCheckInterval-Help": "Con quale frequenza controllare per un nuovo file da elaborare nei nodi di elaborazione.",
+        "ProcessFileCheckInterval-Suffix": "secondi",
+        "ShowFileAddedNotifications": "Notifiche di File Aggiunto",
+        "ShowFileAddedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando è stato trovato un file e aggiunto alla coda.",
+        "Telemetry": "Telemetria",
+        "Telemetry-Help": "La telemetria è utile per sapere quali dispositivi dobbiamo supportare, quali parti del Flusso sono le più utilizzate e dove dovremmo concentrarci nello sviluppo.\nNessuna informazione sui tuoi file o informazioni identificative viene inviata.",
+        "Database": {
+          "Description": "Qui puoi configurare quale Database FileFlows utilizzerà.\nNota: Qualsiasi modifica qui richiederà di riavviare FileFlows affinché possa migrare i tuoi dati e, se necessario, creare il nuovo database.",
+          "DontBackupOnUpgrade": "Non Eseguire Backup Durante l'Aggiornamento",
+          "DontBackupOnUpgrade-Help": "I backup del database comportano la copia di tutti i dati del tuo database in un file SQLite, il che può richiedere tempo. Se esegui già il backup del tuo database esterno tramite altri mezzi, puoi scegliere di disabilitare questo processo.",
+          "Name": "Nome",
+          "Name-Help": "Il nome del database da creare; se lasciato vuoto, verrà utilizzato 'FileFlows'",
+          "Password": "Password",
+          "Password-Help": "La password dell'utente per connettersi al database",
+          "Port": "Porta",
+          "Port-Help": "La porta predefinita per MySQL è 3306",
+          "Port-Help-MySql": "La porta predefinita per MySQL è 3306",
+          "Port-Help-Postgres": "La porta predefinita per Postgres è 5432",
+          "Port-Help-SQLServer": "La porta predefinita per SQL Server è 1433",
+          "RecreateDatabase": "Ricrea Database",
+          "RecreateDatabase-Help": "Quando abilitato, se il nuovo database esiste già, verrà eliminato e ricreato. Altrimenti, se disabilitato e il database esiste già, nessun dato verrà migrato e il nuovo database verrà utilizzato così com'è.",
+          "Server": "Server",
+          "Server-Help": "L'indirizzo del server Database e la porta o l'istanza denominata se necessario",
+          "Type": "Tipo",
+          "Type-Help": "Il tipo di database da utilizzare, il tipo predefinito è SQLite, che non richiede ulteriori configurazioni",
+          "User": "Utente",
+          "User-Help": "L'utente utilizzato per connettersi al database"
+        },
+        "FileServer": {
+          "AllowList": "Percorsi Consentiti",
+          "AllowList-Help": "Un elenco separato da nuove righe di percorsi consentiti per l'accesso dal file server esposto.\nQueste sono le posizioni che possono essere lette/scritte da remoto.\nNota: Tutti i percorsi della libreria sono automaticamente consentiti.",
+          "AllowList-Placeholder": "Se lasciato vuoto, saranno consentiti tutti i percorsi tranne quelli di sistema.",
+          "Description": "Questo consente ai nodi di elaborazione esterni di scaricare un file per l'elaborazione senza mappatura.\n\nQuesto espone i tuoi file sulla tua rete, quindi disabilitalo se non ti trovi su una rete fidata.",
+          "Enabled": "Abilitato",
+          "FilePermissions": "Permessi File",
+          "FilePermissions-Help": "Permessi facoltativi da dare ai file creati o modificati.",
+          "FolderPermissions": "Permessi Cartella",
+          "FolderPermissions-Help": "Permessi facoltativi da dare alle cartelle create o modificate.",
+          "OwnerGroup": "Gruppo Proprietario",
+          "OwnerGroup-Help": "Proprietario: gruppo facoltativo da utilizzare per cambiare il proprietario dei file o delle cartelle creati o modificati",
+          "OwnerGroup-Placeholder": "users:nobody"
+        },
+        "License": {
+          "Email": "Email di Licenza",
+          "ExpiryDate": "Data di Scadenza",
+          "Files": "File",
+          "Flags": "Funzionalità",
+          "Key": "Chiave di Licenza",
+          "Level": "Livello",
+          "ProcessingNodes": "Nodi di Elaborazione",
+          "Status": "Stato"
+        },
+        "Security": {
+          "AccessToken": "Token di Accesso",
+          "AccessToken-Help": "Token di Accesso utilizzato dai nodi di elaborazione per connettersi al server",
+          "Authority": "Autorità",
+          "Authority-Help": "Inserisci l'URL del provider Open ID Connect (ad es., https://accounts.google.com/).",
+          "CallbackAddress": "Indirizzo di Callback",
+          "CallbackAddress-Help": "Un indirizzo di callback facoltativo, puoi usarlo per sovrascrivere l'indirizzo predefinito a cui invierà al client.\n Ad esempio, se sei dietro a un proxy inverso e FileFlows sta ascoltando su HTTP ma il callback dovrebbe avvenire su HTTPS.",
+          "ClientId": "ID Client",
+          "ClientId-Help": "L'ID client registrato con il provider Open ID Connect.",
+          "ClientSecret": "Segreto Client",
+          "ClientSecret-Help": "Il segreto client registrato con il provider Open ID Connect.",
+          "Description": "Configurare la sicurezza dell'utente richiederà agli utenti di effettuare il login e ai nodi di elaborazione di fornire il Token di Accesso per connettersi.\n\n[Gli utenti](/users) devono essere aggiunti prima di poter accedere o prima di poter utilizzare questa funzione.",
+          "LockoutMinutes": "Durata del Blocco",
+          "LockoutMinutes-Help": "La durata per cui l'utente sarà bloccato prima di poter riprovare a effettuare il login.",
+          "LockoutMinutes-Suffix": "minuti",
+          "MaxAttempts": "Tentativi Massimi",
+          "MaxAttempts-Help": "Il numero massimo di tentativi di login consentiti all'utente prima di essere temporaneamente bloccato",
+          "Mode": "Modalità",
+          "Mode-Help": "Abilita l'autenticazione degli utenti per accedere a FileFlows.\nQuando abilitato, gli utenti dovranno effettuare il login e i nodi di elaborazione richiederanno il Token API per accedere al server.",
+          "Title": "Sicurezza",
+          "TokenExpiryMinutes": "Scadenza del Token",
+          "TokenExpiryMinutes-Help": "La durata del token di accesso prima che scada."
+        },
+        "Smtp": {
+          "From": "Da",
+          "From-Help": "Il nome dell'utente da cui verranno inviati i messaggi email",
+          "FromAddress": "Indirizzo del Mittente",
+          "FromAddress-Help": "L'indirizzo email dell'utente da cui verranno inviati i messaggi email",
+          "Password": "Password",
+          "Password-Help": "La password per l'utente SMTP",
+          "Port": "Porta",
+          "Port-Help": "La porta del server email",
+          "Security": "Sicurezza",
+          "Security-Help": "La sicurezza da utilizzare durante l'invio delle email",
+          "Server": "Server",
+          "Server-Help": "Il server email",
+          "User": "Utente",
+          "User-Help": "Un nome utente facoltativo per inviare email"
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "Disattivare i backup automatici del database significa che non verrà effettuato alcun backup durante gli aggiornamenti dell'applicazione. È importante assicurarsi di avere un metodo alternativo per eseguire il backup del database esternamente per proteggere i tuoi dati.\n\nSei sicuro di voler disattivare questi backup?",
+          "NoDatabase": "Il nome è obbligatorio",
+          "NoPassword": "La password è obbligatoria",
+          "NoServer": "Il server è obbligatorio",
+          "NoUser": "L'utente è obbligatorio",
+          "TestingDatabase": "Test connessione al database",
+          "TestSuccess": "Connessione al database riuscita"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "Sei sicuro di voler disabilitare la telemetria?\n\nPuoi stare tranquillo, nessuna informazione personale viene registrata. I dati inviati includono informazioni sugli elementi del flusso in uso, i plugin utilizzati, nonché il numero totale di file non riusciti e elaborati.\n\nQueste informazioni ci aiutano a comprendere le preferenze degli utenti e influenzano le nostre decisioni riguardo alla dismissione degli elementi del flusso non utilizzati.",
+          "Title": "Disabilita Telemetria"
+        },
+        "Restart": {
+          "Message": "Sei sicuro di voler riavviare FileFlows?\n\nLe tue impostazioni verranno automaticamente salvate prima.\n\nNota: Assicurati che non ci siano flussi in esecuzione.",
+          "Title": "Riavvia FileFlows"
+        },
+        "Update": {
+          "Downloading": "L'aggiornamento è in download",
+          "Failed": "Controllo aggiornamenti non riuscito",
+          "Message": "È disponibile un nuovo aggiornamento, desideri scaricarlo e installarlo?",
+          "NotAvailable": "Nessun aggiornamento disponibile",
+          "Title": "Aggiornamento Disponibile"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "Statistiche"
+    },
+    "Task": {
+      "Title": "Compito",
+      "Fields": {
+        "CustomSchedule": "Piano Personalizzato",
+        "CustomSchedule-Help": "Questo compito verrà eseguito una volta per ogni blocco di 15 minuti all'inizio di quel blocco",
+        "Schedule": "Piano",
+        "Schedule-Help": "Quando questo script dovrebbe essere eseguito",
+        "Script": "Script",
+        "Script-Help": "Lo script da eseguire secondo il piano configurato",
+        "TimeSchedule": "Piano",
+        "TimeSchedule-Help": "Quando il compito verrà eseguito",
+        "Type": "Tipo",
+        "Type-Help": "Il tipo di compito. I compiti basati sul tempo verranno eseguiti negli orari configurati. Altri compiti sono basati su eventi"
+      }
+    },
+    "Tasks": {
+      "Title": "Compiti",
+      "Buttons": {
+        "EditScript": "Modifica Script"
+      },
+      "Messages": {
+        "NoHistory": "Questo compito non ha una cronologia di esecuzione disponibile.",
+        "NoScripts": "Nessuno script trovato per creare un compito."
+      }
+    },
+    "Users": {
+      "Single": "Utente",
+      "Title": "Utenti",
+      "Labels": {
+        "Address": "Indirizzo",
+        "Administrator": "Amministratore",
+        "LastLoggedIn": "Ultimo Accesso",
+        "Never": "Mai"
+      },
+      "Fields": {
+        "Email": "Email",
+        "IsAdmin": "Amministratore",
+        "Password": "Password",
+        "Roles": "Ruoli"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "Non puoi eliminare te stesso.",
+        "EmailInUse": "L'indirizzo email ''{email}'' è già in uso da un altro utente ''{user}''."
+      }
+    },
+    "Variable": {
+      "Title": "Variabile"
+    },
+    "Variables": {
+      "Title": "Variabili"
+    },
+    "Webhook": {
+      "Title": "Webhook",
+      "Fields": {
+        "Code": "Codice",
+        "Method": "Metodo",
+        "Route": "Percorso"
+      }
+    },
+    "Webhooks": {
+      "Title": "Webhooks",
+      "Columns": {
+        "Method": "Metodo",
+        "Route": "Percorso"
+      }
+    },
+    "Widget": {
+      "Title": "Widget",
+      "Fields": {
+        "AudioCodecs": "Codec Audio",
+        "AudioContainers": "Contenitore Audio",
+        "Codecs": "Codec",
+        "ComicFormats": "Formati Fumetti",
+        "ComicPages": "Pagine Fumetto",
+        "CpuUsage": "Utilizzo CPU",
+        "FilesRecentlyFinished": "Appena Completati",
+        "FilesUpcoming": "In Arrivo",
+        "ImageFormats": "Formati Immagine",
+        "LibraryProcessingTimes": "Tempi di Elaborazione della Libreria [Secondi per Megabyte]",
+        "LogStorage": "Archiviazione Log",
+        "MemoryUsage": "Utilizzo Memoria",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "Connessioni Database Aperte",
+        "Processing": "Elaborazione",
+        "ProcessingNodes": "Nodi di Elaborazione",
+        "ProcessingTimes": "Tempi di Elaborazione",
+        "StorageSaved": "Spazio di Archiviazione Risparmiato",
+        "TempStorage": "Archiviazione Temporanea",
+        "VideoCodecs": "Codec Video",
+        "VideoContainers": "Contenitore Video",
+        "VideoResolution": "Risoluzione Video"
+      }
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "Un modello audio vuoto con un singolo elemento di flusso di input ''Audio File''.",
+        "Name": "File Audio"
+      },
+      "ConvertComic": {
+        "Description": "Un flusso che convertirà fumetti da CBR, CBZ, CB7, PDF, GZ, BZ2 in CBZ o PDF.",
+        "Name": "Converti Fumetto"
+      },
+      "ConvertImage": {
+        "Description": "Un flusso che converte immagini.",
+        "Name": "Converti Immagine"
+      },
+      "ConvertVideo": {
+        "Description": "Un flusso che convertirà un file video in un altro formato.",
+        "Name": "Converti Video"
+      },
+      "FailureFlow": {
+        "Description": "Flusso di errore di base che verrà eseguito quando un flusso fallisce per qualsiasi motivo.",
+        "Name": "Flusso di Errore"
+      },
+      "File": {
+        "Description": "Un modello di file vuoto con un singolo elemento di flusso di input ''Input File''.",
+        "Name": "File"
+      },
+      "Folder": {
+        "Description": "Un modello di cartella vuoto con un singolo elemento di flusso di input ''Input Folder''.\n\nNOTA: Questo modello dovrebbe essere utilizzato solo per elaborare una cartella invece di file. L'elaborazione di una cartella ha limitazioni di elaborazione poiché la cartella viene elaborata e non i file contenuti in essa.",
+        "Name": "Cartella"
+      },
+      "ImageFile": {
+        "Description": "Un modello immagine vuoto con un singolo elemento di flusso di input ''Image File''.",
+        "Name": "File Immagine"
+      },
+      "VideoFile": {
+        "Description": "Un modello immagine vuoto con un singolo elemento di flusso di input ''Video File''.",
+        "Name": "File Video"
+      }
+    },
+    "Groups": {
+      "Books": "Libri",
+      "DownloadClients": "Client di Download",
+      "DVR": "DVR",
+      "General": "Generale"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "Biblioteca di audiolibri che cerca file comuni di audiolibri.",
+        "Name": "Biblioteca Audiolibri"
+      },
+      "ComicLibrary": {
+        "Description": "Biblioteca di fumetti che cerca file comuni di fumetti.",
+        "Name": "Biblioteca Fumetti"
+      },
+      "eBookLibrary": {
+        "Description": "Biblioteca di eBook che cerca file comuni di eBook.",
+        "Name": "Biblioteca eBook"
+      },
+      "ImageLibrary": {
+        "Description": "Biblioteca di immagini che cerca file comuni di immagini.",
+        "Name": "Biblioteca Immagini"
+      },
+      "MusicLibrary": {
+        "Description": "Biblioteca musicale che cerca file musicali comuni.",
+        "Name": "Biblioteca Musica"
+      },
+      "PlexDVR": {
+        "Description": "Biblioteca per monitorare le registrazioni DVR di Plex in modo da poterle convertire automaticamente dopo il completamento.",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "Biblioteca per monitorare una directory di download ''completa'' da SABnzbd.\n\nQuesta biblioteca può quindi utilizzare un flusso per convertire la musica in un formato target e posizionare i file musicali nella cartella di destinazione, ad es. ''convertiti''.\n\nL'applicazione che ha istruito SABnzbd a eseguire il download può monitorare la cartella ''convertita'' per i file completati.",
+        "Name": "Musica SABnzbd"
+      },
+      "SABnzbdVideos": {
+        "Description": "Biblioteca per monitorare una directory di download ''completa'' da SABnzbd.\n\nQuesta biblioteca può quindi utilizzare un flusso per convertire i video in un formato target e posizionare i video nella cartella di destinazione, ad es. ''convertiti''.\n\nL'applicazione che ha istruito SABnzbd a eseguire il download può monitorare la cartella ''convertita'' per i file completati.",
+        "Name": "Video SABnzbd"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "Trova file video di campioni, trailer o anteprime in una directory in modo da poterli eliminare se necessario.\nUtile per una biblioteca 'Video SABnzbd' abbinata, in modo che la cartella possa essere eliminata pulitamente dopo che il file principale è stato elaborato.",
+        "Name": "Campioni/Trailer/Anteprime"
+      },
+      "VideoLibrary": {
+        "Description": "Biblioteca video che cerca file video comuni.",
+        "Name": "Biblioteca Video"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {giorno} other {giorni}} fa",
+    "HoursAgo": "{num} {num, plural, one {ora} other {ore}} fa",
+    "MinutesAgo": "{num} {num, plural, one {minuto} other {minuti}} fa",
+    "Never": "Mai",
+    "SecondsAgo": "{num} {num, plural, one {secondo} other {secondi}} fa"
+  },
+  "Validators": {
+    "Pattern": "Non è valido",
+    "Range": "Deve essere compreso tra {Minimum} e {Maximum}",
+    "Required": "Richiesto"
+  },
+  "Widgets": {
+    "AudioCodecs": "Codec Audio",
+    "AudioContainers": "Contenitori Audio",
+    "Codecs": "Codec",
+    "ComicFormats": "Formati Fumetto",
+    "ComicPages": "Pagine Fumetto",
+    "CPUUsage": "Utilizzo CPU",
+    "CurrentRevision": "Revisione Corrente",
+    "DatabaseConnections": "Connessioni Database",
+    "DecoderParameters": "Parametri Decoder",
+    "Decoders": "Decoder",
+    "Encoders": "Encoder",
+    "ImageFormats": "Formati Immagine",
+    "LibraryProcessingTimes": "Tempi di Elaborazione della Biblioteca",
+    "LogStorage": "Archiviazione Log",
+    "MemoryUsage": "Utilizzo della Memoria",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "Elaborazione",
+    "ProcessingNodes": "Nodi di Elaborazione",
+    "ProcessingTimes": "Tempi di Elaborazione",
+    "RecentlyFinished": "Recentemente Completato",
+    "StorageSaved": "Spazio di Archiviazione Risparmiato",
+    "TemporaryFileStorage": "Archiviazione File Temporanei",
+    "Upcoming": "In Arrivo",
+    "VideoCodecs": "Codec Video",
+    "VideoContainers": "Contenitori Video",
+    "VideoResolutions": "Risoluzioni Video"
+  }
+}
