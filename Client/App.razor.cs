@@ -90,35 +90,17 @@ public partial class App : ComponentBase
     //public event FileFlowsSystemUpdated OnFileFlowsSystemUpdated;
     
 
-    public async Task LoadLanguage(string language, bool loadPlugin = true)
+    /// <summary>
+    /// Loads the language files from the server
+    /// </summary>
+    /// <param name="language">the language</param>
+    public async Task LoadLanguage(string language)
     {
-        List<string> langFiles = new();
-
-        bool nonEnglishLanguage = string.IsNullOrWhiteSpace(language) == false &&
-                                  language.ToLowerInvariant() != "en" && Regex.IsMatch(language, "^[a-z]{2,3}$",
-                                      RegexOptions.IgnoreCase);
-        langFiles.Add(await LoadLanguageFile("i18n/en.json?version=" + Globals.Version));
-        if (nonEnglishLanguage)
-        {
-            var other = await LoadLanguageFile("i18n/" + language + ".json?version=" + Globals.Version);
-            if (string.IsNullOrWhiteSpace(other) == false)
-                langFiles.Add(other);
-        }
-
-        if (loadPlugin)
-        {
-            langFiles.Add(
-                await LoadLanguageFile("/api/plugin/language/en.json?ts=" + DateTime.UtcNow.ToFileTime()));
-            if (nonEnglishLanguage)
-            {
-                var other = await LoadLanguageFile("/api/plugin/language/" + language + ".json?version=" +
-                                                   Globals.Version);
-                if (string.IsNullOrWhiteSpace(other) == false)
-                    langFiles.Add(other);
-            }
-        }
-
-        Translater.Init(langFiles.ToArray());
+        language = language?.EmptyAsNull() ?? "en";
+        var langMain = await LoadLanguageFile($"i18n/{language}.json?version={Globals.Version}");
+        var langPlugins = await LoadLanguageFile($"/api/plugin/language/{language}.json?version={Globals.Version}&t={DateTime.Now.Ticks}");;
+        
+        Translater.Init([langMain, langPlugins]);
     }
 
     /// <summary>
@@ -140,7 +122,7 @@ public partial class App : ComponentBase
         }
         else
         {
-            await LoadLanguage(null, loadPlugin: false);
+            await LoadLanguage("en");
         }
         LanguageLoaded = true;
         StateHasChanged();
