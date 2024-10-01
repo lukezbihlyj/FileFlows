@@ -93,20 +93,16 @@ public partial class App : ComponentBase
     /// <summary>
     /// Loads the language files from the server
     /// </summary>
-    /// <param name="language">the language</param>
-    public async Task LoadLanguage(string language)
+    public async Task LoadLanguage()
     {
-        language = language?.EmptyAsNull() ?? "en";
-        var langMain = await LoadLanguageFile($"i18n/{language}.json?version={Globals.Version}");
-        var langPlugins = await LoadLanguageFile($"/api/plugin/language/{language}.json?version={Globals.Version}&t={DateTime.Now.Ticks}");;
-        
-        Translater.Init([langMain, langPlugins]);
+        var langFile = await LoadLanguageFile($"/api/language?version={Globals.Version}&t={DateTime.Now.Ticks}");;
+        Translater.Init([langFile]);
     }
 
     /// <summary>
     /// Reinitialize the app after a login
     /// </summary>
-    public async Task Reinitialize(bool forced = false)
+    public async Task Reinitialize()
     {
         var token = await LocalStorage.GetAccessToken();
         if (string.IsNullOrWhiteSpace(token) == false)
@@ -115,15 +111,7 @@ public partial class App : ComponentBase
                 = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        if (forced || NavigationManager.Uri.Contains("/login") == false)
-        {
-            var profile = await ProfileService.Get();
-            await LoadLanguage(profile.Language);
-        }
-        else
-        {
-            await LoadLanguage("en");
-        }
+        await LoadLanguage();
         LanguageLoaded = true;
         StateHasChanged();
     }
