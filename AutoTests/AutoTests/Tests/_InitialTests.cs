@@ -200,7 +200,7 @@ public class InitialTests : TestBase
         foreach (var lang in
                  new [] {
                      ("Español", "Configuraciones", "General"),
-                     ("Deutsch", "Einstellungen", "Algemeen"),
+                     ("Deutsch", "Einstellungen", "Allgemein"),
                      ("Português", "Configurações", "Geral"),
                      ("Français", "Paramètres", "Général"),
                      ("Italiano", "Impostazioni", "Generale"),
