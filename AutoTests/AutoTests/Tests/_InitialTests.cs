@@ -247,11 +247,11 @@ public class InitialTests : TestBase
         var txtStatus = Page.Locator("input[placeholder='Status']");
         await Expect(txtStatus).ToHaveValueAsync("Valid", new() { Timeout = 20_000 });
     
+        await FileFlows.Tab.Exists("General");
         await FileFlows.Tab.Exists("Logging");
         await FileFlows.Tab.Exists("License");
         await FileFlows.Tab.Exists("Database");
         await FileFlows.Tab.Exists("Updates");
-        await FileFlows.Tab.Exists("Advanced");
     
         await Expect(Page.Locator("a[href='tasks']")).ToHaveCountAsync(1);
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(1);
