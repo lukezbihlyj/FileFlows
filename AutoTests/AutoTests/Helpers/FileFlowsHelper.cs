@@ -104,7 +104,8 @@ public class FileFlowsHelper
     /// Goes to a specific page by its nav menu link
     /// </summary>
     /// <param name="name">the name of the page</param>
-    public async Task GotoPage(string name, bool forceLoad = false)
+    /// <param name="contentTitle">optional content title to wait for, if different from name</param>
+    public async Task GotoPage(string name, bool forceLoad = false, string? contentTitle = null)
     {
         Logger.ILog("GotoPage: " + name);
         try
@@ -129,11 +130,13 @@ public class FileFlowsHelper
         if (forceLoad)
             await Page.ReloadAsync();
         await WaitForBlockerToDisappear();
+
+        contentTitle = contentTitle?.EmptyAsNull() ?? name;
         
-        Logger.ILog("Waiting for top row text: " + name);
+        Logger.ILog("Waiting for top row text: " + contentTitle);
         await Page.Locator(".top-row .title", new ()
         {
-            HasTextString = name
+            HasTextString = contentTitle
         }).WaitForAsync();
 
         Logger.ILog("Dismissing update available if present");
