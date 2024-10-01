@@ -207,25 +207,39 @@ public class InitialTests : TestBase
                      ("Nederlands", "Instellingen", "Algemeen"),
                      ("Svenska", "Inställningar", "Allmän"),
                      ("Русский", "Настройки", "Общие"),
-                     // English Last to Rest it
-                     ("English", "Settings", "General")
                  })
         {
-            Logger.ILog("Testing Language: " + lang.Item1);
-            await FileFlows.Inputs.SetDropDown("Language", lang.Item1);
-            await Page.Locator("#settings-save").ClickAsync();
-            await Task.Delay(500);
-            await FileFlows.WaitForBlockerToDisappear();
+            SetLanguage(lang.Item1, lang.Item2, lang.Item3);
+        }
+        
+        // russian, test flow elements are in Russian
+        await FileFlows.GotoPage("Flows");
+        await FileFlows.Table.DoubleClick(Constants.Flow_Basic);
+        await FileFlows.WaitForBlockerToDisappear();
+        var text = await Page.Locator("#FileFlows.BasicNodes.File.InputFile").TextContentAsync();
+        ClassicAssert.AreEqual("Входной файл", text);
+        
+        // English Last to Rest it
+        await FileFlows.GotoPage("Settings");
+        SetLanguage("English", "Settings", "General");
+        
+        void SetLanguage(string language, string settingsPage, string generalTab)
+        {
+            Logger.ILog("Testing Language: " + language);
+            FileFlows.Inputs.SetDropDown("Language", language).Wait();
+            Page.Locator("#settings-save").ClickAsync().Wait();
+            Task.Delay(500).Wait();
+            FileFlows.WaitForBlockerToDisappear().Wait();
 
-            await Page.Locator(".nav-item.settings a").ClickAsync();
-            await FileFlows.WaitForBlockerToDisappear();
-            Logger.ILog("Waiting for top row text: " + lang.Item2);
-            await Page.Locator(".top-row .title", new ()
+            Page.Locator(".nav-item.settings a").ClickAsync().Wait();
+            FileFlows.WaitForBlockerToDisappear().Wait();
+            Logger.ILog("Waiting for top row text: " + settingsPage);
+            Page.Locator(".top-row .title", new ()
             {
-                HasTextString = lang.Item2
-            }).WaitForAsync();
+                HasTextString = settingsPage
+            }).WaitForAsync().Wait();
 
-            await FileFlows.Tab.Click(lang.Item3);
+            FileFlows.Tab.Click(generalTab).Wait();
         }
     }
     
