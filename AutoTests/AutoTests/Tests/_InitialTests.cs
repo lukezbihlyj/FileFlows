@@ -97,9 +97,9 @@ public class InitialTests : TestBase
     public async Task UnlicensedTabs()
     {
         await FileFlows.GotoPage("Settings");
+        await FileFlows.Tab.Exists("General");
         await FileFlows.Tab.Exists("Logging");
         await FileFlows.Tab.Exists("Database");
-        await FileFlows.Tab.Exists("Advanced");
         await FileFlows.Tab.Exists("Email");
         await FileFlows.Tab.Exists("License");
         
