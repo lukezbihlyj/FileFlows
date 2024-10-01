@@ -99,6 +99,7 @@ public class SettingsController : BaseController
             uiModel.DontBackupOnUpgrade = Settings.DontBackupOnUpgrade;
 
         uiModel.LanguageOptions = GetLanguageOptions();
+        uiModel.Language = settings.Language?.EmptyAsNull() ?? "en";
 
         uiModel.Security = ServiceLoader.Load<AppSettingsService>().Settings.Security;
         if (uiModel.TokenExpiryMinutes < 1)

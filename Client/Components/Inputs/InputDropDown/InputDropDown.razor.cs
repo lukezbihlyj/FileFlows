@@ -96,7 +96,7 @@ public partial class InputDropDown : Input<object>
     /// <summary>
     /// The selected option
     /// </summary>
-    private string SelectedOption { get; set; } = "Select an option";
+    private ListOption SelectedOption { get; set; }
 
     /// <summary>
     /// Toggles the dropdown open or closed
@@ -113,15 +113,10 @@ public partial class InputDropDown : Input<object>
     private void SelectOption(ListOption option)
     {
         if (option == null)
-        {
-            SelectedIndex = -1;
-            SelectedOption = lblSelectOne;
-        }
+            SelectedOption =  new () { Label = lblSelectOne };
         else
-        {
-            SelectedIndex = _Options.IndexOf(option);
-            SelectedOption = option.Label;
-        }
+            SelectedOption = option;
+        Value = option.Value;
         IsOpen = false;
     }
 
@@ -143,33 +138,14 @@ public partial class InputDropDown : Input<object>
     /// </summary>
     [Parameter] public bool BlankClearLabel { get; set; }
 
-    /// <summary>
-    /// Backing field for the SelectedIndex property
-    /// </summary>
-    private int _SelectedIndex = -1;
-
-    /// <summary>
-    /// Gets or sets the selected index of the item in the select component
-    /// </summary>
-    public int SelectedIndex
-    {
-        get => _SelectedIndex;
-        set
-        {
-            _SelectedIndex = value;
-            if (value == -1 || Options == null || Options.Any() == false)
-                this.Value = null;
-            else
-                this.Value = Options.ToArray()[value].Value;
-            UpdateDescription();
-        }
-    }
-
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
         lblSelectOne = BlankClearLabel ? string.Empty : Translater.Instant("Labels.SelectOne");
+        if (Value != null)
+            SelectedOption = FindOption(Value);
+        SelectedOption ??= new () { Label = lblSelectOne };
         ValueUpdated();
     }
 
@@ -180,8 +156,6 @@ public partial class InputDropDown : Input<object>
     {
         if (UpdatingValue)
             return;
-
-        int startIndex = SelectedIndex;
         if (Value != null)
         {
             var opt = Options.ToArray();
@@ -190,44 +164,66 @@ public partial class InputDropDown : Input<object>
             for (int i = 0; i < opt.Length; i++)
             {
                 if (opt[i].Value == Value)
-                {
-                    startIndex = i;
                     break;
-                }
                 string optJson = JsonSerializer.Serialize(opt[i].Value);
                 if (optJson.ToLower() == valueJson.ToLower())
-                {
-                    startIndex = i;
                     break;
-                }
 
                 if (objReference.Uid != Guid.Empty)
                 {
                     // incase the object reference name has changed, we look for the UID
                     var otherObjReference = TryParseObjectReference(optJson);
                     if (otherObjReference.Uid == objReference.Uid)
-                    {
-                        startIndex = i;
                         break;
-                    }
                 }
             }
         }
 
-        if (startIndex == -1)
+        SelectedOption = FindOption(Value) ?? new() { Label = lblSelectOne };
+        StateHasChanged();
+    }
+
+    
+    /// <summary>
+    /// Finds a option based on its value
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>the option if found</returns>
+    private ListOption? FindOption(object value)
+    {
+        value = GetValue(value);
+        foreach (var opt in _options)
         {
-            if (AllowClear)
-            {
-                startIndex = -1;
-            }
-            else
-            {
-                startIndex = 0;
-                Value = Options.FirstOrDefault()?.Value;
-            }
+            var optValue = GetValue(opt.Value);
+            if (optValue == value)
+                return opt;
+            if (optValue.Equals(value))
+                return opt;
         }
-        if (startIndex != SelectedIndex)
-            SelectedIndex = startIndex;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Gets the value
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>the value</returns>
+    private object GetValue(object value)
+    {
+        if (value is JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind == JsonValueKind.False)
+                return false;
+            if (jsonElement.ValueKind == JsonValueKind.True)
+                return true;
+            if (jsonElement.ValueKind == JsonValueKind.Number)
+                return jsonElement.GetInt32();
+            if (jsonElement.ValueKind == JsonValueKind.String)
+                return jsonElement.GetString();
+        }
+
+        return value;
     }
 
     /// <summary>
@@ -248,33 +244,12 @@ public partial class InputDropDown : Input<object>
     }
 
     /// <summary>
-    /// Called when the selection changes in the select control
-    /// </summary>
-    /// <param name="args">The change event args</param>
-    private void SelectionChanged(ChangeEventArgs args)
-    {
-        UpdatingValue = true;
-        try
-        {
-            if (int.TryParse(args?.Value?.ToString(), out int index))
-                SelectedIndex = index;
-            else
-                Logger.Instance.DLog("Unable to find index of: ", args?.Value);
-            UpdateDescription();
-        }
-        finally
-        {
-            UpdatingValue = false;
-        }
-    }
-
-    /// <summary>
     /// Validates the input
     /// </summary>
     /// <returns>true if valid, otherwise false</returns>
     public override async Task<bool> Validate()
     {
-        if (this.SelectedIndex == -1)
+        if (this.SelectedOption == null || this.SelectedOption.Label == lblSelectOne)
         {
             ErrorMessage = Translater.Instant($"Validators.Required");
             return false;

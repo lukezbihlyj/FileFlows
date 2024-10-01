@@ -19,6 +19,14 @@ public class Inputs:UiComponent
     
     public Task SetSelect(string name, string value)
         => Input(name, "select").SelectOptionAsync(new SelectOptionValue { Label = value});
+
+    public async Task SetDropDown(string name, string text)
+    {
+        var locator = Input(name, "div.dropdown");
+        await locator.Locator("button").ClickAsync();
+        await locator.Locator($"li >> text='{text}'").ClickAsync();
+    }
+
     public Task SetNumber(string name, int value)
         => Input(name, "input[type=number]").FillAsync(value.ToString());
 

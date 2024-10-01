@@ -195,20 +195,24 @@ public class InitialTests : TestBase
     public async Task ChangeLanguage()
     {
         await FileFlows.GotoPage("Settings");
-        await FileFlows.Tab.Click("Advanced");
+        await FileFlows.Tab.Click("General");
 
         foreach (var lang in
                  new [] {
-                     ("Español", "Configuraciones", "Avanzado"),
-                     ("Deutsch", "Einstellungen", "Erweitert"),
-                     ("Português", "Configurações", "Avançado"),
-                     ("Français", "Paramètres", "Avancé"),
+                     ("Español", "Configuraciones", "General"),
+                     ("Deutsch", "Einstellungen", "Algemeen"),
+                     ("Português", "Configurações", "Geral"),
+                     ("Français", "Paramètres", "Général"),
+                     ("Italiano", "Impostazioni", "Generale"),
+                     ("Nederlands", "Instellingen", "Algemeen"),
+                     ("Svenska", "Inställningar", "Allmän"),
+                     ("Русский", "Настройки", "Общие"),
                      // English Last to Rest it
-                     ("English", "Settings", "Advanced")
+                     ("English", "Settings", "General")
                  })
         {
             Logger.ILog("Testing Language: " + lang.Item1);
-            await FileFlows.Inputs.SetSelect("Language", lang.Item1);
+            await FileFlows.Inputs.SetDropDown("Language", lang.Item1);
             await Page.Locator("#settings-save").ClickAsync();
             await Task.Delay(500);
             await FileFlows.WaitForBlockerToDisappear();

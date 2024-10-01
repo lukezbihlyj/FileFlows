@@ -47,9 +47,9 @@ public partial class Settings : InputRegister
 
     private bool IsSaving { get; set; }
 
-    private string lblSave, lblSaving, lblHelp, lblEmail, lblAdvanced, lblDatabase, lblLogging, 
+    private string lblSave, lblSaving, lblHelp, lblEmail, lblDatabase, lblGeneral, lblLogging, 
         lblDbDescription, lblFileServerDescription, lblTest, lblRestart, lblSecurity, mdSecurityDescription, 
-        lblLicense, lblUpdates, lblCheckNow, lblTestingDatabase, lblFileServer;
+        lblLicense, lblUpdates, lblCheckNow, lblTestingDatabase, lblFileServer, lblEmailDescription;
 
     private string OriginalDatabase, OriginalServer;
     private DatabaseType OriginalDbType;
@@ -160,9 +160,10 @@ public partial class Settings : InputRegister
         lblSave = Translater.Instant("Labels.Save");
         lblSaving = Translater.Instant("Labels.Saving");
         lblHelp = Translater.Instant("Labels.Help");
-        lblAdvanced = Translater.Instant("Labels.Advanced");
+        lblGeneral = Translater.Instant("Pages.Settings.Labels.General");
         lblLicense = Translater.Instant("Labels.License");
         lblEmail = Translater.Instant("Pages.Settings.Labels.Email");
+        lblEmailDescription = Translater.Instant("Pages.Settings.Labels.EmailDescription");
         lblUpdates = Translater.Instant("Pages.Settings.Labels.Updates");
         lblSecurity = Translater.Instant("Pages.Settings.Fields.Security.Title");
         lblDatabase = Translater.Instant("Pages.Settings.Labels.Database");

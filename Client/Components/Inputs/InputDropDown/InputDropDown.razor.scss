@@ -10,10 +10,21 @@
     border: none;
     cursor: pointer;
     text-align: left;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     height: var(--input-height);
+    display:flex;
+    img {
+      width:1.5rem;
+      margin-right:0.5rem;
+    }
+    span {
+      flex-grow:1;
+    }
+    i.fa-caret-down {
+      width:1.5rem;
+      text-align: center;
+    }
   }
 
   .dropdown-menu {

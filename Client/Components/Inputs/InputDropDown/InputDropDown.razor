@@ -3,9 +3,21 @@
 @inherits Input<object>
 
 <InputWrapper Input="@this">
-    <div class="dropdown">
+    <div class="dropdown" id=@Uid>
         <button @onclick="ToggleDropdown" class="dropdown-button dd-btn">
-            @SelectedOption
+            @if (SelectedOption is IconListOption selectedIconOption)
+            {
+                if (!string.IsNullOrWhiteSpace(selectedIconOption.IconUrl))
+                {
+                    <img src="@selectedIconOption.IconUrl" class="option-image" />
+                }
+                else if (!string.IsNullOrWhiteSpace(selectedIconOption.IconCss))
+                {
+                    <i class="@selectedIconOption.IconCss" />
+                }
+            }
+            <span>@SelectedOption.Label</span>
+            <i class="fas fa-caret-down" />
         </button>
         <ul class="dropdown-menu" style="display: @(IsOpen ? "block" : "none")">
             @if (AllowClear)
@@ -15,34 +27,25 @@
                 </li>
             }
             @{
-                int index = -1;
                 foreach (var group in Groups)
                 {
                     if (group.Key == string.Empty)
                     {
                         foreach (var opt in group.Value)
                         {
-                            ++index;
-                            <li @onclick="() => SelectOption(opt)" class="@(SelectedIndex == index ? "selected" : "")">
+                            <li @onclick="() => SelectOption(opt)" class="@(SelectedOption == opt ? "selected" : "")" x-value="@opt.Value">
                                 @if (opt is IconListOption iconListOption)
                                 {
                                     if (!string.IsNullOrWhiteSpace(iconListOption.IconUrl))
                                     {
-                                        <img src="@iconListOption.IconUrl" class="option-image" /> @opt.Label
+                                        <img src="@iconListOption.IconUrl" class="option-image" />
                                     }
                                     else if (!string.IsNullOrWhiteSpace(iconListOption.IconCss))
                                     {
-                                        <i class="@iconListOption.IconCss" /> @opt.Label
-                                    }
-                                    else
-                                    {
-                                        @opt.Label
+                                        <i class="@iconListOption.IconCss" /> 
                                     }
                                 }
-                                else
-                                {
-                                    @opt.Label
-                                }
+                                <span>@opt.Label</span>
                             </li>
                         }
                     }
@@ -51,27 +54,19 @@
                         <li class="optgroup-label">@group.Key</li>
                         @foreach (var opt in group.Value)
                         {
-                            ++index;
-                            <li @onclick="() => SelectOption(opt)" class="@(SelectedIndex == index ? "selected" : "")">
+                            <li @onclick="() => SelectOption(opt)" class="@(SelectedOption == opt ? "selected" : "")" x-value="@opt.Value">
                                 @if (opt is IconListOption iconListOption)
                                 {
                                     if (!string.IsNullOrWhiteSpace(iconListOption.IconUrl))
                                     {
-                                        <img src="@iconListOption.IconUrl" class="option-image" /> @opt.Label
+                                        <img src="@iconListOption.IconUrl" class="option-image" />
                                     }
                                     else if (!string.IsNullOrWhiteSpace(iconListOption.IconCss))
                                     {
-                                        <i class="@iconListOption.IconCss" /> @opt.Label
-                                    }
-                                    else
-                                    {
-                                        @opt.Label
+                                        <i class="@iconListOption.IconCss" />
                                     }
                                 }
-                                else
-                                {
-                                    @opt.Label
-                                }
+                                <span>@opt.Label</span>
                             </li>
                         }
                     }
