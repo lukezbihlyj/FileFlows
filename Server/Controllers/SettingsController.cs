@@ -188,12 +188,14 @@ public class SettingsController : BaseController
         if (model == null)
             return;
 
+        var existing = await ServiceLoader.Load<ISettingsService>().Get();
         if (model.SmtpPassword == DUMMY_PASSWORD)
         {
             // need to get the existing password
-            var existing = await ServiceLoader.Load<ISettingsService>().Get();
             model.SmtpPassword = existing.SmtpPassword;
         }
+
+        bool langChanged = existing.Language != model.Language;
         
         // validate license it
         Settings.LicenseKey = model.LicenseKey?.Trim();
@@ -267,6 +269,9 @@ public class SettingsController : BaseController
         Settings.DontBackupOnUpgrade = model.DbType != DatabaseType.Sqlite && model.DbType != DatabaseType.SqliteNewConnection && model.DontBackupOnUpgrade;
         // save AppSettings with updated license and db migration if set
         SettingsService.Save();
+        
+        if(langChanged)
+            PluginScanner.Scan();
     }
     
     /// <summary>

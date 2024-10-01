@@ -216,7 +216,8 @@ public class InitialTests : TestBase
         await FileFlows.GotoPage("Flows", contentTitle:"Потоки");
         await FileFlows.Table.DoubleClick(Constants.Flow_Basic);
         await FileFlows.WaitForBlockerToDisappear();
-        var text = await Page.Locator("div[id='FileFlows.BasicNodes.File.InputFile']").TextContentAsync();
+        var text = await Page.Locator("div[id='FileFlows.BasicNodes.File.InputFile']").TextContentAsync() ?? string.Empty;
+        text = text.Replace("\n", "").Trim();
         ClassicAssert.AreEqual("Входной файл", text);
         
         // English Last to Rest it
