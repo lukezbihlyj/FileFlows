@@ -27,7 +27,7 @@ public class InitialTests : TestBase
     /// Test the license shows unlicensed
     /// </summary>
     [Test, Order(1)]
-    public async Task InitialConfiguration()
+    public async Task IT_01_InitialConfiguration()
     {
         await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
         ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.Shown(), "The Initial Configuration should be shown.");
@@ -78,7 +78,7 @@ public class InitialTests : TestBase
     /// Sets the FFmpeg paths
     /// </summary>
     [Test, Order(2)] 
-    public async Task SetFFmpegPath()
+    public async Task IT_02_SetFFmpegPath()
     {
         await FileFlows.GotoPage("Variables");
         await DoubleClickItem("ffmpeg");
@@ -95,7 +95,7 @@ public class InitialTests : TestBase
     /// Test the license shows unlicensed
     /// </summary>
     [Test, Order(3)]
-    public async Task LicenseUnlicensed()
+    public async Task IT_03_LicenseUnlicensed()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("License");
@@ -109,7 +109,7 @@ public class InitialTests : TestBase
     /// Tests the tabs in settings are only the expected tabs
     /// </summary>
     [Test, Order(4)]
-    public async Task UnlicensedTabs()
+    public async Task IT_04_UnlicensedTabs()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Exists("General");
@@ -131,7 +131,7 @@ public class InitialTests : TestBase
     /// Tests that if a user tries to add a library before adding a flow, they are stopped with a toast error message
     /// </summary>
     [Test, Order(5)]
-    public async Task LibraryNoFlows()
+    public async Task IT_05_LibraryNoFlows()
     {
         await FileFlows.GotoPage("Libraries");
         await FileFlows.Table.ButtonClick("Add");
@@ -143,7 +143,7 @@ public class InitialTests : TestBase
     /// Tests the pointer is shown for step 1.
     /// </summary>
     [Test, Order(6)]
-    public async Task FlowPointer()
+    public async Task IT_06_FlowPointer()
     {
         await Expect(Page.Locator(".nav-item.flows .not-configured-pointer")).ToHaveCountAsync(1);
         await FileFlows.GotoPage("Flows");
@@ -154,7 +154,7 @@ public class InitialTests : TestBase
     /// Tests creating a flow
     /// </summary>
     [Test, Order(7)]
-    public async Task FlowCreate()
+    public async Task IT_07_FlowCreate()
     {
         await FileFlows.GotoPage("Flows");
         await FileFlows.Table.ButtonClick("Add");
@@ -177,7 +177,7 @@ public class InitialTests : TestBase
     /// Creates a library
     /// </summary>
     [Test, Order(8)]
-    public async Task LibraryCreate()
+    public async Task IT_08_LibraryCreate()
     {
         await FileFlows.GotoPage("Libraries");
         await Expect(Page.Locator(".pointer-add >> text='Add'")).ToHaveCountAsync(1);
@@ -197,7 +197,7 @@ public class InitialTests : TestBase
     }
     
     [Test, Order(9)]
-    public async Task CheckUnLicensedPages()
+    public async Task IT_09_CheckUnLicensedPages()
     {
         await Expect(Page.Locator("a[href='tasks']")).ToHaveCountAsync(0);
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(0);
@@ -207,7 +207,7 @@ public class InitialTests : TestBase
     /// Tests language can be changed
     /// </summary>
     [Test, Order(10)]
-    public async Task ChangeLanguage()
+    public async Task IT_10_ChangeLanguage()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("General");
@@ -260,7 +260,7 @@ public class InitialTests : TestBase
     }
     
     [Test, Order(11)]
-    public async Task EnterLicense()
+    public async Task IT_11_EnterLicense()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("License");
@@ -288,7 +288,7 @@ public class InitialTests : TestBase
     }
     
     [Test, Order(12)]
-    public async Task TasksNoScript()
+    public async Task IT_12_TasksNoScript()
     {
         await GotoPage("Tasks");
         await TableButtonClick("Add");
@@ -296,7 +296,7 @@ public class InitialTests : TestBase
     }
     
     [Test, Order(13)]
-    public async Task GotifyFileProcessed()
+    public async Task IT_13_GotifyFileProcessed()
     {
         await GotoPage("Scripts");
         const string name = "Gotify - Notify File Processed";
