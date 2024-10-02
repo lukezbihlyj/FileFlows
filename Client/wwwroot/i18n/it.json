@@ -265,6 +265,68 @@
       }
     }
   },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip è un software di archiviazione di file gratuito e open-source, una utility utilizzata per raggruppare file all'interno di contenitori compressi noti come \"archivi\".",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip è un'applicazione utilizzata per il rilevamento delle pubblicità nei file video. Analizza file MPEG o H.264 e genera file di output contenenti la posizione delle pubblicità.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installa Docker all'interno di Docker. Questo ti permette di lanciare contenitori Docker fratelli.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg è un progetto software libero e open-source costituito da una suite di librerie e programmi per gestire file e flussi video, audio e altri file multimediali. Al centro si trova lo strumento a riga di comando ffmpeg, progettato per l'elaborazione di file video e audio.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git semplifica il processo di download e gestione di varie risorse, come pacchetti software o configurazioni, da repository remoti, rendendolo uno strumento essenziale per gli utenti che cercano un accesso efficiente a file e progetti.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop è un visualizzatore interattivo di processi e monitor di sistema per sistemi operativi Unix-like, che fornisce un'interfaccia intuitiva per monitorare le risorse di sistema e gestire i processi.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, invocato dalla riga di comando come magick, è una suite software multi-piattaforma, libera e open-source, utilizzata per visualizzare, creare, convertire, modificare e modificare immagini raster.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK è un'implementazione open-source della piattaforma Java, edizione standard (Java SE), che fornisce un ambiente di sviluppo gratuito e multi-piattaforma per creare ed eseguire applicazioni Java.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix è un set di strumenti per creare, modificare, dividere, unire e ispezionare file Matroska (MKV).",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano è un semplice editor di testo user-friendly per sistemi operativi Unix-like, che offre capacità di editing di base in un ambiente terminale.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch è uno strumento di informazioni di sistema scritto in Bash. Di default, sul lato sinistro viene mostrato un logo della distribuzione, reso in arte ASCII.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js è un ambiente di runtime JavaScript open-source e multi-piattaforma che esegue codice JavaScript al di fuori di un browser web, consentendo agli sviluppatori di creare applicazioni server-side e di rete.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 è un linguaggio di programmazione di alto livello, interpretato, noto per la sua semplicità, leggibilità e versatilità, ampiamente utilizzato per lo sviluppo web, l'analisi dei dati, l'intelligenza artificiale e compiti di scripting.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR è un formato di file d'archivio utilizzato per la compressione dei dati, mentre UNRAR è un'utilità per estrarre contenuti dagli archivi RAR.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim è un editor di testo basato su schermo, libero e open-source. È un clone migliorato di vi.",
+      "Label": "Vim"
+    }
+  },
   "Enums": {
     "AuditAction": {
       "Added": "Aggiunto",

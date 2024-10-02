@@ -265,6 +265,68 @@
       }
     }
   },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip est un logiciel d'archivage de fichiers libre et open-source, une utilité utilisée pour regrouper des fichiers dans des conteneurs compressés appelés \"archives\".",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip est une application utilisée pour la détection des publicités dans les fichiers vidéo. Elle analyse les fichiers MPEG ou H.264 et génère des fichiers de sortie contenant l'emplacement des publicités.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installe Docker dans Docker. Cela vous permet de lancer des conteneurs Docker frères.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg est un projet de logiciel libre et open-source constitué d'une suite de bibliothèques et de programmes pour gérer les fichiers et flux vidéo, audio et autres fichiers multimédias. Au cœur se trouve l'outil en ligne de commande ffmpeg, conçu pour le traitement des fichiers vidéo et audio.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git simplifie le processus de téléchargement et de gestion de diverses ressources, comme les paquets logiciels ou les configurations, depuis des dépôts distants, en faisant un outil essentiel pour les utilisateurs cherchant un accès efficace aux fichiers et projets.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop est un visualiseur interactif de processus et un moniteur système pour les systèmes d'exploitation de type Unix, offrant une interface conviviale pour surveiller les ressources système et gérer les processus.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, appelé en ligne de commande sous le nom magick, est une suite logicielle libre, multi-plateforme, utilisée pour afficher, créer, convertir, modifier et éditer des images raster.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK est une implémentation open-source de la plate-forme Java, édition standard (Java SE), fournissant un environnement de développement gratuit et multi-plateforme pour créer et exécuter des applications Java.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix est un ensemble d'outils pour créer, modifier, diviser, joindre et inspecter des fichiers Matroska (MKV).",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano est un éditeur de texte simple et convivial pour les systèmes d'exploitation de type Unix, offrant des fonctionnalités d'édition de base dans un environnement terminal.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch est un outil d'informations système écrit en Bash. Par défaut, un logo de la distribution est affiché sur la gauche, rendu en art ASCII.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js est un environnement d'exécution JavaScript open-source et multi-plateforme qui exécute du code JavaScript en dehors d'un navigateur web, permettant aux développeurs de créer des applications côté serveur et réseau.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 est un langage de programmation de haut niveau, interprété, connu pour sa simplicité, sa lisibilité et sa polyvalence, largement utilisé pour le développement web, l'analyse de données, l'intelligence artificielle et les tâches de script.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR est un format de fichier d'archive utilisé pour la compression de données, tandis qu'UNRAR est un utilitaire permettant d'extraire le contenu des archives RAR.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim est un éditeur de texte libre et open-source basé sur un écran. C'est un clone amélioré de vi.",
+      "Label": "Vim"
+    }
+  },
   "Enums": {
     "AuditAction": {
       "Added": "Ajouté",

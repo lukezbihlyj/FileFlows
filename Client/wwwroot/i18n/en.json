@@ -265,6 +265,68 @@
       }
     }
   },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip is a free and open-source file archiver, a utility used to place groups of files within compressed containers known as \"archives\".",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip is a application used for commercial detection in video files. It analyzes MPEG or H.264 files and generates output files containing the location of commercials.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installs Docker inside Docker.  This allows you to launch sibling Docker containers.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg is a free and open-source software project consisting of a suite of libraries and programs for handling video, audio, and other multimedia files and streams. At its core is the command-line ffmpeg tool itself, designed for processing of video and audio files.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git simplifies the process of downloading and managing various resources, like software packages or configurations, from remote repositories, making it an essential tool for users seeking efficient access to files and projects.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop is an interactive process viewer and system monitor for Unix-like operating systems, providing a user-friendly interface to monitor system resources and manage processes.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, invoked from the command line as magick, is a free and open-source cross-platform software suite for displaying, creating, converting, modifying, and editing raster images.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK is an open-source implementation of the Java Platform, Standard Edition (Java SE), providing a free and cross-platform development environment for building and running Java applications.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix is a set of tools to create, alter, split, join, and inspect Matroska (MKV) files.",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano is a simple and user-friendly text editor for Unix-like operating systems, providing basic editing capabilities in a terminal environment.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch is a system information tool written in the Bash shell scripting language. By default, on the left side is a logo of the distribution, rendered in ASCII art.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside of a web browser, allowing developers to build server-side and networking applications.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 is a high-level, interpreted programming language known for its simplicity, readability, and versatility, widely used for web development, data analysis, artificial intelligence, and scripting tasks.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR is an archive file format used for data compression, while UNRAR is a utility to extract content from RAR archives.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim is a free and open-source, screen-based text editor program. It is an improved clone of vi.",
+      "Label": "Vim"
+    }
+  },
   "Enums": {
     "AuditAction": {
       "Added": "Added",

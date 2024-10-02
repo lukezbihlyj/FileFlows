@@ -51,8 +51,8 @@ else
                                 </Header>
                                 <Cell Context="item">
                                     @{
-                                        string label = Translater.TranslateIfHasTranslation($"Plugins.{item.Package}.Label", item.Name);
-                                        string description = Translater.TranslateIfHasTranslation($"Plugins.{item.Package}.Description", item.Description); 
+                                        string label = Translater.TranslateIfHasTranslation($"Plugins.{item.Package.Replace(".", "")}.Label", item.Name);
+                                        string description = Translater.TranslateIfHasTranslation($"Plugins.{item.Package.Replace(".", "")}.Description", item.Description); 
                                     }
                                     <div class="table-item">
                                         <TableItemIcon Icon="@item.Icon" DefaultIcon="fas fa-puzzle-piece"/>
@@ -91,8 +91,9 @@ else
                                 </Header>
                                 <Cell Context="item">
                                     @{
-                                        string label = Translater.TranslateIfHasTranslation($"DockerMods.{item.Name.Dehumanize()}.Label", item.Name);
-                                        string description = Translater.TranslateIfHasTranslation($"DockerMods.{item.Name.Dehumanize()}.Description", item.Description);
+                                        string key = item.Name.Replace(".", "").Replace("-", "").Dehumanize();
+                                        string label = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Label", item.Name);
+                                        string description = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Description", item.Description);
                                     }
                                     <div class="table-item">
                                         <TableItemIcon Icon="@item.Icon" DefaultIcon="fab fa-docker"/>

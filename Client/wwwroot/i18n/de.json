@@ -265,6 +265,68 @@
       }
     }
   },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip ist ein freier und quelloffener Dateikomprimierer, ein Dienstprogramm, das verwendet wird, um Dateigruppen in komprimierte Container, sogenannte \"Archive\", zu packen.",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip ist eine Anwendung zur Erkennung von Werbeunterbrechungen in Videodateien. Es analysiert MPEG- oder H.264-Dateien und erzeugt Ausgabedateien, die den Standort der Werbeblöcke enthalten.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installiert Docker innerhalb von Docker. Dies ermöglicht es, Docker-Container nebeneinander zu starten.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg ist ein freies und quelloffenes Softwareprojekt, das aus einer Suite von Bibliotheken und Programmen zur Verarbeitung von Video-, Audio- und anderen Multimedia-Dateien und -Streams besteht. Im Kern steht das Kommandozeilen-Tool ffmpeg selbst, das zur Verarbeitung von Video- und Audiodateien entwickelt wurde.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git vereinfacht das Herunterladen und Verwalten verschiedener Ressourcen wie Softwarepakete oder Konfigurationen aus entfernten Repositories und ist ein unverzichtbares Tool für Benutzer, die effizienten Zugriff auf Dateien und Projekte suchen.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop ist ein interaktiver Prozess-Viewer und Systemmonitor für Unix-ähnliche Betriebssysteme, der eine benutzerfreundliche Oberfläche zur Überwachung von Systemressourcen und zur Verwaltung von Prozessen bietet.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, das von der Kommandozeile als magick aufgerufen wird, ist eine freie und plattformübergreifende Software-Suite zur Anzeige, Erstellung, Umwandlung, Bearbeitung und Bearbeitung von Rasterbildern.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK ist eine quelloffene Implementierung der Java-Plattform, Standard Edition (Java SE), die eine freie und plattformübergreifende Entwicklungsumgebung zum Erstellen und Ausführen von Java-Anwendungen bietet.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix ist eine Sammlung von Werkzeugen zum Erstellen, Ändern, Teilen, Verbinden und Überprüfen von Matroska (MKV) Dateien.",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano ist ein einfacher und benutzerfreundlicher Texteditor für Unix-ähnliche Betriebssysteme, der grundlegende Bearbeitungsfunktionen in einer Terminalumgebung bietet.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch ist ein Systeminformationstool, das in der Bash-Shell-Skriptsprache geschrieben ist. Standardmäßig wird auf der linken Seite ein Logo der Distribution in ASCII-Kunst angezeigt.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js ist eine quelloffene, plattformübergreifende JavaScript-Laufzeitumgebung, die JavaScript-Code außerhalb eines Webbrowsers ausführt und Entwicklern ermöglicht, serverseitige und Netzwerk-Anwendungen zu erstellen.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 ist eine hochentwickelte, interpretierte Programmiersprache, die für ihre Einfachheit, Lesbarkeit und Vielseitigkeit bekannt ist und weit verbreitet in der Webentwicklung, Datenanalyse, künstlichen Intelligenz und bei Skripting-Aufgaben eingesetzt wird.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR ist ein Archivdateiformat, das zur Datenkomprimierung verwendet wird, während UNRAR ein Dienstprogramm ist, um Inhalte aus RAR-Archiven zu extrahieren.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim ist ein freier und quelloffener, bildschirmbasierter Texteditor. Es ist ein verbesserter Klon von vi.",
+      "Label": "Vim"
+    }
+  },
   "Enums": {
     "AuditAction": {
       "Added": "Hinzugefügt",

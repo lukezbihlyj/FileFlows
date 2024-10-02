@@ -265,6 +265,68 @@
       }
     }
   },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip is een gratis en open-source bestandsarchiveringsprogramma, een hulpprogramma dat wordt gebruikt om groepen bestanden in gecomprimeerde containers, bekend als 'archieven', te plaatsen.",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip is een applicatie die wordt gebruikt voor het detecteren van reclames in videobestanden. Het analyseert MPEG- of H.264-bestanden en genereert uitvoerbestanden die de locatie van reclames bevatten.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installeert Docker binnen Docker. Dit stelt je in staat om zuster-Docker-containers te starten.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg is een gratis en open-source softwareproject dat bestaat uit een suite van bibliotheken en programma's voor het verwerken van video-, audio- en andere multimedia-bestanden en -streams. In het hart van het project bevindt zich het commandoregelprogramma ffmpeg, dat is ontworpen voor de verwerking van video- en audiobestanden.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git vereenvoudigt het proces van het downloaden en beheren van verschillende bronnen, zoals softwarepakketten of configuraties, uit externe repositories, waardoor het een essentieel hulpmiddel is voor gebruikers die efficiënte toegang tot bestanden en projecten zoeken.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop is een interactieve procesviewer en systeemonitor voor Unix-achtige besturingssystemen, die een gebruiksvriendelijke interface biedt om systeembronnen te bewaken en processen te beheren.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, opgeroepen vanuit de opdrachtregel als magick, is een gratis en open-source cross-platform softwarepakket voor het weergeven, creëren, converteren, wijzigen en bewerken van rasterafbeeldingen.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK is een open-source implementatie van het Java Platform, Standard Edition (Java SE), dat een gratis en cross-platform ontwikkelomgeving biedt voor het bouwen en uitvoeren van Java-toepassingen.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix is een set tools om Matroska (MKV) bestanden te maken, te wijzigen, te splitsen, samen te voegen en te inspecteren.",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano is een eenvoudige en gebruiksvriendelijke teksteditor voor Unix-achtige besturingssystemen, die basisbewerkingsmogelijkheden biedt in een terminalomgeving.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch is een systeeminformatiehulpmiddel geschreven in de Bash-shell scriptingtaal. Standaard bevindt zich aan de linkerkant een logo van de distributie, weergegeven in ASCII-kunst.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js is een open-source, cross-platform JavaScript-runtime-omgeving die JavaScript-code uitvoert buiten een webbrowser, waardoor ontwikkelaars server-side en netwerkt toepassingen kunnen bouwen.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 is een high-level, geïnterpreteerde programmeertaal die bekend staat om zijn eenvoud, leesbaarheid en veelzijdigheid, en veel wordt gebruikt voor webontwikkeling, data-analyse, kunstmatige intelligentie en scriptingtaken.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR is een archieffileformaat dat wordt gebruikt voor gegevenscompressie, terwijl UNRAR een hulpprogramma is om inhoud uit RAR-archieven te extraheren.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim is een gratis en open-source, schermgebaseerd tekstbewerkingsprogramma. Het is een verbeterde kloon van vi.",
+      "Label": "Vim"
+    }
+  },
   "Enums": {
     "AuditAction": {
       "Added": "Toegevoegd",

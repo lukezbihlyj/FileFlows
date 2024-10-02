@@ -265,6 +265,68 @@
       }
     }
   },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip 是一个免费的开源文件归档工具，用于将一组文件放入称为 \"归档\" 的压缩容器中。",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip 是一款用于视频文件中商业检测的应用程序。它分析 MPEG 或 H.264 文件，并生成包含广告位置的输出文件。",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "在 Docker 内部安装 Docker。这允许您启动兄弟 Docker 容器。",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg 是一个免费的开源软件项目，包含一套用于处理视频、音频和其他多媒体文件及流的库和程序。在其核心是命令行工具 ffmpeg，专为处理视频和音频文件而设计。",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git 简化了从远程仓库下载和管理各种资源（如软件包或配置）的过程，使其成为寻求高效访问文件和项目的用户的重要工具。",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop 是一个交互式进程查看器和系统监视器，适用于类 Unix 操作系统，提供用户友好的界面来监视系统资源和管理进程。",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick，通过命令行调用为 magick，是一个免费的跨平台开源软件套件，用于显示、创建、转换、修改和编辑光栅图像。",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK 是 Java 平台标准版 (Java SE) 的开源实现，提供了一个免费的跨平台开发环境，用于构建和运行 Java 应用程序。",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix 是一套工具，用于创建、修改、拆分、合并和检查 Matroska (MKV) 文件。",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano 是一款简单易用的文本编辑器，适用于类 Unix 操作系统，提供在终端环境中的基本编辑功能。",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch 是一个用 Bash 脚本语言编写的系统信息工具。默认情况下，左侧是一个以 ASCII 艺术呈现的发行版徽标。",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js 是一个开源的跨平台 JavaScript 运行时环境，在网页浏览器之外执行 JavaScript 代码，允许开发者构建服务器端和网络应用。",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 是一种高级的解释型编程语言，以其简洁性、可读性和多功能性而闻名，广泛用于 web 开发、数据分析、人工智能和脚本任务。",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR 是一种用于数据压缩的归档文件格式，而 UNRAR 是一种用于从 RAR 归档中提取内容的工具。",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim 是一个免费的开源基于屏幕的文本编辑器程序，是 vi 的改进克隆。",
+      "Label": "Vim"
+    }
+  },
   "Enums": {
     "AuditAction": {
       "Added": "已添加",
