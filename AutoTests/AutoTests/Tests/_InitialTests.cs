@@ -186,7 +186,7 @@ public class InitialTests : TestBase
         await FileFlows.Inputs.SetText("Name", Constants.Library_Basic);
         await FileFlows.Editor.ButtonClick("Save");
         await FileFlows.Inputs.Error("Path", "Required");
-        await FileFlows.Inputs.Error("Flow", "Required");
+        // await FileFlows.Inputs.Error("Flow", "Required"); // if a flow exists its auto selected
     
         await FileFlows.Inputs.SetSelect("Template", "Video Library");
         await FileFlows.Inputs.SetText("Path", "/media/basic");
