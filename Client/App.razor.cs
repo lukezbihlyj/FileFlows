@@ -1,5 +1,3 @@
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,10 +34,10 @@ public partial class App : ComponentBase
     public int DisplayWidth { get; private set; }
     public int DisplayHeight { get; private set; }
 
-    public bool IsMobile => DisplayWidth > 0 && DisplayWidth <= 768;
-
-    public FileFlows.Shared.Models.Flow NewFlowTemplate { get; set; }
-
+    /// <summary>
+    /// Gets if being viewed on a mobile device
+    /// </summary>
+    public bool IsMobile => DisplayWidth is > 0 and <= 768;
     public static int PageSize { get; set; }
 
     /// <summary>
@@ -76,27 +74,21 @@ public partial class App : ComponentBase
             }
         }
     }
-
-
-    // public FileFlowsStatus FileFlowsSystem { get; private set; }
     
     /// <summary>
     /// Gets or sets if the nav menu is collapsed
     /// </summary>
     public bool NavMenuCollapsed { get; set; }
-
-    //public delegate void FileFlowsSystemUpdated(FileFlowsStatus system);
-
-    //public event FileFlowsSystemUpdated OnFileFlowsSystemUpdated;
     
 
     /// <summary>
     /// Loads the language files from the server
     /// </summary>
-    public async Task LoadLanguage()
+    /// <param name="language">Optional language to load</param>
+    public async Task LoadLanguage(string? language = null)
     {
-        var langFile = await LoadLanguageFile($"/api/language?version={Globals.Version}&t={DateTime.Now.Ticks}");;
-        Translater.Init([langFile]);
+        var langFile = await LoadLanguageFile($"/api/language?version={Globals.Version}&t={DateTime.Now.Ticks}&language={language}");;
+        Translater.Init(langFile);
     }
 
     /// <summary>
@@ -134,7 +126,7 @@ public partial class App : ComponentBase
         new ClientConsoleLogger();
         HttpHelper.Client = Client;
         PageSize = await LocalStorage.GetItemAsync<int>(nameof(PageSize));
-        if (PageSize < 100 || PageSize > 5000)
+        if (PageSize is < 100 or > 5000)
             PageSize = 1000;
 
         var dimensions = await jsRuntime.InvokeAsync<Dimensions>("ff.deviceDimensions");
@@ -146,6 +138,19 @@ public partial class App : ComponentBase
         _ = jsRuntime.InvokeVoidAsync("ff.setCSharp",  new object[] { dotNetObjRef });
 
         await Reinitialize();
+        var profile = await ProfileService.Get();
+        
+        if ((profile.ConfigurationStatus & ConfigurationStatus.InitialConfig) != ConfigurationStatus.InitialConfig || 
+            (profile.ConfigurationStatus & ConfigurationStatus.EulaAccepted) != ConfigurationStatus.EulaAccepted)
+        {
+            if (profile.IsAdmin == false)
+            {
+                await ProfileService.Logout("Labels.AdminRequired");
+                return;
+            }
+            if(NavigationManager.Uri.Contains("/initial-config") == false)
+                NavigationManager.NavigateTo("/initial-config");
+        }
 
         this.StateHasChanged();
     }

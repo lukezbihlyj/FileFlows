@@ -37,7 +37,7 @@
     "DownloadLogShort": "Log",
     "Duplicate": "Duplica",
     "Edit": "Modifica",
-    "EditSubFlow": "Modifica Sotto Flusso",
+    "EditSubFlow": "Modifica Sotto Flow",
     "Enabled": "Abilitato",
     "Execute": "Esegui",
     "Executing": "Esecuzione",
@@ -46,9 +46,9 @@
     "Fields": "Campi",
     "Filter": "Filtra",
     "FilterPlaceholder": "Filtra (/)",
-    "Flow": "Flusso",
-    "FlowElement": "Elemento di Flusso",
-    "FlowElements": "Elementi di Flusso",
+    "Flow": "Flow",
+    "FlowElement": "Elemento di Flow",
+    "FlowElements": "Elementi di Flow",
     "ForceProcessing": "Forza Elaborazione",
     "Forum": "Forum",
     "Help": "Aiuto",
@@ -127,7 +127,7 @@
     "SpaceIncrease": "{size} aumento, {items} prodotti",
     "SpaceSavings": "{size} salvati, {items} prodotti",
     "Status": "Stato",
-    "SubFlow": "Sotto Flusso",
+    "SubFlow": "Sotto Flow",
     "SubFlows": "Sotto Flussi",
     "Success": "Successo",
     "Test": "Test",
@@ -159,9 +159,9 @@
       "Yesterday": "Ieri"
     },
     "ObsoleteConfirm": {
-      "Message": "Si consiglia di passare a un elemento di flusso diverso.",
-      "Question": "Questo elemento di flusso è ora obsoleto e verrà presto rimosso. Sei sicuro di volerlo utilizzare?",
-      "Title": "Elemento di Flusso Obsoleto"
+      "Message": "Si consiglia di passare a un elemento di flow diverso.",
+      "Question": "Questo elemento di flow è ora obsoleto e verrà presto rimosso. Sei sicuro di volerlo utilizzare?",
+      "Title": "Elemento di Flow Obsoleto"
     }
   },
   "AuditActions": {
@@ -181,7 +181,7 @@
       "Title": "Aggiungi File",
       "Fields": {
         "AnyNode": "Qualsiasi Nodo",
-        "Flow": "Flusso",
+        "Flow": "Flow",
         "List": "Elenco",
         "Mode": "Modalità Input",
         "Node": "Nodo",
@@ -213,8 +213,8 @@
       "Title": "Seleziona un modello da cui partire"
     },
     "Import": {
-      "Message": "Seleziona un flusso esportato da importare nel sistema.",
-      "Title": "Importa Flusso"
+      "Message": "Seleziona un flow esportato da importare nel sistema.",
+      "Title": "Importa Flow"
     },
     "ImportScript": {
       "Title": "Importa Script",
@@ -223,7 +223,7 @@
       }
     },
     "PauseDialog": {
-      "Message": "Seleziona la durata della pausa per l'elaborazione.\nNota: I flussi attuali continueranno ad essere eseguiti, ma nessun altro flusso verrà eseguito fino a quando non sarà scaduto questo tempo.",
+      "Message": "Seleziona la durata della pausa per l'elaborazione.\nNota: I flussi attuali continueranno ad essere eseguiti, ma nessun altro flow verrà eseguito fino a quando non sarà scaduto questo tempo.",
       "Title": "Metti in Pausa l'Elaborazione"
     },
     "ReprocessDialog": {
@@ -236,7 +236,7 @@
         "CustomVariablesKey": "Variabile Personalizzata",
         "CustomVariablesMode": "Variabili Personalizzate",
         "CustomVariablesValue": "Valore",
-        "Flow": "Flusso",
+        "Flow": "Flow",
         "Merge": "Unisci variabili personalizzate con l'originale",
         "Node": "Nodo",
         "Original": "Usa variabili personalizzate originali",
@@ -313,7 +313,7 @@
       "Any": "Qualsiasi",
       "Disabled": "Disabilitato",
       "Duplicate": "Duplicato",
-      "FlowNotFound": "Flusso Non Trovato",
+      "FlowNotFound": "Flow Non Trovato",
       "MappingIssue": "Problema di Mappatura",
       "MissingLibrary": "Libreria Mancante",
       "OnHold": "In Attesa",
@@ -321,13 +321,13 @@
       "Processed": "Elaborato",
       "Processing": "In Elaborazione",
       "ProcessingFailed": "Elaborazione Fallita",
-      "ReprocessByFlow": "Ri-elabora per Flusso",
+      "ReprocessByFlow": "Ri-elabora per Flow",
       "Unprocessed": "Non Elaborato"
     },
     "FlowType": {
       "Failure": "Fallimento",
       "Standard": "Standard",
-      "SubFlow": "Sotto Flusso"
+      "SubFlow": "Sotto Flow"
     },
     "LogType": {
       "Debug": "Debug",
@@ -430,7 +430,7 @@
     "DuplicatesFound": "Duplicati trovati",
     "NameInUse": "Il nome è già in uso",
     "NameRequired": "Il nome è obbligatorio",
-    "NoFlowSpecified": "Nessun flusso specificato, devi selezionare un flusso per creare una libreria",
+    "NoFlowSpecified": "Nessun flow specificato, devi selezionare un flow per creare una libreria",
     "NotAllFilesCouldBeDeleted": "Non tutti i file potrebbero essere eliminati.\nVedi il log per ulteriori informazioni.",
     "NotFound": "Elemento non trovato",
     "SaveFailed": "Salvataggio fallito",
@@ -439,8 +439,8 @@
   },
   "Flow": {
     "ErrorMessages": {
-      "NoInput": "Nessun nodo di input specifico, ogni flusso ha bisogno di un nodo di input",
-      "NoParts": "Nessuna parte del flusso specifica, devi avere alcune parti per salvare un flusso",
+      "NoInput": "Nessun nodo di input specifico, ogni flow ha bisogno di un nodo di input",
+      "NoParts": "Nessuna parte del flow specifica, devi avere alcune parti per salvare un flow",
       "TooManyInputNodes": "Puoi avere solo un nodo di input"
     },
     "Parts": {
@@ -519,6 +519,7 @@
       "Title": "Dashboard",
       "Labels": {
         "AddWidget": "Aggiungi Widget",
+        "CurrentlyPaused": "FileFlows è attualmente in pausa!",
         "FinalSize": "Dimensione Finale",
         "OriginalSize": "Dimensione Originale",
         "Savings": "Risparmi",
@@ -584,22 +585,22 @@
       }
     },
     "Flow": {
-      "Title": "Flusso",
+      "Title": "Flow",
       "Labels": {
-        "EditFlow": "Flusso: {Name}",
-        "FlowProperties": "Proprietà del Flusso",
+        "EditFlow": "Flow: {Name}",
+        "FlowProperties": "Proprietà del Flow",
         "OpenScriptBrowser": "Apri il Browser degli Script",
         "OpenSubFlowBrowser": "Apri il Browser dei Sottoflussi",
         "SubFlowBrowser": "Browser dei Sottoflussi",
-        "SubFlowHelp": "Per aggiungere campi di input a un sottoflusso per poter passare parametri personalizzati a questo sottoflusso, crea questi nella scheda `Campi`.\n\nUn sottoflusso deve avere un singolo `Input` che può essere qualsiasi elemento di flusso di input valido, ad esempio `Input File`, `Video File`, ecc."
+        "SubFlowHelp": "Per aggiungere campi di input a un sottoflow per poter passare parametri personalizzati a questo sottoflow, crea questi nella scheda `Campi`.\n\nUn sottoflow deve avere un singolo `Input` che può essere qualsiasi elemento di flow di input valido, ad esempio `Input File`, `Video File`, ecc."
       },
       "Fields": {
         "Author": "Autore",
-        "Author-Help": "Specifica facoltativamente l'autore di questo flusso.",
+        "Author-Help": "Specifica facoltativamente l'autore di questo flow.",
         "Description": "Descrizione.",
         "MinimumVersion": "Versione Minima",
         "Outputs": "Output",
-        "Outputs-Help": "Il numero di output che ha questo sottoflusso. Questo è il numero di output disponibili quando si utilizza questo sottoflusso in un altro flusso.",
+        "Outputs-Help": "Il numero di output che ha questo sottoflow. Questo è il numero di output disponibili quando si utilizza questo sottoflow in un altro flow.",
         "OutputsKey": "Output",
         "OutputsValue": "Descrizione",
         "Tags": "Tag",
@@ -612,7 +613,7 @@
           "DeleteIfEmpty-Help": "Se vengono aggiunti valori qui e l'utente seleziona 'Elimina Originale', la cartella verrà eliminata anche se non ci sono file che corrispondono a nessuna di queste espressioni regolari.",
           "Description": "Una descrizione facoltativa da mostrare con questo campo. Questo può essere un testo di aiuto per il campo.",
           "FlowElementField": "Campo Elemento",
-          "FlowElementField-Help": "Facoltativo, impostalo nel formato '{Uid}.{FieldName}' ad esempio ''53a72207-34a2-4b71-b3d8-8b12764a85fe.Force'' per impostare un campo in un elemento di flusso direttamente. Vedi l'aiuto per ulteriori informazioni.",
+          "FlowElementField-Help": "Facoltativo, impostalo nel formato '{Uid}.{FieldName}' ad esempio ''53a72207-34a2-4b71-b3d8-8b12764a85fe.Force'' per impostare un campo in un elemento di flow direttamente. Vedi l'aiuto per ulteriori informazioni.",
           "IfName": "Se",
           "IfName-Help": "Se questo dovrebbe essere mostrato all'utente solo se un altro valore corrisponde a queste condizioni.",
           "IfNot": "Se Non",
@@ -631,8 +632,8 @@
       },
       "Messages": {
         "Close": "Sei sicuro di voler uscire e perdere tutte le modifiche non salvate?",
-        "FailedToLoadFlow": "Impossibile caricare il flusso.",
-        "LoadingFlow": "Caricamento Flusso"
+        "FailedToLoadFlow": "Impossibile caricare il flow.",
+        "LoadingFlow": "Caricamento Flow"
       }
     },
     "Flows": {
@@ -650,19 +651,49 @@
         "Template": "Modello"
       },
       "Messages": {
-        "DeleteUsed": "Non puoi eliminare un flusso che è in uso",
-        "Duplicated": "Flusso ''{name}'' duplicato",
-        "FailedToExport": "Impossibile esportare il flusso(i).",
-        "FailureFlowDescription": "Questo è un tipo speciale di flusso che verrà eseguito se un flusso fallisce.\nFileFlows cercherà il Flusso di Errore 'Predefinito' da utilizzare se un flusso fallisce, se non trovato allora l'elaborazione si fermerà immediatamente.",
-        "FlowImported": "Flusso ''{name}'' importato",
+        "DeleteUsed": "Non puoi eliminare un flow che è in uso",
+        "Duplicated": "Flow ''{name}'' duplicato",
+        "FailedToExport": "Impossibile esportare il flow(i).",
+        "FailureFlowDescription": "Questo è un tipo speciale di flow che verrà eseguito se un flow fallisce.\nFileFlows cercherà il Flow di Errore 'Predefinito' da utilizzare se un flow fallisce, se non trovato allora l'elaborazione si fermerà immediatamente.",
+        "FlowImported": "Flow ''{name}'' importato",
         "LoadingTemplates": "Caricamento Modelli"
       },
       "Template": {
-        "Title": "Aggiungi Flusso",
+        "Title": "Aggiungi Flow",
         "Fields": {
-          "PageDescription": "Seleziona un modello su cui basare il flusso, questo ti aiuterà a iniziare con un flusso.",
+          "PageDescription": "Seleziona un modello su cui basare il flow, questo ti aiuterà a iniziare con un flow.",
           "Template": "Modello"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Ho letto e accetto i termini del Contratto di Licenza per l'Utente Finale",
+        "Language": "Lingua"
+      },
+      "Messages": {
+        "Welcome": "Benvenuto in FileFlows! Grazie per aver scelto il nostro software.\n\nQuesto wizard ti guiderà attraverso i passaggi essenziali di configurazione, incluso l'accettazione dell'EULA e la selezione dei plugin per aggiungere funzionalità in base alle tue preferenze.\n\nScegli tra una varietà di plugin progettati per elaborare diversi tipi di file, come video, audio e immagini.",
+        "WelcomeUpdate": "Abbiamo recentemente aggiornato il nostro Contratto di Licenza per l'Utente Finale (EULA).\n\nTi preghiamo di prendere un momento per rivedere e accettare i termini aggiornati prima di continuare.\n\nLa tua accettazione è necessaria per proseguire con l'uso di FileFlows.\n\nGrazie per aver scelto FileFlows.",
+        "Finish": {
+          "Bottom": "Con questi passaggi, sei sulla buona strada per massimizzare il potenziale di FileFlows.\n\nSe hai domande o hai bisogno di assistenza lungo il percorso, non esitare a contattare il nostro team di supporto.",
+          "CreateALibrary": "Crea una Libreria:",
+          "CreateALibraryDescription": "Crea una libreria per automatizzare l'elaborazione dei file.\nLa tua libreria rileverà automaticamente e processerà i file in base ai criteri specificati,\nsemplificando il tuo flow di lavoro senza la necessità di intervento manuale.",
+          "CreateFirstFlow": "Crea il tuo Primo Flow:",
+          "CreateFirstFlowDescription": "Utilizza i plugin selezionati per creare il tuo primo flow.\nChe si tratti di elaborare file video, tracce audio, immagini o altri tipi di file, il tuo flow\nti permette di personalizzare la gestione dei file secondo le tue esigenze specifiche, siano esse semplici\no complesse.",
+          "Top": "Hai configurato con successo FileFlows secondo le tue esigenze. Ora è il momento di metterlo al lavoro!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Scegli quali DockerMods installare",
+        "Eula": "EULA",
+        "EulaDescription": "Contratto di Licenza per l'Utente Finale di FileFlows",
+        "Finish": "Fine",
+        "FinishDescription": "Configurazione Iniziale Completata",
+        "Plugins": "Plugin",
+        "PluginsDescription": "Scegli quali plugin installare",
+        "Welcome": "Benvenuto",
+        "WelcomeDescription": "Benvenuto in FileFlows"
       }
     },
     "Libraries": {
@@ -671,7 +702,7 @@
         "Files": "{TotalString} {TotalFiles, plural, one {File} other {Files}}"
       },
       "ErrorMessages": {
-        "NoFlows": "Non ci sono flussi configurati.\nCrea un flusso prima di aggiungere o aggiornare una libreria."
+        "NoFlows": "Non ci sono flussi configurati.\nCrea un flow prima di aggiungere o aggiornare una libreria."
       },
       "Messages": {
         "DeleteConfirm": "Sei sicuro di voler eliminare i {count, plural, one {libreria} other {librerie}} selezionati?",
@@ -719,7 +750,7 @@
         "FileSizeDetectionInterval-Suffix": "Secondi",
         "Filters": "Filtri",
         "Filters-Help": "Elenco facoltativo di filtri da eseguire contro il nome completo dei file.",
-        "Flow": "Flusso",
+        "Flow": "Flow",
         "Folders": "Cartelle",
         "Folders-Help": "Se questa biblioteca elabora Cartelle invece di File.\nQuesto non significa scansionare le sottocartelle, una biblioteca lo farà già.\nQuesto significa che verrà elaborato un oggetto Cartella invece di file singoli.",
         "FullScanDisabled": "Disabilita Scansione Completa",
@@ -754,7 +785,7 @@
         "UpdateMovedFiles": "Aggiorna File Spostati",
         "UpdateMovedFiles-Help": "Quando abilitato, se un file è stato rilevato come spostato all'interno della stessa biblioteca, il file originale verrà aggiornato per puntare a questo nuovo file.\nAltrimenti, quando disabilitato, verrà invece aggiunto un duplicato.\n\nUn file sarà rilevato come spostato se il file originale non esiste e viene trovato un nuovo file con la stessa firma.",
         "UseFingerprinting": "Utilizza Fingerprinting",
-        "UseFingerprinting-Help": "Quando abilitato, i file avranno eseguito un checksum quando vengono importati e dopo che un flusso è stato completato. Qualsiasi file con checksum corrispondente verrà saltato dalle future importazioni nella biblioteca.",
+        "UseFingerprinting-Help": "Quando abilitato, i file avranno eseguito un checksum quando vengono importati e dopo che un flow è stato completato. Qualsiasi file con checksum corrispondente verrà saltato dalle future importazioni nella biblioteca.",
         "WaitTimeSeconds": "Tempo di Attesa",
         "WaitTimeSeconds-Help": "Il numero di secondi che devono passare dall'ultima modifica scritta in questa cartella affinché venga scansionata nella biblioteca.",
         "WaitTimeSeconds-Suffix": "secondi"
@@ -769,7 +800,7 @@
         "FinalSize": "Dimensione Finale",
         "FinalSizeSuffix": "Bytes",
         "Fingerprint": "Fingerprint",
-        "Flow": "Flusso",
+        "Flow": "Flow",
         "Library": "Biblioteca",
         "Log": "Log",
         "Name": "File Originale",
@@ -858,7 +889,7 @@
       "Fields": {
         "Address": "Indirizzo",
         "Enabled": "Abilitato",
-        "FlowRunners": "Esecutori di flusso"
+        "FlowRunners": "Esecutori di flow"
       }
     },
     "Notifications": {
@@ -895,8 +926,8 @@
         "DontSetPermissions": "Imposta Permessi",
         "DontSetPermissions-Help": "Se selezionato, i permessi dei file saranno impostati su tutti i file creati di recente",
         "Enabled": "Abilitato",
-        "FlowRunners": "Esecutori di flusso",
-        "FlowRunners-Help": "Il numero di istanze di esecutore di flusso disponibili per eseguire un flusso.",
+        "FlowRunners": "Esecutori di flow",
+        "FlowRunners-Help": "Il numero di istanze di esecutore di flow disponibili per eseguire un flow.",
         "InternalProcessingNodeDescription": "Questo è il nodo di elaborazione integrato in FileFlows.\n\nQuesto nodo ti consente di eseguire FileFlows senza preoccuparti di installare altri nodi su sistemi remoti e ti consente di utilizzare FileFlows come un'applicazione autonoma.\n\nPuoi continuare a utilizzare questo nodo interno e nodi di elaborazione aggiuntivi se lo desideri, oppure puoi disabilitare questo nodo e utilizzare solo nodi aggiuntivi.",
         "Libraries": "Librerie",
         "Libraries-Help": "Seleziona quali librerie questo nodo può elaborare",
@@ -923,7 +954,7 @@
         "Schedule-Help": "Questo programma funziona nel fuso orario del nodo",
         "ScheduleDescription": "Questo ti consente di configurare quando questo nodo sarà attivo.\n\nIl nodo non elaborerà alcun file al di fuori di questo programma configurato.\n",
         "TempPath": "Directory Temp",
-        "TempPath-Help": "Questa directory sarà utilizzata dai flussi per creare file temporanei mentre il flusso viene elaborato; questa directory verrà pulita regolarmente, quindi non tenere nulla di importante qui.",
+        "TempPath-Help": "Questa directory sarà utilizzata dai flussi per creare file temporanei mentre il flow viene elaborato; questa directory verrà pulita regolarmente, quindi non tenere nulla di importante qui.",
         "Variables": "Variabili",
         "VariablesDescription": "Le variabili ti consentono di configurare variabili avanzate da impostare su un nodo di elaborazione.",
         "VariablesKey": "Nome",
@@ -942,7 +973,7 @@
         "Direction": "Direzione",
         "Email": "Email",
         "Email-Placeholder": "Inserisci un indirizzo email",
-        "Flow": "Flusso",
+        "Flow": "Flow",
         "Library": "Libreria",
         "Node": "Nodo",
         "Period": "Periodo",
@@ -1064,13 +1095,13 @@
         "DelayBetweenNextFile-Help": "Il ritardo in millisecondi da attendere tra l'inizio di un file e la richiesta di uno nuovo. Impostare questo ritardo a zero significa che verrà immediatamente richiesta una nuova file. Se il ritardo è troppo breve, funzionalità come il bilanciamento del carico e i limiti del runner della libreria potrebbero non funzionare correttamente, poiché un file potrebbe non essere completamente avviato prima della richiesta successiva.",
         "DelayBetweenNextFile-Suffix": "millisecondi",
         "DockerModsOnServer": "DockerMods sul Server",
-        "DockerModsOnServer-Help": "I DockerMods devono essere eseguiti automaticamente all'avvio del server o quando specificamente abilitati. Altrimenti, verranno eseguiti solo quando viene avviato un flusso di lavoro.",
+        "DockerModsOnServer-Help": "I DockerMods devono essere eseguiti automaticamente all'avvio del server o quando specificamente abilitati. Altrimenti, verranno eseguiti solo quando viene avviato un flow di lavoro.",
         "HideProcessingFinishedNotifications": "Notifiche di Elaborazione Completata",
         "HideProcessingFinishedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando un file ha terminato l'elaborazione",
         "HideProcessingStartedNotifications": "Notifiche di Elaborazione Iniziata",
         "HideProcessingStartedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando un file inizia a essere elaborato",
         "KeepFailedFlowTempFiles": "Mantieni File Temporanei Falliti",
-        "KeepFailedFlowTempFiles-Help": "Abilitando questa opzione verranno mantenuti i file temporanei utilizzati da un flusso in caso di fallimento, impedendo la loro eliminazione automatica.\nUsa con cautela.",
+        "KeepFailedFlowTempFiles-Help": "Abilitando questa opzione verranno mantenuti i file temporanei utilizzati da un flow in caso di fallimento, impedendo la loro eliminazione automatica.\nUsa con cautela.",
         "Language": "Lingua",
         "Language-Help": "La lingua che verrà utilizzata nel sistema.",
         "LogEveryRequest": "Registra Ogni Richiesta",
@@ -1090,7 +1121,7 @@
         "ShowFileAddedNotifications": "Notifiche di File Aggiunto",
         "ShowFileAddedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando è stato trovato un file e aggiunto alla coda.",
         "Telemetry": "Telemetria",
-        "Telemetry-Help": "La telemetria è utile per sapere quali dispositivi dobbiamo supportare, quali parti del Flusso sono le più utilizzate e dove dovremmo concentrarci nello sviluppo.\nNessuna informazione sui tuoi file o informazioni identificative viene inviata.",
+        "Telemetry-Help": "La telemetria è utile per sapere quali dispositivi dobbiamo supportare, quali parti del Flow sono le più utilizzate e dove dovremmo concentrarci nello sviluppo.\nNessuna informazione sui tuoi file o informazioni identificative viene inviata.",
         "Database": {
           "Description": "Qui puoi configurare quale Database FileFlows utilizzerà.\nNota: Qualsiasi modifica qui richiederà di riavviare FileFlows affinché possa migrare i tuoi dati e, se necessario, creare il nuovo database.",
           "DontBackupOnUpgrade": "Non Eseguire Backup Durante l'Aggiornamento",
@@ -1188,7 +1219,7 @@
           "TestSuccess": "Connessione al database riuscita"
         },
         "DisableTelemetryConfirm": {
-          "Message": "Sei sicuro di voler disabilitare la telemetria?\n\nPuoi stare tranquillo, nessuna informazione personale viene registrata. I dati inviati includono informazioni sugli elementi del flusso in uso, i plugin utilizzati, nonché il numero totale di file non riusciti e elaborati.\n\nQueste informazioni ci aiutano a comprendere le preferenze degli utenti e influenzano le nostre decisioni riguardo alla dismissione degli elementi del flusso non utilizzati.",
+          "Message": "Sei sicuro di voler disabilitare la telemetria?\n\nPuoi stare tranquillo, nessuna informazione personale viene registrata. I dati inviati includono informazioni sugli elementi del flow in uso, i plugin utilizzati, nonché il numero totale di file non riusciti e elaborati.\n\nQueste informazioni ci aiutano a comprendere le preferenze degli utenti e influenzano le nostre decisioni riguardo alla dismissione degli elementi del flow non utilizzati.",
           "Title": "Disabilita Telemetria"
         },
         "Restart": {
@@ -1301,42 +1332,116 @@
       }
     }
   },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Un plugin che ti consente di inviare messaggi a un server Apprise.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Una raccolta di elementi di flusso relativi all'audio per aiutare a elaborare i file audio.",
+      "Label": "Audio"
+    },
+    "BasicNodes": {
+      "Description": "Elementi di flusso di base per FileFlows. Questo plugin contiene elementi di flusso di base e comuni per elaborare i file.\nQuesto plugin è necessario per il funzionamento di FileFlows.",
+      "Label": "Base"
+    },
+    "ChecksumNodes": {
+      "Description": "Elementi di flusso che forniscono la possibilità di eseguire un checksum su un file.",
+      "Label": "Checksum"
+    },
+    "ComicNodes": {
+      "Description": "Elementi di flusso per l'elaborazione di fumetti (cbr, cbz, pdf, ecc.)",
+      "Label": "Fumetto"
+    },
+    "DiscordNodes": {
+      "Description": "Un plugin che ti consente di inviare messaggi a un server Discord.\n\nL'ID del Webhook e il token possono essere ottenuti dall'URL del webhook\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Questo plugin ti consente di inviare un'e-mail durante l'esecuzione di un Flusso.",
+      "Label": "Email"
+    },
+    "Emby": {
+      "Description": "Un plugin che ti consente di comunicare con Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Un plugin che ti consente di inviare messaggi a un server Gotify.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Elementi di flusso per l'elaborazione di file immagine. Questo plugin contiene nodi per convertire e manipolare immagini.",
+      "Label": "Immagine"
+    },
+    "MetaNodes": {
+      "Description": "Un plugin che contiene elementi di flusso di informazioni meta utilizzati per cercare informazioni meta sui file.\n\nContiene elementi di flusso per cercare informazioni sui film da TheMovieDB e informazioni musicali dai tag ID3 all'interno del file.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Un plugin che ti consente di caricare file su Nextcloud.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Un plugin che consente di comunicare con Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Un plugin che ti consente di inviare messaggi a un server Pushbullet.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Un plugin che ti consente di inviare messaggi a un server Pushover.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Un plugin che ti consente di inviare messaggi Telegram.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin per l'elaborazione di file video, inclusa, ma non limitata a, conversione di file video, rilevamento di file video, upscaling, downscaling e transcodifica.",
+      "Label": "Video"
+    },
+    "Web": {
+      "Description": "Plugin che fornisce elementi di flusso correlati al Web.",
+      "Label": "Web"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {
-        "Description": "Un modello audio vuoto con un singolo elemento di flusso di input ''Audio File''.",
+        "Description": "Un modello audio vuoto con un singolo elemento di flow di input ''Audio File''.",
         "Name": "File Audio"
       },
       "ConvertComic": {
-        "Description": "Un flusso che convertirà fumetti da CBR, CBZ, CB7, PDF, GZ, BZ2 in CBZ o PDF.",
+        "Description": "Un flow che convertirà fumetti da CBR, CBZ, CB7, PDF, GZ, BZ2 in CBZ o PDF.",
         "Name": "Converti Fumetto"
       },
       "ConvertImage": {
-        "Description": "Un flusso che converte immagini.",
+        "Description": "Un flow che converte immagini.",
         "Name": "Converti Immagine"
       },
       "ConvertVideo": {
-        "Description": "Un flusso che convertirà un file video in un altro formato.",
+        "Description": "Un flow che convertirà un file video in un altro formato.",
         "Name": "Converti Video"
       },
       "FailureFlow": {
-        "Description": "Flusso di errore di base che verrà eseguito quando un flusso fallisce per qualsiasi motivo.",
-        "Name": "Flusso di Errore"
+        "Description": "Flow di errore di base che verrà eseguito quando un flow fallisce per qualsiasi motivo.",
+        "Name": "Flow di Errore"
       },
       "File": {
-        "Description": "Un modello di file vuoto con un singolo elemento di flusso di input ''Input File''.",
+        "Description": "Un modello di file vuoto con un singolo elemento di flow di input ''Input File''.",
         "Name": "File"
       },
       "Folder": {
-        "Description": "Un modello di cartella vuoto con un singolo elemento di flusso di input ''Input Folder''.\n\nNOTA: Questo modello dovrebbe essere utilizzato solo per elaborare una cartella invece di file. L'elaborazione di una cartella ha limitazioni di elaborazione poiché la cartella viene elaborata e non i file contenuti in essa.",
+        "Description": "Un modello di cartella vuoto con un singolo elemento di flow di input ''Input Folder''.\n\nNOTA: Questo modello dovrebbe essere utilizzato solo per elaborare una cartella invece di file. L'elaborazione di una cartella ha limitazioni di elaborazione poiché la cartella viene elaborata e non i file contenuti in essa.",
         "Name": "Cartella"
       },
       "ImageFile": {
-        "Description": "Un modello immagine vuoto con un singolo elemento di flusso di input ''Image File''.",
+        "Description": "Un modello immagine vuoto con un singolo elemento di flow di input ''Image File''.",
         "Name": "File Immagine"
       },
       "VideoFile": {
-        "Description": "Un modello immagine vuoto con un singolo elemento di flusso di input ''Video File''.",
+        "Description": "Un modello immagine vuoto con un singolo elemento di flow di input ''Video File''.",
         "Name": "File Video"
       }
     },
@@ -1372,11 +1477,11 @@
         "Name": "Plex DVR"
       },
       "SABnzbdMusic": {
-        "Description": "Biblioteca per monitorare una directory di download ''completa'' da SABnzbd.\n\nQuesta biblioteca può quindi utilizzare un flusso per convertire la musica in un formato target e posizionare i file musicali nella cartella di destinazione, ad es. ''convertiti''.\n\nL'applicazione che ha istruito SABnzbd a eseguire il download può monitorare la cartella ''convertita'' per i file completati.",
+        "Description": "Biblioteca per monitorare una directory di download ''completa'' da SABnzbd.\n\nQuesta biblioteca può quindi utilizzare un flow per convertire la musica in un formato target e posizionare i file musicali nella cartella di destinazione, ad es. ''convertiti''.\n\nL'applicazione che ha istruito SABnzbd a eseguire il download può monitorare la cartella ''convertita'' per i file completati.",
         "Name": "Musica SABnzbd"
       },
       "SABnzbdVideos": {
-        "Description": "Biblioteca per monitorare una directory di download ''completa'' da SABnzbd.\n\nQuesta biblioteca può quindi utilizzare un flusso per convertire i video in un formato target e posizionare i video nella cartella di destinazione, ad es. ''convertiti''.\n\nL'applicazione che ha istruito SABnzbd a eseguire il download può monitorare la cartella ''convertita'' per i file completati.",
+        "Description": "Biblioteca per monitorare una directory di download ''completa'' da SABnzbd.\n\nQuesta biblioteca può quindi utilizzare un flow per convertire i video in un formato target e posizionare i video nella cartella di destinazione, ad es. ''convertiti''.\n\nL'applicazione che ha istruito SABnzbd a eseguire il download può monitorare la cartella ''convertita'' per i file completati.",
         "Name": "Video SABnzbd"
       },
       "SamplesTrailersPreviews": {

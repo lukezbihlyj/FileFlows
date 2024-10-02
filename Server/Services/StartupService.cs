@@ -106,7 +106,7 @@ public class StartupService
 
             ScanForPlugins();
 
-            TranslaterHelper.InitTranslater(settings.Language?.EmptyAsNull() ?? "en");
+            ServiceLoader.Load<LanguageService>().Initialize().Wait();
 
             LibraryWorker.ResetProcessing(internalOnly: true);
 

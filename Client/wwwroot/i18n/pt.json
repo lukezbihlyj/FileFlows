@@ -159,9 +159,9 @@
       "Yesterday": "Ontem"
     },
     "ObsoleteConfirm": {
-      "Message": "Recomenda-se que você altere para um outro elemento de fluxo.",
-      "Question": "Este elemento de fluxo está obsoleto e será removido em breve. Tem certeza de que deseja usá-lo?",
-      "Title": "Elemento de Fluxo Obsoleto"
+      "Message": "Recomenda-se que você altere para um outro elemento de flow.",
+      "Question": "Este elemento de flow está obsoleto e será removido em breve. Tem certeza de que deseja usá-lo?",
+      "Title": "Elemento de Flow Obsoleto"
     }
   },
   "AuditActions": {
@@ -519,6 +519,7 @@
       "Title": "Painel",
       "Labels": {
         "AddWidget": "Adicionar Widget",
+        "CurrentlyPaused": "O FileFlows está atualmente pausado!",
         "FinalSize": "Tamanho Final",
         "OriginalSize": "Tamanho Original",
         "Savings": "Economias",
@@ -591,7 +592,7 @@
         "OpenScriptBrowser": "Abrir Navegador de Script",
         "OpenSubFlowBrowser": "Abrir Navegador de Sub Flow",
         "SubFlowBrowser": "Navegador de Sub Flow",
-        "SubFlowHelp": "Para adicionar campos de entrada a um sub flow, para que você possa passar parâmetros personalizados para este sub flow, crie-os na aba `Fields`.\n\nUm sub flow deve ter um único `Input`, que pode ser qualquer elemento de fluxo de entrada válido, por exemplo, `Input File`, `Video File`, etc."
+        "SubFlowHelp": "Para adicionar campos de entrada a um sub flow, para que você possa passar parâmetros personalizados para este sub flow, crie-os na aba `Fields`.\n\nUm sub flow deve ter um único `Input`, que pode ser qualquer elemento de flow de entrada válido, por exemplo, `Input File`, `Video File`, etc."
       },
       "Fields": {
         "Author": "Autor",
@@ -663,6 +664,36 @@
           "PageDescription": "Selecione um modelo para basear o flow, isso ajudará você a começar com um flow.",
           "Template": "Modelo"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Eu li e concordo com os termos do Contrato de Licença de Usuário Final",
+        "Language": "Idioma"
+      },
+      "Messages": {
+        "Welcome": "Bem-vindo ao FileFlows! Obrigado por escolher nosso software.\n\nEste assistente irá guiá-lo pelos passos essenciais de configuração, incluindo a aceitação do EULA e a seleção de plugins para adicionar funcionalidades com base nas suas preferências.\n\nEscolha entre uma variedade de plugins adaptados para processar diferentes tipos de arquivos, como vídeo, áudio e imagens.",
+        "WelcomeUpdate": "Recentemente, atualizamos nosso Contrato de Licença de Usuário Final (EULA).\n\nPor favor, reserve um momento para revisar e aceitar os termos atualizados antes de continuar.\n\nSua aceitação é necessária para prosseguir com o uso do FileFlows.\n\nObrigado por escolher o FileFlows.",
+        "Finish": {
+          "Bottom": "Com esses passos, você está no caminho certo para maximizar o poder do FileFlows.\n\nSe tiver dúvidas ou precisar de ajuda, não hesite em entrar em contato com nossa equipe de suporte.",
+          "CreateALibrary": "Criar uma Biblioteca:",
+          "CreateALibraryDescription": "Crie uma biblioteca para automatizar o processamento de arquivos.\nSua biblioteca detectará e processará arquivos automaticamente com base nos critérios especificados,\nsimplificando seu flow de trabalho sem a necessidade de intervenção manual.",
+          "CreateFirstFlow": "Crie seu Primeiro Flow:",
+          "CreateFirstFlowDescription": "Utilize os plugins que você selecionou para criar seu primeiro flow.\nSeja para processar arquivos de vídeo, faixas de áudio, imagens ou qualquer outro tipo de arquivo, seu flow\npermite que você ajuste o tratamento dos arquivos às suas necessidades específicas, sejam elas simples\nou complexas.",
+          "Top": "Você configurou o FileFlows com sucesso de acordo com suas necessidades. Agora é hora de colocá-lo em ação!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Escolha quais DockerMods instalar",
+        "Eula": "EULA",
+        "EulaDescription": "Contrato de Licença de Usuário Final do FileFlows",
+        "Finish": "Concluir",
+        "FinishDescription": "Configuração Inicial Concluída",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Escolha quais plugins instalar",
+        "Welcome": "Bem-vindo",
+        "WelcomeDescription": "Bem-vindo ao FileFlows"
       }
     },
     "Libraries": {
@@ -1059,18 +1090,18 @@
         "AutoUpdatePlugins": "Atualização Automática de Plugins",
         "AutoUpdatePlugins-Help": "Quando ativado, os plugins serão verificados regularmente em busca de atualizações e, se qualquer atualização for encontrada, será baixada automaticamente.",
         "CheckForUpdateNow": "Verificar Atualização Agora",
-        "CheckForUpdateNow-Help": "Verifica se há uma atualização agora e, se encontrada, fará o download da atualização e a instalará quando nenhum Fluxo estiver em execução.",
+        "CheckForUpdateNow-Help": "Verifica se há uma atualização agora e, se encontrada, fará o download da atualização e a instalará quando nenhum Flow estiver em execução.",
         "DelayBetweenNextFile": "Atraso Entre Arquivos",
         "DelayBetweenNextFile-Help": "O atraso em milissegundos a esperar entre o início de um arquivo e a solicitação de um novo. Definir esse atraso como zero significa que ele solicitará imediatamente um novo arquivo. Se o atraso for muito curto, recursos como balanceamento de carga e limites do executor de biblioteca podem não funcionar corretamente, pois um arquivo pode não ter iniciado completamente antes da próxima solicitação.",
         "DelayBetweenNextFile-Suffix": "milissegundos",
         "DockerModsOnServer": "DockerMods No Servidor",
-        "DockerModsOnServer-Help": "DockerMods devem ser executados automaticamente ao iniciar o servidor ou quando especificamente ativados. Caso contrário, eles só serão executados quando um fluxo de trabalho for iniciado.",
+        "DockerModsOnServer-Help": "DockerMods devem ser executados automaticamente ao iniciar o servidor ou quando especificamente ativados. Caso contrário, eles só serão executados quando um flow de trabalho for iniciado.",
         "HideProcessingFinishedNotifications": "Notificações de Processamento Finalizado",
         "HideProcessingFinishedNotifications-Help": "Se uma notificação de toast deve ser exibida no console da web quando um arquivo terminar de processar.",
         "HideProcessingStartedNotifications": "Notificações de Processamento Iniciado",
         "HideProcessingStartedNotifications-Help": "Se uma notificação de toast deve ser exibida no console da web quando um arquivo começar a processar.",
         "KeepFailedFlowTempFiles": "Manter Arquivos Temporários Falhados",
-        "KeepFailedFlowTempFiles-Help": "Ativar esta opção reterá os arquivos temporários usados por um fluxo em caso de falha, evitando que sejam excluídos automaticamente.\nUse com cautela.",
+        "KeepFailedFlowTempFiles-Help": "Ativar esta opção reterá os arquivos temporários usados por um flow em caso de falha, evitando que sejam excluídos automaticamente.\nUse com cautela.",
         "Language": "Idioma",
         "Language-Help": "O idioma que será utilizado no sistema.",
         "LogEveryRequest": "Registrar Cada Solicitação",
@@ -1090,7 +1121,7 @@
         "ShowFileAddedNotifications": "Notificações de Arquivo Adicionado",
         "ShowFileAddedNotifications-Help": "Se uma notificação de toast deve ser exibida no console da web quando um arquivo foi encontrado e adicionado à fila.",
         "Telemetry": "Telemetria",
-        "Telemetry-Help": "A telemetria é útil para ajudar a saber quais dispositivos precisamos suportar, quais partes do Fluxo são as mais usadas e onde devemos focar no desenvolvimento.\nNenhuma informação sobre seus arquivos ou informações de identificação é enviada.",
+        "Telemetry-Help": "A telemetria é útil para ajudar a saber quais dispositivos precisamos suportar, quais partes do Flow são as mais usadas e onde devemos focar no desenvolvimento.\nNenhuma informação sobre seus arquivos ou informações de identificação é enviada.",
         "Database": {
           "Description": "Aqui você pode configurar qual Banco de Dados o FileFlows usará.\nNota: Quaisquer alterações aqui exigirão que você reinicie o FileFlows para que ele possa migrar seus dados e, se necessário, criar o novo banco de dados.",
           "DontBackupOnUpgrade": "Não Fazer Backup na Atualização",
@@ -1188,11 +1219,11 @@
           "TestSuccess": "Conectado ao banco de dados com sucesso"
         },
         "DisableTelemetryConfirm": {
-          "Message": "Você tem certeza de que deseja desativar a telemetria?\n\nFique tranquilo, nenhuma informação pessoal é registrada. Os dados enviados incluem informações sobre os elementos de fluxo em uso, plugins utilizados, bem como o número total de arquivos falhados e processados.\n\nEssas informações nos ajudam a entender as preferências dos usuários e informam nossas decisões sobre a descontinuação de elementos de fluxo não utilizados.",
+          "Message": "Você tem certeza de que deseja desativar a telemetria?\n\nFique tranquilo, nenhuma informação pessoal é registrada. Os dados enviados incluem informações sobre os elementos de flow em uso, plugins utilizados, bem como o número total de arquivos falhados e processados.\n\nEssas informações nos ajudam a entender as preferências dos usuários e informam nossas decisões sobre a descontinuação de elementos de flow não utilizados.",
           "Title": "Desativar Telemetria"
         },
         "Restart": {
-          "Message": "Você tem certeza de que deseja reiniciar o FileFlows?\n\nSuas configurações serão salvas automaticamente primeiro.\n\nNota: Certifique-se de que não há fluxos em execução.",
+          "Message": "Você tem certeza de que deseja reiniciar o FileFlows?\n\nSuas configurações serão salvas automaticamente primeiro.\n\nNota: Certifique-se de que não há flows em execução.",
           "Title": "Reiniciar FileFlows"
         },
         "Update": {
@@ -1301,10 +1332,84 @@
       }
     }
   },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Apprise.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Uma coleção de elementos de fluxo relacionados ao áudio para ajudar no processamento de arquivos de áudio.",
+      "Label": "Áudio"
+    },
+    "BasicNodes": {
+      "Description": "Elementos de fluxo básicos para FileFlows. Este plugin contém elementos de fluxo básicos e comuns para processar arquivos.\nEste plugin é necessário para que o FileFlows funcione.",
+      "Label": "Básico"
+    },
+    "ChecksumNodes": {
+      "Description": "Elementos de fluxo que fornecem a capacidade de executar um checksum em um arquivo.",
+      "Label": "Checksum"
+    },
+    "ComicNodes": {
+      "Description": "Elementos de fluxo para processar quadrinhos (cbr, cbz, pdf, etc.)",
+      "Label": "Quadrinhos"
+    },
+    "DiscordNodes": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Discord.\n\nO ID do Webhook e o token podem ser obtidos a partir da URL do webhook\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Este plugin permite que você envie um e-mail enquanto executa um fluxo.",
+      "Label": "Email"
+    },
+    "Emby": {
+      "Description": "Um plugin que permite comunicar-se com Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Gotify.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Elementos de fluxo para processar arquivos de imagem. Este plugin contém nós para converter e manipular imagens.",
+      "Label": "Imagem"
+    },
+    "MetaNodes": {
+      "Description": "Um plugin que contém elementos de fluxo de informações meta usados para procurar informações meta sobre arquivos.\n\nContém elementos de fluxo para procurar informações sobre filmes do TheMovieDB e informações musicais das tags ID3 dentro do arquivo.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Um plugin que permite enviar arquivos para o Nextcloud.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Um plugin que permite comunicar-se com o Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Pushbullet.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Pushover.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Um plugin que permite enviar mensagens do Telegram.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin para o processamento de arquivos de vídeo, incluindo, mas não se limitando a, conversão de arquivos de vídeo, detecção de arquivos de vídeo, upscale, downscale e transcodificação.",
+      "Label": "Vídeo"
+    },
+    "Web": {
+      "Description": "Plugin que fornece elementos de fluxo relacionados à web.",
+      "Label": "Web"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {
-        "Description": "Um template de Áudio em branco com um único elemento de fluxo de entrada ''Audio File''.",
+        "Description": "Um template de Áudio em branco com um único elemento de flow de entrada ''Audio File''.",
         "Name": "Audio File"
       },
       "ConvertComic": {
@@ -1324,19 +1429,19 @@
         "Name": "Failure Flow"
       },
       "File": {
-        "Description": "Um template de arquivo em branco com um único elemento de fluxo de entrada ''Input File''.",
+        "Description": "Um template de arquivo em branco com um único elemento de flow de entrada ''Input File''.",
         "Name": "File"
       },
       "Folder": {
-        "Description": "Um template de pasta em branco com um único elemento de fluxo de entrada ''Input Folder''.\n\nNOTA: Este template deve ser usado apenas para processar uma Folder em vez de Files. Processar uma Folder tem limitações de processamento, pois a Folder está sendo processada e não os arquivos contidos nessa pasta.",
+        "Description": "Um template de pasta em branco com um único elemento de flow de entrada ''Input Folder''.\n\nNOTA: Este template deve ser usado apenas para processar uma Folder em vez de Files. Processar uma Folder tem limitações de processamento, pois a Folder está sendo processada e não os arquivos contidos nessa pasta.",
         "Name": "Folder"
       },
       "ImageFile": {
-        "Description": "Um template de Imagem em branco com um único elemento de fluxo de entrada ''Image File''.",
+        "Description": "Um template de Imagem em branco com um único elemento de flow de entrada ''Image File''.",
         "Name": "Image File"
       },
       "VideoFile": {
-        "Description": "Um template de Imagem em branco com um único elemento de fluxo de entrada ''Video File''.",
+        "Description": "Um template de Imagem em branco com um único elemento de flow de entrada ''Video File''.",
         "Name": "Video File"
       }
     },

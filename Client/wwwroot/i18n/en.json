@@ -519,6 +519,7 @@
       "Title": "Dashboard",
       "Labels": {
         "AddWidget": "Add Widget",
+        "CurrentlyPaused": "FileFlows is currently paused!",
         "FinalSize": "Final Size",
         "OriginalSize": "Original Size",
         "Savings": "Savings",
@@ -663,6 +664,36 @@
           "PageDescription": "Select a template to base the flow on, this will help you get started with a flow.",
           "Template": "Template"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "I have read and agree to the terms of the End User License Agreement",
+        "Language": "Language"
+      },
+      "Messages": {
+        "Welcome": "Welcome to FileFlows! Thank you for choosing our software.\n\nThis wizard will guide you through the essential setup steps, including accepting the EULA and selecting plugins to add functionality based on your preferences.\n\nChoose from a variety of plugins tailored to process different types of files, such as video, audio, and images.",
+        "WelcomeUpdate": "We've recently updated our End-User License Agreement (EULA).\n\nPlease take a moment to review and accept the updated terms before you continue.\n\nYour acceptance is required to proceed with using FileFlows.\n\nThank you for choosing FileFlows.",
+        "Finish": {
+          "Bottom": "With these steps, you're well on your way to maximizing the power of FileFlows.\n\nIf you have any questions or need assistance along the way, don't hesitate to reach out to our support team.",
+          "CreateALibrary": "Create A Library:",
+          "CreateALibraryDescription": "Establish a library to automate file processing.\nYour library will automatically detect and process files based on your specified criteria,\nsimplifying your workflow without the need for manual intervention.",
+          "CreateFirstFlow": "Create Your First Flow:",
+          "CreateFirstFlowDescription": "Utilize the plugins you've selected to craft your first flow.\nWhether it's processing video files, audio tracks, images, or any other type of file, your flow\nempowers you to tailor the handling of your files to your specific needs, whether they're simple\nor complex.",
+          "Top": "You've successfully configured FileFlows to suit your needs. Now it's time to put it to work!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Choose which DockerMods to install",
+        "Eula": "EULA",
+        "EulaDescription": "End-User License Agreement of FileFlows",
+        "Finish": "Finish",
+        "FinishDescription": "Initial Configuration Complete",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Choose which plugins to install",
+        "Welcome": "Welcome",
+        "WelcomeDescription": "Welcome to FileFlows"
       }
     },
     "Libraries": {
@@ -1299,6 +1330,80 @@
         "VideoContainers": "Video Container",
         "VideoResolution": "Video Resolution"
       }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "A plugin that allows you to send messages to a Apprise server.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "A collection of audio related flow elements to help process audio files.",
+      "Label": "Audio"
+    },
+    "BasicNodes": {
+      "Description": "Basic flow elements for FileFlows.  This plugin contains basic and common flow elements to process files.\nThis plugin is required for FileFlows to work.",
+      "Label": "Basic"
+    },
+    "ChecksumNodes": {
+      "Description": "Flow elements that provide the ability to run a checksum against a file.",
+      "Label": "Checksum"
+    },
+    "ComicNodes": {
+      "Description": "Flow elements for processing comic books (cbr, cbz, pdf etc)",
+      "Label": "Comic"
+    },
+    "DiscordNodes": {
+      "Description": "A plugin that allows you to send messages to a Discord server.\n\nThe Webhook Id and token can be obtained from the webhook URL\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "This plugin allows you to send an email while executing a Flow.",
+      "Label": "Email"
+    },
+    "Emby": {
+      "Description": "A plugin that allows you to communicate with Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "A plugin that allows you to send messages to a Gotify server.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Flow elements for processing images files.  This plugin contains nodes to convert and manipulate images.",
+      "Label": "Image"
+    },
+    "MetaNodes": {
+      "Description": "A plugin that contains Meta information flow elements used to lookup meta information on files.\n\nContains flow elements to lookup movie information from TheMovieDB, and music information from ID3 tags inside the file.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "A plugin that allows you to upload files to Nextcloud.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "A plugin that allows you to communicate with Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "A plugin that allows you to send messages to a Pushbullet server.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "A plugin that allows you to send messages to a Pushover server.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "A plugin that allows you to send Telegram messages.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin for the processing of video files, including but not limited to video file conversion, video file detection, upscaling, downscaling, and transcoding.",
+      "Label": "Video"
+    },
+    "Web": {
+      "Description": "Plugin that provides Web related flow elements",
+      "Label": "Web"
     }
   },
   "Templates": {

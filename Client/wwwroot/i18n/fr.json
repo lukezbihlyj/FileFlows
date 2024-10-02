@@ -519,6 +519,7 @@
       "Title": "Tableau de Bord",
       "Labels": {
         "AddWidget": "Ajouter un Widget",
+        "CurrentlyPaused": "FileFlows est actuellement en pause!",
         "FinalSize": "Taille Finale",
         "OriginalSize": "Taille Originale",
         "Savings": "Économies",
@@ -663,6 +664,36 @@
           "PageDescription": "Sélectionnez un modèle sur lequel baser le flow, cela vous aidera à démarrer avec un flow.",
           "Template": "Modèle"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "J'ai lu et j'accepte les termes du Contrat de Licence Utilisateur Final",
+        "Language": "Langue"
+      },
+      "Messages": {
+        "Welcome": "Bienvenue sur FileFlows ! Merci d'avoir choisi notre logiciel.\n\nCet assistant vous guidera à travers les étapes essentielles de la configuration, y compris l'acceptation de l'EULA et la sélection des plugins pour ajouter des fonctionnalités en fonction de vos préférences.\n\nChoisissez parmi une variété de plugins conçus pour traiter différents types de fichiers, tels que des vidéos, des audios et des images.",
+        "WelcomeUpdate": "Nous avons récemment mis à jour notre Contrat de Licence Utilisateur Final (EULA).\n\nVeuillez prendre un moment pour examiner et accepter les termes mis à jour avant de continuer.\n\nVotre acceptation est requise pour continuer à utiliser FileFlows.\n\nMerci d'avoir choisi FileFlows.",
+        "Finish": {
+          "Bottom": "Avec ces étapes, vous êtes en bonne voie pour maximiser la puissance de FileFlows.\n\nSi vous avez des questions ou avez besoin d'aide, n'hésitez pas à contacter notre équipe de support.",
+          "CreateALibrary": "Créer une Bibliothèque :",
+          "CreateALibraryDescription": "Créez une bibliothèque pour automatiser le traitement des fichiers.\nVotre bibliothèque détectera et traitera automatiquement les fichiers en fonction de vos critères spécifiés,\nsimplifiant votre flow de travail sans intervention manuelle.",
+          "CreateFirstFlow": "Créez votre Premier Flow :",
+          "CreateFirstFlowDescription": "Utilisez les plugins que vous avez sélectionnés pour créer votre premier flow.\nQue vous traitiez des fichiers vidéo, des pistes audio, des images ou tout autre type de fichier, votre flow\nvous permet d'adapter le traitement de vos fichiers à vos besoins spécifiques, qu'ils soient simples\noù complexes.",
+          "Top": "Vous avez configuré FileFlows avec succès selon vos besoins. Il est maintenant temps de le mettre au travail !"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Choisissez quels DockerMods installer",
+        "Eula": "EULA",
+        "EulaDescription": "Contrat de Licence Utilisateur Final de FileFlows",
+        "Finish": "Terminer",
+        "FinishDescription": "Configuration Initiale Complète",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Choisissez quels plugins installer",
+        "Welcome": "Bienvenue",
+        "WelcomeDescription": "Bienvenue sur FileFlows"
       }
     },
     "Libraries": {
@@ -858,7 +889,7 @@
       "Fields": {
         "Address": "Adresse",
         "Enabled": "Activé",
-        "FlowRunners": "Exécuteurs de flux"
+        "FlowRunners": "Exécuteurs de flow"
       }
     },
     "Notifications": {
@@ -895,8 +926,8 @@
         "DontSetPermissions": "Définir les permissions",
         "DontSetPermissions-Help": "Lorsque cette option est cochée, les permissions de fichier seront définies sur tous les fichiers nouvellement créés",
         "Enabled": "Activé",
-        "FlowRunners": "Exécuteurs de flux",
-        "FlowRunners-Help": "Le nombre d'instances d'exécuteurs de flux disponibles pour exécuter un flux.",
+        "FlowRunners": "Exécuteurs de flow",
+        "FlowRunners-Help": "Le nombre d'instances d'exécuteurs de flow disponibles pour exécuter un flow.",
         "InternalProcessingNodeDescription": "Ceci est le nœud de traitement intégré dans FileFlows.\n\nCe nœud vous permet d'exécuter FileFlows sans vous soucier de l'installation d'autres nœuds sur des systèmes distants et vous permet d'utiliser FileFlows comme une application autonome.\n\nVous pouvez continuer à utiliser ce nœud interne et des nœuds de traitement supplémentaires si vous le souhaitez, ou vous pouvez désactiver ce nœud et n'utiliser que des nœuds supplémentaires.",
         "Libraries": "Bibliothèques",
         "Libraries-Help": "Sélectionnez les bibliothèques que ce nœud peut traiter",
@@ -923,7 +954,7 @@
         "Schedule-Help": "Cet horaire fonctionne dans le fuseau horaire du nœud",
         "ScheduleDescription": "Cela vous permet de configurer quand ce nœud sera actif.\n\nLe nœud ne traitera aucun fichier en dehors de cet horaire configuré.\n",
         "TempPath": "Répertoire temporaire",
-        "TempPath-Help": "Ce répertoire sera utilisé par les flux pour créer des fichiers temporaires au fur et à mesure que le flux est traité, ce répertoire sera régulièrement nettoyé, donc ne gardez rien d'important ici.",
+        "TempPath-Help": "Ce répertoire sera utilisé par les flow pour créer des fichiers temporaires au fur et à mesure que le flow est traité, ce répertoire sera régulièrement nettoyé, donc ne gardez rien d'important ici.",
         "Variables": "Variables",
         "VariablesDescription": "Les variables vous permettent de configurer des variables avancées à définir sur un nœud de traitement.",
         "VariablesKey": "Nom",
@@ -942,7 +973,7 @@
         "Direction": "Direction",
         "Email": "Email",
         "Email-Placeholder": "Entrez une adresse email",
-        "Flow": "Flux",
+        "Flow": "Flow",
         "Library": "Bibliothèque",
         "Node": "Noeud",
         "Period": "Période",
@@ -988,7 +1019,7 @@
         "Direction": "Direction",
         "Enabled": "Activé",
         "Enabled-Help": "Ce rapport programmé ne s'exécutera que s'il est activé.",
-        "Flows": "Flux",
+        "Flows": "Flow",
         "Libraries": "Bibliothèques",
         "Name-Help": "Le nom du rapport, cela apparaîtra dans l'objet de l'email envoyé.",
         "Nodes": "Noeuds",
@@ -1059,18 +1090,18 @@
         "AutoUpdatePlugins": "Mise à jour automatique des plugins",
         "AutoUpdatePlugins-Help": "Lorsqu'elle est activée, les plugins seront régulièrement vérifiés pour des mises à jour, et si des mises à jour sont trouvées, elles seront automatiquement téléchargées.",
         "CheckForUpdateNow": "Vérifier les mises à jour",
-        "CheckForUpdateNow-Help": "Vérifie maintenant pour une mise à jour et, si trouvée, téléchargera la mise à jour et l'installera lorsque aucun flux n'est en cours d'exécution.",
+        "CheckForUpdateNow-Help": "Vérifie maintenant pour une mise à jour et, si trouvée, téléchargera la mise à jour et l'installera lorsque aucun flow n'est en cours d'exécution.",
         "DelayBetweenNextFile": "Délai entre les fichiers",
         "DelayBetweenNextFile-Help": "Le délai en millisecondes à attendre entre le démarrage d'un fichier et la demande d'un nouveau. Fixer ce délai à zéro signifie qu'il demandera immédiatement un nouveau fichier. Si le délai est trop court, des fonctionnalités comme l'équilibrage de charge et les limites du lecteur de bibliothèque peuvent ne pas fonctionner correctement, car un fichier peut ne pas avoir entièrement démarré avant la prochaine demande.",
         "DelayBetweenNextFile-Suffix": "millisecondes",
         "DockerModsOnServer": "DockerMods sur le serveur",
-        "DockerModsOnServer-Help": "Les DockerMods devraient s'exécuter automatiquement au démarrage du serveur ou lorsqu'ils sont spécifiquement activés. Sinon, ils ne s'exécuteront que lorsqu'un flux de travail est initié.",
+        "DockerModsOnServer-Help": "Les DockerMods devraient s'exécuter automatiquement au démarrage du serveur ou lorsqu'ils sont spécifiquement activés. Sinon, ils ne s'exécuteront que lorsqu'un flow de travail est initié.",
         "HideProcessingFinishedNotifications": "Notifications de traitement terminé",
         "HideProcessingFinishedNotifications-Help": "Si une notification toast doit être affichée dans la console Web lorsque le traitement d'un fichier est terminé.",
         "HideProcessingStartedNotifications": "Notifications de traitement commencé",
         "HideProcessingStartedNotifications-Help": "Si une notification toast doit être affichée dans la console Web lorsque le traitement d'un fichier commence.",
         "KeepFailedFlowTempFiles": "Conserver les fichiers temporaires échoués",
-        "KeepFailedFlowTempFiles-Help": "L'activation de cette option conservera les fichiers temporaires utilisés par un flux en cas d'échec, les empêchant d'être automatiquement supprimés.\nÀ utiliser avec précaution.",
+        "KeepFailedFlowTempFiles-Help": "L'activation de cette option conservera les fichiers temporaires utilisés par un flow en cas d'échec, les empêchant d'être automatiquement supprimés.\nÀ utiliser avec précaution.",
         "Language": "Langue",
         "Language-Help": "La langue qui sera utilisée dans le système.",
         "LogEveryRequest": "Journaliser chaque demande",
@@ -1090,7 +1121,7 @@
         "ShowFileAddedNotifications": "Notifications de fichier ajouté",
         "ShowFileAddedNotifications-Help": "Si une notification toast doit être affichée dans la console Web lorsqu'un fichier a été trouvé et ajouté à la file d'attente.",
         "Telemetry": "Télémétrie",
-        "Telemetry-Help": "La télémétrie est utile pour savoir quels appareils nous devons prendre en charge, quelles parties de flux sont les plus utilisées et où nous devrions nous concentrer sur le développement.\nAucune information sur vos fichiers ou informations identifiables n'est envoyée.",
+        "Telemetry-Help": "La télémétrie est utile pour savoir quels appareils nous devons prendre en charge, quelles parties de flow sont les plus utilisées et où nous devrions nous concentrer sur le développement.\nAucune information sur vos fichiers ou informations identifiables n'est envoyée.",
         "Database": {
           "Description": "Ici, vous pouvez configurer la base de données que FileFlows utilisera.\nRemarque : Tout changement ici nécessitera un redémarrage de FileFlows afin qu'il puisse migrer vos données et, si nécessaire, créer la nouvelle base de données.",
           "DontBackupOnUpgrade": "Ne pas sauvegarder lors de la mise à niveau",
@@ -1188,11 +1219,11 @@
           "TestSuccess": "Connexion à la base de données réussie"
         },
         "DisableTelemetryConfirm": {
-          "Message": "Êtes-vous sûr de vouloir désactiver la télémétrie ?\n\nSoyez assuré qu'aucune information personnelle n'est enregistrée. Les données envoyées incluent des informations sur les éléments de flux utilisés, les plugins utilisés, ainsi que le nombre total de fichiers échoués et traités.\n\nCes informations nous aident à comprendre les préférences des utilisateurs et éclairent nos décisions concernant la dépréciation des éléments de flux inutilisés.",
+          "Message": "Êtes-vous sûr de vouloir désactiver la télémétrie ?\n\nSoyez assuré qu'aucune information personnelle n'est enregistrée. Les données envoyées incluent des informations sur les éléments de flow utilisés, les plugins utilisés, ainsi que le nombre total de fichiers échoués et traités.\n\nCes informations nous aident à comprendre les préférences des utilisateurs et éclairent nos décisions concernant la dépréciation des éléments de flow inutilisés.",
           "Title": "Désactiver la télémétrie"
         },
         "Restart": {
-          "Message": "Êtes-vous sûr de vouloir redémarrer FileFlows ?\n\nVos paramètres seront automatiquement enregistrés d'abord.\n\nRemarque : Assurez-vous qu'aucun flux n'est en cours d'exécution.",
+          "Message": "Êtes-vous sûr de vouloir redémarrer FileFlows ?\n\nVos paramètres seront automatiquement enregistrés d'abord.\n\nRemarque : Assurez-vous qu'aucun flow n'est en cours d'exécution.",
           "Title": "Redémarrer FileFlows"
         },
         "Update": {
@@ -1299,6 +1330,80 @@
         "VideoContainers": "Conteneur Vidéo",
         "VideoResolution": "Résolution Vidéo"
       }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Un plugin qui vous permet d'envoyer des messages à un serveur Apprise.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Une collection d'éléments de flux liés à l'audio pour aider à traiter les fichiers audio.",
+      "Label": "Audio"
+    },
+    "BasicNodes": {
+      "Description": "Éléments de flux basiques pour FileFlows. Ce plugin contient des éléments de flux basiques et communs pour traiter les fichiers.\nCe plugin est requis pour que FileFlows fonctionne.",
+      "Label": "Basique"
+    },
+    "ChecksumNodes": {
+      "Description": "Éléments de flux permettant d'exécuter une somme de contrôle sur un fichier.",
+      "Label": "Somme de contrôle"
+    },
+    "ComicNodes": {
+      "Description": "Éléments de flux pour traiter des bandes dessinées (cbr, cbz, pdf, etc.)",
+      "Label": "BD"
+    },
+    "DiscordNodes": {
+      "Description": "Un plugin qui vous permet d'envoyer des messages à un serveur Discord.\n\nL'ID du Webhook et le token peuvent être obtenus à partir de l'URL du webhook\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Ce plugin vous permet d'envoyer un e-mail lors de l'exécution d'un flux.",
+      "Label": "E-mail"
+    },
+    "Emby": {
+      "Description": "Un plugin qui vous permet de communiquer avec Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Un plugin qui vous permet d'envoyer des messages à un serveur Gotify.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Éléments de flux pour traiter les fichiers image. Ce plugin contient des nœuds pour convertir et manipuler des images.",
+      "Label": "Image"
+    },
+    "MetaNodes": {
+      "Description": "Un plugin qui contient des éléments de flux d'informations méta utilisés pour rechercher des informations méta sur les fichiers.\n\nContient des éléments de flux pour rechercher des informations sur les films à partir de TheMovieDB et des informations musicales à partir des balises ID3 dans le fichier.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Un plugin qui vous permet de télécharger des fichiers vers Nextcloud.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Un plugin qui vous permet de communiquer avec Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Un plugin qui vous permet d'envoyer des messages à un serveur Pushbullet.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Un plugin qui vous permet d'envoyer des messages à un serveur Pushover.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Un plugin qui vous permet d'envoyer des messages Telegram.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin pour le traitement des fichiers vidéo, y compris, mais sans s'y limiter, la conversion de fichiers vidéo, la détection de fichiers vidéo, l'upscaling, le downscaling et la transcodage.",
+      "Label": "Vidéo"
+    },
+    "Web": {
+      "Description": "Plugin qui fournit des éléments de flux liés au Web.",
+      "Label": "Web"
     }
   },
   "Templates": {

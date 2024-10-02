@@ -519,6 +519,7 @@
       "Title": "仪表板",
       "Labels": {
         "AddWidget": "添加小部件",
+        "CurrentlyPaused": "FileFlows 当前已暂停！",
         "FinalSize": "最终大小",
         "OriginalSize": "原始大小",
         "Savings": "节省",
@@ -663,6 +664,36 @@
           "PageDescription": "选择一个模板作为流程的基础，这将帮助你开始创建流程。",
           "Template": "模板"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "我已阅读并同意最终用户许可协议的条款",
+        "Language": "语言"
+      },
+      "Messages": {
+        "Welcome": "欢迎使用FileFlows！感谢您选择我们的软件。\n\n本向导将引导您完成必要的设置步骤，包括接受最终用户许可协议(EULA)和选择插件，以根据您的偏好添加功能。\n\n选择各种适用于处理不同类型文件的插件，例如视频、音频和图像。",
+        "WelcomeUpdate": "我们最近更新了最终用户许可协议(EULA)。\n\n请花点时间查看并接受更新后的条款，然后再继续。\n\n您必须接受此协议才能继续使用FileFlows。\n\n感谢您选择FileFlows。",
+        "Finish": {
+          "Bottom": "通过这些步骤，您已经走在了充分利用FileFlows的路上。\n\n如果您有任何问题或需要帮助，请随时联系我们的支持团队。",
+          "CreateALibrary": "创建一个库:",
+          "CreateALibraryDescription": "建立一个库以自动化文件处理。\n您的库将根据您指定的条件自动检测和处理文件，\n简化您的工作流程，无需手动干预。",
+          "CreateFirstFlow": "创建您的第一个流程:",
+          "CreateFirstFlowDescription": "利用您选择的插件来创建第一个流程。\n无论是处理视频文件、音频轨道、图像或其他类型的文件，\n您的流程都可以根据您的具体需求调整文件的处理，无论它们是简单还是复杂。",
+          "Top": "您已成功配置FileFlows以满足您的需求。现在是时候让它发挥作用了！"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "选择要安装的DockerMods",
+        "Eula": "EULA",
+        "EulaDescription": "FileFlows的最终用户许可协议",
+        "Finish": "完成",
+        "FinishDescription": "初始配置完成",
+        "Plugins": "插件",
+        "PluginsDescription": "选择要安装的插件",
+        "Welcome": "欢迎",
+        "WelcomeDescription": "欢迎使用FileFlows"
       }
     },
     "Libraries": {
@@ -1299,6 +1330,80 @@
         "VideoContainers": "视频容器",
         "VideoResolution": "视频分辨率"
       }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "允许您向Apprise服务器发送消息的插件。",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "一组与音频相关的流程元素，帮助处理音频文件。",
+      "Label": "音频"
+    },
+    "BasicNodes": {
+      "Description": "FileFlows的基础流程元素。此插件包含用于处理文件的基础和常用流程元素。\nFileFlows的正常工作需要此插件。",
+      "Label": "基础"
+    },
+    "ChecksumNodes": {
+      "Description": "提供针对文件运行校验和的流程元素。",
+      "Label": "校验和"
+    },
+    "ComicNodes": {
+      "Description": "处理漫画书的流程元素（cbr、cbz、pdf 等）",
+      "Label": "漫画"
+    },
+    "DiscordNodes": {
+      "Description": "一个插件，允许您向Discord服务器发送消息。\n\nWebhook ID和令牌可以从Webhook URL中获取\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "此插件允许您在执行流程时发送电子邮件。",
+      "Label": "电子邮件"
+    },
+    "Emby": {
+      "Description": "一个允许您与Emby通信的插件。",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "一个插件，可以向Gotify服务器发送消息。",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "用于处理图像文件的流程元素。此插件包含用于转换和操作图像的节点。",
+      "Label": "图像"
+    },
+    "MetaNodes": {
+      "Description": "一个包含用于查找文件元信息的元数据信息流元素的插件。\n\n包含用于从 TheMovieDB 查找电影信息和从文件内的 ID3 标签查找音乐信息的流元素。",
+      "Label": "元数据"
+    },
+    "Nextcloud": {
+      "Description": "一个允许您将文件上传到Nextcloud的插件。",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "一个允许您与 Plex 通信的插件。",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "一个允许您向Pushbullet服务器发送消息的插件。",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "一个允许你向 Pushover 服务器发送消息的插件。",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "一个允许您发送Telegram消息的插件。",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "用于处理视频文件的插件，包括但不限于视频文件转换、视频文件检测、放大、缩小和转码。",
+      "Label": "视频"
+    },
+    "Web": {
+      "Description": "提供与网页相关的流元素的插件。",
+      "Label": "网页"
     }
   },
   "Templates": {

@@ -1,8 +1,7 @@
-using System.Text.RegularExpressions;
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Common;
+using FileFlows.Client.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 namespace FileFlows.Client.Pages;
 
@@ -11,7 +10,6 @@ namespace FileFlows.Client.Pages;
 /// </summary>
 public partial class InitialConfig : ComponentBase
 {
-    
     /// <summary>
     /// Gets or sets blocker instance
     /// </summary>
@@ -67,28 +65,63 @@ public partial class InitialConfig : ComponentBase
     /// </summary>
     private FlowTable<RepositoryObject> DockerModTable;
     /// <summary>
-    /// Label for "Installed" shown next to installed plugins
-    /// </summary>
-    private string lblInstalled;
-    /// <summary>
     /// If this component is fully loaded or not.
     /// Is false until the plugins have been loaded which may take a second or two
     /// </summary>
     private bool loaded;
+    /// <summary>
+    /// The language options
+    /// </summary>
+    private List<IconListOption> LanguageOptions = new ();
+
+    /// <summary>
+    /// The reference to the wizard
+    /// </summary>
+    private FlowWizard? Wizard;
 
     /// <summary>
     /// If only the EULA needs accepting
     /// </summary>
     private bool onlyEula;
 
+    private string _SelectedLanguage;
+
+    /// <summary>
+    /// Gets or sets the selected language
+    /// </summary>
+    private object SelectedLanguage
+    {
+        get => _SelectedLanguage;
+        set
+        {
+            if ((string)value != _SelectedLanguage)
+            {
+                _SelectedLanguage = (string)value;
+                _ = UpdateLabels(_SelectedLanguage);
+            }
+        }
+    }
+
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
+        Logger.Instance.ILog("InitialConfig: OnInitializedAsync");
         Blocker.Show("Labels.Loading");
         Profile = await ProfileService.Get();
         #if(DEBUG)
         Profile.ServerOS = OperatingSystemType.Docker;
         #endif
+        _SelectedLanguage = Profile.Language?.EmptyAsNull() ?? "en";
+        
+        LanguageOptions = Profile.LanguageOptions?.Select(x =>
+            new IconListOption()
+            {
+                Label = x.Label,
+                Value = x.Value,
+                IconUrl = $"/icons/flags/{x.Value}.svg"
+            }
+        ).ToList();
+        await UpdateLabels();
         if (Profile.IsAdmin == false)
         {
             await ProfileService.Logout("Labels.AdminRequired");
@@ -103,7 +136,6 @@ public partial class InitialConfig : ComponentBase
         }
         var html = Markdig.Markdown.ToHtml(EULA).Trim();
         msEula = new MarkupString(html);
-        lblInstalled = Translater.Instant("Labels.Installed");
 
         // only show plugins if they haven't configured the system yet
         onlyEula = (Profile.ConfigurationStatus & ConfigurationStatus.InitialConfig) ==
@@ -175,7 +207,8 @@ public partial class InitialConfig : ComponentBase
             {
                 EulaAccepted,
                 Plugins = plugins,
-                DockerMods = dockerMods
+                DockerMods = dockerMods,
+                Language = SelectedLanguage as string ?? "en" 
             });
             if (result.Success)
             {
@@ -215,5 +248,44 @@ public partial class InitialConfig : ComponentBase
             PluginTable.SetSelected(AvailablePlugins.Where(x => x.Name is "Basic" or "Audio" or "Video" or "Image" or "Web").ToArray());
             DockerModTable.SetSelected(AvailableDockerMods.Where(x => x.Default == true).ToArray());
         }
+    }
+    
+    // labels used for translations
+    private string lblWelcomeMessage, lblWelcomeMessageUpdate, lblWelcome, lblWelcomeDescription, lblFieldLanguage, lblEula,
+        lblEulaDescription, lblEulaAccept, lblPlugins, lblPluginsDescription, lblDockerMods, lblDockerModsDescription, lblFinish,
+        lblFinishDescription, lblFinishTop, lblFinishCreateFirstFlow, lblFinishCreateFirstFlowDescription, lblFinishCreateALibrary,
+        lblFinishCreateALibraryDescription, lblFinishBottom, lblInstalled;
+    
+    /// <summary>
+    /// Updates the labels
+    /// </summary>
+    /// <param name="language">Optional new language to load</param>
+    private async Task UpdateLabels(string? language = null)
+    {
+        if(language != null)
+            await App.Instance.LoadLanguage(language);
+        lblWelcomeMessage = Translater.Instant("Pages.InitialConfig.Messages.Welcome");
+        lblWelcomeMessageUpdate = Translater.Instant("Pages.InitialConfig.Messages.WelcomeUpdate"); 
+        lblWelcome = Translater.Instant("Pages.InitialConfig.Tabs.Welcome");
+        lblWelcomeDescription = Translater.Instant("Pages.InitialConfig.Tabs.WelcomeDescription");
+        lblFieldLanguage = Translater.Instant("Pages.InitialConfig.Fields.Language");
+        lblEula = Translater.Instant("Pages.InitialConfig.Tabs.Eula");
+        lblEulaDescription = Translater.Instant("Pages.InitialConfig.Tabs.EulaDescription");
+        lblEulaAccept = Translater.Instant("Pages.InitialConfig.Fields.EulaAccept");
+        lblPlugins = Translater.Instant("Pages.InitialConfig.Tabs.Plugins");
+        lblPluginsDescription = Translater.Instant("Pages.InitialConfig.Tabs.PluginsDescription");
+        lblDockerMods = Translater.Instant("Pages.InitialConfig.Tabs.DockerMods");
+        lblDockerModsDescription = Translater.Instant("Pages.InitialConfig.Tabs.DockerModsDescription");
+        lblFinish = Translater.Instant("Pages.InitialConfig.Tabs.Finish");
+        lblFinishDescription = Translater.Instant("Pages.InitialConfig.Tabs.FinishDescription");
+        lblFinishTop = Translater.Instant("Pages.InitialConfig.Messages.Finish.Top");
+        lblFinishCreateFirstFlow = Translater.Instant("Pages.InitialConfig.Messages.Finish.CreateFirstFlow");
+        lblFinishCreateFirstFlowDescription= Translater.Instant("Pages.InitialConfig.Messages.Finish.CreateFirstFlowDescription");
+        lblFinishCreateALibrary = Translater.Instant("Pages.InitialConfig.Messages.Finish.CreateALibrary");
+        lblFinishCreateALibraryDescription= Translater.Instant("Pages.InitialConfig.Messages.Finish.CreateALibraryDescription");
+        lblFinishBottom =Translater.Instant("Pages.InitialConfig.Messages.Finish.Bottom");
+        lblInstalled = Translater.Instant("Labels.Installed");
+        StateHasChanged();
+        Wizard?.TriggerStateHasChanged();
     }
 }

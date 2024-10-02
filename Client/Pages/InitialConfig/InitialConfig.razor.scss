@@ -55,3 +55,14 @@ ol {
     padding-right:1rem;
   }
 }
+::deep {
+  .row {
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 2rem;
+    position: relative;
+    .input-label {
+      display: none;
+    }
+  }  
+}

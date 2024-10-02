@@ -47,8 +47,7 @@ public class AuthorizeController : Controller
 
         if (Translater.InitDone == false)
         {
-            var settings = await ServiceLoader.Load<ISettingsService>().Get();
-            TranslaterHelper.InitTranslater(settings.Language?.EmptyAsNull() ?? "en");
+            await ServiceLoader.Load<LanguageService>().Initialize();
         }
 
         ViewBag.Message = Translater.TranslateIfNeeded(message);

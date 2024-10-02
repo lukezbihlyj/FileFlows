@@ -177,6 +177,15 @@ public partial class Settings : InputRegister
         lblFileServerDescription = Translater.Instant("Pages.Settings.Fields.FileServer.Description");
         mdSecurityDescription = RenderMarkdown("Pages.Settings.Fields.Security.Description");
         
+        LanguageOptions = Profile.LanguageOptions?.Select(x =>
+            new IconListOption()
+            {
+                Label = x.Label,
+                Value = x.Value,
+                IconUrl = $"/icons/flags/{x.Value}.svg"
+            }
+        ).ToList();
+        
         InitSecurityModes();
         Blocker.Show("Loading Settings");
         try
@@ -269,14 +278,6 @@ public partial class Settings : InputRegister
         if (response.Success)
         {
             this.Model = response.Data;
-            LanguageOptions = response.Data.LanguageOptions?.Select(x =>
-                new IconListOption()
-                {
-                    Label = x.Label,
-                    Value = x.Value,
-                    IconUrl = $"/icons/flags/{x.Value}.svg"
-                }
-            ).ToList();
             LicenseFlagsString = LicenseFlagsToString(Model.LicenseFlags);
             this.OriginalServer = this.Model?.DbServer;
             this.OriginalDatabase = this.Model?.DbName;

@@ -22,6 +22,7 @@ public static class ServiceLoader
             .AddSingleton<StartupService>()
             .AddSingleton<DatabaseService>()
             .AddSingleton<ISettingsService, SettingsService>()
+            .AddSingleton<LanguageService>()
             //.AddSingleton<DatabaseLogService>()
             .AddSingleton<StatisticService>()
             .AddSingleton<DashboardService>()

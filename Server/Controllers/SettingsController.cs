@@ -98,7 +98,6 @@ public class SettingsController : BaseController
         if(uiModel.DbType != DatabaseType.Sqlite)
             uiModel.DontBackupOnUpgrade = Settings.DontBackupOnUpgrade;
 
-        uiModel.LanguageOptions = GetLanguageOptions();
         uiModel.Language = settings.Language?.EmptyAsNull() ?? "en";
 
         uiModel.Security = ServiceLoader.Load<AppSettingsService>().Settings.Security;
@@ -113,39 +112,6 @@ public class SettingsController : BaseController
         return uiModel;
     }
 
-    /// <summary>
-    /// Get the language options
-    /// </summary>
-    /// <returns>the language options</returns>
-    private List<ListOption> GetLanguageOptions()
-    {
-        var options = new List<ListOption>();
-        var langPath = Path.Combine(DirectoryHelper.BaseDirectory, "Server", "wwwroot", "i18n");
-        #if(DEBUG)
-        var dllDir =
-            System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        dllDir = dllDir[..(dllDir.IndexOf("Server", StringComparison.Ordinal))];
-        langPath = Path.Combine(dllDir, "Client", "wwwroot", "i18n");
-        #endif        
-        if (Directory.Exists(langPath) == false)
-            return options;
-        foreach (var file in new DirectoryInfo(langPath).GetFiles("*.json"))
-        {
-            if(file.Name.Contains("Plugins", StringComparison.InvariantCultureIgnoreCase))
-                continue;
-            var parts = file.Name.Split('.');
-            if (parts.Length != 2)
-                continue;
-            var langName = LanguageHelper.GetNativeName(parts[0]);
-            options.Add(new ListOption
-            {
-                Value = parts[0],
-                Label = langName
-            });
-        }
-
-        return options.OrderBy(x => x.Label == "English" ? 0 : 1).ThenBy(x => x.Label.ToLowerInvariant()).ToList();
-    }
 
     /// <summary>
     /// Get the system settings
@@ -249,8 +215,6 @@ public class SettingsController : BaseController
         
         Settings.Security = model.Security;
         
-        TranslaterHelper.InitTranslater(model.Language?.EmptyAsNull() ?? "en");
-        
         var newConnectionString = GetConnectionString(model, model.DbType);
         if (IsConnectionSame(Settings.DatabaseConnection, newConnectionString) == false)
         {
@@ -269,9 +233,13 @@ public class SettingsController : BaseController
         Settings.DontBackupOnUpgrade = model.DbType != DatabaseType.Sqlite && model.DbType != DatabaseType.SqliteNewConnection && model.DontBackupOnUpgrade;
         // save AppSettings with updated license and db migration if set
         SettingsService.Save();
-        
-        if(langChanged)
+
+        if (langChanged)
+        {
             PluginScanner.Scan();
+            await ServiceLoader.Load<LanguageService>().Initialize();
+
+        }
     }
     
     /// <summary>
@@ -479,6 +447,7 @@ public class SettingsController : BaseController
         var settings = await service.Get();
         settings.EulaAccepted = model.EulaAccepted;
         settings.InitialConfigDone = true;
+        settings.Language = model.Language?.EmptyAsNull() ?? "en";
         await service.Save(settings, await GetAuditDetails());
 
         if (model.DockerMods?.Any() == true)
@@ -513,5 +482,9 @@ public class SettingsController : BaseController
         /// Gets or sets the DockerMods to install
         /// </summary>
         public List<RepositoryObject> DockerMods { get; set; }
+        /// <summary>
+        /// Gets or sets the language
+        /// </summary>
+        public string Language { get; set; }
     }
 }

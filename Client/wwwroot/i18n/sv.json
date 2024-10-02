@@ -519,6 +519,7 @@
       "Title": "Instrumentpanel",
       "Labels": {
         "AddWidget": "Lägg till widget",
+        "CurrentlyPaused": "FileFlows är för närvarande pausat!",
         "FinalSize": "Slutlig storlek",
         "OriginalSize": "Originalstorlek",
         "Savings": "Besparingar",
@@ -663,6 +664,36 @@
           "PageDescription": "Välj en mall att basera flödet på, detta kommer att hjälpa dig att komma igång med ett flöde.",
           "Template": "Mall"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Jag har läst och godkänner villkoren i slutanvändarlicensavtalet",
+        "Language": "Språk"
+      },
+      "Messages": {
+        "Welcome": "Välkommen till FileFlows! Tack för att du valde vår programvara.\n\nDenna guide leder dig genom de nödvändiga inställningsstegen, inklusive att acceptera EULA och välja plugins för att lägga till funktionalitet baserat på dina preferenser.\n\nVälj bland en mängd olika plugins anpassade för att bearbeta olika typer av filer, såsom video, ljud och bilder.",
+        "WelcomeUpdate": "Vi har nyligen uppdaterat vårt slutanvändarlicensavtal (EULA).\n\nTa en stund för att granska och godkänna de uppdaterade villkoren innan du fortsätter.\n\nDitt godkännande krävs för att fortsätta använda FileFlows.\n\nTack för att du valde FileFlows.",
+        "Finish": {
+          "Bottom": "Med dessa steg är du på god väg att maximera potentialen med FileFlows.\n\nOm du har några frågor eller behöver hjälp, tveka inte att kontakta vårt supportteam.",
+          "CreateALibrary": "Skapa ett Bibliotek:",
+          "CreateALibraryDescription": "Skapa ett bibliotek för att automatisera filbehandling.\nDitt bibliotek kommer automatiskt att upptäcka och behandla filer baserat på dina angivna kriterier,\nvilket förenklar ditt arbetsflöde utan behov av manuell inblandning.",
+          "CreateFirstFlow": "Skapa ditt Första Flöde:",
+          "CreateFirstFlowDescription": "Använd de plugins du har valt för att skapa ditt första flöde.\nOavsett om det handlar om att bearbeta videofiler, ljudspår, bilder eller någon annan typ av fil, ger ditt flöde\nmöjlighet att anpassa filhanteringen efter dina specifika behov, oavsett om de är enkla\neller komplexa.",
+          "Top": "Du har framgångsrikt konfigurerat FileFlows efter dina behov. Nu är det dags att sätta det i arbete!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Välj vilka DockerMods som ska installeras",
+        "Eula": "EULA",
+        "EulaDescription": "Slutanvändarlicensavtal för FileFlows",
+        "Finish": "Avsluta",
+        "FinishDescription": "Initial konfiguration klar",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Välj vilka plugins som ska installeras",
+        "Welcome": "Välkommen",
+        "WelcomeDescription": "Välkommen till FileFlows"
       }
     },
     "Libraries": {

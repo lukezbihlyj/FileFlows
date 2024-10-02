@@ -21,7 +21,7 @@ public partial class Dashboard : ComponentBase, IDisposable
     [Inject] private IPausedService PausedService { get; set; }
     
 
-    private string lblAddWidget;
+    private string lblAddWidget, lblCurrentlyPaused;
     private bool IsPaused;
     
     private List<ListOption> Dashboards;
@@ -61,6 +61,7 @@ public partial class Dashboard : ComponentBase, IDisposable
         ClientService.SystemPausedUpdated += ClientServiceOnSystemPausedUpdated;
         PausedService.OnPausedLabelChanged += PausedServiceOnOnPausedLabelChanged;
         IsPaused = PausedService.IsPaused;
+        lblCurrentlyPaused = Translater.Instant("Pages.Dashboard.Labels.CurrentlyPaused");
 
         await LoadDashboards();
     }

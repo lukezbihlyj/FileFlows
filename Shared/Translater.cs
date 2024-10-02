@@ -55,27 +55,11 @@ public class Translater
     /// <summary>
     /// Initializes the translator
     /// </summary>
-    /// <param name="jsonFiles">a list of translation json files</param>
-    public static void Init(params string[] jsonFiles)
+    /// <param name="json">the language JSON</param>
+    public static void Init(string json)
     {
-        Formatter = new MessageFormatter();
-
-        foreach (var json in jsonFiles)
-        {
-            try
-            {
-                var dict = DeserializeAndFlatten(json);
-                foreach (var key in dict.Keys)
-                {
-                    if (Language.ContainsKey(key))
-                        Language[key] = dict[key];
-                    else
-                        Language.Add(key, dict[key]);
-                }
-            }
-            catch (Exception) { }
-        }
-
+        Formatter ??= new MessageFormatter();
+        Language = DeserializeAndFlatten(json);
         Logger.Instance.DLog("Language keys found: " + Language.Keys.Count);
     }
     

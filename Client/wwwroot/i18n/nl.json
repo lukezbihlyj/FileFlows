@@ -519,6 +519,7 @@
       "Title": "Dashboard",
       "Labels": {
         "AddWidget": "Widget Toevoegen",
+        "CurrentlyPaused": "FileFlows is momenteel gepauzeerd!",
         "FinalSize": "Eindgrootte",
         "OriginalSize": "Oorspronkelijke Grootte",
         "Savings": "Besparingen",
@@ -663,6 +664,36 @@
           "PageDescription": "Selecteer een sjabloon om de stroom op te baseren, dit helpt je om te beginnen met een stroom.",
           "Template": "Sjabloon"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Ik heb de voorwaarden van de Eindgebruikerslicentieovereenkomst gelezen en ga akkoord",
+        "Language": "Taal"
+      },
+      "Messages": {
+        "Welcome": "Welkom bij FileFlows! Bedankt dat je voor onze software hebt gekozen.\n\nDeze wizard begeleidt je door de essentiële configuratiestappen, inclusief het accepteren van de EULA en het selecteren van plug-ins om functies toe te voegen op basis van je voorkeuren.\n\nKies uit een verscheidenheid aan plug-ins die zijn afgestemd op het verwerken van verschillende soorten bestanden, zoals video's, audio en afbeeldingen.",
+        "WelcomeUpdate": "We hebben onlangs onze Eindgebruikerslicentieovereenkomst (EULA) bijgewerkt.\n\nNeem even de tijd om de bijgewerkte voorwaarden door te lezen en te accepteren voordat je verdergaat.\n\nJe moet akkoord gaan om verder te kunnen met het gebruik van FileFlows.\n\nBedankt dat je voor FileFlows hebt gekozen.",
+        "Finish": {
+          "Bottom": "Met deze stappen ben je goed op weg om het maximale uit FileFlows te halen.\n\nAls je vragen hebt of hulp nodig hebt, aarzel dan niet om contact op te nemen met ons ondersteuningsteam.",
+          "CreateALibrary": "Maak een Bibliotheek:",
+          "CreateALibraryDescription": "Stel een bibliotheek in om de verwerking van bestanden te automatiseren.\nJe bibliotheek detecteert en verwerkt automatisch bestanden op basis van jouw specifieke criteria,\nwaardoor je workflow wordt vereenvoudigd zonder handmatige interventie.",
+          "CreateFirstFlow": "Maak je Eerste Flow:",
+          "CreateFirstFlowDescription": "Gebruik de geselecteerde plug-ins om je eerste flow te maken.\nOf het nu gaat om het verwerken van videobestanden, audiotracks, afbeeldingen of een ander type bestand, jouw flow\ngeeft je de mogelijkheid om de verwerking van je bestanden aan te passen aan je specifieke behoeften, of deze nu eenvoudig\nof complex zijn.",
+          "Top": "Je hebt FileFlows succesvol geconfigureerd naar jouw wensen. Tijd om het aan het werk te zetten!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Kies welke DockerMods je wilt installeren",
+        "Eula": "EULA",
+        "EulaDescription": "Eindgebruikerslicentieovereenkomst van FileFlows",
+        "Finish": "Voltooien",
+        "FinishDescription": "Initiële Configuratie Voltooid",
+        "Plugins": "Plug-ins",
+        "PluginsDescription": "Kies welke plug-ins je wilt installeren",
+        "Welcome": "Welkom",
+        "WelcomeDescription": "Welkom bij FileFlows"
       }
     },
     "Libraries": {
@@ -1299,6 +1330,80 @@
         "VideoContainers": "Video Container",
         "VideoResolution": "Videoresolutie"
       }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Een plugin waarmee je berichten kunt verzenden naar een Apprise-server.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Een verzameling van audio-gerelateerde stroomelementen om te helpen bij het verwerken van audiobestanden.",
+      "Label": "Audio"
+    },
+    "BasicNodes": {
+      "Description": "Basisstroomelementen voor FileFlows. Deze plugin bevat basis- en algemene stroomelementen voor het verwerken van bestanden.\nDeze plugin is vereist om FileFlows te laten werken.",
+      "Label": "Basis"
+    },
+    "ChecksumNodes": {
+      "Description": "Stroomelementen die de mogelijkheid bieden om een controlegetal op een bestand uit te voeren.",
+      "Label": "Controlegetal"
+    },
+    "ComicNodes": {
+      "Description": "Stroomelementen voor het verwerken van stripboeken (cbr, cbz, pdf, enz.)",
+      "Label": "Strip"
+    },
+    "DiscordNodes": {
+      "Description": "Een plugin die je in staat stelt om berichten naar een Discord-server te sturen.\n\nDe Webhook-ID en token kunnen worden verkregen via de webhook-URL\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Deze plugin stelt je in staat om een e-mail te verzenden tijdens het uitvoeren van een flow.",
+      "Label": "E-mail"
+    },
+    "Emby": {
+      "Description": "Een plugin die je in staat stelt te communiceren met Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Een plugin waarmee je berichten naar een Gotify-server kunt sturen.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Stroomelementen voor het verwerken van afbeeldingsbestanden. Deze plugin bevat knooppunten om afbeeldingen te converteren en te manipuleren.",
+      "Label": "Afbeelding"
+    },
+    "MetaNodes": {
+      "Description": "Een plugin die meta-informatie flow-elementen bevat die worden gebruikt om meta-informatie over bestanden op te zoeken.\n\nBevat flow-elementen om filmgegevens van TheMovieDB en muziekinformatie van ID3-tags in het bestand op te zoeken.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Een plugin waarmee je bestanden naar Nextcloud kunt uploaden.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Een plugin die je in staat stelt te communiceren met Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Een plugin die je in staat stelt om berichten naar een Pushbullet-server te verzenden.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Een plugin die je in staat stelt berichten naar een Pushover-server te verzenden.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Een plugin die je in staat stelt om Telegram-berichten te verzenden.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin voor het verwerken van videobestanden, inclusief maar niet beperkt tot videobestandconversie, videobestandsdetectie, opschaling, afschaling en transcodering.",
+      "Label": "Video"
+    },
+    "Web": {
+      "Description": "Plugin die webgerelateerde stromen biedt.",
+      "Label": "Web"
     }
   },
   "Templates": {

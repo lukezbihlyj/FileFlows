@@ -29,7 +29,8 @@
             <div class="settings">
                 <FlowTabs>
                     <FlowTab Title="@lblGeneral">
-                        <InputDropDown CustomXID="Language" @bind-Value="@Language" Options=@LanguageOptions Label="Pages.Settings.Fields.Language" AllowClear="false" />
+                        <InputDropDown CustomXID="Language" @bind-Value="@Language" Options=@LanguageOptions 
+                                       Label="Pages.Settings.Fields.Language" AllowClear="false" />
                         
                         <InputNumber @bind-Value="@Model.DelayBetweenNextFile" Label="Pages.Settings.Fields.DelayBetweenNextFile" Min=0 Max=60000/>
                         @{

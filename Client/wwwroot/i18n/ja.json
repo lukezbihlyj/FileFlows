@@ -519,6 +519,7 @@
       "Title": "ダッシュボード",
       "Labels": {
         "AddWidget": "ウィジェットを追加",
+        "CurrentlyPaused": "FileFlowsは現在一時停止中です！",
         "FinalSize": "最終サイズ",
         "OriginalSize": "元のサイズ",
         "Savings": "節約",
@@ -663,6 +664,36 @@
           "PageDescription": "フローのベースとなるテンプレートを選択します。これにより、フローの作成を開始できます。",
           "Template": "テンプレート"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "エンドユーザーライセンス契約の条件を読み、同意しました",
+        "Language": "言語"
+      },
+      "Messages": {
+        "Welcome": "FileFlowsへようこそ！当社のソフトウェアをお選びいただき、ありがとうございます。\n\nこのウィザードでは、EULAの承認やプラグインの選択など、基本的なセットアップ手順を案内します。\n\nビデオ、オーディオ、画像など、さまざまなファイルを処理するために特化したプラグインを選択してください。",
+        "WelcomeUpdate": "最近、エンドユーザーライセンス契約（EULA）を更新しました。\n\n続行する前に、更新された条件を確認し、同意してください。\n\nFileFlowsの使用を継続するには、同意が必要です。\n\nFileFlowsをお選びいただき、ありがとうございます。",
+        "Finish": {
+          "Bottom": "これらのステップで、FileFlowsの最大限のパワーを活用するための準備が整いました。\n\nご質問やサポートが必要な場合は、サポートチームまでお気軽にお問い合わせください。",
+          "CreateALibrary": "ライブラリを作成:",
+          "CreateALibraryDescription": "ファイル処理を自動化するためのライブラリを作成します。\nライブラリは、指定した基準に基づいて自動的にファイルを検出し、処理します。\nこれにより、手動の介入が不要になり、ワークフローが簡素化されます。",
+          "CreateFirstFlow": "最初のフローを作成:",
+          "CreateFirstFlowDescription": "選択したプラグインを使用して、最初のフローを作成します。\nビデオファイル、オーディオトラック、画像、またはその他のタイプのファイルを処理する場合でも、フローは\n単純でも複雑でも、特定のニーズに応じてファイルの処理をカスタマイズすることができます。",
+          "Top": "FileFlowsをあなたのニーズに合わせて正常に設定しました。さあ、実行してみましょう！"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "インストールするDockerModsを選択",
+        "Eula": "EULA",
+        "EulaDescription": "FileFlowsのエンドユーザーライセンス契約",
+        "Finish": "完了",
+        "FinishDescription": "初期設定が完了しました",
+        "Plugins": "プラグイン",
+        "PluginsDescription": "インストールするプラグインを選択",
+        "Welcome": "ようこそ",
+        "WelcomeDescription": "FileFlowsへようこそ"
       }
     },
     "Libraries": {
@@ -1299,6 +1330,80 @@
         "VideoContainers": "ビデオコンテナ",
         "VideoResolution": "ビデオ解像度"
       }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Appriseサーバーにメッセージを送信できるプラグインです。",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "オーディオファイルを処理するためのオーディオ関連のフロー要素のコレクション。",
+      "Label": "オーディオ"
+    },
+    "BasicNodes": {
+      "Description": "FileFlowsの基本フロー要素。このプラグインには、ファイル処理のための基本的で共通のフロー要素が含まれています。\nFileFlowsが機能するには、このプラグインが必要です。",
+      "Label": "基本"
+    },
+    "ChecksumNodes": {
+      "Description": "ファイルに対してチェックサムを実行する機能を提供するフロー要素。",
+      "Label": "チェックサム"
+    },
+    "ComicNodes": {
+      "Description": "コミックブックを処理するためのフロー要素（cbr、cbz、pdfなど）",
+      "Label": "コミック"
+    },
+    "DiscordNodes": {
+      "Description": "Discordサーバーにメッセージを送信できるプラグインです。",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "このプラグインを使用すると、フローを実行している間にメールを送信できます。",
+      "Label": "メール"
+    },
+    "Emby": {
+      "Description": "Embyと通信するためのプラグインです。",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Gotifyサーバーにメッセージを送信するためのプラグイン。",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "画像ファイルを処理するためのフロー要素。このプラグインには、画像を変換および操作するためのノードが含まれています。",
+      "Label": "画像"
+    },
+    "MetaNodes": {
+      "Description": "ファイルのメタ情報を検索するために使用されるメタ情報フロー要素を含むプラグインです。",
+      "Label": "メタ"
+    },
+    "Nextcloud": {
+      "Description": "Nextcloudにファイルをアップロードするためのプラグインです。",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Plexと通信するためのプラグイン。",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Pushbulletサーバーにメッセージを送信するためのプラグインです。",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Pushoverサーバーにメッセージを送信するためのプラグインです。",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Telegramメッセージを送信するためのプラグインです。",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "ビデオファイルの処理のためのプラグインで、ビデオファイルの変換、ビデオファイルの検出、アップスケーリング、ダウンスケーリング、トランスコーディングなどを含みます。",
+      "Label": "ビデオ"
+    },
+    "Web": {
+      "Description": "Web関連のフロー要素を提供するプラグイン。",
+      "Label": "Web"
     }
   },
   "Templates": {

@@ -519,6 +519,7 @@
       "Title": "Dashboard",
       "Labels": {
         "AddWidget": "Widget einfügen",
+        "CurrentlyPaused": "FileFlows ist derzeit pausiert!",
         "FinalSize": "Finale Größe",
         "OriginalSize": "Originale Größe",
         "Savings": "Gespart",
@@ -663,6 +664,36 @@
           "PageDescription": "Wählen Sie eine Vorlage aus, auf der der Flow basieren soll.",
           "Template": "Template"
         }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Ich habe die Bedingungen des Endbenutzer-Lizenzvertrags gelesen und akzeptiere sie",
+        "Language": "Sprache"
+      },
+      "Messages": {
+        "Welcome": "Willkommen bei FileFlows! Vielen Dank, dass Sie sich für unsere Software entschieden haben.\n\nDieser Assistent führt Sie durch die wesentlichen Schritte der Einrichtung, einschließlich der Annahme der EULA und der Auswahl von Plugins, um die Funktionalität nach Ihren Vorlieben zu erweitern.\n\nWählen Sie aus einer Vielzahl von Plugins, die auf die Verarbeitung verschiedener Dateitypen wie Video, Audio und Bilder zugeschnitten sind.",
+        "WelcomeUpdate": "Wir haben kürzlich unseren Endbenutzer-Lizenzvertrag (EULA) aktualisiert.\n\nBitte nehmen Sie sich einen Moment Zeit, um die aktualisierten Bedingungen zu überprüfen und zu akzeptieren, bevor Sie fortfahren.\n\nIhre Zustimmung ist erforderlich, um FileFlows weiterhin zu nutzen.\n\nVielen Dank, dass Sie sich für FileFlows entschieden haben.",
+        "Finish": {
+          "Bottom": "Mit diesen Schritten sind Sie auf dem besten Weg, die Leistungsfähigkeit von FileFlows voll auszuschöpfen.\n\nWenn Sie Fragen haben oder Unterstützung benötigen, zögern Sie nicht, sich an unser Support-Team zu wenden.",
+          "CreateALibrary": "Erstellen Sie eine Bibliothek:",
+          "CreateALibraryDescription": "Erstellen Sie eine Bibliothek, um die Dateiverarbeitung zu automatisieren.\nIhre Bibliothek erkennt und verarbeitet Dateien automatisch auf der Grundlage Ihrer angegebenen Kriterien,\nwodurch Ihr Arbeitsablauf vereinfacht wird, ohne dass eine manuelle Eingabe erforderlich ist.",
+          "CreateFirstFlow": "Erstellen Sie Ihren ersten Flow:",
+          "CreateFirstFlowDescription": "Nutzen Sie die von Ihnen ausgewählten Plugins, um Ihren ersten Flow zu erstellen.\nEgal, ob Sie Videodateien, Audiospuren, Bilder oder andere Dateitypen verarbeiten, Ihr Flow\nermöglicht es Ihnen, die Verarbeitung Ihrer Dateien an Ihre spezifischen Bedürfnisse anzupassen, sei es einfach\noder komplex.",
+          "Top": "Sie haben FileFlows erfolgreich konfiguriert, um Ihren Anforderungen zu entsprechen. Jetzt ist es an der Zeit, es zu nutzen!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Wählen Sie aus, welche DockerMods installiert werden sollen",
+        "Eula": "EULA",
+        "EulaDescription": "Endbenutzer-Lizenzvereinbarung von FileFlows",
+        "Finish": "Abschließen",
+        "FinishDescription": "Erstkonfiguration abgeschlossen",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Wählen Sie aus, welche Plugins installiert werden sollen",
+        "Welcome": "Willkommen",
+        "WelcomeDescription": "Willkommen bei FileFlows"
       }
     },
     "Libraries": {
@@ -1299,6 +1330,80 @@
         "VideoContainers": "Video-Container",
         "VideoResolution": "Video-Auflösung"
       }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, Nachrichten an einen Apprise-Server zu senden.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Eine Sammlung von audiobezogenen Flusselementen, die bei der Verarbeitung von Audiodateien helfen.",
+      "Label": "Audio"
+    },
+    "BasicNodes": {
+      "Description": "Grundlegende Flusselemente für FileFlows. Dieses Plugin enthält grundlegende und allgemeine Flusselemente zur Verarbeitung von Dateien.\nDieses Plugin ist erforderlich, damit FileFlows funktioniert.",
+      "Label": "Basic"
+    },
+    "ChecksumNodes": {
+      "Description": "Flusselemente, die die Möglichkeit bieten, eine Prüfsumme für eine Datei auszuführen.",
+      "Label": "Checksumme"
+    },
+    "ComicNodes": {
+      "Description": "Flusselemente zur Verarbeitung von Comics (cbr, cbz, pdf usw.)",
+      "Label": "Comic"
+    },
+    "DiscordNodes": {
+      "Description": "Mit diesem Plugin können Sie Nachrichten an Discord senden.\n\nDie Webhook Id und der  Token kann aus der URL entnommen werden.\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Dieses Plugin ermöglicht es Ihnen, während der Ausführung eines Flows eine E-Mail zu senden.",
+      "Label": "E-Mail"
+    },
+    "Emby": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, mit Emby zu kommunizieren.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, Nachrichten an einen Gotify-Server zu senden.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Flusselemente zur Verarbeitung von Bilddateien. Dieses Plugin enthält Knoten zum Konvertieren und Manipulieren von Bildern.",
+      "Label": "Bild"
+    },
+    "MetaNodes": {
+      "Description": "Ein Plugin, das Meta-Informationen und Flusselemente enthält, die zur Abfrage von Metainformationen zu Dateien verwendet werden.\n\nEnthält Flusselemente, um Filminformationen von TheMovieDB und Musikinformationen aus ID3-Tags in der Datei abzufragen.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, Dateien zu Nextcloud hochzuladen.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, mit Plex zu kommunizieren.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, Nachrichten an einen Pushbullet-Server zu senden.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, Nachrichten an einen Pushover-Server zu senden.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Ein Plugin, das es Ihnen ermöglicht, Telegram-Nachrichten zu senden.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin zur Verarbeitung von Videodateien, einschließlich, aber nicht beschränkt auf die Konvertierung von Videodateien, Erkennung von Videodateien, Hochskalierung, Herunterskalierung und Transcodierung.",
+      "Label": "Video"
+    },
+    "Web": {
+      "Description": "Plugin, das webbezogene Flusselemente bereitstellt.",
+      "Label": "Web"
     }
   },
   "Templates": {
