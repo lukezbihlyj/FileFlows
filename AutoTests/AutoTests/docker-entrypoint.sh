@@ -38,11 +38,6 @@ wait_for_server
 /dotnet/dotnet test /app/AutoTests/FileFlows.AutoTests.dll \
   --filter FullyQualifiedName=FileFlowsTests.Tests.InitialTests \
   --logger "trx;LogFileName=/app/tests-results/InitialTests.trx"
-  
-echo "--------------------------------------------------------------------------------------------------------------------------"
-echo "Initial Test Results:"
-cat /app/tests-results/InitialTests.trx
-echo "--------------------------------------------------------------------------------------------------------------------------"
 
 # Check if InitialTests passed
 if [ $? -eq 0 ]; then
@@ -58,6 +53,12 @@ if [ $? -eq 0 ]; then
     fi
 else
     echo "InitialTests failed. Not running other tests."
+      
+    echo "--------------------------------------------------------------------------------------------------------------------------"
+    echo "Initial Test Results:"
+    cat /app/tests-results/InitialTests.trx
+    echo ""
+    echo "--------------------------------------------------------------------------------------------------------------------------"
 fi
 
 # Stop the server after tests are completed
