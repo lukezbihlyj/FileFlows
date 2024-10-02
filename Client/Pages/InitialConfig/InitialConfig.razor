@@ -1,6 +1,7 @@
 @namespace FileFlows.Client.Pages
 
 @page "/initial-config"
+@using Humanizer
 
 @layout EmptyLayout
 
@@ -49,11 +50,15 @@ else
                                     @Globals.lblName
                                 </Header>
                                 <Cell Context="item">
+                                    @{
+                                        string label = Translater.TranslateIfHasTranslation($"Plugins.{item.Package}.Label", item.Name);
+                                        string description = Translater.TranslateIfHasTranslation($"Plugins.{item.Package}.Description", item.Description); 
+                                    }
                                     <div class="table-item">
                                         <TableItemIcon Icon="@item.Icon" DefaultIcon="fas fa-puzzle-piece"/>
                                         <div class="center">
-                                            <span class="name"><span>@Translater.Instant($"Plugins.{item.Package}.Label")</span></span>
-                                            <span class="description"><span>@Translater.Instant($"Plugins.{item.Package}.Description")</span></span>
+                                            <span class="name"><span>@label</span></span>
+                                            <span class="description"><span>@description</span></span>
                                         </div>
                                         @if (item.Installed)
                                         {
@@ -85,11 +90,15 @@ else
                                     @Globals.lblName
                                 </Header>
                                 <Cell Context="item">
+                                    @{
+                                        string label = Translater.TranslateIfHasTranslation($"DockerMods.{item.Name.Dehumanize()}.Label", item.Name);
+                                        string description = Translater.TranslateIfHasTranslation($"DockerMods.{item.Name.Dehumanize()}.Description", item.Description);
+                                    }
                                     <div class="table-item">
                                         <TableItemIcon Icon="@item.Icon" DefaultIcon="fab fa-docker"/>
                                         <div class="center">
-                                            <span class="name"><span>@item.Name</span></span>
-                                            <span class="description"><span>@item.Description</span></span>
+                                            <span class="name"><span>@label</span></span>
+                                            <span class="description"><span>@description</span></span>
                                         </div>
                                     </div>
 
