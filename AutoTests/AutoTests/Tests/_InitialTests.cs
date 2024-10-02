@@ -216,11 +216,11 @@ public class InitialTests : TestBase
                  new [] {
                      ("Español", "Configuraciones", "General"),
                      ("Deutsch", "Einstellungen", "Allgemein"),
-                     // ("Português", "Configurações", "Geral"),
-                     // ("Français", "Paramètres", "Général"),
-                     // ("Italiano", "Impostazioni", "Generale"),
-                     // ("Nederlands", "Instellingen", "Algemeen"),
-                     // ("Svenska", "Inställningar", "Allmän"),
+                     ("Português", "Configurações", "Geral"),
+                     ("Français", "Paramètres", "Général"),
+                     ("Italiano", "Impostazioni", "Generale"),
+                     ("Nederlands", "Instellingen", "Algemeen"),
+                     ("Svenska", "Inställningar", "Allmän"),
                      ("Русский", "Настройки", "Общие"),
                  })
         {
