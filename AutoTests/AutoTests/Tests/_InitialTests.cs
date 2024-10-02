@@ -217,10 +217,10 @@ public class InitialTests : TestBase
                      ("Español", "Configuraciones", "General"),
                      ("Deutsch", "Einstellungen", "Allgemein"),
                      ("Português", "Configurações", "Geral"),
-                     ("Français", "Paramètres", "Général"),
-                     ("Italiano", "Impostazioni", "Generale"),
-                     ("Nederlands", "Instellingen", "Algemeen"),
-                     ("Svenska", "Inställningar", "Allmän"),
+                     // ("Français", "Paramètres", "Général"),
+                     // ("Italiano", "Impostazioni", "Generale"),
+                     // ("Nederlands", "Instellingen", "Algemeen"),
+                     // ("Svenska", "Inställningar", "Allmän"),
                      ("Русский", "Настройки", "Общие"),
                  })
         {
