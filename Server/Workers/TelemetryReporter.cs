@@ -34,6 +34,7 @@ public class TelemetryReporter : ServerWorker
             TelemetryData data = new TelemetryData();
             data.ClientUid = settings.Uid;
             data.Version = Globals.Version;
+            data.Language = settings.Language?.EmptyAsNull() ?? "en";
             data.DatabaseProvider = ServiceLoader.Load<AppSettingsService>().Settings.DatabaseType.ToString();
             var pNodes = ServiceLoader.Load<NodeService>().GetAllAsync().Result.Where(x => x.Enabled).ToList();
             data.ProcessingNodes = pNodes.Count();
@@ -163,6 +164,11 @@ public class TelemetryReporter : ServerWorker
         /// Gets or sets the architecture of the client's operating system.
         /// </summary>
         public string Architecture { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the language being used by the system
+        /// </summary>
+        public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the number of processing nodes in the client.
