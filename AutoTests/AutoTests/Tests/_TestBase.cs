@@ -62,6 +62,12 @@ public abstract class TestBase : PlaywrightTest
     /// <param name="prefix">a prefix on the name</param>
     /// <returns>the random name</returns>
     protected string RandomName(string prefix) => prefix + " " + rand.Next(1, 100_000);
+
+    /// <summary>
+    /// Called at the start of the test setup
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool SetupStart() => true;
     
     /// <summary>
     /// Sets up the tests
@@ -70,6 +76,9 @@ public abstract class TestBase : PlaywrightTest
     public async Task Setup()
     {
         Logger.Writer = TestContext.WriteLine;
+        if (SetupStart() == false)
+            Assert.Fail("Test Setup Failed");
+        
         TempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
         var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
         Logger.ILog("FF Base URL: " + ffBaseUrl);
@@ -135,13 +144,22 @@ public abstract class TestBase : PlaywrightTest
         if(string.IsNullOrWhiteSpace(PageName) == false)
             await FileFlows.GotoPage(PageName);
     }
-    
+
+    /// <summary>
+    /// Called when the test ends
+    /// </summary>
+    /// <param name="result">the result of the test</param>
+    protected virtual void TestEnded(ResultState result)
+    {
+    }
+
     /// <summary>
     /// Tears down the tests/cleans it up
     /// </summary>
     [TearDown]
     public async Task TearDown()
     {
+        TestEnded(TestContext.CurrentContext.Result.Outcome);
         bool passed = TestContext.CurrentContext.Result.Outcome == ResultState.Success ||
                       TestContext.CurrentContext.Result.Outcome == ResultState.NotRunnable;
         bool failed = !passed;

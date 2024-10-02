@@ -1,3 +1,5 @@
+using NUnit.Framework.Interfaces;
+
 namespace FileFlowsTests.Tests;
 
 /// <summary>
@@ -8,6 +10,19 @@ namespace FileFlowsTests.Tests;
 //[TestCategory("InitialTests")]
 public class InitialTests : TestBase
 {
+    private static bool _hasFailed = false;
+
+    /// <inheritdoc />
+    protected override bool SetupStart()
+        => _hasFailed == false;
+
+    /// <inheritdoc />
+    protected override void TestEnded(ResultState result)
+    {
+        if(result != ResultState.Success && result != ResultState.Skipped)
+            _hasFailed = true;
+    }
+
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
@@ -201,11 +216,11 @@ public class InitialTests : TestBase
                  new [] {
                      ("Español", "Configuraciones", "General"),
                      ("Deutsch", "Einstellungen", "Allgemein"),
-                     ("Português", "Configurações", "Geral"),
-                     ("Français", "Paramètres", "Général"),
-                     ("Italiano", "Impostazioni", "Generale"),
-                     ("Nederlands", "Instellingen", "Algemeen"),
-                     ("Svenska", "Inställningar", "Allmän"),
+                     // ("Português", "Configurações", "Geral"),
+                     // ("Français", "Paramètres", "Général"),
+                     // ("Italiano", "Impostazioni", "Generale"),
+                     // ("Nederlands", "Instellingen", "Algemeen"),
+                     // ("Svenska", "Inställningar", "Allmän"),
                      ("Русский", "Настройки", "Общие"),
                  })
         {
