@@ -79,17 +79,19 @@ public class TelemetryReporter : ServerWorker
             {
                 if (fp == null)
                     continue;
-                if (fp.FlowElementUid.StartsWith("SubFlow:"))
+                var flowElementUid = fp.FlowElementUid;
+                if (flowElementUid.StartsWith("SubFlow:"))
                     continue;
-                if (fp.FlowElementUid.StartsWith("Script:"))
+                if (flowElementUid.StartsWith("Script:"))
                 {
-                    string uid = fp.FlowElementUid[7..];
+                    string uid = flowElementUid[7..];
                     if (Guid.TryParse(uid, out var guid) == false || repoScripts.TryGetValue(guid, out var rs) == false)
                         continue;
-                    fp.FlowElementUid = "Script:" + rs.Name; // so we get the name of the script in telemetry
+                    // we use a variable here so we dont update the actual cached flow object
+                    flowElementUid = "Script:" + rs.Name; // so we get the name of the script in telemetry
                 }
-                if (!dictNodes.TryAdd(fp.FlowElementUid, 1))
-                    dictNodes[fp.FlowElementUid] += 1;
+                if (!dictNodes.TryAdd(flowElementUid, 1))
+                    dictNodes[flowElementUid] += 1;
             }
 
             data.Nodes = dictNodes.Select(x => new TelemetryDataSet
