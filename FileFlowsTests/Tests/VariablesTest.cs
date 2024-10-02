@@ -488,19 +488,28 @@ public class VariablesTest
     {
         var variables = new Dictionary<string, object>
         {
-            { "pathVariable", "C:/Users/John/Files:Test" }
+            { "pathVariable", "C:/Users/John/Files:Test" },
+            { "null", null}
         };
 
-        // Case 10: No special characters cleaned with space handling
         string input = "Path{missing}";
         string expected = "Path";
         string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: true);
         Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
         
-        // Case 10: No special characters cleaned with space handling
         string input2 = "Path{missing}";
         string expected2 = "Pathmissing";
-        string result2 = VariablesHelper.ReplaceVariables(input, variables, stripMissing: false);
+        string result2 = VariablesHelper.ReplaceVariables(input2, variables, stripMissing: false);
         Assert.AreEqual(expected2, result2, $"Expected '{expected2}', but got '{result2}'.");
+        
+        string input3 = "Path{null}";
+        string expected3 = "Path";
+        string result3 = VariablesHelper.ReplaceVariables(input3, variables, stripMissing: true);
+        Assert.AreEqual(expected3, result3, $"Expected '{expected3}', but got '{result3}'.");
+        
+        string input4 = "Path{null}";
+        string expected4 = "Pathnull";
+        string result4 = VariablesHelper.ReplaceVariables(input4, variables, stripMissing: false);
+        Assert.AreEqual(expected4, result4, $"Expected '{expected4}', but got '{result4}'.");
     }
 }
