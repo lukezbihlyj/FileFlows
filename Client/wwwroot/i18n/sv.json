@@ -1397,15 +1397,7 @@
   "Plugins": {
     "Apprise": {
       "Description": "En plugin som låter dig skicka meddelanden till en Apprise-server.",
-      "Label": "Apprise",
-      "Fields": {
-        "Endpoint": "Endpoint",
-        "Endpoint-Help": "Endpoint på Apprise-servern, till exempel notify/apprise",
-        "Endpoint-Placeholder": "notify/apprise",
-        "ServerUrl": "Server",
-        "ServerUrl-Help": "URL till Apprise-servern",
-        "ServerUrl-Placeholder": "http://apprise.lan"
-      }
+      "Label": "Apprise"
     },
     "AudioNodes": {
       "Description": "En samling av ljudrelaterade flödeselement för att hjälpa till att bearbeta ljudfiler.",
@@ -1425,53 +1417,19 @@
     },
     "DiscordNodes": {
       "Description": "Ett plugin som gör att du kan skicka meddelanden till en Discord-server.\n\nWebhook-ID och token kan erhållas från webhook-URL\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
-      "Label": "Discord",
-      "Fields": {
-        "WebhookId": "Webhook-ID",
-        "WebhookToken": "Webhook-token"
-      }
+      "Label": "Discord"
     },
     "EmailNodes": {
       "Description": "Denna plugin gör att du kan skicka ett e-postmeddelande medan ett flöde körs.",
-      "Label": "E-post",
-      "Fields": {
-        "Sender": "Avsändare",
-        "Sender-Help": "E-postadressen som e-postmeddelandena skickas från",
-        "SmtpPassword": "SMTP-lösenord",
-        "SmtpPassword-Help": "Lösenordet som används för att autentisera mot SMTP-servern",
-        "SmtpPort": "SMTP-port",
-        "SmtpPort-Help": "Porten för SMTP-servern som används för att skicka e-post, standard 25",
-        "SmtpServer": "SMTP-server",
-        "SmtpServer-Help": "Adressen till SMTP-servern som används för att skicka e-post",
-        "SmtpUsername": "SMTP-användarnamn",
-        "SmtpUsername-Help": "Användarnamnet som används för att autentisera mot SMTP-servern"
-      }
+      "Label": "E-post"
     },
     "Emby": {
       "Description": "En plugin som låter dig kommunicera med Emby.",
-      "Label": "Emby",
-      "Fields": {
-        "AccessToken": "Åtkomsttoken",
-        "AccessToken-Help": "Ett Emby API-åtkomsttoken",
-        "Mapping": "Mapping",
-        "Mapping-Help": "En lista över mappingsersättningar som används för vägar i FileFlows med de vägar som används i Emby.",
-        "MappingKey": "FileFlows",
-        "MappingValue": "Emby",
-        "ServerUrl": "Server",
-        "ServerUrl-Help": "URL:en till Emby-servern",
-        "ServerUrl-Placeholder": "http://localhost:8096/"
-      }
+      "Label": "Emby"
     },
     "Gotify": {
       "Description": "Ett plugin som låter dig skicka meddelanden till en Gotify-server.",
-      "Label": "Gotify",
-      "Fields": {
-        "AccessToken": "Åtkomsttoken",
-        "AccessToken-Help": "Åtkomsttoken som används för att kommunicera med Gotify-servern.",
-        "ServerUrl": "Server",
-        "ServerUrl-Help": "URL-adressen till Gotify-servern",
-        "ServerUrl-Placeholder": "http://gotify.lan"
-      }
+      "Label": "Gotify"
     },
     "ImageNodes": {
       "Description": "Flödeselement för att bearbeta bildfiler. Denna plugin innehåller noder för att konvertera och manipulera bilder.",
@@ -1483,60 +1441,23 @@
     },
     "Nextcloud": {
       "Description": "Ett plugin som låter dig ladda upp filer till Nextcloud.",
-      "Label": "Nextcloud",
-      "Fields": {
-        "Password": "Lösenord",
-        "Password-Help": "Det applikationsspecifika lösenordet som du skapade för FileFlows för denna Nextcloud-användare.",
-        "Url": "URL",
-        "Url-Help": "URL-adressen till Nextcloud-servern",
-        "Username": "Användarnamn",
-        "Username-Help": "Användarnamnet för den användare som ska laddas upp."
-      }
+      "Label": "Nextcloud"
     },
     "Plex": {
       "Description": "Ett plugin som gör att du kan kommunicera med Plex.",
-      "Label": "Plex",
-      "Fields": {
-        "AccessToken": "Åtkomsttoken",
-        "AccessToken-Help": "Den [åtkomsttoken](https://github.com/revenz/Fenrus/wiki/Plex-Token) som används för att kommunicera med Plex-servern.",
-        "Mapping": "Kartläggning",
-        "Mapping-Help": "En lista över ersättningar för kartläggning som används för vägar i FileFlows med de vägar som används i Plex.",
-        "MappingKey": "FileFlows",
-        "MappingValue": "Plex",
-        "ServerUrl": "Server",
-        "ServerUrl-Help": "URL:en till Plex-servern",
-        "ServerUrl-Placeholder": "http://localhost:32400/"
-      }
+      "Label": "Plex"
     },
     "Pushbullet": {
       "Description": "Ett plugin som gör att du kan skicka meddelanden till en Pushbullet-server.",
-      "Label": "Pushbullet",
-      "Fields": {
-        "ApiToken": "API-token",
-        "ApiToken-Help": "API-token för appen som används för att skicka aviseringar.",
-        "UserKey": "Användarnyckel",
-        "UserKey-Help": "Din personliga användarnyckel för att ta emot aviseringar."
-      }
+      "Label": "Pushbullet"
     },
     "Pushover": {
       "Description": "En plugin som gör att du kan skicka meddelanden till en Pushover-server.",
-      "Label": "Pushover",
-      "Fields": {
-        "ApiToken": "API-token",
-        "ApiToken-Help": "API-token för appen som används för att skicka notifieringar.",
-        "UserKey": "Användarnyckel",
-        "UserKey-Help": "Din personliga användarnyckel för att ta emot notifieringar."
-      }
+      "Label": "Pushover"
     },
     "Telegram": {
       "Description": "Ett plugin som gör att du kan skicka Telegram-meddelanden.",
       "Label": "Telegram",
-      "Fields": {
-        "BotToken": "Bot-token",
-        "BotToken-Help": "Din Telegram-bot-token.",
-        "ChatId": "Chat-ID",
-        "ChatId-Help": "ID för chatten där meddelanden ska skickas."
-      }
     },
     "VideoNodes": {
       "Description": "Plugin för bearbetning av videofiler, inklusive men inte begränsat till videofilkonvertering, videofilavkänning, uppskalning, nedskalning och transkodning.",
