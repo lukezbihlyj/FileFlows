@@ -238,7 +238,7 @@ public class InitialTests : TestBase
         ClassicAssert.AreEqual("Входной файл", text);
         
         // English Last to Rest it
-        await FileFlows.GotoPage("Settings");
+        await FileFlows.GotoPage("Settings", contentTitle: "Настройки");
         SetLanguage("English", "Settings", "General");
         
         void SetLanguage(string language, string settingsPage, string generalTab)
