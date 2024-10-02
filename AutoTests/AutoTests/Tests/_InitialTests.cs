@@ -228,7 +228,9 @@ public class InitialTests : TestBase
         }
         
         // russian, test flow elements are in Russian
-        await FileFlows.GotoPage("Flows", contentTitle:"Потоки");
+        await Page.GotoAsync(FileFlowsBaseUrl + "flows");
+        await Task.Delay(250);
+        await FileFlows.WaitForBlockerToDisappear();
         await FileFlows.Table.DoubleClick(Constants.Flow_Basic);
         await FileFlows.WaitForBlockerToDisappear();
         var text = await Page.Locator("div[id='FileFlows.BasicNodes.File.InputFile']").TextContentAsync() ?? string.Empty;

@@ -70,6 +70,11 @@ public abstract class TestBase : PlaywrightTest
     protected virtual bool SetupStart() => true;
     
     /// <summary>
+    /// Gest the base url for the FileFlows
+    /// </summary>
+    protected string FileFlowsBaseUrl { get; private set; }
+    
+    /// <summary>
     /// Sets up the tests
     /// </summary>
     [SetUp]
@@ -80,8 +85,10 @@ public abstract class TestBase : PlaywrightTest
             Assert.Fail("Test Setup Failed");
         
         TempPath = TestContext.Parameters.Get("FF_TEMP_PATH", Environment.GetEnvironmentVariable("FF_TEMP_PATH"))?.EmptyAsNull() ?? Path.GetTempPath();
-        var ffBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
-        Logger.ILog("FF Base URL: " + ffBaseUrl);
+        FileFlowsBaseUrl = TestContext.Parameters.Get("FileFlowsUrl", Environment.GetEnvironmentVariable("FileFlowsUrl"))?.EmptyAsNull()  ?? "http://localhost:5276/";
+        if(FileFlowsBaseUrl.EndsWith('/') == false)
+            FileFlowsBaseUrl += "/";
+        Logger.ILog("FF Base URL: " + FileFlowsBaseUrl);
         Logger.ILog("Temp Path: " + TempPath);
         RecordingsDirectory = Path.Combine(TempPath, "recordings", TestContext.CurrentContext.Test.FullName);
         if (Directory.Exists(RecordingsDirectory) == false)
@@ -139,7 +146,7 @@ public abstract class TestBase : PlaywrightTest
             else
                 Logger.ILog(msg.Text);
         };
-        FileFlows = new FileFlowsHelper(this, ffBaseUrl, Logger);
+        FileFlows = new FileFlowsHelper(this, FileFlowsBaseUrl, Logger);
         await FileFlows.Open();
         if(string.IsNullOrWhiteSpace(PageName) == false)
             await FileFlows.GotoPage(PageName);
