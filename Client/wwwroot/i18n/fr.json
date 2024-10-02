@@ -1165,7 +1165,7 @@
         "KeepFailedFlowTempFiles": "Conserver les fichiers temporaires échoués",
         "KeepFailedFlowTempFiles-Help": "L'activation de cette option conservera les fichiers temporaires utilisés par un flow en cas d'échec, les empêchant d'être automatiquement supprimés.\nÀ utiliser avec précaution.",
         "Language": "Langue",
-        "Language-Help": "La langue qui sera utilisée dans le système.",
+        "Language-Help": "La langue qui sera utilisée dans le système.\nRemarque : Ces traductions sont générées par IA et peuvent contenir des erreurs. Veuillez signaler toute erreur à l'équipe de support.",
         "LogEveryRequest": "Journaliser chaque demande",
         "LogEveryRequest-Help": "Si chaque demande au serveur doit être journalisée.",
         "LogFileRetention": "Conservation des fichiers journaux",

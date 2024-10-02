@@ -1165,7 +1165,7 @@
         "KeepFailedFlowTempFiles": "保留失败的临时文件",
         "KeepFailedFlowTempFiles-Help": "启用此选项将保留流使用的临时文件，以防出现故障，防止它们被自动删除。\n请谨慎使用。",
         "Language": "语言",
-        "Language-Help": "系统将使用的语言。",
+        "Language-Help": "系统中将使用的语言。\n注意：这些翻译由人工智能生成，可能包含错误。请将任何错误报告给支持团队。",
         "LogEveryRequest": "记录每个请求",
         "LogEveryRequest-Help": "是否应该记录对服务器的每个请求。",
         "LogFileRetention": "日志文件保留",

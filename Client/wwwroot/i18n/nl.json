@@ -1165,7 +1165,7 @@
         "KeepFailedFlowTempFiles": "Behoud Mislukte Temp Bestanden",
         "KeepFailedFlowTempFiles-Help": "Door deze optie in te schakelen, worden de tijdelijke bestanden die door een flow worden gebruikt in geval van een mislukking behouden, zodat ze niet automatisch worden verwijderd.\nGebruik met voorzichtigheid.",
         "Language": "Taal",
-        "Language-Help": "De taal die in het systeem zal worden gebruikt.",
+        "Language-Help": "De taal die in het systeem wordt gebruikt.\nOpmerking: Deze vertalingen worden gegenereerd door AI en kunnen fouten bevatten. Gelieve eventuele fouten te melden aan het ondersteuningsteam.",
         "LogEveryRequest": "Log Elke Aanroep",
         "LogEveryRequest-Help": "Of elke aanvraag naar de server moet worden gelogd.",
         "LogFileRetention": "Logbestand Bewaartermijn",

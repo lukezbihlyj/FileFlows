@@ -1165,7 +1165,7 @@
         "KeepFailedFlowTempFiles": "Fehlgeschlagene Temp-Dateien behalten",
         "KeepFailedFlowTempFiles-Help": "Wenn Sie diese Option aktivieren, bleiben die von einem Fluss verwendeten temporären Dateien im Falle eines Fehlers erhalten und werden nicht automatisch gelöscht.",
         "Language": "Sprache",
-        "Language-Help": "Die Sprache, die im System verwendet wird.",
+        "Language-Help": "Die Sprache, die im System verwendet wird.\nHinweis: Diese Übersetzungen werden von einer KI generiert und können Fehler enthalten. Bitte melden Sie Fehler an das Support-Team.",
         "LogEveryRequest": "Jede Anfrage protokollieren",
         "LogEveryRequest-Help": "Wenn jede Anfrage an den Server protokolliert werden soll.",
         "LogFileRetention": "Aufbewahrung von Log-Dateien",
