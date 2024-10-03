@@ -45,7 +45,7 @@ public class Plugins : TestBase
         await FileFlows.Table.ButtonEnabled("Download", sideEditor: true);
         await FileFlows.Table.ButtonClick("View", sideEditor: true);
         await Expect(Page.Locator(".vi-container .title >> text='Pushover'")).ToHaveCountAsync(1);
-        await Expect(Page.Locator(".vi-container .input-value .pre-text:has-text('Lets you send Pushover messages to a server')")).ToHaveCountAsync(1);
+        await Expect(Page.Locator(".vi-container .input-value .pre-text:has-text('A plugin that allows you to send messages to a Pushover server.')")).ToHaveCountAsync(1);
         await FileFlows.Editor.ButtonClick("Close");
         await FileFlows.Table.ButtonClick("Download", sideEditor: true);
         await Expect(Page.Locator(".blocker")).ToHaveCountAsync(0, new() { Timeout = 20_000 });
