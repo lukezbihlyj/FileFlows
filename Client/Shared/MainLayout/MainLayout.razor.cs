@@ -11,6 +11,9 @@ public partial class MainLayout : LayoutComponentBase
     /// </summary>
     public Blocker Blocker { get; set; }
     public Blocker DisconnectedBlocker { get; set; }
+    /// <summary>
+    /// Gets or sets the editor
+    /// </summary>
     public Editor Editor { get; set; }
     [Inject] private ClientService ClientService { get; set; }
     [Inject] private FFLocalStorageService LocalStorage { get; set; }

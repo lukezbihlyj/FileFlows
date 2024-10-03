@@ -221,14 +221,8 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
                     ErrorMessage = ""; // clear the error
 
                 _Value = value;
-                if (Editor == null)
-                {
-                    ValueUpdated();
-                    ValueChanged.InvokeAsync(value);
-                    return;
-                }
                 
-                if (Editor.Loaded != true)
+                if (Editor?.Loaded != true)
                     return;
                 ValueUpdated();
                 ValueChanged.InvokeAsync(value);

@@ -14,6 +14,10 @@ public partial class InitialConfig : ComponentBase
     /// Gets or sets blocker instance
     /// </summary>
     [CascadingParameter] Blocker Blocker { get; set; }
+    /// <summary>
+    /// Gets or sets the editor
+    /// </summary>
+    public Editor Editor { get; set; }
     
     /// <summary>
     /// Gets or sets the navigation manager used
