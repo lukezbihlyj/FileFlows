@@ -43,15 +43,15 @@
         <div class="flow-wizard-navigation-buttons">
             @if (ActivePage != Pages.FirstOrDefault(x => x.Visible))
             {
-                <span class="previous" @onclick="Previous">Previous</span>
+                <span class="previous" @onclick="Previous">@Translater.Instant("Labels.Previous")</span>
             }
             @if (ActivePage != Pages.LastOrDefault(x => x.Visible))
             {
-                <span class="next @(ActivePage?.NextDisabled == true ? "disabled" : "")" @onclick="Next">Next</span>
+                <span class="next @(ActivePage?.NextDisabled == true ? "disabled" : "")" @onclick="Next">@Translater.Instant("Labels.Next")</span>
             }
             else
             {
-                <span class="finish" @onclick="Finish">Finish</span>
+                <span class="finish" @onclick="Finish">@Translater.Instant("Labels.Finish")</span>
             }
         </div>
     </div>
