@@ -628,6 +628,15 @@ public class WatchedLibrary:IDisposable
     {
         try
         {
+            if (Library.TopLevelOnly)
+            {
+                var dir = new DirectoryInfo(e.FullPath);
+                if (dir.Parent.FullName != Library.Path)
+                {
+                    return; // only top level files
+                }
+            }
+            
             if (Library.Folders == false && Directory.Exists(e.FullPath))
             {
                 foreach (var file in Directory.GetFiles(e.FullPath, "*.*", Library.TopLevelOnly? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories))
