@@ -37,7 +37,7 @@ public partial class PluginBrowser : ComponentBase
     /// <summary>
     /// The translated labels
     /// </summary>
-    private string lblTitle, lblClose;
+    private string lblTitle, lblClose, lblVersion, lblFlowElements, lblDescription;
 
     /// <summary>
     /// The open task to complete when closing
@@ -53,6 +53,9 @@ public partial class PluginBrowser : ComponentBase
     {
         lblClose = Translater.Instant("Labels.Close");
         lblTitle = Translater.Instant("Pages.Plugins.Labels.PluginBrowser");
+        lblVersion = Translater.Instant("Labels.Version");
+        lblFlowElements = Translater.Instant("Labels.FlowElements");
+        lblDescription = Translater.Instant("Labels.Description");
     }
 
     /// <summary>
@@ -85,6 +88,15 @@ public partial class PluginBrowser : ComponentBase
                 // close this and show message
                 this.Close();
                 return;
+            }
+
+            foreach (var item in result.Data)
+            {
+                item.Name =
+                    Translater.TranslateIfHasTranslation($"Plugins.{item.Package.Replace(".", "")}.Label", item.Name);
+                item.Description =
+                    Translater.TranslateIfHasTranslation($"Plugins.{item.Package.Replace(".", "")}.Description",
+                        item.Description);
             }
 
             this.Table.SetData(result.Data);

@@ -31,7 +31,7 @@
                             </FlowTableColumn>
                             <FlowTableColumn TItem="PluginPackageInfo" Width="8rem">
                                 <Header>
-                                    Version
+                                    @lblVersion
                                 </Header>
                                 <Cell Context="item">
                                     <span>@item.Version</span>
@@ -39,7 +39,7 @@
                             </FlowTableColumn>
                             <FlowTableColumn TItem="PluginPackageInfo" Width="8rem">
                                 <Header>
-                                    Nodes
+                                    @lblFlowElements
                                 </Header>
                                 <Cell Context="item">
                                     <span>@(item.Elements?.Length ?? 0)</span>
@@ -47,7 +47,7 @@
                             </FlowTableColumn>
                             <FlowTableColumn TItem="PluginPackageInfo" Pre=@true>
                                 <Header>
-                                    Description
+                                    @lblDescription
                                 </Header>
                                 <Cell Context="item">
                                     <span>@item.Description</span>

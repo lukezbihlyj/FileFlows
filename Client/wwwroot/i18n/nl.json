@@ -24,6 +24,7 @@
     "CopyToClipboard": "Kopiëren naar klembord",
     "Decrease": "Afnemen",
     "Default": "Standaard",
+    "Description": "Beschrijving",
     "Delete": "Verwijderen",
     "DeleteItems": "Weet je zeker dat je de geselecteerde {count, plural, one {item} other {items}} wilt verwijderen?",
     "DeleteLibraryFiles": "Weet je zeker dat je de geselecteerde {count, plural, one {file} other {files}} wilt verwijderen?\n\nLet op, dit verwijdert de {count, plural, one {file} other {files}} niet van de schijf, {count, plural, one {het} other {ze}} zullen alleen uit de FileFlows-database worden verwijderd.",

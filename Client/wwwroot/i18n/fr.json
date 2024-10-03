@@ -24,6 +24,7 @@
     "CopyToClipboard": "Copier dans le presse-papiers",
     "Decrease": "Diminuer",
     "Default": "Par défaut",
+    "Description": "Description",
     "Delete": "Supprimer",
     "DeleteItems": "Êtes-vous sûr de vouloir supprimer le {count, plural, one {élément} other {éléments}} sélectionné?",
     "DeleteLibraryFiles": "Êtes-vous sûr de vouloir supprimer le {count, plural, one {fichier} other {fichiers}} sélectionné?\n\nNotez que cela ne supprimera pas les {count, plural, one {fichier} other {fichiers}} du disque, {count, plural, one {il} other {ils}} seront simplement retirés de la base de données FileFlows.",

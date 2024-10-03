@@ -24,6 +24,7 @@
     "CopyToClipboard": "复制到剪贴板",
     "Decrease": "减少",
     "Default": "默认",
+    "Description": "描述",
     "Delete": "删除",
     "DeleteItems": "您确定要删除所选的 {count, plural, one {项目} other {项目}} 吗？",
     "DeleteLibraryFiles": "您确定要删除所选的 {count, plural, one {文件} other {文件}} 吗？\n\n注意，这不会从磁盘中删除 {count, plural, one {文件} other {文件}}，{count, plural, one {它} other {它们}} 只会从文件流数据库中删除。",

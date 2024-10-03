@@ -24,6 +24,7 @@
     "CopyToClipboard": "クリップボードにコピー",
     "Decrease": "減少",
     "Default": "デフォルト",
+    "Description": "説明",
     "Delete": "削除",
     "DeleteItems": "選択した{count, plural, one {アイテム} other {アイテム}}を削除してもよろしいですか？",
     "DeleteLibraryFiles": "選択した{count, plural, one {ファイル} other {ファイル}}を削除してもよろしいですか？\n\nこれは{count, plural, one {ファイル} other {ファイル}}をディスクから削除するのではなく、FileFlowsデータベースから削除されることに注意してください。",

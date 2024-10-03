@@ -24,6 +24,7 @@
     "CopyToClipboard": "In Zwischenablage kopieren",
     "Decrease": "Senken",
     "Default": "Default",
+    "Description": "Beschreibung",
     "Delete": "Löschen",
     "DeleteItems": "Sind Sie sicher, dass Sie die ausgewählten Elemente löschen wollen?",
     "DeleteLibraryFiles": "Sind Sie sicher, dass Sie die ausgewählten Elemente löschen wollen?\n\nBeachten Sie, dass dadurch die Dateien nicht von der Festplatte gelöscht wird, sondern lediglich aus der FileFlows-Datenbank entfernt wird.",

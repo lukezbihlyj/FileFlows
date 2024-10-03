@@ -24,6 +24,7 @@
     "CopyToClipboard": "Copiar para a área de transferência",
     "Decrease": "Diminuir",
     "Default": "Padrão",
+    "Description": "Descrição",
     "Delete": "Excluir",
     "DeleteItems": "Tem certeza de que deseja excluir o(s) item(ns) selecionado(s) {count, plural, one {item} other {itens}}?",
     "DeleteLibraryFiles": "Tem certeza de que deseja remover o(s) arquivo(s) selecionado(s) {count, plural, one {file} other {files}}?\n\nObserve que isso não excluirá o(s) arquivo(s) do disco, {count, plural, one {ele} other {eles}} será(ão) removido(s) apenas do banco de dados do FileFlows.",

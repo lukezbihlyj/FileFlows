@@ -24,6 +24,7 @@
     "CopyToClipboard": "Copiar al portapapeles",
     "Decrease": "Disminuir",
     "Default": "Predeterminado",
+    "Description": "Descripción",
     "Delete": "Eliminar",
     "DeleteItems": "¿Está seguro de que desea eliminar el {count, plural, one {elemento} other {elementos}} seleccionado?",
     "DeleteLibraryFiles": "¿Está seguro de que desea eliminar el {count, plural, one {archivo} other {archivos}} seleccionado?\n\nNota: Esto no eliminará el {count, plural, one {archivo} other {archivos}} del disco, {count, plural, one {se} other {se}} eliminará solo de la base de datos de FileFlows.",

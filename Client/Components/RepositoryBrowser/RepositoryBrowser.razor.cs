@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using FileFlows.Client.Components.Inputs;
 using FileFlows.Plugin;
 using FileFlows.Client.Components.Common;
+using Humanizer;
 
 namespace FileFlows.Client.Components;
 
@@ -108,7 +109,20 @@ public partial class RepositoryBrowser : ComponentBase
             if (Type.StartsWith("Script:"))
             {
                 foreach (var item in result.Data)
+                {
                     item.Icon = ScriptIconHelper.GetIcon(item.Name);
+                }
+            }
+
+            if (Type == "DockerMod")
+            {
+                foreach (var item in result.Data)
+                {
+                    string key = item.Name.Replace(".", "").Replace("-", "").Dehumanize();
+                    item.Name = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Label", item.Name);
+                    item.Description =
+                        Translater.TranslateIfHasTranslation($"DockerMods.{key}.Description", item.Description);
+                }
             }
 
             this.Table.SetData(result.Data);
@@ -201,6 +215,15 @@ public partial class RepositoryBrowser : ComponentBase
                 return;
             fields = result.Data.Fields.Select(x => (IFlowField)x).ToList();
             model = result.Data.Model;
+            if(Type == "DockerMod")
+            {
+                if(model is IDictionary<string, object> dockerModel)
+                {
+                    string key = item.Name.Replace(".", "").Replace("-", "").Dehumanize();
+                    dockerModel["Name"] = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Label", item.Name);
+                    dockerModel["Description"] = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Description", item.Description);
+                }
+            }
         }
         finally
         {

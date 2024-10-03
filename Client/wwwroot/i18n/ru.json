@@ -24,6 +24,7 @@
     "CopyToClipboard": "Копировать в буфер обмена",
     "Decrease": "Уменьшить",
     "Default": "По умолчанию",
+    "Description": "Описание",
     "Delete": "Удалить",
     "DeleteItems": "Вы уверены, что хотите удалить выбранные {count, plural, one {элемент} other {элементы}}?",
     "DeleteLibraryFiles": "Вы уверены, что хотите удалить выбранные {count, plural, one {файл} other {файлы}}?\n\nОбратите внимание, что это не удалит {count, plural, one {файл} other {файлы}} с диска, {count, plural, one {он} other {они}} просто будут удалены из базы данных FileFlows.",

@@ -24,6 +24,7 @@
     "CopyToClipboard": "Kopiera till urklipp",
     "Decrease": "Minska",
     "Default": "Standard",
+    "Description": "Beskrivning",
     "Delete": "Ta bort",
     "DeleteItems": "Är du säker på att du vill ta bort de valda {count, plural, one {objektet} other {objekten}}?",
     "DeleteLibraryFiles": "Är du säker på att du vill ta bort de valda {count, plural, one {filen} other {filerna}}?\n\nObservera att detta inte kommer att ta bort {count, plural, one {filen} other {filerna}} från disken, {count, plural, one {den} other {de}} kommer bara att tas bort från FileFlows-databasen.",
