@@ -60,6 +60,12 @@ class CommandLineOptions
     public bool InstallService { get; set; }
     
     /// <summary>
+    /// Gets or sets if the service is installed as root
+    /// </summary>
+    [CommandLineArg("If the systemd service is root", "", command: "root")]
+    public bool Root { get; set; }
+    
+    /// <summary>
     /// Gets or sets if should uninstall the sysetmd service
     /// </summary>
     [CommandLineArg("Uninstall the systemd service", "", command: "uninstall")]

@@ -22,7 +22,8 @@ public class SystemdService
     /// </summary>
     /// <param name="baseDirectory">the base directory for the FileFiles install, DirectoryHelper.BaseDirectory</param>
     /// <param name="isNode">if installing node or server</param>
-    public static void Install(string baseDirectory, bool isNode)
+    /// <param name="root">if running as root</param>
+    public static void Install(string baseDirectory, bool isNode, bool root = false)
     {
         string bashScript = CreateEntryPoint(baseDirectory, isNode);
         if (SaveServiceFile(baseDirectory, isNode, bashScript) == false)
@@ -38,7 +39,8 @@ public class SystemdService
     /// Uninstall the service
     /// </summary>
     /// <param name="isNode">if uninstalling node or server</param>
-    public static void Uninstall(bool isNode)
+    /// <param name="root">If running as root or not</param>
+    public static void Uninstall(bool isNode, bool root = false)
     {
         string name = isNode ? "fileflows-node" : "fileflows";
         

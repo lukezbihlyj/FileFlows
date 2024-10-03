@@ -22,6 +22,12 @@ public class Systemd : Command
         missingErrorOverride: "'install' or 'uninstall' required.")]
     public string Mode { get; set; }
     
+    /// <summary>
+    /// Gets or sets if the service is installed as root
+    /// </summary>
+    [CommandLineArg("root", "If running as root")]
+    public bool Root { get; set; }
+    
     /// <inheritdoc />
     public override bool Run(ILogger logger)
     {
@@ -34,13 +40,13 @@ public class Systemd : Command
         string mode = (Mode ?? string.Empty).TrimStart('-').ToLowerInvariant();
         if (mode == "install")
         {
-            FileFlows.ServerShared.Helpers.SystemdService.Install(DirectoryHelper.BaseDirectory, isNode: false);
+            FileFlows.ServerShared.Helpers.SystemdService.Install(DirectoryHelper.BaseDirectory, isNode: false, root: Root);
             return true;
         }
 
         if (mode == "uninstall")
         {
-            FileFlows.ServerShared.Helpers.SystemdService.Uninstall(false);
+            FileFlows.ServerShared.Helpers.SystemdService.Uninstall(false, root: Root);
             return true;
         }
         
