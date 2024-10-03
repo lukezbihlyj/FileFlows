@@ -8,6 +8,7 @@ using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
 using Microsoft.AspNetCore.Authorization;
+using NodeService = FileFlows.Server.Services.NodeService;
 using ServiceLoader = FileFlows.Server.Services.ServiceLoader;
 using SettingsService = FileFlows.Server.Services.SettingsService;
 
@@ -448,6 +449,18 @@ public class SettingsController : BaseController
         settings.EulaAccepted = model.EulaAccepted;
         settings.InitialConfigDone = true;
         settings.Language = model.Language?.EmptyAsNull() ?? "en";
+
+        if (model.Runners > 0)
+        {
+            var nodeService = ServiceLoader.Load<NodeService>();
+            var node = await nodeService.GetServerNodeAsync();
+            if (node != null)
+            {
+                node.FlowRunners = model.Runners;
+                await nodeService.Update(node, null);
+            }
+        }
+
         await service.Save(settings, await GetAuditDetails());
 
         if (model.DockerMods?.Any() == true)
@@ -486,5 +499,9 @@ public class SettingsController : BaseController
         /// Gets or sets the language
         /// </summary>
         public string Language { get; set; }
+        /// <summary>
+        /// Gets or sets the flow runners
+        /// </summary>
+        public int Runners { get; set; }
     }
 }

@@ -35,6 +35,7 @@ public class InitialTests : TestBase
         ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.PageEnabled("EULA"), "The EULA page should be enabled");
         ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Plugins"), "The Plugins page should be disabled");
         ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("DockerMods"), "The DockerMods page should be disabled");
+        ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Runners"), "The Runners page should be disabled");
         ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PageEnabled("Finish"), "The Finish page should be disabled");
         ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.PreviousButtonShown(), "The Previous button should not be shown");
         ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.FinishButtonShown(), "The Finish button should not be shown");
@@ -66,12 +67,22 @@ public class InitialTests : TestBase
         ClassicAssert.IsTrue(ffmpeg6!.Checked, "FFmpeg6 DockerMod is not checked by default.");
         await FileFlows.InitialConfiguration.ClearAllItems(); // we dont want this DockerMod installed
         await FileFlows.InitialConfiguration.NextClick();
+        
+        ClassicAssert.AreEqual("Specify the number of runners", await FileFlows.InitialConfiguration.GetPageTitle());
+        await Page.Locator(".flow-numeric input").FillAsync("2");
+        await FileFlows.InitialConfiguration.NextClick();
 
         ClassicAssert.IsFalse(await FileFlows.InitialConfiguration.NextButtonShown(), "Next Button is shown when it should not be present");
         ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.FinishButtonShown(), "Finish Button is not shown.");
 
         await FileFlows.InitialConfiguration.FinishClick();
         await Page.WaitForSelectorAsync(".sidebar .nav-menu-footer .version-info");
+
+        await FileFlows.GotoPage("Nodes");
+        await FileFlows.WaitForBlockerToDisappear();
+        var text = await Page.Locator("div[title='Flow Runners'] span").TextContentAsync() ?? string.Empty;
+        ClassicAssert.AreEqual("2", text.Trim(), $"Flow runners expected to be 2, but was {text}");
+
     }
 
     /// <summary>

@@ -734,6 +734,7 @@
         "Language": "Язык"
       },
       "Messages": {
+        "RunnersTop": "Ange antalet processer (runners) som kan bearbeta filer samtidigt i dina bibliotek.\n\nRunners är arbetarna som bearbetar filer i dina bibliotek. Ju fler runners du har, desto fler filer kan bearbetas samtidigt.\n\nDenna inställning kan justeras när som helst genom att redigera den interna bearbetningsnoden.",
         "Welcome": "Добро пожаловать в FileFlows! Спасибо, что выбрали наше программное обеспечение.\n\nЭтот мастер проведет вас через основные шаги настройки, включая принятие EULA и выбор плагинов для добавления функционала в соответствии с вашими предпочтениями.\n\nВыберите из множества плагинов, адаптированных для обработки различных типов файлов, таких как видео, аудио и изображения.",
         "WelcomeUpdate": "Мы недавно обновили наше Лицензионное соглашение с конечным пользователем (EULA).\n\nПожалуйста, уделите время для ознакомления и принятия обновленных условий перед продолжением.\n\nВаше согласие необходимо для дальнейшего использования FileFlows.\n\nСпасибо, что выбрали FileFlows.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Начальная настройка завершена",
         "Plugins": "Плагины",
         "PluginsDescription": "Выберите, какие плагины установить",
+        "Runners": "Processer",
+        "RunnersDescription": "Ange antalet processer",
         "Welcome": "Добро пожаловать",
         "WelcomeDescription": "Добро пожаловать в FileFlows"
       }

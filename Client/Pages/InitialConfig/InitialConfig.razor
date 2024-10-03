@@ -15,7 +15,9 @@ else
         <FlowWizard @ref="Wizard" FinishDisabled="@(EulaAccepted == false)" OnFinish="@Save">
             <FlowWizardPage Title="@lblWelcome" Description="@lblWelcomeDescription">
 
-                <InputDropDown @bind-Value="SelectedLanguage" Options="LanguageOptions" />
+                <div class="language-dropdown">
+                    <InputDropDown @bind-Value="SelectedLanguage" Options="LanguageOptions" />
+                </div>
                 
                 @if (onlyEula == false)
                 {
@@ -110,6 +112,16 @@ else
                 </FlowWizardPage>
             }
 
+            <FlowWizardPage Title="@lblRunners" Disabled="@(EulaAccepted == false)" Visible="(onlyEula == false)" Description="@lblRunnersDescription">
+
+                <div class="pre-text">
+                    @lblRunnersTop
+                </div>
+                
+                <div class="runners">
+                    <InputNumber TItem="int" @bind-Value="Runners" Label="@lblRunners" Min="1" Max="100" />
+                </div>
+            </FlowWizardPage>
             <FlowWizardPage Title="@lblFinish" Disabled="@(EulaAccepted == false)" Visible="(onlyEula == false)" Description="@lblFinishDescription">
 
                 @lblFinishTop

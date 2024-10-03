@@ -734,6 +734,7 @@
         "Language": "Lingua"
       },
       "Messages": {
+        "RunnersTop": "Specifica il numero di runner che possono elaborare contemporaneamente i file nelle tue librerie.\n\nI runner sono i lavoratori che elaborano i file nelle tue librerie. Più runner hai, più file possono essere elaborati allo stesso tempo.\n\nQuesta impostazione può essere modificata in qualsiasi momento modificando il Nodo di Elaborazione Interna.",
         "Welcome": "Benvenuto in FileFlows! Grazie per aver scelto il nostro software.\n\nQuesto wizard ti guiderà attraverso i passaggi essenziali di configurazione, incluso l'accettazione dell'EULA e la selezione dei plugin per aggiungere funzionalità in base alle tue preferenze.\n\nScegli tra una varietà di plugin progettati per elaborare diversi tipi di file, come video, audio e immagini.",
         "WelcomeUpdate": "Abbiamo recentemente aggiornato il nostro Contratto di Licenza per l'Utente Finale (EULA).\n\nTi preghiamo di prendere un momento per rivedere e accettare i termini aggiornati prima di continuare.\n\nLa tua accettazione è necessaria per proseguire con l'uso di FileFlows.\n\nGrazie per aver scelto FileFlows.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Configurazione Iniziale Completata",
         "Plugins": "Plugin",
         "PluginsDescription": "Scegli quali plugin installare",
+        "Runners": "Runner",
+        "RunnersDescription": "Specifica il numero di runner",
         "Welcome": "Benvenuto",
         "WelcomeDescription": "Benvenuto in FileFlows"
       }

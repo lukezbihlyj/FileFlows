@@ -55,7 +55,7 @@ ol {
     padding-right:1rem;
   }
 }
-::deep {
+.language-dropdown ::deep {
   .row {
     width: 50%;
     margin-left: 25%;
@@ -65,4 +65,11 @@ ol {
       display: none;
     }
   }  
+}
+.runners ::deep {
+  .row {
+    width: calc(100% - 2rem);
+    margin-left: 0rem;
+    margin-top: 4rem;
+  }
 }

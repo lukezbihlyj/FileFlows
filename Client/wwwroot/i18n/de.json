@@ -734,6 +734,7 @@
         "Language": "Sprache"
       },
       "Messages": {
+        "RunnersTop": "Geben Sie die Anzahl der Runners an, die gleichzeitig Dateien in Ihren Bibliotheken verarbeiten können.\n\nRunners sind die Arbeiter, die Dateien in Ihren Bibliotheken verarbeiten. Je mehr Runners Sie haben, desto mehr Dateien können gleichzeitig verarbeitet werden.\n\nDiese Einstellung kann jederzeit durch Bearbeiten des Internen Verarbeitungs-Knotens angepasst werden.",
         "Welcome": "Willkommen bei FileFlows! Vielen Dank, dass Sie sich für unsere Software entschieden haben.\n\nDieser Assistent führt Sie durch die wesentlichen Schritte der Einrichtung, einschließlich der Annahme der EULA und der Auswahl von Plugins, um die Funktionalität nach Ihren Vorlieben zu erweitern.\n\nWählen Sie aus einer Vielzahl von Plugins, die auf die Verarbeitung verschiedener Dateitypen wie Video, Audio und Bilder zugeschnitten sind.",
         "WelcomeUpdate": "Wir haben kürzlich unseren Endbenutzer-Lizenzvertrag (EULA) aktualisiert.\n\nBitte nehmen Sie sich einen Moment Zeit, um die aktualisierten Bedingungen zu überprüfen und zu akzeptieren, bevor Sie fortfahren.\n\nIhre Zustimmung ist erforderlich, um FileFlows weiterhin zu nutzen.\n\nVielen Dank, dass Sie sich für FileFlows entschieden haben.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Erstkonfiguration abgeschlossen",
         "Plugins": "Plugins",
         "PluginsDescription": "Wählen Sie aus, welche Plugins installiert werden sollen",
+        "Runners": "Runners",
+        "RunnersDescription": "Anzahl der Runners festlegen",
         "Welcome": "Willkommen",
         "WelcomeDescription": "Willkommen bei FileFlows"
       }

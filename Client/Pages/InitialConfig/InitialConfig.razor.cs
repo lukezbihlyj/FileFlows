@@ -39,6 +39,11 @@ public partial class InitialConfig : ComponentBase
     /// Gets or sets if the EULA has been accepted
     /// </summary>
     private bool EulaAccepted { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of runners
+    /// </summary>
+    private int Runners { get; set; } = 3;
     
     /// <summary>
     /// Gets or sets a list of available plugins
@@ -208,7 +213,8 @@ public partial class InitialConfig : ComponentBase
                 EulaAccepted,
                 Plugins = plugins,
                 DockerMods = dockerMods,
-                Language = SelectedLanguage as string ?? "en" 
+                Language = SelectedLanguage as string ?? "en",
+                Runners
             });
             if (result.Success)
             {
@@ -251,10 +257,10 @@ public partial class InitialConfig : ComponentBase
     }
     
     // labels used for translations
-    private string lblWelcomeMessage, lblWelcomeMessageUpdate, lblWelcome, lblWelcomeDescription, lblFieldLanguage, lblEula,
+    private string lblWelcomeMessage, lblWelcomeMessageUpdate, lblWelcome, lblWelcomeDescription, lblEula,
         lblEulaDescription, lblEulaAccept, lblPlugins, lblPluginsDescription, lblDockerMods, lblDockerModsDescription, lblFinish,
         lblFinishDescription, lblFinishTop, lblFinishCreateFirstFlow, lblFinishCreateFirstFlowDescription, lblFinishCreateALibrary,
-        lblFinishCreateALibraryDescription, lblFinishBottom, lblInstalled;
+        lblFinishCreateALibraryDescription, lblFinishBottom, lblInstalled, lblRunners, lblRunnersDescription, lblRunnersTop;
     
     /// <summary>
     /// Updates the labels
@@ -268,7 +274,6 @@ public partial class InitialConfig : ComponentBase
         lblWelcomeMessageUpdate = Translater.Instant("Pages.InitialConfig.Messages.WelcomeUpdate"); 
         lblWelcome = Translater.Instant("Pages.InitialConfig.Tabs.Welcome");
         lblWelcomeDescription = Translater.Instant("Pages.InitialConfig.Tabs.WelcomeDescription");
-        lblFieldLanguage = Translater.Instant("Pages.InitialConfig.Fields.Language");
         lblEula = Translater.Instant("Pages.InitialConfig.Tabs.Eula");
         lblEulaDescription = Translater.Instant("Pages.InitialConfig.Tabs.EulaDescription");
         lblEulaAccept = Translater.Instant("Pages.InitialConfig.Fields.EulaAccept");
@@ -285,6 +290,9 @@ public partial class InitialConfig : ComponentBase
         lblFinishCreateALibraryDescription= Translater.Instant("Pages.InitialConfig.Messages.Finish.CreateALibraryDescription");
         lblFinishBottom =Translater.Instant("Pages.InitialConfig.Messages.Finish.Bottom");
         lblInstalled = Translater.Instant("Labels.Installed");
+        lblRunners = Translater.Instant("Pages.InitialConfig.Tabs.Runners");
+        lblRunnersDescription = Translater.Instant("Pages.InitialConfig.Tabs.RunnersDescription");
+        lblRunnersTop = Translater.Instant("Pages.InitialConfig.Messages.RunnersTop");
         StateHasChanged();
         Wizard?.TriggerStateHasChanged();
     }

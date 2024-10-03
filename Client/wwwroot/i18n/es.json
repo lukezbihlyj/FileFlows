@@ -734,6 +734,7 @@
         "Language": "Idioma"
       },
       "Messages": {
+        "RunnersTop": "Especifique el número de procesadores que pueden procesar archivos simultáneamente en sus bibliotecas.\n\nLos procesadores son los trabajadores que procesan archivos en sus bibliotecas. Cuantos más procesadores tenga, más archivos se pueden procesar al mismo tiempo.\n\nEsta configuración se puede ajustar en cualquier momento editando el Nodo de Procesamiento Interno.",
         "Welcome": "¡Bienvenido a FileFlows! Gracias por elegir nuestro software.\n\nEste asistente le guiará a través de los pasos esenciales de configuración, incluida la aceptación del EULA y la selección de complementos para agregar funcionalidad según sus preferencias.\n\nElija entre una variedad de complementos diseñados para procesar diferentes tipos de archivos, como video, audio e imágenes.",
         "WelcomeUpdate": "Recientemente hemos actualizado nuestro Acuerdo de Licencia de Usuario Final (EULA).\n\nTómese un momento para revisar y aceptar los términos actualizados antes de continuar.\n\nSe requiere su aceptación para continuar usando FileFlows.\n\nGracias por elegir FileFlows.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Configuración Inicial Completa",
         "Plugins": "Complementos",
         "PluginsDescription": "Elija qué complementos instalar",
+        "Runners": "Procesadores",
+        "RunnersDescription": "Especifique el número de procesadores",
         "Welcome": "Bienvenido",
         "WelcomeDescription": "Bienvenido a FileFlows"
       }

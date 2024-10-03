@@ -734,6 +734,7 @@
         "Language": "语言"
       },
       "Messages": {
+        "RunnersTop": "指定可以同时处理您库中文件的执行者（runners）数量。\n\n执行者是处理您库中文件的工作者。执行者数量越多，文件可以同时处理的数量越多。\n\n此设置可以随时通过编辑内部处理节点进行调整。",
         "Welcome": "欢迎使用FileFlows！感谢您选择我们的软件。\n\n本向导将引导您完成必要的设置步骤，包括接受最终用户许可协议(EULA)和选择插件，以根据您的偏好添加功能。\n\n选择各种适用于处理不同类型文件的插件，例如视频、音频和图像。",
         "WelcomeUpdate": "我们最近更新了最终用户许可协议(EULA)。\n\n请花点时间查看并接受更新后的条款，然后再继续。\n\n您必须接受此协议才能继续使用FileFlows。\n\n感谢您选择FileFlows。",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "初始配置完成",
         "Plugins": "插件",
         "PluginsDescription": "选择要安装的插件",
+        "Runners": "执行者",
+        "RunnersDescription": "指定执行者数量",
         "Welcome": "欢迎",
         "WelcomeDescription": "欢迎使用FileFlows"
       }

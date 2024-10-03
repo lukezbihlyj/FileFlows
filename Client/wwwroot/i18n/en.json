@@ -734,6 +734,7 @@
         "Language": "Language"
       },
       "Messages": {
+        "RunnersTop": "Specify the number of runners that can simulatneously process files in your libraries.\n\nRunners are the workers that process files in your libraries. The more runners you have, the more files can be processed at the same time.\n\nThis setting can be adjusted at any time by editing the Internal Processing Node.",
         "Welcome": "Welcome to FileFlows! Thank you for choosing our software.\n\nThis wizard will guide you through the essential setup steps, including accepting the EULA and selecting plugins to add functionality based on your preferences.\n\nChoose from a variety of plugins tailored to process different types of files, such as video, audio, and images.",
         "WelcomeUpdate": "We've recently updated our End-User License Agreement (EULA).\n\nPlease take a moment to review and accept the updated terms before you continue.\n\nYour acceptance is required to proceed with using FileFlows.\n\nThank you for choosing FileFlows.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Initial Configuration Complete",
         "Plugins": "Plugins",
         "PluginsDescription": "Choose which plugins to install",
+        "Runners": "Runners",
+        "RunnersDescription": "Specify the number of runners",
         "Welcome": "Welcome",
         "WelcomeDescription": "Welcome to FileFlows"
       }

@@ -734,6 +734,7 @@
         "Language": "Taal"
       },
       "Messages": {
+        "RunnersTop": "Geef het aantal runners op dat tegelijkertijd bestanden in uw bibliotheken kan verwerken.\n\nRunners zijn de werkers die bestanden in uw bibliotheken verwerken. Hoe meer runners u hebt, hoe meer bestanden er tegelijkertijd kunnen worden verwerkt.\n\nDeze instelling kan op elk moment worden aangepast door de Interne Verwerkingsknooppunt te bewerken.",
         "Welcome": "Welkom bij FileFlows! Bedankt dat je voor onze software hebt gekozen.\n\nDeze wizard begeleidt je door de essentiële configuratiestappen, inclusief het accepteren van de EULA en het selecteren van plug-ins om functies toe te voegen op basis van je voorkeuren.\n\nKies uit een verscheidenheid aan plug-ins die zijn afgestemd op het verwerken van verschillende soorten bestanden, zoals video's, audio en afbeeldingen.",
         "WelcomeUpdate": "We hebben onlangs onze Eindgebruikerslicentieovereenkomst (EULA) bijgewerkt.\n\nNeem even de tijd om de bijgewerkte voorwaarden door te lezen en te accepteren voordat je verdergaat.\n\nJe moet akkoord gaan om verder te kunnen met het gebruik van FileFlows.\n\nBedankt dat je voor FileFlows hebt gekozen.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Initiële Configuratie Voltooid",
         "Plugins": "Plug-ins",
         "PluginsDescription": "Kies welke plug-ins je wilt installeren",
+        "Runners": "Runners",
+        "RunnersDescription": "Geef het aantal runners op",
         "Welcome": "Welkom",
         "WelcomeDescription": "Welkom bij FileFlows"
       }

@@ -734,6 +734,7 @@
         "Language": "Språk"
       },
       "Messages": {
+        "RunnersTop": "Ange antalet processer (runners) som kan bearbeta filer samtidigt i dina bibliotek.\n\nRunners är arbetarna som bearbetar filer i dina bibliotek. Ju fler runners du har, desto fler filer kan bearbetas samtidigt.\n\nDenna inställning kan justeras när som helst genom att redigera den interna bearbetningsnoden.",
         "Welcome": "Välkommen till FileFlows! Tack för att du valde vår programvara.\n\nDenna guide leder dig genom de nödvändiga inställningsstegen, inklusive att acceptera EULA och välja plugins för att lägga till funktionalitet baserat på dina preferenser.\n\nVälj bland en mängd olika plugins anpassade för att bearbeta olika typer av filer, såsom video, ljud och bilder.",
         "WelcomeUpdate": "Vi har nyligen uppdaterat vårt slutanvändarlicensavtal (EULA).\n\nTa en stund för att granska och godkänna de uppdaterade villkoren innan du fortsätter.\n\nDitt godkännande krävs för att fortsätta använda FileFlows.\n\nTack för att du valde FileFlows.",
         "Finish": {
@@ -754,6 +755,8 @@
         "FinishDescription": "Initial konfiguration klar",
         "Plugins": "Plugins",
         "PluginsDescription": "Välj vilka plugins som ska installeras",
+        "Runners": "Processer",
+        "RunnersDescription": "Ange antalet processer",
         "Welcome": "Välkommen",
         "WelcomeDescription": "Välkommen till FileFlows"
       }
@@ -1457,7 +1460,7 @@
     },
     "Telegram": {
       "Description": "Ett plugin som gör att du kan skicka Telegram-meddelanden.",
-      "Label": "Telegram",
+      "Label": "Telegram"
     },
     "VideoNodes": {
       "Description": "Plugin för bearbetning av videofiler, inklusive men inte begränsat till videofilkonvertering, videofilavkänning, uppskalning, nedskalning och transkodning.",
