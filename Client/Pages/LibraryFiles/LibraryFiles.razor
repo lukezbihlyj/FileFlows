@@ -95,7 +95,7 @@
                 <Cell Context="item">
                     <div class="library-file table-item">
                         <span class="icon">
-                            <img src="@GetExtensionImage(item.Name.ToLowerInvariant())"/>
+                            <img src="@IconHelper.GetExtensionImage(item.Name.ToLowerInvariant())"/>
                         </span>
                         <div class="center">
                             <span class="name">
@@ -181,7 +181,7 @@
                                     if (worker != null)
                                     {
                                         <span class="top-right">@worker.CurrentPartName</span>
-                                        <FlowProgress Info="@worker" />
+                                        <FlowProgress TotalParts="worker.TotalParts" CurrentPart="worker.CurrentPart" CurrentPartPercent="worker.CurrentPartPercent" />
                                         @* @if (false) *@
                                         @* { *@
                                         @*     var overall = worker.TotalParts == 0 ? 100 : ((worker.CurrentPart / (double)worker.TotalParts)) * 100; *@

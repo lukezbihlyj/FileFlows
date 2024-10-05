@@ -107,32 +107,29 @@ input[type=checkbox]:disabled {
   cursor: not-allowed;
 }
 
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select {
+button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select {
   font-size: 0.8rem !important;
   text-transform: uppercase;
-  border-radius: unset !important;
   height: var(--input-height, 2.1875rem);
   font-weight: normal;
   outline: none !important;
   line-height: initial;
   box-shadow: none;
-  border-radius: unset !important;
-  font-size: 0.8rem !important;
-  text-transform: uppercase;
+  border-radius: var(--button-border-radius) !important;
   border: solid 1px var(--accent);
   background-color: transparent;
   color: var(--color);
   overflow: hidden;
 }
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):hover:not(:disabled):not(.toast-button-btn), button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):active:not(:disabled):not(.toast-button-btn), a.btn:hover:not(:disabled):not(.toast-button-btn), a.btn:active:not(:disabled):not(.toast-button-btn), .btn-select:hover:not(:disabled):not(.toast-button-btn), .btn-select:active:not(:disabled):not(.toast-button-btn) {
+button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):hover:not(:disabled):not(.toast-button-btn), button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):active:not(:disabled):not(.toast-button-btn), a.btn:hover:not(:disabled):not(.toast-button-btn), a.btn:active:not(:disabled):not(.toast-button-btn), .btn-select:hover:not(:disabled):not(.toast-button-btn), .btn-select:active:not(:disabled):not(.toast-button-btn) {
   background-image: var(--btn-background-image, linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3))) !important;
   box-shadow: var(--btn-box-shadow, inset 0 -3px 0 0 var(--accent)) !important;
 }
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):disabled, a.btn:disabled, .btn-select:disabled {
+button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):disabled, a.btn:disabled, .btn-select:disabled {
   border-color: var(--input-background);
   color: var(--input-background);
 }
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):focus:not(.toast-button-btn), a.btn:focus:not(.toast-button-btn), .btn-select:focus:not(.toast-button-btn) {
+button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):focus:not(.toast-button-btn), a.btn:focus:not(.toast-button-btn), .btn-select:focus:not(.toast-button-btn) {
   background: var(--btn-focus-background, rgba(var(--accent-rgb), 0.2)) !important;
 }
 
@@ -3005,9 +3002,9 @@ td a:hover, span.column a:hover {
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: var(--scroller-width);
   height: 10px;
-  border-radius: 6px;
+  border-radius: var(--scroller-width);
   --scrollbar-track-color: #333;
   background-color: var(--scrollbar-track-color);
 }
@@ -3018,7 +3015,7 @@ td a:hover, span.column a:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 6px !important;
+  border-radius: var(--scroller-width) !important;
   --scrollbar-thumb-color: #444;
   background-color: var(--scrollbar-thumb-color);
 }
@@ -3329,11 +3326,13 @@ hr {
 }
 .widget .inner {
   border: solid 1px var(--base-lightest);
+  background: var(--widget-background);
   position: absolute;
   left: 0.25rem;
   right: 0.25rem;
   bottom: 0.25rem;
   top: 0.25rem;
+  border-radius: var(--container-border-radius);
 }
 .widget .title {
   height: 2.5rem;

@@ -30,6 +30,10 @@ public partial class ClientService
     /// Event raised when the executors have bene updated
     /// </summary>
     public event Action<List<FlowExecutorInfoMinified>> ExecutorsUpdated;
+    /// <summary>
+    /// Event raised when the system info has bene updated
+    /// </summary>
+    public event Action<SystemInfo> SystemInfoUpdated;
 
     /// <summary>
     /// Event raised when the system is paused/unpaused
@@ -78,6 +82,7 @@ public partial class ClientService
                 _hubConnection.On<List<LibraryStatus>>("UpdateFileStatus", UpdateFileStatus);
                 _hubConnection.On<LibraryFile>("StartProcessing", StartProcessing);
                 _hubConnection.On<LibraryFile>("FinishProcessing", FinishProcessing);
+                _hubConnection.On<SystemInfo>("SystemInfo", (info) => SystemInfoUpdated?.Invoke(info));
                 _hubConnection.On<int>("SystemPaused", UpdateSystemPaused);
                 _hubConnection.On<NotificationData>("Notification", HandleNotification);
 
@@ -160,10 +165,11 @@ public partial class ClientService
     {
         FileStatusUpdated?.Invoke(data);
     }
+    
     /// <summary>
     /// Called when the system is paused/unpaused
     /// </summary>
-    /// <param name="minutes">the how many minutes to pause the system for</param>
+    /// <param name="minutes">how many minutes to pause the system for</param>
     private void UpdateSystemPaused(int minutes)
     {
         SetPausedFor(minutes);

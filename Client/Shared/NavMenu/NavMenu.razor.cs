@@ -194,6 +194,9 @@ public partial class NavMenu : IDisposable
             Items = new List<NavMenuItem>
             {
                 new ("Pages.Dashboard.Title", "fas fa-chart-pie", ""),
+                #if(DEBUG)
+                new ("New Dashboard", "fas fa-chart-pie", "/new-dashboard"),
+                #endif
                 Profile.HasRole(UserRole.Files) ? new ("Pages.LibraryFiles.Title", "fas fa-copy", "library-files") : null,
                 nmiPause
             }

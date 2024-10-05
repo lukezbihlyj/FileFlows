@@ -1,8 +1,8 @@
 @namespace FileFlows.Client.Components.Common
 @{
     
-    var overall = Info.TotalParts == 0 ? 100 : ((Info.CurrentPart / (double)Info.TotalParts)) * 100;
-    var current = Info.CurrentPartPercent;
+    var overall = TotalParts == 0 ? 100 : ((CurrentPart / (double)TotalParts)) * 100;
+    var current = CurrentPartPercent;
 
     bool hasCurrent = current > 0;
 }

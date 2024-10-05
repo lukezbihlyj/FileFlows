@@ -1,16 +1,13 @@
-﻿button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select 
+﻿button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select 
 {
     font-size: 0.8rem !important;
     text-transform: uppercase;
-    border-radius: unset !important;
     height: var(--input-height, 2.1875rem);
     font-weight: normal;
     outline: none !important;
     line-height: initial;
     box-shadow: none;
-    border-radius: unset !important;
-    font-size: .8rem !important;
-    text-transform: uppercase;
+    border-radius: var(--button-border-radius) !important;
     border: solid 1px var(--accent);
     background-color: transparent;
     color: var(--color);

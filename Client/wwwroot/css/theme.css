@@ -27,6 +27,12 @@ body {
   --primary: #0366d6;
   --error: #ff4d76;
   --modified: rgba(var(--accent-rgb), 0.4);
+  --nav-menu-background: var(--base-darker);
+  --main-background:#161616;
+  --widget-background:#141414;
+  --button-border-radius:0.25rem;
+  --container-border-radius:0.5rem;
+  --scroller-width:6px;
   --flow-logic: var(--orange);
   --flow-input: var(--indigo);
   --flow-output: var(--green);

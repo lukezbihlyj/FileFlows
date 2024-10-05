@@ -1,0 +1,27 @@
+@namespace FileFlows.Client.Components.Widgets
+<div class="progress-donut">
+    <svg width="150" height="150" viewBox="0 0 150 150" class="gauge-container">
+        <!-- Outer Progress (270-degree arc) -->
+        <path d="@OuterArcPath" stroke="#00A9E0" stroke-width="15" fill="none"
+              stroke-dasharray="282.743" stroke-dashoffset="@((1 - OverallProgress / 100.0) * 282.743)" />
+
+        <!-- Inner Progress (270-degree arc) -->
+        @if (InnerProgress.HasValue)
+        {
+        <path d="@InnerArcPath" stroke="#D40072" stroke-width="10" fill="none"
+              stroke-dasharray="235.619" stroke-dashoffset="@((1 - InnerProgress.Value / 100.0) * 235.619)" />
+        }
+
+        <!-- Inner Text -->
+        <text x="50%" y="45%" class="current-progress-text" alignment-baseline="middle" text-anchor="middle">
+            @($"{InnerProgress?.ToString("F1") ?? OverallProgress.ToString("F1")} %")
+        </text>
+
+        <!-- Overall Text (only shown if inner is available) -->
+        @if (InnerProgress.HasValue)
+        {
+        @:<text x="50%" y="65%" class="overall-text" alignment-baseline="middle" text-anchor="middle">@($"{OverallProgress:F1} %")</text>
+        }
+    </svg>
+
+</div>

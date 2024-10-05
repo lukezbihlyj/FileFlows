@@ -1,0 +1,18 @@
+@namespace FileFlows.Client.Components.Widgets
+
+
+<div class="flow-widget">
+    <div class="head">
+        @if (string.IsNullOrEmpty(Icon) == false)
+        {
+            <TableItemIcon Icon="Icon" />
+        }
+        @if (string.IsNullOrEmpty(Title) == false)
+        {
+            <span class="title">@Title</span>
+        }
+    </div>
+    <OptionButtons Value="Mode" ValueChanged="OnModeChanged">
+        @ChildContent
+    </OptionButtons>
+</div>

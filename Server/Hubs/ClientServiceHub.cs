@@ -139,6 +139,13 @@ public class ClientServiceManager
     /// <param name="minutes">how many minutes to pause the system for</param>
     public void SystemPaused(int minutes)
         => _hubContext.Clients.All.SendAsync("SystemPaused", minutes);
+    
+    /// <summary>
+    /// Updates the system info
+    /// </summary>
+    /// <param name="info">the system info</param>
+    public void UpdateSystemInfo(SystemInfo info)
+        => _hubContext.Clients.All.SendAsync("SystemInfo", info);
 
     /// <summary>
     /// Called when a file starts processing

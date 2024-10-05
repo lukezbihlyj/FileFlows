@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
@@ -34,12 +35,18 @@ public class SystemMonitor:Worker
     /// Database service
     /// </summary>
     private DatabaseService dbService;
+
+    /// <summary>
+    /// The settings service
+    /// </summary>
+    private SettingsService settingsService;
     
-    public SystemMonitor() : base(ScheduleType.Second, 10)
+    public SystemMonitor() : base(ScheduleType.Second, 3)
     {
         Instance = this;
         appSettingsService = ServiceLoader.Load<AppSettingsService>();
         dbService = ServiceLoader.Load<DatabaseService>();
+        settingsService = (SettingsService)ServiceLoader.Load<ISettingsService>();
     }
 
     protected override void Execute()
@@ -49,9 +56,11 @@ public class SystemMonitor:Worker
         var taskLogStorage = GetLogStorageSize();
         var taskOpenDatabaseConnections = GetOpenDatabaseConnections();
 
+        long memoryUsage = GC.GetTotalMemory(true);
+
         MemoryUsage.Enqueue(new()
         {
-            Value = GC.GetTotalMemory(true)
+            Value = memoryUsage
         });
 
         Task.WaitAll(taskCpu, taskTempStorage, taskOpenDatabaseConnections);
@@ -75,6 +84,15 @@ public class SystemMonitor:Worker
                 Value = taskOpenDatabaseConnections.Result
             });
         }
+
+        var settings = settingsService.Get().Result;
+        ClientServiceManager.Instance.UpdateSystemInfo(new ()
+        {
+            CpuUsage = taskCpu.Result,
+            MemoryUsage = memoryUsage,
+            IsPaused = settings.IsPaused,
+            PausedUntil = settings.PausedUntil
+        });
     }
 
     private async Task<float> GetCpu()

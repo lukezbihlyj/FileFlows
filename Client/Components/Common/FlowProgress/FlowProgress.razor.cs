@@ -8,7 +8,15 @@ namespace FileFlows.Client.Components.Common;
 public partial class FlowProgress : ComponentBase
 {
     /// <summary>
-    /// Gets or sets the executor info
+    /// Gets or sets the total parts
     /// </summary>
-    [Parameter] public FlowExecutorInfo Info { get; set; }
+    [Parameter] public int TotalParts { get; set; }
+    /// <summary>
+    /// Gets or sets the current part
+    /// </summary>
+    [Parameter] public int CurrentPart { get; set; }
+    /// <summary>
+    /// Gets or sets the current percent of the executing flow part
+    /// </summary>
+    [Parameter]public float CurrentPartPercent { get; set; }
 }

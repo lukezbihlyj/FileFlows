@@ -15,7 +15,13 @@ public partial class CustomDashboard : IDisposable
 {
     const string ApiUrl = "/api/worker";
     [Inject] public IJSRuntime jSRuntime { get; set; }
+    /// <summary>
+    /// Gets or sets the blocker
+    /// </summary>
     [CascadingParameter] public Blocker Blocker { get; set; }
+    /// <summary>
+    /// Gets or sets the editor
+    /// </summary>
     [CascadingParameter] Editor Editor { get; set; }
     [CascadingParameter] private Pages.Dashboard Dashboard { get; set; }
     /// <summary>

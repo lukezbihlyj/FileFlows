@@ -1,0 +1,113 @@
+@using FileFlows.Client.Helpers
+
+@namespace FileFlows.Client.Components.Widgets
+
+<div class="flow-widget @(Runners.Count > 0 ? "has-runners" : "no-runners")">
+    @if (Runners.Count > 0)
+    {
+        <div class="runners">
+            <div class="head">
+                <span>Runners</span>
+                <button class="ignore-button btn-pause" @onclick="() => { }">
+                    <i class="far fa-pause-circle"></i> Pause
+                </button>
+            </div>
+            @foreach (var runner in Runners)
+            {
+                var overall = runner.TotalParts == 0 ? 100 : ((runner.CurrentPart / (double)runner.TotalParts)) * 100;
+                var current = runner.CurrentPartPercent;
+
+                bool hasCurrent = current > 0;
+                <div class="runner table-item @(runner.Uid == SelectedExecutor ? "active" : "")" @key="runner.Uid">
+                    <div class="current-progress" style="width:@(current)%"></div>
+                    <div class="overall-progress" style="width:@(overall)%"></div>
+                    @* <FlowGauge InnerProgress=@executor.CurrentPartPercent OverallProgress="@overallProgress"></FlowGauge> *@
+                    <span class="icon">
+                        <img class="icon" src="@IconHelper.GetExtensionImage(runner.LibraryFileName.ToLowerInvariant())"/>
+                    </span>
+                    <div class="center">
+                        <span class="name path">@runner.RelativeFile</span>
+                        <div class="info">
+                            <FlowIconValue Icon="node" Value="@runner.NodeName"></FlowIconValue>
+                            <FlowIconValue Icon="library" Value="@runner.LibraryName"></FlowIconValue>
+                        </div>
+                    </div>
+
+                    <div class="right savings">
+                        <span class="top-right time">@FormatProcessingTime(runner.ProcessingTime)</span>
+                    </div>
+
+                    <div class="details">
+                        @if (runner.FramesPerSecond > 0)
+                        {
+                            <span class="fps">@runner.FramesPerSecond</span>
+                        }
+                        @if (runner.FramesPerSecond > 0)
+                        {
+                            <span class="CurrentPart">@runner.CurrentPart</span>
+                        }
+                        @foreach (var additional in runner.Additional ?? [])
+                        {
+                            <span class="additional-label">@additional[0]</span>
+                            <span class="additional-value">@additional[1]</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <div class="files">
+        <OptionButtons @bind-Value="FileMode">
+            <WidgetOption Label="Upcoming" Value="1" Icon="far fa-clock" Color="yellow" />
+            <WidgetOption Label="Finished" Value="2" Icon="far fa-check-circle" Color="green" />
+            <WidgetOption Label="Failed" Value="3" Icon="far fa-times-circle" Color="red" />
+        </OptionButtons>
+
+        <div class="file-table">
+            <div class="head"><span>Files</span></div>
+            <div class="body">
+            @if ((int)FileMode == 1)
+            {
+                @foreach (var file in UpcomingFiles)
+                {
+                <div class="file-table-row">
+                    <span class="icon">
+                        <img class="icon" src="icons/filetypes/video/mkv.svg"/>
+                    </span>
+                    <span class="path">@file.DisplayName</span>
+                    <span class="library">
+                        <FlowIconValue Icon="library" Value="@file.LibraryName" />
+                    </span>
+                </div>
+
+                }
+            }
+            else
+            {
+            var list = (int)FileMode == 3 ? FailedFiles : RecentlyFinished;
+                @foreach (var file in list ?? [])
+                {
+                    <div class="file-table-row @(file.Message != null ? "has-message" : "no-message")" @ondblclick="() => OpenFile(file)">
+                        @if ((int)FileMode == 2)
+                        {
+                            var percentage = Math.Min(100, (file.FinalSize / (double)file.OriginalSize) * 100);
+                            <div class="savings" style="width: @percentage%"></div>
+                        }
+                        <span class="icon">
+                            <img class="icon" src="icons/filetypes/video/mkv.svg"/>
+                        </span>
+                        <div class="center">
+                            <span class="path">@file.DisplayName</span>
+                            <span class="time">@file.When</span>
+                            @if (file.Message != null)
+                            {
+                            <div class="message">@file.Message</div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            </div>
+        </div>
+    </div>
+</div>

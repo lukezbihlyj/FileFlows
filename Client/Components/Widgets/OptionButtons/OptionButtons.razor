@@ -1,0 +1,21 @@
+@namespace FileFlows.Client.Components.Widgets
+
+<CascadingValue IsFixed="true" Value="this">
+    @ChildContent
+</CascadingValue>
+@if (Options.Count > 0)
+{
+    <div class="options">
+        @foreach (var option in Options)
+        {
+            var color = string.IsNullOrWhiteSpace(option.Color) ? "" : "color-" + option.Color;
+            <button class="ignore-button btn-option @color @(Value == option.Value ? "active" : "")" @onclick="() => SelectOption(option)">
+                @if (string.IsNullOrWhiteSpace(option.Icon) == false)
+                {
+                    <i class="icon @option.Icon"></i>
+                }
+                <span>@option.Label</span>
+            </button>
+        }
+    </div>
+}

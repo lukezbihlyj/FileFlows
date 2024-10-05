@@ -1,0 +1,11 @@
+@namespace FileFlows.Client.Components.Widgets
+
+
+<TrendWidget Title="@Label" @bind-Mode="Mode" Color="@Color" 
+             Icon="fas fa-microchip" 
+             Suffix=@Max 
+             Total=@Value
+             Data=@Data>
+    <WidgetOption Label="CPU" Value="0" />
+    <WidgetOption Label="RAM" Value="1" />
+</TrendWidget>

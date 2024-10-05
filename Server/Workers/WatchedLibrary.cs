@@ -178,6 +178,27 @@ public class WatchedLibrary:IDisposable
                 return;
             }
 
+            if (Library.TopLevelOnly)
+            {
+                if (Library.Folders)
+                {
+                    var dir = new DirectoryInfo(fullpath);
+                    if (dir.Parent.FullName != Library.Path)
+                    {
+                        return; // only top level files
+                    }
+                }
+                else
+                {
+                    var dir = new FileInfo(fullpath);
+                    if (dir.Directory.FullName != Library.Path)
+                    {
+                        return; // only top level files
+                    }
+                    
+                }
+            }
+            
             if (this.Library.ExcludeHidden)
             {
                 if (FileIsHidden(fullpath))
@@ -628,15 +649,6 @@ public class WatchedLibrary:IDisposable
     {
         try
         {
-            if (Library.TopLevelOnly)
-            {
-                var dir = new DirectoryInfo(e.FullPath);
-                if (dir.Parent.FullName != Library.Path)
-                {
-                    return; // only top level files
-                }
-            }
-            
             if (Library.Folders == false && Directory.Exists(e.FullPath))
             {
                 foreach (var file in Directory.GetFiles(e.FullPath, "*.*", Library.TopLevelOnly? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories))

@@ -272,7 +272,7 @@ public class LibraryFileEditor
             item.Status != FileStatus.OutOfSchedule)
         {
             if(item.Node?.Name == "FileFlowsServer")
-                item.Node.Name = "Internal Processing Node";
+                item.Node.Name = Translater.Instant("Labels.InternalProcessingNode");
             fields.Add(new ElementField
             {
                 InputType = FormInputType.TextLabel,

@@ -17,12 +17,64 @@
   margin-bottom: 0.5rem;
 }
 
-.flow-tab-buttons {
+.new-tabs.flow-tab-buttons {
+  border-bottom: solid 2px #3a3a3a;
+  margin-bottom: 1rem;
+}
+.new-tabs .tab-button {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  padding: 0 1.25rem 0.75rem 1.25rem;
+  border-bottom: solid 0.25rem transparent;
+  outline: none;
+  position: relative;
+  bottom: -2px;
+  font-weight: var(--bold, 600);
+  opacity: 0.5;
+}
+.new-tabs .tab-button i {
+  margin-right: 0.5rem;
+}
+.new-tabs .tab-button.active {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+.old-tabs .flow-tab-buttons {
   display: flex;
   flex-direction: row;
   margin-bottom: 2rem;
   border-bottom: solid 1px var(--input-background);
   padding-left: 1rem;
+}
+.old-tabs .tab-button {
+  min-width: 8rem;
+  width: fit-content;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  border-color: var(--input-background) !important;
+  position: relative;
+  bottom: -1px;
+  margin-right: 0.25rem;
+}
+.old-tabs .tab-button i {
+  margin: 0 0.5rem;
+}
+.old-tabs .tab-button.active {
+  border-color: var(--accent) !important;
+  border-bottom: 1px solid var(--base) !important;
+}
+.old-tabs .tab-button:not(.active) {
+  font-size: 0.7rem !important;
+}
+.old-tabs .flow-tabs:not(.disabled) .tab-button:hover {
+  border-color: var(--accent) !important;
+}
+.old-tabs .flow-tabs.disabled .tab-button.active:hover {
+  box-shadow: none !important;
+  background-image: none !important;
+  cursor: default;
 }
 
 @media screen and (max-width: 500px) {
@@ -39,37 +91,6 @@
 }
 .title-only-on-active .tab-button:not(.active) i {
   margin: 0;
-}
-
-.tab-button {
-  min-width: 8rem;
-  width: fit-content;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  border-color: var(--input-background) !important;
-  position: relative;
-  bottom: -1px;
-  margin-right: 0.25rem;
-}
-.tab-button i {
-  margin: 0 0.5rem;
-}
-.tab-button.active {
-  border-color: var(--accent) !important;
-  border-bottom: 1px solid var(--base) !important;
-}
-.tab-button:not(.active) {
-  font-size: 0.7rem !important;
-}
-
-.flow-tabs:not(.disabled) .tab-button:hover {
-  border-color: var(--accent) !important;
-}
-
-.flow-tabs.disabled .tab-button.active:hover {
-  box-shadow: none !important;
-  background-image: none !important;
-  cursor: default;
 }
 
 .flow-tabs-content {

@@ -1,0 +1,47 @@
+.progress-donut {
+  width: 100px;
+  height: 100px;
+  position: relative;
+
+  .circular-chart {
+    max-width: 100%;
+    max-height: 100%;
+    transform: rotate(-90deg); // Rotate to start from the top
+
+    .circle {
+      fill: none;
+      stroke-width: 2.8;
+    }
+
+    .outer-circle {
+      stroke: #00bcd4; // Outer ring color (Overall progress)
+    }
+
+    .inner-circle {
+      stroke: #ff4081; // Inner ring color (Current step progress)
+    }
+
+    .current-text {
+      font-size: 5px;
+      fill: #ffffff; // Inner text color
+      font-weight: bold;
+    }
+
+    .overall-text {
+      font-size: 3px;
+      fill: #ffffff; // Bottom text color
+    }
+  }
+}
+.gauge-container {
+}
+
+.current-progress-text {
+  fill: #fff;
+  font-size: 18px;
+}
+
+.overall-text {
+  fill: #fff;
+  font-size: 12px;
+}

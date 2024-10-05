@@ -125,9 +125,9 @@ td a, span.column a {
 
 
 ::-webkit-scrollbar{
-    width: 6px;
+    width: var(--scroller-width);
     height: 10px;
-    border-radius: 6px;
+    border-radius: var(--scroller-width);
     --scrollbar-track-color: #333;
     background-color: var(--scrollbar-track-color);
     
@@ -137,7 +137,7 @@ td a, span.column a {
     border-radius: 0px;
 }
 ::-webkit-scrollbar-thumb {
-    border-radius: 6px !important;
+    border-radius: var(--scroller-width) !important;
     --scrollbar-thumb-color: #444;
     background-color: var(--scrollbar-thumb-color);
 }
@@ -467,11 +467,13 @@ input[type=file]{
     
     .inner {
         border: solid 1px var(--base-lightest);
+        background:var(--widget-background);
         position: absolute;
         left: 0.25rem;
         right: 0.25rem;
         bottom: 0.25rem;
         top: 0.25rem;
+        border-radius: var(--container-border-radius);
     }
     
 

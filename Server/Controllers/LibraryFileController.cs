@@ -120,12 +120,14 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     [FileFlowsAuthorize]
     public async Task<IActionResult> Upcoming()
     {
-        var data = await ServiceLoader.Load<LibraryFileService>().GetAll(FileStatus.Unprocessed, rows: 10);
+        var data = await ServiceLoader.Load<LibraryFileService>().GetAll(FileStatus.Unprocessed, rows: 50);
         var results = data.Select(x => new
         {
             x.Uid,
             x.Name,
-            DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(x.Name, x.RelativePath, x.LibraryName)?.EmptyAsNull() ?? x.RelativePath?.EmptyAsNull() ?? x.Name
+            x.LibraryName,
+            DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(x.Name, x.RelativePath, x.LibraryName)?.EmptyAsNull() 
+                          ?? x.RelativePath?.EmptyAsNull() ?? x.Name
         });
         return Ok(results);
     }
@@ -136,19 +138,35 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     /// <returns>the last successfully processed files</returns>
     [HttpGet("recently-finished")]
     [FileFlowsAuthorize]
-    public async Task<IActionResult> RecentlyFinished()
+    public async Task<IActionResult> RecentlyFinished([FromQuery]bool? failedFiles = null)
     {
         var service = ServiceLoader.Load<LibraryFileService>();
         var libraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
-        var processed = await service.GetAll(FileStatus.Processed, rows: 10, allLibraries: libraries);
-        var failed = await service.GetAll(FileStatus.ProcessingFailed, rows: 10, allLibraries: libraries);
-        var mapping = await service.GetAll(FileStatus.MappingIssue, rows: 10, allLibraries: libraries);
+        LibraryFile[] all;
+        var processed = await service.GetAll(FileStatus.Processed, rows: 50, allLibraries: libraries);
+        var failed = await service.GetAll(FileStatus.ProcessingFailed, rows: 50, allLibraries: libraries);
+        var mapping = await service.GetAll(FileStatus.MappingIssue, rows: 50, allLibraries: libraries);
         var minDate = new DateTime(2020, 1, 1);
-        var all = processed.Union(failed).Union(mapping).OrderByDescending(x => x.ProcessingEnded < minDate ? x.ProcessingStarted : x.ProcessingEnded).ToArray();
+        if (failedFiles == false)
+            all = processed.ToArray();
+        else if (failedFiles == true)
+            all = failed.Union(mapping).ToArray();
+        else
+        {
+            all = processed.Union(failed).Union(mapping)
+                .OrderByDescending(x => x.ProcessingEnded < minDate ? x.ProcessingStarted : x.ProcessingEnded)
+                .ToArray();
+            
+        }
+
         if (all.Any() == false)
             return Ok(new object[] { });
-        if (all.Length > 10)
-            all = all.Take(10).ToArray();
+        
+        all = all.OrderByDescending(x => x.ProcessingEnded < minDate ? x.ProcessingStarted : x.ProcessingEnded)
+            .ToArray();
+        
+        if (all.Length > 50)
+            all = all.Take(50).ToArray();
         var data = all.Select(x =>
         {
             var date = x.ProcessingEnded.Year > 2000 ? x.ProcessingEnded : x.ProcessingStarted;
@@ -162,6 +180,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
                 When = when,
                 x.OriginalSize,
                 x.FinalSize,
+                Message = x.Status == FileStatus.ProcessingFailed ? x.FailureReason : null,
                 Status = (int)x.Status
             };
         });

@@ -13,6 +13,10 @@ public partial class FlowTabs : ComponentBase
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }
     /// <summary>
+    /// Gets or sets if the tabs should be displayed as new tabs
+    /// </summary>
+    [Parameter] public bool NewTabs { get; set; }
+    /// <summary>
     /// Gets or set the active tab
     /// </summary>
     public FlowTab ActiveTab { get; set; }
