@@ -1,17 +1,11 @@
 ﻿using System.Text.RegularExpressions;
-using FileFlows.DataLayer;
 using FileFlows.Plugin;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Hubs;
-using SharpCompress.Readers;
+using FileFlows.Server.Controllers;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Services;
-
-using FileFlows.Server.Controllers;
-using FileFlows.ServerShared.Services;
-using FileFlows.Shared.Models;
-using System;
-using System.Threading.Tasks;
 
 /// <summary>
 /// A flow runner which is responsible for executing a flow and processing files
