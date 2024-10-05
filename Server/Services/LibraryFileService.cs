@@ -9,7 +9,6 @@ using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
 using Humanizer;
-using Microsoft.AspNetCore.Mvc;
 using ILogger = FileFlows.Plugin.ILogger;
 
 namespace FileFlows.Server.Services;
@@ -91,7 +90,7 @@ public class LibraryFileService
     /// <returns>the total number of items matching</returns>
     public async Task<int> GetTotalMatchingItems(LibraryFileFilter filter)
     {
-        var allLibraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
+        // var allLibraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
         return await new LibraryFileManager().GetTotalMatchingItems(filter);
     }
 

@@ -1,0 +1,15 @@
+.flow-widget {
+  border: solid 1px var(--border-color);
+  border-radius: var(--container-border-radius);
+  background: var(--widget-background);
+  position: relative;
+  min-height: 10rem;
+  overflow: hidden;
+}
+.flow-widget .head {
+  padding: 0.5rem;
+}
+.flow-widget .title {
+  font-size: 1.1rem;
+  font-weight: var(--bold, 600);
+}

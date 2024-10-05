@@ -1,3 +1,5 @@
+using System.Data;
+using System.Data.Common;
 using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using FileFlows.ServerShared.Helpers;
@@ -68,7 +70,7 @@ public class SQLiteConnector : IDatabaseConnector
 
     private DatabaseConnection CreateConnection(string connectionString)
     {
-        var db = new NPoco.Database(connectionString, new SQLiteDatabaseType(),
+        var db = new LoggingDatabase(Logger, connectionString, new SQLiteDatabaseType(),
             PlatformHelper.IsArm ? Microsoft.Data.Sqlite.SqliteFactory.Instance : System.Data.SQLite.SQLiteFactory.Instance);
 
         db.Mappers = new()
@@ -77,6 +79,7 @@ public class SQLiteConnector : IDatabaseConnector
             Converters.CustomDbMapper.UseInstance(),
             // Converters.UtcDateConverter.UseInstance()
         };
+        
 
         var connection = new DatabaseConnection(db, false);
         
@@ -163,5 +166,37 @@ public class SQLiteConnector : IDatabaseConnector
         if (string.IsNullOrWhiteSpace(connectionString))
             return string.Empty;
         return Regex.Match(connectionString, @"(?<=(Data Source=))[^;]+")?.Value ?? string.Empty;
+    }
+}
+
+public class LoggingDatabase(ILogger Logger, string connectionString, NPoco.DatabaseType dbType, DbProviderFactory provider) 
+    : NPoco.Database(connectionString, dbType, provider)
+{
+
+    protected override void OnExecutingCommand(DbCommand cmd)
+    {
+        // Log the query and parameters
+        LogQuery(cmd);
+
+        // Call base method to ensure the normal operation
+        base.OnExecutingCommand(cmd);
+    }
+
+    private void LogQuery(IDbCommand cmd)
+    {
+        var sqlQuery = cmd.CommandText;
+
+        // Log parameters if any
+        if (cmd.Parameters.Count > 0)
+        {
+            sqlQuery += " | Parameters: ";
+            foreach (IDbDataParameter param in cmd.Parameters)
+            {
+                sqlQuery += $"{param.ParameterName}={param.Value}, ";
+            }
+            sqlQuery = sqlQuery.TrimEnd(',', ' ');
+        }
+        
+        Logger.ILog($"Executing Query: {sqlQuery}");
     }
 }

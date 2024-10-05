@@ -1,0 +1,39 @@
+.dashboard-wrapper {
+  padding: 1rem 0;
+  height: 100%;
+}
+.dashboard-wrapper ::deep .flow-tabs {
+  height: 100%;
+}
+.dashboard-wrapper ::deep .flow-tab-buttons button:first-child {
+  margin-left: 1rem;
+}
+.dashboard-wrapper ::deep .flow-tabs-content {
+  padding: 0 1rem;
+}
+.dashboard-wrapper ::deep .flow-tab.active {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3.5rem;
+  bottom: 0;
+  padding: 1rem;
+}
+.dashboard-wrapper .grid {
+  display: grid;
+  grid-gap: 0.5rem;
+}
+.dashboard-wrapper .grid + .grid {
+  margin-top: 1rem;
+}
+.dashboard-wrapper .grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.flex-grow {
+  flex-grow: 1;
+  overflow: hidden;
+}

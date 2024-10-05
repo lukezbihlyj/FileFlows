@@ -3,6 +3,7 @@ using FileFlows.DataLayer;
 using FileFlows.Plugin;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Hubs;
+using SharpCompress.Readers;
 
 namespace FileFlows.Server.Services;
 
@@ -259,7 +260,9 @@ public class FlowRunnerService : IFlowRunnerService
 
             await ServiceLoader.Load<StatisticService>()
                 .RecordStorageSaved(library.Name, existing.OriginalSize, existing.FinalSize);
+            _ = ServiceLoader.Load<DashboardFileOverviewService>().UpdateFileDataAsync(existing);
         }
+
         
         await ClientServiceManager.Instance.UpdateFileStatus();
     }

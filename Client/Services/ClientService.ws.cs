@@ -39,11 +39,25 @@ public partial class ClientService
     /// Event raised when the system is paused/unpaused
     /// </summary>
     public event Action<bool> SystemPausedUpdated;
+
+    /// <summary>
+    /// Event raised when the file overview has bene updated
+    /// </summary>
+    public event Action<FileOverviewData> FileOverviewUpdated;
     
     /// <summary>
     /// Event raised when the file status have bene updated
     /// </summary>
     public event Action<List<LibraryStatus>> FileStatusUpdated;
+    
+    /// <summary>
+    /// Gets the current system info
+    /// </summary>
+    public SystemInfo? CurrentSystemInfo { get; set; }
+    /// <summary>
+    /// Gets the current file overview data
+    /// </summary>
+    public FileOverviewData? CurrentFileOverData { get; set; }
 
 
     /// <summary>
@@ -82,7 +96,16 @@ public partial class ClientService
                 _hubConnection.On<List<LibraryStatus>>("UpdateFileStatus", UpdateFileStatus);
                 _hubConnection.On<LibraryFile>("StartProcessing", StartProcessing);
                 _hubConnection.On<LibraryFile>("FinishProcessing", FinishProcessing);
-                _hubConnection.On<SystemInfo>("SystemInfo", (info) => SystemInfoUpdated?.Invoke(info));
+                _hubConnection.On<SystemInfo>("SystemInfo", (info) =>
+                {
+                    CurrentSystemInfo = info;
+                    SystemInfoUpdated?.Invoke(info);
+                });
+                _hubConnection.On<FileOverviewData>("FileOverviewUpdate", (data) =>
+                {
+                    CurrentFileOverData = data;
+                    FileOverviewUpdated?.Invoke(data);
+                });
                 _hubConnection.On<int>("SystemPaused", UpdateSystemPaused);
                 _hubConnection.On<NotificationData>("Notification", HandleNotification);
 

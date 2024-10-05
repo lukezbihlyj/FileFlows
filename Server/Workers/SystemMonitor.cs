@@ -13,23 +13,45 @@ namespace FileFlows.Server.Workers;
 /// </summary>
 public class SystemMonitor:Worker
 {
-    public readonly FixedSizedQueue<SystemValue<float>> CpuUsage = new (2000);
-    public readonly FixedSizedQueue<SystemValue<float>> MemoryUsage = new (2000);
-    public readonly FixedSizedQueue<SystemValue<float>> OpenDatabaseConnections = new (2000);
-    public readonly FixedSizedQueue<SystemValue<long>> TempStorageUsage = new(2000);
-    public readonly FixedSizedQueue<SystemValue<long>> LogStorageUsage = new(2000);
-    private readonly Dictionary<Guid, NodeSystemStatistics> NodeStatistics = new();
+    public static readonly FixedSizedQueue<SystemValue<float>> CpuUsage = new (2000);
+    public static readonly FixedSizedQueue<SystemValue<float>> MemoryUsage = new (2000);
+    public static readonly FixedSizedQueue<SystemValue<float>> OpenDatabaseConnections = new (2000);
+    public static readonly FixedSizedQueue<SystemValue<long>> TempStorageUsage = new(2000);
+    public static readonly FixedSizedQueue<SystemValue<long>> LogStorageUsage = new(2000);
+    private static readonly Dictionary<Guid, NodeSystemStatistics> NodeStatistics = new();
+    
+    /// <summary>
+    /// Gets the last 30 cpu usage
+    /// </summary>
+    public static float[] LatestCpuUsage 
+    {
+        get
+        {
+            lock (CpuUsage) // Ensure thread safety if CpuUsage can be accessed concurrently
+            {
+                return CpuUsage.Reverse().Take(30).Select(x => x.Value).ToArray();
+            }
+        }
+    }
+    /// <summary>
+    /// Gets the last 30 memory usage
+    /// </summary>
+    public static long[] LatestMemoryUsage 
+    {
+        get
+        {
+            lock (MemoryUsage) // Ensure thread safety if CpuUsage can be accessed concurrently
+            {
+                return MemoryUsage.Reverse().Take(30).Select(x => (long)x.Value).ToArray();
+            }
+        }
+    }
     
 
     /// <summary>
     /// Gets the instance of the system monitor
     /// </summary>
     public static SystemMonitor Instance { get; private set; }
-
-    /// <summary>
-    /// The app settings service
-    /// </summary>
-    private AppSettingsService appSettingsService;
 
     /// <summary>
     /// Database service
@@ -44,7 +66,6 @@ public class SystemMonitor:Worker
     public SystemMonitor() : base(ScheduleType.Second, 3)
     {
         Instance = this;
-        appSettingsService = ServiceLoader.Load<AppSettingsService>();
         dbService = ServiceLoader.Load<DatabaseService>();
         settingsService = (SettingsService)ServiceLoader.Load<ISettingsService>();
     }
@@ -88,8 +109,8 @@ public class SystemMonitor:Worker
         var settings = settingsService.Get().Result;
         ClientServiceManager.Instance.UpdateSystemInfo(new ()
         {
-            CpuUsage = taskCpu.Result,
-            MemoryUsage = memoryUsage,
+            CpuUsage = LatestCpuUsage,
+            MemoryUsage = LatestMemoryUsage,
             IsPaused = settings.IsPaused,
             PausedUntil = settings.PausedUntil
         });

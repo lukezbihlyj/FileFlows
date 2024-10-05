@@ -80,6 +80,39 @@ public class LibraryFileFilter
     /// Gets or sets the system info
     /// </summary>
     public LibraryFilterSystemInfo SysInfo { get; set; } = new();
+
+    /// <summary>
+    /// Tests if a file matches the filter
+    /// </summary>
+    /// <param name="file">the file</param>
+    /// <returns>true if matches</returns>
+    public bool Matches(LibraryFile file)
+    {
+        // test if it matches
+        if (Status != null && file.Status != Status)
+            return false;
+        if (AllowedLibraries != null && 
+            (file.LibraryUid == null || AllowedLibraries!.Contains(file.LibraryUid.Value) == false))
+            return false;
+        if (MaxSizeMBs != null && file.OriginalSize > MaxSizeMBs * 1_000_000)
+            return false;
+        if (ExclusionUids != null && ExclusionUids.Contains(file.Uid))
+            return false;
+        if (ForcedOnly && (file.Flags & LibraryFileFlags.ForceProcessing) == 0)
+            return false;
+        if (!string.IsNullOrEmpty(Filter) && !file.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return false;
+        if (NodeUid != null && file.NodeUid != NodeUid)
+            return false;
+        if (ProcessingNodeUid != null && file.ProcessOnNodeUid != ProcessingNodeUid)
+            return false;
+        if (LibraryUid != null && file.LibraryUid != LibraryUid)
+            return false;
+        if (FlowUid != null && file.FlowUid != FlowUid)
+            return false;
+
+        return true;
+    }
 }
 
 /// <summary>

@@ -175,16 +175,7 @@ public class NodeController : BaseController
     /// <param name="minutes">The minutes to pause the system for</param>
     [HttpPost("pause")]
     public async Task Pause([FromQuery] int minutes)
-    {
-        var service = (SettingsService)ServiceLoader.Load<ISettingsService>();
-        var settings = await service.Get();
-        if (settings.IsPaused)
-            return; // already paused
-        
-        settings.PausedUntil = DateTime.UtcNow.AddMinutes(minutes);
-        ClientServiceManager.Instance.SystemPaused(minutes);
-        await service.Save(settings, await GetAuditDetails());
-    }
+        => await ServiceLoader.Load<PausedService>().Pause(minutes);
     
     /// <summary>
     /// Gets if the system is paused

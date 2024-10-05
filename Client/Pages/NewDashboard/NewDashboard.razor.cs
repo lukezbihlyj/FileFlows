@@ -8,7 +8,29 @@ public partial class NewDashboard : ComponentBase, IDisposable
     /// Gets or sets the client service
     /// </summary>
     [Inject] public ClientService ClientService { get; set; }
-    
+
+    private bool loaded = false;
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClientService.CurrentSystemInfo == null)
+        {
+            var infoResult = await HttpHelper.Get<SystemInfo>("/api/dashboard/info");
+            if (infoResult.Success)
+                ClientService.CurrentSystemInfo ??= infoResult.Data;
+        }
+        if(ClientService.CurrentFileOverData == null)
+        {
+            var fileOverviewResult = await HttpHelper.Get<FileOverviewData>("/api/dashboard/file-overview");
+            if (fileOverviewResult.Success)
+                ClientService.CurrentFileOverData ??= fileOverviewResult.Data;
+        }
+
+        loaded = true;
+        StateHasChanged();
+    }
+
 
     /// <summary>
     /// Disposes of the component

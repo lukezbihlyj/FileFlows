@@ -24,6 +24,15 @@ public class LibraryFileSearchModel
     public DateTime ToDate { get; set; }
     
     /// <summary>
+    /// Gets or sets the starting processing time to search
+    /// </summary>
+    public DateTime? FinishedProcessingFrom { get; set; }
+    /// <summary>
+    /// Gets or sets the finishing processing time to search
+    /// </summary>
+    public DateTime? FinishedProcessingTo { get; set; }
+    
+    /// <summary>
     /// Gets or sets the name of the library
     /// </summary>
     public string LibraryName { get; set; }

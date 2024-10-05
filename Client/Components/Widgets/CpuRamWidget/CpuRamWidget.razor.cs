@@ -1,9 +1,11 @@
-using System.Collections.Concurrent;
 using FileFlows.Client.Helpers;
 using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components.Widgets;
 
+/// <summary>
+/// CPU/RAM Widget
+/// </summary>
 public partial class CpuRamWidget : ComponentBase, IDisposable
 {
     /// <summary>
@@ -21,8 +23,8 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
     private string Max;
     private string Value;
     private double[] Data = [];//[10, 20, 30, 20, 15, 16, 27, 45.34, 41.2, 38.2];
-    private ConcurrentQueue<double> CpuValues = new();
-    private ConcurrentQueue<double> MemoryValues = new();
+    private double[] CpuValues = [];
+    private double[] MemoryValues = [];
     /// <summary>
     /// Gets or sets the selected mode
     /// </summary>
@@ -47,6 +49,8 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
     protected override void OnInitialized()
     {
         ClientService.SystemInfoUpdated += OnSystemInfoUpdated;
+        if(ClientService.CurrentSystemInfo != null)
+            OnSystemInfoUpdated(ClientService.CurrentSystemInfo);
     }
 
     /// <summary>
@@ -55,18 +59,13 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
     /// <param name="info">the system info</param>
     private void OnSystemInfoUpdated(SystemInfo info)
     {
-        CpuValue = info.CpuUsage;
-        RamValue = info.MemoryUsage;
-        CpuValues.Enqueue(CpuValue);
-        MemoryValues.Enqueue(RamValue);
-        while (CpuValues.Count > 30)
-            CpuValues.TryDequeue(out _);
-
-        while (MemoryValues.Count > 30)
-            MemoryValues.TryDequeue(out _);
+        CpuValue = info.CpuUsage.Last();
+        RamValue = info.MemoryUsage.Last();
+        CpuValues = info.CpuUsage.Select(x => (double)x).ToArray();
+        MemoryValues = info.MemoryUsage.Select(x => (double)x).ToArray();
         
-        CpuMax = !CpuValues.IsEmpty ? CpuValues.Max() : 0;
-        RamMax = !MemoryValues.IsEmpty ? MemoryValues.Max() : 0;
+        CpuMax = info.CpuUsage.Length > 0 ? info.CpuUsage.Max() : 0;
+        RamMax = info.MemoryUsage.Length > 0 ? info.MemoryUsage.Max() : 0;
 
         SetValues();
 

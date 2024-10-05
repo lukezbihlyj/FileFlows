@@ -50,20 +50,9 @@ public class SystemController:BaseController
     [FileFlowsAuthorize(UserRole.PauseProcessing)]
     public async Task Pause([FromQuery] int duration)
     {
-        var service = (SettingsService)ServiceLoader.Load<ISettingsService>();
-        var settings = await service.Get();
-        if (duration < 1)
-        {
-            settings.PausedUntil = DateTime.MinValue;
-            ClientServiceManager.Instance.SystemPaused(0);
-        }
-        else
-        {
-            settings.PausedUntil = DateTime.UtcNow.AddMinutes(duration);
-            ClientServiceManager.Instance.SystemPaused(duration);
-        }
-
-        await service.Save(settings, await GetAuditDetails());
+        var service = ServiceLoader.Load<PausedService>();
+        await service.Pause(duration, await GetAuditDetails());
+        
     }
 
 
@@ -73,18 +62,8 @@ public class SystemController:BaseController
     /// </summary>
     /// <returns></returns>
     [HttpGet("info")]
-    public async Task<SystemInfo> GetSystemInfo()
-    {
-        SystemInfo info = new ();
-        //Process proc = Process.GetCurrentProcess();
-        //info.MemoryUsage = proc.PrivateMemorySize64;
-        info.MemoryUsage = GC.GetTotalMemory(true);
-        info.CpuUsage = await GetCpuPercentage();
-        var settings = await ServiceLoader.Load<ISettingsService>().Get();
-        info.IsPaused = settings.IsPaused;
-        info.PausedUntil = settings.PausedUntil;
-        return info;
-    }
+    public SystemInfo GetSystemInfo()
+        => ServiceLoader.Load<DashboardService>().GetSystemInfo();
 
     /// <summary>
     /// Gets history CPU data of system information
@@ -97,8 +76,8 @@ public class SystemController:BaseController
         if (SystemMonitor.Instance == null)
             return new SystemValue<float>[] { };
         if (since != null)
-            return SystemMonitor.Instance.CpuUsage.Where(x => x.Time > since);
-        var data = SystemMonitor.Instance.CpuUsage;
+            return SystemMonitor.CpuUsage.Where(x => x.Time > since);
+        var data = SystemMonitor.CpuUsage;
         return EaseData(data);
     }
     
@@ -113,8 +92,8 @@ public class SystemController:BaseController
         if (SystemMonitor.Instance == null)
             return new SystemValue<float>[] { };
         if (since != null)
-            return SystemMonitor.Instance.MemoryUsage.Where(x => x.Time > since);
-        var data = SystemMonitor.Instance.MemoryUsage;
+            return SystemMonitor.MemoryUsage.Where(x => x.Time > since);
+        var data = SystemMonitor.MemoryUsage;
         return EaseData(data);
     }
     
@@ -129,8 +108,8 @@ public class SystemController:BaseController
         if (SystemMonitor.Instance == null)
             return new SystemValue<float>[] { };
         if (since != null)
-            return SystemMonitor.Instance.OpenDatabaseConnections.Where(x => x.Time > since);
-        var data = SystemMonitor.Instance.OpenDatabaseConnections;
+            return SystemMonitor.OpenDatabaseConnections.Where(x => x.Time > since);
+        var data = SystemMonitor.OpenDatabaseConnections;
         return EaseData(data);
     }
     
@@ -145,8 +124,8 @@ public class SystemController:BaseController
         if (SystemMonitor.Instance == null)
             return new SystemValue<long>[] { };
         if (since != null)
-            return SystemMonitor.Instance.TempStorageUsage.Where(x => x.Time > since);
-        var data = SystemMonitor.Instance.TempStorageUsage;
+            return SystemMonitor.TempStorageUsage.Where(x => x.Time > since);
+        var data = SystemMonitor.TempStorageUsage;
         return EaseData(data);
     }
 
@@ -161,8 +140,8 @@ public class SystemController:BaseController
         if (SystemMonitor.Instance == null)
             return new SystemValue<long>[] { };
         if (since != null)
-            return SystemMonitor.Instance.LogStorageUsage.Where(x => x.Time > since);
-        var data = SystemMonitor.Instance.LogStorageUsage;
+            return SystemMonitor.LogStorageUsage.Where(x => x.Time > since);
+        var data = SystemMonitor.LogStorageUsage;
         return EaseData(data);
     }
 
@@ -223,34 +202,6 @@ public class SystemController:BaseController
     [HttpGet("history-data/processing-heatmap")]
     public List<HeatmapData> GetProcessingHeatMap()
         => ServiceLoader.Load<StatisticService>().GetHeatMap(Globals.STAT_PROCESSING_TIMES_HEATMAP);
-
-    private async Task<float> GetCpuPercentage()
-    {
-        try
-        {
-            var startTime = DateTime.UtcNow;
-            var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            await Task.Delay(100);
-
-            stopWatch.Stop();
-            var endTime = DateTime.UtcNow;
-            var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-
-            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
-
-            var cpuUsagePercentage = (float)(cpuUsageTotal * 100);
-            return cpuUsagePercentage;
-        }
-        catch (Exception)
-        {
-            return 0;
-        }
-    }
 
     /// <summary>
     /// Restarts FileFlows server
