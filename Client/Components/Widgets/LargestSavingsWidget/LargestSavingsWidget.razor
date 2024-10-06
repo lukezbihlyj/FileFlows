@@ -1,4 +1,5 @@
 @using FileFlows.Client.Helpers
+@using Humanizer
 @using FileSizeFormatter = FileFlows.Shared.Formatters.FileSizeFormatter
 @namespace FileFlows.Client.Components.Widgets
 
@@ -22,7 +23,7 @@
                 <img class="icon" src="@IconHelper.GetExtensionImage(item.Name.ToLowerInvariant())"/>
             </span>
             <div class="center">
-                <span class="name path">@item.Name</span>
+                <span class="name path">@item.RelativePath</span>
                 <div class="info">
                     <FlowIconValue Icon="node" Color="dark" Value="@item.NodeName"></FlowIconValue>
                     <FlowIconValue Icon="library" Color="dark" Value="@item.LibraryName"></FlowIconValue>
@@ -31,6 +32,7 @@
 
             <div class="right savings">
                 <span class="top-right">@saved</span>
+                <span class="time">@item.ProcessingEnded.Humanize(false)</span>
             </div>
         </div>
 
