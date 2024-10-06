@@ -68,16 +68,16 @@ public partial class FlowIconValue : ComponentBase
         if (_icon == "library")
         {
             _icon = "fas fa-folder";
-            _color = "green";
+            _color = _color?.EmptyAsNull() ?? "green";
         }
         else if (_icon == "flow")
         {
             _icon = "fas fa-sitemap";
-            _color = "blue";
+            _color = _color?.EmptyAsNull() ?? "blue";
         }
         else if (_icon.StartsWith("node"))
         {
-            _color = "purple";
+            _color = _color?.EmptyAsNull() ?? "purple";
             _icon = _icon switch
             {
                 "node:docker" => "fab fa-docker",

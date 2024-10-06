@@ -37,9 +37,21 @@ public partial class FlowRunnersWidget : ComponentBase, IDisposable
         ClientService.ExecutorsUpdated += ExecutorsUpdated;
         #endif
         await RefreshData();
+        ClientService.FileStatusUpdated += OnFileStatusUpdated;
     }
-    
-    #if(DEBUG)
+
+    /// <summary>
+    /// File status updated
+    /// </summary>
+    /// <param name="obj">the files updated</param>
+    private void OnFileStatusUpdated(List<LibraryStatus> obj)
+    {
+        bool watchedStatuses = obj.Any(x => x.Status is FileStatus.Unprocessed or FileStatus.Processed or FileStatus.ProcessingFailed);
+        if (watchedStatuses)
+            _ = RefreshData();
+    }
+
+#if(DEBUG)
     
     public static List<FlowExecutorInfoMinified> GenerateRandomExecutors(int count)
     {
@@ -125,6 +137,7 @@ public partial class FlowRunnersWidget : ComponentBase, IDisposable
     public void Dispose()
     {
         ClientService.ExecutorsUpdated -= ExecutorsUpdated;
+        ClientService.FileStatusUpdated -= OnFileStatusUpdated;
     }
     
     /// <summary>
