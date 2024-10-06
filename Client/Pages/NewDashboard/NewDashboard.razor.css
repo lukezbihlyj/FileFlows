@@ -29,6 +29,12 @@
 .dashboard-wrapper .grid + .grid {
   margin-top: 1rem;
 }
+.dashboard-wrapper .grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.dashboard-wrapper .grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
 .dashboard-wrapper .grid-4 {
   grid-template-columns: repeat(4, 1fr);
 }
