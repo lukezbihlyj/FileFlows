@@ -70,6 +70,7 @@
     "MappingIssue": "Zuordnungsproblem",
     "MissingDependencies": "Fehlende Abhängigkeiten",
     "MissingDependenciesMessage": "Die folgenden fehlenden Plugins müssen vor der Verwendung dieser Vorlage heruntergeladen werden:\n\n#LIST#",
+    "MonthShort": "Monat",
     "Name": "Name",
     "Never": "Nie",
     "Next": "Nächste",
@@ -147,6 +148,7 @@
     "VersionNumber": "Version: {version}",
     "View": "View",
     "ViewLog": "Log betrachten",
+    "WeekShort": "Woche",
     "When": "Wann",
     "Yes": "Ja",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Sind Sie sicher, dass Sie das aktuelle Dashboard löschen möchten?\n\nDies kann nicht rückgängig gemacht werden.",
         "DeleteWidget": "Sind Sie sicher, dass Sie dieses Widget entfernen möchten?",
         "Waiting": "Warten auf die Bearbeitung einer Datei"
+      },
+      "Tabs": {
+        "Dashboard": "Dashboard",
+        "Savings": "Einsparungen"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Spitze"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Fehlgeschlagen} other {# Fehlgeschlagen}}",
+          "Finished": "{count, plural, zero {Abgeschlossen} other {# Abgeschlossen}}",
+          "Upcoming": "{count, plural, zero {Bevorstehend} other {# Bevorstehend}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Dateien verarbeitet",
+          "PerDay": "{num} pro Tag",
+          "PerHour": "{num} pro Stunde",
+          "StorageSaved": "Speicher gespart"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Keine Einsparungen"
+        }
       }
     },
     "DockerMod": {

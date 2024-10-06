@@ -70,6 +70,7 @@
     "MappingIssue": "Problema di Mappatura",
     "MissingDependencies": "Dipendenze Mancanti",
     "MissingDependenciesMessage": "I seguenti plugin mancanti devono essere scaricati prima di utilizzare questo modello:\n\n#LIST#",
+    "MonthShort": "Mese",
     "Name": "Nome",
     "Never": "Mai",
     "Next": "Avanti",
@@ -147,6 +148,7 @@
     "VersionNumber": "Versione: {version}",
     "View": "Visualizza",
     "ViewLog": "Visualizza Log",
+    "WeekShort": "Sett",
     "When": "Quando",
     "Yes": "Sì",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Sei sicuro di voler eliminare la dashboard attuale?\n\nQuesta operazione non può essere annullata.",
         "DeleteWidget": "Sei sicuro di voler rimuovere questo Widget?",
         "Waiting": "In attesa di un file da elaborare"
+      },
+      "Tabs": {
+        "Dashboard": "Cruscotto",
+        "Savings": "Risparmi"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Picco"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Fallito} other {# Falliti}}",
+          "Finished": "{count, plural, zero {Completato} other {# Completati}}",
+          "Upcoming": "{count, plural, zero {In arrivo} other {# In arrivo}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "File elaborati",
+          "PerDay": "{num} al giorno",
+          "PerHour": "{num} all'ora",
+          "StorageSaved": "Spazio salvato"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Nessun risparmio"
+        }
       }
     },
     "DockerMod": {

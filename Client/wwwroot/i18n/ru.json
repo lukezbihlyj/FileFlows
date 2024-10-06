@@ -70,6 +70,7 @@
     "MappingIssue": "Проблема с отображением",
     "MissingDependencies": "Отсутствуют зависимости",
     "MissingDependenciesMessage": "Следующие отсутствующие плагины должны быть загружены перед использованием этого шаблона:\n\n#LIST#",
+    "MonthShort": "Мес",
     "Name": "Имя",
     "Never": "Никогда",
     "Next": "Далее",
@@ -147,6 +148,7 @@
     "VersionNumber": "Версия: {version}",
     "View": "Просмотр",
     "ViewLog": "Просмотреть журнал",
+    "WeekShort": "Нед",
     "When": "Когда",
     "Yes": "Да",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Вы уверены, что хотите удалить текущую приборную панель?\n\nЭто действие не может быть отменено.",
         "DeleteWidget": "Вы уверены, что хотите удалить этот виджет?",
         "Waiting": "Ожидание файла для обработки"
+      },
+      "Tabs": {
+        "Dashboard": "Панель",
+        "Savings": "Сбережения"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Пик"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Неудачно} other {# Неудачно}}",
+          "Finished": "{count, plural, zero {Завершено} other {# Завершено}}",
+          "Upcoming": "{count, plural, zero {Предстоящие} other {# Предстоящие}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Обработанные файлы",
+          "PerDay": "{num} в день",
+          "PerHour": "{num} в час",
+          "StorageSaved": "Сохраненное хранилище"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Без сбережений"
+        }
       }
     },
     "DockerMod": {

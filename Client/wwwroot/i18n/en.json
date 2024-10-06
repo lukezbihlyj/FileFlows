@@ -17,8 +17,6 @@
     "ChangePassword": "Change Password",
     "Clear": "Clear",
     "Close": "Close",
-    "MonthShort": "Month",
-    "WeekShort": "Week",
     "CommunityFlows": "Community Flows",
     "Confirm": "Confirm",
     "CopiedToClipboard": "Copied ''{text}'' to clipboard.",
@@ -72,6 +70,7 @@
     "MappingIssue": "Mapping Issue",
     "MissingDependencies": "Missing Dependencies",
     "MissingDependenciesMessage": "The following missing plugins must be downloaded before using this template:\n\n#LIST#",
+    "MonthShort": "Month",
     "Name": "Name",
     "Never": "Never",
     "Next": "Next",
@@ -149,6 +148,7 @@
     "VersionNumber": "Version: {version}",
     "View": "View",
     "ViewLog": "View Log",
+    "WeekShort": "Week",
     "When": "When",
     "Yes": "Yes",
     "DateRanges": {
@@ -621,23 +621,23 @@
         "Dashboard": "Dashboard",
         "Savings": "Savings"
       },
-      "Widgets": {        
+      "Widgets": {
         "CpuRam": {
           "Peak": "{num} Peak"
         },
         "Files": {
-          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}",
+          "Failed": "{count, plural, zero {Failed} other {# Failed}}",
           "Finished": "{count, plural, zero {Finished} other {# Finished}}",
-          "Failed": "{count, plural, zero {Failed} other {# Failed}}"
-        },
-        "LibrarySavings": {
-          "NoSavings": "No Savings"
+          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}"
         },
         "FilesOverview": {
           "FilesProcessed": "Files Processed",
-          "StorageSaved": "Storage Saved",
           "PerDay": "{num} Per Day",
-          "PerHour": "{num} Per Hour"
+          "PerHour": "{num} Per Hour",
+          "StorageSaved": "Storage Saved"
+        },
+        "LibrarySavings": {
+          "NoSavings": "No Savings"
         }
       }
     },

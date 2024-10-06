@@ -70,6 +70,7 @@
     "MappingIssue": "Mappningsproblem",
     "MissingDependencies": "Saknade beroenden",
     "MissingDependenciesMessage": "Följande saknade plugins måste laddas ner innan du använder denna mall:\n\n#LIST#",
+    "MonthShort": "Mån",
     "Name": "Namn",
     "Never": "Aldrig",
     "Next": "Nästa",
@@ -147,6 +148,7 @@
     "VersionNumber": "Version: {version}",
     "View": "Visa",
     "ViewLog": "Visa logg",
+    "WeekShort": "Vecka",
     "When": "När",
     "Yes": "Ja",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Är du säker på att du vill radera den aktuella instrumentpanelen?\n\nDetta kan inte ångras.",
         "DeleteWidget": "Är du säker på att du vill ta bort denna widget?",
         "Waiting": "Väntar på en fil att bearbeta"
+      },
+      "Tabs": {
+        "Dashboard": "Instrumentbräda",
+        "Savings": "Besparingar"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Topp"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Misslyckad} other {# Misslyckade}}",
+          "Finished": "{count, plural, zero {Färdig} other {# Färdiga}}",
+          "Upcoming": "{count, plural, zero {Kommande} other {# Kommande}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Bearbetade filer",
+          "PerDay": "{num} per dag",
+          "PerHour": "{num} per timme",
+          "StorageSaved": "Sparad lagring"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Inga besparingar"
+        }
       }
     },
     "DockerMod": {

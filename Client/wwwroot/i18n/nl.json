@@ -70,6 +70,7 @@
     "MappingIssue": "Mapping Probleem",
     "MissingDependencies": "Ontbrekende Afhankelijkheden",
     "MissingDependenciesMessage": "De volgende ontbrekende plugins moeten worden gedownload voordat je deze sjabloon kunt gebruiken:\n\n#LIST#",
+    "MonthShort": "Mnd",
     "Name": "Naam",
     "Never": "Nooit",
     "Next": "Volgende",
@@ -147,6 +148,7 @@
     "VersionNumber": "Versie: {version}",
     "View": "Bekijk",
     "ViewLog": "Bekijk Log",
+    "WeekShort": "Wk",
     "When": "Wanneer",
     "Yes": "Ja",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Weet je zeker dat je het huidige dashboard wilt verwijderen?\n\nDit kan niet ongedaan worden gemaakt.",
         "DeleteWidget": "Weet je zeker dat je deze widget wilt verwijderen?",
         "Waiting": "Wachten op een bestand om te verwerken"
+      },
+      "Tabs": {
+        "Dashboard": "Dashboard",
+        "Savings": "Besparingen"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Piek"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Mislukt} other {# Mislukt}}",
+          "Finished": "{count, plural, zero {Voltooid} other {# Voltooid}}",
+          "Upcoming": "{count, plural, zero {Aankomend} other {# Aankomend}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Verwerkte bestanden",
+          "PerDay": "{num} per dag",
+          "PerHour": "{num} per uur",
+          "StorageSaved": "Opgeslagen opslag"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Geen besparingen"
+        }
       }
     },
     "DockerMod": {

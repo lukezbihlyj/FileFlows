@@ -70,6 +70,7 @@
     "MappingIssue": "マッピングの問題",
     "MissingDependencies": "依存関係が不足しています",
     "MissingDependenciesMessage": "このテンプレートを使用する前に、次の不足しているプラグインをダウンロードする必要があります：\n\n#LIST#",
+    "MonthShort": "月",
     "Name": "名前",
     "Never": "決して",
     "Next": "次",
@@ -147,6 +148,7 @@
     "VersionNumber": "バージョン: {version}",
     "View": "表示",
     "ViewLog": "ログを表示",
+    "WeekShort": "週",
     "When": "いつ",
     "Yes": "はい",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "現在のダッシュボードを削除してもよろしいですか？\n\nこれは元に戻せません。",
         "DeleteWidget": "このウィジェットを削除してもよろしいですか？",
         "Waiting": "ファイルの処理を待っています"
+      },
+      "Tabs": {
+        "Dashboard": "ダッシュボード",
+        "Savings": "節約"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} ピーク"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
+          "Finished": "{count, plural, zero {完了} other {# 完了}}",
+          "Upcoming": "{count, plural, zero {今後} other {# 今後}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "処理済みファイル",
+          "PerDay": "{num} 日あたり",
+          "PerHour": "{num} 時間あたり",
+          "StorageSaved": "保存されたストレージ"
+        },
+        "LibrarySavings": {
+          "NoSavings": "節約なし"
+        }
       }
     },
     "DockerMod": {

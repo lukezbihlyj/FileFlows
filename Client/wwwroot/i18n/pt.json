@@ -70,6 +70,7 @@
     "MappingIssue": "Problema de Mapeamento",
     "MissingDependencies": "Dependências Faltando",
     "MissingDependenciesMessage": "Os seguintes plugins faltantes devem ser baixados antes de usar este modelo:\n\n#LIST#",
+    "MonthShort": "Mês",
     "Name": "Nome",
     "Never": "Nunca",
     "Next": "Próximo",
@@ -147,6 +148,7 @@
     "VersionNumber": "Versão: {version}",
     "View": "Visualizar",
     "ViewLog": "Visualizar Log",
+    "WeekShort": "Sem",
     "When": "Quando",
     "Yes": "Sim",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Tem certeza de que deseja excluir o painel atual?\n\nIsso não pode ser desfeito.",
         "DeleteWidget": "Tem certeza de que deseja remover este Widget?",
         "Waiting": "Aguardando um arquivo para processar"
+      },
+      "Tabs": {
+        "Dashboard": "Painel",
+        "Savings": "Economias"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Pico"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Falhou} other {# Falhados}}",
+          "Finished": "{count, plural, zero {Concluído} other {# Concluídos}}",
+          "Upcoming": "{count, plural, zero {Próximo} other {# Próximos}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Arquivos processados",
+          "PerDay": "{num} por dia",
+          "PerHour": "{num} por hora",
+          "StorageSaved": "Armazenamento salvo"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Sem economias"
+        }
       }
     },
     "DockerMod": {

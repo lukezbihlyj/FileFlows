@@ -70,6 +70,7 @@
     "MappingIssue": "Problema de Mapeo",
     "MissingDependencies": "Dependencias Faltantes",
     "MissingDependenciesMessage": "Los siguientes complementos faltantes deben ser descargados antes de usar esta plantilla:\n\n#LIST#",
+    "MonthShort": "Mes",
     "Name": "Nombre",
     "Never": "Nunca",
     "Next": "Siguiente",
@@ -147,6 +148,7 @@
     "VersionNumber": "Versión: {version}",
     "View": "Ver",
     "ViewLog": "Ver Registro",
+    "WeekShort": "Sem",
     "When": "Cuándo",
     "Yes": "Sí",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "¿Está seguro de que desea eliminar el tablero actual?\n\nEsto no se puede deshacer.",
         "DeleteWidget": "¿Está seguro de que desea eliminar este Widget?",
         "Waiting": "Esperando un archivo para procesar"
+      },
+      "Tabs": {
+        "Dashboard": "Panel",
+        "Savings": "Ahorros"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Pico"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Fallido} other {# Fallidos}}",
+          "Finished": "{count, plural, zero {Completado} other {# Completados}}",
+          "Upcoming": "{count, plural, zero {Próximo} other {# Próximos}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Archivos procesados",
+          "PerDay": "{num} por día",
+          "PerHour": "{num} por hora",
+          "StorageSaved": "Almacenamiento ahorrado"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Sin ahorros"
+        }
       }
     },
     "DockerMod": {

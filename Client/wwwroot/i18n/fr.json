@@ -70,6 +70,7 @@
     "MappingIssue": "Problème de mapping",
     "MissingDependencies": "Dépendances manquantes",
     "MissingDependenciesMessage": "Les plugins manquants suivants doivent être téléchargés avant d'utiliser ce modèle:\n\n#LIST#",
+    "MonthShort": "Mois",
     "Name": "Nom",
     "Never": "Jamais",
     "Next": "Suivant",
@@ -147,6 +148,7 @@
     "VersionNumber": "Version: {version}",
     "View": "Voir",
     "ViewLog": "Voir le journal",
+    "WeekShort": "Sem",
     "When": "Quand",
     "Yes": "Oui",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "Êtes-vous sûr de vouloir supprimer le tableau de bord actuel ?\n\nCela ne peut pas être annulé.",
         "DeleteWidget": "Êtes-vous sûr de vouloir supprimer ce Widget?",
         "Waiting": "En attente d'un fichier à traiter"
+      },
+      "Tabs": {
+        "Dashboard": "Tableau de bord",
+        "Savings": "Économies"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Pic"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Échoué} other {# Échoués}}",
+          "Finished": "{count, plural, zero {Terminé} other {# Terminés}}",
+          "Upcoming": "{count, plural, zero {À venir} other {# À venir}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Fichiers traités",
+          "PerDay": "{num} par jour",
+          "PerHour": "{num} par heure",
+          "StorageSaved": "Stockage économisé"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Aucune économie"
+        }
       }
     },
     "DockerMod": {

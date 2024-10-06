@@ -70,6 +70,7 @@
     "MappingIssue": "映射问题",
     "MissingDependencies": "缺少依赖项",
     "MissingDependenciesMessage": "在使用此模板之前，必须下载以下缺少的插件：\n\n#LIST#",
+    "MonthShort": "月",
     "Name": "名称",
     "Never": "从不",
     "Next": "下一个",
@@ -147,6 +148,7 @@
     "VersionNumber": "版本：{version}",
     "View": "查看",
     "ViewLog": "查看日志",
+    "WeekShort": "周",
     "When": "时间",
     "Yes": "是",
     "DateRanges": {
@@ -614,6 +616,29 @@
         "DeleteDashboard": "你确定要删除当前的仪表板吗？\n\n此操作无法撤销。",
         "DeleteWidget": "你确定要删除此小部件吗？",
         "Waiting": "等待处理文件"
+      },
+      "Tabs": {
+        "Dashboard": "仪表板",
+        "Savings": "节省"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} 峰值"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {失败} other {# 失败}}",
+          "Finished": "{count, plural, zero {完成} other {# 完成}}",
+          "Upcoming": "{count, plural, zero {即将} other {# 即将}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "已处理文件",
+          "PerDay": "{num} 每天",
+          "PerHour": "{num} 每小时",
+          "StorageSaved": "节省的存储空间"
+        },
+        "LibrarySavings": {
+          "NoSavings": "没有节省"
+        }
       }
     },
     "DockerMod": {
