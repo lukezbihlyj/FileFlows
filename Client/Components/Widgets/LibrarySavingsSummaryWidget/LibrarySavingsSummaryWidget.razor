@@ -4,14 +4,14 @@
 <ContainerWidget Title="Savings" Scroll="true">
     <Head>
         <OptionButtons @bind-Value="Mode">
-            <WidgetOption Label="Week" Value="1" />
-            <WidgetOption Label="Month" Value="2" />
+            <WidgetOption Label="@lblWeek" Value="1" />
+            <WidgetOption Label="@lblMonth" Value="2" />
         </OptionButtons>
     </Head>
     <Body>
     <CircularChart Percent="@TotalPercent" Title="@TotalSavings" />
     <div class="libraries">
-        @foreach (var library in Data)
+        @foreach (var library in Data.OrderBy(x => x.OriginalSize - x.FinalSize))
         {
             var savings = FileSizeFormatter.FormatSize(library.OriginalSize - library.FinalSize, 1);
             var percent = library.OriginalSize == 0 ? "0" : $"{(library.OriginalSize - library.FinalSize) * 100 / library.OriginalSize}%";

@@ -1,4 +1,3 @@
-using System.Data;
 using FileFlows.Client.Helpers;
 using Microsoft.AspNetCore.Components;
 
@@ -18,6 +17,8 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
     /// Gets if this is for the files processed, or the storage saved
     /// </summary>
     [Parameter] public bool IsFilesProcessed { get; set; }
+    
+    private string lblWeek, lblMonth;
     
     private int _Mode = 1;
     private string Color = "green";
@@ -45,8 +46,10 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        lblWeek = Translater.Instant("Labels.WeekShort");
+        lblMonth = Translater.Instant("Labels.MonthShort");
         Color = IsFilesProcessed ? "green" : "blue";
-        Label = IsFilesProcessed ? "Files Processed" : "Storage Saved";
+        Label = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview." + (IsFilesProcessed ? "FilesProcessed" : "StorageSaved"));
         Icon = IsFilesProcessed ? "far fa-checked-circle" : "fas fa-hdd";
         
         ClientService.FileOverviewUpdated += OnFileOverviewUpdated;
@@ -91,13 +94,17 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
             switch (Mode)
             {
                 case 1:
-                    Average = $"{Math.Round(total / 7d)} per day";
+                    Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
+                        new { num = Math.Round(total / 7d) });
                     break;
                 case 2:
+                    Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
+                        new { num = Math.Round(total / 31d) });
                     Average = $"{Math.Round(total / 31d)} per day";
                     break;
                 default:
-                    Average = $"{Math.Round(total / 24d)} per hour";
+                    Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerHour",
+                        new { num = Math.Round(total / 24d) });
                     break;
             }
             Data = dataset.Select(x => x.Value.FileCount).Select(x => (double)x).ToArray();
@@ -110,13 +117,16 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
             switch (Mode)
             {
                 case 1:
-                    Average = $"{FileSizeFormatter.FormatSize((long)Math.Round(total / 7d), 1)} per day";
+                    Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
+                        new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 7d), 1) });
                     break;
                 case 2:
-                    Average = $"{FileSizeFormatter.FormatSize((long)Math.Round(total / 31d), 1)} per day";
+                    Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
+                        new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 31d), 1) });
                     break;
                 default:
-                    Average = $"{FileSizeFormatter.FormatSize((long)Math.Round(total / 24d), 1)} per hour";
+                    Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerHour",
+                        new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 24d), 1) });
                     break;
             }
             Data = dataset.Select(x => x.Value.StorageSaved).Select(x => (double)x).ToArray();

@@ -80,7 +80,7 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
             Color = "yellow";
             Label = "CPU";
             Value = $"{CpuValue:F1}%";
-            Max = $"{CpuMax:F1}% Peak";
+            Max = Translater.Instant("Pages.Dashboard.Widgets.CpuRam.Peak", new { num = $"{CpuMax:F1}%" });
             Data = CpuValues.ToArray();
         }
         else
@@ -88,7 +88,7 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
             Color = "purple";
             Label = "RAM";
             Value = FileSizeFormatter.FormatSize((long)RamValue);
-            Max = FileSizeFormatter.FormatSize((long)RamMax) + " Peak";
+            Max = Translater.Instant("Pages.Dashboard.Widgets.CpuRam.Peak", new { num = FileSizeFormatter.FormatSize((long)RamMax) });
             Data = MemoryValues.ToArray();
         }
     }

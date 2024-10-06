@@ -17,6 +17,8 @@
     "ChangePassword": "Change Password",
     "Clear": "Clear",
     "Close": "Close",
+    "MonthShort": "Month",
+    "WeekShort": "Week",
     "CommunityFlows": "Community Flows",
     "Confirm": "Confirm",
     "CopiedToClipboard": "Copied ''{text}'' to clipboard.",
@@ -615,10 +617,28 @@
         "DeleteWidget": "Are you sure you want to remove this Widget?",
         "Waiting": "Waiting for a file to process"
       },
-      "Files": {
-        "Upcoming":"{count, plural, zero {Upcoming} other {# Upcoming}}",
-        "Finished":"{count, plural, zero {Finished} other {# Finished}}",
-        "Failed":"{count, plural, zero {Failed} other {# Failed}}"
+      "Tabs": {
+        "Dashboard": "Dashboard",
+        "Savings": "Savings"
+      },
+      "Widgets": {        
+        "CpuRam": {
+          "Peak": "{num} Peak"
+        },
+        "Files": {
+          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}",
+          "Finished": "{count, plural, zero {Finished} other {# Finished}}",
+          "Failed": "{count, plural, zero {Failed} other {# Failed}}"
+        },
+        "LibrarySavings": {
+          "NoSavings": "No Savings"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Files Processed",
+          "StorageSaved": "Storage Saved",
+          "PerDay": "{num} Per Day",
+          "PerHour": "{num} Per Hour"
+        }
       }
     },
     "DockerMod": {

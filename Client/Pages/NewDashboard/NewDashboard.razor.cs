@@ -9,11 +9,15 @@ public partial class NewDashboard : ComponentBase, IDisposable
     /// </summary>
     [Inject] public ClientService ClientService { get; set; }
 
+    private string lblDashboard, lblSavings;
+
     private bool loaded = false;
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
+        lblDashboard = Translater.Instant("Pages.Dashboard.Tabs.Dashboard");
+        lblSavings = Translater.Instant("Pages.Dashboard.Tabs.Savings");
         if (ClientService.CurrentSystemInfo == null)
         {
             var infoResult = await HttpHelper.Get<SystemInfo>("/api/dashboard/info");

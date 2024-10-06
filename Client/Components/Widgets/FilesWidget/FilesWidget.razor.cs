@@ -29,9 +29,9 @@ public partial class FilesWidget : ComponentBase, IDisposable
     
     protected override async Task OnInitializedAsync()
     {
-        lblUpcoming = Translater.Instant("Pages.Dashboard.Files.Upcoming", new { count = 0});
-        lblFinished = Translater.Instant("Pages.Dashboard.Files.Finished", new { count = 0});
-        lblFailed = Translater.Instant("Pages.Dashboard.Files.Failed", new { count = 0 });
+        lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = 0});
+        lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = 0});
+        lblFailed = Translater.Instant("Pages.Dashboard.Widgets.Files.Failed", new { count = 0 });
         await RefreshData();
         ClientService.FileStatusUpdated += OnFileStatusUpdated;
     }
@@ -58,9 +58,9 @@ public partial class FilesWidget : ComponentBase, IDisposable
         TotalUpcoming = UpcomingFiles.Count;
         TotalFailed = FailedFiles.Count;
         TotalFinished = RecentlyFinished.Count;
-        lblUpcoming = Translater.Instant("Pages.Dashboard.Files.Upcoming", new { count = TotalUpcoming});
-        lblFinished = Translater.Instant("Pages.Dashboard.Files.Finished", new { count = TotalFinished});
-        lblFailed = Translater.Instant("Pages.Dashboard.Files.Failed", new { count = TotalFailed });
+        lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = TotalUpcoming});
+        lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = TotalFinished});
+        lblFailed = Translater.Instant("Pages.Dashboard.Widgets.Files.Failed", new { count = TotalFailed });
         StateHasChanged();
     }
 

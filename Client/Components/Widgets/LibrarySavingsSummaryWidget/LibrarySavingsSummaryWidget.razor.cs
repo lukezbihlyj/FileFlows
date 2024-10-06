@@ -17,6 +17,8 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     private string TotalSavings = string.Empty;
     
     private List<StorageSavedData> Data = new();
+
+    private string lblNoSavings, lblWeek, lblMonth;
     
     private int _Mode = 1;
     private FileOverviewData? CurrentData;
@@ -38,6 +40,9 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        lblNoSavings = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavings.NoSavings");
+        lblWeek = Translater.Instant("Labels.WeekShort");
+        lblMonth = Translater.Instant("Labels.MonthShort");
         ClientService.FileOverviewUpdated += OnFileOverviewUpdated;
         if (ClientService.CurrentFileOverData != null)
         {
@@ -86,7 +91,7 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
         long original = dataset.Sum(x => x.Value.OriginalStorage);
         long final = dataset.Sum(x => x.Value.FinalStorage);
         TotalPercent = Math.Round((1 - (double)final / original) * 100, 1);
-        TotalSavings = FileSizeFormatter.FormatSize(original - final, 1);
+        TotalSavings = final > original ? lblNoSavings : FileSizeFormatter.FormatSize(original - final, 1);
     }
 
     /// <summary>
