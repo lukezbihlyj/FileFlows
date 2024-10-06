@@ -34,7 +34,10 @@
                     </div>
 
                     <div class="right savings">
-                        <span class="top-right time">@FormatProcessingTime(runner.ProcessingTime)</span>
+                        <span class="top-right time">@runner.CurrentPartName</span>
+                        <div class="steps">
+                            @FormatProcessingTime(runner.ProcessingTime)
+                        </div>
                     </div>
 
                     <div class="details">

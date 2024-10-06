@@ -148,10 +148,8 @@ public partial class FlowRunnersWidget : ComponentBase, IDisposable
             return processingTime.ToString(@"d\.hh\:mm\:ss");
         if (processingTime.TotalHours >= 1)
             return processingTime.ToString(@"h\:mm\:ss");
-        if (processingTime.TotalMinutes >= 1)
-            return processingTime.ToString(@"m\:ss");
-
-        return processingTime.TotalSeconds.ToString("0");
+        
+        return processingTime.ToString(@"m\:ss");
     }
 
 }

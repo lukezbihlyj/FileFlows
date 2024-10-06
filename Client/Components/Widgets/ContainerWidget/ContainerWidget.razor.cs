@@ -13,6 +13,11 @@ public partial class ContainerWidget : ComponentBase
     [Parameter] public string? Title { get; set; }
     
     /// <summary>
+    /// Gets or sets the UID of the widget
+    /// </summary>
+    [Parameter] public string? Uid { get; set; }
+    
+    /// <summary>
     /// Gets or sets the icon
     /// </summary>
     [Parameter] public string? Icon { get; set; }
