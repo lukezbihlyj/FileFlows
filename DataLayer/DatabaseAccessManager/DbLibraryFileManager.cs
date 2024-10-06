@@ -1994,9 +1994,17 @@ FROM {Wrap(nameof(LibraryFile))}";
             DatabaseType.SqlServer => $" OFFSET 0 ROWS FETCH NEXT {filter.Limit} ROWS ONLY",
             _ => $" LIMIT {filter.Limit}",
         };
-        
-        using var db = await DbConnector.GetDb();
-        return await db.Db.FetchAsync<LibraryFile>(sql);
+
+        try
+        {
+            using var db = await DbConnector.GetDb();
+            return await db.Db.FetchAsync<LibraryFile>(sql);
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Failed Searching Library Files: " + ex.Message + Environment.NewLine + sql);
+            return [];
+        }
     }
 
 
