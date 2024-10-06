@@ -1,0 +1,58 @@
+.file-table {
+  height: 100%;
+}
+
+.file-table-row {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+  align-items: center;
+  padding: 0.25rem 0;
+  position: relative;
+  cursor: pointer;
+}
+.file-table-row.has-message .center {
+  display: grid;
+  grid-template-columns: 1fr 8rem;
+}
+.file-table-row.has-message .center .message {
+  grid-column: 1/span 2;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--red);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-table-row .center {
+  display: flex;
+  align-content: center;
+  width: 100%;
+}
+
+.path {
+  flex-grow: 1;
+}
+
+.time {
+  width: 8rem;
+  min-width: 8rem;
+  text-align: center;
+}
+
+.savings {
+  background: rgba(255, 255, 255, 0.03);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.icon {
+  width: 3rem;
+}
+.icon .icon {
+  height: 2.25rem;
+}

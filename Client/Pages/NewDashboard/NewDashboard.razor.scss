@@ -1,3 +1,22 @@
+@media (max-width:720px)
+{
+  .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    height: fit-content !important;
+    overflow: unset !important;
+  }
+  ::deep {
+    .flow-tab.active {
+      overflow: auto !important;
+      top: 8.5rem !important;
+      padding:0 0.5rem 1rem !important;
+      &.dashboard {
+        flex-direction: column-reverse !important;
+      }
+    }
+  }
+}
 .dashboard-wrapper
 {
   padding:1rem 0;

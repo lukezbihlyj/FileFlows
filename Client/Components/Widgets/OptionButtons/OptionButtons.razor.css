@@ -22,34 +22,29 @@
   font-weight: var(--bold, 600);
   font-size: 0.9rem;
   color: rgba(var(--color-rgb), 0.3);
+  display: inline-flex;
+  align-items: center;
 }
 .options .btn-option + .btn-option {
   margin-left: 0.25rem;
 }
 .options .btn-option i {
-  margin-right: 0.5rem;
+  margin-right: 0.75rem;
+  font-size: 1.15rem;
 }
 .options .btn-option.active {
   background: var(--input-background);
   color: var(--color);
 }
-.options .btn-option.active.color-yellow {
-  background: transparent;
-  border-color: var(--yellow);
+.options .btn-option.color-yellow i {
   color: var(--yellow);
 }
-.options .btn-option.active.color-red {
-  background: transparent;
-  border-color: var(--red);
+.options .btn-option.color-red i {
   color: var(--red);
 }
-.options .btn-option.active.color-green {
-  background: transparent;
-  border-color: var(--green);
+.options .btn-option.color-green i {
   color: var(--green);
 }
-.options .btn-option.active.color-blue {
-  background: transparent;
-  border-color: var(--blue);
+.options .btn-option.color-blue i {
   color: var(--blue);
 }

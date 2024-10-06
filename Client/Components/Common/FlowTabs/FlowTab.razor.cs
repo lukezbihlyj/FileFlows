@@ -11,6 +11,11 @@ public partial class FlowTab:ComponentBase
     /// Gets or sets the <see cref="FlowTabs"/> component containing this tab.
     /// </summary>
     [CascadingParameter] FlowTabs Tabs { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional class name to apply to the tab.
+    /// </summary>
+    [Parameter] public string? ClassName { get; set; }
 
     private bool _Visible = true;
 

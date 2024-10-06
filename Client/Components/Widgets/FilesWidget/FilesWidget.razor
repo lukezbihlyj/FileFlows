@@ -14,7 +14,7 @@
         {
             @foreach (var file in UpcomingFiles)
             {
-                <div class="file-table-row">
+                <div class="file-table-row" @ondblclick="() => OpenFile(file)">
                     <span class="icon">
                         <img class="icon" src="icons/filetypes/video/mkv.svg"/>
                     </span>

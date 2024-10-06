@@ -11,60 +11,12 @@
     </Head>
     <Body>
     
-    <div class="runners @(Mode == 0 && Runners.Count > 0 ? "active" : "")">
-        @if (Runners.Count > 0)
-        {
-            @foreach (var runner in Runners)
-            {
-                var overall = runner.TotalParts == 0 ? 100 : ((runner.CurrentPart / (double)runner.TotalParts)) * 100;
-                var current = runner.CurrentPartPercent;
-
-                bool hasCurrent = current > 0;
-                <div class="runner table-item @(runner.Uid == SelectedExecutor ? "active" : "")" @key="runner.Uid">
-                    <div class="current-progress" style="width:@(current)%"></div>
-                    <div class="overall-progress" style="width:@(overall)%"></div>
-                    @* <FlowGauge InnerProgress=@executor.CurrentPartPercent OverallProgress="@overallProgress"></FlowGauge> *@
-                    <span class="icon">
-                        <img class="icon" src="@IconHelper.GetExtensionImage(runner.LibraryFileName.ToLowerInvariant())"/>
-                    </span>
-                    <div class="center">
-                        <span class="name path">@runner.RelativeFile</span>
-                        <div class="info">
-                            <FlowIconValue Icon="node" Color="dark" Value="@runner.NodeName"></FlowIconValue>
-                            <FlowIconValue Icon="library" Color="dark" Value="@runner.LibraryName"></FlowIconValue>
-                        </div>
-                    </div>
-
-                    <div class="right savings">
-                        <span class="top-right time">@runner.CurrentPartName</span>
-                        <div class="steps">
-                            @FormatProcessingTime(runner.ProcessingTime)
-                        </div>
-                    </div>
-
-                    <div class="details">
-                        @if (runner.FramesPerSecond > 0)
-                        {
-                            <span class="fps">@runner.FramesPerSecond</span>
-                        }
-                        @if (runner.FramesPerSecond > 0)
-                        {
-                            <span class="CurrentPart">@runner.CurrentPart</span>
-                        }
-                        @foreach (var additional in runner.Additional ?? [])
-                        {
-                            <span class="additional-label">@additional[0]</span>
-                            <span class="additional-value">@additional[1]</span>
-                        }
-                    </div>
-                </div>
-            }
-        }
+    <div class="runners @(Mode == 0 ? "active" : "")">
+        <RunnersComponent />
     </div>
 
-    <div class="charts @(Mode == 1 || Runners.Count == 0 ? "active" : "")">
-        charts
-
+    <div class="charts @(Mode == 1 ? "active" : "")">
+        <RunnerChartsComponent />
     </div>
 
     </Body>

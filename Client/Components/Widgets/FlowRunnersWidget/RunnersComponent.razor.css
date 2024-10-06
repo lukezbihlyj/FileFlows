@@ -1,0 +1,143 @@
+.runners {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.actions {
+  position: absolute;
+  bottom: 0.25rem;
+  top: 0;
+  left: -100%;
+  transition: left 0.3s ease-out;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  align-items: center;
+  background: var(--base-lightest-2);
+  font-size: 1.75rem;
+  align-content: center;
+}
+.actions i {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.actions i:hover {
+  opacity: 1;
+}
+
+.runner {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  flex-direction: column;
+  line-height: 2;
+  padding: 0;
+  margin: 0.75rem;
+  border-radius: var(--container-border-radius);
+  overflow: hidden;
+  border: solid 1px var(--border-color);
+}
+.runner:hover .actions {
+  left: 0;
+}
+.runner .runner-content {
+  z-index: 1;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+.runner .details {
+  display: none;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0 2rem 1rem;
+  border-top: solid 1px var(--border-color);
+}
+.runner.expanded .details {
+  display: grid;
+}
+.runner.expanded .actions {
+  bottom: 0;
+}
+.runner .right {
+  width: 7rem;
+  min-width: 7rem;
+}
+.runner .overall-progress {
+  background: rgba(255, 255, 255, 0.03);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+.runner .current-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0.25rem;
+  background: #33b2df;
+  z-index: 0;
+}
+
+.head {
+  display: flex;
+  flex-direction: row;
+  font-weight: var(--bold, 600);
+  padding-left: 1rem;
+  align-items: center;
+  border-bottom: solid 1px var(--border-color);
+}
+.head > span {
+  line-height: 3.2rem;
+  flex-grow: 1;
+}
+
+.icon {
+  width: 3rem;
+}
+.icon .icon {
+  height: 2.25rem;
+}
+
+.btn-pause {
+  float: right;
+  border-radius: var(--button-border-radius);
+  border: solid 1px var(--yellow);
+  color: var(--yellow);
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: var(--bold, 600);
+}
+.btn-pause i {
+  margin-right: 0.25rem;
+}
+
+.steps {
+  white-space: nowrap;
+  font-size: 0.9rem;
+  font-weight: var(--bold, 600);
+  height: fit-content;
+  align-self: center;
+  border-radius: var(--container-border-radius);
+  padding: 0.25rem 0.5rem;
+  width: fit-content;
+  margin: 2rem 0 0 auto;
+}
+
+.info-value {
+  display: flex;
+  flex-direction: row;
+}
+.info-value .label {
+  font-weight: var(--bold, 600);
+  width: 12rem;
+  min-width: 12rem;
+  display: inline-block;
+}
+.info-value .value {
+  opacity: 0.9;
+}
