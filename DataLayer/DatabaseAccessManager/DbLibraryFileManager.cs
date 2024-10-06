@@ -1876,11 +1876,19 @@ FROM {Wrap(nameof(LibraryFile))}";
         if(lastDays > 0)
             sql += $" WHERE {Wrap(nameof(LibraryFile.ProcessingEnded))} >= {Date(DateTime.UtcNow.AddDays(-lastDays))}";
         sql += $"GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
-    
-        using var db = await DbConnector.GetDb();
-        var results = await db.Db.FetchAsync<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>(sql);
 
-        return results;
+        try
+        {
+            using var db = await DbConnector.GetDb();
+            var results =
+                await db.Db.FetchAsync<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>(sql);
+            return results;
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Failed Getting Library File Stats: " + ex.Message + Environment.NewLine + sql);
+            return [];
+        }
     }
 
     /// <summary>

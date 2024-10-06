@@ -78,16 +78,16 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     {
         var data = Data;
         if (data == null || data.Count == 0)
+        {
+            TotalSavings = lblNoSavings;
+            TotalPercent = 0;
             return;
+        }
         
         long original = data.Sum(x => x.OriginalSize);
-        Logger.Instance.ILog("LibrarySavings: Original: " + original);
         long final = data.Sum(x => x.FinalSize);
-        Logger.Instance.ILog("LibrarySavings: Final: " + final);
         TotalPercent = Math.Round(final * 100f / original, 1);
-        Logger.Instance.ILog("LibrarySavings: TotalPercent: " + TotalPercent);
         TotalSavings = final > original ? lblNoSavings : FileSizeFormatter.FormatSize(original - final, 1);
-        Logger.Instance.ILog("LibrarySavings: TotalSavings: " + TotalSavings);
     }
 
     /// <summary>
