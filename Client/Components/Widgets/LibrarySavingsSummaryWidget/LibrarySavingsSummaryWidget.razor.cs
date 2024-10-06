@@ -88,8 +88,9 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
         
         long original = data.Sum(x => x.OriginalSize);
         long final = data.Sum(x => x.FinalSize);
-        TotalPercent = Math.Round(final * 100f / original, 1);
-        TotalSavings = final > original ? lblNoSavings : FileSizeFormatter.FormatSize(original - final, 1);
+        long saved = original - final;
+        TotalPercent = Math.Round(saved * 100f / original, 1);
+        TotalSavings = final > original ? lblNoSavings : FileSizeFormatter.FormatSize(saved, 1);
     }
 
     /// <summary>
