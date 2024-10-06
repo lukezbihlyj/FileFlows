@@ -1949,9 +1949,14 @@ FROM {Wrap(nameof(LibraryFile))}";
         }
         List<string> wheres = new();
 
-        wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " between " +
-                   DbConnector.FormatDateQuoted(filter.FromDate.Year > 1970 ? filter.FromDate : new DateTime(1970,1,1)) + " and " +
-                   DbConnector.FormatDateQuoted(filter.ToDate.Year < 2200 ? filter.ToDate : new DateTime(2200,12, 31)));
+        if(filter.FromDate.Year > 1970 && filter.ToDate.Year is > 1970 and < 2200)
+            wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " between " +
+                   DbConnector.FormatDateQuoted(new DateTime(1970,1,1)) + " and " +
+                   DbConnector.FormatDateQuoted(new DateTime(2200,12, 31)));
+        else if(filter.FromDate > new DateTime(1970,1,1))
+            wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " >= " + DbConnector.FormatDateQuoted(filter.FromDate));
+        else if(filter.ToDate.Year is > 1970 and < 2200)
+            wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " <= " + DbConnector.FormatDateQuoted(filter.ToDate));
         
         if(filter.FinishedProcessingFrom != null && filter.FinishedProcessingTo != null)
             wheres.Add(Wrap(nameof(LibraryFile.ProcessingEnded)) + " between " +
