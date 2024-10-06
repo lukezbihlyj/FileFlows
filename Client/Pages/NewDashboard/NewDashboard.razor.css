@@ -49,7 +49,12 @@
   grid-template-columns: repeat(2, 1fr);
 }
 .dashboard-wrapper .grid-60-40 {
-  grid-template-columns: 1fr 40%;
+  grid-template-columns: 1fr minmax(36rem, 40%);
+}
+@media (max-width: 1040px) {
+  .dashboard-wrapper .grid-60-40 {
+    grid-template-columns: 1fr minmax(28rem, 40%);
+  }
 }
 .dashboard-wrapper .grid-3 {
   grid-template-columns: repeat(3, 1fr);

@@ -1212,6 +1212,9 @@ input[type=file]{
     &.blue {
         --iv-color: #345772;
     }
+    &.dark {
+        --iv-color:var(--dark);
+    }
 
     &.purple {
         --iv-color: #780746;

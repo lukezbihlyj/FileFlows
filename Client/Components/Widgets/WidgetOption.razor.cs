@@ -30,6 +30,11 @@ public partial class WidgetOption : ComponentBase
     [Parameter] public int Value { get; set; }
     
     /// <summary>
+    /// Gets or sets an optional bubble to show
+    /// </summary>
+    [Parameter] public int? Bubble { get; set; }
+    
+    /// <summary>
     /// Initializes the tab when it is first rendered.
     /// </summary>
     protected override void OnInitialized()

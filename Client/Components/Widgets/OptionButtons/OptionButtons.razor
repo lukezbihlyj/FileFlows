@@ -14,7 +14,11 @@
                 {
                     <i class="icon @option.Icon"></i>
                 }
-                <span>@option.Label</span>
+                <span class="label">@option.Label</span>
+                @if (option.Bubble != null)
+                {
+                    <span class="bubble">@option.Bubble</span>
+                }
             </button>
         }
     </div>

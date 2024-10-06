@@ -36,6 +36,16 @@
       background:var(--input-background);
       color:var(--color);
     }
+    .bubble {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--color);
+      color: var(--white);
+      font-size: 0.75rem;
+      padding: 0.1rem 0.25rem;
+      border-radius: 0.25rem;
+    }
     //&.active.color-yellow {
     //  background: transparent;
     //  border-color:var(--yellow);

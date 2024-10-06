@@ -21,11 +21,17 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// </summary>
     private int FileMode { get; set; } = 2;
 
+    private string lblUpcoming, lblFinished, lblFailed;
+
 
     private List<DashboardFile> UpcomingFiles, RecentlyFinished, FailedFiles;
+    private int TotalUpcoming, TotalFinished, TotalFailed;
     
     protected override async Task OnInitializedAsync()
     {
+        lblUpcoming = Translater.Instant("Pages.Dashboard.Files.Upcoming", new { count = 0});
+        lblFinished = Translater.Instant("Pages.Dashboard.Files.Finished", new { count = 0});
+        lblFailed = Translater.Instant("Pages.Dashboard.Files.Failed", new { count = 0 });
         await RefreshData();
         ClientService.FileStatusUpdated += OnFileStatusUpdated;
     }
@@ -49,6 +55,12 @@ public partial class FilesWidget : ComponentBase, IDisposable
         UpcomingFiles = await LoadData<List<DashboardFile>>("/api/library-file/upcoming");
         RecentlyFinished = await LoadData<List<DashboardFile>>("/api/library-file/recently-finished?failedFiles=false");
         FailedFiles = await LoadData<List<DashboardFile>>("/api/library-file/recently-finished?failedFiles=true");
+        TotalUpcoming = UpcomingFiles.Count;
+        TotalFailed = FailedFiles.Count;
+        TotalFinished = RecentlyFinished.Count;
+        lblUpcoming = Translater.Instant("Pages.Dashboard.Files.Upcoming", new { count = TotalUpcoming});
+        lblFinished = Translater.Instant("Pages.Dashboard.Files.Finished", new { count = TotalFinished});
+        lblFailed = Translater.Instant("Pages.Dashboard.Files.Failed", new { count = TotalFailed });
         StateHasChanged();
     }
 
