@@ -15,7 +15,7 @@
         {
             long bytesSaved = library.OriginalSize - library.FinalSize;
             var savings = (bytesSaved < 0 ? "-" : "")+ FileSizeFormatter.FormatSize(Math.Abs(bytesSaved), 1);
-            var percent = bytesSaved < 1 ? "0" : $"{bytesSaved / library.OriginalSize * 100}%";
+            var percent = bytesSaved < 1 ? "0" : $"{bytesSaved * 100f / library.OriginalSize}%";
             <div class="library">
                 <span class="name">@library.Library</span>
                 <span class="savings">@savings</span>
