@@ -1,7 +1,4 @@
-using FileFlows.Plugin;
-
 namespace FileFlows.Shared.Models;
-
 
 /// <summary>
 /// A model used to search the library files
@@ -46,4 +43,25 @@ public class LibraryFileSearchModel
     /// Gets or sets the number of files to limit it too
     /// </summary>
     public int Limit { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the order by
+    /// </summary>
+    public LibraryFileSearchOrderBy? OrderBy { get; set; }
+    
+}
+
+/// <summary>
+/// Order by options for the library file search
+/// </summary>
+public enum LibraryFileSearchOrderBy
+{
+    /// <summary>
+    /// No order by
+    /// </summary>
+    None = 0,
+    /// <summary>
+    /// Order by the storage saved
+    /// </summary>
+    Savings = 1
 }

@@ -388,6 +388,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     /// <param name="filter">the search filter</param>
     /// <returns>a list of matching library files</returns>
     [HttpPost("search")]
+    [FileFlowsAuthorize] // needed for the dashboard
     public Task<List<LibraryFile>> Search([FromBody] LibraryFileSearchModel filter)
         => ServiceLoader.Load<LibraryFileService>().Search(filter);
 

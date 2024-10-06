@@ -23,7 +23,9 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     private string lblNoSavings, lblAll, lblMonth;
 
     public List<StorageSavedData> Data => Mode == 0 ? MonthData : TotalData;
-    
+    /// <summary>
+    /// Gets the mode
+    /// </summary>
     private int _Mode = 0;
     /// <summary>
     /// Gets or sets the selected mode

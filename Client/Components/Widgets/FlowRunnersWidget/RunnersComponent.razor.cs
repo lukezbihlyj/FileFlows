@@ -1,4 +1,3 @@
-using System.Net.Http;
 using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components.Widgets;

@@ -1875,7 +1875,7 @@ FROM {Wrap(nameof(LibraryFile))}";
         FROM {Wrap(nameof(LibraryFile))}";
         if(lastDays > 0)
             sql += $" WHERE {Wrap(nameof(LibraryFile.ProcessingEnded))} >= {Date(DateTime.UtcNow.AddDays(-lastDays))}";
-        sql += $"GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
+        sql += $" GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
 
         try
         {
@@ -1937,6 +1937,9 @@ FROM {Wrap(nameof(LibraryFile))}";
                     lf.Name.Contains(path, StringComparison.CurrentCultureIgnoreCase) ||
                     lf.OutputPath.Contains(path, StringComparison.CurrentCultureIgnoreCase));
             }
+
+            if (filter is { Status: FileStatus.Processed, OrderBy: LibraryFileSearchOrderBy.Savings })
+                cachedResults = cachedResults.OrderByDescending(lf => lf.OriginalSize - lf.FinalSize);
             
             // Apply Limit
             if (filter.Limit > 0)
@@ -1982,6 +1985,9 @@ FROM {Wrap(nameof(LibraryFile))}";
 
         string sql = "select * from " + Wrap(nameof(LibraryFile)) + " " +
                      "where " + string.Join(" and ", wheres);
+        
+        if (filter is { Status: FileStatus.Processed, OrderBy: LibraryFileSearchOrderBy.Savings })
+            sql += " order by " + Wrap(nameof(LibraryFile.OriginalSize)) + " - " + Wrap(nameof(LibraryFile.FinalSize)) + " desc";
         
         sql += DbType switch
         {

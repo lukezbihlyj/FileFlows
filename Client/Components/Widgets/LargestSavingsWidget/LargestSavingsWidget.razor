@@ -1,0 +1,40 @@
+@using FileFlows.Client.Helpers
+@using FileSizeFormatter = FileFlows.Shared.Formatters.FileSizeFormatter
+@namespace FileFlows.Client.Components.Widgets
+
+<ContainerWidget Title="Largest Savings" Scroll="true">
+    <Head>
+        <OptionButtons @bind-Value="Mode">
+            <WidgetOption Label="@lblMonth" Value="0" />
+            <WidgetOption Label="@lblAll" Value="1" />
+        </OptionButtons>
+    </Head>
+    <Body>
+@foreach (var item in Data)
+{
+    var percent = item.FinalSize * 100f / item.OriginalSize;
+    var saved = FileSizeFormatter.Format(item.OriginalSize - item.FinalSize, 1);
+
+    <div class="library-saving table-item" @key="item.Uid">
+        <div class="savings-bar" style="width:@(percent)%"></div>
+        <div class="library-saving-content">
+            <span class="icon">
+                <img class="icon" src="@IconHelper.GetExtensionImage(item.Name.ToLowerInvariant())"/>
+            </span>
+            <div class="center">
+                <span class="name path">@item.Name</span>
+                <div class="info">
+                    <FlowIconValue Icon="node" Color="dark" Value="@item.NodeName"></FlowIconValue>
+                    <FlowIconValue Icon="library" Color="dark" Value="@item.LibraryName"></FlowIconValue>
+                </div>
+            </div>
+
+            <div class="right savings">
+                <span class="top-right">@saved</span>
+            </div>
+        </div>
+
+    </div>
+}
+</Body>
+</ContainerWidget>
