@@ -27,7 +27,7 @@
   
   .grid {
     display: grid;
-    grid-gap: 0.5rem;   
+    grid-gap: 0.5rem;
     + .grid {
       margin-top:1rem;
     }
@@ -35,6 +35,9 @@
 
   .grid-2 {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-60-40 {
+    grid-template-columns: 1fr 40%;
   }
   .grid-3 {
     grid-template-columns: repeat(3, 1fr);

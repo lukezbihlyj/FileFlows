@@ -11,7 +11,12 @@ public partial class ContainerWidget : ComponentBase
     /// Gets or sets the title
     /// </summary>
     [Parameter] public string? Title { get; set; }
-    
+
+    /// <summary>
+    /// Gets or sets if the scrollbar should always be visible
+    /// </summary>
+    [Parameter] public bool Scroll { get; set; }
+
     /// <summary>
     /// Gets or sets the UID of the widget
     /// </summary>
@@ -25,7 +30,12 @@ public partial class ContainerWidget : ComponentBase
     /// <summary>
     /// Gets or sets the child content
     /// </summary>
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment Body { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the options content
+    /// </summary>
+    [Parameter] public RenderFragment? Head { get; set; }
     
     /// <summary>
     /// Gets or sets the selected Mode

@@ -13,3 +13,13 @@
   font-size: 1.1rem;
   font-weight: var(--bold, 600);
 }
+.flow-widget.scroll {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.flow-widget.scroll ::deep .widget-content {
+  overflow-y: scroll;
+  flex-grow: 1;
+  padding-right: var(--scroller-width);
+}

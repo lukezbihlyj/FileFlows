@@ -1,7 +1,13 @@
 @namespace FileFlows.Client.Components.Widgets
 
-<ContainerWidget Title="@Title" Mode="Mode" ModeChanged="ModeChanged" Uid="@Uid">
-    @ChildContent
+<ContainerWidget Title="@Title" Uid="@Uid">
+    <Head>
+        <OptionButtons Value="Mode" ValueChanged="OnModeChanged">
+            @ChildContent
+        </OptionButtons>
+
+    </Head>
+    <Body>
 
     @{
         var svg = GenerateSvg(Data, Color);
@@ -31,13 +37,14 @@
             @* </svg> *@
         }
     }
-    
+
     <div class="details">
-        <span class="icon"><i class="@Icon" /></span>
+        <span class="icon"><i class="@Icon"/></span>
         <div class="details-main">
             <span class="total">@Total</span>
             <span class="suffix">@Suffix</span>
         </div>
     </div>
-    
+    </Body>
+
 </ContainerWidget>

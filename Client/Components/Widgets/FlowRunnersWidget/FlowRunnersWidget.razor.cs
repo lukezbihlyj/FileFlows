@@ -18,39 +18,24 @@ public partial class FlowRunnersWidget : ComponentBase, IDisposable
     [CascadingParameter] Editor Editor { get; set; }
     
     private List<FlowExecutorInfoMinified> Runners = new ();
+    
     /// <summary>
-    /// Gets or sets the file mode
+    /// Gets or sets the mode
     /// </summary>
-    private int FileMode { get; set; } = 2;
+    private int Mode { get; set; }
     
     private Guid SelectedExecutor = Guid.Empty;
 
-
-    private List<DashboardFile> UpcomingFiles, RecentlyFinished, FailedFiles;
-
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        #if(DEBUG)
+#if(DEBUG)
         Runners = GenerateRandomExecutors(10);
-        #else
+#else
         ClientService.ExecutorsUpdated += ExecutorsUpdated;
-        #endif
-        await RefreshData();
-        ClientService.FileStatusUpdated += OnFileStatusUpdated;
+#endif
     }
-
-    /// <summary>
-    /// File status updated
-    /// </summary>
-    /// <param name="obj">the files updated</param>
-    private void OnFileStatusUpdated(List<LibraryStatus> obj)
-    {
-        bool watchedStatuses = obj.Any(x => x.Status is FileStatus.Unprocessed or FileStatus.Processed or FileStatus.ProcessingFailed);
-        if (watchedStatuses)
-            _ = RefreshData();
-    }
-
+    
 #if(DEBUG)
     
     public static List<FlowExecutorInfoMinified> GenerateRandomExecutors(int count)
@@ -92,52 +77,11 @@ public partial class FlowRunnersWidget : ComponentBase, IDisposable
     #endif
 
     /// <summary>
-    /// Refreshes the data
-    /// </summary>
-    private async Task RefreshData()
-    {
-        UpcomingFiles = await LoadData<List<DashboardFile>>("/api/library-file/upcoming");
-        RecentlyFinished = await LoadData<List<DashboardFile>>("/api/library-file/recently-finished?failedFiles=false");
-        FailedFiles = await LoadData<List<DashboardFile>>("/api/library-file/recently-finished?failedFiles=true");
-        StateHasChanged();
-    }
-
-    private async Task<T> LoadData<T>(string url)
-    {
-        var result = await HttpHelper.Get<T>(url);
-        if(result.Success == false || result.Data == null)
-            return default;
-        return result.Data;
-        
-    }
-    
-    public record DashboardFile(Guid Uid, string Name, string DisplayName,
-        string RelativePath,
-        DateTime ProcessingEnded,
-        string LibraryName,
-        string? When,
-        long OriginalSize,
-        long FinalSize,
-        string Message,
-        FileStatus Status
-    );
-    
-    /// <summary>
-    /// Opens the file for vieweing
-    /// </summary>
-    /// <param name="file">the file</param>
-    private void OpenFile(DashboardFile file)
-    {
-        _ = Helpers.LibraryFileEditor.Open(Blocker, Editor, file.Uid);
-    }
-
-    /// <summary>
     /// Disposes of the component
     /// </summary>
     public void Dispose()
     {
         ClientService.ExecutorsUpdated -= ExecutorsUpdated;
-        ClientService.FileStatusUpdated -= OnFileStatusUpdated;
     }
     
     /// <summary>
