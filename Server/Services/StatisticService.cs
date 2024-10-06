@@ -81,10 +81,12 @@ public class StatisticService : IStatisticService
     /// <summary>
     /// Gets storage saved
     /// </summary>
+    /// <param name="key">optional storage saved key to get</param>
     /// <returns>the storage saved</returns>
-    public List<StorageSavedData> GetStorageSaved()
+    public List<StorageSavedData> GetStorageSaved(string? key = null)
     {
-        if (CachedData.TryGetValue(Globals.STAT_STORAGE_SAVED, out var o) == false)
+        key ??= Globals.STAT_STORAGE_SAVED;
+        if (CachedData.TryGetValue(key, out var o) == false)
             return new ();
         return (o as StorageSaved)?.Data ?? new();
     }
@@ -206,21 +208,31 @@ public class StatisticService : IStatisticService
     /// <returns>an awaited task</returns>
     public async Task SyncStorageSaved()
     {
-        var data = await new LibraryFileManager().GetLibraryFileStats();
+        await SyncData(Globals.STAT_STORAGE_SAVED, 0);
+        await SyncData(Globals.STAT_STORAGE_SAVED_MONTH, 31);
+    }
+    
+    /// <summary>
+    /// Syncs the data
+    /// </summary>
+    /// <param name="key">the key to sync</param>
+    /// <param name="days">the number of days to sync</param>
+    private async Task SyncData(string key, int days)
+    {
+        var data = await new LibraryFileManager().GetLibraryFileStats(days);
         var libraries = await new LibraryManager().GetAll();
         
         await _semaphore.WaitAsync();
         try
         {
-            if (CachedData.ContainsKey(Globals.STAT_STORAGE_SAVED) == false ||
-                CachedData[Globals.STAT_STORAGE_SAVED] is StorageSaved == false)
+            if (CachedData.ContainsKey(key) == false ||
+                CachedData[key] is StorageSaved == false)
             {
-                CachedData[Globals.STAT_STORAGE_SAVED] = new StorageSaved();
+                CachedData[key] = new StorageSaved();
             }
-            var saved = (StorageSaved)CachedData[Globals.STAT_STORAGE_SAVED];
+            var saved = (StorageSaved)CachedData[key];
 
             saved.Data = new();
-
             foreach (var d in data)
             {
                 var lib = libraries.FirstOrDefault(x => x.Uid == d.LibraryUid);
@@ -237,7 +249,7 @@ public class StatisticService : IStatisticService
 
             await new StatisticManager().Update(new()
             {
-                Name = Globals.STAT_STORAGE_SAVED,
+                Name = key,
                 Type = StatisticType.StorageSaved,
                 Value = saved
             });
@@ -271,10 +283,17 @@ public class StatisticService : IStatisticService
             {
                 CachedData[Globals.STAT_STORAGE_SAVED] = new StorageSaved();
             }
+            if (CachedData.ContainsKey(Globals.STAT_STORAGE_SAVED_MONTH) == false ||
+                CachedData[Globals.STAT_STORAGE_SAVED_MONTH] is StorageSaved == false)
+            {
+                CachedData[Globals.STAT_STORAGE_SAVED_MONTH] = new StorageSaved();
+            }
 
             var saved = (StorageSaved)CachedData[Globals.STAT_STORAGE_SAVED];
+            var month = (StorageSaved)CachedData[Globals.STAT_STORAGE_SAVED_MONTH];
 
             saved.Data ??= new();
+            month.Data ??= new();
             var lib = saved.Data.FirstOrDefault(x => x.Library == library);
             if (lib == null)
             {
@@ -282,15 +301,31 @@ public class StatisticService : IStatisticService
                 lib.Library = library;
                 saved.Data.Add(lib);
             }
+            var libMonth = month.Data.FirstOrDefault(x => x.Library == library);
+            if (libMonth == null)
+            {
+                libMonth = new();
+                libMonth.Library = library;
+                month.Data.Add(libMonth);
+            }
 
             lib.OriginalSize += originalSize;
             lib.FinalSize += finalSize;
+            libMonth.OriginalSize += originalSize;
+            libMonth.FinalSize += finalSize;
 
-            await new StatisticManager().Update(new()
+            var manager = new StatisticManager();
+            await manager.Update(new()
             {
                 Name = Globals.STAT_STORAGE_SAVED,
                 Type = StatisticType.StorageSaved,
                 Value = saved
+            });
+            await manager.Update(new()
+            {
+                Name = Globals.STAT_STORAGE_SAVED_MONTH,
+                Type = StatisticType.StorageSaved,
+                Value = month
             });
         }
         catch (Exception ex)

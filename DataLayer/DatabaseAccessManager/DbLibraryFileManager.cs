@@ -1834,8 +1834,9 @@ FROM {Wrap(nameof(LibraryFile))}";
     /// <summary>
     /// Gets the total rows, sum of OriginalSize, and sum of FinalSize from the LibraryFile table grouped by Library.
     /// </summary>
+    /// <param name="lastDays">The number of last days to get, or 0 for all</param>
     /// <returns>A list of library statistics</returns>
-    public async Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats()
+    public async Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats(int lastDays = 0)
     {
         if (UseCache)
         {
@@ -1843,7 +1844,14 @@ FROM {Wrap(nameof(LibraryFile))}";
             
             // Aggregate data from the cache
             var cacheResults = Cache.Values
-                .Where(lf => lf.LibraryUid != null)
+                .Where(lf =>
+                {
+                    if (lf.LibraryUid == null)
+                        return false;
+                    if(lastDays > 0 && lf.ProcessingEnded < DateTime.UtcNow.AddDays(-lastDays))
+                        return false;
+                    return true;
+                })
                 .GroupBy(lf => lf.LibraryUid!.Value)
                 .Select(g => new
                 {
@@ -1864,8 +1872,10 @@ FROM {Wrap(nameof(LibraryFile))}";
             COUNT(*) AS {Wrap("TotalFiles")}, 
             SUM({Wrap(nameof(LibraryFile.OriginalSize))}) AS {Wrap("SumOriginalSize")}, 
             SUM({Wrap(nameof(LibraryFile.FinalSize))}) AS {Wrap("SumFinalSize")} 
-        FROM {Wrap(nameof(LibraryFile))}
-        GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
+        FROM {Wrap(nameof(LibraryFile))}";
+        if(lastDays > 0)
+            sql += $" WHERE {Wrap(nameof(LibraryFile.ProcessingEnded))} >= {Date(DateTime.UtcNow.AddDays(-lastDays))}";
+        sql += $"GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
     
         using var db = await DbConnector.GetDb();
         var results = await db.Db.FetchAsync<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>(sql);

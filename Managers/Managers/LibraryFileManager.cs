@@ -267,9 +267,10 @@ public class LibraryFileManager
     /// <summary>
     /// Gets the total rows, sum of OriginalSize, and sum of FinalSize from the LibraryFile table grouped by Library.
     /// </summary>
+    /// <param name="lastDays">The number of last days to get, or 0 for all</param>
     /// <returns>A list of library statistics</returns>
-    public Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats()
-        => DatabaseAccessManager.Instance.LibraryFileManager.GetLibraryFileStats();
+    public Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats(int lastDays = 0)
+        => DatabaseAccessManager.Instance.LibraryFileManager.GetLibraryFileStats(lastDays);
 
     /// <summary>
     /// Performs a search for files

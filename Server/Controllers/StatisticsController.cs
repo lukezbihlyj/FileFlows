@@ -53,8 +53,8 @@ public class StatisticsController : Controller
     /// </summary>
     /// <returns>the storage saved</returns>
     [HttpGet("storage-saved-raw")]
-    public object GetStorageSavedRaw()
-        => new StatisticService().GetStorageSaved();
+    public object GetStorageSavedRaw([FromQuery] int days)
+        => new StatisticService().GetStorageSaved(days == 31 ? Globals.STAT_STORAGE_SAVED_MONTH : Globals.STAT_STORAGE_SAVED);
     
     /// <summary>
     /// Gets storage saved

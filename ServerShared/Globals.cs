@@ -121,6 +121,10 @@ public class Globals
     /// The processing storage saved statistic
     /// </summary>
     public const string STAT_STORAGE_SAVED = "STORAGE_SAVED";
+    /// <summary>
+    /// The processing storage saved statistic for the month
+    /// </summary>
+    public const string STAT_STORAGE_SAVED_MONTH = "STORAGE_SAVED_MONTH";
 
     /// <summary>
     /// The processing total files statistic

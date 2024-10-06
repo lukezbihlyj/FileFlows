@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using FileFlows.Client.Helpers;
 using Microsoft.AspNetCore.Components;
 
@@ -16,12 +17,14 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     private double TotalPercent = 0;
     private string TotalSavings = string.Empty;
     
-    private List<StorageSavedData> Data = new();
+    private List<StorageSavedData> TotalData = new();
+    private List<StorageSavedData> MonthData = new();
 
-    private string lblNoSavings, lblWeek, lblMonth;
+    private string lblNoSavings, lblAll, lblMonth;
+
+    public List<StorageSavedData> Data => Mode == 0 ? MonthData : TotalData;
     
-    private int _Mode = 1;
-    private FileOverviewData? CurrentData;
+    private int _Mode = 0;
     /// <summary>
     /// Gets or sets the selected mode
     /// </summary>
@@ -32,7 +35,6 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
         {
             _Mode = value;
             SetValues();
-
             StateHasChanged();
         }
     }
@@ -41,24 +43,24 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     protected override void OnInitialized()
     {
         lblNoSavings = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavings.NoSavings");
-        lblWeek = Translater.Instant("Labels.WeekShort");
+        lblAll = Translater.Instant("Labels.All");
         lblMonth = Translater.Instant("Labels.MonthShort");
         ClientService.FileOverviewUpdated += OnFileOverviewUpdated;
-        if (ClientService.CurrentFileOverData != null)
-        {
-            CurrentData = ClientService.CurrentFileOverData;
-            SetValues();
-        }
-
         _ = Refresh();
     }
 
+    /// <summary>
+    /// Refresh the data
+    /// </summary>
     private async Task Refresh()
     {
-        var result = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw");
-        if (result.Success == false)
-            return;
-        Data = result.Data;
+        var result = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=0");
+        if (result.Success)
+            TotalData = result.Data;
+        var result2 = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=31");
+        if (result2.Success)
+            MonthData = result2.Data;
+        SetValues();
         StateHasChanged();
     }
 
@@ -67,30 +69,20 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     /// </summary>
     /// <param name="data">the updated data</param>
     private void OnFileOverviewUpdated(FileOverviewData data)
-    {
-        CurrentData = data;
-        SetValues();
-        StateHasChanged();
-    }
+        => _ = Refresh();
 
     /// <summary>
     /// Sets the value based on the data
     /// </summary>
     private void SetValues()
     {
-        var dataset = Mode switch
-        {
-            1 => CurrentData.Last7Days,
-            2 => CurrentData.Last31Days,
-            _ => CurrentData.Last24Hours
-        };
-
-        if (dataset.Count == 0)
+        var data = Data;
+        if (data == null || data.Count == 0)
             return;
         
-        long original = dataset.Sum(x => x.Value.OriginalStorage);
+        long original = data.Sum(x => x.OriginalSize);
         Logger.Instance.ILog("LibrarySavings: Original: " + original);
-        long final = dataset.Sum(x => x.Value.FinalStorage);
+        long final = data.Sum(x => x.FinalSize);
         Logger.Instance.ILog("LibrarySavings: Final: " + final);
         TotalPercent = Math.Round(final * 100f / original, 1);
         Logger.Instance.ILog("LibrarySavings: TotalPercent: " + TotalPercent);
