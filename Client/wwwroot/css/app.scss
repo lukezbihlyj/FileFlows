@@ -1257,6 +1257,7 @@ input[type=file]{
         font-weight: var(--bold, 600);
         padding: 0 0.5rem;
         align-self: center;
+        white-space: nowrap;
     }
 }
 

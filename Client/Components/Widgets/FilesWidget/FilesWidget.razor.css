@@ -29,10 +29,14 @@
   display: flex;
   align-content: center;
   width: 100%;
+  overflow: hidden;
+  align-items: center;
 }
 
 .path {
   flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .time {

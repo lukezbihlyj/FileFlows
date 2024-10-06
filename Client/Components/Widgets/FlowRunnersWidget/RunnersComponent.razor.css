@@ -50,9 +50,14 @@
 }
 .runner .details {
   display: none;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(6, auto);
   padding: 0 2rem 1rem;
   border-top: solid 1px var(--border-color);
+}
+@media (max-width: 600px) {
+  .runner .details {
+    grid-template-columns: repeat(4, auto);
+  }
 }
 .runner.expanded .details {
   display: grid;
@@ -128,16 +133,11 @@
   margin: 2rem 0 0 auto;
 }
 
-.info-value {
-  display: flex;
-  flex-direction: row;
-}
-.info-value .label {
+.label {
   font-weight: var(--bold, 600);
-  width: 12rem;
-  min-width: 12rem;
   display: inline-block;
 }
-.info-value .value {
+
+.value {
   opacity: 0.9;
 }

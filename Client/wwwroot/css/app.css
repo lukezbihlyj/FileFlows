@@ -3998,9 +3998,6 @@ hr {
 .icon-value.blue {
   --iv-color: #345772;
 }
-.icon-value.dark {
-  --iv-color: var(--dark);
-}
 .icon-value.purple {
   --iv-color: #780746;
 }
@@ -4029,6 +4026,7 @@ hr {
   font-weight: var(--bold, 600);
   padding: 0 0.5rem;
   align-self: center;
+  white-space: nowrap;
 }
 
 .top-right {

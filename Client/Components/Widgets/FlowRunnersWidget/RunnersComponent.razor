@@ -38,17 +38,13 @@ var expandable = runner.FramesPerSecond > 0 || runner.Additional?.Any() == true;
     <div class="details">
         @if (runner.FramesPerSecond > 0)
         {
-            <div class="info-value">
-                <span class="label">FPS</span>
-                <span class="value">@runner.FramesPerSecond</span>
-            </div>
+            <span class="label">FPS</span>
+            <span class="value">@runner.FramesPerSecond</span>
         }
         @foreach (var additional in runner.Additional ?? [])
         {
-            <div class="info-value">
-                <span class="label">@additional[0]</span>
-                <span class="value">@additional[1]</span>
-            </div>
+            <span class="label">@additional[0]</span>
+            <span class="value">@additional[1]</span>
         }
     </div>
 </div>
