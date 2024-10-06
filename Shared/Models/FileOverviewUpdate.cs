@@ -33,4 +33,13 @@ public record DashboardFileData
     /// Gets or sets the total storage saved
     /// </summary>
     public long StorageSaved { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the final storage
+    /// </summary>
+    public long FinalStorage { get; set; }
+    /// <summary>
+    /// Gets or sets the original storage
+    /// </summary>
+    public long OriginalStorage { get; set; }
 }

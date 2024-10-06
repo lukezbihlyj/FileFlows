@@ -71,13 +71,13 @@ public class DashboardFileOverviewService
             var currentDate = DateTime.UtcNow.Date;
 
             // Update today's hourly data
-            UpdateDictionary(last24HoursData, currentHour, 24, savings);
+            UpdateDictionary(last24HoursData, currentHour, 24, savings, file.OriginalSize, file.FinalSize);
 
             // Update 7-day bucket
-            UpdateDictionary(last7DaysData, currentDate, 7, savings);
+            UpdateDictionary(last7DaysData, currentDate, 7, savings, file.OriginalSize, file.FinalSize);
 
             // Update 31-day bucket
-            UpdateDictionary(last31DaysData, currentDate, 31, savings);
+            UpdateDictionary(last31DaysData, currentDate, 31, savings, file.OriginalSize, file.FinalSize);
 
             TriggerUpdateNotification();
         }
@@ -107,13 +107,13 @@ public class DashboardFileOverviewService
             DateTime fileDate = file.ProcessingEnded.Date;
 
             // Update today's hourly data
-            UpdateDictionary(last24HoursData, fileHour, 24, savings);
+            UpdateDictionary(last24HoursData, fileHour, 24, savings, file.OriginalSize, file.FinalSize);
 
             // Update 7-day bucket
-            UpdateDictionary(last7DaysData, fileDate, 7, savings);
+            UpdateDictionary(last7DaysData, fileDate, 7, savings, file.OriginalSize, file.FinalSize);
 
             // Update 31-day bucket
-            UpdateDictionary(last31DaysData, fileDate, 31, savings);
+            UpdateDictionary(last31DaysData, fileDate, 31, savings, file.OriginalSize, file.FinalSize);
         }
 
         TriggerUpdateNotification();
@@ -161,8 +161,10 @@ public class DashboardFileOverviewService
     /// <param name="dateKey">The date key for the data.</param>
     /// <param name="maxSize">The maximum size of the dictionary.</param>
     /// <param name="savings">The file size savings to add.</param>
+    /// <param name="originalSize">The original file size</param>
+    /// <param name="finalSize">The final file size</param>
     private void UpdateDictionary(Dictionary<DateTime, DashboardFileData> dataDictionary, DateTime dateKey, int maxSize,
-        long savings)
+        long savings, long originalSize, long finalSize)
     {
         if (!dataDictionary.ContainsKey(dateKey))
         {
@@ -177,7 +179,9 @@ public class DashboardFileOverviewService
             dataDictionary[dateKey] = new DashboardFileData
             {
                 FileCount = 1,
-                StorageSaved = savings
+                StorageSaved = savings,
+                OriginalStorage = originalSize,
+                FinalStorage = finalSize
             };
         }
         else
@@ -185,6 +189,8 @@ public class DashboardFileOverviewService
             // Update existing entry
             dataDictionary[dateKey].FileCount += 1;
             dataDictionary[dateKey].StorageSaved += savings;
+            dataDictionary[dateKey].OriginalStorage += originalSize;
+            dataDictionary[dateKey].FinalStorage += finalSize;
         }
     }
 

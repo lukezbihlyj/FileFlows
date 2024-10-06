@@ -1,0 +1,30 @@
+@namespace FileFlows.Client.Components.Widgets
+
+<svg width="300" height="300" viewBox="0 0 36 36" class="circular-chart">
+    <!-- Background circle -->
+    <path
+        class="circle-bg"
+        d="M18 2.0845
+           a 15.9155 15.9155 0 0 1 0 31.831
+           a 15.9155 15.9155 0 0 1 0 -31.831"
+    />
+
+    <!-- Highlighted progress circle -->
+    <path
+        class="circle"
+        stroke-dasharray="@(_percent), 100"
+        d="M18 2.0845
+           a 15.9155 15.9155 0 0 1 0 31.831
+           a 15.9155 15.9155 0 0 1 0 -31.831"
+    />
+
+    <!-- Percentage Text -->
+    <text x="18" y="18" class="percentage" text-anchor="middle" alignment-baseline="middle">
+        @($"{Percent:F0}%")
+    </text>
+
+    <!-- Title Text -->
+    <text x="18" y="24" class="title" text-anchor="middle" alignment-baseline="middle">
+        @Title
+    </text>
+</svg>

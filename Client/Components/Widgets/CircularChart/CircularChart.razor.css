@@ -1,0 +1,31 @@
+.circular-chart {
+  max-height: 16rem;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #2b2b2b;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke: #33b2df;
+  transition: stroke-dasharray 0.6s ease;
+}
+
+.percentage {
+  fill: white;
+  font-size: 8px;
+  font-weight: bold;
+}
+
+.title {
+  fill: white;
+  font-size: 4px;
+  font-weight: normal;
+}
