@@ -29,7 +29,7 @@ public class SystemMonitor:Worker
         {
             lock (CpuUsage) // Ensure thread safety if CpuUsage can be accessed concurrently
             {
-                return CpuUsage.Reverse().Take(30).Select(x => x.Value).ToArray();
+                return CpuUsage.Reverse().Take(30).Select(x => x.Value).Reverse().ToArray();
             }
         }
     }
@@ -42,7 +42,7 @@ public class SystemMonitor:Worker
         {
             lock (MemoryUsage) // Ensure thread safety if CpuUsage can be accessed concurrently
             {
-                return MemoryUsage.Reverse().Take(30).Select(x => (long)x.Value).ToArray();
+                return MemoryUsage.Reverse().Take(30).Select(x => (long)x.Value).Reverse().ToArray();
             }
         }
     }
