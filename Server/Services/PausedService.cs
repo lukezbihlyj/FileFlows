@@ -37,7 +37,7 @@ public class PausedService
     /// <param name="auditDetails">the audit details</param>
     public async Task Pause(int minutes, AuditDetails? auditDetails = null )
     {
-        if (minutes < 0)
+        if (minutes < 1)
         {
             // resuming
             if (IsPaused == false)

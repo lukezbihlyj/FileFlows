@@ -89,12 +89,32 @@ public class LibraryFileFilter
     public bool Matches(LibraryFile file)
     {
         // test if it matches
-        if (Status != null && file.Status != Status)
-            return false;
+        if (Status != null)
+        {
+            if (Status == FileStatus.Disabled)
+            {
+                if ((file.Flags & LibraryFileFlags.ForceProcessing) == LibraryFileFlags.ForceProcessing)
+                    return false; // its force, therefore not disabled
+                if (file.Status != FileStatus.Unprocessed)
+                    return false;
+                if(file.LibraryUid == null || SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) == false || lib?.Enabled != false)
+                    return false;
+            }
+            else if (Status == FileStatus.OnHold)
+            {
+                if (file.Status != FileStatus.Unprocessed)
+                    return false;
+                if(file.HoldUntil < DateTime.UtcNow)
+                    return false;
+            }
+            else if (file.Status != Status)
+                return false;
+        }
+
         if (AllowedLibraries != null && 
             (file.LibraryUid == null || AllowedLibraries!.Contains(file.LibraryUid.Value) == false))
             return false;
-        if (MaxSizeMBs != null && file.OriginalSize > MaxSizeMBs * 1_000_000)
+        if (MaxSizeMBs is > 0 && file.OriginalSize > MaxSizeMBs * 1_000_000)
             return false;
         if (ExclusionUids != null && ExclusionUids.Contains(file.Uid))
             return false;
@@ -104,7 +124,7 @@ public class LibraryFileFilter
             return false;
         if (NodeUid != null && file.NodeUid != NodeUid)
             return false;
-        if (ProcessingNodeUid != null && file.ProcessOnNodeUid != ProcessingNodeUid)
+        if (ProcessingNodeUid != null && file.ProcessOnNodeUid != null && file.ProcessOnNodeUid != ProcessingNodeUid)
             return false;
         if (LibraryUid != null && file.LibraryUid != LibraryUid)
             return false;

@@ -86,8 +86,8 @@ public class LibraryFileManager
     /// </summary>
     /// <param name="filter">the filter to get files for</param>
     /// <returns>a list of matching library files</returns>
-    public Task<List<LibraryFile>> GetAll(LibraryFileFilter filter)
-        => DatabaseAccessManager.Instance.LibraryFileManager.GetAll(filter);
+    public async Task<List<LibraryFile>> GetAll(LibraryFileFilter filter)
+        => await DatabaseAccessManager.Instance.LibraryFileManager.GetAll(filter);
 
     /// <summary>
     /// Gets the total items matching the filter

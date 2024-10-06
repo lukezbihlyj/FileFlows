@@ -1014,7 +1014,7 @@ internal class DbLibraryFileManager : BaseManager
         if (UseCache)
         {
             // use cache, also use filter.Skip and filter.Rows
-            var cachedFiles = Cache.Values.Where(filter.Matches);
+            var cachedFiles = Cache.Values.Where(filter.Matches).ToList();
             var sortedFiles = SortLibraryFiles(cachedFiles, filter);
             return sortedFiles.Skip(filter.Skip).Take(filter.Rows).ToList();
         }
@@ -1489,35 +1489,51 @@ end ");
         var disabled = libraries.Where(x => x.Enabled == false).Select(x => x.Uid).ToList();
         List<Guid> libraryUids = libraries.Select(x => x.Uid).ToList();
         int quarter = TimeHelper.GetCurrentQuarter();
-        var outOfSchedule = libraries.Where(x => disabled.Contains(x.Uid) == false && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
-            .Select(x => x.Uid).ToList();
+        var outOfSchedule = libraries
+            .Where(x => disabled.Contains(x.Uid) == false && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
+            .Select(x => x.Uid)
+            .ToList();
         
         if (UseCache)
         {
             var cachedFiles = Cache.Values.ToList();
-            var groupedStatus = cachedFiles.GroupBy(f => f.Status)
+
+            // Count distinct statuses from the cache
+            var groupedStatus = cachedFiles.Where(x => x.Status != FileStatus.Unprocessed).GroupBy(f => f.Status)
                 .Select(g => new LibraryStatus { Status = g.Key, Count = g.Count() })
                 .ToList();
+
+            // Add the counts from the cache to the results
             results.AddRange(groupedStatus);
 
+            // Calculate Disabled count
             if (disabled.Any())
             {
-                var disabledCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed && (f.LibraryUid != null && disabled.Contains(f.LibraryUid.Value)) && (f.Flags & LibraryFileFlags.ForceProcessing) == 0);
+                var disabledCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed &&
+                    disabled.Contains(f.LibraryUid ?? Guid.Empty) &&
+                    (f.Flags & LibraryFileFlags.ForceProcessing) == 0);
                 results.Add(new LibraryStatus { Count = disabledCount, Status = FileStatus.Disabled });
             }
 
+            // Calculate OutOfSchedule count
             if (outOfSchedule.Any())
             {
-                var outOfScheduleCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed && (f.LibraryUid != null && outOfSchedule.Contains(f.LibraryUid.Value)) && (f.Flags & LibraryFileFlags.ForceProcessing) == 0);
+                var outOfScheduleCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed &&
+                    outOfSchedule.Contains(f.LibraryUid ?? Guid.Empty) &&
+                    (f.Flags & LibraryFileFlags.ForceProcessing) == 0);
                 results.Add(new LibraryStatus { Count = outOfScheduleCount, Status = FileStatus.OutOfSchedule });
             }
 
-            var onHoldCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed && f.HoldUntil > DateTime.UtcNow &&
-                                                     ((f.Flags & LibraryFileFlags.ForceProcessing) > 0 || !disabled.Union(outOfSchedule).Contains(f.LibraryUid ?? Guid.Empty)));
+            // Calculate OnHold count
+            var onHoldCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed &&
+                f.HoldUntil > DateTime.UtcNow &&
+                ((f.Flags & LibraryFileFlags.ForceProcessing) > 0 || !disabled.Union(outOfSchedule).Contains(f.LibraryUid ?? Guid.Empty)));
             results.Add(new LibraryStatus { Count = onHoldCount, Status = FileStatus.OnHold });
 
-            var unProcessedCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed && f.HoldUntil <= DateTime.UtcNow &&
-                                                          ((f.Flags & LibraryFileFlags.ForceProcessing) > 0 || !disabled.Union(outOfSchedule).Contains(f.LibraryUid ?? Guid.Empty)));
+            // Calculate Unprocessed count
+            var unProcessedCount = cachedFiles.Count(f => f.Status == FileStatus.Unprocessed &&
+                f.HoldUntil <= DateTime.UtcNow &&
+                ((f.Flags & LibraryFileFlags.ForceProcessing) > 0 || !disabled.Union(outOfSchedule).Contains(f.LibraryUid ?? Guid.Empty)));
             results.Add(new LibraryStatus { Count = unProcessedCount, Status = FileStatus.Unprocessed });
 
             return results;

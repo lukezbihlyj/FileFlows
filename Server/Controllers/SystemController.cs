@@ -52,7 +52,6 @@ public class SystemController:BaseController
     {
         var service = ServiceLoader.Load<PausedService>();
         await service.Pause(duration, await GetAuditDetails());
-        
     }
 
 
