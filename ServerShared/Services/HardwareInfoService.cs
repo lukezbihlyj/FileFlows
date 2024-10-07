@@ -106,13 +106,9 @@ public class HardwareInfoService
                     {
                         if (!string.IsNullOrWhiteSpace(line) && line.Contains("VGA"))
                         {
-                            gpus.Add(new GpuInfo
-                            {
-                                Vendor = "AMD",
-                                Model = line.Trim(),
-                                Memory = GetAmdMemory(line.Trim()),
-                                DriverVersion = GetAmdDriverVersion()
-                            });
+                            var gpu = ParseAmdGpu(line);
+                            if(gpu != null)
+                                gpus.Add(gpu);
                         }
                     }
                 }
@@ -160,6 +156,38 @@ public class HardwareInfoService
         return gpus;
     }
 
+
+    /// <summary>
+    /// Parses the GPU model information string.
+    /// </summary>
+    /// <param name="line">The model information string from the GPU.</param>
+    /// <returns>A tuple containing the vendor and model of the GPU.</returns>
+    private GpuInfo ParseAmdGpu(string line)
+    {
+        // Example input:
+        // "Model: 0b:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M] (rev c1)"
+
+        string vendor = "AMD"; // Set vendor to AMD
+        string model = "Unknown";
+
+        // Split the model info to isolate the relevant sections
+        var parts = line.Split(new[] { " VGA compatible controller: " }, StringSplitOptions.None);
+
+        if (parts.Length > 1)
+        {
+            // Extract model information
+            model = parts[1][parts[1].IndexOf('[')..].Trim(); // Extracts "[AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M]"
+            model = model.Trim().Replace("(", "").Replace(")", ""); // Clean up parentheses
+        }
+
+        return new ()
+        {
+            Vendor = vendor,
+            Model = model,
+            Memory = GetAmdMemory(line), // Call your existing method to get memory
+            DriverVersion = GetAmdDriverVersion() // Call your existing method to get driver version
+        };
+    }
     /// <summary>
     /// Parses the NVIDIA GPU info
     /// </summary>
@@ -268,7 +296,7 @@ public class HardwareInfoService
     private long GetAmdMemory(string gpuInfo)
     {
         // Command to get memory size for a specific AMD GPU based on its name
-        string command = $"lspci -v -s {gpuInfo} | grep 'Memory size' | awk '{{print $3}}'";
+        string command = $"lspci -v -s {gpuInfo.Split(' ')[0]} | grep 'Memory size' | awk '{{print $3}}'";
 
         // Execute the command and get the output
         var result = ExecuteCommand(command);
@@ -411,10 +439,13 @@ public class HardwareInfoService
 
                 if (parts.Length >= 3)
                 {
+                    var model = parts[0].Trim();
+                    if (model == "Virtual Desktop Monitor")
+                        continue;
                     gpus.Add(new GpuInfo
                     {
                         Vendor = parts[0].Trim(), // May need to adjust based on output
-                        Model = parts[0].Trim(), // Same as Vendor in this output
+                        Model = model, // Same as Vendor in this output
                         Memory = long.TryParse(parts[1].Trim(), out long memory) ? memory : 0,
                         DriverVersion = parts[2].Trim()
                     });
@@ -446,10 +477,13 @@ public class HardwareInfoService
                 new ManagementObjectSearcher("select Name, AdapterRAM, DriverVersion from Win32_VideoController");
             foreach (var obj in searcher.Get())
             {
+                var model = obj["Name"]?.ToString() ?? "Unknown";
+                if (model == "Virtual Desktop Monitor")
+                    continue;
                 gpus.Add(new GpuInfo
                 {
                     Vendor = obj["Name"]?.ToString() ?? "Unknown",
-                    Model = obj["Name"]?.ToString() ?? "Unknown",
+                    Model = model,
                     Memory = Convert.ToInt64(obj["AdapterRAM"] ?? 0),
                     DriverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown"
                 });
@@ -484,19 +518,64 @@ public class HardwareInfoService
 
             // Read the generated output file
             string output = System.IO.File.ReadAllText("dxdiag_output.txt");
-            // You will need to parse the output for GPU information here
 
-            // Example parsing logic (you would need to implement this based on actual output format)
-            // This is a placeholder to show where parsing would happen
+            // Parsing the output for GPU information
+            // Split the output into lines
+            var lines = output.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
-            // Example of a hardcoded GPU entry (remove and implement parsing logic)
-            gpus.Add(new GpuInfo
+            GpuInfo? currentGpu = null;
+
+            foreach (var line in lines)
             {
-                Vendor = "NVIDIA Corporation",
-                Model = "GeForce RTX 3060",
-                Memory = 8589934592, // Example memory in bytes
-                DriverVersion = "31.0.15.2746" // Example driver version
-            });
+                // Check for GPU vendor information
+                if (line.StartsWith("Card name: "))
+                {
+                    if (currentGpu != null)
+                    {
+                        gpus.Add(currentGpu); // Add the previous GPU info if it exists
+                    }
+
+                    currentGpu = new GpuInfo
+                    {
+                        Model = line.Substring("Card name: ".Length).Trim() // Extract the model
+                    };
+                    continue;
+                }
+
+                // Check for GPU memory information
+                if (line.StartsWith("Display Memory: "))
+                {
+                    if (currentGpu != null)
+                    {
+                        string memoryString = line.Substring("Display Memory: ".Length).Trim();
+                        // Example: "8192 MB"
+                        if (long.TryParse(memoryString.Split(' ')[0], out long memoryInMb))
+                        {
+                            currentGpu.Memory = memoryInMb * 1024 * 1024; // Convert MB to bytes
+                        }
+                    }
+
+                    continue;
+                }
+
+                // Check for driver version information
+                if (line.StartsWith("Driver Version: "))
+                {
+                    if (currentGpu != null)
+                    {
+                        currentGpu.DriverVersion =
+                            line.Substring("Driver Version: ".Length).Trim(); // Extract the driver version
+                    }
+
+                    continue;
+                }
+            }
+
+            // Add the last GPU info if exists
+            if (currentGpu != null)
+            {
+                gpus.Add(currentGpu);
+            }
 
             // Clean up output file
             System.IO.File.Delete("dxdiag_output.txt");
