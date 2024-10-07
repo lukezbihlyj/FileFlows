@@ -649,6 +649,9 @@
         },
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# File} other {# File}}"
+        },
+        "Updates": {
+          "Title": "Aggiornamenti"
         }
       }
     },
@@ -1001,6 +1004,7 @@
       "Title": "Notifiche"
     },
     "Plugins": {
+      "Single": "Plugin",
       "Title": "Plugin",
       "Labels": {
         "PluginBrowser": "Browser Plugin"

@@ -295,6 +295,8 @@ public class RepositoryController : BaseController
             await updater(ro, cResult.Value, auditDetails);
         }
 
+        _ = ServiceLoader.Load<UpdateService>().Trigger();
+
         return Ok();
     }
 
@@ -473,6 +475,7 @@ public class RepositoryController : BaseController
         {
             // scripts were update, increment the revision
             await RevisionIncrement();
+            _ = ServiceLoader.Load<UpdateService>().Trigger();
         }
     }
 

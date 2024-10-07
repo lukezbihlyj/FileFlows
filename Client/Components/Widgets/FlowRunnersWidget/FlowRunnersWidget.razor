@@ -1,12 +1,10 @@
-@using FileFlows.Client.Helpers
-
 @namespace FileFlows.Client.Components.Widgets
 
 <ContainerWidget Title="@lblTitle" Scroll="true">
     <Head>
         <OptionButtons @bind-Value="Mode">
-            <WidgetOption Label="Runners" Value="0" Icon="fas fa-running"/>
-            <WidgetOption Label="Charts" Value="1" Icon="fas fa-chart-bar"/>
+            <WidgetOption Label="@lblTitle" Value="0" Icon="fas fa-running"/>
+            <WidgetOption Label="@lblUpdates" Value="1" Icon="fas fa-chart-bar"/>
         </OptionButtons>
     </Head>
     <Body>
@@ -16,7 +14,7 @@
     </div>
 
     <div class="charts @(Mode == 1 ? "active" : "")">
-        <RunnerChartsComponent />
+        <UpdatesComponent />
     </div>
 
     </Body>

@@ -112,6 +112,8 @@ public class StartupService
 
             DataLayerDelegates.Setup();
             
+            ServiceLoader.Load<UpdateService>().Trigger().Wait();
+            
             Complete(settings, serverUrl);
 
             // Start workers right at the end, so the ServerUrl is set in case the worker needs BaseServerUrl

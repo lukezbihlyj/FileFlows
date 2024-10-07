@@ -12,11 +12,12 @@ public partial class FlowRunnersWidget : ComponentBase
     /// <summary>
     /// Translated strings
     /// </summary>
-    private string lblTitle;
+    private string lblTitle, lblUpdates;
 
     /// <inheritdoc />
     protected override void OnInitialized()
     {
-        lblTitle = Translater.Instant("Pages.Dashboard.Widget.FlowRunners.Title");
+        lblTitle = Translater.Instant("Pages.Dashboard.Widgets.FlowRunners.Title");
+        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.Updates.Title");
     }
 }

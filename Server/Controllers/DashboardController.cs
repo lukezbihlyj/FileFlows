@@ -28,6 +28,14 @@ public class DashboardController : BaseController
         => ServiceLoader.Load<DashboardFileOverviewService>().GetData();
     
     /// <summary>
+    /// Gets any updates
+    /// </summary>
+    /// <returns>the updates</returns>
+    [HttpGet("updates")]
+    public UpdateInfo GetUpates()
+        => ServiceLoader.Load<UpdateService>().Info;
+    
+    /// <summary>
     /// Get all dashboards in the system
     /// </summary>
     /// <returns>all dashboards in the system</returns>

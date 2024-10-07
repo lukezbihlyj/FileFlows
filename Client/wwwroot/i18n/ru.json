@@ -649,6 +649,9 @@
         },
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# Файл} other {# Файлы}}"
+        },
+        "Updates": {
+          "Title": "Обновления"
         }
       }
     },
@@ -1001,6 +1004,7 @@
       "Title": "Уведомления"
     },
     "Plugins": {
+      "Single": "Плагин",
       "Title": "Плагины",
       "Labels": {
         "PluginBrowser": "Обозреватель плагинов"
