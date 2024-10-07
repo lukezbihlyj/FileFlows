@@ -28,7 +28,7 @@
         }
         else
         {
-            var list = FileMode == 3 ? FailedFiles : RecentlyFinished;
+            var list = FileMode == 2 ? FailedFiles : RecentlyFinished;
             @foreach (var file in list ?? [])
             {
                 <div class="file-table-row @(file.Message != null ? "has-message" : "no-message")" @ondblclick="() => OpenFile(file)">

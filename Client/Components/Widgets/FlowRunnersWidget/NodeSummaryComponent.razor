@@ -3,9 +3,9 @@
 
 @if (Data.Count > 0)
 {
-    foreach (var item in Data)
+    foreach (var item in Data.OrderBy(x => x.Enabled ? 0 : 1).ThenByDescending(x => x.Priority).ThenBy(x =>x.Name.ToLowerInvariant()))
     {
-        <div class="processing-node">
+        <div class="processing-node" @key="item.Uid">
             <span class="icon">
                 @if (item.OperatingSystem == OperatingSystemType.Mac)
                 {
