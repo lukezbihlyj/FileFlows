@@ -3,14 +3,14 @@
   flex-direction: row;
   border-bottom: solid 1px var(--border-color);
   padding-bottom: 0.75rem;
-  .icon {
-    height:9rem;
+  span.icon {
+    width:6rem;
     position: relative;
     align-self: center;
     top: -0.25rem;
     .architecture {
       position: absolute;
-      bottom: 1rem;
+      bottom: 0.3rem;
       font-size: 0.9rem;
       border-radius: 0.5rem;
       padding: 0 0.5rem;

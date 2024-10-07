@@ -1,6 +1,6 @@
-.runners, .charts {
+.runners, .charts, .nodes {
   display: none;
 }
-.runners.active, .charts.active {
+.runners.active, .charts.active, .nodes.active {
   display: unset;
 }
