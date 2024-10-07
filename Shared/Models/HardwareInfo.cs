@@ -41,7 +41,7 @@ public class HardwareInfo
     /// <returns>A formatted string containing the hardware information.</returns>
     public override string ToString()
     {
-        var gpuInfoStrings = Gpus.Select(gpu => gpu.ToString());
+        var gpuInfoStrings = Gpus?.Select(gpu => gpu.ToString())?.ToArray() ?? [];
         return $"Operating System: {OperatingSystem}\n" +
                $"OS Version: {OperatingSystemVersion}\n" +
                $"Architecture: {Architecture}\n" +

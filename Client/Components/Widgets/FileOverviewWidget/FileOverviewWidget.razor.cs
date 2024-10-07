@@ -113,7 +113,6 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
                 case 1:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
                         new { num = Math.Round(total / 31d) });
-                    Average = $"{Math.Round(total / 31d)} per day";
                     break;
                 default:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerHour",

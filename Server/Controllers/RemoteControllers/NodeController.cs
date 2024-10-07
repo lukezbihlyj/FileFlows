@@ -206,7 +206,9 @@ public class NodeController : BaseController
 
         Logger.Instance.ILog("Registering Node: " + model.Address);
         if (model.HardwareInfo != null)
-            Logger.Instance?.ILog($"Node {model.Address} Hardware Info: " + Environment.NewLine + model.HardwareInfo);
+            Logger.Instance.ILog($"Node {model.Address} Hardware Info: " + Environment.NewLine + model.HardwareInfo);
+        else
+            Logger.Instance.ILog($"Node {model.Address} provided no Hardware Info");
 
         var address = model.Address.ToLowerInvariant().Trim();
         var service = ServiceLoader.Load<NodeService>();

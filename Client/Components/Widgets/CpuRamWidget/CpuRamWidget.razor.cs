@@ -97,8 +97,8 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
         {
             Color = "purple";
             Label = "RAM";
-            Value = FileSizeFormatter.FormatSize((long)RamValue);
-            Max = Translater.Instant("Pages.Dashboard.Widgets.CpuRam.Peak", new { num = FileSizeFormatter.FormatSize((long)RamMax) });
+            Value = FileSizeFormatter.FormatSize((long)RamValue, 1);
+            Max = Translater.Instant("Pages.Dashboard.Widgets.CpuRam.Peak", new { num = FileSizeFormatter.FormatSize((long)RamMax, 1) });
             Data = MemoryValues.ToArray();
         }
     }
