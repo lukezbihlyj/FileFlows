@@ -42,7 +42,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// </summary>
     private const string LocalStorageKey = "FilesWidget";
 
-    private string lblUpcoming, lblFinished, lblFailed;
+    private string lblTitle, lblUpcoming, lblFinished, lblFailed;
 
 
     private List<DashboardFile> UpcomingFiles, RecentlyFinished, FailedFiles;
@@ -50,6 +50,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
     
     protected override async Task OnInitializedAsync()
     {
+        lblTitle = Translater.Instant("Pages.Dashboard.Widgets.Files.Title");
         lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = 0});
         lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = 0});
         lblFailed = Translater.Instant("Pages.Dashboard.Widgets.Files.Failed", new { count = 0 });

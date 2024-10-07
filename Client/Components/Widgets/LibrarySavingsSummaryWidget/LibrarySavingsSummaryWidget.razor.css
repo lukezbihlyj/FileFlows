@@ -1,19 +1,47 @@
-.libraries {
+.lss-widget {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  overflow: hidden;
+  height: 100%;
+  padding-left: 1rem;
+  margin: 0 0.5rem;
+}
+
+.lss-widget-chart {
+  padding-right: 1rem;
+}
+
+.lss-widget-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
+  padding-right: 1rem;
 }
 
 .library {
   display: flex;
   position: relative;
   line-height: 4rem;
+  padding: 0 0 1rem;
 }
 .library .name {
   flex-grow: 1;
+  position: relative;
+  top: 0.5rem;
+  font-size: 1.1rem;
 }
 .library .savings {
   font-weight: var(--bold, 600);
+  font-size: 1.3rem;
+}
+.library .items {
+  opacity: 0.5;
+  font-weight: 600;
+  font-size: 0.9rem;
+  position: absolute;
+  right: 0;
+  bottom: -0.5rem;
 }
 
 .bar {
@@ -27,7 +55,7 @@
   overflow: hidden;
 }
 .bar .inner {
-  background: #33b2df;
+  background: var(--accent-2);
   height: 100%;
   transition: width 0.6s ease;
 }

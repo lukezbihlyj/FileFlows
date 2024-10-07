@@ -628,6 +628,7 @@
         "Files": {
           "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
           "Finished": "{count, plural, zero {完了} other {# 完了}}",
+          "Title:": "ファイル",
           "Upcoming": "{count, plural, zero {今後} other {# 今後}}"
         },
         "FilesOverview": {
@@ -636,8 +637,18 @@
           "PerHour": "{num} 時間あたり",
           "StorageSaved": "保存されたストレージ"
         },
+        "FlowRunners": {
+          "Title": "ランナー"
+        },
+        "LargestSavings": {
+          "Title": "最大の節約"
+        },
         "LibrarySavings": {
-          "NoSavings": "節約なし"
+          "NoSavings": "節約なし",
+          "Title": "節約"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# ファイル} other {# ファイル}}"
         }
       }
     },

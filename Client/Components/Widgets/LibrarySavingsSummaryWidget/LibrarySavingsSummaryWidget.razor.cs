@@ -16,11 +16,12 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
 
     private double TotalPercent = 0;
     private string TotalSavings = string.Empty;
+    private string OriginalSize = string.Empty;
     
     private List<StorageSavedData> TotalData = new();
     private List<StorageSavedData> MonthData = new();
 
-    private string lblNoSavings, lblAll, lblMonth;
+    private string lblTitle, lblNoSavings, lblAll, lblMonth;
 
     public List<StorageSavedData> Data => Mode == 0 ? MonthData : TotalData;
     
@@ -55,6 +56,7 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
+        lblTitle = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavings.Title");
         lblNoSavings = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavings.NoSavings");
         lblAll = Translater.Instant("Labels.All");
         lblMonth = Translater.Instant("Labels.MonthShort");
@@ -94,6 +96,7 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
         if (data == null || data.Count == 0)
         {
             TotalSavings = lblNoSavings;
+            OriginalSize = string.Empty;
             TotalPercent = 0;
             return;
         }
@@ -103,6 +106,7 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
         long saved = original - final;
         TotalPercent = Math.Round(saved * 100f / original, 1);
         TotalSavings = final > original ? lblNoSavings : FileSizeFormatter.FormatSize(saved, 1);
+        OriginalSize = FileSizeFormatter.FormatSize(original, 1);
     }
 
     /// <summary>

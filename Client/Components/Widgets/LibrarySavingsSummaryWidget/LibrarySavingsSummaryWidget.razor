@@ -1,7 +1,7 @@
 @using FileFlows.Client.Helpers
 @namespace FileFlows.Client.Components.Widgets
 
-<ContainerWidget Title="Savings" Scroll="true">
+<ContainerWidget Title="@lblTitle" Scroll="true">
     <Head>
         <OptionButtons @bind-Value="Mode">
             <WidgetOption Label="@lblMonth" Value="0" />
@@ -9,21 +9,27 @@
         </OptionButtons>
     </Head>
     <Body>
-    <CircularChart Percent="@TotalPercent" Title="@TotalSavings" />
-    <div class="libraries">
-        @foreach (var library in Data.OrderByDescending(x => x.OriginalSize - x.FinalSize))
-        {
-            long bytesSaved = library.OriginalSize - library.FinalSize;
-            var savings = (bytesSaved < 0 ? "-" : "")+ FileSizeFormatter.FormatSize(Math.Abs(bytesSaved), 1);
-            var percent = bytesSaved < 1 ? "0" : $"{bytesSaved * 100f / library.OriginalSize}%";
-            <div class="library">
-                <span class="name">@library.Library</span>
-                <span class="savings">@savings</span>
-                <div class="bar">
-                    <div class="inner" style="width:@percent" />
+    <div class="lss-widget">
+        <div class="lss-widget-chart">
+            <CircularChart Percent="@TotalPercent" Title="@TotalSavings" Subtitle="@OriginalSize"/>
+        </div>
+        <div class="lss-widget-list">
+            @foreach (var library in Data.OrderByDescending(x => x.OriginalSize - x.FinalSize))
+            {
+                long bytesSaved = library.OriginalSize - library.FinalSize;
+                var savings = (bytesSaved < 0 ? "-" : "") + FileSizeFormatter.FormatSize(Math.Abs(bytesSaved), 1);
+                var percent = bytesSaved < 1 ? "0" : $"{bytesSaved * 100f / library.OriginalSize}%";
+                var files = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavingsSummary.Files", new { count = library.TotalFiles });
+                <div class="library">
+                    <span class="name">@library.Library</span>
+                    <span class="savings">@savings</span>
+                    <span class="items">@files</span>
+                    <div class="bar">
+                        <div class="inner" style="width:@percent"/>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
     </Body>
 </ContainerWidget>

@@ -32,7 +32,7 @@ public partial class LargestSavingsWidget : ComponentBase
     /// Gets the current data
     /// </summary>
     private List<LibraryFile> Data => Mode == 0 ? MonthData : AllData;
-    private string lblAll, lblMonth;
+    private string lblTitle, lblAll, lblMonth;
     
     /// <summary>
     /// Gets the mode
@@ -57,6 +57,7 @@ public partial class LargestSavingsWidget : ComponentBase
     {
         lblAll = Translater.Instant("Labels.All");
         lblMonth = Translater.Instant("Labels.MonthShort");
+        lblTitle = Translater.Instant("Pages.Dashboard.Widget.LargestSavings.Title");
         Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
         await Refresh();
         //ClientService.FileStatusUpdated += OnFileStatusUpdated; 

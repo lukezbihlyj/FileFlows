@@ -628,6 +628,7 @@
         "Files": {
           "Failed": "{count, plural, zero {Неудачно} other {# Неудачно}}",
           "Finished": "{count, plural, zero {Завершено} other {# Завершено}}",
+          "Title:": "Файлы",
           "Upcoming": "{count, plural, zero {Предстоящие} other {# Предстоящие}}"
         },
         "FilesOverview": {
@@ -636,8 +637,18 @@
           "PerHour": "{num} в час",
           "StorageSaved": "Сохраненное хранилище"
         },
+        "FlowRunners": {
+          "Title": "Processer"
+        },
+        "LargestSavings": {
+          "Title": "Наибольшие Сбережения"
+        },
         "LibrarySavings": {
-          "NoSavings": "Без сбережений"
+          "NoSavings": "Без сбережений",
+          "Title": "Сбережения"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# Файл} other {# Файлы}}"
         }
       }
     },

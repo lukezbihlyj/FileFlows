@@ -628,6 +628,7 @@
         "Files": {
           "Failed": "{count, plural, zero {Misslyckad} other {# Misslyckade}}",
           "Finished": "{count, plural, zero {Färdig} other {# Färdiga}}",
+          "Title:": "Filer",
           "Upcoming": "{count, plural, zero {Kommande} other {# Kommande}}"
         },
         "FilesOverview": {
@@ -636,8 +637,18 @@
           "PerHour": "{num} per timme",
           "StorageSaved": "Sparad lagring"
         },
+        "FlowRunners": {
+          "Title": "Processer"
+        },
+        "LargestSavings": {
+          "Title": "Största Besparingarna"
+        },
         "LibrarySavings": {
-          "NoSavings": "Inga besparingar"
+          "NoSavings": "Inga besparingar",
+          "Title": "Besparingar"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# Fil} other {# Filer}}"
         }
       }
     },

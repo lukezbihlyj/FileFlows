@@ -36,6 +36,9 @@
   background: var(--input-background);
   color: var(--color);
 }
+.options .btn-option:not(.active):hover {
+  background: rgba(255, 255, 255, 0.0705882353);
+}
 .options .btn-option .bubble {
   position: absolute;
   top: 0;

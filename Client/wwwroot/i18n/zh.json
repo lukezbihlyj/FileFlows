@@ -628,6 +628,7 @@
         "Files": {
           "Failed": "{count, plural, zero {失败} other {# 失败}}",
           "Finished": "{count, plural, zero {完成} other {# 完成}}",
+          "Title:": "文件",
           "Upcoming": "{count, plural, zero {即将} other {# 即将}}"
         },
         "FilesOverview": {
@@ -636,8 +637,18 @@
           "PerHour": "{num} 每小时",
           "StorageSaved": "节省的存储空间"
         },
+        "FlowRunners": {
+          "Title": "执行者"
+        },
+        "LargestSavings": {
+          "Title": "最大节省"
+        },
         "LibrarySavings": {
-          "NoSavings": "没有节省"
+          "NoSavings": "没有节省",
+          "Title": "节省"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# 文件} other {# 文件}}"
         }
       }
     },

@@ -36,6 +36,9 @@
       background:var(--input-background);
       color:var(--color);
     }
+    &:not(.active):hover {
+      background:#ffffff12;
+    }
     .bubble {
       position: absolute;
       top: 0;

@@ -3,7 +3,7 @@
 @using FileSizeFormatter = FileFlows.Shared.Formatters.FileSizeFormatter
 @namespace FileFlows.Client.Components.Widgets
 
-<ContainerWidget Title="Largest Savings" Scroll="true">
+<ContainerWidget Title="@lblTitle" Scroll="true">
     <Head>
         <OptionButtons @bind-Value="Mode">
             <WidgetOption Label="@lblMonth" Value="0" />

@@ -112,7 +112,7 @@
     border-radius: 0.5rem;
     overflow: hidden;
     background: #13191b;
-    border: solid 2px #33b2df;
+    border: solid 2px var(--accent-2);
     font-size: 0.8rem;
     height: 1.5rem;
     position: relative;
@@ -137,7 +137,7 @@
     .bar {
       border-top-right-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
-      background: #33b2df61;
+      background: var(--accent-2)61;
       background: linear-gradient(to right, rgba(51, 178, 223, 0.25), rgba(51, 178, 223, 0.5));
     }
     &.over-100

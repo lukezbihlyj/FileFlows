@@ -628,6 +628,7 @@
         "Files": {
           "Failed": "{count, plural, zero {Échoué} other {# Échoués}}",
           "Finished": "{count, plural, zero {Terminé} other {# Terminés}}",
+          "Title:": "Fichiers",
           "Upcoming": "{count, plural, zero {À venir} other {# À venir}}"
         },
         "FilesOverview": {
@@ -636,8 +637,18 @@
           "PerHour": "{num} par heure",
           "StorageSaved": "Stockage économisé"
         },
+        "FlowRunners": {
+          "Title": "Runners"
+        },
+        "LargestSavings": {
+          "Title": "Plus Grandes Économies"
+        },
         "LibrarySavings": {
-          "NoSavings": "Aucune économie"
+          "NoSavings": "Aucune économie",
+          "Title": "Économies"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# Fichier} other {# Fichiers}}"
         }
       }
     },
