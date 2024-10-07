@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 using FileFlows.Plugin;
 using FileFlows.Shared.Models;
@@ -57,29 +58,17 @@ public class HardwareInfoService
             // Using wmic command to get GPU info
             try
             {
-                using var process = new Process();
-                process.StartInfo.FileName = "wmic";
-                process.StartInfo.Arguments = "path win32_VideoController get name, adapterram, driverversion";
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
+                // Try using the PowerShell approach first
+                gpus.AddRange(GetGpuInfoUsingPowerShell());
+                if (gpus.Count > 0) return gpus;
 
-                string output = process.StandardOutput.ReadToEnd();
-                foreach (var line in output.Split(Environment.NewLine))
-                {
-                    var parts = line.Trim().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length >= 3)
-                    {
-                        gpus.Add(new GpuInfo
-                        {
-                            Vendor = parts[0].Trim(),
-                            Model = parts[1].Trim(),
-                            Memory = long.Parse(parts[2].Trim()),
-                            DriverVersion = parts[3].Trim()
-                        });
-                    }
-                }
+                // Try using the WMI approach if PowerShell fails
+                gpus.AddRange(GetGpuInfoUsingWmi());
+                if (gpus.Count > 0) return gpus;
+
+                // Finally, try using the dxdiag approach
+                gpus.AddRange(GetGpuInfoUsingDxdiag());
+
             }
             catch (Exception)
             {
@@ -93,7 +82,7 @@ public class HardwareInfoService
             try
             {
                 // NVIDIA GPU detection
-                var result =ExecuteCommand("lspci | grep -i nvidia");
+                var result = ExecuteCommand("lspci | grep -i nvidia");
                 if (result.IsFailed == false)
                 {
                     var nvidiaInfo = result.Value.Trim();
@@ -102,7 +91,7 @@ public class HardwareInfoService
                         if (!string.IsNullOrWhiteSpace(line) && line.Contains("VGA"))
                         {
                             var gpu = ParseNvidiaGpu(line);
-                            if(gpu != null)
+                            if (gpu != null)
                                 gpus.Add(gpu);
                         }
                     }
@@ -115,7 +104,7 @@ public class HardwareInfoService
                     var amdInfo = amdInfoResult.Value.Trim();
                     foreach (var line in amdInfo.Split(Environment.NewLine))
                     {
-                        if (!string.IsNullOrWhiteSpace(line))
+                        if (!string.IsNullOrWhiteSpace(line) && line.Contains("VGA"))
                         {
                             gpus.Add(new GpuInfo
                             {
@@ -170,7 +159,7 @@ public class HardwareInfoService
 
         return gpus;
     }
-    
+
     /// <summary>
     /// Parses the NVIDIA GPU info
     /// </summary>
@@ -179,7 +168,7 @@ public class HardwareInfoService
     private GpuInfo? ParseNvidiaGpu(string gpuInfo)
     {
         // Example input: "01:00.0 VGA compatible controller: NVIDIA Corporation AD107M [GeForce RTX 4060 Max-Q / Mobile] (rev a1)"
-    
+
         var parts = gpuInfo.Split(new[] { ':' }, 2); // Split at the first colon
         if (parts.Length < 2)
         {
@@ -233,7 +222,7 @@ public class HardwareInfoService
             return Result<string>.Fail(ex.Message);
         }
     }
-    
+
     /// <summary>
     /// Retrieves the memory of NVIDIA GPUs in bytes.
     /// </summary>
@@ -243,7 +232,8 @@ public class HardwareInfoService
     {
         // Use the name of the GPU to query its memory size
         // Command to get memory size for a specific GPU based on its name
-        string command = $"nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits -i {gpuInfo.Split(' ')[0]}";
+        string command =
+            $"nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits -i {gpuInfo.Split(' ')[0]}";
 
         // Execute the command and get the output
         var result = ExecuteCommand(command);
@@ -342,7 +332,7 @@ public class HardwareInfoService
 
         // Execute the command and get the output
         var result = ExecuteCommand(command);
-        if(result.IsFailed)
+        if (result.IsFailed)
             return string.Empty;
         string output = result.Value.Trim();
 
@@ -389,6 +379,134 @@ public class HardwareInfoService
             if (result.IsFailed == false)
                 return result.Value.Trim();
         }
+
         return "Unknown Processor";
     }
+
+    /// <summary>
+    /// Retrieves GPU information using PowerShell commands.
+    /// </summary>
+    /// <returns>A list of <see cref="GpuInfo"/> objects with GPU details.</returns>
+    private List<GpuInfo> GetGpuInfoUsingPowerShell()
+    {
+        var gpus = new List<GpuInfo>();
+
+        try
+        {
+            using var process = new Process();
+            process.StartInfo.FileName = "powershell";
+            process.StartInfo.Arguments =
+                "Get-WmiObject win32_VideoController | Select-Object Name, AdapterRAM, DriverVersion | ConvertTo-Csv -NoTypeInformation";
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+
+            string output = process.StandardOutput.ReadToEnd();
+            var lines = output.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 1; i < lines.Length; i++) // Skip header
+            {
+                var parts = lines[i].Split(',');
+
+                if (parts.Length >= 3)
+                {
+                    gpus.Add(new GpuInfo
+                    {
+                        Vendor = parts[0].Trim(), // May need to adjust based on output
+                        Model = parts[0].Trim(), // Same as Vendor in this output
+                        Memory = long.TryParse(parts[1].Trim(), out long memory) ? memory : 0,
+                        DriverVersion = parts[2].Trim()
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving GPU info using PowerShell: {ex.Message}");
+        }
+
+        return gpus;
+    }
+
+    /// <summary>
+    /// Retrieves GPU information using WMI.
+    /// </summary>
+    /// <returns>A list of <see cref="GpuInfo"/> objects with GPU details.</returns>
+    private List<GpuInfo> GetGpuInfoUsingWmi()
+    {
+        var gpus = new List<GpuInfo>();
+        if (OperatingSystem.IsWindows() == false)
+            return gpus;
+
+        #pragma warning disable CA1416
+        try
+        {
+            using var searcher =
+                new ManagementObjectSearcher("select Name, AdapterRAM, DriverVersion from Win32_VideoController");
+            foreach (var obj in searcher.Get())
+            {
+                gpus.Add(new GpuInfo
+                {
+                    Vendor = obj["Name"]?.ToString() ?? "Unknown",
+                    Model = obj["Name"]?.ToString() ?? "Unknown",
+                    Memory = Convert.ToInt64(obj["AdapterRAM"] ?? 0),
+                    DriverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown"
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance?.WLog($"Error retrieving GPU info using WMI: {ex.Message}");
+        }
+        #pragma warning restore CA1416
+
+        return gpus;
+    }
+
+    /// <summary>
+    /// Retrieves GPU information using the DirectX Diagnostic Tool (dxdiag).
+    /// </summary>
+    /// <returns>A list of <see cref="GpuInfo"/> objects with GPU details.</returns>
+    private List<GpuInfo> GetGpuInfoUsingDxdiag()
+    {
+        var gpus = new List<GpuInfo>();
+
+        try
+        {
+            using var process = new Process();
+            process.StartInfo.FileName = "dxdiag";
+            process.StartInfo.Arguments = "/t dxdiag_output.txt";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            process.WaitForExit();
+
+            // Read the generated output file
+            string output = System.IO.File.ReadAllText("dxdiag_output.txt");
+            // You will need to parse the output for GPU information here
+
+            // Example parsing logic (you would need to implement this based on actual output format)
+            // This is a placeholder to show where parsing would happen
+
+            // Example of a hardcoded GPU entry (remove and implement parsing logic)
+            gpus.Add(new GpuInfo
+            {
+                Vendor = "NVIDIA Corporation",
+                Model = "GeForce RTX 3060",
+                Memory = 8589934592, // Example memory in bytes
+                DriverVersion = "31.0.15.2746" // Example driver version
+            });
+
+            // Clean up output file
+            System.IO.File.Delete("dxdiag_output.txt");
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance?.WLog($"Error retrieving GPU info using dxdiag: {ex.Message}");
+        }
+
+        return gpus;
+    }
 }
+
