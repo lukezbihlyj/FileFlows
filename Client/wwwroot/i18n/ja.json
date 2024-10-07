@@ -628,7 +628,7 @@
         "Files": {
           "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
           "Finished": "{count, plural, zero {完了} other {# 完了}}",
-          "Title:": "ファイル",
+          "Title": "ファイル",
           "Upcoming": "{count, plural, zero {今後} other {# 今後}}"
         },
         "FilesOverview": {
