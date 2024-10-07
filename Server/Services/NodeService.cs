@@ -165,4 +165,19 @@ public class NodeService //: INodeService
     /// <returns>A dictionary of the total files indexed by the node UID</returns>
     public Task<Dictionary<Guid, int>> GetTotalFiles()
         => new NodeManager().GetTotalFiles();
+
+    public ProcessingNodeStatus GetStatus(ProcessingNode node)
+    {
+        if (node.Enabled == false)
+            return ProcessingNodeStatus.Disabled;
+        if (TimeHelper.InSchedule(node.Schedule) == false)
+            return ProcessingNodeStatus.OutOfSchedule;
+        if (node.Version != Globals.Version && node.Uid != CommonVariables.InternalNodeUid)
+            return ProcessingNodeStatus.VersionMismatch;
+        if (node.LastSeen < DateTime.UtcNow.AddMinutes(-5) && node.Uid != CommonVariables.InternalNodeUid)
+            return ProcessingNodeStatus.Offline;
+        if (FlowRunnerService.Executors.Any(x => x.Value.NodeUid == node.Uid))
+            return ProcessingNodeStatus.Processing;
+        return ProcessingNodeStatus.Idle;
+    }
 }

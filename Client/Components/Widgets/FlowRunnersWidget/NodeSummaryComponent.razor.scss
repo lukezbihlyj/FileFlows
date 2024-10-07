@@ -4,6 +4,9 @@
   border-bottom: solid 1px var(--border-color);
   padding-bottom: 0.75rem;
   font-size: 0.8rem;
+  &.disabled {
+    opacity: 0.5;
+  }
   span.icon {
     position: relative;
     align-self: center;

@@ -42,7 +42,7 @@ public partial class NavMenu : IDisposable
 
     public NavMenuItem Active { get; private set; }
 
-    private string lblVersion, lblHelp, lblForum, lblDiscord, lblChangePassword, lblLogout;
+    private string lblVersion, lblHelp, lblReddit, lblDiscord, lblChangePassword, lblLogout;
 
     private NavMenuItem nmiFlows, nmiLibraries, nmiPause;
     /// <summary>
@@ -79,7 +79,7 @@ public partial class NavMenu : IDisposable
     {
         lblVersion = Translater.Instant("Labels.Version");
         lblHelp = Translater.Instant("Labels.Help");
-        lblForum = Translater.Instant("Labels.Forum");
+        lblReddit = "Reddit";
         lblDiscord = Translater.Instant("Labels.Discord");
         lblChangePassword = Translater.Instant("Labels.ChangePassword");
         lblLogout = Translater.Instant("Labels.Logout");
@@ -280,7 +280,7 @@ public partial class NavMenu : IDisposable
                 Items = new List<NavMenuItem>
                 {
                     new (lblHelp, "fas fa-question-circle", "https://fileflows.com/docs"), 
-                    new (lblForum, "fas fa-comments", "https://fileflows.com/forum"),
+                    new (lblReddit, "fab fa-reddit", "https://reddit.com/r/FileFlows"),
                     new (lblDiscord, "fab fa-discord", "https://fileflows.com/discord")
                 }
             });

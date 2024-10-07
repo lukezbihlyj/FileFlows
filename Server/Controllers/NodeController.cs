@@ -39,19 +39,7 @@ public class NodeController : BaseController
         {
             if (totalFiles.TryGetValue(node.Uid, out int pValue))
                 node.ProcessedFiles = pValue;
-            
-            if (node.Enabled == false)
-                node.Status = ProcessingNodeStatus.Disabled;
-            else if (TimeHelper.InSchedule(node.Schedule) == false)
-                node.Status = ProcessingNodeStatus.OutOfSchedule;
-            else if (node.Version != Globals.Version && node.Uid != CommonVariables.InternalNodeUid)
-                node.Status = ProcessingNodeStatus.VersionMismatch;
-            else if (node.LastSeen < DateTime.UtcNow.AddMinutes(-5) && node.Uid != CommonVariables.InternalNodeUid)
-                node.Status = ProcessingNodeStatus.Offline;
-            else if (FlowRunnerService.Executors.Any(x => x.Value.NodeUid == node.Uid))
-                node.Status = ProcessingNodeStatus.Processing;
-            else
-                node.Status = ProcessingNodeStatus.Idle;
+            node.Status = service.GetStatus(node);
         }
         
         return nodes.OrderBy(x => x.Name.ToLowerInvariant());

@@ -5,6 +5,9 @@
   padding-bottom: 0.75rem;
   font-size: 0.8rem;
 }
+.processing-node.disabled {
+  opacity: 0.5;
+}
 .processing-node span.icon {
   position: relative;
   align-self: center;

@@ -5,7 +5,7 @@
 {
     foreach (var item in Data.OrderBy(x => x.Enabled ? 0 : 1).ThenByDescending(x => x.Priority).ThenBy(x =>x.Name.ToLowerInvariant()))
     {
-        <div class="processing-node" @key="item.Uid">
+        <div class="processing-node @(item.Enabled == false ? "disabled" : "")" @key="item.Uid">
             <span class="icon">
                 @if (item.OperatingSystem == OperatingSystemType.Mac)
                 {
@@ -26,7 +26,13 @@
                 <div class="architecture @(item.Architecture is ArchitectureType.Arm32 or ArchitectureType.Arm64 ? "arm" : "")">@item.Architecture</div>
             </span>
             <div class="summary">
-                <span class="name">@item.Name</span>
+                <span class="name">
+                    @item.Name
+                    @if (item.Enabled == false)
+                    {
+                        <text> (@lblDisabled)</text>
+                    }
+                </span>
 
                 @if (item.HardwareInfo != null)
                 {
@@ -35,10 +41,14 @@
                         <span class="label">CPU</span>
                         <span class="value">@item.HardwareInfo.Processor</span>
                     </div>
+                    <div class="hardware-info-item">
+                        <span class="label">Status</span>
+                        <span class="value">@item.Status</span>
+                    </div>
                     @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
                     {
                     <div class="hardware-info-item">
-                        <span class="label">Operating System</span>
+                        <span class="label">@lblOperatingSystem</span>
                         <span class="value">
                             @item.HardwareInfo.OperatingSystem
                             @if (string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
@@ -49,7 +59,7 @@
                     </div>
                     }
                     <div class="hardware-info-item">
-                        <span class="label">Architecture</span>
+                        <span class="label">@lblArchitecture</span>
                         <span class="value">
                             @item.HardwareInfo.Architecture.ToLowerInvariant()
                             @if (item.HardwareInfo.CoreCount > 0)
@@ -61,7 +71,7 @@
                     @if (item.HardwareInfo.Memory > 0)
                     {
                         <div class="hardware-info-item">
-                            <span class="label">Memory</span>
+                            <span class="label">@lblMemory</span>
                             <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0, useBinary: true)</span>
                         </div>
                     }

@@ -32,7 +32,8 @@ public partial class FlowRunnersWidget : ComponentBase
         await Refresh();
         if (UpdateInfoData.HasUpdates)
             Mode = 1;
-        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates", new { count = UpdateInfoData.NumberOfUpdates});
+        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
+            new { count = UpdateInfoData.NumberOfUpdates });
     }
 
     /// <summary>

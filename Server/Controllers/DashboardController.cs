@@ -38,19 +38,20 @@ public class DashboardController : BaseController
     [HttpGet("node-summary")]
     public async Task<List<ProcessingNode>> GetNodeSummary()
     {
-        var nodes = await ServiceLoader.Load<NodeService>().GetAllAsync();
+        var service = ServiceLoader.Load<NodeService>();
+        var nodes = await service.GetAllAsync();
         var server = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
         return nodes.Select(x => new ProcessingNode()
         {
             OperatingSystem = x.OperatingSystem,
             Architecture = x.Architecture,
             Version = x.Version,
-            Schedule = x.Schedule,
             Enabled = x.Enabled,
             Uid = x.Uid,
             Address = x.Address,
             Name = x.Name,
             Priority = x.Priority,
+            Status = service.GetStatus(x),
             HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? server : x.HardwareInfo
         }).ToList();
     }
