@@ -1993,17 +1993,19 @@ FROM {Wrap(nameof(LibraryFile))}";
         
         if (filter is { Status: FileStatus.Processed, OrderBy: LibraryFileSearchOrderBy.Savings })
             sql += " order by " + Wrap(nameof(LibraryFile.OriginalSize)) + " - " + Wrap(nameof(LibraryFile.FinalSize)) + " desc";
-        
-        sql += DbType switch
+
+        if (filter.Limit > 0)
         {
-            DatabaseType.SqlServer => $" OFFSET 0 ROWS FETCH NEXT {filter.Limit} ROWS ONLY",
-            _ => $" LIMIT {filter.Limit}",
-        };
+            sql += DbType switch
+            {
+                DatabaseType.SqlServer => $" OFFSET 0 ROWS FETCH NEXT {filter.Limit} ROWS ONLY",
+                _ => $" LIMIT {filter.Limit}",
+            };
+        }
 
         try
         {
             using var db = await DbConnector.GetDb();
-            Logger.ILog("Searching For Files: " + Environment.NewLine + sql);
             return await db.Db.FetchAsync<LibraryFile>(sql);
         }
         catch (Exception ex)

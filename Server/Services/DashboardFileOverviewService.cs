@@ -101,7 +101,6 @@ public class DashboardFileOverviewService
 
         foreach (var file in data)
         {
-            Logger.Instance.ILog("DashboardFileOverviewFile: " + file.Name);
             long savings = file.OriginalSize - file.FinalSize;
             DateTime fileHour = file.ProcessingEnded.Date.AddHours(file.ProcessingEnded.Hour);
             DateTime fileDate = file.ProcessingEnded.Date;
