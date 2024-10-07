@@ -225,6 +225,7 @@ public class NodeController : BaseController
                 existing.Architecture = model.Architecture;
                 existing.OperatingSystem = model.OperatingSystem;
                 existing.Version = model.Version;
+                existing.HardwareInfo = model.HardwareInfo;
                 existing = await service.Update(existing, await GetAuditDetails());
             }
             existing.SignalrUrl = "flow";

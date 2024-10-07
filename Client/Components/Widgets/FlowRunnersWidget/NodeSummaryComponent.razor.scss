@@ -4,13 +4,16 @@
   border-bottom: solid 1px var(--border-color);
   padding-bottom: 0.75rem;
   span.icon {
-    width:6rem;
     position: relative;
     align-self: center;
     top: -0.25rem;
+    img {
+      width: 8rem;
+      padding: 0 0.5rem;
+    }
     .architecture {
       position: absolute;
-      bottom: 0.3rem;
+      bottom: -0.2rem;
       font-size: 0.9rem;
       border-radius: 0.5rem;
       padding: 0 0.5rem;
