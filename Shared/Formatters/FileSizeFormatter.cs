@@ -51,15 +51,27 @@ public class FileSizeFormatter : Formatter
     /// </summary>
     /// <param name="size">The size in bytes</param>
     /// <param name="decimalPoints">the number of decimal points</param>
+    /// <param name="useBinary">If binary should be used</param>
     /// <returns>The size in a formatted string</returns>
-    public static string Format(double size, int decimalPoints = 2)
+    public static string Format(double size, int decimalPoints = 2, bool useBinary = false)
     {
         int order = 0;
         double num = size;
-        while (num >= 1000 && order < sizes.Length - 1)
+        if (useBinary)
         {
-            order++;
-            num /= 1000;  // 1024 would be a kibibyte.  I'm trying to embrace the proper metric meaning....
+            while (num >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                num /= 1024;
+            }
+        }
+        else
+        {
+            while (num >= 1000 && order < sizes.Length - 1)
+            {
+                order++;
+                num /= 1000;
+            }
         }
         if (decimalPoints == 0)
             return $"{num:0} {sizes[order]}";

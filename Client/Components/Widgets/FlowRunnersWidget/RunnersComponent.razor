@@ -9,7 +9,7 @@ var overall = runner.TotalParts == 0 ? 100 : ((runner.CurrentPart / (double)runn
 var current = runner.CurrentPartPercent;
 var expandable = runner.FramesPerSecond > 0 || runner.Additional?.Any() == true;
 
-<div class="widget-runner table-item @(expandable && ExandedRunners.Contains(runner.Uid) ? "expanded" : "collapsed")" @key="runner.Uid" @onclick="() => ToggleExpand(runner)">
+<div class="widget-runner table-item @(expandable && ExpandedRunners.Contains(runner.Uid) ? "expanded" : "collapsed")" @key="runner.Uid" @onclick="() => ToggleExpand(runner)">
     <div class="current-progress" style="width:@(current)%"></div>
     <div class="overall-progress" style="width:@(overall)%"></div>
     <div class="runner-content">

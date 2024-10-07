@@ -35,37 +35,35 @@
                         <span class="label">CPU</span>
                         <span class="value">@item.HardwareInfo.Processor</span>
                     </div>
-                    @if (item.HardwareInfo.Memory > 0)
-                    {
-                    <div class="hardware-info-item">
-                        <span class="label">Memory</span>
-                        <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0)</span>
-                    </div>
-                    }
-                    <div class="hardware-info-item">
-                        <span class="label">Architecture</span>
-                        <span class="value">@item.HardwareInfo.Architecture</span>
-                    </div>
-                    @if(item.HardwareInfo.CoreCount > 0)
-                    {
-                    <div class="hardware-info-item">
-                        <span class="label">Cores</span>
-                        <span class="value">@item.HardwareInfo.CoreCount</span>
-                    </div>
-                    }
                     @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
                     {
                     <div class="hardware-info-item">
                         <span class="label">Operating System</span>
-                        <span class="value">@item.HardwareInfo.OperatingSystem</span>
+                        <span class="value">
+                            @item.HardwareInfo.OperatingSystem
+                            @if (string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
+                            {
+                                <span>(@item.HardwareInfo.OperatingSystemVersion)</span>
+                            }
+                        </span>
                     </div>
                     }
-                    @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
-                    {
                     <div class="hardware-info-item">
-                        <span class="label">OS Version</span>
-                        <span class="value">@item.HardwareInfo.OperatingSystemVersion</span>
+                        <span class="label">Architecture</span>
+                        <span class="value">
+                            @item.HardwareInfo.Architecture.ToLowerInvariant()
+                            @if (item.HardwareInfo.CoreCount > 0)
+                            {
+                            <span class="value">(@item.HardwareInfo.CoreCount cores)</span>
+                            }
+                        </span>
                     </div>
+                    @if (item.HardwareInfo.Memory > 0)
+                    {
+                        <div class="hardware-info-item">
+                            <span class="label">Memory</span>
+                            <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0, useBinary: true)</span>
+                        </div>
                     }
                     @foreach(var gpu in item.HardwareInfo.Gpus ?? [])
                     {
@@ -76,11 +74,11 @@
                             (@gpu.Vendor)
                             @if (gpu.Memory > 0)
                             {
-                                <span class="memory">@FileSizeFormatter.Format(gpu.Memory, 0)</span>
+                                <span class="memory">@FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true)</span>
                             }
                             @if(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false)
                             {
-                            <span class="driver">@gpu.DriverVersion</span>
+                            <span class="driver"> (@gpu.DriverVersion)</span>
                             }
                         </span>
                     </div>

@@ -11,7 +11,7 @@
     <Body>
     
     <div class="runners @(Mode == 0 ? "active" : "")">
-        <RunnersComponent />
+        <RunnersComponent NoneOnLoad="SelectNodes" />
     </div>
     <div class="charts @(Mode == 1 ? "active" : "")">
         <UpdatesComponent />

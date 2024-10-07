@@ -17,6 +17,14 @@ public partial class RunnersComponent : ComponentBase
     /// </summary>
     [CascadingParameter] Editor Editor { get; set; }
     
+    /// <summary>
+    /// Callback when there are no runners when loading
+    /// </summary>
+    [Parameter] public EventCallback NoneOnLoad { get; set; }
+    
+    /// <summary>
+    /// The runners
+    /// </summary>
     private List<FlowExecutorInfoMinified> Runners = new ();
     
     /// <summary>
@@ -24,11 +32,17 @@ public partial class RunnersComponent : ComponentBase
     /// </summary>
     private int Mode { get; set; }
 
-    private List<Guid> ExandedRunners = new();
+    /// <summary>
+    /// The expanded runners
+    /// </summary>
+    private List<Guid> ExpandedRunners = new();
 
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await Refresh();
+        if(Runners.Count == 0)
+            await NoneOnLoad.InvokeAsync();
 #if(DEBUG)
         Runners = GenerateRandomExecutors(10);
 #else
@@ -78,6 +92,17 @@ public partial class RunnersComponent : ComponentBase
     #endif
 
     /// <summary>
+    /// Refreshes the runners
+    /// </summary>
+    private async Task Refresh()
+    {
+        var result = await HttpHelper.Get<List<FlowExecutorInfoMinified>>("/api/worker");
+        if (result.Success && Runners.Count == 0)
+            Runners = result.Data ?? [];
+    }
+    
+
+    /// <summary>
     /// Disposes of the component
     /// </summary>
     public void Dispose()
@@ -93,7 +118,7 @@ public partial class RunnersComponent : ComponentBase
     {
         Runners = obj ?? new();
         // rempve the expanded runners that are no longer in the list
-        ExandedRunners = ExandedRunners.Where(x => Runners.Any(y => y.Uid == x)).ToList();
+        ExpandedRunners = ExpandedRunners.Where(x => Runners.Any(y => y.Uid == x)).ToList();
         StateHasChanged();
     }
     
@@ -112,17 +137,25 @@ public partial class RunnersComponent : ComponentBase
         return processingTime.ToString(@"m\:ss");
     }
     
+    /// <summary>
+    /// Cancels a runner
+    /// </summary>
+    /// <param name="runner">the runner to cancel</param>
     private async Task Cancel(FlowExecutorInfoMinified runner)
     {
         await HttpHelper.Delete($"/api/library-file/{runner.Uid}");
     }
 
+    /// <summary>
+    /// Toggle the expand state of a runner
+    /// </summary>
+    /// <param name="runner">the runner to toggle</param>
     private void ToggleExpand(FlowExecutorInfoMinified runner)
     {
-        if(ExandedRunners.Contains(runner.Uid))
-            ExandedRunners.Remove(runner.Uid);
+        if(ExpandedRunners.Contains(runner.Uid))
+            ExpandedRunners.Remove(runner.Uid);
         else
-            ExandedRunners.Add(runner.Uid);
+            ExpandedRunners.Add(runner.Uid);
             
     }
 }

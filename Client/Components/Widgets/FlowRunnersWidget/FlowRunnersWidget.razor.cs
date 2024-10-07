@@ -20,4 +20,13 @@ public partial class FlowRunnersWidget : ComponentBase
         lblTitle = Translater.Instant("Pages.Dashboard.Widgets.FlowRunners.Title");
         lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.Updates.Title");
     }
+
+    /// <summary>
+    /// Select nodes if no runners are running on load
+    /// </summary>
+    private void SelectNodes()
+    {
+        Mode = 2;
+        StateHasChanged();
+    }
 }
