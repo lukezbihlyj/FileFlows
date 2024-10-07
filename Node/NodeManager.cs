@@ -121,6 +121,9 @@ public class NodeManager
             new SystemStatisticsWorker(),
             new ConfigCleaner()
         );
+        
+        var hardwareInfo = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+        Logger.Instance?.ILog("Hardware Info: " + Environment.NewLine + hardwareInfo);
     }
 
     
