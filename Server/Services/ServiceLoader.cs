@@ -47,6 +47,7 @@ public static class ServiceLoader
             .AddSingleton<INotificationService, NotificationService>()
             .AddSingleton<ScheduledReportService>()
             .AddSingleton<FileDisplayNameService>()
+            .AddSingleton<HardwareInfoService>()
             
             // Register UpdateService both as a singleton and a hosted service
             .AddSingleton<UpdateService>()

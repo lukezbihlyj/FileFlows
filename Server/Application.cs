@@ -235,6 +235,9 @@ public class Application
         }
 
         Logger.Instance.ILog(new string('=', 100));
+
+        var hardwareInfo = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+        Logger.Instance.ILog("Hardware Info: " + Environment.NewLine + hardwareInfo);
     }
 
 
