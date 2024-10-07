@@ -120,15 +120,7 @@ public class NodeService : RemoteService, INodeService
                  Globals.IsMac ? OperatingSystemType.Mac :
                  Globals.IsFreeBsd ? OperatingSystemType.FreeBsd :
                  OperatingSystemType.Unknown,
-            HardwareInfo = hardwareInfo ?? new ()
-            {
-                Gpus = [],
-                OperatingSystem = "Not provided",
-                OperatingSystemVersion = "Not provided",
-                Processor = "Not provided",
-                CoreCount = Environment.ProcessorCount,
-                Architecture =  "Provided no hardware info",
-            }
+            HardwareInfo = hardwareInfo
         }, timeoutSeconds: 10);
 
         if (result.Success == false)

@@ -9,7 +9,6 @@ namespace FileFlows.Server.Services;
 /// </summary>
 public class DashboardFileOverviewService
 {
-
     private readonly FairSemaphore updateFileDataSemaphore = new (1, 1);
 
     // Dictionary for last 24 hours, 7 days, and 31 days
@@ -102,6 +101,7 @@ public class DashboardFileOverviewService
 
         foreach (var file in data)
         {
+            Logger.Instance.ILog("DashboardFileOverviewFile: " + file.Name);
             long savings = file.OriginalSize - file.FinalSize;
             DateTime fileHour = file.ProcessingEnded.Date.AddHours(file.ProcessingEnded.Hour);
             DateTime fileDate = file.ProcessingEnded.Date;
@@ -166,12 +166,12 @@ public class DashboardFileOverviewService
     private void UpdateDictionary(Dictionary<DateTime, DashboardFileData> dataDictionary, DateTime dateKey, int maxSize,
         long savings, long originalSize, long finalSize)
     {
-        if (!dataDictionary.ContainsKey(dateKey))
+        if (dataDictionary.TryGetValue(dateKey, out DashboardFileData? value) == false)
         {
             // Remove oldest entry if the dictionary exceeds the max size
             if (dataDictionary.Count >= maxSize)
             {
-                var oldestDate = dataDictionary.Keys.OrderBy(k => k).First();
+                var oldestDate = dataDictionary.Keys.MinBy(k => k);
                 dataDictionary.Remove(oldestDate);
             }
 
@@ -186,11 +186,10 @@ public class DashboardFileOverviewService
         }
         else
         {
-            // Update existing entry
-            dataDictionary[dateKey].FileCount += 1;
-            dataDictionary[dateKey].StorageSaved += savings;
-            dataDictionary[dateKey].OriginalStorage += originalSize;
-            dataDictionary[dateKey].FinalStorage += finalSize;
+            value.FileCount += 1;
+            value.StorageSaved += savings;
+            value.OriginalStorage += originalSize;
+            value.FinalStorage += finalSize;
         }
     }
 

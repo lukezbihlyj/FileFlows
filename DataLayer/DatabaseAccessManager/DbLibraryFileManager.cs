@@ -2003,6 +2003,7 @@ FROM {Wrap(nameof(LibraryFile))}";
         try
         {
             using var db = await DbConnector.GetDb();
+            Logger.ILog("Searching For Files: " + Environment.NewLine + sql);
             return await db.Db.FetchAsync<LibraryFile>(sql);
         }
         catch (Exception ex)

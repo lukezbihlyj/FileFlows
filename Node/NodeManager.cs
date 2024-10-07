@@ -163,15 +163,6 @@ public class NodeManager
         catch(Exception ex)
         {
             Logger.Instance?.ELog("Failed to get hardware info: " + ex.Message);
-            hardwareInfo = new()
-            {
-                OperatingSystemVersion = "Failed to get: " + ex.Message,
-                Architecture = "Unknown",
-                CoreCount = Environment.ProcessorCount,
-                OperatingSystem = ex.Message,
-                Processor = ex.Message,
-                Gpus = []
-            };
         }
 
         
