@@ -90,9 +90,10 @@ public class NodeService : RemoteService, INodeService
     /// <param name="address">The address (Hostname or IP Address) of the node</param>
     /// <param name="tempPath">The temporary path location of the node</param>
     /// <param name="mappings">Any mappings for the node</param>
+    /// <param name="hardwareInfo">The hardware information</param>
     /// <returns>An instance of the registered node</returns>
     /// <exception cref="Exception">If fails to register, an exception will be thrown</exception>
-    public async Task<ProcessingNode?> Register(string serverUrl, string address, string tempPath, List<RegisterModelMapping> mappings)// int runners, bool enabled, List<RegisterModelMapping> mappings)
+    public async Task<ProcessingNode?> Register(string serverUrl, string address, string tempPath, List<RegisterModelMapping> mappings, HardwareInfo? hardwareInfo)
     {
         if(serverUrl.EndsWith("/"))
             serverUrl = serverUrl.Substring(0, serverUrl.Length - 1);
@@ -118,7 +119,8 @@ public class NodeService : RemoteService, INodeService
                  Globals.IsLinux ? OperatingSystemType.Linux :       
                  Globals.IsMac ? OperatingSystemType.Mac :
                  Globals.IsFreeBsd ? OperatingSystemType.FreeBsd :
-                 OperatingSystemType.Unknown
+                 OperatingSystemType.Unknown,
+            HardwareInfo = hardwareInfo
         }, timeoutSeconds: 10);
 
         if (result.Success == false)

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using FileFlows.Shared;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.ServerShared.Models;
 
@@ -41,6 +42,10 @@ public class RegisterModel
     /// Gets or sets the version of this node
     /// </summary>
     public string Version { get; set; } = null!;
+    /// <summary>
+    /// Gets or sets the hardware information
+    /// </summary>
+    public HardwareInfo? HardwareInfo { get; set; }
 }
 
 /// <summary>

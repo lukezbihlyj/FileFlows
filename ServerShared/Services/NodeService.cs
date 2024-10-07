@@ -43,10 +43,11 @@ public interface INodeService
     /// <param name="address">The address (Hostname or IP Address) of the node</param>
     /// <param name="tempPath">The temporary path location of the node</param>
     /// <param name="mappings">Any mappings for the node</param>
+    /// <param name="hardwareInfo">Hardware Inforamtion</param>
     /// <returns>An instance of the registered node</returns>
     /// <exception cref="Exception">If fails to register, an exception will be thrown</exception>
     Task<ProcessingNode?> Register(string serverUrl, string address, string tempPath,
-        List<RegisterModelMapping> mappings);
+        List<RegisterModelMapping> mappings, HardwareInfo? hardwareInfo);
 
     /// <summary>
     /// Gets the version the node can update to

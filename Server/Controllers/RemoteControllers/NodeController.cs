@@ -204,6 +204,9 @@ public class NodeController : BaseController
         if (string.IsNullOrWhiteSpace(model?.TempPath))
             throw new ArgumentNullException(nameof(model.TempPath));
 
+        if (model.HardwareInfo != null)
+            Logger.Instance?.ILog($"Node {model.Address} Hardware Info: " + Environment.NewLine + model.HardwareInfo);
+
         var address = model.Address.ToLowerInvariant().Trim();
         var service = ServiceLoader.Load<NodeService>();
         var data = await service.GetAllAsync();
