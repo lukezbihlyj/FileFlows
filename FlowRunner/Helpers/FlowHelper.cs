@@ -416,8 +416,9 @@ public class FlowHelper
             return typeof(SubFlowInput);
         if (fullName.EndsWith(nameof(SubFlowOutput)) || fullName.StartsWith(nameof(SubFlowOutput)))
             return typeof(SubFlowOutput);
-        
-        foreach (var dll in new DirectoryInfo(runInstance.WorkingDirectory).GetFiles("*.dll", SearchOption.AllDirectories))
+
+        var dlls = new DirectoryInfo(runInstance.WorkingDirectory).GetFiles("*.dll", SearchOption.AllDirectories);
+        foreach (var dll in dlls)
         {
             try
             {
@@ -433,6 +434,10 @@ public class FlowHelper
                 runInstance.Logger.WLog("Failed to load assembly: " + dll.FullName + " > " + ex.Message);
             }
         }
+
+        runInstance.Logger.WLog(
+            $"Failed to load '{fullName}' from any of the following DLLs:{Environment.NewLine} {string.Join(Environment.NewLine, dlls.Select(x => " - " + x.FullName))}");
+        
         return null;
     }
 }
