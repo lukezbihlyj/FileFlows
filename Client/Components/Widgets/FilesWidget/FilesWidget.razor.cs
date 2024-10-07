@@ -16,10 +16,31 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// Gets or sets the editor
     /// </summary>
     [CascadingParameter] Editor Editor { get; set; }
+
+    private int _FileMode = 0;
+
     /// <summary>
     /// Gets or sets the file mode
     /// </summary>
-    private int FileMode { get; set; } = 2;
+    private int FileMode
+    {
+        get => _FileMode;
+        set
+        {
+            _FileMode = value;
+            _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
+        }
+    }
+    
+
+    /// <summary>
+    /// Gets or sets the Local Storage instance
+    /// </summary>
+    [Inject] private FFLocalStorageService LocalStorage { get; set; }
+    /// <summary>
+    /// The key used to store the selected mode in local storage
+    /// </summary>
+    private const string LocalStorageKey = "FilesWidget";
 
     private string lblUpcoming, lblFinished, lblFailed;
 
@@ -32,6 +53,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
         lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = 0});
         lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = 0});
         lblFailed = Translater.Instant("Pages.Dashboard.Widgets.Files.Failed", new { count = 0 });
+        FileMode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 2);
         await RefreshData();
         ClientService.FileStatusUpdated += OnFileStatusUpdated;
     }
@@ -84,13 +106,11 @@ public partial class FilesWidget : ComponentBase, IDisposable
     );
     
     /// <summary>
-    /// Opens the file for vieweing
+    /// Opens the file for viewing
     /// </summary>
     /// <param name="file">the file</param>
     private void OpenFile(DashboardFile file)
-    {
-        _ = Helpers.LibraryFileEditor.Open(Blocker, Editor, file.Uid);
-    }
+        => _ = Helpers.LibraryFileEditor.Open(Blocker, Editor, file.Uid);
     
     /// <summary>
     /// Disposes of the component

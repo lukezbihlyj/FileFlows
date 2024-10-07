@@ -4,8 +4,8 @@
     <Head>
         <OptionButtons @bind-Value="FileMode">
             <WidgetOption Label="@lblUpcoming" Value="1" Icon="far fa-clock" Color="yellow" />
-            <WidgetOption Label="@lblFinished" Value="2" Icon="far fa-check-circle" Color="green" />
-            <WidgetOption Label="@lblFailed" Value="3" Icon="far fa-times-circle" Color="red" />
+            <WidgetOption Label="@lblFinished" Value="0" Icon="far fa-check-circle" Color="green" />
+            <WidgetOption Label="@lblFailed" Value="2" Icon="far fa-times-circle" Color="red" />
         </OptionButtons>
     </Head>
     <Body>
@@ -32,7 +32,7 @@
             @foreach (var file in list ?? [])
             {
                 <div class="file-table-row @(file.Message != null ? "has-message" : "no-message")" @ondblclick="() => OpenFile(file)">
-                    @if (FileMode == 2)
+                    @if (FileMode == 0)
                     {
                         var percentage = Math.Min(100, (file.FinalSize / (double)file.OriginalSize) * 100);
                         <div class="savings" style="width: @percentage%"></div>

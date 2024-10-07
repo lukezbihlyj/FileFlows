@@ -26,6 +26,14 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
     private double[] CpuValues = [];
     private double[] MemoryValues = [];
     /// <summary>
+    /// Gets or sets the Local Storage instance
+    /// </summary>
+    [Inject] private FFLocalStorageService LocalStorage { get; set; }
+    /// <summary>
+    /// The key used to store the selected mode in local storage
+    /// </summary>
+    private const string LocalStorageKey = "CpuRamWidget";
+    /// <summary>
     /// Gets or sets the selected mode
     /// </summary>
     private int Mode
@@ -34,6 +42,7 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
         set
         {
             _Mode = value;
+            _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
             SetValues();
 
             StateHasChanged();
@@ -46,9 +55,10 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
     private bool CpuMode => _Mode == 0;
 
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         ClientService.SystemInfoUpdated += OnSystemInfoUpdated;
+        _Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
         if(ClientService.CurrentSystemInfo != null)
             OnSystemInfoUpdated(ClientService.CurrentSystemInfo);
     }

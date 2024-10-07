@@ -23,6 +23,16 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
     private string lblNoSavings, lblAll, lblMonth;
 
     public List<StorageSavedData> Data => Mode == 0 ? MonthData : TotalData;
+    
+    /// <summary>
+    /// Gets or sets the Local Storage instance
+    /// </summary>
+    [Inject] private FFLocalStorageService LocalStorage { get; set; }
+    /// <summary>
+    /// The key used to store the selected mode in local storage
+    /// </summary>
+    private const string LocalStorageKey = "LibrarySavingsSummaryWidget";
+    
     /// <summary>
     /// Gets the mode
     /// </summary>
@@ -36,19 +46,21 @@ public partial class LibrarySavingsSummaryWidget : ComponentBase, IDisposable
         set
         {
             _Mode = value;
+            _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
             SetValues();
             StateHasChanged();
         }
     }
 
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         lblNoSavings = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavings.NoSavings");
         lblAll = Translater.Instant("Labels.All");
         lblMonth = Translater.Instant("Labels.MonthShort");
         ClientService.FileOverviewUpdated += OnFileOverviewUpdated;
-        _ = Refresh();
+        Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
+        await Refresh();
     }
 
     /// <summary>

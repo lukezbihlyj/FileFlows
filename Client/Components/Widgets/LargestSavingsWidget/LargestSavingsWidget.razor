@@ -13,10 +13,11 @@
     <Body>
 @foreach (var item in Data)
 {
-    var percent = item.FinalSize * 100f / item.OriginalSize;
+    var percent = (item.OriginalSize - item.FinalSize) * 100f / item.OriginalSize;
     var saved = FileSizeFormatter.Format(item.OriginalSize - item.FinalSize, 1);
+    var storage = FileSizeFormatter.Format(item.FinalSize, 1) + " / " + FileSizeFormatter.Format(item.OriginalSize, 1);
 
-    <div class="library-saving table-item" @key="item.Uid">
+    <div class="library-saving table-item" @key="item.Uid" @ondblclick="() => OpenFile(item)">
         <div class="savings-bar" style="width:@(percent)%"></div>
         <div class="library-saving-content">
             <span class="icon">
@@ -27,6 +28,7 @@
                 <div class="info">
                     <FlowIconValue Icon="node" Color="dark" Value="@item.NodeName"></FlowIconValue>
                     <FlowIconValue Icon="library" Color="dark" Value="@item.LibraryName"></FlowIconValue>
+                    <FlowIconValue Icon="fas fa-hdd" Color="dark" Value="@storage"></FlowIconValue>
                 </div>
             </div>
 

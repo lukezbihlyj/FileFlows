@@ -17,16 +17,25 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
     /// Gets if this is for the files processed, or the storage saved
     /// </summary>
     [Parameter] public bool IsFilesProcessed { get; set; }
+    /// <summary>
+    /// Gets or sets the Local Storage instance
+    /// </summary>
+    [Inject] private FFLocalStorageService LocalStorage { get; set; }
+    
+    /// <summary>
+    /// The key used to store the selected mode in local storage
+    /// </summary>
+    private string LocalStorageKey;
     
     private string lblWeek, lblMonth;
     
-    private int _Mode = 1;
+    private int _Mode = 0;
     private string Color = "green";
     private string Label = string.Empty;
     private string Icon = string.Empty;
     private string Total;
     private string Average;
-    private double[] Data = [];//[10, 20, 30, 20, 15, 16, 27, 45.34, 41.2, 38.2];
+    private double[] Data = [];
     private FileOverviewData? CurrentData;
     /// <summary>
     /// Gets or sets the selected mode
@@ -37,6 +46,8 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
         set
         {
             _Mode = value;
+            if(LocalStorageKey != null)
+                _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
             SetValues();
 
             StateHasChanged();
@@ -44,11 +55,13 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
     }
 
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         lblWeek = Translater.Instant("Labels.WeekShort");
         lblMonth = Translater.Instant("Labels.MonthShort");
         Color = IsFilesProcessed ? "green" : "blue";
+        LocalStorageKey = IsFilesProcessed ? "FileOverviewWidgetFiles-FilesProcessed" : "FileOverviewWidgetStorage-StorageSaved";
+        _Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
         Label = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview." + (IsFilesProcessed ? "FilesProcessed" : "StorageSaved"));
         Icon = IsFilesProcessed ? "far fa-checked-circle" : "fas fa-hdd";
         
@@ -78,8 +91,8 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
     {
         var dataset = Mode switch
         {
-            1 => CurrentData.Last7Days,
-            2 => CurrentData.Last31Days,
+            0 => CurrentData.Last7Days,
+            1 => CurrentData.Last31Days,
             _ => CurrentData.Last24Hours
         };
 
@@ -93,11 +106,11 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
             // average
             switch (Mode)
             {
-                case 1:
+                case 0:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
                         new { num = Math.Round(total / 7d) });
                     break;
-                case 2:
+                case 1:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
                         new { num = Math.Round(total / 31d) });
                     Average = $"{Math.Round(total / 31d)} per day";
@@ -116,11 +129,11 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
             // average
             switch (Mode)
             {
-                case 1:
+                case 0:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
                         new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 7d), 1) });
                     break;
-                case 2:
+                case 1:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
                         new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 31d), 1) });
                     break;

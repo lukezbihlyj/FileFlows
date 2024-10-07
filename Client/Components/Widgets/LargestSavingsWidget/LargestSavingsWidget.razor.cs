@@ -16,6 +16,15 @@ public partial class LargestSavingsWidget : ComponentBase
     /// Gets or sets the editor
     /// </summary>
     [CascadingParameter] Editor Editor { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the Local Storage instance
+    /// </summary>
+    [Inject] private FFLocalStorageService LocalStorage { get; set; }
+    /// <summary>
+    /// The key used to store the selected mode in local storage
+    /// </summary>
+    private const string LocalStorageKey = "LargestSavingsWidget";
 
     private List<LibraryFile> MonthData = [], AllData = [];
     
@@ -38,6 +47,7 @@ public partial class LargestSavingsWidget : ComponentBase
         set
         {
             _Mode = value;
+            _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
             StateHasChanged();
         }
     }
@@ -47,6 +57,7 @@ public partial class LargestSavingsWidget : ComponentBase
     {
         lblAll = Translater.Instant("Labels.All");
         lblMonth = Translater.Instant("Labels.MonthShort");
+        Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
         await Refresh();
         //ClientService.FileStatusUpdated += OnFileStatusUpdated; 
     }
@@ -87,4 +98,11 @@ public partial class LargestSavingsWidget : ComponentBase
         
         return processingTime.ToString(@"m\:ss");
     }
+    
+    /// <summary>
+    /// Opens the file for viewing
+    /// </summary>
+    /// <param name="file">the file</param>
+    private void OpenFile(LibraryFile file)
+        => _ = Helpers.LibraryFileEditor.Open(Blocker, Editor, file.Uid);
 }
