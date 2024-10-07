@@ -204,6 +204,7 @@ public class NodeController : BaseController
         if (string.IsNullOrWhiteSpace(model?.TempPath))
             throw new ArgumentNullException(nameof(model.TempPath));
 
+        Logger.Instance.ILog("Registering Node: " + model.Address);
         if (model.HardwareInfo != null)
             Logger.Instance?.ILog($"Node {model.Address} Hardware Info: " + Environment.NewLine + model.HardwareInfo);
 

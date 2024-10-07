@@ -14,15 +14,15 @@ public class ConnectionTester
         string address = url.ToLower().Replace("http://", "").Replace("https://", "");
         int givenPort = 5151;
         var portMatch = Regex.Match(address, @"(?<=(:))[\d]+");
-        if(portMatch != null && portMatch.Success)
+        if(portMatch is { Success: true })
         {
-            int.TryParse(portMatch.Value, out givenPort);
+            _ = int.TryParse(portMatch.Value, out givenPort);
         }
-        if (address.IndexOf(":") > 0)
-            address = address.Substring(0, address.IndexOf(":"));
+        if (address.IndexOf(':') > 0)
+            address = address[..address.IndexOf(':')];
 
-        if (address.IndexOf("/") > 0)
-            address = address.Substring(0, address.IndexOf("/"));
+        if (address.IndexOf('/') > 0)
+            address = address[..address.IndexOf('/')];
 
         // try the common set of ports protocols
         foreach (int port in new[] { givenPort, 19200, 5000, 5151, 80 }.Distinct())
