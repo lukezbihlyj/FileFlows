@@ -7,7 +7,8 @@ public partial class UpdatesComponent : ComponentBase
     /// <summary>
     /// The update data
     /// </summary>
-    private UpdateInfo Data = new();
+    [Parameter]
+    public UpdateInfo Data { get; set; } = new();
 
     /// <summary>
     /// Translation strings
@@ -15,19 +16,9 @@ public partial class UpdatesComponent : ComponentBase
     private string lblPlugin, lblScript;
     
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         lblPlugin = Translater.Instant("Pages.Plugins.Single");
         lblScript = Translater.Instant("Pages.Script.Title.Script");
-        await Refresh();
-    }
-
-    /// <summary>
-    /// Refreshes the data
-    /// </summary>
-    async Task Refresh()
-    {
-        var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
-        Data = result.Success ? result.Data ?? new() : new();
     }
 }

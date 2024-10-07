@@ -637,9 +637,6 @@
           "PerHour": "{num} all'ora",
           "StorageSaved": "Spazio salvato"
         },
-        "FlowRunners": {
-          "Title": "Runner"
-        },
         "LargestSavings": {
           "Title": "Maggiori Risparmi"
         },
@@ -649,6 +646,11 @@
         },
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# File} other {# File}}"
+        },
+        "System": {
+          "Runners": "Runner",
+          "Title": "Sistema",
+          "Updates": "{count, plural, zero {Aggiornamenti} one {# Aggiornamento} other {# Aggiornamenti}}"
         },
         "Updates": {
           "Title": "Aggiornamenti"

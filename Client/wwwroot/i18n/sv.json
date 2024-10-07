@@ -637,9 +637,6 @@
           "PerHour": "{num} per timme",
           "StorageSaved": "Sparad lagring"
         },
-        "FlowRunners": {
-          "Title": "Processer"
-        },
         "LargestSavings": {
           "Title": "Största Besparingarna"
         },
@@ -649,6 +646,11 @@
         },
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# Fil} other {# Filer}}"
+        },
+        "System": {
+          "Runners": "Processer",
+          "Title": "System",
+          "Updates": "{count, plural, zero {Uppdateringar} one {# Uppdatering} other {# Uppdateringar}}"
         },
         "Updates": {
           "Title": "Uppdateringar"

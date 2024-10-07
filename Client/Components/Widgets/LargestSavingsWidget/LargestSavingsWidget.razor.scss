@@ -6,6 +6,14 @@
   background:var(--accent-2);
   z-index: 0;
 }
+@mixin backgroundBar($alpha:0.04) {
+  background: rgba(255, 255, 255, $alpha);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 .library-saving {
   position: relative;
   display: flex;
@@ -44,8 +52,8 @@
     text-align: right;
     padding-right: 0.5rem;
   }
-  .savings-bar {
-    @include bottomBar;
+  .savings-background {
+    @include backgroundBar;
   }
 }
 .icon {

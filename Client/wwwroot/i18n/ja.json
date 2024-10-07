@@ -637,9 +637,6 @@
           "PerHour": "{num} 時間あたり",
           "StorageSaved": "保存されたストレージ"
         },
-        "FlowRunners": {
-          "Title": "ランナー"
-        },
         "LargestSavings": {
           "Title": "最大の節約"
         },
@@ -649,6 +646,11 @@
         },
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# ファイル} other {# ファイル}}"
+        },
+        "System": {
+          "Runners": "ランナー",
+          "Title": "システム",
+          "Updates": "{count, plural, zero {アップデート} one {# アップデート} other {# アップデート}}"
         },
         "Updates": {
           "Title": "アップデート"

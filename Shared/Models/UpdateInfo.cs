@@ -24,6 +24,16 @@ public class UpdateInfo
     /// Gets or sets the list of script updates.
     /// </summary>
     public List<PackageUpdate> ScriptUpdates { get; set; } = new();
+    
+    /// <summary>
+    /// Gets if there are any updates
+    /// </summary>
+    public bool HasUpdates => PluginUpdates.Any() || DockerModUpdates.Any() || ScriptUpdates.Any() || FileFlowsVersion != null;
+    
+    /// <summary>
+    /// Gets the number of updates
+    /// </summary>
+    public int NumberOfUpdates => PluginUpdates.Count + DockerModUpdates.Count + ScriptUpdates.Count + (FileFlowsVersion != null ? 1 : 0);
 }
 
 /// <summary>

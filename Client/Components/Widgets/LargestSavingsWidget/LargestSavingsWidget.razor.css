@@ -37,13 +37,13 @@
   text-align: right;
   padding-right: 0.5rem;
 }
-.library-saving .savings-bar {
+.library-saving .savings-background {
+  background: rgba(255, 255, 255, 0.04);
   position: absolute;
+  top: 0;
   bottom: 0;
   left: 0;
-  height: 0.25rem;
-  background: #33b2df;
-  z-index: 0;
+  right: 0;
 }
 
 .icon {

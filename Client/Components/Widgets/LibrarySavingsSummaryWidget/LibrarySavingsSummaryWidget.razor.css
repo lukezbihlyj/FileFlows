@@ -19,6 +19,13 @@
   padding-right: 1rem;
 }
 
+@media (max-width:720px) {
+  .lss-widget-list {
+    overflow: unset;
+    padding-bottom: 2rem;
+  }
+}
+
 .library {
   display: flex;
   position: relative;

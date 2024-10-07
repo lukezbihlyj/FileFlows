@@ -1,4 +1,4 @@
-@mixin backgroundBar($alpha:0.03) {
+@mixin backgroundBar($alpha:0.04) {
   background: rgba(255, 255, 255, $alpha);
   position: absolute;
   top: 0;

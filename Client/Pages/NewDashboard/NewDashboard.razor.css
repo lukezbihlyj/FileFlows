@@ -13,6 +13,12 @@
   ::deep .flow-tab.active.dashboard {
     flex-direction: column-reverse !important;
   }
+  ::deep .flow-widget {
+    margin-bottom: 1rem;
+  }
+  .savings {
+    flex-direction: column-reverse !important;
+  }
 }
 .dashboard-wrapper {
   padding: 1rem 0;
