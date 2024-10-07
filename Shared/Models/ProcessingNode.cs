@@ -90,6 +90,11 @@ public class ProcessingNode: FileFlowObject
     /// Gets or sets the permissions to set
     /// </summary>
     public string Permissions { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the hardware information
+    /// </summary>
+    public HardwareInfo? HardwareInfo { get; set; }
 
     /// <summary>
     /// Gets or sets the permissions to set

@@ -23,10 +23,38 @@ public class DashboardController : BaseController
     public SystemInfo GetInfo()
         => ServiceLoader.Load<DashboardService>().GetSystemInfo();
     
+    /// <summary>
+    /// Gets the file overview
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("file-overview")]
     public FileOverviewData GetFileOverview()
         => ServiceLoader.Load<DashboardFileOverviewService>().GetData();
-    
+
+    /// <summary>
+    /// Gets the processing node
+    /// </summary>
+    /// <returns>the processing node</returns>
+    [HttpGet("node-summary")]
+    public async Task<List<ProcessingNode>> GetNodeSummary()
+    {
+        var nodes = await ServiceLoader.Load<NodeService>().GetAllAsync();
+        var server = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+        return nodes.Select(x => new ProcessingNode()
+        {
+            OperatingSystem = x.OperatingSystem,
+            Architecture = x.Architecture,
+            Version = x.Version,
+            Schedule = x.Schedule,
+            Enabled = x.Enabled,
+            Uid = x.Uid,
+            Address = x.Address,
+            Name = x.Name,
+            Priority = x.Priority,
+            HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? server : x.HardwareInfo
+        }).ToList();
+    }
+
     /// <summary>
     /// Gets any updates
     /// </summary>

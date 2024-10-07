@@ -1,0 +1,46 @@
+.processing-node {
+  display:flex;
+  flex-direction: row;
+  border-bottom: solid 1px var(--border-color);
+  padding-bottom: 0.75rem;
+  .icon {
+    height:9rem;
+    position: relative;
+    align-self: center;
+    top: -0.25rem;
+    .architecture {
+      position: absolute;
+      bottom: 1rem;
+      font-size: 0.9rem;
+      border-radius: 0.5rem;
+      padding: 0 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      line-height: 1.25;
+      font-weight: var(--bold, 600);
+      color: white;
+      background-color: var(--primary);
+    }
+  }
+  .summary {
+    .name {
+      font-size:1.2rem;
+      font-weight: var(--bold, 600);
+      padding-bottom: 0.25rem;
+      display: inline-block;
+    }
+    .hardware-info-item {
+      display:flex;
+      flex-direction: row;
+      padding: 0.2rem 0;
+      .label {
+        font-weight: var(--bold, 600);
+        width: 10rem;
+        min-width: 10rem;
+      }
+      .value {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}

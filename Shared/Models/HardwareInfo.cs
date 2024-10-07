@@ -29,6 +29,11 @@ public class HardwareInfo
     /// Gets or sets the name of the processor.
     /// </summary>
     public string Processor { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the memory size of the system.
+    /// </summary>
+    public long Memory { get; set; }
 
     /// <summary>
     /// Gets or sets the number of processor cores.

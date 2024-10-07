@@ -1,0 +1,93 @@
+@using FileFlows.Shared.Formatters
+@namespace FileFlows.Client.Components.Widgets
+
+@if (Data.Count > 0)
+{
+    foreach (var item in Data)
+    {
+        <div class="processing-node">
+            <span class="icon">
+                @if (item.OperatingSystem == OperatingSystemType.Mac)
+                {
+                    <img class="icon" src="/icons/apple.svg"/>
+                }
+                else if (item.OperatingSystem == OperatingSystemType.Docker)
+                {
+                    <img class="icon" src="/icons/docker.svg"/>
+                }
+                else if (item.OperatingSystem == OperatingSystemType.Windows)
+                {
+                    <img class="icon" src="/icons/windows.svg"/>
+                }
+                else if (item.OperatingSystem == OperatingSystemType.Linux)
+                {
+                    <img class="icon" src="/icons/linux.svg"/>
+                }
+                <div class="architecture @(item.Architecture is ArchitectureType.Arm32 or ArchitectureType.Arm64 ? "arm" : "")">@item.Architecture</div>
+            </span>
+            <div class="summary">
+                <span class="name">@item.Name</span>
+
+                @if (item.HardwareInfo != null)
+                {
+                <div class="hardware-info">
+                    <div class="hardware-info-item">
+                        <span class="label">CPU</span>
+                        <span class="value">@item.HardwareInfo.Processor</span>
+                    </div>
+                    @if (item.HardwareInfo.Memory > 0)
+                    {
+                    <div class="hardware-info-item">
+                        <span class="label">Memory</span>
+                        <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0)</span>
+                    </div>
+                    }
+                    <div class="hardware-info-item">
+                        <span class="label">Architecture</span>
+                        <span class="value">@item.HardwareInfo.Architecture</span>
+                    </div>
+                    @if(item.HardwareInfo.CoreCount > 0)
+                    {
+                    <div class="hardware-info-item">
+                        <span class="label">Cores</span>
+                        <span class="value">@item.HardwareInfo.CoreCount</span>
+                    </div>
+                    }
+                    @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
+                    {
+                    <div class="hardware-info-item">
+                        <span class="label">Operating System</span>
+                        <span class="value">@item.HardwareInfo.OperatingSystem</span>
+                    </div>
+                    }
+                    @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
+                    {
+                    <div class="hardware-info-item">
+                        <span class="label">OS Version</span>
+                        <span class="value">@item.HardwareInfo.OperatingSystemVersion</span>
+                    </div>
+                    }
+                    @foreach(var gpu in item.HardwareInfo.Gpus ?? [])
+                    {
+                        <div class="hardware-info-item">
+                        <span class="label">GPU</span>
+                        <span class="value">
+                            @gpu.Model 
+                            (@gpu.Vendor)
+                            @if (gpu.Memory > 0)
+                            {
+                                <span class="memory">@FileSizeFormatter.Format(gpu.Memory, 0)</span>
+                            }
+                            @if(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false)
+                            {
+                            <span class="driver">@gpu.DriverVersion</span>
+                            }
+                        </span>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+        </div>
+    }
+}

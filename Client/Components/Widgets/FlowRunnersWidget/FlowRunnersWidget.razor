@@ -3,8 +3,9 @@
 <ContainerWidget Title="@lblTitle" Scroll="true">
     <Head>
         <OptionButtons @bind-Value="Mode">
-            <WidgetOption Label="@lblTitle" Value="0" Icon="fas fa-running"/>
-            <WidgetOption Label="@lblUpdates" Value="1" Icon="fas fa-chart-bar"/>
+            <WidgetOption Label="@lblTitle" Value="0" Icon="fas fa-running" />
+            <WidgetOption Label="@lblUpdates" Value="1" Icon="fas fa-chart-bar" />
+            <WidgetOption Label="Nodes" Value="2" Icon="fas fa-desktop" />
         </OptionButtons>
     </Head>
     <Body>
@@ -12,9 +13,11 @@
     <div class="runners @(Mode == 0 ? "active" : "")">
         <RunnersComponent />
     </div>
-
     <div class="charts @(Mode == 1 ? "active" : "")">
         <UpdatesComponent />
+    </div>
+    <div class="nodes @(Mode == 2 ? "active" : "")">
+        <NodeSummaryComponent />
     </div>
 
     </Body>

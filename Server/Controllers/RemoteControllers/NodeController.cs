@@ -264,7 +264,8 @@ public class NodeController : BaseController
             Mappings = model.Mappings?.Select(x => new KeyValuePair<string, string>(x.Server, x.Local))?.ToList() ??
                        variables?.Select(x => new
                            KeyValuePair<string, string>(x.Value, "")
-                       )?.ToList() ?? new()
+                       )?.ToList() ?? new(),
+            HardwareInfo = model.HardwareInfo
         };
         var result = await service.Update(node, await GetAuditDetails());
         if (result.Failed(out string error))

@@ -25,6 +25,7 @@ public class HardwareInfoService
             Architecture = RuntimeInformation.OSArchitecture.ToString(),
             Gpus = GetGPUs(),
             Processor = GetProcessor(),
+            Memory = GetTotalMemory(),
             CoreCount = Environment.ProcessorCount
         };
 
@@ -108,7 +109,7 @@ public class HardwareInfoService
                         if (!string.IsNullOrWhiteSpace(line) && line.Contains("VGA"))
                         {
                             var gpu = ParseAmdGpu(line);
-                            if(gpu != null)
+                            if (gpu != null)
                                 gpus.Add(gpu);
                         }
                     }
@@ -142,7 +143,7 @@ public class HardwareInfoService
                         {
                             Vendor = "Apple/Intel",
                             Model = model,
-                            Memory = GetMacMemory(),
+                            Memory = GetMacGpuMemory(),
                             DriverVersion = GetMacDriverVersion()
                         });
                     }
@@ -177,18 +178,19 @@ public class HardwareInfoService
         if (parts.Length > 1)
         {
             // Extract model information
-            model = parts[1][parts[1].IndexOf('[')..].Trim(); // Extracts "[AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M]"
+            model = parts[1][parts[1].IndexOf('[')..]
+                .Trim(); // Extracts "[AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M]"
             model = model.Trim().Replace("(", "").Replace(")", ""); // Clean up parentheses
         }
 
         if (model.StartsWith("[AMD/ATI]"))
             model = model[9..].Trim(); // Remove "[AMD/ATI]" prefix
-        
+
         var match = Regex.Match(model, @"\[(Radeon [^]]+)\]");
         if (match is { Success: true, Groups.Count: > 1 })
             model = match.Groups[1].Value; // Extract the Radeon model
 
-        return new ()
+        return new()
         {
             Vendor = vendor,
             Model = model,
@@ -196,6 +198,7 @@ public class HardwareInfoService
             DriverVersion = GetAmdDriverVersion() // Call your existing method to get driver version
         };
     }
+
     /// <summary>
     /// Parses the NVIDIA GPU info
     /// </summary>
@@ -337,7 +340,7 @@ public class HardwareInfoService
     /// Retrieves the memory size of the GPU on macOS in bytes.
     /// </summary>
     /// <returns>The memory size of the macOS GPU in bytes.</returns>
-    private long GetMacMemory()
+    private long GetMacGpuMemory()
     {
         // Command to get GPU memory size on macOS
         string command = "system_profiler SPDisplaysDataType | grep 'VRAM' | awk '{print $2}'";
@@ -447,12 +450,12 @@ public class HardwareInfoService
 
                 if (parts.Length >= 3)
                 {
-                    var model = parts[0].Trim().TrimStart('"').TrimStart('"');
-                    if (model == "Virtual Desktop Monitor")
+                    var model = parts[0].Trim().TrimStart('"').TrimEnd('"');
+                    if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
                         continue;
                     gpus.Add(new GpuInfo
                     {
-                        Vendor = parts[0].Trim().TrimStart('"').TrimStart('"'), // May need to adjust based on output
+                        Vendor = parts[0].Trim().TrimStart('"').TrimEnd('"'), // May need to adjust based on output
                         Model = model, // Same as Vendor in this output
                         Memory = long.TryParse(parts[1].Trim(), out long memory) ? memory : 0,
                         DriverVersion = parts[2].Trim()
@@ -478,7 +481,7 @@ public class HardwareInfoService
         if (OperatingSystem.IsWindows() == false)
             return gpus;
 
-        #pragma warning disable CA1416
+#pragma warning disable CA1416
         try
         {
             using var searcher =
@@ -486,7 +489,7 @@ public class HardwareInfoService
             foreach (var obj in searcher.Get())
             {
                 var model = obj["Name"]?.ToString()?.TrimStart('"')?.TrimEnd('"') ?? "Unknown";
-                if (model == "Virtual Desktop Monitor")
+                if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
                     continue;
                 gpus.Add(new GpuInfo
                 {
@@ -501,7 +504,7 @@ public class HardwareInfoService
         {
             Logger.Instance?.WLog($"Error retrieving GPU info using WMI: {ex.Message}");
         }
-        #pragma warning restore CA1416
+#pragma warning restore CA1416
 
         return gpus;
     }
@@ -595,5 +598,123 @@ public class HardwareInfoService
 
         return gpus;
     }
+
+    /// <summary>
+    /// Gets the total physical memory in bytes.
+    /// </summary>
+    /// <returns>The total physical memory in bytes.</returns>
+    public long GetTotalMemory()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return GetWindowsMemory();
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return GetLinuxMemory();
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            return GetMacMemory();
+        }
+        else
+        {
+            throw new PlatformNotSupportedException("This operating system is not supported.");
+        }
+    }
+
+    /// <summary>
+    /// Gets the total physical memory for Windows.
+    /// </summary>
+    /// <returns>The total physical memory in bytes.</returns>
+    private long GetWindowsMemory()
+    {
+        if (OperatingSystem.IsWindows() == false)
+            return 0;
+#pragma warning disable CA1416
+        try
+        {
+            // Using ManagementObjectSearcher to get total physical memory
+            using var searcher =
+                new ManagementObjectSearcher("SELECT TotalVisibleMemorySize FROM Win32_OperatingSystem");
+            foreach (var obj in searcher.Get())
+            {
+                return Convert.ToInt64(obj["TotalVisibleMemorySize"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle exceptions as needed
+            Logger.Instance?.WLog("Failed getting memory size on Windows: " + ex.Message);
+        }
+#pragma warning restore CA1416
+        return 0; // Fallback if unable to retrieve memory
+    }
+
+    /// <summary>
+    /// Gets the total physical memory for Linux.
+    /// </summary>
+    /// <returns>The total physical memory in bytes.</returns>
+    private long GetLinuxMemory()
+    {
+        try
+        {
+            string memInfo = System.IO.File.ReadAllText("/proc/meminfo");
+            var match = Regex.Match(memInfo, @"MemTotal:\s+(\d+)\s+kB");
+            if (match.Success)
+            {
+                return long.Parse(match.Groups[1].Value) * 1024; // Convert kB to bytes
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log or handle exceptions as needed
+            Logger.Instance?.WLog("failed getting memory size on Linux: " + ex.Message);
+        }
+
+        return 0; // Fallback if unable to retrieve memory
+    }
+
+    /// <summary>
+    /// Gets the total physical memory for macOS.
+    /// </summary>
+    /// <returns>The total physical memory in bytes.</returns>
+    private long GetMacMemory()
+    {
+        try
+        {
+            // Use sysctl to get physical memory
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "sysctl",
+                    Arguments = "hw.memsize",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+
+            // Parse output to extract memory
+            var match = Regex.Match(output, @"hw\.memsize:\s+(\d+)");
+            if (match.Success)
+            {
+                return long.Parse(match.Groups[1].Value);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance?.WLog("Failed getting memory size on macOS: " + ex.Message);
+            // Log or handle exceptions as needed
+        }
+
+        return 0; // Fallback if unable to retrieve memory
+    }
+
 }
 
