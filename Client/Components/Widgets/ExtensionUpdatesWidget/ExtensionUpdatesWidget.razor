@@ -1,0 +1,39 @@
+@namespace FileFlows.Client.Components.Widgets
+
+<ContainerWidget Title="@lblTitle" Scroll="true">
+<Head>
+    <OptionButtons @bind-Value="Mode">
+        @if (Data.PluginUpdates.Count > 0)
+        {
+            <WidgetOption Label="@lblPlugins" Value="0" Icon="fas fa-puzzle-piece"/>
+        }
+        @if (Data.ScriptUpdates.Count > 0)
+        {
+            <WidgetOption Label="@lblScripts" Value="1" Icon="fas fa-scroll"/>
+        }
+        @if (Data.DockerModUpdates.Count > 0)
+        {
+            <WidgetOption Label="@lblDockerMods" Value="2" Icon="fab fa-docker"/>
+        }
+    </OptionButtons>
+</Head>
+<Body>
+    @foreach (var item in SelectedList)
+    {
+        <div class="table-item">
+            <span class="icon">
+                <TableItemIcon Icon="@item.Icon" DefaultIcon="@DefaultIcon" />
+            </span>
+            <div class="center">
+                <span class="name">@item.Name</span>
+                <div class="info">
+                    <FlowIconValue Icon="fas fa-code-branch" Color="dark" Value="@item.CurrentVersion" />
+                </div>
+            </div>
+            <div class="right">
+                <span class="top-right">@item.LatestVersion</span>
+            </div>
+        </div>
+    }
+</Body>
+</ContainerWidget>

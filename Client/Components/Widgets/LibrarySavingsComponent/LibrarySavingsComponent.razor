@@ -1,0 +1,23 @@
+@using FileFlows.Client.Helpers
+@namespace FileFlows.Client.Components.Widgets
+
+<div class="lss-widget-chart">
+    <CircularChart Percent="@TotalPercent" Title="@TotalSavings" Subtitle="@OriginalSize"/>
+</div>
+<div class="lss-widget-list">
+    @foreach (var library in Data.OrderByDescending(x => x.OriginalSize - x.FinalSize))
+    {
+        long bytesSaved = library.OriginalSize - library.FinalSize;
+        var savings = (bytesSaved < 0 ? "-" : "") + FileSizeFormatter.FormatSize(Math.Abs(bytesSaved), 1);
+        var percent = bytesSaved < 1 ? "0" : $"{bytesSaved * 100f / library.OriginalSize}%";
+        var files = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavingsSummary.Files", new { count = library.TotalFiles });
+        <div class="library">
+            <span class="name">@library.Library</span>
+            <span class="savings">@savings</span>
+            <span class="items">@files</span>
+            <div class="bar">
+                <div class="inner" style="width:@percent"/>
+            </div>
+        </div>
+    }
+</div>

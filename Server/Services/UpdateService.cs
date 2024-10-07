@@ -1,4 +1,6 @@
+using FileFlows.Server.Helpers;
 using FileFlows.Server.Workers;
+using FileFlows.Shared.Helpers;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Services;
@@ -51,11 +53,28 @@ public class UpdateService : BackgroundService
     {
         var repository = await ServiceLoader.Load<RepositoryService>().GetRepository();
         Info.FileFlowsVersion = await CheckForFileFlowsUpdate();
+        if (Info.FileFlowsVersion != null)
+            Info.ReleaseNotes = await GetReleaseNotes();
         Info.PluginUpdates = await CheckForPluginUpdates();
         Info.DockerModUpdates = repository == null ? [] : await CheckForDockerModUpdates(repository);
         Info.ScriptUpdates = repository == null ? [] : await CheckForScriptUpdates(repository);
     }
-    
+
+    /// <summary>
+    /// Gets the release notes
+    /// </summary>
+    /// <returns>the release notes</returns>
+    private async Task<List<ReleaseNotes>> GetReleaseNotes()
+    {
+        var response = await HttpHelper.Get<string>("https://fileflows.com/news/feed.json");
+        if (response.Success == false || string.IsNullOrWhiteSpace(response.Body))
+            return [];
+        var releaseNotes = FileFlowsFeedParser.Parse(response.Body);
+        var thisVersion = Version.Parse(Globals.Version);
+        //return releaseNotes.Where(x => Version.Parse(x.Version + ".0") > thisVersion).ToList();
+        return releaseNotes.Take(4).ToList();
+    }
+
     /// <summary>
     /// Checks for a new FileFlows Version
     /// </summary>

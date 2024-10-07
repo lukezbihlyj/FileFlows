@@ -32,6 +32,31 @@
                     <LibrarySavingsSummaryWidget/>
                 </div>
             </FlowTab>
+            @if (UpdateInfoData.HasUpdates)
+            {
+                <FlowTab Title="@lblUpdates" Icon="fas fa-cloud-download-alt">
+                @if (UpdateInfoData.FileFlowsVersion != null && UpdateInfoData.HasExtensionUpdates)
+                {
+                    <div class="grid grid-60-40 flex-grow savings">
+                        <FileFlowsUpdateWidget Data="UpdateInfoData"/>
+                        <ExtensionUpdatesWidget Data="UpdateInfoData"/>
+                    </div>
+                }
+                else if (UpdateInfoData.FileFlowsVersion != null)
+                {
+                    <div class="grid">
+                        <FileFlowsUpdateWidget Data="UpdateInfoData"/>
+                    </div>
+                }
+                else if (UpdateInfoData.HasExtensionUpdates)
+                {
+                    <div class="grid">
+                        <ExtensionUpdatesWidget Data="UpdateInfoData"/>
+                    </div>
+                }
+
+                </FlowTab>
+            }
         </FlowTabs>
 
     </div>

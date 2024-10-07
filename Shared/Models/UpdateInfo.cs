@@ -9,6 +9,11 @@ public class UpdateInfo
     /// Gets or sets the current version of FileFlows.
     /// </summary>
     public string? FileFlowsVersion { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the release notes
+    /// </summary>
+    public List<ReleaseNotes> ReleaseNotes { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the list of plugin updates.
@@ -28,7 +33,12 @@ public class UpdateInfo
     /// <summary>
     /// Gets if there are any updates
     /// </summary>
-    public bool HasUpdates => PluginUpdates.Any() || DockerModUpdates.Any() || ScriptUpdates.Any() || FileFlowsVersion != null;
+    public bool HasUpdates => PluginUpdates.Count != 0 || DockerModUpdates.Count != 0 || ScriptUpdates.Count != 0 || FileFlowsVersion != null;
+
+    /// <summary>
+    /// Gets if there are any extension updates
+    /// </summary>
+    public bool HasExtensionUpdates => PluginUpdates.Count != 0 || DockerModUpdates.Count != 0 || ScriptUpdates.Count != 0;
     
     /// <summary>
     /// Gets the number of updates
@@ -61,4 +71,23 @@ public class PackageUpdate
     /// Gets or sets the icon for the package.
     /// </summary>
     public string? Icon { get; set; }
+}
+
+/// <summary>
+/// Release Notes
+/// </summary>
+public class ReleaseNotes
+{
+    /// <summary>
+    /// Gets or sets the version
+    /// </summary>
+    public string Version { get; set; }
+    /// <summary>
+    /// Gets or sets what is new in this version
+    /// </summary>
+    public List<string> New { get; set; } = new ();
+    /// <summary>
+    /// Gets or sets what is fixed in this version
+    /// </summary>
+    public List<string> Fixed { get; set; } = new ();
 }

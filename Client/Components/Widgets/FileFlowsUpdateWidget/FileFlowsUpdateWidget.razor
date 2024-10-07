@@ -1,0 +1,32 @@
+@namespace FileFlows.Client.Components.Widgets
+
+<ContainerWidget Title="FileFlows" Scroll="true">
+    <Body>
+    @foreach(var update in Data.ReleaseNotes)
+    {
+        <div class="release-note">
+            <h1>@update.Version</h1>
+            @if (update.New.Count > 0)
+            {
+                <h2>@lblNew</h2>
+                <ul>
+                    @foreach (var note in update.New)
+                    {
+                        <li>@note</li>
+                    }
+                </ul>
+            }
+            @if (update.Fixed.Count > 0)
+            {
+                <h2>@lblFixed</h2>
+                <ul>
+                    @foreach (var note in update.Fixed)
+                    {
+                        <li>@note</li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+    </Body>
+</ContainerWidget>

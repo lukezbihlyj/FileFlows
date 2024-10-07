@@ -2,14 +2,20 @@ using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Pages;
 
-public partial class NewDashboard : ComponentBase, IDisposable
+public partial class NewDashboard : ComponentBase
 {
     /// <summary>
     /// Gets or sets the client service
     /// </summary>
     [Inject] public ClientService ClientService { get; set; }
+    
+    /// <summary>
+    /// The update data
+    /// </summary>
+    public UpdateInfo? UpdateInfoData;
 
-    private string lblDashboard, lblSavings;
+
+    private string lblDashboard, lblSavings, lblUpdates;
 
     private bool loaded = false;
 
@@ -31,56 +37,21 @@ public partial class NewDashboard : ComponentBase, IDisposable
                 ClientService.CurrentFileOverData ??= fileOverviewResult.Data;
         }
 
+        await Refresh();
+
+        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
+            new { count = UpdateInfoData.NumberOfUpdates });
+        
         loaded = true;
         StateHasChanged();
     }
-
-
-    /// <summary>
-    /// Disposes of the component
-    /// </summary>
-    public void Dispose()
-    {
-        RegisterListeners(false);
-    }
     
     /// <summary>
-    /// Registers the listeners
+    /// Refreshes the data
     /// </summary>
-    /// <param name="unregister">if the listeners should be unregistered</param>
-    private void RegisterListeners(bool unregister = false)
+    async Task Refresh()
     {
-        if (unregister)
-        {
-            ClientService.FileStatusUpdated -= OnFileStatusUpdated;
-            ClientService.SystemPausedUpdated -= SystemPausedUpdated;
-            ClientService.ExecutorsUpdated -= ExecutorsUpdated;
-        }
-        else
-        {
-            ClientService.FileStatusUpdated += OnFileStatusUpdated;
-            ClientService.SystemPausedUpdated += SystemPausedUpdated;
-            ClientService.ExecutorsUpdated += ExecutorsUpdated;
-        }
-    }
-
-
-    private void OnFileStatusUpdated(List<LibraryStatus> obj)
-    {
-        //throw new NotImplementedException();
-    }
-
-    private void SystemPausedUpdated(bool obj)
-    {
-        //throw new NotImplementedException();
-        StateHasChanged();
-    }
-    /// <summary>
-    /// Called when the executors are updated
-    /// </summary>
-    /// <param name="obj">the updated executors</param>
-    private void ExecutorsUpdated(List<FlowExecutorInfoMinified> obj)
-    {
-        StateHasChanged();
+        var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
+        UpdateInfoData = result.Success ? result.Data ?? new() : new();
     }
 }

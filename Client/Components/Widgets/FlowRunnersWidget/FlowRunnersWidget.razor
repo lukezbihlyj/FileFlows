@@ -4,24 +4,20 @@
     <Head>
         <OptionButtons @bind-Value="Mode">
             <WidgetOption Label="@lblRunners" Value="0" Icon="fas fa-running" />
-            <WidgetOption Label="@lblUpdates" Value="1" Icon="fas fa-chart-bar" />
-            <WidgetOption Label="@lblNodes" Value="2" Icon="fas fa-desktop" />
+            <WidgetOption Label="@lblNodes" Value="1" Icon="fas fa-desktop" />
+            <WidgetOption Label="@lblSavings" Value="2" Icon="fas fa-dollar-sign" />
         </OptionButtons>
     </Head>
     <Body>
     
-    <div class="runners @(Mode == 0 ? "active" : "")">
+    <div class="system-section runners @(Mode == 0 ? "active" : "")">
         <RunnersComponent NoneOnLoad="SelectNodes" />
     </div>
-    <div class="charts @(Mode == 1 ? "active" : "")">
-        @if (UpdateInfoData != null)
-        {
-            <UpdatesComponent Data="UpdateInfoData" />
-        }
-    </div>
-    <div class="nodes @(Mode == 2 ? "active" : "")">
+    <div class="system-section nodes @(Mode == 1 ? "active" : "")">
         <NodeSummaryComponent />
     </div>
-
+    <div class="system-section savings @(Mode == 2 ? "active" : "")">
+        <LibrarySavingsComponent Mode="1" />
+    </div>
     </Body>
 </ContainerWidget>

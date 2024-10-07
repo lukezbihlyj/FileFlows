@@ -657,6 +657,9 @@
           "Updates": "{count, plural, zero {Mises à jour} one {# Mise à jour} other {# Mises à jour}}"
         },
         "Updates": {
+          "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
+          "Scripts": "{count, plural, zero {Scripts} one {# Script} other {# Scripts}}",
           "Title": "Mises à jour"
         }
       }
