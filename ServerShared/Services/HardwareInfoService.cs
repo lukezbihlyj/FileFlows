@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using FileFlows.Shared.Models;
 
@@ -179,6 +180,13 @@ public class HardwareInfoService
             model = parts[1][parts[1].IndexOf('[')..].Trim(); // Extracts "[AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M]"
             model = model.Trim().Replace("(", "").Replace(")", ""); // Clean up parentheses
         }
+
+        if (model.StartsWith("[AMD/ATI]"))
+            model = model[9..].Trim(); // Remove "[AMD/ATI]" prefix
+        
+        var match = Regex.Match(model, @"\[(Radeon [^]]+)\]");
+        if (match is { Success: true, Groups.Count: > 1 })
+            model = match.Groups[1].Value; // Extract the Radeon model
 
         return new ()
         {
@@ -439,12 +447,12 @@ public class HardwareInfoService
 
                 if (parts.Length >= 3)
                 {
-                    var model = parts[0].Trim();
+                    var model = parts[0].Trim().TrimStart('"').TrimStart('"');
                     if (model == "Virtual Desktop Monitor")
                         continue;
                     gpus.Add(new GpuInfo
                     {
-                        Vendor = parts[0].Trim(), // May need to adjust based on output
+                        Vendor = parts[0].Trim().TrimStart('"').TrimStart('"'), // May need to adjust based on output
                         Model = model, // Same as Vendor in this output
                         Memory = long.TryParse(parts[1].Trim(), out long memory) ? memory : 0,
                         DriverVersion = parts[2].Trim()
@@ -477,12 +485,12 @@ public class HardwareInfoService
                 new ManagementObjectSearcher("select Name, AdapterRAM, DriverVersion from Win32_VideoController");
             foreach (var obj in searcher.Get())
             {
-                var model = obj["Name"]?.ToString() ?? "Unknown";
+                var model = obj["Name"]?.ToString()?.TrimStart('"')?.TrimEnd('"') ?? "Unknown";
                 if (model == "Virtual Desktop Monitor")
                     continue;
                 gpus.Add(new GpuInfo
                 {
-                    Vendor = obj["Name"]?.ToString() ?? "Unknown",
+                    Vendor = obj["Name"]?.ToString()?.TrimStart('"')?.TrimStart('"') ?? "Unknown",
                     Model = model,
                     Memory = Convert.ToInt64(obj["AdapterRAM"] ?? 0),
                     DriverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown"
