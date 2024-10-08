@@ -510,10 +510,7 @@ public class LibraryFileService
 
             // first check if its in schedule
             if (TimeHelper.InSchedule(other.Schedule) == false)
-            {
-                nodeService.UpdateStatus(other.Uid, ProcessingNodeStatus.OutOfSchedule);
                 continue;
-            }
 
             // check if this node is maxed out
             if (executors.TryGetValue(other.Uid, out int value) && value >= other.FlowRunners)

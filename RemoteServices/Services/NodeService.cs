@@ -59,7 +59,21 @@ public class NodeService : RemoteService, INodeService
             throw;
         }
     }
-    
+
+    /// <inheritdoc />
+    public async Task SetStatus(Guid uid, ProcessingNodeStatus? status)
+    {
+        try
+        {
+            await HttpHelper.Post(ServiceBaseUrl + "/remote/node/" + uid + $"/status/{status}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Failed to set node status: " + ex.Message + Environment.NewLine + ex.StackTrace);
+            throw;
+        }
+    }
+
     /// <inheritdoc />
     public async Task<ProcessingNode?> GetByUidAsync(Guid uid)
     {

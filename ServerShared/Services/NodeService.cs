@@ -16,6 +16,14 @@ public interface INodeService
     Task<ProcessingNode?> GetByAddressAsync(string address);
     
     /// <summary>
+    /// Sets the node status
+    /// </summary>
+    /// <param name="uid">the UID of the node</param>
+    /// <param name="status">the new status</param>
+    /// <returns>the status</returns>
+    Task SetStatus(Guid uid, ProcessingNodeStatus? status);
+    
+    /// <summary>
     /// Gets a processing node by UID
     /// </summary>
     /// <param name="uid">The UID of the node</param>

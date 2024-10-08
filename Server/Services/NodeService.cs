@@ -66,9 +66,12 @@ public class NodeService //: INodeService
     /// </summary>
     /// <param name="uid">The UID of the node</param>
     /// <param name="status">The current status</param>
-    public void UpdateStatus(Guid uid, ProcessingNodeStatus status)
+    public void UpdateStatus(Guid uid, ProcessingNodeStatus? status)
     {
-        _currentStatus.AddOrUpdate(uid, status, (key, existingVal) => status);
+        if (status == null)
+            _currentStatus.TryRemove(uid, out _);
+        else
+            _currentStatus.AddOrUpdate(uid, status.Value, (key, existingVal) => status.Value);
         _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
     }
 

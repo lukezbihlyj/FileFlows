@@ -791,7 +791,7 @@ public class FlowWorker : Worker
 
         if (Globals.IsDocker)
         {
-            if (WriteAndRunDockerMods(config.DockerMods ?? new(), node.Name) == false)
+            if (WriteAndRunDockerMods(config.DockerMods ?? new(), node.Uid, node.Name) == false)
                 return false;
         }
 
@@ -806,36 +806,47 @@ public class FlowWorker : Worker
     /// Writes and run all the DockerMods
     /// </summary>
     /// <param name="mods">the DockerMods</param>
+    /// <param name="nodeUid">the UID of the node</param>
     /// <param name="nodeName">the hostname node this is running on</param>
-    bool WriteAndRunDockerMods(List<DockerMod> mods, string nodeName)
+    bool WriteAndRunDockerMods(List<DockerMod> mods, Guid nodeUid, string nodeName)
     {
-        var directory = DirectoryHelper.DockerModsDirectory;
-        Logger.Instance.ILog("DockerMods Directory: " + directory);
-        if (Directory.Exists(directory) == false)
-            Directory.CreateDirectory(directory);
         
-        DockerModHelper.UninstallUnknownMods(mods).Wait();
-
-        if (mods?.Any() != true)
+        var nodeService = ServiceLoader.Load<INodeService>();
+        nodeService.SetStatus(nodeUid, ProcessingNodeStatus.InstallingDockerMods).Wait();
+        try
         {
-            Logger.Instance.ILog("No DockerMods to run");
+            var directory = DirectoryHelper.DockerModsDirectory;
+            Logger.Instance.ILog("DockerMods Directory: " + directory);
+            if (Directory.Exists(directory) == false)
+                Directory.CreateDirectory(directory);
+
+            DockerModHelper.UninstallUnknownMods(mods).Wait();
+
+            if (mods?.Any() != true)
+            {
+                Logger.Instance.ILog("No DockerMods to run");
+                return true;
+            }
+
+
+            foreach (var mod in mods)
+            {
+                var result = DockerModHelper.Execute(mod).Result;
+                if (result.Failed(out string error))
+                {
+                    _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Critical,
+                        $"Docker Mod '{mod.Name}' Failed on '{nodeName}'",
+                        error);
+                    return false;
+                }
+            }
+
             return true;
         }
-
-        
-        foreach (var mod in mods)
+        finally
         {
-            var result = DockerModHelper.Execute(mod).Result;
-            if (result.Failed(out string error))
-            {
-                _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Critical,
-                    $"Docker Mod '{mod.Name}' Failed on '{nodeName}'",
-                    error);
-                return false;
-            }
+            nodeService.SetStatus(nodeUid, null).Wait();
         }
-
-        return true;
     }
 
     /// <summary>
