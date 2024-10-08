@@ -21,7 +21,8 @@ public class HardwareInfoService
         var hardwareInfo = new HardwareInfo
         {
             OperatingSystem = GetOperatingSystem(),
-            OperatingSystemVersion = Environment.OSVersion.VersionString,
+            OperatingSystemType = PlatformHelper.GetOperatingSystemType(),
+            OperatingSystemVersion = GetOperatingSystemVersion(),
             Architecture = RuntimeInformation.OSArchitecture.ToString(),
             Gpus = GetGPUs(),
             Processor = GetProcessor(),
@@ -33,6 +34,21 @@ public class HardwareInfoService
     }
 
     /// <summary>
+    /// Gets the operating system version.
+    /// </summary>
+    /// <returns>the opreating system version</returns>
+    private string GetOperatingSystemVersion()
+    {
+        if (OperatingSystem.IsWindows())
+            return GetWindowsVersion();
+        if (OperatingSystem.IsMacOS())
+            return GetMacOSVersion();
+        if (OperatingSystem.IsLinux())
+            return GetLinuxDistroVersion();
+        return Environment.OSVersion.VersionString;
+    }
+
+    /// <summary>
     /// Retrieves the operating system name.
     /// </summary>
     /// <returns>The name of the operating system.</returns>
@@ -41,7 +57,7 @@ public class HardwareInfoService
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             return "Windows";
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            return "Linux";
+            return GetLinuxDistribution();
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             return "MacOS";
         return "Unknown OS";
@@ -450,12 +466,13 @@ public class HardwareInfoService
 
                 if (parts.Length >= 3)
                 {
-                    var model = parts[0].Trim().TrimStart('"').TrimEnd('"');
-                    if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
+                    var model = CleanUpModel(parts[0]);
+                    var vendor = CleanUpVendor(parts[0]);
+                    if (model == null || vendor == null)
                         continue;
                     gpus.Add(new GpuInfo
                     {
-                        Vendor = parts[0].Trim().TrimStart('"').TrimEnd('"'), // May need to adjust based on output
+                        Vendor = vendor!, // May need to adjust based on output
                         Model = model, // Same as Vendor in this output
                         Memory = long.TryParse(parts[1].Trim(), out long memory) ? memory : 0,
                         DriverVersion = parts[2].Trim()
@@ -469,6 +486,45 @@ public class HardwareInfoService
         }
 
         return gpus;
+    }
+
+    /// <summary>
+    /// Cleans up a model string.
+    /// </summary>
+    /// <param name="model">the model to clean up</param>
+    /// <returns>the cleaned up model name, or null if a bad model</returns>
+    private string? CleanUpModel(string? model)
+    {
+        if (model == null)
+            return null;
+        model = model.Trim().TrimStart('"').TrimEnd('"');
+        if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
+            return null;
+        model = model.Replace("Intel(R) ", ""); // Remove Intel(R) prefix
+        model = model.Replace("(TM)", ""); // Remove (TM) suffix
+        model = model.Replace("Graphics)", ""); // Remove (TM) suffix
+        while (model.Contains("  "))
+            model = model.Replace("  ", " ");
+        return model;
+    }
+
+    /// <summary>
+    /// Cleans up a vendor string.
+    /// </summary>
+    /// <param name="vendor">the vendor to clean up</param>
+    /// <returns>the cleaned up vendor name, or null if a bad model</returns>
+    private string? CleanUpVendor(string? vendor)
+    {
+        if(string.IsNullOrWhiteSpace(vendor))
+            return null;
+        if (vendor.Contains("NVIDIA", StringComparison.InvariantCultureIgnoreCase) == true)
+            return "NVIDIA";
+        if (vendor.Contains("AMD", StringComparison.InvariantCultureIgnoreCase) == true)
+            return "AMD";
+        if (vendor.Contains("Intel", StringComparison.InvariantCultureIgnoreCase) == true)
+            return "Intel";
+        vendor = vendor.Trim().TrimStart('"').TrimEnd('"');
+        return vendor;
     }
 
     /// <summary>
@@ -488,12 +544,14 @@ public class HardwareInfoService
                 new ManagementObjectSearcher("select Name, AdapterRAM, DriverVersion from Win32_VideoController");
             foreach (var obj in searcher.Get())
             {
-                var model = obj["Name"]?.ToString()?.TrimStart('"')?.TrimEnd('"') ?? "Unknown";
-                if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
+                var model = CleanUpModel(obj["Name"]?.ToString());
+                var vendor = CleanUpVendor(obj["Name"]?.ToString());
+                if (model == null || vendor == null)
                     continue;
+                
                 gpus.Add(new GpuInfo
                 {
-                    Vendor = obj["Name"]?.ToString()?.TrimStart('"')?.TrimStart('"') ?? "Unknown",
+                    Vendor = vendor,
                     Model = model,
                     Memory = Convert.ToInt64(obj["AdapterRAM"] ?? 0),
                     DriverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown"
@@ -558,7 +616,7 @@ public class HardwareInfoService
                 {
                     if (currentGpu != null)
                     {
-                        string memoryString = line.Substring("Display Memory: ".Length).Trim();
+                        string memoryString = line["Display Memory: ".Length..].Trim();
                         // Example: "8192 MB"
                         if (long.TryParse(memoryString.Split(' ')[0], out long memoryInMb))
                         {
@@ -715,6 +773,134 @@ public class HardwareInfoService
 
         return 0; // Fallback if unable to retrieve memory
     }
+    
+    /// <summary>
+    /// Gets the Windows version string and returns the human-readable version name.
+    /// </summary>
+    /// <returns>The human-readable version name, e.g., "Windows 7", "Windows 8", "Windows 8.1", "Windows 10", "Windows 11", or "Unknown Windows Version".</returns>
+    public static string GetWindowsVersion()
+    {
+        // The string containing the Windows version information, such as "Windows(Microsoft Windows NT 10.0.22631.0)".
+        var input =Environment.OSVersion.VersionString;
+        // Regular expression to capture the version number (e.g., 10.0)
+        var regex = new Regex(@"Windows NT (?<version>\d+\.\d+)");
+        var match = regex.Match(input);
 
+        if (match.Success)
+        {
+            // Extract the version number (e.g., "10.0")
+            var version = match.Groups["version"].Value;
+
+            // Handle Windows 10 and 11 based on build numbers
+            if (version == "10.0")
+            {
+                // Extract the build number to distinguish between Windows 10 and Windows 11
+                var buildRegex = new Regex(@"(\d+\.\d+\.(?<build>\d+)\.\d+)");
+                var buildMatch = buildRegex.Match(input);
+
+                if (buildMatch.Success && int.TryParse(buildMatch.Groups["build"].Value, out int build))
+                {
+                    // Windows 10: Build numbers lower than 22000
+                    // Windows 11: Build numbers 22000 and above
+                    return build >= 22000 ? "11" : "10";
+                }
+
+                return "10"; // Default to Windows 10 if build number is unknown
+            }
+
+            // Map other versions based on the version number
+            return version switch
+            {
+                "6.1" => "7",
+                "6.2" => "8",
+                "6.3" => "8.1",
+                _ => input
+            };
+        }
+
+        // Return a default message if no version is matched
+        return input;
+    }
+    
+    /// <summary>
+    /// Gets the macOS version using the `sw_vers` command.
+    /// </summary>
+    /// <returns>A string representing the macOS version.</returns>
+    private static string GetMacOSVersion()
+    {
+        try
+        {
+            using var process = new Process
+            {
+                StartInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "sw_vers",
+                    Arguments = "-productVersion",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+            process.Start();
+            string version = process.StandardOutput.ReadToEnd().Trim();
+            process.WaitForExit();
+
+            return "macOS " + version;
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.WLog("Failed to parse MacOS version: " + ex.Message);
+            return Environment.OSVersion.VersionString;
+        }
+    }
+    
+    /// <summary>
+    /// Gets the Linux distribution name and version from /etc/os-release.
+    /// </summary>
+    /// <returns>A string representing the Linux distribution and version.</returns>
+    private static string GetLinuxDistroVersion()
+    {
+        try
+        {
+            string[] osRelease = File.ReadAllLines("/etc/os-release");
+            foreach (string line in osRelease)
+            {
+                if (line.StartsWith("VERSION_ID="))
+                {
+                    return line.Split('=')[1].Trim('\"');
+                }
+            }
+
+            return Environment.OSVersion.VersionString;
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.WLog("Failed to parse Linux version: " + ex.Message);
+            return Environment.OSVersion.VersionString;
+        }
+    }
+
+    /// <summary>
+    /// Gets the Linux distribution name from /etc/os-release.
+    /// </summary>
+    /// <returns>A string representing the Linux distribution.</returns>
+    private static string GetLinuxDistribution()
+    {
+        try
+        {
+            string[] osRelease = File.ReadAllLines("/etc/os-release");
+            foreach (string line in osRelease)
+            {
+                if (line.StartsWith("NAME="))
+                    return line.Split('=')[1].Trim('\"');
+            }
+
+            return "Linux";
+        }
+        catch (Exception)
+        {
+            return "Linux";
+        }
+    }
 }
 

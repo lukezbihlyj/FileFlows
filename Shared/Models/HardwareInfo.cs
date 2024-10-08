@@ -11,6 +11,11 @@ public class HardwareInfo
     public string OperatingSystem { get; set; }
 
     /// <summary>
+    /// Gets or sets the operating system type
+    /// </summary>
+    public OperatingSystemType OperatingSystemType { get; set; }
+    
+    /// <summary>
     /// Gets or sets the operating system version.
     /// </summary>
     public string OperatingSystemVersion { get; set; }

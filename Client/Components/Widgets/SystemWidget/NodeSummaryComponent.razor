@@ -43,11 +43,7 @@
                             <div class="hardware-info-item">
                                 <span class="label">@lblOperatingSystem</span>
                                 <span class="value">
-                                    @item.HardwareInfo.OperatingSystem
-                                    @if (string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
-                                    {
-                                        <span>(@item.HardwareInfo.OperatingSystemVersion)</span>
-                                    }
+                                    @item.HardwareInfo.OperatingSystem @item.HardwareInfo.OperatingSystemVersion
                                 </span>
                             </div>
                         }
