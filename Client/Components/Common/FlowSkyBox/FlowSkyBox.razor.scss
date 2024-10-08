@@ -1,4 +1,4 @@
-.skybox {
+.skybox.v1 {
   width:100%;
   margin-top:-1rem;
   margin-bottom:1rem;
@@ -36,9 +36,50 @@
   }
 }
 
+.skybox.v2 {
+  border-radius: 3rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: auto;
+  flex-grow: 1;
+  flex-direction: row;
+  user-select: none;
+  align-self: center;
+  position: relative;
+  top:-0.5rem;
+  margin-bottom:0.25rem;
+  max-width: 100%;
+  overflow: hidden;
+  .skybox-item {
+    font-weight: var(--bold, 600);
+    place-content: center;
+    position: relative;
+    border-radius: 2rem;
+    line-height: 2.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    align-items: center;
+    padding: 0 1rem;
+    font-size:0.9rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    .icon, .count {
+      padding-right:0.5rem;
+    }
+    &.active {
+      background:var(--input-background);
+    }
+    .icon {
+      font-size: 1.25rem;
+      position: relative;
+      top: 0.1rem;
+    }
+  }
+}
+
 @media screen and (min-width: 1200.001px)
 {
-  .skybox {
+  .skybox.v1 {
     height:5rem;
     .skybox-item {
       padding:unset;
@@ -82,7 +123,7 @@
 
 
 @media screen and (max-width: 400px) {
-  .skybox {
+  .skybox.v1 {
     .icon {
       display: block;
       margin: auto auto 0.5rem !important;

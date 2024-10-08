@@ -49,36 +49,27 @@ public partial class FileFlowsUpdateWidget : ComponentBase
             return;
         
         Blocker.Show();
-        try
+        var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
+        if (available.Success == false)
         {
-            var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
-            if (available.Success == false)
-            {
-                Toast.ShowError("Pages.Settings.Messages.Update.Failed");
-                return;
-            }
+            Toast.ShowError("Pages.Settings.Messages.Update.Failed");
+            return;
+        }
 
-            if (available.Data == false)
-            {
-                Toast.ShowInfo("Pages.Settings.Messages.Update.NotAvailable");
-                return;
-            }
+        if (available.Data == false)
+        {
+            Toast.ShowInfo("Pages.Settings.Messages.Update.NotAvailable");
+            return;
+        }
 
-            if (await Confirm.Show("Pages.Settings.Messages.Update.Title",
-                    "Pages.Settings.Messages.Update.Message") == false)
-                return;
-            await HttpHelper.Post("/api/settings/upgrade-now");
-            Toast.ShowInfo("Pages.Settings.Messages.Update.Downloading");
-            await OnUpdate.InvokeAsync();
-        }
-        catch (Exception)
-        {
-            Toast.ShowError("Pages.Settings.Messages.CheckUpdateFailed");
-        }
-        finally
-        {
-            Blocker.Hide();
-        }
+        Blocker.Hide();
+        
+        if (await Confirm.Show("Pages.Settings.Messages.Update.Title",
+                "Pages.Settings.Messages.Update.Message") == false)
+            return;
+        await HttpHelper.Post("/api/settings/upgrade-now");
+        Toast.ShowInfo("Pages.Settings.Messages.Update.Downloading");
+        await OnUpdate.InvokeAsync();
     }
     
 }

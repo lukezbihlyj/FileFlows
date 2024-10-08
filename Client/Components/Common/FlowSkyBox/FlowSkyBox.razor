@@ -3,7 +3,7 @@
 @typeparam TItem
 
 
-<div class="skybox">
+<div class="skybox v2">
     @foreach (var item in Items)
     {
         <div class="skybox-item @(NoCount ? "no-count": "") @item.ClassName @(item == SelectedItem ? "active" : "") @item.Name.Dehumanize()"

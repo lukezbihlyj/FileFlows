@@ -2,9 +2,6 @@
   margin: 0.5rem 0;
 }
 
-.add-dialog-tabs ::deep .tb-CustomVariables {
-  width: 12rem;
-}
 .add-dialog-tabs ::deep .flow-tabs-content {
   height: min(20rem, 50vw);
 }

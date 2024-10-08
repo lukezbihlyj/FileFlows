@@ -57,12 +57,12 @@
     }
 
     ::deep button {
-        text-transform: uppercase;
+        font-weight: var(--bold, 600);
         background: transparent;
         color: rgba(var(--color-rgb), 0.8);
         border: unset;
         border-radius: 0 !important;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         outline:none;
 
         &:hover {
@@ -167,6 +167,8 @@
     padding-right: 0.7rem;
     font-weight: var(--bold, 600);
     background: rgba(var(--input-background-rgb), 0.3) !important;
+    border-top-right-radius: var(--container-border-radius);
+    border-top-left-radius: var(--container-border-radius);
 }
 
 .flowtable:not(.hide-head.hide-toolbar)
@@ -186,6 +188,8 @@
     border-left: solid 1px $borderColor;
     border-bottom: solid 1px $borderColor;
     border-right: solid 1px $borderColor;
+    border-bottom-right-radius: var(--container-border-radius);
+    border-bottom-left-radius: var(--container-border-radius);
     &::-webkit-scrollbar-track {
         border-right: solid 1px $borderColor;
         border-left: solid 1px $borderColor;
@@ -199,6 +203,8 @@
     font-size:0.9rem;
     display:flex;
     flex-direction: column;
+    border-radius: var(--container-border-radius);
+    background: var(--widget-background);
 }
 
 

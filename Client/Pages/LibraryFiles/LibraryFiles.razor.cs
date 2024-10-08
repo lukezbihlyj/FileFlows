@@ -81,7 +81,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     {
         SelectedStatus = status.Value;
         this.PageIndex = 0;
-        Title = lblLibraryFiles + ": " + status.Name;
+        Title = lblLibraryFiles;// + ": " + status.Name;
         await this.Refresh();
         this.StateHasChanged();
     }
@@ -110,7 +110,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         lblMoveToTop = Translater.Instant("Pages.LibraryFiles.Buttons.MoveToTop");
         lblLibraryFiles = Translater.Instant("Pages.LibraryFiles.Title");
         lblFileFlowsServer = Translater.Instant("Pages.Nodes.Labels.FileFlowsServer");
-        Title = lblLibraryFiles + ": " + Translater.Instant("Enums.FileStatus." + FileStatus.Unprocessed);
+        Title = lblLibraryFiles;// + ": " + Translater.Instant("Enums.FileStatus." + FileStatus.Unprocessed);
         this.lblSearch = Translater.Instant("Labels.Search");
         this.lblDeleteSwitch = Translater.Instant("Labels.DeleteLibraryFilesPhysicallySwitch");
         base.OnInitialized(true);
