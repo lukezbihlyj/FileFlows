@@ -2,3 +2,50 @@
   border-top:solid 1px var(--border-color);
   padding: 1rem 1rem;
 }
+
+.eu-main
+{
+  display:flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+.eu-actions {
+  height: fit-content;
+  padding: 0 0 1.5rem;
+  display: flex;
+  margin-left: 1rem;
+}
+.eu-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  .right {
+    width: fit-content !important;
+    min-width: fit-content !important;
+  }
+  .table-item:hover {
+    .actions {
+      left: 0; // Slide in from the left
+    }
+  }
+}
+
+.actions {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: -100%;
+  z-index:1;
+  transition: left 0.3s ease-out;
+  padding: 0.5rem 1.1rem;
+  background: var(--base-lightest-2);
+  font-size: 1.75rem;
+  align-content: center;
+  i {
+    cursor: pointer;
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

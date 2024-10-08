@@ -53,6 +53,10 @@ public class UpdateInfo
 public class PackageUpdate
 {
     /// <summary>
+    /// Gets or sets the unique identifier for the package.
+    /// </summary>
+    public Guid Uid { get; set; }
+    /// <summary>
     /// Gets or sets the name of the package.
     /// </summary>
     public string Name { get; set; }

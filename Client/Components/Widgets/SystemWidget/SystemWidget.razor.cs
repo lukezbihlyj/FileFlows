@@ -6,7 +6,7 @@ namespace FileFlows.Client.Components.Widgets;
 /// <summary>
 /// Flow Runners widget
 /// </summary>
-public partial class FlowRunnersWidget : ComponentBase
+public partial class SystemWidget : ComponentBase
 {
     /// <summary>
     /// Gets or sets the mode

@@ -32,11 +32,13 @@
       margin-right: 0.75rem;
       font-size: 1.15rem;
     }
-    &.active {
+    &.active,
+    &.has-on-click:hover
+    {
       background:var(--input-background);
       color:var(--color);
     }
-    &:not(.active):hover {
+    &:not(.active):not(.has-on-click):hover {
       background:#ffffff12;
     }
     .bubble {

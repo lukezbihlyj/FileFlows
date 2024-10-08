@@ -146,7 +146,7 @@ public class PluginController : BaseController
             updated |= success;
         }
         
-        _ = ServiceLoader.Load<UpdateService>().Trigger();
+        await ServiceLoader.Load<UpdateService>().Trigger();
         return updated;
     }
 

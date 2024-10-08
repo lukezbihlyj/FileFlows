@@ -10,6 +10,16 @@ public partial class NewDashboard : ComponentBase
     [Inject] public ClientService ClientService { get; set; }
     
     /// <summary>
+    /// Gets or sets the profile service
+    /// </summary>
+    [Inject] public ProfileService ProfileService { get; set; }
+
+    /// <summary>
+    /// The users profile
+    /// </summary>
+    private Profile Profile;
+    
+    /// <summary>
     /// The update data
     /// </summary>
     public UpdateInfo? UpdateInfoData;
@@ -36,11 +46,11 @@ public partial class NewDashboard : ComponentBase
             if (fileOverviewResult.Success)
                 ClientService.CurrentFileOverData ??= fileOverviewResult.Data;
         }
+        
+        Profile = await ProfileService.Get();
 
         await Refresh();
 
-        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
-            new { count = UpdateInfoData.NumberOfUpdates });
         
         loaded = true;
         StateHasChanged();
@@ -53,5 +63,16 @@ public partial class NewDashboard : ComponentBase
     {
         var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
         UpdateInfoData = result.Success ? result.Data ?? new() : new();
+        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
+            new { count = UpdateInfoData.NumberOfUpdates });
+    }
+
+    /// <summary>
+    /// On Extension update
+    /// </summary>
+    private async Task OnUpdate()
+    {
+        await Refresh();
+        StateHasChanged();
     }
 }

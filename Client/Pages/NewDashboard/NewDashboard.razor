@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="grid grid-60-40 flex-grow">
-                    <FlowRunnersWidget/>
+                    <SystemWidget />
                     <FilesWidget />
                 </div>
 
@@ -38,20 +38,20 @@
                 @if (UpdateInfoData.FileFlowsVersion != null && UpdateInfoData.HasExtensionUpdates)
                 {
                     <div class="grid grid-60-40 flex-grow savings">
-                        <FileFlowsUpdateWidget Data="UpdateInfoData"/>
-                        <ExtensionUpdatesWidget Data="UpdateInfoData"/>
+                        <FileFlowsUpdateWidget Data="UpdateInfoData" OnUpdate="OnUpdate" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
+                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" OnUpdate="OnUpdate" />
                     </div>
                 }
                 else if (UpdateInfoData.FileFlowsVersion != null)
                 {
                     <div class="grid">
-                        <FileFlowsUpdateWidget Data="UpdateInfoData"/>
+                        <FileFlowsUpdateWidget Data="UpdateInfoData" OnUpdate="OnUpdate" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
                     </div>
                 }
                 else if (UpdateInfoData.HasExtensionUpdates)
                 {
                     <div class="grid">
-                        <ExtensionUpdatesWidget Data="UpdateInfoData"/>
+                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" OnUpdate="OnUpdate" />
                     </div>
                 }
 

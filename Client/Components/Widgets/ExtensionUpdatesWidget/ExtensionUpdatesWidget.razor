@@ -1,6 +1,6 @@
 @namespace FileFlows.Client.Components.Widgets
 
-<ContainerWidget Title="@lblTitle" Scroll="true">
+<ContainerWidget Scroll="true">
 <Head>
     <OptionButtons @bind-Value="Mode">
         @if (Data.PluginUpdates.Count > 0)
@@ -18,22 +18,46 @@
     </OptionButtons>
 </Head>
 <Body>
-    @foreach (var item in SelectedList)
+<div class="eu-main">
+    @{
+        bool updatesViewable = UpdatesViewable();
+    }
+    @if (updatesViewable)
     {
-        <div class="table-item">
-            <span class="icon">
-                <TableItemIcon Icon="@item.Icon" DefaultIcon="@DefaultIcon" />
-            </span>
-            <div class="center">
-                <span class="name">@item.Name</span>
-                <div class="info">
-                    <FlowIconValue Icon="fas fa-code-branch" Color="dark" Value="@item.CurrentVersion" />
-                </div>
-            </div>
-            <div class="right">
-                <span class="top-right">@item.LatestVersion</span>
-            </div>
+        <div class="eu-actions">
+            <button class="btn" @onclick="UpdateAll">
+                <span class="icon">
+                    <i class="fas fa-cloud-download-alt"></i>
+                </span>
+                <span class="text">@lblUpdateAll</span>
+            </button>
         </div>
     }
+    <div class="eu-list">
+        @foreach (var item in SelectedList)
+        {
+            <div class="table-item">
+                @if (updatesViewable)
+                {
+                    <div class="actions">
+                        <i class="fas fa-cloud-download-alt" title="@lblUpdate" @onclick="() => Update(item)"></i>
+                    </div>
+                }
+                <span class="icon">
+                    <TableItemIcon Icon="@item.Icon" DefaultIcon="@DefaultIcon"/>
+                </span>
+                <div class="center">
+                    <span class="name">@item.Name</span>
+                    <div class="info">
+                        <FlowIconValue Icon="fas fa-code-branch" Color="dark" Value="@item.CurrentVersion"/>
+                    </div>
+                </div>
+                <div class="right">
+                    <span class="top-right">@item.LatestVersion</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 </Body>
 </ContainerWidget>

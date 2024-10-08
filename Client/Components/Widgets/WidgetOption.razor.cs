@@ -35,6 +35,11 @@ public partial class WidgetOption : ComponentBase
     [Parameter] public int? Bubble { get; set; }
     
     /// <summary>
+    /// Gets or sets the on click event
+    /// </summary>
+    [Parameter] public EventCallback OnClick { get; set; }
+    
+    /// <summary>
     /// Initializes the tab when it is first rendered.
     /// </summary>
     protected override void OnInitialized()

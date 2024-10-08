@@ -435,7 +435,7 @@ public class RepositoryController : BaseController
         // always re-download all the shared scripts to ensure they are up to date
         var service = new RepositoryService();
         await service.Init();
-        await service.DownloadSharedScripts();
+        await service.DownloadSharedScripts(true);
         await service.DownloadScripts(scripts);
         
     }
@@ -490,11 +490,19 @@ public class RepositoryController : BaseController
         var service = new RepositoryService();
         await service.Init();
         var repo = await service.GetRepository();
-        var objects = repo.FlowScripts.Union(repo.SystemScripts).Where(x => x.MinimumVersion <= new Version(Globals.Version))
-            .Where(x => model.Uids.Contains(x.Path)).ToList();
+        var objects = repo.FlowScripts.Union(repo.SystemScripts).Union(repo.SharedScripts).Where(x => x.MinimumVersion <= new Version(Globals.Version))
+            .Where(x =>
+            {
+                if(model.Uids.Contains(x.Path))
+                    return true;
+                if (model.Uids.Contains(x.Uid.ToString()))
+                    return true;
+                return false;
+            }).ToList();
         if (objects.Any() == false)
             return false; // nothing to update
         await DownloadActual(objects.Where(x => x.Path != null).Select(x => x.Path!).ToList());
+        await ServiceLoader.Load<UpdateService>().Trigger();
         // we always do an update here, its a user forcing an update
         await RevisionIncrement();
         return true;

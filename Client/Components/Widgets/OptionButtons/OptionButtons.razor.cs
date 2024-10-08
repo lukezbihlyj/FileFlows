@@ -33,6 +33,12 @@ public partial class OptionButtons : ComponentBase, IWidgetRegistrar
     /// <param name="option">the option to select</param>
     private void SelectOption(WidgetOption option)
     {
+        if (option.OnClick.HasDelegate)
+        {
+            _ = option.OnClick.InvokeAsync();
+            return;
+        }
+
         Value = option.Value;
         _ = ValueChanged.InvokeAsync(option.Value);
     }

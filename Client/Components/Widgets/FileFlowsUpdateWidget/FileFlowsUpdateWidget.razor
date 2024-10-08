@@ -1,8 +1,16 @@
 @namespace FileFlows.Client.Components.Widgets
 
 <ContainerWidget Title="FileFlows" Scroll="true">
+    <Head>
+        @if (CanUpdate)
+        {
+            <OptionButtons>
+                <WidgetOption Label="@lblUpdate" Value="1" Icon="fas fa-cloud-download-alt" OnClick="Update" />
+            </OptionButtons>
+        }
+    </Head>
     <Body>
-    @foreach(var update in Data.ReleaseNotes)
+    @foreach (var update in Data.ReleaseNotes)
     {
         <div class="release-note">
             <h1>@update.Version</h1>

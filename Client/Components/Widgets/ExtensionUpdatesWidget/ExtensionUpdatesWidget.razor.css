@@ -2,3 +2,49 @@
   border-top: solid 1px var(--border-color);
   padding: 1rem 1rem;
 }
+
+.eu-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.eu-actions {
+  height: fit-content;
+  padding: 0 0 1.5rem;
+  display: flex;
+  margin-left: 1rem;
+}
+
+.eu-list {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+.eu-list .right {
+  width: fit-content !important;
+  min-width: fit-content !important;
+}
+.eu-list .table-item:hover .actions {
+  left: 0;
+}
+
+.actions {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: -100%;
+  z-index: 1;
+  transition: left 0.3s ease-out;
+  padding: 0.5rem 1.1rem;
+  background: var(--base-lightest-2);
+  font-size: 1.75rem;
+  align-content: center;
+}
+.actions i {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.actions i:hover {
+  opacity: 1;
+}

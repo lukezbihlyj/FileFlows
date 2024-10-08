@@ -115,6 +115,7 @@ public class UpdateService : BackgroundService
             {
                 updates.Add(new PackageUpdate
                 {
+                    Uid = plugin.Uid,
                     Name = plugin.Name,
                     Icon = plugin.Icon,
                     CurrentVersion = plugin.Version,
@@ -140,15 +141,18 @@ public class UpdateService : BackgroundService
             var repoMod = repository.DockerMods.FirstOrDefault(x => x.Uid == mod.Uid);
             if (repoMod == null)
                 continue;
-            if (mod.Revision == repoMod.Revision)
+            if (mod.Revision >= repoMod.Revision)
+                continue;
+            if(repoMod.MinimumVersion != null && repoMod.MinimumVersion > Version.Parse(Globals.Version))
                 continue;
             
             updates.Add(new PackageUpdate
             {
+                Uid = repoMod.Uid!.Value,
                 Name = mod.Name,
                 Icon = repoMod.Icon,
-                CurrentVersion = repoMod.Revision.ToString(),
-                LatestVersion = mod.Revision.ToString()
+                CurrentVersion = mod.Revision.ToString(),
+                LatestVersion = repoMod.Revision.ToString()
             });
             
         }
@@ -174,15 +178,18 @@ public class UpdateService : BackgroundService
                              repository.SystemScripts.FirstOrDefault(x => x.Uid == script.Uid);
             if (repoScript == null)
                 continue;
-            if (script.Revision == repoScript.Revision)
+            if (script.Revision >= repoScript.Revision)
+                continue;
+            if(script.MinimumVersion != null && script.MinimumVersion > Version.Parse(Globals.Version))
                 continue;
             
             updates.Add(new PackageUpdate
             {
+                Uid = repoScript.Uid!.Value,
                 Name = script.Name,
                 Icon = repoScript.Icon,
-                CurrentVersion = repoScript.Revision.ToString(),
-                LatestVersion = script.Revision.ToString()
+                CurrentVersion = script.Revision.ToString(),
+                LatestVersion = repoScript.Revision.ToString()
             });
             
         }
