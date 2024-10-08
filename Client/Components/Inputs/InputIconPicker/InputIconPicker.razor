@@ -17,7 +17,7 @@
         }
         else
         {
-            <button @onclick=@Choose>Choose</button>
+            <button class="btn" @onclick=@Choose>Choose</button>
         }
         <Microsoft.AspNetCore.Components.Forms.InputFile @ref="fileInput" id="fileInput" OnChange="HandleFileSelected" style="display:none;" accept="image/*"/>
     </div>
@@ -51,10 +51,10 @@
     </Body>
     <Footer>
         <div class="icon-picker-modal-footer">
-            <button @onclick=@Upload>Upload</button>
+            <button class="btn" @onclick=@Upload>Upload</button>
             <div class="spacer"></div>
-            <button @onclick="() => DblClick(SelectedIcon)" disabled="@string.IsNullOrEmpty(SelectedIcon)">Select</button>
-            <button @onclick=@Cancel>Cancel</button>
+            <button class="btn" @onclick="() => DblClick(SelectedIcon)" disabled="@string.IsNullOrEmpty(SelectedIcon)">Select</button>
+            <button class="btn" @onclick=@Cancel>Cancel</button>
         </div>
     </Footer>
 </Modal>

@@ -10,7 +10,7 @@
     <div class="inline-buttons">
         @foreach (var btn in Buttons)
         {
-            <button @onclick=@((e) => btn.Clicked(this, e))>@btn.Label</button>
+            <button class="btn" @onclick=@((e) => btn.Clicked(this, e))>@btn.Label</button>
         }
     </div>
 </div>

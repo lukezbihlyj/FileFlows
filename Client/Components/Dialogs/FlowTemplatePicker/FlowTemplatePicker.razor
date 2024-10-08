@@ -60,9 +60,9 @@
         </div>
         </Body>
         <Footer>
-            <button id="flow-template-picker-button-open" @onclick=@Open class="btn-open" disabled="@(Selected?.Path?.StartsWith("local:") != true)">@lblOpen</button>
-            <button id="flow-template-picker-button-next" @onclick=@New disabled="@(Selected == null)">@lblNext &gt;</button>
-            <button id="flow-template-picker-button-close" @onclick=@Cancel>@lblCancel</button>
+            <button id="flow-template-picker-button-open" @onclick=@Open class="btn-open btn" disabled="@(Selected?.Path?.StartsWith("local:") != true)">@lblOpen</button>
+            <button id="flow-template-picker-button-next" @onclick=@New class="btn" disabled="@(Selected == null)">@lblNext &gt;</button>
+            <button id="flow-template-picker-button-close" @onclick=@Cancel class="btn">@lblCancel</button>
         </Footer>
     </Modal>
 }

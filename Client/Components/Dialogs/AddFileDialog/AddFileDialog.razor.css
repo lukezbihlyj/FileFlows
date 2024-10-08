@@ -32,6 +32,8 @@ textarea {
 }
 .item button {
   width: 3rem;
+  border-radius: 0 !important;
+  border: none !important;
 }
 .item input[type=text] {
   flex-grow: 1;

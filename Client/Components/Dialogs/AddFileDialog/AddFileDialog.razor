@@ -32,8 +32,8 @@
                         }
                         <div class="item new-item">
                             <input type="text" @bind="NewItem" placeholder="Add new item"/>
-                            <button class="browse" @onclick="() => Browse(-1)">...</button>
-                            <button class="add" @onclick="Add"><i class="fas fa-plus"></i></button>
+                            <button class="btn browse" @onclick="() => Browse(-1)">...</button>
+                            <button class="btn add" @onclick="Add"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                 }
@@ -49,7 +49,7 @@
     </div>
     </Body>
     <Footer>
-        <button @onclick=@Save disabled="@(Mode == 0 ? (Files.Any() ? null : "") : string.IsNullOrWhiteSpace(TextList) ? "" : null)">@lblAdd</button>
-        <button @onclick=@Cancel>@lblCancel</button>
+        <button class="btn" @onclick=@Save disabled="@(Mode == 0 ? (Files.Any() ? null : "") : string.IsNullOrWhiteSpace(TextList) ? "" : null)">@lblAdd</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

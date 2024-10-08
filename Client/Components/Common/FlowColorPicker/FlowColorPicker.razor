@@ -6,7 +6,7 @@
            autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" @bind-value="@Value"/>
     @if (string.IsNullOrWhiteSpace(Value) == false)
     {
-        <button id="@Uid-clear" title="@lblClear" @onclick="Clear"><i class="fas fa-times"/></button>
+        <button id="@Uid-clear" class="btn" title="@lblClear" @onclick="Clear"><i class="fas fa-times"/></button>
     }
 
     <div id="@Uid-picker" class="color-picker hidden">

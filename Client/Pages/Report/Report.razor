@@ -6,12 +6,12 @@
     <Head>
         @if (ShowReportOutput)
         {
-            <button @onclick="GoBack">@lblBack</button>
-            <button @onclick="Close">@lblClose</button>
+            <button class="btn" @onclick="GoBack">@lblBack</button>
+            <button class="btn" @onclick="Close">@lblClose</button>
         }
         else if(string.IsNullOrWhiteSpace(HelpUrl) == false)
         {
-            <button @onclick="OpenHelp">@lblHelp</button>
+            <button class="btn" @onclick="OpenHelp">@lblHelp</button>
         }
     </Head>
 

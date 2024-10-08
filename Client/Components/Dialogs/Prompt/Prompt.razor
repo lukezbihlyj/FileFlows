@@ -11,7 +11,7 @@
                autocomplete="off" autofocus />
     </Body>
     <Footer>
-        <button @onclick=@Accept disabled=@string.IsNullOrWhiteSpace(Value)>@lblOk</button>
-        <button @onclick=@Cancel>@lblCancel</button>
+        <button class="btn" @onclick=@Accept disabled=@string.IsNullOrWhiteSpace(Value)>@lblOk</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

@@ -14,7 +14,7 @@
             <ViContainer Title="@(CurrentTemplate?.Name?.EmptyAsNull() ?? Title)" Icon="@Icon" FullWidth=@true AlwaysShowTitle=@true Maximise=true OnMaximised=@OnMaximised>
 
                 <Head>
-                    <button @onclick=@Save> 
+                    <button class="btn" @onclick=@Save> 
                         @if (IsSaving)
                         {
                             @lblSaving
@@ -24,11 +24,11 @@
                             @lblSave
                         }
                     </button>
-                    <button @onclick=@Cancel>@lblCancel</button>
+                    <button class="btn" @onclick=@Cancel>@lblCancel</button>
 
                     @if(string.IsNullOrEmpty(HelpUrl) == false)
                     {
-                        <button @onclick=@OpenHelp>@lblHelp</button>
+                        <button class="btn" @onclick=@OpenHelp>@lblHelp</button>
                     }
                 </Head>
 

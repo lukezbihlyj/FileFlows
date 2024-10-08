@@ -107,30 +107,30 @@ input[type=checkbox]:disabled {
   cursor: not-allowed;
 }
 
-button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select {
-  font-size: 0.8rem !important;
-  text-transform: uppercase;
+.btn, a.btn, .btn-select {
+  font-size: 0.9rem !important;
   height: var(--input-height, 2.1875rem);
-  font-weight: normal;
   outline: none !important;
   line-height: initial;
   box-shadow: none;
   border-radius: var(--button-border-radius) !important;
-  border: solid 1px var(--accent);
-  background-color: transparent;
-  color: var(--color);
+  border: solid 1px var(--border-color);
+  background-color: var(--input-background);
+  color: var(--color) !important;
   overflow: hidden;
+  font-weight: var(--bold, 600);
 }
-button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):hover:not(:disabled):not(.toast-button-btn), button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):active:not(:disabled):not(.toast-button-btn), a.btn:hover:not(:disabled):not(.toast-button-btn), a.btn:active:not(:disabled):not(.toast-button-btn), .btn-select:hover:not(:disabled):not(.toast-button-btn), .btn-select:active:not(:disabled):not(.toast-button-btn) {
-  background-image: var(--btn-background-image, linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3))) !important;
-  box-shadow: var(--btn-box-shadow, inset 0 -3px 0 0 var(--accent)) !important;
+.btn:hover:not(:disabled), .btn:active:not(:disabled), a.btn:hover:not(:disabled), a.btn:active:not(:disabled), .btn-select:hover:not(:disabled), .btn-select:active:not(:disabled) {
+  background: #515151;
+  color: var(--color) !important;
 }
-button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):disabled, a.btn:disabled, .btn-select:disabled {
-  border-color: var(--input-background);
-  color: var(--input-background);
+.btn:disabled, a.btn:disabled, .btn-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
-button:not(.flowtable-button):not(.ignore-button):not(.navbar-toggler):not(.dd-btn):focus:not(.toast-button-btn), a.btn:focus:not(.toast-button-btn), .btn-select:focus:not(.toast-button-btn) {
-  background: var(--btn-focus-background, rgba(var(--accent-rgb), 0.2)) !important;
+.btn:focus:not(.toast-button-btn), a.btn:focus:not(.toast-button-btn), .btn-select:focus:not(.toast-button-btn) {
+  background: #515151;
+  outline: solid 1px var(--border-color) !important;
 }
 
 a.btn {

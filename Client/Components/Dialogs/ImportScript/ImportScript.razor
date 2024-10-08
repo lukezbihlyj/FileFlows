@@ -19,7 +19,7 @@
         </ul>
     </Body>
     <Footer>
-        <button @onclick=@Accept disabled="@(CheckedItems.Count > 0 ? null : "disabled")">@lblImport</button>
-        <button @onclick=@Cancel>@lblCancel</button>
+        <button class="btn" @onclick=@Accept disabled="@(CheckedItems.Count > 0 ? null : "disabled")">@lblImport</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

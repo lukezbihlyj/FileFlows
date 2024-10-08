@@ -13,12 +13,12 @@
             <div class="editor">
                 <ViContainer Title="@Title" Icon="@Icon" FullWidth=@true AlwaysShowTitle=@true Maximise=true OnMaximised=@OnMaximised>
                     <Head>
-                        <button @onclick=@Save>@(IsSaving ? lblSaving : lblSave)</button>
-                        <button @onclick=@Cancel>@lblCancel</button>
+                        <button class="btn" @onclick=@Save>@(IsSaving ? lblSaving : lblSave)</button>
+                        <button class="btn" @onclick=@Cancel>@lblCancel</button>
 
                         @if (string.IsNullOrEmpty(HelpUrl) == false)
                         {
-                            <button @onclick=@OpenHelp>@lblHelp</button>
+                            <button class="btn" @onclick=@OpenHelp>@lblHelp</button>
                         }
                     </Head>
 
@@ -44,27 +44,27 @@
                     <Head>
                         @if (ShowDownload)
                         {
-                            <button @onclick=@(() => DoDownload())>@lblDownloadButton</button>
+                            <button class="btn" @onclick=@(() => DoDownload())>@lblDownloadButton</button>
                         }
 
                         @foreach (var btn in AdditionalButtons)
                         {
-                            <button @onclick=@((e) => btn.Clicked(this, e))>@btn.Label</button>
+                            <button class="btn" @onclick=@((e) => btn.Clicked(this, e))>@btn.Label</button>
                         }
 
                         @if (ReadOnly)
                         {
-                            <button @onclick=@Cancel>@lblClose</button>
+                            <button class="btn" @onclick=@Cancel>@lblClose</button>
                         }
                         else
                         {
-                            <button @onclick=@Save>@(IsSaving ? lblSaving : lblSave)</button>
-                            <button @onclick=@Cancel>@lblCancel</button>
+                            <button class="btn" @onclick=@Save>@(IsSaving ? lblSaving : lblSave)</button>
+                            <button class="btn" @onclick=@Cancel>@lblCancel</button>
                         }
 
                         @if (string.IsNullOrEmpty(HelpUrl) == false)
                         {
-                            <button @onclick=@OpenHelp>@lblHelp</button>
+                            <button class="btn" @onclick=@OpenHelp>@lblHelp</button>
                         }
                     </Head>
 

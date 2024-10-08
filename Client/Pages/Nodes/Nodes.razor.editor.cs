@@ -38,16 +38,11 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
             Blocker.Hide();
         }
 
-        string helpUrl = isServerProcessingNode
-            ? string.Empty
-            : "https://fileflows.com/docs/guides/external-processing-node";
-
-
         await Editor.Open(new()
         {
             TypeName = "Pages.ProcessingNode", Title = "Pages.ProcessingNode.Title", Model = node, Tabs = tabs,
             Large = true,
-            SaveCallback = Save, HelpUrl = helpUrl
+            SaveCallback = Save, HelpUrl = "https://fileflows.com/docs/webconsole/configuration/nodes",
         });
         return false;
     }
