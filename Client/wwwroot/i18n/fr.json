@@ -435,10 +435,14 @@
     },
     "ProcessingNodeStatus": {
       "Disabled": "Désactivé",
+      "HigherPriorityNodeAvailable": "Nœud de priorité supérieure disponible",
       "Idle": "Inactif",
+      "InstallingDockerMods": "Installation de DockerMods",
+      "MaximumRunnersReached": "Nombre maximum de coureurs atteint",
       "Offline": "Hors Ligne",
       "OutOfSchedule": "Hors Programme",
       "Processing": "Traitement",
+      "RestrictedByLibrary": "Restreint par la bibliothèque",
       "VersionMismatch": "Incompatibilité de Version"
     },
     "ProcessingOrder": {

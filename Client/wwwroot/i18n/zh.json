@@ -435,10 +435,14 @@
     },
     "ProcessingNodeStatus": {
       "Disabled": "已禁用",
+      "HigherPriorityNodeAvailable": "有更高优先级的节点",
       "Idle": "空闲",
+      "InstallingDockerMods": "正在安装 DockerMods",
+      "MaximumRunnersReached": "已达到最大运行器数量",
       "Offline": "离线",
       "OutOfSchedule": "超出计划",
       "Processing": "处理中",
+      "RestrictedByLibrary": "受限于库",
       "VersionMismatch": "版本不匹配"
     },
     "ProcessingOrder": {

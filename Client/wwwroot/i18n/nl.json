@@ -435,10 +435,14 @@
     },
     "ProcessingNodeStatus": {
       "Disabled": "Uitgeschakeld",
+      "HigherPriorityNodeAvailable": "Knooppunt met hogere prioriteit beschikbaar",
       "Idle": "Inactief",
+      "InstallingDockerMods": "DockerMods worden geïnstalleerd",
+      "MaximumRunnersReached": "Maximaal aantal runners bereikt",
       "Offline": "Offline",
       "OutOfSchedule": "Buiten Schema",
       "Processing": "Bezig Met Verwerken",
+      "RestrictedByLibrary": "Beperkt door bibliotheek",
       "VersionMismatch": "Versie Mismatch"
     },
     "ProcessingOrder": {

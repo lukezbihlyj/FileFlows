@@ -1,7 +1,9 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.Concurrent;
+using System.Runtime.InteropServices;
 using FileFlows.Managers;
 using FileFlows.Plugin;
 using FileFlows.Server.Controllers;
+using FileFlows.Server.Hubs;
 using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Models;
 
@@ -12,6 +14,8 @@ namespace FileFlows.Server.Services;
 /// </summary>
 public class NodeService //: INodeService
 {
+    private ConcurrentDictionary<Guid, ProcessingNodeStatus> _currentStatus = new();
+    
     /// <summary>
     /// Initializes the node service
     /// </summary>
@@ -56,6 +60,25 @@ public class NodeService //: INodeService
     {
         throw new NotImplementedException();
     }
+    
+    /// <summary>
+    /// Updates the status of a processing node
+    /// </summary>
+    /// <param name="uid">The UID of the node</param>
+    /// <param name="status">The current status</param>
+    public void UpdateStatus(Guid uid, ProcessingNodeStatus status)
+    {
+        _currentStatus.AddOrUpdate(uid, status, (key, existingVal) => status);
+        _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
+    }
+
+    /// <summary>
+    /// Gets the current status of a processing node
+    /// </summary>
+    /// <param name="uid">The UID of the node</param>
+    /// <returns>the current status</returns>
+    public ProcessingNodeStatus GetStatus(Guid uid)
+        => _currentStatus.GetValueOrDefault(uid, new ProcessingNodeStatus());
 
     /// <summary>
     /// Gets an instance of the internal processing node
@@ -178,6 +201,33 @@ public class NodeService //: INodeService
             return ProcessingNodeStatus.Offline;
         if (FlowRunnerService.Executors.Any(x => x.Value.NodeUid == node.Uid))
             return ProcessingNodeStatus.Processing;
-        return ProcessingNodeStatus.Idle;
+
+        var status = GetStatus(node.Uid);
+        if(status == ProcessingNodeStatus.Offline && node.Uid == CommonVariables.InternalNodeUid)
+            return ProcessingNodeStatus.Idle;
+        return status;
+    }
+
+    /// <summary>
+    /// Gets the status summaries of all nodes
+    /// </summary>
+    /// <returns>the status summaries</returns>
+    public async Task<List<NodeStatusSummary>> GetStatusSummaries()
+    {
+        var nodes = await GetAllAsync();
+        var server = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+        return nodes.Select(x => new NodeStatusSummary()
+        {
+            OperatingSystem = x.OperatingSystem,
+            Architecture = x.Architecture,
+            Version = x.Version,
+            Enabled = x.Enabled,
+            Uid = x.Uid,
+            Address = x.Address,
+            Name = x.Name,
+            Priority = x.Priority,
+            Status = GetStatus(x),
+            HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? server : x.HardwareInfo
+        }).ToList();
     }
 }

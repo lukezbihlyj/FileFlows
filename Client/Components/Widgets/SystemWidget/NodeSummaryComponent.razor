@@ -1,4 +1,5 @@
 @using FileFlows.Shared.Formatters
+@using Humanizer
 @namespace FileFlows.Client.Components.Widgets
 
 @if (Data.Count > 0)
@@ -25,9 +26,9 @@
                 }
                 <div class="architecture @(item.Architecture is ArchitectureType.Arm32 or ArchitectureType.Arm64 ? "arm" : "")">@item.Architecture</div>
             </span>
-            <div class="summary">
+            <div class="center">
                 <span class="name">
-                    @item.Name
+                    @(item.Name == CommonVariables.InternalNodeName ? lblInternalProcessingNode : item.Name)
                     @if (item.Enabled == false)
                     {
                         <text> (@lblDisabled)</text>
@@ -36,66 +37,64 @@
 
                 @if (item.HardwareInfo != null)
                 {
-                <div class="hardware-info">
-                    <div class="hardware-info-item">
-                        <span class="label">CPU</span>
-                        <span class="value">@item.HardwareInfo.Processor</span>
-                    </div>
-                    <div class="hardware-info-item">
-                        <span class="label">Status</span>
-                        <span class="value">@item.Status</span>
-                    </div>
-                    @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
-                    {
-                    <div class="hardware-info-item">
-                        <span class="label">@lblOperatingSystem</span>
-                        <span class="value">
-                            @item.HardwareInfo.OperatingSystem
-                            @if (string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
-                            {
-                                <span>(@item.HardwareInfo.OperatingSystemVersion)</span>
-                            }
-                        </span>
-                    </div>
-                    }
-                    <div class="hardware-info-item">
-                        <span class="label">@lblArchitecture</span>
-                        <span class="value">
-                            @item.HardwareInfo.Architecture.ToLowerInvariant()
-                            @if (item.HardwareInfo.CoreCount > 0)
-                            {
-                            <span class="value">(@item.HardwareInfo.CoreCount cores)</span>
-                            }
-                        </span>
-                    </div>
-                    @if (item.HardwareInfo.Memory > 0)
-                    {
+                    <div class="hardware-info">
                         <div class="hardware-info-item">
-                            <span class="label">@lblMemory</span>
-                            <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0, useBinary: true)</span>
+                            <span class="label">CPU</span>
+                            <span class="value">@item.HardwareInfo.Processor</span>
                         </div>
-                    }
-                    @foreach(var gpu in item.HardwareInfo.Gpus ?? [])
-                    {
+                        @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">@lblOperatingSystem</span>
+                                <span class="value">
+                                    @item.HardwareInfo.OperatingSystem
+                                    @if (string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystemVersion) == false)
+                                    {
+                                        <span>(@item.HardwareInfo.OperatingSystemVersion)</span>
+                                    }
+                                </span>
+                            </div>
+                        }
                         <div class="hardware-info-item">
-                        <span class="label">GPU</span>
-                        <span class="value">
-                            @gpu.Model 
-                            (@gpu.Vendor)
-                            @if (gpu.Memory > 0)
-                            {
-                                <span class="memory">@FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true)</span>
-                            }
-                            @if(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false)
-                            {
-                            <span class="driver"> (@gpu.DriverVersion)</span>
-                            }
-                        </span>
+                            <span class="label">@lblArchitecture</span>
+                            <span class="value">
+                                @item.HardwareInfo.Architecture.ToLowerInvariant()
+                                @if (item.HardwareInfo.CoreCount > 0)
+                                {
+                                    <span class="value">(@item.HardwareInfo.CoreCount cores)</span>
+                                }
+                            </span>
+                        </div>
+                        @if (item.HardwareInfo.Memory > 0)
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">@lblMemory</span>
+                                <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0, useBinary: true)</span>
+                            </div>
+                        }
+                        @foreach(var gpu in item.HardwareInfo.Gpus ?? [])
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">GPU</span>
+                                <span class="value">
+                                    @gpu.Model 
+                                    (@gpu.Vendor)
+                                    @if (gpu.Memory > 0)
+                                    {
+                                        <span class="memory">@FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true)</span>
+                                    }
+                                    @if(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false)
+                                    {
+                                        <span class="driver"> (@gpu.DriverVersion)</span>
+                                    }
+                                </span>
+                            </div>
+                        }
                     </div>
-                    }
-                </div>
                 }
+                <span class="top-right status-@(item.Status.ToString().Kebaberize())">@Translater.Instant("Enums.ProcessingNodeStatus." + item.Status)</span>
             </div>
+
         </div>
     }
 }

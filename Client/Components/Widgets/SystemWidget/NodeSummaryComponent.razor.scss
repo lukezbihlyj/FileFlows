@@ -4,6 +4,7 @@
   border-bottom: solid 1px var(--border-color);
   padding-bottom: 0.75rem;
   font-size: 0.8rem;
+  position: relative;
   &.disabled {
     opacity: 0.5;
   }
@@ -29,7 +30,7 @@
       background-color: var(--primary);
     }
   }
-  .summary {
+  .summary, .center {
     .name {
       font-size:1.2rem;
       font-weight: var(--bold, 600);
@@ -47,6 +48,21 @@
       }
       .value {
         margin-left: 0.5rem;
+      }
+    }
+    .top-right {
+      font-size: 1rem;
+      &.status-version-mismatch {
+        background-color: var(--warning);
+      }
+      &.status-out-of-schedule {
+        background-color: var(--purple);
+      }
+      &.status-maximum-runners-reached {
+        background-color: var(--green);
+      }
+      &.status-installing-docker-mods {
+        background-color: var(--blue);
       }
     }
   }

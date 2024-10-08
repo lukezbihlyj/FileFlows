@@ -133,6 +133,16 @@ public class ClientServiceManager
         var status = await ServiceLoader.Load<LibraryFileService>().GetStatus();
         await _hubContext.Clients.All.SendAsync("UpdateFileStatus", status);
     }
+    
+    /// <summary>
+    /// Updates the status summaries of the nodes
+    /// </summary>
+    public async Task UpdateNodeStatusSummaries()
+    {
+        var status = await ServiceLoader.Load<NodeService>().GetStatusSummaries();
+        await _hubContext.Clients.All.SendAsync("UpdateNodeStatusSummaries", status);
+    }
+    
     /// <summary>
     /// Called when a system is paused/unpaused
     /// </summary>

@@ -435,10 +435,14 @@
     },
     "ProcessingNodeStatus": {
       "Disabled": "無効",
+      "HigherPriorityNodeAvailable": "優先度の高いノードが利用可能です",
       "Idle": "アイドル",
+      "InstallingDockerMods": "DockerModsをインストール中",
+      "MaximumRunnersReached": "最大ランナー数に達しました",
       "Offline": "オフライン",
       "OutOfSchedule": "スケジュール外",
       "Processing": "処理中",
+      "RestrictedByLibrary": "ライブラリによって制限されています",
       "VersionMismatch": "バージョン不一致"
     },
     "ProcessingOrder": {

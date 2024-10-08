@@ -4,6 +4,7 @@
   border-bottom: solid 1px var(--border-color);
   padding-bottom: 0.75rem;
   font-size: 0.8rem;
+  position: relative;
 }
 .processing-node.disabled {
   opacity: 0.5;
@@ -30,22 +31,37 @@
   color: white;
   background-color: var(--primary);
 }
-.processing-node .summary .name {
+.processing-node .summary .name, .processing-node .center .name {
   font-size: 1.2rem;
   font-weight: var(--bold, 600);
   padding-bottom: 0.25rem;
   display: inline-block;
 }
-.processing-node .summary .hardware-info-item {
+.processing-node .summary .hardware-info-item, .processing-node .center .hardware-info-item {
   display: flex;
   flex-direction: row;
   padding: 0.2rem 0;
 }
-.processing-node .summary .hardware-info-item .label {
+.processing-node .summary .hardware-info-item .label, .processing-node .center .hardware-info-item .label {
   font-weight: var(--bold, 600);
   width: 10rem;
   min-width: 10rem;
 }
-.processing-node .summary .hardware-info-item .value {
+.processing-node .summary .hardware-info-item .value, .processing-node .center .hardware-info-item .value {
   margin-left: 0.5rem;
+}
+.processing-node .summary .top-right, .processing-node .center .top-right {
+  font-size: 1rem;
+}
+.processing-node .summary .top-right.status-version-mismatch, .processing-node .center .top-right.status-version-mismatch {
+  background-color: var(--warning);
+}
+.processing-node .summary .top-right.status-out-of-schedule, .processing-node .center .top-right.status-out-of-schedule {
+  background-color: var(--purple);
+}
+.processing-node .summary .top-right.status-maximum-runners-reached, .processing-node .center .top-right.status-maximum-runners-reached {
+  background-color: var(--green);
+}
+.processing-node .summary .top-right.status-installing-docker-mods, .processing-node .center .top-right.status-installing-docker-mods {
+  background-color: var(--blue);
 }

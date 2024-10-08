@@ -435,10 +435,14 @@
     },
     "ProcessingNodeStatus": {
       "Disabled": "Отключено",
+      "HigherPriorityNodeAvailable": "Доступен узел с более высоким приоритетом",
       "Idle": "Бездействует",
+      "InstallingDockerMods": "Установка DockerMods",
+      "MaximumRunnersReached": "Достигнуто максимальное количество исполнителей",
       "Offline": "Офлайн",
       "OutOfSchedule": "Вне расписания",
       "Processing": "Обрабатывается",
+      "RestrictedByLibrary": "Ограничено библиотекой",
       "VersionMismatch": "Несоответствие версии"
     },
     "ProcessingOrder": {

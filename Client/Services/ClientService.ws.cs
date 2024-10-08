@@ -34,7 +34,10 @@ public partial class ClientService
     /// Event raised when the system info has bene updated
     /// </summary>
     public event Action<SystemInfo> SystemInfoUpdated;
-
+    /// <summary>
+    /// Events raised when the node status summaries are updated
+    /// </summary>
+    public event Action<List<NodeStatusSummary>> NodeStatusSummaryUpdated;
     /// <summary>
     /// Event raised when the system is paused/unpaused
     /// </summary>
@@ -54,6 +57,10 @@ public partial class ClientService
     /// Gets the current system info
     /// </summary>
     public SystemInfo? CurrentSystemInfo { get; set; }
+    /// <summary>
+    /// Gets the current node status summaries
+    /// </summary>
+    public List<NodeStatusSummary>? CurrentNodeStatusSummaries { get; set; }
     /// <summary>
     /// Gets the current file overview data
     /// </summary>
@@ -100,6 +107,11 @@ public partial class ClientService
                 {
                     CurrentSystemInfo = info;
                     SystemInfoUpdated?.Invoke(info);
+                });
+                _hubConnection.On<List<NodeStatusSummary>>("UpdateNodeStatusSummaries", (info) =>
+                {
+                    CurrentNodeStatusSummaries = info;
+                    NodeStatusSummaryUpdated?.Invoke(info);
                 });
                 _hubConnection.On<FileOverviewData>("FileOverviewUpdate", (data) =>
                 {

@@ -444,8 +444,12 @@ public class LibraryFileService
             }
         )).FirstOrDefault();
 
+        var nodeService = ServiceLoader.Load<NodeService>();
         if (nextFile == null)
+        {
+            nodeService.UpdateStatus(node.Uid, ProcessingNodeStatus.Idle);
             return nextFile;
+        }
 
         if (waitingForReprocess == null && await HigherPriorityWaiting(logger, node, nextFile, allLibraries))
         {
@@ -465,6 +469,7 @@ public class LibraryFileService
 #endif
 
         await manager.StartProcessing(nextFile.Uid, node.Uid, node.Name, workerUid);
+        nodeService.UpdateStatus(node.Uid, ProcessingNodeStatus.Processing);
         return nextFile;
     }
 
@@ -491,6 +496,8 @@ public class LibraryFileService
             .ToDictionary(x => x.Key, x => x.Count());
 
         int nodePriority = GetCalculatedNodePriority(node);
+
+        var nodeService = ServiceLoader.Load<NodeService>();
         
         foreach (var other in allNodes)
         {
@@ -503,16 +510,25 @@ public class LibraryFileService
 
             // first check if its in schedule
             if (TimeHelper.InSchedule(other.Schedule) == false)
+            {
+                nodeService.UpdateStatus(other.Uid, ProcessingNodeStatus.OutOfSchedule);
                 continue;
-            
+            }
+
             // check if this node is maxed out
             if (executors.TryGetValue(other.Uid, out int value) && value >= other.FlowRunners)
+            {
+                nodeService.UpdateStatus(other.Uid, ProcessingNodeStatus.MaximumRunnersReached);
                 continue; // it's maxed out
+            }
 
             if (Version.TryParse(other.Version, out Version? otherVersion) == false || otherVersion == null ||
                 otherVersion < Globals.MinimumNodeVersion)
+            {
+                nodeService.UpdateStatus(other.Uid, ProcessingNodeStatus.VersionMismatch);
                 continue; // version mismatch
-            
+            }
+
             // check if other can process this library
             var nodeLibraries = other.Libraries?.Select(x => x.Uid)?.ToList() ?? new();
             List<Guid> allowedLibraries = other.AllLibraries switch
@@ -541,6 +557,8 @@ public class LibraryFileService
                 }
 
                 logger.ILog("Other node is offline: " + other.Name + ", last seen: " + lastSeen);
+                if(other.Uid != CommonVariables.InternalNodeUid)
+                    nodeService.UpdateStatus(other.Uid, ProcessingNodeStatus.Offline);
                 continue; // 10 minute cut off, give it some grace period
             }
 
@@ -559,12 +577,15 @@ public class LibraryFileService
                     continue;
                 }
                 logger.ILog($"Load balancing '{other.Name}' can process file and is processing less '{otherRunners}', skipping node: '{node.Name}': {file.Name}");
+                nodeService.UpdateStatus(node.Uid, ProcessingNodeStatus.HigherPriorityNodeAvailable);
                 return true;
             }
             
             // the "other" node is higher priority, it's not maxed out, it's in-schedule, so we don't want the "node"
             // processing this file
             logger.ILog($"Higher priority node '{other.Name}' can process file, skipping node: '{node.Name}': {file.Name}");
+            nodeService.UpdateStatus(node.Uid, ProcessingNodeStatus.HigherPriorityNodeAvailable);
+            
             return true;
         }
         // no other node is higher priority, this node can process this file

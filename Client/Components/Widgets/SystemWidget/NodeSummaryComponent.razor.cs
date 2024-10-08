@@ -1,4 +1,3 @@
-using System.Threading;
 using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components.Widgets;
@@ -9,18 +8,18 @@ namespace FileFlows.Client.Components.Widgets;
 public partial class NodeSummaryComponent : ComponentBase, IDisposable
 {
     /// <summary>
+    /// Gets or sets the client service
+    /// </summary>
+    [Inject] public ClientService ClientService { get; set; }
+    /// <summary>
     /// The data
     /// </summary>
-    private List<ProcessingNode> Data = new();
-    /// <summary>
-    /// The timer
-    /// </summary>
-    private Timer _timer;
+    private List<NodeStatusSummary> Data = new();
 
     /// <summary>
     /// Translation strings
     /// </summary>
-    private string lblOperatingSystem, lblArchitecture, lblMemory, lblDisabled;
+    private string lblOperatingSystem, lblArchitecture, lblMemory, lblDisabled, lblStatus, lblInternalProcessingNode;
     
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
@@ -28,33 +27,27 @@ public partial class NodeSummaryComponent : ComponentBase, IDisposable
         lblOperatingSystem = Translater.Instant("Labels.OperatingSystem");
         lblArchitecture = Translater.Instant("Labels.Architecture");
         lblMemory = Translater.Instant("Labels.Memory");
-        lblDisabled =Translater.Instant("Labels.Disabled");
-        await Refresh();
-        _timer = new Timer(RefreshCallback!, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
-    }
-    
-    /// <summary>
-    /// Refreshes the data
-    /// </summary>
-    /// <param name="state">the state from the timer</param>
-    private async void RefreshCallback(object state)
-    {
-        await Refresh();
-        StateHasChanged();
+        lblDisabled = Translater.Instant("Labels.Disabled");
+        lblStatus = Translater.Instant("Labels.Status");
+        lblInternalProcessingNode = Translater.Instant("Labels.InternalProcessingNode");
+        if(ClientService.CurrentNodeStatusSummaries == null)
+        {
+            var result = await HttpHelper.Get<List<NodeStatusSummary>>("/api/dashboard/node-summary");
+            if (result.Success)
+                ClientService.CurrentNodeStatusSummaries ??= result.Data;
+        }
+        Data = ClientService.CurrentNodeStatusSummaries ?? [];
+        ClientService.NodeStatusSummaryUpdated += OnNodeStatusSummaryUpdated;
     }
 
     /// <summary>
-    /// Refreshes the data
+    /// Raised when the node status summaries are updated
     /// </summary>
-    async Task Refresh()
+    /// <param name="data">the updated data</param>
+    private void OnNodeStatusSummaryUpdated(List<NodeStatusSummary> data)
     {
-        var result = await HttpHelper.Get<List<ProcessingNode>>("/api/dashboard/node-summary");
-        Data = result.Success ? result.Data ?? new() : new();
-        foreach (var d in Data)
-        {
-            if(d.Name == CommonVariables.InternalNodeName)
-                d.Name = Translater.Instant("Labels.InternalProcessingNode");
-        }
+        Data = data;
+        StateHasChanged();
     }
 
     /// <summary>
@@ -62,6 +55,6 @@ public partial class NodeSummaryComponent : ComponentBase, IDisposable
     /// </summary>
     public void Dispose()
     {
-        _timer?.Dispose();
+        ClientService.NodeStatusSummaryUpdated -= OnNodeStatusSummaryUpdated;
     }
 }

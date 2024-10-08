@@ -36,25 +36,8 @@ public class DashboardController : BaseController
     /// </summary>
     /// <returns>the processing node</returns>
     [HttpGet("node-summary")]
-    public async Task<List<ProcessingNode>> GetNodeSummary()
-    {
-        var service = ServiceLoader.Load<NodeService>();
-        var nodes = await service.GetAllAsync();
-        var server = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
-        return nodes.Select(x => new ProcessingNode()
-        {
-            OperatingSystem = x.OperatingSystem,
-            Architecture = x.Architecture,
-            Version = x.Version,
-            Enabled = x.Enabled,
-            Uid = x.Uid,
-            Address = x.Address,
-            Name = x.Name,
-            Priority = x.Priority,
-            Status = service.GetStatus(x),
-            HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? server : x.HardwareInfo
-        }).ToList();
-    }
+    public async Task<List<NodeStatusSummary>> GetNodeSummary()
+        => await ServiceLoader.Load<NodeService>().GetStatusSummaries();
 
     /// <summary>
     /// Gets any updates

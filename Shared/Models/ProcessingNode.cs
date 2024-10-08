@@ -213,7 +213,7 @@ public class ProcessingNode: FileFlowObject
 }
 
 /// <summary>
-/// Current status of a processing node
+/// Status of a processing node
 /// </summary>
 public enum ProcessingNodeStatus
 {
@@ -241,5 +241,20 @@ public enum ProcessingNodeStatus
     /// The node's version does not match the servers
     /// </summary>
     VersionMismatch = 5,
-    
+    /// <summary>
+    /// If a higher priority node is available to process a file
+    /// </summary>
+    HigherPriorityNodeAvailable = 6,
+    /// <summary>
+    /// Installing DockerMods
+    /// </summary>
+    InstallingDockerMods = 7,
+    /// <summary>
+    /// If the maximum runners have been reached
+    /// </summary>
+    MaximumRunnersReached = 8,
+    /// <summary>
+    /// Restricted for processing by library
+    /// </summary>
+    RestrictedByLibrary = 9
 }

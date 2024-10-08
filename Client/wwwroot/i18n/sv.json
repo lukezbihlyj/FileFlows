@@ -435,10 +435,14 @@
     },
     "ProcessingNodeStatus": {
       "Disabled": "Inaktiverad",
+      "HigherPriorityNodeAvailable": "Högre prioriterad nod tillgänglig",
       "Idle": "Vila",
+      "InstallingDockerMods": "Installerar DockerMods",
+      "MaximumRunnersReached": "Maximalt antal löpare nått",
       "Offline": "Offline",
       "OutOfSchedule": "Utanför schemat",
       "Processing": "Bearbetar",
+      "RestrictedByLibrary": "Begränsad av bibliotek",
       "VersionMismatch": "Versionskonflikt"
     },
     "ProcessingOrder": {
