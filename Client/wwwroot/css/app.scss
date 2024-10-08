@@ -244,6 +244,9 @@ input[type=file]{
         text-align-last: center;
         align-content: center;
         font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
