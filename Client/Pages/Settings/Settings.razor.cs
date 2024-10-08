@@ -433,8 +433,12 @@ public partial class Settings : InputRegister
         return (Model.LicenseFlags & feature) == feature;
     }
 
+    /// <summary>
+    /// Check for an update
+    /// </summary>
     private async Task CheckForUpdateNow()
     {
+        Blocker.Show();
         try
         {
             var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
@@ -459,6 +463,10 @@ public partial class Settings : InputRegister
         catch (Exception)
         {
             Toast.ShowError("Pages.Settings.Messages.CheckUpdateFailed");
+        }
+        finally
+        {
+            Blocker.Hide();
         }
     }
     

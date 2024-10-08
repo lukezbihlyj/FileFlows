@@ -17,6 +17,10 @@ public partial class FileFlowsUpdateWidget : ComponentBase
     /// Gets or sets if this user can update FileFlows automatically
     /// </summary>
     [Parameter] public bool CanUpdate { get; set; }
+    /// <summary>
+    /// Gets or sets the Blocker
+    /// </summary>
+    [CascadingParameter] public Blocker Blocker { get; set; }
     
     /// <summary>
     /// Gets or sets the update data
@@ -44,6 +48,7 @@ public partial class FileFlowsUpdateWidget : ComponentBase
         if (CanUpdate == false)
             return;
         
+        Blocker.Show();
         try
         {
             var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
@@ -69,6 +74,10 @@ public partial class FileFlowsUpdateWidget : ComponentBase
         catch (Exception)
         {
             Toast.ShowError("Pages.Settings.Messages.CheckUpdateFailed");
+        }
+        finally
+        {
+            Blocker.Hide();
         }
     }
     
