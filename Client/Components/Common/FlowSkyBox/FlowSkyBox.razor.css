@@ -35,33 +35,25 @@
 }
 
 .skybox.v2 {
-  border-radius: 3rem;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: auto;
-  flex-grow: 1;
-  flex-direction: row;
   user-select: none;
   align-self: center;
   position: relative;
   top: -0.5rem;
-  margin-bottom: 0.25rem;
   max-width: 100%;
-  overflow: hidden;
+  align-items: center;
   height: 3rem;
-  max-height: 3rem;
   min-height: 3rem;
+  max-height: 3rem;
 }
 .skybox.v2 .skybox-item {
   font-weight: var(--bold, 600);
-  place-content: center;
-  position: relative;
   border-radius: 2rem;
-  line-height: 2.5rem;
   overflow: hidden;
   cursor: pointer;
-  align-items: center;
-  padding: 0 1rem;
+  padding: 0.5rem 0.75rem;
   font-size: 0.9rem;
   white-space: nowrap;
   text-overflow: ellipsis;

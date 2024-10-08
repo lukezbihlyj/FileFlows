@@ -440,6 +440,7 @@ public partial class Settings : InputRegister
     {
         Blocker.Show();
         var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
+        Blocker.Hide();
         if (available.Success == false)
         {
             Toast.ShowError("Pages.Settings.Messages.Update.Failed");
@@ -451,8 +452,6 @@ public partial class Settings : InputRegister
             Toast.ShowInfo("Pages.Settings.Messages.Update.NotAvailable");
             return;
         }
-
-        Blocker.Hide();
 
         if (await Confirm.Show("Pages.Settings.Messages.Update.Title",
                 "Pages.Settings.Messages.Update.Message") == false)
