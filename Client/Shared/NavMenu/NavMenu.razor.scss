@@ -15,6 +15,7 @@ $maxItems: 15;
 }
 
 .navbar-brand, .page-title {
+    user-select: none;
     font-size: 1.5rem;
     font-weight: var(--bold, 600);
     display:none;
@@ -34,6 +35,7 @@ $maxItems: 15;
 .nav-menu-container
 {
     flex: 1;
+    user-select: none;
     display: flex;
     flex-direction: column;
     @media screen and (min-width: 850px) {
@@ -90,11 +92,11 @@ $maxItems: 15;
         color: var(--color) !important;
         border-left:solid 0.5rem transparent;
         &.active {
-            background-color: rgba(var(--accent-rgb),0.3);
+            background-color: rgba(var(--accent-rgb),0.1);
             border-color:var(--accent);
         }
         &:hover {
-            background-color: rgba(var(--accent-rgb),0.1);
+            background-color: rgba(var(--accent-rgb),0.2);
         }
         
     }

@@ -12,6 +12,7 @@
 }
 
 .navbar-brand, .page-title {
+  user-select: none;
   font-size: 1.5rem;
   font-weight: var(--bold, 600);
   display: none;
@@ -30,6 +31,7 @@
 
 .nav-menu-container {
   flex: 1;
+  user-select: none;
   display: flex;
   flex-direction: column;
 }
@@ -80,11 +82,11 @@
   border-left: solid 0.5rem transparent;
 }
 .nav-item ::deep a.active {
-  background-color: rgba(var(--accent-rgb), 0.3);
+  background-color: rgba(var(--accent-rgb), 0.1);
   border-color: var(--accent);
 }
 .nav-item ::deep a:hover {
-  background-color: rgba(var(--accent-rgb), 0.1);
+  background-color: rgba(var(--accent-rgb), 0.2);
 }
 
 .paused-indicator {
