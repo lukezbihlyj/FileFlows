@@ -16,10 +16,18 @@ public class UpdateService : BackgroundService
     public UpdateInfo Info { get; private init; } = new UpdateInfo();
 
     /// <summary>
+    /// Gets the interval to run in minutes
+    /// </summary>
+    private int InternalMinutes = 180;
+
+    /// <summary>
     /// Constructs a new instance of the service
     /// </summary>
     public UpdateService()
     {
+        if (int.TryParse(Environment.GetEnvironmentVariable("AutoUpdateInterval") ?? string.Empty, out int minutes) &&
+            minutes > 0)
+            InternalMinutes = minutes;
         // Trigger on startup
         _ = Trigger();
     }
@@ -36,12 +44,12 @@ public class UpdateService : BackgroundService
                 await Trigger();
 
                 // Wait for 1 hour, or until cancellation is requested
-                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(InternalMinutes), stoppingToken);
             }
             catch (Exception ex)
             {
                 // Handle any exceptions (log or retry logic)
-                Console.WriteLine($"Error: {ex.Message}");
+                Logger.Instance.ELog("Error in UpdateService: " + ex.Message);
             }
         }
     }
