@@ -29,10 +29,6 @@
             <div class="center">
                 <span class="name">
                     @(item.Name == CommonVariables.InternalNodeName ? lblInternalProcessingNode : item.Name)
-                    @if (item.Enabled == false)
-                    {
-                        <text> (@lblDisabled)</text>
-                    }
                 </span>
 
                 @if (item.HardwareInfo != null)
