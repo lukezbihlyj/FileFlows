@@ -1,4 +1,4 @@
-﻿.flow-switch {
+.flow-switch {
   position: relative;
   display: inline-block;
   width: 3rem;
@@ -38,11 +38,11 @@
 }
 
 input:checked + .slider {
-  background-color: rgba(var(--accent-rgb), 0.7);
+  background-color: rgba(var(--accent-2-rgb), 0.7);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 5px var(--accent);
+  box-shadow: 0 0 5px var(--accent-2);
 }
 
 input:checked + .slider:before {

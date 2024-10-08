@@ -2933,7 +2933,8 @@ html, body {
 }
 
 a, .btn-link {
-  color: var(--accent) !important;
+  color: var(--accent-2) !important;
+  font-weight: var(--bold, 600);
 }
 
 td a, span.column a {
@@ -3101,22 +3102,25 @@ hr {
   color: var(--color);
   font-size: 0.85rem;
   position: relative;
-  border: solid 1px var(--yellow);
+  border: solid 2px var(--accent-2);
   white-space: pre-line !important;
   margin-bottom: 1rem;
+  border-radius: var(--container-border-radius);
 }
 .box.info::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
-  content: "\f071";
+  content: "\f05a";
   position: absolute;
-  left: 1rem;
-  color: var(--yellow);
-}
-.box.info a {
-  color: var(--yellow) !important;
-  font-weight: var(--bold, 600);
-  text-decoration: underline;
+  background: var(--accent-2);
+  color: #000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2.5rem;
+  text-align-last: center;
+  align-content: center;
+  font-size: 1.25rem;
 }
 
 .search-pane {

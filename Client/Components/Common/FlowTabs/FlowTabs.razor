@@ -1,21 +1,28 @@
 ﻿@using Humanizer
 @namespace FileFlows.Client.Components.Common
 
-<div class="flow-tabs @(ContainTabs ? "contain-tabs" : string.Empty) @(DisableChanging ? "disabled" :"")">
-
-    <div class="flow-tab-buttons @(NewTabs ? "new-tabs" : "old-tabs")  @(TitleOnlyOnActive ? "title-only-on-active" : string.Empty)">
+<div class="flow-tabs @(ContainTabs ? "contain-tabs" : string.Empty) @(DisableChanging ? "disabled" :"") style-@(Style.ToString().Kebaberize()) ">
+    @if (Style == TabStyle.Minimal)
+    {
+        <div class="head">
+            @if(TitleOnlyOnActive) {
+                @ActiveTab?.Title
+            }
+        </div>
+    }
+    <div class="flow-tab-buttons @(TitleOnlyOnActive ? "title-only-on-active" : string.Empty)">
         @foreach(var tab in Tabs)
         {
             if (tab.Visible == false)
             {
                 continue;
             }
-            <button class="tab-button @(NewTabs ? "ignore-button" : "") tb-@tab.Title.Dehumanize() @(ActiveTab == tab ? "active" : "")" @onclick="() => SelectTab(tab)" 
+            <button class="tab-button @(Style != TabStyle.OldStyle ? "ignore-button" : "") tb-@tab.Title.Dehumanize() @(ActiveTab == tab ? "active" : "")" @onclick="() => SelectTab(tab)" 
                     disabled="@(DisableChanging && ActiveTab != tab)">
                 @if (string.IsNullOrEmpty(tab.Icon) == false)
                 {
                     <i class="@tab.Icon" />
-                    @if (ActiveTab == tab || TitleOnlyOnActive == false)
+                    @if ((TitleOnlyOnActive == false || Style != TabStyle.Minimal) && (ActiveTab == tab || TitleOnlyOnActive == false))
                     {
                         @tab.Title
                     }

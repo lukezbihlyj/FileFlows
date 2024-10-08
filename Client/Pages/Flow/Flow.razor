@@ -13,7 +13,9 @@
             <i id="show-elements" class="show-elements fas fa-sitemap" @onclick="ShowElementsOnClick"></i>
         }
         <div class="flow-elements @(fieldsOnTop ? "flow-elements-on-top" : "")">
-            <FlowTabs @ref="tabsFlowElements" TitleOnlyOnActive="true" ContainTabs="true" OnTabChanged="OnFlowElementsTabChange" DisableChanging="fieldsOnTop">
+            <FlowTabs @ref="tabsFlowElements" TitleOnlyOnActive="true" ContainTabs="true" 
+                      OnTabChanged="OnFlowElementsTabChange" DisableChanging="fieldsOnTop" 
+                      Style="TabStyle.Minimal">
                 <FlowTab Icon="fas fa-puzzle-piece" Title="@lblPlugins" Visible="@(AvailablePlugins?.Any() == true)">
                     <FlowElementList @ref="eleListPlugins" Items="@AvailablePlugins" DefaultGroup="@PluginsDefaultGroup" OnDragStart="@HandleDragStart"
                                      AddSelectedElement="AddSelectedElement" Close="@CloseElements" />

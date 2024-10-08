@@ -82,7 +82,8 @@
                         <InputTextArea @bind-Value="@Model.FileServerAllowedPathsString" Label="Pages.Settings.Fields.FileServer.AllowList" Disabled="Model.FileServerDisabled"/>
                     </FlowTab>
                     <FlowTab Title="@lblDatabase">
-                        <p class="box info">@lblDbDescription</p>
+                        <p>@lblDbDescription</p>
+                        <hr />
                         <InputSelect @bind-Value="@DbType" Options=@DbTypes Label="Pages.Settings.Fields.Database.Type" AllowClear="false"/>
                         @if (Model.DbType is DatabaseType.Sqlite or DatabaseType.SqliteNewConnection == false)
                         {
@@ -136,7 +137,8 @@
                         }
                     </FlowTab>
                     <FlowTab Title="@lblEmail">
-                        <p class="box info">@lblEmailDescription</p>
+                        <p>@lblEmailDescription</p>
+                        <hr />
                         <InputText @bind-Value="@Model.SmtpServer" Label="Pages.Settings.Fields.Smtp.Server"/>
                         <InputNumber @bind-Value="@Model.SmtpPort" Label="Pages.Settings.Fields.Smtp.Port" Min="1" Max="65535"/>
                         <InputSelect @bind-Value="@SmtpSecurity" Options=@SmtpSecurityTypes Label="Pages.Settings.Fields.Smtp.Security" AllowClear="false"/>
@@ -146,7 +148,7 @@
                         <InputText @bind-Value="@Model.SmtpFromAddress" Label="Pages.Settings.Fields.Smtp.FromAddress"/>
                     </FlowTab>
                     <FlowTab Title="@lblLicense">
-                        <p class="box info">Here you can enter your license key to enable additional features
+                        <p>Here you can enter your license key to enable additional features
                             See <a href="https://fileflows.com/pricing" target="_blank" rel="noreferrer">FileFlows.com</a> for more information.</p>
                         <InputText @bind-Value=@Model.LicenseEmail Label="Pages.Settings.Fields.License.Email"/>
                         <InputText @bind-Value=@Model.LicenseKey Label="Pages.Settings.Fields.License.Key"/>

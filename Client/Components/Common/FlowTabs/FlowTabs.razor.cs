@@ -12,10 +12,12 @@ public partial class FlowTabs : ComponentBase
     /// Gets or sets the content of the tabs.
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }
+
     /// <summary>
-    /// Gets or sets if the tabs should be displayed as new tabs
+    /// Gets or sets the style of the tabs
     /// </summary>
-    [Parameter] public bool NewTabs { get; set; }
+    [Parameter]
+    public TabStyle Style { get; set; }
     /// <summary>
     /// Gets or set the active tab
     /// </summary>
@@ -102,4 +104,23 @@ public partial class FlowTabs : ComponentBase
         }
     }
 
+}
+
+/// <summary>
+/// Tab style
+/// </summary>
+public enum TabStyle
+{
+    /// <summary>
+    /// New style
+    /// </summary>
+    NewStyle = 0,
+    /// <summary>
+    /// Standard style
+    /// </summary>
+    OldStyle = 1,
+    /// <summary>
+    /// Minimal style
+    /// </summary>
+    Minimal = 2
 }

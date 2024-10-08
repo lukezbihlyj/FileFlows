@@ -28,25 +28,27 @@
   padding:1rem 0;
   height:100%;
   ::deep {
-    .flow-tabs {
+    .flow-tabs.style-new-style {
       height: 100%;
-    }
-    .flow-tab-buttons button:first-child {
-      margin-left:1rem;
-    }
-    .flow-tabs-content {
-      padding:0 1rem;
-    }
-    .flow-tab.active {
-      display:flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 3.5rem;
-      bottom: 0;
-      padding:1rem;
+      @media (min-width: 850px) {
+        > .flow-tab-buttons button:first-child {
+          margin-left: 1rem;
+        }
+      }
+      > .flow-tabs-content {
+        padding: 0 1rem;
+        > .flow-tab.active {
+          display:flex;
+          flex-direction: column;
+          overflow: hidden;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 3.5rem;
+          bottom: 0;
+          padding:1rem;
+        }
+      }
     }
   }
   
