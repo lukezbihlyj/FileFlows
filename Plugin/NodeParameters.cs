@@ -445,6 +445,7 @@ public class NodeParameters
         if (Fake) return;
         try
         {
+            Logger.ILog("Initing file: " + filename);
             if (IsDirectory)
             {
                 Variables.TryAdd("folder.OriginalName", LibraryFileName);
@@ -497,44 +498,51 @@ public class NodeParameters
 
                 if (initDone == false)
                 {
+                    Logger.ILog("init not done");
                     initDone = true;
-                    var fiOrigResult = FileService.FileInfo(this.FileName);
-                    if (fiOrigResult.IsFailed)
-                        return;
-                    var fiOriginal = fiOrigResult.Value;
-                    UpdateVariables(new Dictionary<string, object>
-                    {
-                        { "file.Create", fiOriginal.CreationTime },
-                        { "file.Create.Year", fiOriginal.CreationTime.Year },
-                        { "file.Create.Month", fiOriginal.CreationTime.Month },
-                        { "file.Create.Day", fiOriginal.CreationTime.Day },
-
-                        { "file.Modified", fiOriginal.LastWriteTime },
-                        { "file.Modified.Year", fiOriginal.LastWriteTime.Year },
-                        { "file.Modified.Month", fiOriginal.LastWriteTime.Month },
-                        { "file.Modified.Day", fiOriginal.LastWriteTime.Day },
-
-                        { "file.Orig.Extension", fiOriginal.Extension ?? string.Empty },
-                        { "file.Orig.FileName", fiOriginal.Name ?? string.Empty },
-                        { "file.Orig.Name", fiOriginal.Name ?? string.Empty },
-                        { "file.Orig.FileNameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
-                        { "file.Orig.NameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
-                        { "file.Orig.FullName", fiOriginal.FullName ?? string.Empty },
-                        { "file.Orig.Size", fiOriginal.Length },
-
-                        { "folder.Orig.Name", FileHelper.GetDirectoryName(fiOriginal.FullName) ?? string.Empty },
-                        { "folder.Orig.FullName", fiOriginal.Directory ?? "" }
-                    });
-                    if (FileService.DirectorySize(fiOriginal.Directory).Success(out var origSize))
-                        Variables["folder.Orig.Size"] = origSize;
-
-                    if (string.IsNullOrEmpty(this.LibraryPath) == false &&
-                        fiOriginal.FullName.StartsWith(this.LibraryPath))
+                    if (FileName.StartsWith("http", StringComparison.InvariantCultureIgnoreCase) == false 
+                        && FileService.FileInfo(this.FileName).Success(out var fiOriginal))
                     {
                         UpdateVariables(new Dictionary<string, object>
                         {
-                            { "file.Orig.RelativeName", fiOriginal.FullName.Substring(LibraryPath.Length + 1) }
+                            { "file.Create", fiOriginal.CreationTime },
+                            { "file.Create.Year", fiOriginal.CreationTime.Year },
+                            { "file.Create.Month", fiOriginal.CreationTime.Month },
+                            { "file.Create.Day", fiOriginal.CreationTime.Day },
+
+                            { "file.Modified", fiOriginal.LastWriteTime },
+                            { "file.Modified.Year", fiOriginal.LastWriteTime.Year },
+                            { "file.Modified.Month", fiOriginal.LastWriteTime.Month },
+                            { "file.Modified.Day", fiOriginal.LastWriteTime.Day },
+
+                            { "file.Orig.Extension", fiOriginal.Extension ?? string.Empty },
+                            { "file.Orig.FileName", fiOriginal.Name ?? string.Empty },
+                            { "file.Orig.Name", fiOriginal.Name ?? string.Empty },
+                            {
+                                "file.Orig.FileNameNoExtension",
+                                FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty
+                            },
+                            {
+                                "file.Orig.NameNoExtension",
+                                FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty
+                            },
+                            { "file.Orig.FullName", fiOriginal.FullName ?? string.Empty },
+                            { "file.Orig.Size", fiOriginal.Length },
+
+                            { "folder.Orig.Name", FileHelper.GetDirectoryName(fiOriginal.FullName) ?? string.Empty },
+                            { "folder.Orig.FullName", fiOriginal.Directory ?? "" }
                         });
+                        if (FileService.DirectorySize(fiOriginal.Directory).Success(out var origSize))
+                            Variables["folder.Orig.Size"] = origSize;
+
+                        if (string.IsNullOrEmpty(this.LibraryPath) == false &&
+                            fiOriginal.FullName.StartsWith(this.LibraryPath))
+                        {
+                            UpdateVariables(new Dictionary<string, object>
+                            {
+                                { "file.Orig.RelativeName", fiOriginal.FullName.Substring(LibraryPath.Length + 1) }
+                            });
+                        }
                     }
                 }
             }

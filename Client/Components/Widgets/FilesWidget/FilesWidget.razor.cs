@@ -65,9 +65,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// <param name="obj">the files updated</param>
     private void OnFileStatusUpdated(List<LibraryStatus> obj)
     {
-        bool watchedStatuses = obj.Any(x => x.Status is FileStatus.Unprocessed or FileStatus.Processed or FileStatus.ProcessingFailed);
-        if (watchedStatuses)
-            _ = RefreshData();
+        _ = RefreshData();
     }
 
     /// <summary>
