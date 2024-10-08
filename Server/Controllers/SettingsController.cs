@@ -333,16 +333,17 @@ public class SettingsController : BaseController
     /// Triggers a check for an update
     /// </summary>
     [HttpPost("check-for-update-now")]
-    public bool CheckForUpdateNow()
+    public async Task<bool> CheckForUpdateNow()
     {
+        var service = ServiceLoader.Load<UpdateService>();
+        await service.Trigger();
+        
         if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
             return false;
 
-        if (ServerUpdater.Instance == null)
+        if (string.IsNullOrEmpty(service.Info.FileFlowsVersion))
             return false;
-
-        var available = ServerUpdater.Instance.GetLatestOnlineVersion();
-        return available.updateAvailable;
+        return true;
     }
 
     /// <summary>
