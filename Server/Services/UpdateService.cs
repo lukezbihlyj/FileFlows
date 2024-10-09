@@ -38,6 +38,7 @@ public class UpdateService : BackgroundService
         // Runs the service until the app is stopped.
         while (!stoppingToken.IsCancellationRequested)
         {
+            Logger.Instance.ILog("UpdateService.Executing");
             try
             {
                 // Do the work you need to do every minute
