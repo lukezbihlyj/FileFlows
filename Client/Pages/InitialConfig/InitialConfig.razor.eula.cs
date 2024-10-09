@@ -48,7 +48,7 @@ FileFlows collects telemetry data from your use of the Software. This data is an
 - Database type
 - Version installed
 - Operating system
-- Architecture (e.g., ARM, x64, etc.)
+- Hardware Information
 - Number of processing nodes
 - Number of file runners
 - Storage saved
