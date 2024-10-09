@@ -479,7 +479,7 @@ public class HardwareInfoService
                         Vendor = vendor!, // May need to adjust based on output
                         Model = model, // Same as Vendor in this output
                         Memory = long.TryParse(parts[1].Trim(), out long memory) ? memory : 0,
-                        DriverVersion = parts[2].Trim()
+                        DriverVersion = parts[2].Trim().TrimStart('"').TrimEnd('"')
                     });
                 }
             }
