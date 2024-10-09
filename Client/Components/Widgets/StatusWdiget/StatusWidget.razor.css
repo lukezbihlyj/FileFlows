@@ -1,0 +1,30 @@
+.sw-status {
+  display: flex;
+  flex-grow: 1;
+  place-content: center;
+  height: 100%;
+  text-align: center;
+  align-items: center;
+}
+
+.sw-paused {
+  cursor: pointer;
+}
+.sw-paused .icon {
+  font-size: 5rem;
+  color: var(--orange);
+}
+
+.sw-update-available {
+  display: flex;
+  flex-direction: column;
+  font-weight: var(--bold, 600);
+}
+.sw-update-available img {
+  width: 3rem;
+  margin-bottom: 0.75rem;
+}
+.sw-update-available .sw-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}

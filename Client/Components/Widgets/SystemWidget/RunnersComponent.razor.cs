@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components.Widgets;
 
-public partial class RunnersComponent : ComponentBase
+public partial class RunnersComponent : ComponentBase, IDisposable
 {
     /// <summary>
     /// Gets or sets the client service
@@ -45,9 +45,8 @@ public partial class RunnersComponent : ComponentBase
             await NoneOnLoad.InvokeAsync();
 #if(DEBUG)
         Runners = GenerateRandomExecutors(10);
-#else
-        ClientService.ExecutorsUpdated += ExecutorsUpdated;
 #endif
+        ClientService.ExecutorsUpdated += ExecutorsUpdated;
     }
     
 #if(DEBUG)

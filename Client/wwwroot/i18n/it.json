@@ -656,6 +656,14 @@
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# File} other {# File}}"
         },
+        "Status": {
+          "CurrentlyProcessing": "Attualmente in elaborazione {count, plural, one {# file} other {# file}}",
+          "DockerModUpdates": "{count, plural, one {# Aggiornamento DockerMod} other {# Aggiornamenti DockerMods}}",
+          "FileFlowsUpdate": "FileFlows {version} disponibile",
+          "Idle": "Il sistema è attualmente inattivo",
+          "PluginUpdates": "{count, plural, one {# Aggiornamento Plugin} other {# Aggiornamenti Plugin}}",
+          "ScriptUpdates": "{count, plural, one {# Aggiornamento Script} other {# Aggiornamenti Script}}"
+        },
         "System": {
           "Runners": "Runner",
           "Title": "Sistema",

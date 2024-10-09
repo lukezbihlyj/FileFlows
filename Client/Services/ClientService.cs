@@ -173,4 +173,34 @@ public partial class ClientService
     {
         SystemPausedUpdated(false);
     }
+
+    /// <summary>
+    /// Gets the current update info
+    /// </summary>
+    /// <returns>the update info</returns>
+    public async Task<UpdateInfo?> GetCurrentUpdatesInfo()
+    {
+        if(CurrentUpdatesInfo == null)
+        {
+            var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
+            if (result.Success)
+                CurrentUpdatesInfo ??= result.Data;
+        }
+        return CurrentUpdatesInfo;
+    }
+
+    /// <summary>
+    /// Gets the current node status summaries
+    /// </summary>
+    /// <returns>the current node status summaries</returns>
+    public async Task<List<NodeStatusSummary>> GetCurrentNodeStatusSummaries()
+    {
+        if(CurrentNodeStatusSummaries == null)
+        {
+            var result = await HttpHelper.Get<List<NodeStatusSummary>>("/api/dashboard/node-summary");
+            if (result.Success)
+                CurrentNodeStatusSummaries ??= result.Data;
+        }
+        return CurrentNodeStatusSummaries;
+    }
 }

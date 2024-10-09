@@ -177,4 +177,11 @@ public class ClientServiceManager
     /// <param name="data">the update data</param>
     public void FileOverviewUpdate(FileOverviewData data)
         => _hubContext.Clients.All.SendAsync("FileOverviewUpdate", data);
+
+    /// <summary>
+    /// Sends a update about updates available to the system
+    /// </summary>
+    /// <param name="data">the update data</param>
+    public void UpdatesUpdate(UpdateInfo data)
+        => _hubContext.Clients.All.SendAsync("UpdatesUpdateInfo", data);
 }

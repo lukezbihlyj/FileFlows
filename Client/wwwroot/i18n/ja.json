@@ -656,6 +656,14 @@
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# ファイル} other {# ファイル}}"
         },
+        "Status": {
+          "CurrentlyProcessing": "現在 {count, plural, one {# ファイル} other {# ファイル}} を処理中です",
+          "DockerModUpdates": "{count, plural, one {# DockerMod 更新} other {# DockerMod 更新}}",
+          "FileFlowsUpdate": "FileFlows {version} が利用可能です",
+          "Idle": "システムは現在アイドル状態です",
+          "PluginUpdates": "{count, plural, one {# プラグイン更新} other {# プラグイン更新}}",
+          "ScriptUpdates": "{count, plural, one {# スクリプト更新} other {# スクリプト更新}}"
+        },
         "System": {
           "Runners": "ランナー",
           "Title": "システム",

@@ -1,4 +1,5 @@
 using FileFlows.Server.Helpers;
+using FileFlows.Server.Hubs;
 using FileFlows.Server.Workers;
 using FileFlows.Shared.Helpers;
 using FileFlows.Shared.Models;
@@ -27,6 +28,7 @@ public class UpdateService
         Info.PluginUpdates = await CheckForPluginUpdates();
         Info.DockerModUpdates = repository == null ? [] : await CheckForDockerModUpdates(repository);
         Info.ScriptUpdates = repository == null ? [] : await CheckForScriptUpdates(repository);
+        ClientServiceManager.Instance.UpdatesUpdate(Info);
     }
 
     /// <summary>

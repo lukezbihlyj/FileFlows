@@ -1084,6 +1084,7 @@ internal class DbLibraryFileManager : BaseManager
         }
         else if (filter.Status is FileStatus.Unprocessed)
         {
+            DateTime dtSortingTime = DateTime.UtcNow;
             var sortDict = new Dictionary<Guid, string>();
             
             // first sort by file order
@@ -1135,6 +1136,12 @@ internal class DbLibraryFileManager : BaseManager
                             else
                                 key = "9999999999999999999";
                             break;
+                        case ProcessingOrder.OldestFirst:
+                            if(inLibrary)
+                                key = (long.MaxValue - file.CreationTime.Ticks).ToString("D19");
+                            else
+                                key = "9999999999999999999";
+                            break;
                         case ProcessingOrder.Alphabetical:
                             if (inLibrary)
                             {
@@ -1160,6 +1167,7 @@ internal class DbLibraryFileManager : BaseManager
             
             // now we have the sort keys, sort the files by that
             sortedFiles = sortedFiles.ThenBy(file => sortDict[file.Uid]);
+            Logger.ILog("Unprocessed Sort Key Time: " + (DateTime.UtcNow - dtSortingTime).TotalMilliseconds + "ms");
         }
         else
         {

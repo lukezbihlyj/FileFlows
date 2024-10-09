@@ -1,0 +1,58 @@
+@namespace FileFlows.Client.Components.Widgets
+
+<ContainerWidget Title="@lblTitle" Scroll="true">
+<Head>
+    <OptionButtons>
+        <WidgetOption Label="@PausedService.PausedLabel" Value="1" Icon="@(PausedService.IsPaused ? "fas fa-play" : "fas fa-pause")" OnClick="TogglePause" />
+    </OptionButtons>
+</Head>
+<Body>
+    @switch (GetStatus())
+    {
+        case SystemStatus.Paused:
+        {
+            <div class="sw-status sw-paused" @onclick="TogglePause">
+                <i class="sw-icon far fa-pause-circle"></i>
+            </div>
+        }
+        break;
+        case SystemStatus.Processing:
+        {
+            <div class="sw-status sw-processing">@Translater.Instant("Pages.Dashboard.Widgets.Status.CurrentlyProcessing", new { count = _executors.Count})</div>
+        }
+        break;
+        case SystemStatus.UpdateAvailable:
+        {
+            <div class="sw-status sw-update-available">
+                @if(_updateInfo.FileFlowsVersion != null)
+                {
+                    <img src="favicon.svg" />
+                    <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.FileFlowsUpdate", new { version = _updateInfo.FileFlowsVersion})</span>
+                }
+                else
+                {
+                    <i class="sw-icon fas fa-cloud-download-alt"></i>
+                    if(_updateInfo.PluginUpdates.Count > 0)
+                    {
+                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.PluginUpdates", new { count = _updateInfo.PluginUpdates.Count})</span>
+                    }
+                    if(_updateInfo.ScriptUpdates.Count > 0)
+                    {
+                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.ScriptUpdates", new { count = _updateInfo.ScriptUpdates.Count})</span>
+                    }
+                    if(_updateInfo.DockerModUpdates.Count > 0)
+                    {
+                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.DockerModUpdates", new { count = _updateInfo.DockerModUpdates.Count})</span>
+                    }
+                }
+            </div>    
+        }
+        break;
+        default:
+        {
+            <div class="sw-status sw-idle">@Translater.Instant("Pages.Dashboard.Widgets.Status.Idle")</div>
+        }
+        break;
+    }
+</Body>
+</ContainerWidget>

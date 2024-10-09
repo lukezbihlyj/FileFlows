@@ -656,6 +656,14 @@
         "LibrarySavingsSummary": {
           "Files": "{count, plural, one {# 文件} other {# 文件}}"
         },
+        "Status": {
+          "CurrentlyProcessing": "当前正在处理 {count, plural, one {# 个文件} other {# 个文件}}",
+          "DockerModUpdates": "{count, plural, one {# DockerMod 更新} other {# DockerMod 更新}}",
+          "FileFlowsUpdate": "FileFlows {version} 可用",
+          "Idle": "系统当前处于空闲状态",
+          "PluginUpdates": "{count, plural, one {# 插件更新} other {# 插件更新}}",
+          "ScriptUpdates": "{count, plural, one {# 脚本更新} other {# 脚本更新}}"
+        },
         "System": {
           "Runners": "执行者",
           "Title": "系统",

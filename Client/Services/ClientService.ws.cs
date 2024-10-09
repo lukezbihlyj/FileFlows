@@ -49,6 +49,11 @@ public partial class ClientService
     public event Action<FileOverviewData> FileOverviewUpdated;
     
     /// <summary>
+    /// Event raised when the file overview has bene updated
+    /// </summary>
+    public event Action<UpdateInfo> UpdatesUpdateInfo;
+    
+    /// <summary>
     /// Event raised when the file status have bene updated
     /// </summary>
     public event Action<List<LibraryStatus>> FileStatusUpdated;
@@ -65,6 +70,11 @@ public partial class ClientService
     /// Gets the current file overview data
     /// </summary>
     public FileOverviewData? CurrentFileOverData { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the current update info
+    /// </summary>
+    public UpdateInfo CurrentUpdatesInfo { get; set; }
 
 
     /// <summary>
@@ -118,6 +128,12 @@ public partial class ClientService
                     CurrentFileOverData = data;
                     FileOverviewUpdated?.Invoke(data);
                 });
+                _hubConnection.On<UpdateInfo>("UpdatesUpdateInfo", (data) =>
+                {
+                    CurrentUpdatesInfo = data;
+                    UpdatesUpdateInfo?.Invoke(data);
+                });
+                
                 _hubConnection.On<int>("SystemPaused", UpdateSystemPaused);
                 _hubConnection.On<NotificationData>("Notification", HandleNotification);
 

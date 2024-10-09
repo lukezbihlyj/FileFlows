@@ -124,21 +124,21 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
         else
         {
             long total = dataset.Sum(x => x.Value.StorageSaved);
-            Total = FileSizeFormatter.FormatSize(total, 1);
+            Total = FileSizeFormatter.FormatSize(Math.Max(0, total), 1);
             // average
             switch (Mode)
             {
                 case 0:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
-                        new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 7d), 1) });
+                        new { num = FileSizeFormatter.FormatSize(Math.Max(0, (long)Math.Round(total / 7d)), 1) });
                     break;
                 case 1:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerDay",
-                        new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 31d), 1) });
+                        new { num = FileSizeFormatter.FormatSize(Math.Max(0, (long)Math.Round(total / 31d)), 1) });
                     break;
                 default:
                     Average = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview.PerHour",
-                        new { num = FileSizeFormatter.FormatSize((long)Math.Round(total / 24d), 1) });
+                        new { num = FileSizeFormatter.FormatSize(Math.Max(0, (long)Math.Round(total / 24d)), 1) });
                     break;
             }
             Data = dataset.Select(x => x.Value.StorageSaved).Select(x => (double)x).ToArray();

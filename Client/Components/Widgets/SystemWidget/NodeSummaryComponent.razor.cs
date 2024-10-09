@@ -31,13 +31,7 @@ public partial class NodeSummaryComponent : ComponentBase, IDisposable
         lblRunners = Translater.Instant("Pages.Nodes.Labels.Runners");
         lblPriority = Translater.Instant("Pages.ProcessingNode.Fields.Priority");
         lblInternalProcessingNode = Translater.Instant("Labels.InternalProcessingNode");
-        if(ClientService.CurrentNodeStatusSummaries == null)
-        {
-            var result = await HttpHelper.Get<List<NodeStatusSummary>>("/api/dashboard/node-summary");
-            if (result.Success)
-                ClientService.CurrentNodeStatusSummaries ??= result.Data;
-        }
-        Data = ClientService.CurrentNodeStatusSummaries ?? [];
+        Data = await ClientService.GetCurrentNodeStatusSummaries() ?? [];
         ClientService.NodeStatusSummaryUpdated += OnNodeStatusSummaryUpdated;
     }
 
