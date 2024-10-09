@@ -10,6 +10,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.Shared;
 using FileFlows.Shared.Json;
 using FileFlows.Shared.Models;
+using Jint.Runtime.Debugger;
 using FileHelper = FileFlows.Plugin.Helpers.FileHelper;
 
 namespace FileFlows.DataLayer;
@@ -1046,7 +1047,8 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>the sorted files</returns>
     private IEnumerable<LibraryFile> SortLibraryFiles(IEnumerable<LibraryFile> files, LibraryFileFilter filter)
     {
-        IOrderedEnumerable<LibraryFile> sortedFiles = files.OrderBy(file => 0); // Initial dummy ordering
+        var libraryFiles = files as LibraryFile[] ?? files.ToArray();
+        IOrderedEnumerable<LibraryFile> sortedFiles = libraryFiles.OrderBy(file => 0); // Initial dummy ordering
 
         if (filter.SortBy != null)
         {
@@ -1076,18 +1078,93 @@ internal class DbLibraryFileManager : BaseManager
         if (filter.Status is FileStatus.Processed or FileStatus.ProcessingFailed)
         {
             sortedFiles = sortedFiles
-                .ThenByDescending(file => file.ProcessingEnded > file.ProcessingStarted ? file.ProcessingEnded : file.ProcessingStarted)
+                .ThenByDescending(file =>
+                    file.ProcessingEnded > file.ProcessingStarted ? file.ProcessingEnded : file.ProcessingStarted)
                 .ThenByDescending(file => file.DateModified);
+        }
+        else if (filter.Status is FileStatus.Unprocessed)
+        {
+            var sortDict = new Dictionary<Guid, string>();
+            
+            // first sort by file order
+            foreach(var file in libraryFiles)
+            {
+                string key = file.Order > 0 ? file.Order.ToString("D6") : "999999";
+                sortDict.Add(file.Uid, key + "_");
+            }
+            // Get the maximum length of the RelativePath strings
+            int maxPathLength = libraryFiles.Max(f => f.RelativePath.Length);
+
+            // libraries
+            Random random = new (DateTime.Now.Millisecond);
+            foreach (var library in filter.SysInfo.AllLibraries.Values.OrderByDescending(x => x.Priority))
+            {
+                foreach(var file in libraryFiles)
+                {
+                    string key = string.Empty;
+                    var inLibrary = file.LibraryUid == library.Uid;
+                    switch (library.ProcessingOrder)
+                    {
+                        case ProcessingOrder.Random:
+                            if (inLibrary)
+                                key = random.Next(0, 999998).ToString("D6");
+                            else
+                                key = "999999";
+                            break;
+                        case ProcessingOrder.AsFound:
+                            if (inLibrary)
+                                key = file.DateCreated.Ticks.ToString("D19");
+                            else
+                                key = "9999999999999999999";
+                            break;
+                        case ProcessingOrder.LargestFirst:
+                            if(inLibrary)
+                                key = (long.MaxValue - file.OriginalSize).ToString("D19");
+                            else
+                                key = "9999999999999999999";
+                            break;
+                        case ProcessingOrder.SmallestFirst:
+                            if(inLibrary)
+                                key = file.OriginalSize.ToString("D19");
+                            else
+                                key = "9999999999999999999";
+                            break;
+                        case ProcessingOrder.NewestFirst:
+                            if(inLibrary)
+                                key = file.CreationTime.Ticks.ToString("D19");
+                            else
+                                key = "9999999999999999999";
+                            break;
+                        case ProcessingOrder.Alphabetical:
+                            if (inLibrary)
+                            {
+                                // Pad the string to the maximum length calculated earlier
+                                key = file.RelativePath.ToLower().PadRight(maxPathLength, ' ');
+                            }
+                            else
+                            {
+                                // Ensure non-matching files are sorted last with a high-value string
+                                key = new string('z', maxPathLength);
+                            }
+                            break;
+                    }
+                    sortDict[file.Uid] += key + "_";
+                }
+                
+                // one last sort of files by date created if they werent in a library
+                foreach(var file in libraryFiles)
+                {
+                    sortDict[file.Uid] += file.DateCreated.Ticks.ToString("D19");
+                }
+            }
+            
+            // now we have the sort keys, sort the files by that
+            sortedFiles = sortedFiles.ThenBy(file => sortDict[file.Uid]);
         }
         else
         {
-            sortedFiles = sortedFiles.ThenByDescending(file => file.DateModified);
+            sortedFiles = sortedFiles.ThenBy(file => file.DateCreated);
         }
-
-        // Add sorting by library priority
-        sortedFiles = sortedFiles
-            //.ThenBy(file => file.Library.ProcessingOrder)
-            .ThenBy(file => file.DateCreated);
 
         return sortedFiles;
     }
