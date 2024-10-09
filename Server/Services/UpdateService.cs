@@ -8,52 +8,12 @@ namespace FileFlows.Server.Services;
 /// <summary>
 /// Service that monitors for updates
 /// </summary>
-public class UpdateService : BackgroundService
+public class UpdateService
 {
     /// <summary>
     /// Gets the update information
     /// </summary>
     public UpdateInfo Info { get; private init; } = new UpdateInfo();
-
-    /// <summary>
-    /// Gets the interval to run in minutes
-    /// </summary>
-    private int InternalMinutes = 180;
-
-    /// <summary>
-    /// Constructs a new instance of the service
-    /// </summary>
-    public UpdateService()
-    {
-        if (int.TryParse(Environment.GetEnvironmentVariable("AutoUpdateInterval") ?? string.Empty, out int minutes) &&
-            minutes > 0)
-            InternalMinutes = minutes;
-        // Trigger on startup
-        _ = Trigger();
-    }
-
-    /// <inheritdoc />
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        // Runs the service until the app is stopped.
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            Logger.Instance.ILog("UpdateService.Executing");
-            try
-            {
-                // Do the work you need to do every minute
-                await Trigger();
-
-                // Wait for 1 hour, or until cancellation is requested
-                await Task.Delay(TimeSpan.FromMinutes(InternalMinutes), stoppingToken);
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions (log or retry logic)
-                Logger.Instance.ELog("Error in UpdateService: " + ex.Message);
-            }
-        }
-    }
 
     /// <summary>
     /// Triggers a scan

@@ -117,8 +117,6 @@ public class StartupService
             // Start workers right at the end, so the ServerUrl is set in case the worker needs BaseServerUrl
             StartupWorkers();
             
-            ServiceLoader.Load<UpdateService>().Trigger().Wait();
-            
             WebServer.FullyStarted = true;
             return true;
         }
@@ -190,7 +188,8 @@ public class StartupService
             new FileFlowsTasksWorker(),
             new RepositoryUpdaterWorker(),
             new ScheduledReportWorker(),
-            new StatisticSyncer()
+            new StatisticSyncer(),
+            new UpdateWorker()
             //new LibraryFileServiceUpdater()
         );
     }

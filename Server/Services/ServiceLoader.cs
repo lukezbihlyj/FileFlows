@@ -48,10 +48,7 @@ public static class ServiceLoader
             .AddSingleton<ScheduledReportService>()
             .AddSingleton<FileDisplayNameService>()
             .AddSingleton<HardwareInfoService>()
-            
-            // Register UpdateService both as a singleton and a hosted service
-            .AddSingleton<UpdateService>()
-            .AddHostedService<UpdateService>() 
+            .AddSingleton<UpdateService>() 
             
             .BuildServiceProvider(); // Build the service provider
     }
