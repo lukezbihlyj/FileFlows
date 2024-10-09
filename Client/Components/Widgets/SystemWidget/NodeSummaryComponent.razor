@@ -44,17 +44,6 @@
                             </div>
                         }
                         <div class="hardware-info-item">
-                            <span class="label">@lblRunners</span>
-                            <span class="value">@item.FlowRunners</span>
-                        </div>
-                        @if (item.Priority > 0)
-                        {
-                            <div class="hardware-info-item">
-                                <span class="label">@lblPriority</span>
-                                <span class="value">@item.Priority</span>
-                            </div>
-                        }
-                        <div class="hardware-info-item">
                             <span class="label">CPU</span>
                             <span class="value">@item.HardwareInfo.ProcessorVendor @item.HardwareInfo.Processor</span>
                         </div>
@@ -78,7 +67,17 @@
                         }
                     </div>
                 }
-                <span class="top-right status-@(item.Status.ToString().Kebaberize())">@Translater.Instant("Enums.ProcessingNodeStatus." + item.Status)</span>
+                <span class="top-right status-@(item.Status.ToString().Kebaberize())">
+                    @Translater.Instant("Enums.ProcessingNodeStatus." + item.Status)
+                </span>
+                @if (item.Priority > 0)
+                {
+                    <span class="priority" title="@lblPriority">@item.Priority</span>
+                }
+                @if (item.FlowRunners > 0)
+                {
+                    <span class="runners" title="@lblRunners"><i class="fas fa-running"></i> @item.FlowRunners</span>
+                }
             </div>
 
         </div>
