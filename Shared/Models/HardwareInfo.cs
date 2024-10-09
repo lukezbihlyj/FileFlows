@@ -34,6 +34,11 @@ public class HardwareInfo
     /// Gets or sets the name of the processor.
     /// </summary>
     public string Processor { get; set; }
+
+    /// <summary>
+    /// Gets or sets the vendor of the processor.
+    /// </summary>
+    public string ProcessorVendor { get; set; }
     
     /// <summary>
     /// Gets or sets the memory size of the system.

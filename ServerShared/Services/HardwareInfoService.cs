@@ -18,6 +18,7 @@ public class HardwareInfoService
     /// <returns>A <see cref="HardwareInfo"/> instance containing the system's hardware information.</returns>
     public HardwareInfo GetHardwareInfo()
     {
+        var (processorVendor, processorModel)  = GetProcessor();
         var hardwareInfo = new HardwareInfo
         {
             OperatingSystem = GetOperatingSystem(),
@@ -25,7 +26,8 @@ public class HardwareInfoService
             OperatingSystemVersion = GetOperatingSystemVersion(),
             Architecture = RuntimeInformation.OSArchitecture.ToString(),
             Gpus = GetGPUs(),
-            Processor = GetProcessor(),
+            ProcessorVendor = processorVendor,
+            Processor = processorModel,
             Memory = GetTotalMemory(),
             CoreCount = Environment.ProcessorCount
         };
@@ -401,7 +403,7 @@ public class HardwareInfoService
     /// Retrieves the name of the processor.
     /// </summary>
     /// <returns>The name of the processor.</returns>
-    private string GetProcessor()
+    private (string vendor, string model) GetProcessor()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
@@ -437,7 +439,7 @@ public class HardwareInfoService
                 return CleanUpCpu(result.Value.Trim());
         }
 
-        return "Unknown Processor";
+        return (string.Empty, "Unknown Processor");
     }
 
     /// <summary>
@@ -494,10 +496,14 @@ public class HardwareInfoService
     /// </summary>
     /// <param name="cpu">the CPU to clean up</param>
     /// <returns>the cleaned up CPU, or null if a bad model</returns>
-    private string CleanUpCpu(string? cpu)
+    private (string vendor, string model) CleanUpCpu(string? cpu)
     {
         if (cpu == null)
-            return string.Empty;
+            return (string.Empty, string.Empty);
+        string vendor = cpu.Contains("Intel", StringComparison.InvariantCultureIgnoreCase) ? "Intel" :
+            cpu.Contains("Apple", StringComparison.InvariantCultureIgnoreCase) ? "Apple" :
+            cpu.Contains("AMD", StringComparison.InvariantCultureIgnoreCase) ? "AMD" : cpu;
+        
         cpu = cpu.Replace("Intel(R) ", ""); // Remove Intel(R) prefix
         cpu = cpu.Replace("Core(TM) ", ""); // Remove Intel(R) prefix
         cpu = Regex.Replace(cpu, @"\b\d+(?:st|nd|rd|th) Gen\b", ""); // Remove generation suffix
@@ -509,7 +515,7 @@ public class HardwareInfoService
         cpu = cpu.Replace("(TM)", ""); // Remove (TM) suffix
         while (cpu.Contains("  "))
             cpu = cpu.Replace("  ", " ");
-        return cpu.Trim();
+        return (vendor, cpu.Trim());
     }
 
     /// <summary>

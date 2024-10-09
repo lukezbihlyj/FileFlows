@@ -56,7 +56,7 @@
                         }
                         <div class="hardware-info-item">
                             <span class="label">CPU</span>
-                            <span class="value">@item.HardwareInfo.Processor</span>
+                            <span class="value">@item.HardwareInfo.ProcessorVendor @item.HardwareInfo.Processor</span>
                         </div>
                         @if (item.HardwareInfo.Memory > 0)
                         {
@@ -72,7 +72,7 @@
                                 <span class="value">
                                     @gpu.Vendor @gpu.Model 
                                     @(gpu.Memory > 0 ? FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true) : "") 
-                                    @(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false ? gpu.DriverVersion : "")
+                                    @(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false ? $"({gpu.DriverVersion})" : "")
                                 </span>
                             </div>
                         }
