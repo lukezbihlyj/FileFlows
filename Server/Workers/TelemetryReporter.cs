@@ -37,13 +37,16 @@ public class TelemetryReporter : ServerWorker
             data.Language = settings.Language?.EmptyAsNull() ?? "en";
             data.DatabaseProvider = ServiceLoader.Load<AppSettingsService>().Settings.DatabaseType.ToString();
             var pNodes = ServiceLoader.Load<NodeService>().GetAllAsync().Result.Where(x => x.Enabled).ToList();
-            data.ProcessingNodes = pNodes.Count();
+            data.ProcessingNodes = pNodes.Count;
+            var hardwareInfo = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+            data.HardwareInfo = hardwareInfo;
             data.ProcessingNodeData = pNodes.Select(x => new ProcessingNodeData()
             {
                 OS = x.OperatingSystem,
                 Architecture = x.Architecture,
                 Runners = x.FlowRunners,
-                Internal = x.Uid == CommonVariables.InternalNodeUid || x.Name == CommonVariables.InternalNodeName
+                Internal = x.Uid == CommonVariables.InternalNodeUid || x.Name == CommonVariables.InternalNodeName,
+                HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? hardwareInfo : x.HardwareInfo
             }).ToList();
             data.Architecture = RuntimeInformation.ProcessArchitecture.ToString();
             data.OS = isDocker ? "Docker" :
@@ -176,6 +179,11 @@ public class TelemetryReporter : ServerWorker
         /// Gets or sets the number of processing nodes in the client.
         /// </summary>
         public int ProcessingNodes { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the hardware information of the server
+        /// </summary>
+        public HardwareInfo HardwareInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the data of individual processing nodes in the client.
@@ -258,5 +266,10 @@ public class TelemetryReporter : ServerWorker
         /// Gets or sets if this is the internal processing node
         /// </summary>
         public bool Internal { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the hardware information of the processing node.
+        /// </summary>
+        public HardwareInfo HardwareInfo { get; set; }
     }
 }

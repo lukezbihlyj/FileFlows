@@ -12,27 +12,31 @@ namespace FileFlows.ServerShared.Services;
 /// </summary>
 public class HardwareInfoService
 {
+    private HardwareInfo? _info;
+    
     /// <summary>
     /// Gets the hardware information of the system.
     /// </summary>
     /// <returns>A <see cref="HardwareInfo"/> instance containing the system's hardware information.</returns>
     public HardwareInfo GetHardwareInfo()
     {
-        var (processorVendor, processorModel)  = GetProcessor();
-        var hardwareInfo = new HardwareInfo
+        if (_info == null)
         {
-            OperatingSystem = GetOperatingSystem(),
-            OperatingSystemType = PlatformHelper.GetOperatingSystemType(),
-            OperatingSystemVersion = GetOperatingSystemVersion(),
-            Architecture = RuntimeInformation.OSArchitecture.ToString(),
-            Gpus = GetGPUs(),
-            ProcessorVendor = processorVendor,
-            Processor = processorModel,
-            Memory = GetTotalMemory(),
-            CoreCount = Environment.ProcessorCount
-        };
-
-        return hardwareInfo;
+            var (processorVendor, processorModel) = GetProcessor();
+            _info = new HardwareInfo
+            {
+                OperatingSystem = GetOperatingSystem(),
+                OperatingSystemType = PlatformHelper.GetOperatingSystemType(),
+                OperatingSystemVersion = GetOperatingSystemVersion(),
+                Architecture = RuntimeInformation.OSArchitecture.ToString(),
+                Gpus = GetGPUs(),
+                ProcessorVendor = processorVendor,
+                Processor = processorModel,
+                Memory = GetTotalMemory(),
+                CoreCount = Environment.ProcessorCount
+            };
+        }
+        return _info;
     }
 
     /// <summary>
