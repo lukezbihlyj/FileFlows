@@ -158,7 +158,8 @@ public class HardwareInfoService
                         gpus.Add(new GpuInfo
                         {
                             Vendor = model.Contains("Intel", StringComparison.InvariantCultureIgnoreCase) ? "Intel" :
-                                Regex.IsMatch(model, @"^M[\d]") ? "Apple" : model,
+                                model.Contains("Apple", StringComparison.InvariantCultureIgnoreCase) ? "Apple" :
+                                model,
                             Model = CleanUpModel(model)!,
                             Memory = GetMacGpuMemory(),
                             DriverVersion = GetMacDriverVersion()
