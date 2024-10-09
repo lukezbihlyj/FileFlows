@@ -280,7 +280,7 @@ public partial class NavMenu : IDisposable
                 Items = new List<NavMenuItem>
                 {
                     new (lblHelp, "fas fa-question-circle", "https://fileflows.com/docs"), 
-                    new (lblReddit, "fab fa-reddit", "https://reddit.com/r/FileFlows"),
+                    new (lblReddit, "fab fa-reddit-alien", "https://reddit.com/r/FileFlows"),
                     new (lblDiscord, "fab fa-discord", "https://fileflows.com/discord")
                 }
             });
