@@ -19,7 +19,7 @@ public partial class NodeSummaryComponent : ComponentBase, IDisposable
     /// <summary>
     /// Translation strings
     /// </summary>
-    private string lblOperatingSystem, lblArchitecture, lblMemory, lblStatus, lblInternalProcessingNode;
+    private string lblOperatingSystem, lblArchitecture, lblMemory, lblStatus, lblInternalProcessingNode, lblRunners, lblPriority;
     
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
@@ -28,6 +28,8 @@ public partial class NodeSummaryComponent : ComponentBase, IDisposable
         lblArchitecture = Translater.Instant("Labels.Architecture");
         lblMemory = Translater.Instant("Labels.Memory");
         lblStatus = Translater.Instant("Labels.Status");
+        lblRunners = Translater.Instant("Pages.Nodes.Labels.Runners");
+        lblPriority = Translater.Instant("Pages.ProcessingNode.Fields.Priority");
         lblInternalProcessingNode = Translater.Instant("Labels.InternalProcessingNode");
         if(ClientService.CurrentNodeStatusSummaries == null)
         {

@@ -227,6 +227,7 @@ public class NodeService //: INodeService
             Enabled = x.Enabled,
             Uid = x.Uid,
             Address = x.Address,
+            FlowRunners = x.FlowRunners,
             Name = x.Name,
             Priority = x.Priority,
             Status = GetStatus(x),

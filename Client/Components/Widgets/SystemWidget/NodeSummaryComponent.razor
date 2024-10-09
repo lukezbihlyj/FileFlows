@@ -34,10 +34,6 @@
                 @if (item.HardwareInfo != null)
                 {
                     <div class="hardware-info">
-                        <div class="hardware-info-item">
-                            <span class="label">CPU</span>
-                            <span class="value">@item.HardwareInfo.Processor</span>
-                        </div>
                         @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
                         {
                             <div class="hardware-info-item">
@@ -47,6 +43,21 @@
                                 </span>
                             </div>
                         }
+                        <div class="hardware-info-item">
+                            <span class="label">@lblRunners</span>
+                            <span class="value">@item.FlowRunners</span>
+                        </div>
+                        @if (item.Priority > 0)
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">@lblPriority</span>
+                                <span class="value">@item.Priority</span>
+                            </div>
+                        }
+                        <div class="hardware-info-item">
+                            <span class="label">CPU</span>
+                            <span class="value">@item.HardwareInfo.Processor</span>
+                        </div>
                         <div class="hardware-info-item">
                             <span class="label">@lblArchitecture</span>
                             <span class="value">
@@ -69,16 +80,9 @@
                             <div class="hardware-info-item">
                                 <span class="label">GPU</span>
                                 <span class="value">
-                                    @gpu.Model 
-                                    (@gpu.Vendor)
-                                    @if (gpu.Memory > 0)
-                                    {
-                                        <span class="memory">@FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true)</span>
-                                    }
-                                    @if(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false)
-                                    {
-                                        <span class="driver"> (@gpu.DriverVersion)</span>
-                                    }
+                                    @gpu.Vendor @gpu.Model 
+                                    @(gpu.Memory > 0 ? FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true) : "") 
+                                    @(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false ? gpu.DriverVersion : "")
                                 </span>
                             </div>
                         }

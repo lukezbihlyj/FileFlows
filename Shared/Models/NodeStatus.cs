@@ -14,6 +14,11 @@ public class NodeStatusSummary
     /// Gets or sets the name of the item
     /// </summary>
     public string Name { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the number of flow runners
+    /// </summary>
+    public int FlowRunners { get; set; }
 
     /// <summary>
     /// Gets or sets the type of operating system this node is running on

@@ -157,8 +157,9 @@ public class HardwareInfoService
                         var model = line.Split(':')[1].Trim();
                         gpus.Add(new GpuInfo
                         {
-                            Vendor = "Apple/Intel",
-                            Model = model,
+                            Vendor = model.Contains("Intel", StringComparison.InvariantCultureIgnoreCase) ? "Intel" :
+                                Regex.IsMatch(model, @"^M[\d]") ? "Apple" : model,
+                            Model = CleanUpModel(model)!,
                             Memory = GetMacGpuMemory(),
                             DriverVersion = GetMacDriverVersion()
                         });
@@ -391,7 +392,7 @@ public class HardwareInfoService
             return string.Empty;
         string output = result.Value.Trim();
 
-        return string.IsNullOrEmpty(output) ? "Unknown Driver" : output; // Return "Unknown Driver" if output is empty
+        return output?.EmptyAsNull() ?? string.Empty;
     }
 
 
@@ -501,6 +502,9 @@ public class HardwareInfoService
         if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
             return null;
         model = model.Replace("Intel(R) ", ""); // Remove Intel(R) prefix
+        model = model.Replace("NVIDIA ", "", StringComparison.InvariantCultureIgnoreCase); // Remove NVIDIA prefix
+        model = model.Replace("Apple ", "", StringComparison.InvariantCultureIgnoreCase); // Remove Apple prefix
+        model = model.Replace("AMD ", "", StringComparison.InvariantCultureIgnoreCase); // Remove AMD prefix
         model = model.Replace("(TM)", ""); // Remove (TM) suffix
         model = model.Replace("Graphics)", ""); // Remove (TM) suffix
         while (model.Contains("  "))
@@ -554,7 +558,7 @@ public class HardwareInfoService
                     Vendor = vendor,
                     Model = model,
                     Memory = Convert.ToInt64(obj["AdapterRAM"] ?? 0),
-                    DriverVersion = obj["DriverVersion"]?.ToString() ?? "Unknown"
+                    DriverVersion = obj["DriverVersion"]?.ToString() ?? string.Empty
                 });
             }
         }
@@ -664,21 +668,12 @@ public class HardwareInfoService
     public long GetTotalMemory()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
             return GetWindowsMemory();
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             return GetLinuxMemory();
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             return GetMacMemory();
-        }
-        else
-        {
-            throw new PlatformNotSupportedException("This operating system is not supported.");
-        }
+        return 0;
     }
 
     /// <summary>
@@ -687,6 +682,7 @@ public class HardwareInfoService
     /// <returns>The total physical memory in bytes.</returns>
     private long GetWindowsMemory()
     {
+      
         if (OperatingSystem.IsWindows() == false)
             return 0;
 #pragma warning disable CA1416
@@ -697,7 +693,8 @@ public class HardwareInfoService
                 new ManagementObjectSearcher("SELECT TotalVisibleMemorySize FROM Win32_OperatingSystem");
             foreach (var obj in searcher.Get())
             {
-                return Convert.ToInt64(obj["TotalVisibleMemorySize"]);
+                // Convert TotalVisibleMemorySize from kilobytes to bytes
+                return Convert.ToInt64(obj["TotalVisibleMemorySize"]) * 1024;
             }
         }
         catch (Exception ex)
@@ -721,7 +718,7 @@ public class HardwareInfoService
             var match = Regex.Match(memInfo, @"MemTotal:\s+(\d+)\s+kB");
             if (match.Success)
             {
-                return long.Parse(match.Groups[1].Value) * 1024; // Convert kB to bytes
+                return ConvertBytesToRoundedGBInBytes(long.Parse(match.Groups[1].Value) * 1024); // Convert kB to bytes
             }
         }
         catch (Exception ex)
@@ -731,6 +728,42 @@ public class HardwareInfoService
         }
 
         return 0; // Fallback if unable to retrieve memory
+    }
+
+    /// <summary>
+    /// Converts memory size in bytes to gigabytes (GB), rounding to the nearest standard size
+    /// (4GB, 8GB, 16GB, 32GB, etc.) if the value is within a 5% tolerance of those sizes,
+    /// and returns the value in bytes.
+    /// </summary>
+    /// <param name="bytes">The memory size in bytes.</param>
+    /// <returns>The memory size in bytes, rounded to the nearest standard GB size if close enough, or the exact size otherwise.</returns>
+    private long ConvertBytesToRoundedGBInBytes(long bytes)
+    {
+        // Convert bytes to gigabytes
+        double totalGB = bytes / (1024.0 * 1024.0 * 1024.0);
+
+        // Predefined list of standard GB sizes
+        long[] standardSizesGB = { 4, 8, 16, 32, 64, 128, 256 };
+
+        // Define tolerance as 5% (you can adjust this)
+        double tolerancePercentage = 0.05;
+
+        foreach (var size in standardSizesGB)
+        {
+            // Calculate the tolerance range
+            double lowerBound = size * (1 - tolerancePercentage);
+            double upperBound = size * (1 + tolerancePercentage);
+
+            // If totalGB is within the tolerance range, round to the standard size
+            if (totalGB >= lowerBound && totalGB <= upperBound)
+            {
+                // Return the rounded value in bytes
+                return size * 1024L * 1024L * 1024L;
+            }
+        }
+
+        // If not close to any standard size, return the actual memory size in bytes
+        return bytes;
     }
 
     /// <summary>
@@ -845,7 +878,7 @@ public class HardwareInfoService
             string version = process.StandardOutput.ReadToEnd().Trim();
             process.WaitForExit();
 
-            return "macOS " + version;
+            return version;
         }
         catch (Exception ex)
         {
