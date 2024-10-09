@@ -415,7 +415,7 @@ public class HardwareInfoService
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
-                return process.StandardOutput.ReadToEnd().Split(Environment.NewLine)[1].Trim();
+                return CleanUpCpu(process.StandardOutput.ReadToEnd().Split(Environment.NewLine)[1].Trim());
             }
             catch (Exception)
             {
@@ -427,14 +427,14 @@ public class HardwareInfoService
             // Using /proc/cpuinfo to get Processor info
             var result = ExecuteCommand("cat /proc/cpuinfo | grep 'model name' | uniq | awk -F: '{print $2}'");
             if (result.IsFailed == false)
-                return result.Value.Trim();
+                return CleanUpCpu(result.Value.Trim());
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             // Using sysctl to get Processor info
             var result = ExecuteCommand("sysctl -n machdep.cpu.brand_string");
             if (result.IsFailed == false)
-                return result.Value.Trim();
+                return CleanUpCpu(result.Value.Trim());
         }
 
         return "Unknown Processor";
@@ -489,6 +489,28 @@ public class HardwareInfoService
 
         return gpus;
     }
+    /// <summary>
+    /// Cleans up a CPU string.
+    /// </summary>
+    /// <param name="cpu">the CPU to clean up</param>
+    /// <returns>the cleaned up CPU, or null if a bad model</returns>
+    private string CleanUpCpu(string? cpu)
+    {
+        if (cpu == null)
+            return string.Empty;
+        cpu = cpu.Replace("Intel(R) ", ""); // Remove Intel(R) prefix
+        cpu = cpu.Replace("Core(TM) ", ""); // Remove Intel(R) prefix
+        cpu = Regex.Replace(cpu, @"\b\d+(?:st|nd|rd|th) Gen\b", ""); // Remove generation suffix
+        cpu = Regex.Replace(cpu, @"\b\d+[\s\-]Core\b", ""); // Remove core suffix
+        cpu = cpu.Replace("Processor", "");
+        cpu = cpu.Replace("NVIDIA ", "", StringComparison.InvariantCultureIgnoreCase); // Remove NVIDIA prefix
+        cpu = cpu.Replace("Apple ", "", StringComparison.InvariantCultureIgnoreCase); // Remove Apple prefix
+        cpu = cpu.Replace("AMD ", "", StringComparison.InvariantCultureIgnoreCase); // Remove AMD prefix
+        cpu = cpu.Replace("(TM)", ""); // Remove (TM) suffix
+        while (cpu.Contains("  "))
+            cpu = cpu.Replace("  ", " ");
+        return cpu.Trim();
+    }
 
     /// <summary>
     /// Cleans up a model string.
@@ -507,7 +529,7 @@ public class HardwareInfoService
         model = model.Replace("Apple ", "", StringComparison.InvariantCultureIgnoreCase); // Remove Apple prefix
         model = model.Replace("AMD ", "", StringComparison.InvariantCultureIgnoreCase); // Remove AMD prefix
         model = model.Replace("(TM)", ""); // Remove (TM) suffix
-        model = model.Replace("Graphics)", ""); // Remove (TM) suffix
+        model = model.Replace("Graphics", ""); // Remove Graphics suffix
         while (model.Contains("  "))
             model = model.Replace("  ", " ");
         return model;
