@@ -9,7 +9,9 @@ $maxItems: 15;
         padding-top:0.2rem;
     }
 }
-
+.text-label, .bubble {
+    user-select: none;
+}
 .top-row {
     height: 4.5rem;
 }
@@ -161,6 +163,7 @@ $maxItems: 15;
 .version-info { 
     display:none;
     a {
+        font-weight: unset !important;
         color:rgba(var(--color-rgb), 0.4) !important;
         &:hover {
             color:var(--accent);

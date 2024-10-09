@@ -7,6 +7,10 @@
   padding-top: 0.2rem;
 }
 
+.text-label, .bubble {
+  user-select: none;
+}
+
 .top-row {
   height: 4.5rem;
 }
@@ -151,6 +155,7 @@
   display: none;
 }
 .version-info a {
+  font-weight: unset !important;
   color: rgba(var(--color-rgb), 0.4) !important;
 }
 .version-info a:hover {
