@@ -26,7 +26,7 @@
         break;
         case SystemStatus.OutOfSchedule:
         {
-            var minutes = _sysInfo.NodeStatuses.Where(x => x.MinutesUntilInSchedule != null).Min(x => x.MinutesUntilInSchedule);
+            var minutes = _sysInfo.NodeStatuses.Where(x => x is { Enabled: true, MinutesUntilInSchedule: > 0 }).Min(x => x.MinutesUntilInSchedule);
             var label = Translater.Instant("Pages.Dashboard.Widgets.Status.OutOfSchedule" + (minutes == null ? "" : "Minutes"), new { minutes }); 
             {
                 <div class="sw-status sw-out-of-schedule">

@@ -62,4 +62,8 @@ public class NodeStatus
     /// Gets or sets the version of the node
     /// </summary>
     public string Version { get; set; }
+    /// <summary>
+    /// Gets or sets if the node is enabled
+    /// </summary>
+    public bool Enabled { get; set; }
 }

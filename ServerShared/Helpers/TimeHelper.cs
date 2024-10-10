@@ -77,7 +77,10 @@ public class TimeHelper
         for (int i = 1; i < 672; i++)
         {
             if (schedule[i] == '1')
-                return (i * 15) + minutesPastQuarter;
+            {
+                // -1 here since this is in schedule, so we dont count it
+                return ((i - 1) * 15) + minutesPastQuarter;
+            }
         }
 
         // no '1', so never in schedule
