@@ -10,7 +10,7 @@
 .sw-paused {
   cursor: pointer;
 }
-.sw-paused .icon {
+.sw-paused .sw-icon {
   font-size: 5rem;
   color: var(--orange);
 }
