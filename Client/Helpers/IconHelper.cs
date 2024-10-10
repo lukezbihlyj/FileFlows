@@ -14,6 +14,10 @@ public static class IconHelper
     /// <returns>the image to show</returns>
     public static string GetExtensionImage(string path)
     {
+        if(string.IsNullOrWhiteSpace(path))
+            return "/icons/filetypes/folder.svg";
+        if(path.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) || path.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
+            return "/icons/filetypes/html.svg";
         int index = path.LastIndexOf('.');
         if (index < 0)
             return "/icons/filetypes/folder.svg";
