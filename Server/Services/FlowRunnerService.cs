@@ -32,6 +32,23 @@ public class FlowRunnerService : IFlowRunnerService
     /// <inheritdoc />
     public Task<bool> IsLicensed()
         => Task.FromResult(LicenseHelper.IsLicensed());
+    
+    /// <summary>
+    /// Gets the executors
+    /// </summary>
+    /// <returns>the executors</returns>
+    public async Task<Dictionary<Guid, FlowExecutorInfoMinified>> GetExecutors()
+    {
+        await executorsSempahore.WaitAsync();
+        try
+        {
+            return GetMinified(Executors);
+        }
+        finally
+        {
+            executorsSempahore.Release();
+        }
+    }
 
     /// <summary>
     /// Gets the minified version of the executors

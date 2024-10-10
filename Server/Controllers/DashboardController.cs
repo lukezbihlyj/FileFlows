@@ -44,8 +44,8 @@ public class DashboardController : BaseController
     /// </summary>
     /// <returns>the executors info minified</returns>
     [HttpGet("executors-info-minified")]
-    public async Task<List<NodeStatusSummary>> GetExecutorsInfoMinified()
-        => await ServiceLoader.Load<NodeService>().GetStatusSummaries();
+    public async Task<List<FlowExecutorInfoMinified>> GetExecutorsInfoMinified()
+        => (await ServiceLoader.Load<FlowRunnerService>().GetExecutors()).Values.ToList();
     
     /// <summary>
     /// Gets any updates
