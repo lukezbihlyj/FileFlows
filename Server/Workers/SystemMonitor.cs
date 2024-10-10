@@ -19,6 +19,8 @@ public class SystemMonitor:Worker
     public static readonly FixedSizedQueue<SystemValue<long>> TempStorageUsage = new(2000);
     public static readonly FixedSizedQueue<SystemValue<long>> LogStorageUsage = new(2000);
     private static readonly Dictionary<Guid, NodeSystemStatistics> NodeStatistics = new();
+
+    private NodeService _nodeService;
     
     /// <summary>
     /// Gets the last 30 cpu usage
@@ -67,6 +69,7 @@ public class SystemMonitor:Worker
     {
         Instance = this;
         dbService = ServiceLoader.Load<DatabaseService>();
+        _nodeService = ServiceLoader.Load<NodeService>();
         settingsService = (SettingsService)ServiceLoader.Load<ISettingsService>();
     }
 
@@ -106,13 +109,23 @@ public class SystemMonitor:Worker
             });
         }
 
+        var nodes = _nodeService.GetAllAsync().Result;
+
         var settings = settingsService.Get().Result;
-        ClientServiceManager.Instance.UpdateSystemInfo(new ()
+        ClientServiceManager.Instance.UpdateSystemInfo(new()
         {
             CpuUsage = LatestCpuUsage,
             MemoryUsage = LatestMemoryUsage,
             IsPaused = settings.IsPaused,
-            PausedUntil = settings.PausedUntil
+            PausedUntil = settings.PausedUntil,
+            NodeStatuses = nodes.Select(x => new NodeStatus
+            {
+                Uid = x.Uid,
+                Name = x.Name,
+                Version = x.Version,
+                OutOfSchedule = TimeHelper.InSchedule(x.Schedule),
+                MinutesUntilInSchedule = TimeHelper.MinutesOutOfSchedule(x.Schedule),
+            }).ToList()
         });
     }
 

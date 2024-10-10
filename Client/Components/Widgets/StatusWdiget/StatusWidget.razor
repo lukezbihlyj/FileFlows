@@ -21,6 +21,16 @@
             <div class="sw-status sw-processing">@Translater.Instant("Pages.Dashboard.Widgets.Status.CurrentlyProcessing", new { count = _executors.Count})</div>
         }
         break;
+        case SystemStatus.OutOfSchedule:
+        {
+            var minutes = _sysInfo.NodeStatuses.Where(x => x.MinutesUntilInSchedule != null).Min(x => x.MinutesUntilInSchedule);
+            var label = Translater.Instant("Pages.Dashboard.Widgets.Status.OutOfSchedule" + (minutes == null ? "" : "Minutes"), new { minutes }); 
+            {
+                <i class="sw-icon fas fa-clock"></i>
+                <div class="sw-status sw-out-of-schedule">@label</div>
+            }
+        }
+        break;
         case SystemStatus.UpdateAvailable:
         {
             <div class="sw-status sw-update-available">

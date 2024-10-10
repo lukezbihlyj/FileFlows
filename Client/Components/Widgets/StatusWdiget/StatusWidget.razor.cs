@@ -23,13 +23,15 @@ public partial class StatusWidget : ComponentBase, IDisposable
 
     private List<FlowExecutorInfoMinified> _executors = [];
     private UpdateInfo? _updateInfo = null;
+    private SystemInfo? _sysInfo = null;
 
     private enum SystemStatus
     {
         Idle,
         Paused,
         Processing,
-        UpdateAvailable
+        UpdateAvailable,
+        OutOfSchedule
     }
 
     /// <inheritdoc />
@@ -42,7 +44,18 @@ public partial class StatusWidget : ComponentBase, IDisposable
         PausedService.OnPausedLabelChanged += OnPausedLabelChanged;
         ClientService.ExecutorsUpdated += OnExecutorsUpdated;
         ClientService.UpdatesUpdateInfo += OnUpdatesUpdateInfo;
+        ClientService.SystemInfoUpdated += OnSystemInfoUpdated;
         OnPausedLabelChanged(PausedService.PausedLabel);
+    }
+
+    /// <summary>
+    /// Event raised when the system info has bene updated
+    /// </summary>
+    /// <param name="info">the updated info</param>
+    private void OnSystemInfoUpdated(SystemInfo info)
+    {
+        _sysInfo = info;
+        StateHasChanged();
     }
 
     /// <summary>
@@ -67,7 +80,9 @@ public partial class StatusWidget : ComponentBase, IDisposable
             return SystemStatus.Processing;
         if(_updateInfo is { HasUpdates: true })
             return SystemStatus.UpdateAvailable;
-        
+        if (_sysInfo is { NodeStatuses.Count: > 0 } && _sysInfo.NodeStatuses.All(x => x.OutOfSchedule))
+            return SystemStatus.OutOfSchedule;
+
         return SystemStatus.Idle;
     }
 

@@ -661,6 +661,8 @@
           "DockerModUpdates": "{count, plural, one {# DockerMod 更新} other {# DockerMod 更新}}",
           "FileFlowsUpdate": "FileFlows {version} が利用可能です",
           "Idle": "システムは現在アイドル状態です",
+          "OutOfSchedule": "スケジュール外",
+          "OutOfScheduleMinutes": "{minutes, plural, one {スケジュールまで1分未満} other {スケジュールまで # 分}}",
           "PluginUpdates": "{count, plural, one {# プラグイン更新} other {# プラグイン更新}}",
           "ScriptUpdates": "{count, plural, one {# スクリプト更新} other {# スクリプト更新}}"
         },

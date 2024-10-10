@@ -1084,90 +1084,47 @@ internal class DbLibraryFileManager : BaseManager
         }
         else if (filter.Status is FileStatus.Unprocessed)
         {
-            DateTime dtSortingTime = DateTime.UtcNow;
-            var sortDict = new Dictionary<Guid, string>();
-            
-            // first sort by file order
-            foreach(var file in libraryFiles)
-            {
-                string key = file.Order > 0 ? file.Order.ToString("D6") : "999999";
-                sortDict.Add(file.Uid, key + "_");
-            }
-            // Get the maximum length of the RelativePath strings
-            int maxPathLength = libraryFiles.Max(f => f.RelativePath.Length);
-
-            // libraries
+            // sort by order
+            sortedFiles = sortedFiles.ThenBy(file => file.Order > 0 ? file.Order : int.MaxValue);
+            // then by library order
             Random random = new (DateTime.Now.Millisecond);
             foreach (var library in filter.SysInfo.AllLibraries.Values.OrderByDescending(x => x.Priority))
             {
-                foreach(var file in libraryFiles)
+                switch (library.ProcessingOrder)
                 {
-                    string key = string.Empty;
-                    var inLibrary = file.LibraryUid == library.Uid;
-                    switch (library.ProcessingOrder)
-                    {
-                        case ProcessingOrder.Random:
-                            if (inLibrary)
-                                key = random.Next(0, 999998).ToString("D6");
-                            else
-                                key = "999999";
-                            break;
-                        case ProcessingOrder.AsFound:
-                            if (inLibrary)
-                                key = file.DateCreated.Ticks.ToString("D19");
-                            else
-                                key = "9999999999999999999";
-                            break;
-                        case ProcessingOrder.LargestFirst:
-                            if(inLibrary)
-                                key = (long.MaxValue - file.OriginalSize).ToString("D19");
-                            else
-                                key = "9999999999999999999";
-                            break;
-                        case ProcessingOrder.SmallestFirst:
-                            if(inLibrary)
-                                key = file.OriginalSize.ToString("D19");
-                            else
-                                key = "9999999999999999999";
-                            break;
-                        case ProcessingOrder.NewestFirst:
-                            if(inLibrary)
-                                key = file.CreationTime.Ticks.ToString("D19");
-                            else
-                                key = "9999999999999999999";
-                            break;
-                        case ProcessingOrder.OldestFirst:
-                            if(inLibrary)
-                                key = (long.MaxValue - file.CreationTime.Ticks).ToString("D19");
-                            else
-                                key = "9999999999999999999";
-                            break;
-                        case ProcessingOrder.Alphabetical:
-                            if (inLibrary)
-                            {
-                                // Pad the string to the maximum length calculated earlier
-                                key = file.RelativePath.ToLower().PadRight(maxPathLength, ' ');
-                            }
-                            else
-                            {
-                                // Ensure non-matching files are sorted last with a high-value string
-                                key = new string('z', maxPathLength);
-                            }
-                            break;
-                    }
-                    sortDict[file.Uid] += key + "_";
-                }
-                
-                // one last sort of files by date created if they werent in a library
-                foreach(var file in libraryFiles)
-                {
-                    sortDict[file.Uid] += file.DateCreated.Ticks.ToString("D19");
+                    case ProcessingOrder.Alphabetical:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.Name : new string('z', 999));
+                    break;
+                    case ProcessingOrder.Random:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? random.Next(0, 100000) : 100000);
+                        break;
+                    case ProcessingOrder.OldestFirst:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.CreationTime.Ticks : long.MaxValue);
+                        break;
+                    case ProcessingOrder.NewestFirst:
+                        sortedFiles = sortedFiles.ThenByDescending(file =>
+                            file.LibraryUid == library.Uid ? file.CreationTime.Ticks : 0);
+                        break;
+                    case ProcessingOrder.AsFound:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.DateCreated.Ticks : long.MaxValue);
+                        break;
+                    case ProcessingOrder.LargestFirst:
+                        sortedFiles = sortedFiles.ThenByDescending(file =>
+                            file.LibraryUid == library.Uid ? file.OriginalSize : -1);
+                        break;
+                    case ProcessingOrder.SmallestFirst:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.OriginalSize : long.MaxValue);
+                        break;
+                    
                 }
             }
-            
-            // now we have the sort keys, sort the files by that
-            sortedFiles = sortedFiles.ThenBy(file => sortDict[file.Uid]);
-            Logger.ILog("Unprocessed Sort Key Time: " + (DateTime.UtcNow - dtSortingTime).TotalMilliseconds + "ms");
+            // finally as found
+            sortedFiles = sortedFiles.ThenBy(file => file.DateCreated);
         }
         else
         {

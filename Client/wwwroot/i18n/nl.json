@@ -661,6 +661,8 @@
           "DockerModUpdates": "{count, plural, one {# DockerMod-update} other {# DockerMod-updates}}",
           "FileFlowsUpdate": "FileFlows {version} beschikbaar",
           "Idle": "Het systeem is momenteel inactief",
+          "OutOfSchedule": "Buiten het schema",
+          "OutOfScheduleMinutes": "{minutes, plural, one {Minder dan een minuut tot in schema} other {# minuten tot in schema}}",
           "PluginUpdates": "{count, plural, one {# Plugin-update} other {# Plugin-updates}}",
           "ScriptUpdates": "{count, plural, one {# Script-update} other {# Script-updates}}"
         },

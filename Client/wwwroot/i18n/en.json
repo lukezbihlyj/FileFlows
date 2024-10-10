@@ -661,6 +661,8 @@
           "DockerModUpdates": "{count, plural, one {# DockerMod Update} other {# DockerMod Updates}}",
           "FileFlowsUpdate": "FileFlows {version} available",
           "Idle": "The system is currently idle",
+          "OutOfSchedule": "Out Of Schedule",
+          "OutOfScheduleMinutes": "{minutes, plural, one {Less than a minute until in schedule} other {# minutes until in schedule}}",
           "PluginUpdates": "{count, plural, one {# Plugin Update} other {# Plugin Updates}}",
           "ScriptUpdates": "{count, plural, one {# Script Update} other {# Script Updates}}"
         },

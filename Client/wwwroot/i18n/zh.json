@@ -661,6 +661,8 @@
           "DockerModUpdates": "{count, plural, one {# DockerMod 更新} other {# DockerMod 更新}}",
           "FileFlowsUpdate": "FileFlows {version} 可用",
           "Idle": "系统当前处于空闲状态",
+          "OutOfSchedule": "超出日程",
+          "OutOfScheduleMinutes": "{minutes, plural, one {不到一分钟进入日程} other {# 分钟进入日程}}",
           "PluginUpdates": "{count, plural, one {# 插件更新} other {# 插件更新}}",
           "ScriptUpdates": "{count, plural, one {# 脚本更新} other {# 脚本更新}}"
         },
