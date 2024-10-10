@@ -12,12 +12,14 @@
   }
   ::deep .flow-tab.active.dashboard {
     flex-direction: column-reverse !important;
+    scroll-behavior: auto !important;
   }
   ::deep .flow-widget {
     margin-bottom: 1rem;
   }
   .savings {
     flex-direction: column-reverse !important;
+    scroll-behavior: auto !important;
   }
 }
 .dashboard-wrapper {

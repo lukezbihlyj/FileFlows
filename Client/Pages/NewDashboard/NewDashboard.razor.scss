@@ -13,6 +13,7 @@
       padding:0 0.5rem 1rem !important;
       &.dashboard {
         flex-direction: column-reverse !important;
+        scroll-behavior: auto !important;
       }
     }
     .flow-widget {
@@ -21,6 +22,7 @@
   }
   .savings {
     flex-direction: column-reverse !important;
+    scroll-behavior: auto !important;
   }
 }
 .dashboard-wrapper
