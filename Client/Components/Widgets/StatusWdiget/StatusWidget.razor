@@ -18,7 +18,10 @@
         break;
         case SystemStatus.Processing:
         {
-            <div class="sw-status sw-processing">@Translater.Instant("Pages.Dashboard.Widgets.Status.CurrentlyProcessing", new { count = _executors.Count})</div>
+            <div class="sw-status sw-processing">
+                <i class="sw-icon fas fa-running"></i>
+                <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.CurrentlyProcessing", new { count = _executors.Count })</span>
+            </div>
         }
         break;
         case SystemStatus.OutOfSchedule:
@@ -26,8 +29,10 @@
             var minutes = _sysInfo.NodeStatuses.Where(x => x.MinutesUntilInSchedule != null).Min(x => x.MinutesUntilInSchedule);
             var label = Translater.Instant("Pages.Dashboard.Widgets.Status.OutOfSchedule" + (minutes == null ? "" : "Minutes"), new { minutes }); 
             {
-                <i class="sw-icon fas fa-clock"></i>
-                <div class="sw-status sw-out-of-schedule">@label</div>
+                <div class="sw-status sw-out-of-schedule">
+                    <i class="sw-icon fas fa-clock"></i>
+                    <span class="label">@label</span>
+                </div>
             }
         }
         break;
@@ -45,17 +50,15 @@
                         <i class="sw-icon fas fa-cloud-download-alt"></i>
                         if (_updateInfo.PluginUpdates.Count > 0)
                         {
-                            <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.PluginUpdates", new { count = _updateInfo.PluginUpdates.Count })</span>
+                            <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.PluginUpdates", new { count = _updateInfo.PluginUpdates.Count })</span>
                         }
-
-                        if (_updateInfo.ScriptUpdates.Count > 0)
+                        else if (_updateInfo.ScriptUpdates.Count > 0)
                         {
-                            <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.ScriptUpdates", new { count = _updateInfo.ScriptUpdates.Count })</span>
+                            <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.ScriptUpdates", new { count = _updateInfo.ScriptUpdates.Count })</span>
                         }
-
-                        if (_updateInfo.DockerModUpdates.Count > 0)
+                        else if (_updateInfo.DockerModUpdates.Count > 0)
                         {
-                            <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.DockerModUpdates", new { count = _updateInfo.DockerModUpdates.Count })</span>
+                            <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.DockerModUpdates", new { count = _updateInfo.DockerModUpdates.Count })</span>
                         }
                     }
                 </div>
@@ -64,7 +67,10 @@
         break;
         default:
         {
-            <div class="sw-status sw-idle">@Translater.Instant("Pages.Dashboard.Widgets.Status.Idle")</div>
+            <div class="sw-status sw-idle">
+                <i class="sw-icon fas fa-hourglass"></i>
+                <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.Idle")</span>
+            </div>
         }
         break;
     }

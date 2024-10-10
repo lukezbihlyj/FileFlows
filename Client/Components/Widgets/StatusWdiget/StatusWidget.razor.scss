@@ -5,6 +5,7 @@
   height: 100%;
   text-align: center;
   align-items: center;
+  font-weight: var(--bold, 600);
 }
 
 .sw-paused 
@@ -33,4 +34,7 @@
 
 .sw-clickable {
   cursor:pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
