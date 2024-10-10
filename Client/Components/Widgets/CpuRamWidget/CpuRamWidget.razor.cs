@@ -59,8 +59,9 @@ public partial class CpuRamWidget : ComponentBase, IDisposable
     {
         ClientService.SystemInfoUpdated += OnSystemInfoUpdated;
         _Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
-        if(ClientService.CurrentSystemInfo != null)
-            OnSystemInfoUpdated(ClientService.CurrentSystemInfo);
+        var status = await ClientService.GetCurrentSystemInfo();
+        if(status != null)
+            OnSystemInfoUpdated(status);
     }
 
     /// <summary>

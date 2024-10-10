@@ -40,6 +40,14 @@ public class DashboardController : BaseController
         => await ServiceLoader.Load<NodeService>().GetStatusSummaries();
 
     /// <summary>
+    /// Gets the executors info minified
+    /// </summary>
+    /// <returns>the executors info minified</returns>
+    [HttpGet("executors-info-minified")]
+    public async Task<List<NodeStatusSummary>> GetExecutorsInfoMinified()
+        => await ServiceLoader.Load<NodeService>().GetStatusSummaries();
+    
+    /// <summary>
     /// Gets any updates
     /// </summary>
     /// <returns>the updates</returns>

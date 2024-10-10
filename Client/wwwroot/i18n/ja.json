@@ -668,7 +668,7 @@
           "ScriptUpdates": "{count, plural, one {# スクリプト更新} other {# スクリプト更新}}"
         },
         "System": {
-          "Runners": "ランナー",
+          "Runners": "{count, plural, zero {ランナー} one {# ランナー} other {# ランナー}}",
           "Title": "システム",
           "Updates": "{count, plural, zero {アップデート} one {# アップデート} other {# アップデート}}"
         },

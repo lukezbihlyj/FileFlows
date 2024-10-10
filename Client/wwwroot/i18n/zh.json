@@ -668,7 +668,7 @@
           "ScriptUpdates": "{count, plural, one {# 脚本更新} other {# 脚本更新}}"
         },
         "System": {
-          "Runners": "执行者",
+          "Runners": "{count, plural, zero {执行器} one {# 执行器} other {# 执行器}}",
           "Title": "系统",
           "Updates": "{count, plural, zero {更新} one {# 次更新} other {# 次更新}}"
         },

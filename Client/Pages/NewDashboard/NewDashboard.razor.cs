@@ -64,6 +64,7 @@ public partial class NewDashboard : ComponentBase, IDisposable
         UpdateInfoData = info;
         lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
                  new { count = UpdateInfoData?.NumberOfUpdates ?? 0 });
+        Tabs?.TriggerStateHasChanged();
         StateHasChanged();
     }
 

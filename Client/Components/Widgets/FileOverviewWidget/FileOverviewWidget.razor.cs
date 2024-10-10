@@ -65,12 +65,10 @@ public partial class FileOverviewWidget : ComponentBase, IDisposable
         Label = Translater.Instant("Pages.Dashboard.Widgets.FilesOverview." + (IsFilesProcessed ? "FilesProcessed" : "StorageSaved"));
         Icon = IsFilesProcessed ? "far fa-checked-circle" : "fas fa-hdd";
         
+        CurrentData = await ClientService.GetCurrentFileOverData();
         ClientService.FileOverviewUpdated += OnFileOverviewUpdated;
-        if (ClientService.CurrentFileOverData != null)
-        {
-            CurrentData = ClientService.CurrentFileOverData;
+        if (ClientService != null)
             SetValues();
-        }
     }
 
     /// <summary>

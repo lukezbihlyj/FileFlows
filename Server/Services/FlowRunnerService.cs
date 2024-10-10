@@ -34,6 +34,50 @@ public class FlowRunnerService : IFlowRunnerService
         => Task.FromResult(LicenseHelper.IsLicensed());
 
     /// <summary>
+    /// Gets the minified version of the executors
+    /// </summary>
+    /// <param name="executors">the executors</param>
+    /// <returns>the minified version of the executors</returns>
+    private Dictionary<Guid, FlowExecutorInfoMinified> GetMinified(Dictionary<Guid, FlowExecutorInfo> executors)
+    {
+        Dictionary<Guid, FlowExecutorInfoMinified> minified = new();
+        // Make a copy of the keys to avoid modifying the collection during enumeration
+        var keys = new List<Guid>(executors.Keys);
+
+        foreach (var key in keys)
+        {
+            if (executors.TryGetValue(key, out var executor) == false)
+                continue;
+
+            minified[key] = new()
+            {
+                Uid = key,
+                DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(executor.LibraryFile.Name,
+                    executor.LibraryFile.RelativePath,
+                    executor.Library.Name),
+                LibraryName = executor.Library.Name,
+                LibraryFileUid = executor.LibraryFile.Uid,
+                LibraryFileName = executor.LibraryFile.Name,
+                RelativeFile = executor.RelativeFile,
+                NodeName = executor.NodeName,
+                CurrentPartName = executor.CurrentPartName,
+                StartedAt = executor.StartedAt,
+                CurrentPart = executor.CurrentPart,
+                TotalParts = executor.TotalParts,
+                CurrentPartPercent = executor.CurrentPartPercent,
+                Additional = executor.AdditionalInfos
+                    ?.Where(x => x.Value.Expired == false)
+                    ?.Select(x => new object[]
+                    {
+                        x.Key, x.Value.Value
+                    })?.ToArray()
+            };
+        }
+
+        return minified;
+    }
+
+    /// <summary>
     /// Called when the flow execution has completed
     /// </summary>
     /// <param name="info">The information about the flow execution</param>
@@ -61,6 +105,7 @@ public class FlowRunnerService : IFlowRunnerService
         }
         catch (Exception)
         {
+            // Ignored
         }
 
         info.LastUpdate = DateTime.UtcNow;
@@ -75,7 +120,7 @@ public class FlowRunnerService : IFlowRunnerService
             executorsSempahore.Release();
         }
 
-        await ClientServiceManager.Instance.UpdateExecutors(Executors);
+        await ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
 
         Logger.Instance.ILog($"Starting processing on {info.NodeName}: {info.LibraryFile.Name}");
         if (info.LibraryFile != null)
@@ -123,7 +168,7 @@ public class FlowRunnerService : IFlowRunnerService
         {
             executorsSempahore.Release();
         }
-        await ClientServiceManager.Instance.UpdateExecutors(Executors);
+        await ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
     }
 
     
@@ -147,7 +192,7 @@ public class FlowRunnerService : IFlowRunnerService
         {
             executorsSempahore.Release();
         }
-        await ClientServiceManager.Instance.UpdateExecutors(Executors);
+        await ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
 
         if (info.LibraryFile != null)
         {
@@ -283,7 +328,7 @@ public class FlowRunnerService : IFlowRunnerService
         }
 
         await ServiceLoader.Load<LibraryFileService>().ResetProcessingStatus(nodeUid);
-        await ClientServiceManager.Instance.UpdateExecutors(Executors);
+        await ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
     }
     
     /// <summary>
@@ -328,7 +373,7 @@ public class FlowRunnerService : IFlowRunnerService
                 return;
         }
         await Abort(executorId, uid);
-        await ClientServiceManager.Instance.UpdateExecutors(Executors);
+        await ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
     }
 
     /// <summary>
@@ -424,7 +469,7 @@ public class FlowRunnerService : IFlowRunnerService
             {
                 executorsSempahore.Release();
             }
-            await ClientServiceManager.Instance.UpdateExecutors(Executors);
+            await ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
             Logger.Instance?.DLog("Abortion complete: " + uid);
         }
         catch (Exception ex)
@@ -449,7 +494,7 @@ public class FlowRunnerService : IFlowRunnerService
         {
             executorsSempahore.Release();
         }
-        _ = ClientServiceManager.Instance.UpdateExecutors(Executors);
+        _ = ClientServiceManager.Instance.UpdateExecutors(GetMinified(Executors));
         return true;
     }
 

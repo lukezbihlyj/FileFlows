@@ -188,6 +188,18 @@ public partial class ClientService
     }
 
     /// <summary>
+    /// Gets the current update info
+    /// </summary>
+    /// <returns>the update info</returns>
+    public async Task<List<FlowExecutorInfoMinified>> GetCurrentExecutorInfoMinifed()
+    {
+        if (CurrentExecutorInfoMinified != null) return CurrentExecutorInfoMinified;
+        var result = await HttpHelper.Get<List<FlowExecutorInfoMinified>>("/api/dashboard/executors-info-minified");
+        if (result.Success)
+            CurrentExecutorInfoMinified ??= result.Data;
+        return CurrentExecutorInfoMinified ?? [];
+    }
+    /// <summary>
     /// Gets the current node status summaries
     /// </summary>
     /// <returns>the current node status summaries</returns>
@@ -207,9 +219,22 @@ public partial class ClientService
     public async Task<FileOverviewData?> GetCurrentFileOverData()
     {
         if (CurrentFileOverData != null) return CurrentFileOverData;
-        var fileOverviewResult = await HttpHelper.Get<FileOverviewData>("/api/dashboard/file-overview");
-        if (fileOverviewResult.Success)
-            CurrentFileOverData ??= fileOverviewResult.Data;
+        var result = await HttpHelper.Get<FileOverviewData>("/api/dashboard/file-overview");
+        if (result.Success)
+            CurrentFileOverData ??= result.Data;
         return CurrentFileOverData;
+    }
+
+    /// <summary>
+    /// Gets the current system info
+    /// </summary>
+    /// <returns>the current system info</returns>
+    public async Task<SystemInfo?> GetCurrentSystemInfo()
+    {
+        if (CurrentSystemInfo != null) return CurrentSystemInfo;
+        var result = await HttpHelper.Get<SystemInfo>("/api/dashboard/info");
+        if (result.Success)
+            CurrentSystemInfo ??= result.Data;
+        return CurrentSystemInfo;
     }
 }

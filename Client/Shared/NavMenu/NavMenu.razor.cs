@@ -199,7 +199,7 @@ public partial class NavMenu : IDisposable
             Items = new List<NavMenuItem>
             {
                 new ("Pages.Dashboard.Title", "fas fa-chart-pie", ""),
-                newDashboard ? new ("New Dashboard", "fas fa-chart-pie", "new-dashboard") : null,
+                newDashboard ? new ("Old Dashboard", "fas fa-chart-pie", "old-dashboard") : null,
                 Profile.HasRole(UserRole.Files) ? new ("Pages.LibraryFiles.Title", "fas fa-copy", "library-files") : null,
                 nmiPause
             }.Where(x => x != null).ToList()

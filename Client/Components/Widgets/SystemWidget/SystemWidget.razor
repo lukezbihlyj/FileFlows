@@ -2,7 +2,7 @@
 
  <ContainerWidget Title="@lblTitle" Scroll="true">
     <Head>
-        <OptionButtons @bind-Value="Mode">
+        <OptionButtons @ref=OptionButtons @bind-Value="Mode">
             <WidgetOption Label="@lblRunners" Value="0" Icon="fas fa-running" />
             <WidgetOption Label="@lblNodes" Value="1" Icon="fas fa-desktop" />
             <WidgetOption Label="@lblSavings" Value="2" Icon="fas fa-dollar-sign" />

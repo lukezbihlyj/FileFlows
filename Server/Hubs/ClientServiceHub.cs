@@ -71,48 +71,14 @@ public class ClientServiceManager
     /// Update executes
     /// </summary>
     /// <param name="executors">the executors</param>
-    public async Task UpdateExecutors(Dictionary<Guid, FlowExecutorInfo> executors)
+    public async Task UpdateExecutors(Dictionary<Guid, FlowExecutorInfoMinified> executors)
     {
         if (await UpdateSemaphore.WaitAsync(50) == false)
             return;
 
         try
         {
-            Dictionary<Guid, FlowExecutorInfoMinified> minified = new();
-            // Make a copy of the keys to avoid modifying the collection during enumeration
-            var keys = new List<Guid>(executors.Keys);
-
-            foreach (var key in keys)
-            {
-                if (executors.TryGetValue(key, out var executor) == false)
-                    continue;
-
-                minified[key] = new()
-                {
-                    Uid = key,
-                    DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(executor.LibraryFile.Name,
-                        executor.LibraryFile.RelativePath,
-                        executor.Library.Name),
-                    LibraryName = executor.Library.Name,
-                    LibraryFileUid = executor.LibraryFile.Uid,
-                    LibraryFileName = executor.LibraryFile.Name,
-                    RelativeFile = executor.RelativeFile,
-                    NodeName = executor.NodeName,
-                    CurrentPartName = executor.CurrentPartName,
-                    StartedAt = executor.StartedAt,
-                    CurrentPart = executor.CurrentPart,
-                    TotalParts = executor.TotalParts,
-                    CurrentPartPercent = executor.CurrentPartPercent,
-                    Additional = executor.AdditionalInfos
-                        ?.Where(x => x.Value.Expired == false)
-                        ?.Select(x => new object[]
-                        {
-                            x.Key, x.Value.Value
-                        })?.ToArray()
-                };
-            }
-
-            await _hubContext.Clients.All.SendAsync("UpdateExecutors", minified);
+            await _hubContext.Clients.All.SendAsync("UpdateExecutors", executors);
             await Task.Delay(500); // creates a 500 ms delay between messages to the client
         }
         catch (Exception ex)

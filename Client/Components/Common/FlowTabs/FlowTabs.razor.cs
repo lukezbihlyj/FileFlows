@@ -120,6 +120,14 @@ public partial class FlowTabs : ComponentBase
             StateHasChanged();
         }
     }
+
+    /// <summary>
+    /// Triggers the state has changed
+    /// </summary>
+    public void TriggerStateHasChanged()
+    {
+        StateHasChanged();
+    }
 }
 
 /// <summary>

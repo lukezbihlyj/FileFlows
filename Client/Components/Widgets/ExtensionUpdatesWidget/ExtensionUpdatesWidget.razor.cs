@@ -5,7 +5,7 @@ namespace FileFlows.Client.Components.Widgets;
 /// <summary>
 /// Extension Updates widget
 /// </summary>
-public partial class ExtensionUpdatesWidget : ComponentBase
+public partial class ExtensionUpdatesWidget : ComponentBase, IDisposable
 {
     /// <summary>
     /// Gets or sets the mode
@@ -17,10 +17,22 @@ public partial class ExtensionUpdatesWidget : ComponentBase
     private const int MODE_DOCKERMODS = 2;
     
     /// <summary>
+    /// Gets or sets the client service
+    /// </summary>
+    [Inject] public ClientService ClientService { get; set; }
+
+    private UpdateInfo _Data;
+
+    /// <summary>
     /// Gets or sets the update data
     /// </summary>
-    [Parameter] public UpdateInfo Data { get; set; }
-    
+    [Parameter]
+    public UpdateInfo Data
+    {
+        get => _Data;
+        set => _Data = value;
+    }
+
     /// <summary>
     /// Gets or sets the users profile
     /// </summary>
@@ -44,12 +56,30 @@ public partial class ExtensionUpdatesWidget : ComponentBase
     protected override void OnInitialized()
     {
         lblTitle = Translater.Instant("MenuGroups.Extensions");
+        lblUpdateAll = Translater.Instant("Labels.UpdateAll");
+        lblUpdate = Translater.Instant("Labels.Update");
+        DataRefreshed();
+        ClientService.UpdatesUpdateInfo += OnUpdatesUpdateInfo;
+        CheckMode();
+    }
+
+    private void DataRefreshed()
+    {
         lblPlugins = Translater.Instant("Pages.Dashboard.Widgets.Updates.Plugins", new { count = Data.PluginUpdates.Count });
         lblScripts = Translater.Instant("Pages.Dashboard.Widgets.Updates.Scripts", new { count = Data.ScriptUpdates.Count });
         lblDockerMods = Translater.Instant("Pages.Dashboard.Widgets.Updates.DockerMods", new { count = Data.DockerModUpdates.Count });
-        lblUpdateAll = Translater.Instant("Labels.UpdateAll");
-        lblUpdate = Translater.Instant("Labels.Update");
+    }
+
+    /// <summary>
+    /// Called when the update info has been updated
+    /// </summary>
+    /// <param name="info">the new info</param>
+    private void OnUpdatesUpdateInfo(UpdateInfo info)
+    {
+        _Data = info;
+        DataRefreshed();
         CheckMode();
+        StateHasChanged();
     }
 
     /// <summary>
@@ -223,5 +253,13 @@ public partial class ExtensionUpdatesWidget : ComponentBase
             Blocker.Hide();
             StateHasChanged();
         }
+    }
+
+    /// <summary>
+    /// Disposes the component
+    /// </summary>
+    public void Dispose()
+    {
+        ClientService.UpdatesUpdateInfo -= OnUpdatesUpdateInfo;
     }
 }

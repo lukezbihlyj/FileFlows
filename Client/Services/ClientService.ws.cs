@@ -61,20 +61,24 @@ public partial class ClientService
     /// <summary>
     /// Gets the current system info
     /// </summary>
-    public SystemInfo? CurrentSystemInfo { get; set; }
+    private SystemInfo? CurrentSystemInfo { get; set; }
     /// <summary>
     /// Gets the current node status summaries
     /// </summary>
-    public List<NodeStatusSummary>? CurrentNodeStatusSummaries { get; set; }
+    private List<NodeStatusSummary>? CurrentNodeStatusSummaries { get; set; }
     /// <summary>
     /// Gets the current file overview data
     /// </summary>
-    public FileOverviewData? CurrentFileOverData { get; set; }
+    private FileOverviewData? CurrentFileOverData { get; set; }
     
     /// <summary>
     /// Gets or sets the current update info
     /// </summary>
-    public UpdateInfo CurrentUpdatesInfo { get; set; }
+    private UpdateInfo CurrentUpdatesInfo { get; set; }
+    /// <summary>
+    /// Gets or sets the current executor info
+    /// </summary>
+    public List<FlowExecutorInfoMinified>? CurrentExecutorInfoMinified { get; set; }
 
 
     /// <summary>
@@ -109,7 +113,11 @@ public partial class ClientService
                 };
 
                 _hubConnection.On<ToastData>("Toast", HandleToast);
-                _hubConnection.On<Dictionary<Guid, FlowExecutorInfoMinified>>("UpdateExecutors", UpdateExecutors);
+                _hubConnection.On<Dictionary<Guid, FlowExecutorInfoMinified>>("UpdateExecutors", (executors) =>
+                {
+                    CurrentExecutorInfoMinified = executors?.Values?.ToList() ?? [];
+                    UpdateExecutors(executors);
+                });
                 _hubConnection.On<List<LibraryStatus>>("UpdateFileStatus", UpdateFileStatus);
                 _hubConnection.On<LibraryFile>("StartProcessing", StartProcessing);
                 _hubConnection.On<LibraryFile>("FinishProcessing", FinishProcessing);

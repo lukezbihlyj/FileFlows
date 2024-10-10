@@ -668,7 +668,7 @@
           "ScriptUpdates": "{count, plural, one {# Script-update} other {# Script-updates}}"
         },
         "System": {
-          "Runners": "Runners",
+          "Runners": "{count, plural, zero {Processors} one {# Processor} other {# Processors}}",
           "Title": "Systeem",
           "Updates": "{count, plural, zero {Updates} one {# Update} other {# Updates}}"
         },
