@@ -56,6 +56,11 @@ public partial class FlowTab:ComponentBase
     [Parameter] public string Icon { get; set; }
     
     /// <summary>
+    /// Gets or sets an optional unique identifier for the tab.
+    /// </summary>
+    [Parameter] public string? Uid { get; set; }
+    
+    /// <summary>
     /// Gets or sets the content of the tab.
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }

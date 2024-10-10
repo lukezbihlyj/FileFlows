@@ -9,7 +9,7 @@
         @foreach (var option in Options)
         {
             var color = string.IsNullOrWhiteSpace(option.Color) ? "" : "color-" + option.Color;
-            <button class="ignore-button btn-option @color @(Value == option.Value ? "active" : "") @(option.OnClick.HasDelegate ? "has-on-click" : "")" @onclick="() => SelectOption(option)">
+            <button class="btn-option @color @(Value == option.Value ? "active" : "") @(option.OnClick.HasDelegate ? "has-on-click" : "")" @onclick="() => SelectOption(option)">
                 @if (string.IsNullOrWhiteSpace(option.Icon) == false)
                 {
                     <i class="icon @option.Icon"></i>

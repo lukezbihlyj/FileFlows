@@ -17,7 +17,7 @@
             {
                 continue;
             }
-            <button class="tab-button @(Style != TabStyle.OldStyle ? "ignore-button" : "") tb-@tab.Title.Dehumanize() @(ActiveTab == tab ? "active" : "")" @onclick="() => SelectTab(tab)" 
+            <button class="tab-button tb-@tab.Title.Dehumanize() @(ActiveTab == tab ? "active" : "")" @onclick="() => SelectTab(tab)" 
                     disabled="@(DisableChanging && ActiveTab != tab)">
                 @if (string.IsNullOrEmpty(tab.Icon) == false)
                 {

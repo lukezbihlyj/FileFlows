@@ -34,27 +34,31 @@
         case SystemStatus.UpdateAvailable:
         {
             <div class="sw-status sw-update-available">
-                @if(_updateInfo.FileFlowsVersion != null)
-                {
-                    <img src="favicon.svg" />
-                    <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.FileFlowsUpdate", new { version = _updateInfo.FileFlowsVersion})</span>
-                }
-                else
-                {
-                    <i class="sw-icon fas fa-cloud-download-alt"></i>
-                    if(_updateInfo.PluginUpdates.Count > 0)
+                <div class="sw-clickable" @onclick="(() => OnUpdatesClicked.InvokeAsync())">
+                    @if (_updateInfo.FileFlowsVersion != null)
                     {
-                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.PluginUpdates", new { count = _updateInfo.PluginUpdates.Count})</span>
+                        <img src="favicon.svg"/>
+                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.FileFlowsUpdate", new { version = _updateInfo.FileFlowsVersion })</span>
                     }
-                    if(_updateInfo.ScriptUpdates.Count > 0)
+                    else
                     {
-                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.ScriptUpdates", new { count = _updateInfo.ScriptUpdates.Count})</span>
+                        <i class="sw-icon fas fa-cloud-download-alt"></i>
+                        if (_updateInfo.PluginUpdates.Count > 0)
+                        {
+                            <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.PluginUpdates", new { count = _updateInfo.PluginUpdates.Count })</span>
+                        }
+
+                        if (_updateInfo.ScriptUpdates.Count > 0)
+                        {
+                            <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.ScriptUpdates", new { count = _updateInfo.ScriptUpdates.Count })</span>
+                        }
+
+                        if (_updateInfo.DockerModUpdates.Count > 0)
+                        {
+                            <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.DockerModUpdates", new { count = _updateInfo.DockerModUpdates.Count })</span>
+                        }
                     }
-                    if(_updateInfo.DockerModUpdates.Count > 0)
-                    {
-                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.DockerModUpdates", new { count = _updateInfo.DockerModUpdates.Count})</span>
-                    }
-                }
+                </div>
             </div>    
         }
         break;

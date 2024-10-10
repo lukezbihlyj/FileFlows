@@ -34,10 +34,14 @@
       font-size: 1.15rem;
     }
     &.active,
-    &.has-on-click:hover
+    &.has-on-click
     {
       background:var(--input-background);
       color:var(--color);
+      opacity: 0.9;
+      &:hover {
+        opacity: 1;
+      }
     }
     &:not(.active):not(.has-on-click):hover {
       background:#ffffff12;

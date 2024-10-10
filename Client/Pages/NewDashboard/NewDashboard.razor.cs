@@ -1,3 +1,4 @@
+using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Pages;
@@ -24,6 +25,10 @@ public partial class NewDashboard : ComponentBase
     /// </summary>
     public UpdateInfo? UpdateInfoData;
 
+    /// <summary>
+    /// The tabs
+    /// </summary>
+    private FlowTabs Tabs;
 
     private string lblDashboard, lblSavings, lblUpdates;
 
@@ -74,5 +79,16 @@ public partial class NewDashboard : ComponentBase
     {
         await Refresh();
         StateHasChanged();
+    }
+    
+    /// <summary>
+    /// Called when Updates are clicked from the status widget
+    /// </summary>
+    private void Status_OnUpdatesClicked()
+    {
+        if (UpdateInfoData.HasUpdates)
+        {
+            Tabs?.SelectTabByUid("updates");
+        }
     }
 }

@@ -1,19 +1,20 @@
 @page "/new-dashboard"
 @using FileFlows.Client.Components.Widgets
+
 @namespace FileFlows.Client.Pages
 
 @if (loaded)
 {
     <div class="dashboard-wrapper">
 
-        <FlowTabs Style="TabStyle.NewStyle">
+        <FlowTabs @ref="Tabs" Style="TabStyle.NewStyle">
             <FlowTab Title="@lblDashboard" Icon="fas fa-chart-pie" ClassName="dashboard">
 
                 <div class="grid grid-4">
                     <FileOverviewWidget IsFilesProcessed="true" />
                     <FileOverviewWidget IsFilesProcessed="false" />
                     <CpuRamWidget/>
-                    <StatusWidget />
+                    <StatusWidget OnUpdatesClicked="Status_OnUpdatesClicked" />
                 </div>
 
                 <div class="grid grid-60-40 flex-grow">
@@ -30,7 +31,7 @@
             </FlowTab>
             @if (UpdateInfoData.HasUpdates)
             {
-                <FlowTab Title="@lblUpdates" Icon="fas fa-cloud-download-alt">
+                <FlowTab Title="@lblUpdates" Icon="fas fa-cloud-download-alt" Uid="updates">
                 @if (UpdateInfoData.FileFlowsVersion != null && UpdateInfoData.HasExtensionUpdates)
                 {
                     <div class="grid grid-60-40 flex-grow savings">

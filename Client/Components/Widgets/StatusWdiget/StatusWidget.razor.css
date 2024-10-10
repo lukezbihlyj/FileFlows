@@ -28,3 +28,7 @@
   font-size: 2rem;
   margin-bottom: 0.75rem;
 }
+
+.sw-clickable {
+  cursor: pointer;
+}

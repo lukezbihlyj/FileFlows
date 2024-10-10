@@ -17,6 +17,11 @@ public partial class StatusWidget : ComponentBase, IDisposable
     [Inject] private IPausedService PausedService { get; set; }
     
     /// <summary>
+    /// Gets or sets an event callback when an update is clicked
+    /// </summary>
+    [Parameter] public EventCallback OnUpdatesClicked { get; set; }
+    
+    /// <summary>
     /// Translations
     /// </summary>
     private string lblTitle, lblPause, lblResume;

@@ -38,11 +38,7 @@
 }
 
 input:checked + .slider {
-  background-color: rgba(var(--accent-2-rgb), 0.7);
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 5px var(--accent-2);
+  background-color: var(--primary);
 }
 
 input:checked + .slider:before {

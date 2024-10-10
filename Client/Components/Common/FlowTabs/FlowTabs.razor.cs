@@ -104,6 +104,22 @@ public partial class FlowTabs : ComponentBase
         }
     }
 
+    /// <summary>
+    /// Selects a tab by its unique identifier.
+    /// </summary>
+    /// <param name="uid">the tabs UID</param>
+    public void SelectTabByUid(string uid)
+    {
+        if (string.IsNullOrWhiteSpace(uid))
+            return;
+        
+        var tab = Tabs.FirstOrDefault(x => x.Uid == uid);
+        if (tab != null)
+        {
+            SelectTab(tab);
+            StateHasChanged();
+        }
+    }
 }
 
 /// <summary>

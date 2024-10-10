@@ -33,9 +33,13 @@
   margin-right: 0.75rem;
   font-size: 1.15rem;
 }
-.options .btn-option.active, .options .btn-option.has-on-click:hover {
+.options .btn-option.active, .options .btn-option.has-on-click {
   background: var(--input-background);
   color: var(--color);
+  opacity: 0.9;
+}
+.options .btn-option.active:hover, .options .btn-option.has-on-click:hover {
+  opacity: 1;
 }
 .options .btn-option:not(.active):not(.has-on-click):hover {
   background: rgba(255, 255, 255, 0.0705882353);
