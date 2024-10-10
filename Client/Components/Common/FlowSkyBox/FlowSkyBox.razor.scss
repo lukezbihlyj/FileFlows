@@ -72,6 +72,14 @@
   }
 }
 
+@media (min-width:850px)
+{
+    .skybox.v2 {
+      align-self: unset;
+      width: fit-content;      
+    }
+}
+
 @media screen and (min-width: 1200.001px)
 {
   .skybox.v1 {
