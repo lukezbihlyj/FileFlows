@@ -35,7 +35,7 @@ internal class DbLibraryFileManager : BaseManager
     public DbLibraryFileManager(ILogger logger, DatabaseType dbType, IDatabaseConnector dbConnector)
         : base(logger, dbType, dbConnector)
     {
-        UseCache = dbType is DatabaseType.Sqlite or DatabaseType.SqliteNewConnection;
+        UseCache = dbConnector.Cached;
         if (UseCache)
             LoadCache().Wait();
     }

@@ -1,3 +1,4 @@
+using System.Configuration;
 using FileFlows.Plugin;
 using FileFlows.Shared.Models;
 
@@ -27,8 +28,10 @@ internal static class DatabaseConnectorLoader
                 return new PostgresConnector(logger, connectionString);
             case DatabaseType.SqliteNewConnection:
                 return new SQLiteConnectorNewConnection(logger, connectionString);
+            case DatabaseType.SqliteNonCached:
+                return new SQLiteConnector(logger, connectionString, cached: false);
             default:
-                return new SQLiteConnector(logger, connectionString);
+                return new SQLiteConnector(logger, connectionString, cached: true);
         }
     }
 }
@@ -42,6 +45,11 @@ public interface IDatabaseConnector
     /// Gets the database type
     /// </summary>
     DatabaseType Type { get; }
+
+    /// <summary>
+    /// Gets if the connection is cached
+    /// </summary>
+    bool Cached => false; 
     
     /// <summary>
     /// Gets the database connection

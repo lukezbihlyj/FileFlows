@@ -47,6 +47,9 @@ public class SQLiteConnectorNewConnection : IDatabaseConnector
     public int GetOpenedConnections()
         => connectionPool.OpenedConnections;
     
+    /// <inheritdoc />
+    public bool Cached => true;
+    
     /// <summary>
     /// Initialise a new connector
     /// </summary>

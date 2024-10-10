@@ -38,15 +38,19 @@ public class SQLiteConnector : IDatabaseConnector
     /// <inheritdoc />
     public int GetOpenedConnections()
         => writeSemaphore.CurrentInUse;
-    
-    
+
+    /// <inheritdoc />
+    public bool Cached { get; }
+
     /// <summary>
     /// Initialise a new SQLite Connector
     /// </summary>
     /// <param name="logger">the logger to use</param>
     /// <param name="connectionString">the connection string</param>
-    public SQLiteConnector(ILogger logger, string connectionString)
+    /// <param name="cached">if the connectino is cached or not</param>
+    public SQLiteConnector(ILogger logger, string connectionString, bool cached = false)
     {
+        Cached = cached;
         Logger = logger;
         logger.ILog("Using SQLite Connector");
 

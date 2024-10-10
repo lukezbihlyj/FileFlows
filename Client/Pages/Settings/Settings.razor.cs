@@ -291,13 +291,13 @@ public partial class Settings : InputRegister
             if (Model != null && string.IsNullOrWhiteSpace(Model.AccessToken))
                 Model.AccessToken = Guid.NewGuid().ToString("N");
             
-            
             if(LicensedFor(LicenseFlags.ExternalDatabase))
             {
                 DbTypes =
                 [
                     new() { Label = "SQLite", Value = DatabaseType.Sqlite },
                     new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
+                    new() { Label = "SQLite (Non-Cached)", Value = DatabaseType.SqliteNonCached },
                     new() { Label = "MySQL", Value = DatabaseType.MySql },
                     new() { Label = "Postgres", Value = DatabaseType.Postgres },
                     new() { Label = "SQL Server", Value = DatabaseType.SqlServer }
@@ -308,7 +308,8 @@ public partial class Settings : InputRegister
                 DbTypes =
                 [
                     new() { Label = "SQLite", Value = DatabaseType.Sqlite },
-                    new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection }
+                    new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
+                    new() { Label = "SQLite (Non-Cached)", Value = DatabaseType.SqliteNonCached }
                 ];
             }
         }
