@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "Failed to restore {type}",
     "RestoredMessage": "{type} restored",
     "Restoring": "Restoring",
+    "Resume": "Resume",
     "ReturnCode": "Return Code",
     "Revisions": "Revisions",
     "Run": "Run",

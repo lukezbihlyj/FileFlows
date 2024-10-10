@@ -6,6 +6,12 @@
   text-align: center;
   align-items: center;
   font-weight: var(--bold, 600);
+  flex-direction: column;
+}
+
+.sw-icon {
+  font-size:2rem;
+  margin-bottom:0.75rem;
 }
 
 .sw-paused 
@@ -26,12 +32,7 @@
     width:3rem;
     margin-bottom:0.75rem;
   }
-  .sw-icon {
-    font-size:2rem;
-    margin-bottom:0.75rem;
-  }
 }
-
 .sw-clickable {
   cursor:pointer;
   display: flex;

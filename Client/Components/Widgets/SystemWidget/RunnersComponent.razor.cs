@@ -44,7 +44,7 @@ public partial class RunnersComponent : ComponentBase, IDisposable
         if(Runners.Count == 0)
             await NoneOnLoad.InvokeAsync();
 #if(DEBUG)
-        Runners = GenerateRandomExecutors(10);
+        //Runners = GenerateRandomExecutors(10);
 #endif
         ClientService.ExecutorsUpdated += ExecutorsUpdated;
     }

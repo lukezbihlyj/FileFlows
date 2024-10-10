@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "恢复 {type} 失败",
     "RestoredMessage": "{type} 已恢复",
     "Restoring": "正在恢复",
+    "Resume": "继续",
     "ReturnCode": "返回代码",
     "Revisions": "修订",
     "Run": "运行",

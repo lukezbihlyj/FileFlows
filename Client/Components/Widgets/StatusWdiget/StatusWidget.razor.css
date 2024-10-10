@@ -6,6 +6,12 @@
   text-align: center;
   align-items: center;
   font-weight: var(--bold, 600);
+  flex-direction: column;
+}
+
+.sw-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
 }
 
 .sw-paused {
@@ -23,10 +29,6 @@
 }
 .sw-update-available img {
   width: 3rem;
-  margin-bottom: 0.75rem;
-}
-.sw-update-available .sw-icon {
-  font-size: 2rem;
   margin-bottom: 0.75rem;
 }
 

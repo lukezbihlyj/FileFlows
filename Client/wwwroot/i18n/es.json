@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "No se pudo restaurar {type}",
     "RestoredMessage": "{type} restaurado",
     "Restoring": "Restaurando",
+    "Resume": "Reanudar",
     "ReturnCode": "Código de Retorno",
     "Revisions": "Revisiones",
     "Run": "Ejecutar",

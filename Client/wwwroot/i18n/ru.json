@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "Не удалось восстановить {type}",
     "RestoredMessage": "{type} восстановлено",
     "Restoring": "Восстановление",
+    "Resume": "Продолжить",
     "ReturnCode": "Код возврата",
     "Revisions": "Ревизии",
     "Run": "Запустить",

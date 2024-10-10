@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "Misslyckades med att återställa {type}",
     "RestoredMessage": "{type} återställd",
     "Restoring": "Återställer",
+    "Resume": "Återuppta",
     "ReturnCode": "Returkod",
     "Revisions": "Revisioner",
     "Run": "Kör",

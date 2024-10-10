@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "{type}の復元に失敗しました",
     "RestoredMessage": "{type}が復元されました",
     "Restoring": "復元中",
+    "Resume": "再開",
     "ReturnCode": "戻り値",
     "Revisions": "リビジョン",
     "Run": "実行",

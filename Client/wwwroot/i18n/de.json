@@ -115,6 +115,7 @@
     "RestoredFailedMessage": "Fehler beim Wiederherstellen von {type}",
     "RestoredMessage": "{type} wiederhergestellt",
     "Restoring": "Wiederherstellen",
+    "Resume": "Fortsetzen",
     "ReturnCode": "Rückgabe Code",
     "Revisions": "Revisionen",
     "Run": "Start",
