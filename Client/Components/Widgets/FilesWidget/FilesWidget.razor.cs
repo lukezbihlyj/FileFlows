@@ -1,7 +1,11 @@
+using FileFlows.Shared.Formatters;
 using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components.Widgets;
 
+/// <summary>
+/// Files Widget
+/// </summary>
 public partial class FilesWidget : ComponentBase, IDisposable
 {
     /// <summary>
@@ -18,6 +22,9 @@ public partial class FilesWidget : ComponentBase, IDisposable
     [CascadingParameter] Editor Editor { get; set; }
 
     private int _FileMode = 0;
+    private const int MODE_UPCOMING = 1;
+    private const int MODE_FINISHED = 0;
+    private const int MODE_FAILED = 2;
 
     /// <summary>
     /// Gets or sets the file mode
@@ -28,7 +35,8 @@ public partial class FilesWidget : ComponentBase, IDisposable
         set
         {
             _FileMode = value;
-            _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
+            if(initialized)
+                _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
         }
     }
     
@@ -42,11 +50,17 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// </summary>
     private const string LocalStorageKey = "FilesWidget";
 
+    /// <summary>
+    /// Translated strings
+    /// </summary>
     private string lblTitle, lblUpcoming, lblFinished, lblFailed;
+
+    private OptionButtons OptionButtons;
 
 
     private List<DashboardFile> UpcomingFiles, RecentlyFinished, FailedFiles;
     private int TotalUpcoming, TotalFinished, TotalFailed;
+    private bool initialized = false;
     
     protected override async Task OnInitializedAsync()
     {
@@ -54,7 +68,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
         lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = 0});
         lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = 0});
         lblFailed = Translater.Instant("Pages.Dashboard.Widgets.Files.Failed", new { count = 0 });
-        FileMode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 2);
+        _FileMode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 2);
         await RefreshData();
         ClientService.FileStatusUpdated += OnFileStatusUpdated;
     }
@@ -65,6 +79,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// <param name="obj">the files updated</param>
     private void OnFileStatusUpdated(List<LibraryStatus> obj)
     {
+        Logger.Instance.ILog("FilesWidget.OnFileStatusUpdated");
         _ = RefreshData();
     }
 
@@ -82,9 +97,56 @@ public partial class FilesWidget : ComponentBase, IDisposable
         lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = TotalUpcoming});
         lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = TotalFinished});
         lblFailed = Translater.Instant("Pages.Dashboard.Widgets.Files.Failed", new { count = TotalFailed });
+
+        if (initialized == false)
+        {
+            switch (FileMode)
+            {
+                case MODE_UPCOMING when TotalUpcoming == 0:
+                {
+                    if (TotalFailed > 0 && TotalFinished > 0)
+                    {
+                        var failed = FailedFiles.Max(x => x.ProcessingEnded);
+                        var success = RecentlyFinished.Max(x => x.ProcessingEnded);
+                        FileMode = failed > success ? MODE_FAILED : MODE_FINISHED;
+                    }
+                    else if (TotalFinished > 0)
+                        FileMode = MODE_FINISHED;
+                    else if (TotalFailed > 0)
+                        FileMode = MODE_FAILED;
+
+                    break;
+                }
+                case MODE_FAILED when TotalFailed == 0:
+                {
+                    if (TotalUpcoming > 0)
+                        FileMode = MODE_UPCOMING;   
+                    else if(TotalFinished > 0)
+                        FileMode = MODE_FINISHED;
+                    break;
+                }
+                case MODE_FINISHED when TotalFinished == 0:
+                {
+                    if (TotalUpcoming > 0)
+                        FileMode = MODE_UPCOMING;   
+                    else if(TotalFailed > 0)
+                        FileMode = MODE_FAILED;
+                    break;
+                }
+            }
+
+            initialized = true;
+        }
         StateHasChanged();
+        OptionButtons?.TriggerStateHasChanged();
     }
 
+    /// <summary>
+    /// Loads the data from the server
+    /// </summary>
+    /// <param name="url">the URL to call</param>
+    /// <typeparam name="T">the type of data</typeparam>
+    /// <returns>the returned ata</returns>
     private async Task<T> LoadData<T>(string url)
     {
         var result = await HttpHelper.Get<T>(url);

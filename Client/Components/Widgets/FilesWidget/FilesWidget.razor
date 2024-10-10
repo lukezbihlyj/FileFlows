@@ -2,7 +2,7 @@
 
 <ContainerWidget Title="@lblTitle" Scroll="true">
     <Head>
-        <OptionButtons @bind-Value="FileMode">
+        <OptionButtons @ref=OptionButtons @bind-Value="FileMode">
             <WidgetOption Label="@lblUpcoming" Value="1" Icon="far fa-clock" Color="yellow" />
             <WidgetOption Label="@lblFinished" Value="0" Icon="far fa-check-circle" Color="green" />
             <WidgetOption Label="@lblFailed" Value="2" Icon="far fa-times-circle" Color="red" />

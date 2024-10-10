@@ -52,4 +52,10 @@ public partial class OptionButtons : ComponentBase, IWidgetRegistrar
             StateHasChanged();
         }
     }
+
+    /// <summary>
+    /// Triggers state has changed
+    /// </summary>
+    public void TriggerStateHasChanged()
+        => StateHasChanged();
 }

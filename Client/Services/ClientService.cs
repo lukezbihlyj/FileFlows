@@ -180,12 +180,10 @@ public partial class ClientService
     /// <returns>the update info</returns>
     public async Task<UpdateInfo?> GetCurrentUpdatesInfo()
     {
-        if(CurrentUpdatesInfo == null)
-        {
-            var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
-            if (result.Success)
-                CurrentUpdatesInfo ??= result.Data;
-        }
+        if (CurrentUpdatesInfo != null) return CurrentUpdatesInfo;
+        var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
+        if (result.Success)
+            CurrentUpdatesInfo ??= result.Data;
         return CurrentUpdatesInfo;
     }
 
@@ -195,12 +193,23 @@ public partial class ClientService
     /// <returns>the current node status summaries</returns>
     public async Task<List<NodeStatusSummary>> GetCurrentNodeStatusSummaries()
     {
-        if(CurrentNodeStatusSummaries == null)
-        {
-            var result = await HttpHelper.Get<List<NodeStatusSummary>>("/api/dashboard/node-summary");
-            if (result.Success)
-                CurrentNodeStatusSummaries ??= result.Data;
-        }
+        if (CurrentNodeStatusSummaries != null) return CurrentNodeStatusSummaries;
+        var result = await HttpHelper.Get<List<NodeStatusSummary>>("/api/dashboard/node-summary");
+        if (result.Success)
+            CurrentNodeStatusSummaries ??= result.Data;
         return CurrentNodeStatusSummaries;
+    }
+
+    /// <summary>
+    /// Gets the current file overview data
+    /// </summary>
+    /// <returns>the current file overview data</returns>
+    public async Task<FileOverviewData?> GetCurrentFileOverData()
+    {
+        if (CurrentFileOverData != null) return CurrentFileOverData;
+        var fileOverviewResult = await HttpHelper.Get<FileOverviewData>("/api/dashboard/file-overview");
+        if (fileOverviewResult.Success)
+            CurrentFileOverData ??= fileOverviewResult.Data;
+        return CurrentFileOverData;
     }
 }

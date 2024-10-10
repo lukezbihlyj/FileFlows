@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Pages;
 
-public partial class NewDashboard : ComponentBase
+/// <summary>
+/// New Dashboard
+/// </summary>
+public partial class NewDashboard : ComponentBase, IDisposable
 {
     /// <summary>
     /// Gets or sets the client service
@@ -39,47 +42,31 @@ public partial class NewDashboard : ComponentBase
     {
         lblDashboard = Translater.Instant("Pages.Dashboard.Tabs.Dashboard");
         lblSavings = Translater.Instant("Pages.Dashboard.Tabs.Savings");
-        if (ClientService.CurrentSystemInfo == null)
-        {
-            var infoResult = await HttpHelper.Get<SystemInfo>("/api/dashboard/info");
-            if (infoResult.Success)
-                ClientService.CurrentSystemInfo ??= infoResult.Data;
-        }
-        if(ClientService.CurrentFileOverData == null)
-        {
-            var fileOverviewResult = await HttpHelper.Get<FileOverviewData>("/api/dashboard/file-overview");
-            if (fileOverviewResult.Success)
-                ClientService.CurrentFileOverData ??= fileOverviewResult.Data;
-        }
+        UpdateInfoData = await ClientService.GetCurrentUpdatesInfo();
+        OnUpdatesUpdateInfo(UpdateInfoData);
+        _ = await ClientService.GetCurrentFileOverData();
         
+        ClientService.UpdatesUpdateInfo += OnUpdatesUpdateInfo;
         Profile = await ProfileService.Get();
 
-        await Refresh();
-
+        //await Refresh();
         
         loaded = true;
         StateHasChanged();
     }
-    
-    /// <summary>
-    /// Refreshes the data
-    /// </summary>
-    async Task Refresh()
-    {
-        var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
-        UpdateInfoData = result.Success ? result.Data ?? new() : new();
-        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
-            new { count = UpdateInfoData.NumberOfUpdates });
-    }
 
     /// <summary>
-    /// On Extension update
+    /// Event raised when the update info has bene updated
     /// </summary>
-    private async Task OnUpdate()
+    /// <param name="info">the current info</param>
+    private void OnUpdatesUpdateInfo(UpdateInfo info)
     {
-        await Refresh();
+        UpdateInfoData = info;
+        lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
+                 new { count = UpdateInfoData?.NumberOfUpdates ?? 0 });
         StateHasChanged();
     }
+
     
     /// <summary>
     /// Called when Updates are clicked from the status widget
@@ -90,5 +77,13 @@ public partial class NewDashboard : ComponentBase
         {
             Tabs?.SelectTabByUid("updates");
         }
+    }
+
+    /// <summary>
+    /// Disposes of the component
+    /// </summary>
+    public void Dispose()
+    {
+        ClientService.UpdatesUpdateInfo -= OnUpdatesUpdateInfo;
     }
 }

@@ -35,20 +35,20 @@
                 @if (UpdateInfoData.FileFlowsVersion != null && UpdateInfoData.HasExtensionUpdates)
                 {
                     <div class="grid grid-60-40 flex-grow savings">
-                        <FileFlowsUpdateWidget Data="UpdateInfoData" OnUpdate="OnUpdate" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
-                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" OnUpdate="OnUpdate" />
+                        <FileFlowsUpdateWidget Data="UpdateInfoData" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
+                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" />
                     </div>
                 }
                 else if (UpdateInfoData.FileFlowsVersion != null)
                 {
                     <div class="grid flex-grow">
-                        <FileFlowsUpdateWidget Data="UpdateInfoData" OnUpdate="OnUpdate" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
+                        <FileFlowsUpdateWidget Data="UpdateInfoData" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
                     </div>
                 }
                 else if (UpdateInfoData.HasExtensionUpdates)
                 {
                     <div class="grid flex-grow">
-                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" OnUpdate="OnUpdate" />
+                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" />
                     </div>
                 }
 
