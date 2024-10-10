@@ -115,7 +115,7 @@ public partial class ReprocessDialog : VisibleEscapableComponent
         ProcessOptionsMode = processOptionsMode;
         lblDescription = processOptionsMode ? lblProcessOptionsDescription : lblReprocessDescription;
         lblTitle = processOptionsMode ? lblProcessOptionsTitle : lblReprocessTitle;
-        CustomVariables = ObjectHelper.GetCommonCustomVariables(files.Select(file => file.CustomVariables).ToList())
+        CustomVariables = ObjectHelper.GetCommonCustomVariables(files.Select(file => file.CustomVariables ?? []).ToList())
             .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToList();
 
         FlowOptions = flows.OrderBy(x => x.Value.ToLowerInvariant())
