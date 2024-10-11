@@ -79,7 +79,6 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// <param name="obj">the files updated</param>
     private void OnFileStatusUpdated(List<LibraryStatus> obj)
     {
-        Logger.Instance.ILog("FilesWidget.OnFileStatusUpdated");
         _ = RefreshData();
     }
 

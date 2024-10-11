@@ -31,7 +31,7 @@ public partial class SystemWidget : ComponentBase, IDisposable
     protected override async Task OnInitializedAsync()
     {
         lblTitle = Translater.Instant("Pages.Dashboard.Widgets.System.Title");
-        lblRunners = Translater.Instant("Pages.Dashboard.Widgets.System.Runners");
+        lblRunners = Translater.Instant("Pages.Dashboard.Widgets.System.Runners", new {count = 0});
         lblNodes = Translater.Instant("Pages.Nodes.Title");
         lblSavings = Translater.Instant("Pages.Dashboard.Tabs.Savings");
         var info = await ClientService.GetCurrentExecutorInfoMinifed();
