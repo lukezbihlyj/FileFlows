@@ -28,9 +28,7 @@
       flex-direction: column;
       height: 100%;
       ::deep .widget-content {
-        overflow-y: scroll;
         flex-grow: 1;
-        padding-right: var(--scroller-width);
       }
     }
   }

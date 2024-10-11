@@ -35,8 +35,8 @@ public partial class FileFlowsUpdateWidget : ComponentBase
     /// <inheritdoc />
     protected override void OnInitialized()
     {
-        lblNew = Translater.Instant("Pages.Dashboard.Widgets.Updates.FileFlows.New");
-        lblFixed = Translater.Instant("Pages.Dashboard.Widgets.Updates.FileFlows.Fixed");
+        lblNew = Translater.Instant("Pages.Dashboard.Widgets.Updates.New");
+        lblFixed = Translater.Instant("Pages.Dashboard.Widgets.Updates.Fixed");
         lblUpdate = Translater.Instant("Labels.Update");
     }
 

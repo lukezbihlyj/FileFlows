@@ -683,7 +683,9 @@
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
           "Plugins": "{count, plural, zero {插件} one {# 个插件} other {# 个插件}}",
           "Scripts": "{count, plural, zero {脚本} one {# 个脚本} other {# 个脚本}}",
-          "Title": "更新"
+          "Title": "更新",
+          "New": "新",
+          "Fixed": "已修复"
         }
       }
     },

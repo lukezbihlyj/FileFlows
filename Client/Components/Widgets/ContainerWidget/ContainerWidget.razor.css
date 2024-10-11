@@ -27,8 +27,6 @@
     height: 100%;
   }
   .flow-widget.scroll ::deep .widget-content {
-    overflow-y: scroll;
     flex-grow: 1;
-    padding-right: var(--scroller-width);
   }
 }

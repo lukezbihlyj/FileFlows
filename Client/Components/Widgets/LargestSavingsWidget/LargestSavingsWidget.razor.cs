@@ -60,7 +60,6 @@ public partial class LargestSavingsWidget : ComponentBase
         lblTitle = Translater.Instant("Pages.Dashboard.Widgets.LargestSavings.Title");
         Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 1);
         await Refresh();
-        //ClientService.FileStatusUpdated += OnFileStatusUpdated; 
     }
 
     /// <summary>

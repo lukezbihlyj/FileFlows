@@ -683,7 +683,9 @@
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
           "Plugins": "{count, plural, zero {プラグイン} one {# プラグイン} other {# プラグイン}}",
           "Scripts": "{count, plural, zero {スクリプト} one {# スクリプト} other {# スクリプト}}",
-          "Title": "アップデート"
+          "Title": "アップデート",
+          "New": "新規",
+          "Fixed": "修正済み"
         }
       }
     },

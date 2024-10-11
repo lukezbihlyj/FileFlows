@@ -40,7 +40,7 @@
         }
         else
         {
-            var list = FileMode == 2 ? FailedFiles : RecentlyFinished;
+            var list = (FileMode == 2 ? FailedFiles : RecentlyFinished) ?? [];
             if (list.Count == 0)
             {
                 var label = FileMode == 2 ? lblNoFailedFiles : lblNoRecentlyFinishedFiles;

@@ -683,7 +683,9 @@
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
           "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
           "Scripts": "{count, plural, zero {Scripts} one {# Script} other {# Scripts}}",
-          "Title": "Updates"
+          "Title": "Updates",
+          "New": "New",
+          "Fixed": "Fixed"
         }
       }
     },

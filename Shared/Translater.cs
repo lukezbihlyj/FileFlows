@@ -60,7 +60,6 @@ public class Translater
     {
         Formatter ??= new MessageFormatter();
         Language = DeserializeAndFlatten(json);
-        Logger.Instance.DLog("Language keys found: " + Language.Keys.Count);
     }
     
     /// <summary>

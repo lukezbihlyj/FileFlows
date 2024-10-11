@@ -50,22 +50,10 @@ public partial class LibrarySavingsComponent : ComponentBase, IDisposable
     {
         lblNoSavings = Translater.Instant("Pages.Dashboard.Widgets.LibrarySavings.NoSavings");
         ClientService.FileOverviewUpdated += OnFileOverviewUpdated;
-        await Refresh();
-    }
 
-    /// <summary>
-    /// Refresh the data
-    /// </summary>
-    private async Task Refresh()
-    {
-        var result = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=0");
-        if (result.Success)
-            TotalData = result.Data;
-        var result2 = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=31");
-        if (result2.Success)
-            MonthData = result2.Data;
+        TotalData = await ClientService.GetLibrarySavingsAllData();
+        MonthData = await ClientService.GetLibrarySavingsMonthData();
         SetValues();
-        StateHasChanged();
     }
 
     /// <summary>
@@ -73,7 +61,15 @@ public partial class LibrarySavingsComponent : ComponentBase, IDisposable
     /// </summary>
     /// <param name="data">the updated data</param>
     private void OnFileOverviewUpdated(FileOverviewData data)
-        => _ = Refresh();
+    {
+        _ = InvokeAsync(async () =>
+        {
+            TotalData = await ClientService.GetLibrarySavingsAllData();
+            MonthData = await ClientService.GetLibrarySavingsMonthData();
+            SetValues();
+            StateHasChanged();
+        });
+    }
 
     /// <summary>
     /// Sets the value based on the data

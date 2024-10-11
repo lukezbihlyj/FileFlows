@@ -683,7 +683,9 @@
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
           "Plugins": "{count, plural, zero {Плагины} one {# Плагин} other {# Плагинов}}",
           "Scripts": "{count, plural, zero {Скрипты} one {# Скрипт} other {# Скриптов}}",
-          "Title": "Обновления"
+          "Title": "Обновления",
+          "New": "Новое",
+          "Fixed": "Исправлено"
         }
       }
     },

@@ -1,4 +1,5 @@
 ﻿using System.Timers;
+using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.JSInterop;
@@ -24,6 +25,11 @@ public partial class ClientService
     /// The instance of <see cref="IMemoryCache"/> used for caching.
     /// </summary>
     private readonly IMemoryCache _cache;
+
+    /// <summary>
+    /// The instance of the cache service
+    /// </summary>
+    private readonly CacheService _cacheService;
 
     /// <summary>
     /// The javascript runtime
@@ -57,10 +63,12 @@ public partial class ClientService
     /// <param name="profileService">The profile service</param>
     /// <param name="memoryCache">The memory cache instance used for caching.</param>
     /// <param name="jsRuntime">The javascript runtime.</param>
-    public ClientService(NavigationManager navigationManager, ProfileService profileService, IMemoryCache memoryCache, IJSRuntime jsRuntime)
+    /// <param name="cacheService">The cache service instance.</param>
+    public ClientService(NavigationManager navigationManager, ProfileService profileService, IMemoryCache memoryCache, IJSRuntime jsRuntime, CacheService cacheService)
     {
         this._profileService = profileService;
-        _jsRuntime = jsRuntime; 
+        _jsRuntime = jsRuntime;
+        _cacheService = cacheService;
         _navigationManager = navigationManager; 
         _cache = memoryCache;
         _ = InitializeSystemInfo();
@@ -236,5 +244,27 @@ public partial class ClientService
         if (result.Success)
             CurrentSystemInfo ??= result.Data;
         return CurrentSystemInfo;
+    }
+    
+    /// <summary>
+    /// Gets the all library savings data
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<StorageSavedData>> GetLibrarySavingsAllData()
+        => await _cacheService.GetFromCache("LibraryFilesAllData", 5 * 60,
+            async () => await GetLibraryFileData(0));
+
+    /// <summary>
+    /// Gets the month library savings data
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<StorageSavedData>> GetLibrarySavingsMonthData()
+        => await _cacheService.GetFromCache("LibraryFilesMonthData", 5 * 60,
+                async () => await GetLibraryFileData(31));
+    
+    private async Task<List<StorageSavedData>> GetLibraryFileData(int days)
+    {
+        var result = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=" + days);
+        return result.Success ? result.Data ?? [] : [];
     }
 }

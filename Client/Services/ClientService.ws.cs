@@ -96,9 +96,7 @@ public partial class ClientService
     {
         while (true) // Retry indefinitely
         {
-            // string url = ServerUri.Replace("https", "wss").Replace("http", "ws");
-            string url = ServerUri; //ServerUri.Replace("wss", "https").Replace("ws", "http");
-            Logger.Instance.ILog("ServerUri: " + url);
+            string url = ServerUri;
             try
             {
                 _hubConnection = new HubConnectionBuilder()
@@ -134,6 +132,8 @@ public partial class ClientService
                 _hubConnection.On<FileOverviewData>("FileOverviewUpdate", (data) =>
                 {
                     CurrentFileOverData = data;
+                    _cacheService.Clear("LibraryFilesAllData");
+                    _cacheService.Clear("LibraryFilesMonthData");
                     FileOverviewUpdated?.Invoke(data);
                 });
                 _hubConnection.On<UpdateInfo>("UpdatesUpdateInfo", (data) =>

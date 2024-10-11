@@ -9,6 +9,7 @@ using FileFlows.Client;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+builder.Services.AddSingleton<CacheService>();
 builder.Services.AddSingleton<IHotKeysService, HotKeysService>();
 builder.Services.AddSingleton<INavigationService, NavigationService>();
 builder.Services.AddSingleton<IClipboardService, ClipboardService>();
