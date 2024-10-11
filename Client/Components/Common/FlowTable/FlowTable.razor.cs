@@ -27,7 +27,6 @@ public abstract class FlowTableBase: ComponentBase
 
     internal void AddButtonSeperator(FlowTableButtonSeparator separator)
     {
-        Logger.Instance.ILog("Adding button separator");
         Buttons.Add(null);
         if (ToolbarItems.Contains(separator) == false)
             ToolbarItems.Add(separator);
@@ -568,7 +567,6 @@ public partial class FlowTable<TItem>: FlowTableBase,IDisposable, INotifyPropert
 
     private void ContextMenuPreShow()
     {
-        Logger.Instance.ILog("In flowtable context menu preshow!");
         var items = this.ToolbarItems?.Select(x =>
         {
             if (x is FlowTableButtonSeparator separtor)
