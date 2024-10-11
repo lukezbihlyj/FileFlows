@@ -107,6 +107,14 @@ public class LibraryFileFilter
                 if(file.HoldUntil < DateTime.UtcNow)
                     return false;
             }
+            else if (Status == FileStatus.Unprocessed && file.Status == FileStatus.Unprocessed)
+            {
+                // need to check that it isnt actually disabled
+                if (file.LibraryUid != null && SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) && lib?.Enabled == false)
+                    return false; // its actually disabled
+                if(file.HoldUntil > DateTime.UtcNow)
+                    return false; // its on hold
+            }
             else if (file.Status != Status)
                 return false;
         }
