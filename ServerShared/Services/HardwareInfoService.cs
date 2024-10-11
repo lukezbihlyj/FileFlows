@@ -534,6 +534,12 @@ public class HardwareInfoService
         model = model.Trim().TrimStart('"').TrimEnd('"');
         if (model.Contains("Virtual Desktop Monitor", StringComparison.InvariantCultureIgnoreCase))
             return null;
+        if (model.Contains("Microsoft Remote", StringComparison.InvariantCultureIgnoreCase))
+            return null;
+        if (model.Contains("Virtual Display", StringComparison.InvariantCultureIgnoreCase))
+            return null;
+        if (model.Contains("USB Device", StringComparison.InvariantCultureIgnoreCase))
+            return null;
         model = model.Replace("Intel(R) ", ""); // Remove Intel(R) prefix
         model = model.Replace("NVIDIA ", "", StringComparison.InvariantCultureIgnoreCase); // Remove NVIDIA prefix
         model = model.Replace("Apple ", "", StringComparison.InvariantCultureIgnoreCase); // Remove Apple prefix
@@ -560,6 +566,12 @@ public class HardwareInfoService
             return "AMD";
         if (vendor.Contains("Intel", StringComparison.InvariantCultureIgnoreCase) == true)
             return "Intel";
+        if (vendor.Contains("Microsoft Remote", StringComparison.InvariantCultureIgnoreCase))
+            return null;
+        if (vendor.Contains("Virtual Display", StringComparison.InvariantCultureIgnoreCase))
+            return null;
+        if (vendor.Contains("USB Device", StringComparison.InvariantCultureIgnoreCase))
+            return null;
         vendor = vendor.Trim().TrimStart('"').TrimEnd('"');
         return vendor;
     }
