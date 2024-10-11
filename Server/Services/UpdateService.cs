@@ -1,3 +1,4 @@
+using Esprima.Ast;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Hubs;
 using FileFlows.Server.Workers;
@@ -42,8 +43,8 @@ public class UpdateService
             return [];
         var releaseNotes = FileFlowsFeedParser.Parse(response.Body);
         var thisVersion = Version.Parse(Globals.Version);
-        //return releaseNotes.Where(x => Version.Parse(x.Version + ".0") > thisVersion).ToList();
-        return releaseNotes.Take(4).ToList();
+        var notes = releaseNotes.Where(x => Version.Parse(x.Version + ".0") > thisVersion).ToList();
+        return notes.Count == 0 ? releaseNotes.Take(1).ToList() : notes;
     }
 
     /// <summary>
