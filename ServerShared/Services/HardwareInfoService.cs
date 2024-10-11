@@ -564,6 +564,10 @@ public class HardwareInfoService
             return "NVIDIA";
         if (vendor.Contains("AMD", StringComparison.InvariantCultureIgnoreCase) == true)
             return "AMD";
+        if (vendor.Contains("Radeon", StringComparison.InvariantCultureIgnoreCase) == true)
+            return "AMD";
+        if (vendor.Contains("VMware", StringComparison.InvariantCultureIgnoreCase) == true)
+            return "VMware";
         if (vendor.Contains("Intel", StringComparison.InvariantCultureIgnoreCase) == true)
             return "Intel";
         if (vendor.Contains("Microsoft Remote", StringComparison.InvariantCultureIgnoreCase))
