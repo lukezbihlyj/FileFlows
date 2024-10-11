@@ -46,7 +46,7 @@
 }
 
 .savings {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -59,4 +59,19 @@
 }
 .icon .icon {
   height: 2.25rem;
+}
+
+.no-files {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 95%;
+  place-content: center;
+  font-size: 1.2rem;
+  font-weight: var(--bold, 600);
+  padding: 1.47rem;
+}
+.no-files i {
+  font-size: 5rem;
+  margin-bottom: 1rem;
 }

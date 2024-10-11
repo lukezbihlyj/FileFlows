@@ -1,4 +1,4 @@
-@media (max-width: 720px) {
+@media (max-width: 850px) {
   .flow-widget {
     height: fit-content !important;
     overflow: unset !important;
@@ -27,7 +27,8 @@
     height: 100%;
   }
   .flow-widget.scroll ::deep .widget-content {
-    overflow-y: auto;
+    overflow-y: scroll;
     flex-grow: 1;
+    padding-right: var(--scroller-width);
   }
 }

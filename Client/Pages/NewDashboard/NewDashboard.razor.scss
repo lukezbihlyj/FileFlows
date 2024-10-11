@@ -11,18 +11,14 @@
       overflow: auto !important;
       top: 8.5rem !important;
       padding:0 0.5rem 1rem !important;
-      &.dashboard {
-        flex-direction: column-reverse !important;
-        scroll-behavior: auto !important;
-      }
     }
     .flow-widget {
       margin-bottom: 1rem;
     }
-  }
-  .savings {
-    flex-direction: column-reverse !important;
-    scroll-behavior: auto !important;
+    .flow-tab-buttons {
+      overflow: hidden;
+      max-height: 3rem;
+    }
   }
 }
 .dashboard-wrapper

@@ -33,7 +33,7 @@ public partial class NewDashboard : ComponentBase, IDisposable
     /// </summary>
     private FlowTabs Tabs;
 
-    private string lblDashboard, lblSavings, lblUpdates;
+    private string lblDashboard, lblSavings, lblUpdates, lblStatistics;
 
     private bool loaded = false;
 
@@ -42,6 +42,7 @@ public partial class NewDashboard : ComponentBase, IDisposable
     {
         lblDashboard = Translater.Instant("Pages.Dashboard.Tabs.Dashboard");
         lblSavings = Translater.Instant("Pages.Dashboard.Tabs.Savings");
+        lblStatistics = Translater.Instant("Pages.Dashboard.Tabs.Statistics");
         UpdateInfoData = await ClientService.GetCurrentUpdatesInfo();
         OnUpdatesUpdateInfo(UpdateInfoData);
         _ = await ClientService.GetCurrentFileOverData();

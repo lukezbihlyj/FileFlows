@@ -630,7 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "Dashboard",
-        "Savings": "Savings"
+        "Savings": "Savings",
+        "Statistics": "Statistics"
       },
       "Widgets": {
         "CpuRam": {
@@ -640,7 +641,10 @@
           "Failed": "{count, plural, zero {Failed} other {# Failed}}",
           "Finished": "{count, plural, zero {Finished} other {# Finished}}",
           "Title": "Files",
-          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}"
+          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}",
+          "NoFailedFiles": "No Failed Files",
+          "NoRecentlyFinishedFiles": "No Recently Finished Files",
+          "NoUpcomingFiles": "No Upcoming Files"
         },
         "FilesOverview": {
           "FilesProcessed": "Files Processed",

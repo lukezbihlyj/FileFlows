@@ -13,9 +13,32 @@ public partial class SystemWidget : ComponentBase, IDisposable
     [Inject] public ClientService ClientService { get; set; }
     
     /// <summary>
+    /// Gets or sets the Local Storage instance
+    /// </summary>
+    [Inject] private FFLocalStorageService LocalStorage { get; set; }
+    /// <summary>
+    /// The key used to store the selected mode in system widget
+    /// </summary>
+    private const string LocalStorageKey = "SystemWidget";
+    
+    /// <summary>
+    /// Gets the mode
+    /// </summary>
+    private int _Mode = 0;
+    /// <summary>
     /// Gets or sets the mode
     /// </summary>
-    private int Mode { get; set; }
+    private int Mode
+    {
+        get => _Mode;
+        set
+        {
+            _Mode = value;
+            if(App.Instance.IsMobile) // only do this on mobile, on desktop we calculate the best mode to show
+                _ = LocalStorage.SetItemAsync(LocalStorageKey, value);
+            StateHasChanged();
+        }
+    }
 
     /// <summary>
     /// The option buttons
@@ -34,6 +57,8 @@ public partial class SystemWidget : ComponentBase, IDisposable
         lblRunners = Translater.Instant("Pages.Dashboard.Widgets.System.Runners", new {count = 0});
         lblNodes = Translater.Instant("Pages.Nodes.Title");
         lblSavings = Translater.Instant("Pages.Dashboard.Tabs.Savings");
+        if(App.Instance.IsMobile)
+            Mode = Math.Clamp(await LocalStorage.GetItemAsync<int>(LocalStorageKey), 0, 2);
         var info = await ClientService.GetCurrentExecutorInfoMinifed();
         OnExecutorsUpdated(info ?? []);
         ClientService.ExecutorsUpdated += OnExecutorsUpdated;
@@ -57,6 +82,8 @@ public partial class SystemWidget : ComponentBase, IDisposable
     /// </summary>
     private void SelectNodes()
     {
+        if (App.Instance.IsMobile)
+            return;
         Mode = 2;
         StateHasChanged();
     }

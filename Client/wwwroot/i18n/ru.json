@@ -630,7 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "Панель",
-        "Savings": "Сбережения"
+        "Savings": "Сбережения",  "Statistics": "Статистика"
+
       },
       "Widgets": {
         "CpuRam": {
@@ -640,7 +641,10 @@
           "Failed": "{count, plural, zero {Неудачно} other {# Неудачно}}",
           "Finished": "{count, plural, zero {Завершено} other {# Завершено}}",
           "Title": "Файлы",
-          "Upcoming": "{count, plural, zero {Предстоящие} other {# Предстоящие}}"
+          "Upcoming": "{count, plural, zero {Предстоящие} other {# Предстоящие}}",
+          "NoFailedFiles": "Нет неудавшихся файлов",
+          "NoRecentlyFinishedFiles": "Нет недавно завершённых файлов",
+          "NoUpcomingFiles": "Нет предстоящих файлов"
         },
         "FilesOverview": {
           "FilesProcessed": "Обработанные файлы",

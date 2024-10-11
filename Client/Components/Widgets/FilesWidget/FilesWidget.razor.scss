@@ -101,3 +101,19 @@
     height:2.25rem;
   }
 }
+
+
+.no-files {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 95%;
+  place-content: center;
+  font-size: 1.2rem;
+  font-weight: var(--bold, 600);
+  padding:1.47rem;
+  i {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+  }
+}

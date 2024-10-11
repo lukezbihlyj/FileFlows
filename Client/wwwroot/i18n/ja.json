@@ -630,7 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "ダッシュボード",
-        "Savings": "節約"
+        "Savings": "節約",  "Statistics": "統計"
+
       },
       "Widgets": {
         "CpuRam": {
@@ -640,7 +641,10 @@
           "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
           "Finished": "{count, plural, zero {完了} other {# 完了}}",
           "Title": "ファイル",
-          "Upcoming": "{count, plural, zero {今後} other {# 今後}}"
+          "Upcoming": "{count, plural, zero {今後} other {# 今後}}",
+          "NoFailedFiles": "失敗したファイルはありません",
+          "NoRecentlyFinishedFiles": "最近完了したファイルはありません",
+          "NoUpcomingFiles": "今後のファイルはありません"
         },
         "FilesOverview": {
           "FilesProcessed": "処理済みファイル",

@@ -9,25 +9,41 @@
 
         <FlowTabs @ref="Tabs" Style="TabStyle.NewStyle">
             <FlowTab Title="@lblDashboard" Icon="fas fa-chart-pie" ClassName="dashboard">
+                @if (App.Instance.IsMobile)
+                {
+                    <StatusWidget OnUpdatesClicked="Status_OnUpdatesClicked"/>
+                    <SystemWidget/>
+                    <FilesWidget/>
+                }
+                else
+                {
+                    <div class="grid grid-4">
+                        <FileOverviewWidget IsFilesProcessed="true"/>
+                        <FileOverviewWidget IsFilesProcessed="false"/>
+                        <CpuRamWidget/>
+                        <StatusWidget OnUpdatesClicked="Status_OnUpdatesClicked"/>
+                    </div>
 
-                <div class="grid grid-4">
-                    <FileOverviewWidget IsFilesProcessed="true" />
-                    <FileOverviewWidget IsFilesProcessed="false" />
-                    <CpuRamWidget/>
-                    <StatusWidget OnUpdatesClicked="Status_OnUpdatesClicked" />
-                </div>
-
-                <div class="grid grid-60-40 flex-grow">
-                    <SystemWidget />
-                    <FilesWidget />
-                </div>
+                    <div class="grid grid-60-40 flex-grow">
+                        <SystemWidget/>
+                        <FilesWidget/>
+                    </div>
+                }
 
             </FlowTab>
             <FlowTab Title="@lblSavings" Icon="fas fa-dollar-sign">
-                <div class="grid grid-60-40 flex-grow savings">
-                    <LargestSavingsWidget />
+                @if (App.Instance.IsMobile)
+                {
                     <LibrarySavingsSummaryWidget/>
-                </div>
+                    <LargestSavingsWidget/>
+                }
+                else
+                {
+                    <div class="grid grid-60-40 flex-grow savings">
+                        <LargestSavingsWidget/>
+                        <LibrarySavingsSummaryWidget/>
+                    </div>
+                }
             </FlowTab>
             @if (UpdateInfoData.HasUpdates)
             {
@@ -52,6 +68,14 @@
                     </div>
                 }
 
+                </FlowTab>
+            }
+            @if (App.Instance.IsMobile)
+            {
+                <FlowTab Title="@lblStatistics" Icon="fas fa-chart-bar" ClassName="statistics">
+                    <FileOverviewWidget IsFilesProcessed="true"/>
+                    <FileOverviewWidget IsFilesProcessed="false"/>
+                    <CpuRamWidget/>
                 </FlowTab>
             }
         </FlowTabs>

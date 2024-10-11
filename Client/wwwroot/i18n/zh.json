@@ -630,7 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "仪表板",
-        "Savings": "节省"
+        "Savings": "节省",  "Statistics": "统计"
+
       },
       "Widgets": {
         "CpuRam": {
@@ -640,7 +641,10 @@
           "Failed": "{count, plural, zero {失败} other {# 失败}}",
           "Finished": "{count, plural, zero {完成} other {# 完成}}",
           "Title": "文件",
-          "Upcoming": "{count, plural, zero {即将} other {# 即将}}"
+          "Upcoming": "{count, plural, zero {即将} other {# 即将}}",
+          "NoFailedFiles": "没有失败的文件",
+          "NoRecentlyFinishedFiles": "没有最近完成的文件",
+          "NoUpcomingFiles": "没有即将到来的文件"
         },
         "FilesOverview": {
           "FilesProcessed": "已处理文件",

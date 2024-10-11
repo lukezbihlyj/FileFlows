@@ -9,6 +9,13 @@
   overflow: auto;
   padding-right: 1rem;
 }
+@media (max-width: 850px)
+{
+  .lss-widget-list {
+    overflow: hidden;
+    padding-bottom:1rem;
+  }
+}
 .library {
   display: flex;
   position: relative;

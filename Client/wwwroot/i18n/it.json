@@ -630,7 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "Cruscotto",
-        "Savings": "Risparmi"
+        "Savings": "Risparmi",  "Statistics": "Statistiche"
+
       },
       "Widgets": {
         "CpuRam": {
@@ -640,7 +641,10 @@
           "Failed": "{count, plural, zero {Fallito} other {# Falliti}}",
           "Finished": "{count, plural, zero {Completato} other {# Completati}}",
           "Title": "File",
-          "Upcoming": "{count, plural, zero {In arrivo} other {# In arrivo}}"
+          "Upcoming": "{count, plural, zero {In arrivo} other {# In arrivo}}",
+          "NoFailedFiles": "Nessun file non riuscito",
+          "NoRecentlyFinishedFiles": "Nessun file recentemente completato",
+          "NoUpcomingFiles": "Nessun file imminente"
         },
         "FilesOverview": {
           "FilesProcessed": "File elaborati",
