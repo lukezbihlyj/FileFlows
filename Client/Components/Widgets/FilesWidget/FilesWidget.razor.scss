@@ -21,35 +21,6 @@
   height:0.25rem;
   background:var(--accent-2);
 }
-//
-//.flow-widget {
-//  border: solid 1px var(--border-color);
-//  border-radius: var(--container-border-radius);
-//  background: var(--widget-background);
-//  position: relative;
-//  min-height: 5rem;
-//}
-//
-//.flow-widget {
-//  display:flex;
-//  flex-direction: row;
-//  &.has-runners {
-//    .files {
-//      background: var(--base-darker);
-//      overflow: hidden;
-//      border-left: solid 1px var(--border-color);
-//      .file-table {
-//        min-width: min(40vw, 40rem);
-//        width: min(40vw, 40rem);
-//      }
-//    }
-//  }
-//  &.no-runners {
-//    .files {
-//      flex-grow:1;
-//    }
-//  }
-//}
 
 .file-table {
   height: 100%;
@@ -59,7 +30,6 @@
 .file-table-row {
   @include row;
   position:relative;
-  cursor:pointer;
   &.has-message .center {
     display:grid;
     grid-template-columns: 1fr 8rem;
@@ -71,6 +41,10 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      > span {
+        cursor: pointer;
+        position:relative;
+      }
     }
   }
   .center {
@@ -85,11 +59,19 @@
   flex-grow:1;
   overflow: hidden;
   text-overflow: ellipsis;
+  > span {
+    cursor: pointer;
+    position:relative;
+  }
 }
 .time {
   width:8rem;
   min-width:8rem;
   text-align: center;
+  > span {
+    cursor: pointer;
+    position:relative;
+  }
 }
 .savings {
   @include backgroundBar;
@@ -99,9 +81,10 @@
   width:3rem;
   .icon {
     height:2.25rem;
+    cursor: pointer;
+    position: relative;
   }
 }
-
 
 .no-files {
   display: flex;
