@@ -1,3 +1,5 @@
+@using FileFlows.Client.Helpers
+@using FileFlows.Plugin.Formatters
 @namespace FileFlows.Client.Components.Widgets
 
 <ContainerWidget Title="@lblTitle" Scroll="true">
@@ -26,14 +28,12 @@
         break;
         case SystemStatus.OutOfSchedule:
         {
-            var minutes = _sysInfo.NodeStatuses.Where(x => x is { Enabled: true, MinutesUntilInSchedule: > 0 }).Min(x => x.MinutesUntilInSchedule);
-            var label = Translater.Instant("Pages.Dashboard.Widgets.Status.OutOfSchedule" + (minutes == null ? "" : "Minutes"), new { minutes }); 
-            {
-                <div class="sw-status sw-out-of-schedule">
-                    <i class="sw-icon fas fa-clock"></i>
-                    <span class="label">@label</span>
-                </div>
-            }
+            var utcDate = _sysInfo.NodeStatuses.Where(x => x is { Enabled: true, ScheduleResumesAtUtc: not null } && x.ScheduleResumesAtUtc > DateTime.UtcNow)
+                .Min(x => x.ScheduleResumesAtUtc);
+            <div class="sw-status sw-out-of-schedule">
+                <i class="sw-icon fas fa-clock"></i>
+                <span class="label">@ScheduleHelper.HumanReadable(utcDate)</span>
+            </div>
         }
         break;
         case SystemStatus.UpdateAvailable:

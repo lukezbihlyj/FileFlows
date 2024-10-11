@@ -663,7 +663,9 @@
           "FileFlowsUpdate": "FileFlows {version} available",
           "Idle": "The system is currently idle",
           "OutOfSchedule": "Out Of Schedule",
-          "OutOfScheduleMinutes": "{minutes, plural, one {Less than a minute until in schedule} other {# minutes until in schedule}}",
+          "OutOfScheduleDay": "Scheduled to resume on {day} at {time}",
+          "OutOfScheduleHours": "Scheduled to resume in about {hours, plural, one {an hour} other {# hours}}",
+          "OutOfScheduleMinutes": "Scheduled to resume in {minutes, plural, one {Less than a minute} other {# minutes}}",
           "PluginUpdates": "{count, plural, one {# Plugin Update} other {# Plugin Updates}}",
           "ScriptUpdates": "{count, plural, one {# Script Update} other {# Script Updates}}"
         },

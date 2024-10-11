@@ -16,6 +16,15 @@ public class NodeStatusSummary
     public string Name { get; set; }
     
     /// <summary>
+    /// Gets or sets if this node is out of schedule
+    /// </summary>
+    public bool OutOfSchedule { get; set; }
+    /// <summary>
+    /// Gets or sets when the node will be in schedule in UTC
+    /// </summary>
+    public DateTime? ScheduleResumesAtUtc { get; set; }
+    
+    /// <summary>
     /// Gets or sets the number of flow runners
     /// </summary>
     public int FlowRunners { get; set; }

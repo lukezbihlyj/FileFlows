@@ -55,9 +55,9 @@ public class NodeStatus
     /// </summary>
     public bool OutOfSchedule { get; set; }
     /// <summary>
-    /// Gets or sets the number of minutes until the node is in schedule
+    /// Gets or sets when the node will be in schedule in UTC
     /// </summary>
-    public int? MinutesUntilInSchedule { get; set; }
+    public DateTime? ScheduleResumesAtUtc { get; set; }
     /// <summary>
     /// Gets or sets the version of the node
     /// </summary>

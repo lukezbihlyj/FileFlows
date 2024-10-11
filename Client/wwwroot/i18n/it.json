@@ -663,7 +663,9 @@
           "FileFlowsUpdate": "FileFlows {version} disponibile",
           "Idle": "Il sistema è attualmente inattivo",
           "OutOfSchedule": "Fuori dal programma",
-          "OutOfScheduleMinutes": "{minutes, plural, one {Meno di un minuto al programma} other {# minuti al programma}}",
+          "OutOfScheduleDay": "Ripresa prevista il {day} alle {time}",
+          "OutOfScheduleHours": "Ripresa prevista tra circa {hours, plural, one {un'ora} other {# ore}}",
+          "OutOfScheduleMinutes": "Ripresa prevista tra {minutes, plural, one {meno di un minuto} other {# minuti}}",
           "PluginUpdates": "{count, plural, one {# Aggiornamento Plugin} other {# Aggiornamenti Plugin}}",
           "ScriptUpdates": "{count, plural, one {# Aggiornamento Script} other {# Aggiornamenti Script}}"
         },

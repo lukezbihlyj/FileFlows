@@ -93,7 +93,7 @@ public partial class VariableInput:ComponentBase
     {
         var jsObjectReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import",
             $"./Components/Common/VariableInput/VariableInput.razor.js?v={Globals.Version}");
-        await jsObjectReference.InvokeVoidAsync("createVariableInput", DotNetObjectReference.Create(this), Uid, Variables);
+        await jsObjectReference.InvokeVoidAsync("createVariableInput", DotNetObjectReference.Create(this), Uid, Variables ?? new());
     }
 
     

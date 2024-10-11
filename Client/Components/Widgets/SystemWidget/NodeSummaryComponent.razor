@@ -1,5 +1,6 @@
-@using FileFlows.Shared.Formatters
+@using FileFlows.Client.Helpers
 @using Humanizer
+@using FileSizeFormatter = FileFlows.Shared.Formatters.FileSizeFormatter
 @namespace FileFlows.Client.Components.Widgets
 
 @if (Data.Count > 0)
@@ -50,6 +51,13 @@
                 <span class="name">
                     @(item.Name == CommonVariables.InternalNodeName ? lblInternalProcessingNode : item.Name)
                 </span>
+                @if (item.OutOfSchedule)
+                {
+                    <span class="hardware-info-item">
+                        <span class="label">@lblSchedule</span>
+                        <span class="value">@ScheduleHelper.HumanReadable(item.ScheduleResumesAtUtc)</span>
+                    </span>
+                }
 
                 @if (item.HardwareInfo != null)
                 {

@@ -83,11 +83,11 @@ public partial class StatusWidget : ComponentBase, IDisposable
             return SystemStatus.Paused;
         if (_executors.Count > 0)
             return SystemStatus.Processing;
-        if(_updateInfo is { HasUpdates: true })
-            return SystemStatus.UpdateAvailable;
         if (_sysInfo != null && _sysInfo.NodeStatuses.Any(x => x.Enabled) &&
             _sysInfo.NodeStatuses.Where(x => x.Enabled).All(x => x.OutOfSchedule))
             return SystemStatus.OutOfSchedule;
+        if(_updateInfo is { HasUpdates: true })
+            return SystemStatus.UpdateAvailable;
 
         return SystemStatus.Idle;
     }

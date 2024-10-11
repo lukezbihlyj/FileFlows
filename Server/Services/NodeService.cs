@@ -229,6 +229,8 @@ public class NodeService //: INodeService
             Address = x.Address,
             FlowRunners = x.FlowRunners,
             Name = x.Name,
+            OutOfSchedule = TimeHelper.InSchedule(x.Schedule) == false,
+            ScheduleResumesAtUtc = TimeHelper.UtcDateUntilInSchedule(x.Schedule),
             Priority = x.Priority,
             Status = GetStatus(x),
             HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? server : x.HardwareInfo

@@ -663,7 +663,9 @@
           "FileFlowsUpdate": "FileFlows {version} beschikbaar",
           "Idle": "Het systeem is momenteel inactief",
           "OutOfSchedule": "Buiten het schema",
-          "OutOfScheduleMinutes": "{minutes, plural, one {Minder dan een minuut tot in schema} other {# minuten tot in schema}}",
+          "OutOfScheduleDay": "Hervatting gepland op {day} om {time}",
+          "OutOfScheduleHours": "Hervatting gepland over ongeveer {hours, plural, one {een uur} other {# uur}}",
+          "OutOfScheduleMinutes": "Hervatting gepland over {minutes, plural, one {minder dan een minuut} other {# minuten}}",
           "PluginUpdates": "{count, plural, one {# Plugin-update} other {# Plugin-updates}}",
           "ScriptUpdates": "{count, plural, one {# Script-update} other {# Script-updates}}"
         },

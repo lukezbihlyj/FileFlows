@@ -125,7 +125,7 @@ public class SystemMonitor:Worker
                 Version = x.Version,
                 Enabled = x.Enabled,
                 OutOfSchedule = TimeHelper.InSchedule(x.Schedule) == false,
-                MinutesUntilInSchedule = TimeHelper.MinutesOutOfSchedule(x.Schedule),
+                ScheduleResumesAtUtc = TimeHelper.UtcDateUntilInSchedule(x.Schedule)
             }).ToList()
         });
     }

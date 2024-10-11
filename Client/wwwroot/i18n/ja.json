@@ -663,7 +663,9 @@
           "FileFlowsUpdate": "FileFlows {version} が利用可能です",
           "Idle": "システムは現在アイドル状態です",
           "OutOfSchedule": "スケジュール外",
-          "OutOfScheduleMinutes": "{minutes, plural, one {スケジュールまで1分未満} other {スケジュールまで # 分}}",
+          "OutOfScheduleDay": "{day} {time} に再開予定",
+          "OutOfScheduleHours": "{hours, plural, one {約1時間後に再開予定} other {# 時間後に再開予定}}",
+          "OutOfScheduleMinutes": "{minutes, plural, one {1分未満で再開予定} other {# 分後に再開予定}}",
           "PluginUpdates": "{count, plural, one {# プラグイン更新} other {# プラグイン更新}}",
           "ScriptUpdates": "{count, plural, one {# スクリプト更新} other {# スクリプト更新}}"
         },

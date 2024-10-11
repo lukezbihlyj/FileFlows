@@ -663,7 +663,9 @@
           "FileFlowsUpdate": "FileFlows {version} verfügbar",
           "Idle": "Das System ist derzeit im Leerlauf",
           "OutOfSchedule": "Außerhalb des Zeitplans",
-          "OutOfScheduleMinutes": "{minutes, plural, one {Weniger als eine Minute bis zur Zeitplanung} other {# Minuten bis zur Zeitplanung}}",
+          "OutOfScheduleDay": "Wird am {day} um {time} fortgesetzt",
+          "OutOfScheduleHours": "Wird in etwa {hours, plural, one {einer Stunde} other {# Stunden}} fortgesetzt",
+          "OutOfScheduleMinutes": "Wird in {minutes, plural, one {weniger als einer Minute} other {# Minuten}} fortgesetzt",
           "PluginUpdates": "{count, plural, one {# Plugin-Update} other {# Plugin-Updates}}",
           "ScriptUpdates": "{count, plural, one {# Skript-Update} other {# Skript-Updates}}"
         },

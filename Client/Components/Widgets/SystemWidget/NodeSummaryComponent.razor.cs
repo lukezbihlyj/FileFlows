@@ -19,11 +19,12 @@ public partial class NodeSummaryComponent : ComponentBase, IDisposable
     /// <summary>
     /// Translation strings
     /// </summary>
-    private string lblOperatingSystem, lblArchitecture, lblMemory, lblStatus, lblInternalProcessingNode, lblRunners, lblPriority;
+    private string lblSchedule, lblOperatingSystem, lblArchitecture, lblMemory, lblStatus, lblInternalProcessingNode, lblRunners, lblPriority;
     
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
+        lblSchedule = Translater.Instant("Labels.Schedule");
         lblOperatingSystem = Translater.Instant("Labels.OperatingSystem");
         lblArchitecture = Translater.Instant("Labels.Architecture");
         lblMemory = Translater.Instant("Labels.Memory");

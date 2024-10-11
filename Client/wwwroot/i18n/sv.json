@@ -663,7 +663,9 @@
           "FileFlowsUpdate": "FileFlows {version} tillgänglig",
           "Idle": "Systemet är för närvarande inaktivt",
           "OutOfSchedule": "Utanför schemat",
-          "OutOfScheduleMinutes": "{minutes, plural, one {Mindre än en minut till schema} other {# minuter till schema}}",
+          "OutOfScheduleDay": "Planerad att återupptas på {day} kl {time}",
+          "OutOfScheduleHours": "Planerad att återupptas om ungefär {hours, plural, one {en timme} other {# timmar}}",
+          "OutOfScheduleMinutes": "Planerad att återupptas om {minutes, plural, one {mindre än en minut} other {# minuter}}",
           "PluginUpdates": "{count, plural, one {# Pluginuppdatering} other {# Pluginuppdateringar}}",
           "ScriptUpdates": "{count, plural, one {# Skriptuppdatering} other {# Skriptuppdateringar}}"
         },
