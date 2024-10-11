@@ -855,9 +855,48 @@ public class FlowController : BaseController
         if(nameChanged)
             _ = new ObjectReferenceUpdater().RunAsync();
 
+        await SaveToDisk(model);
+
         return await Get(model.Uid);
     }
+    
+    /// <summary>
+    /// Saves the flow to disk
+    /// </summary>
+    /// <param name="flow">the flow to save</param>
+    private async Task SaveToDisk(Flow flow)
+    {
+        try
+        {
+            var service = ServiceLoader.Load<FlowService>();
+            var allFlows = await service.GetAllAsync();
+            var subFlows = allFlows.Where(x => x.Type == FlowType.SubFlow).ToList();
+            string json = CreateExportJson(flow, subFlows);
+            var dir = Path.Combine(DirectoryHelper.ConfigDirectory, "Flows");
+            if (System.IO.Directory.Exists(dir) == false)
+                System.IO.Directory.CreateDirectory(dir);
 
+            var file = Path.Combine(dir, SanitizeFileName(flow.Name) + ".json");
+            await System.IO.File.WriteAllTextAsync(file, json);
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.WLog("Failed to save flow to disk: " + ex.Message);
+        }
+    }
+    
+    /// <summary>
+    /// Saves the flow to disk.
+    /// </summary>
+    private string SanitizeFileName(string fileName)
+    {
+        foreach (char c in Path.GetInvalidFileNameChars())
+        {
+            fileName = fileName.Replace(c.ToString(), string.Empty);
+        }
+        return fileName.Replace("..", string.Empty);
+    }
+    
     /// <summary>
     /// Rename a flow
     /// </summary>
