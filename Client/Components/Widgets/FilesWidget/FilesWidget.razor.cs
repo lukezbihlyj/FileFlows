@@ -56,6 +56,15 @@ public partial class FilesWidget : ComponentBase, IDisposable
     private string lblTitle, lblUpcoming, lblFinished, lblFailed, lblNoUpcomingFiles, lblNoFailedFiles, lblNoRecentlyFinishedFiles;
 
     private OptionButtons OptionButtons;
+    /// <summary>
+    /// Gets or sets the profile service
+    /// </summary>
+    [Inject] protected ProfileService ProfileService { get; set; }
+    
+    /// <summary>
+    /// Gets the profile
+    /// </summary>
+    protected Profile Profile { get; private set; }
 
 
     private List<DashboardFile> UpcomingFiles, RecentlyFinished, FailedFiles;
@@ -64,6 +73,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
     
     protected override async Task OnInitializedAsync()
     {
+        Profile = await ProfileService.Get();
         lblTitle = Translater.Instant("Pages.Dashboard.Widgets.Files.Title");
         lblUpcoming = Translater.Instant("Pages.Dashboard.Widgets.Files.Upcoming", new { count = 0});
         lblFinished = Translater.Instant("Pages.Dashboard.Widgets.Files.Finished", new { count = 0});
@@ -173,7 +183,7 @@ public partial class FilesWidget : ComponentBase, IDisposable
     /// </summary>
     /// <param name="file">the file</param>
     private void OpenFile(DashboardFile file)
-        => _ = Helpers.LibraryFileEditor.Open(Blocker, Editor, file.Uid);
+        => _ = Helpers.LibraryFileEditor.Open(Blocker, Editor, file.Uid, Profile);
     
     /// <summary>
     /// Disposes of the component

@@ -136,7 +136,7 @@ public partial class CustomDashboard : IDisposable
     [JSInvokable]
     public async Task OpenFileViewer(Guid libraryFileUid)
     {
-        await Helpers.LibraryFileEditor.Open(Blocker, Editor, libraryFileUid);
+        await Helpers.LibraryFileEditor.Open(Blocker, Editor, libraryFileUid, Profile);
     }
 
     /// <summary>

@@ -73,7 +73,7 @@ public partial class LibraryFilesSearch : ListPage<Guid, LibraryFile>
 
     public override async Task<bool> Edit(LibraryFile item)
     {
-        await Helpers.LibraryFileEditor.Open(Blocker, Editor, item.Uid);
+        await Helpers.LibraryFileEditor.Open(Blocker, Editor, item.Uid, Profile);
         return false;
     }
     async Task Search()

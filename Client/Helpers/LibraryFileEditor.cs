@@ -30,7 +30,7 @@ public class LibraryFileEditor
 #endif
     }
 
-    public static async Task Open(Blocker blocker, Editor editor, Guid libraryItemUid)
+    public static async Task Open(Blocker blocker, Editor editor, Guid libraryItemUid, Profile profile)
     {
         LibraryFileModel? model = null;
         string logUrl = ApIUrl + "/" + libraryItemUid + "/log";
@@ -121,7 +121,6 @@ public class LibraryFileEditor
             #if(DEBUG)
             bool executionRender = true;
             #else
-            var profile = await ProfileService.Get();
             bool executionRender = profile.LicensedFor(LicenseFlags.Enterprise);
             #endif
             if (executionRender)

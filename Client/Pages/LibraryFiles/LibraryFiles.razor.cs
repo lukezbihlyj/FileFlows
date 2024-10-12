@@ -295,7 +295,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 
     public override async Task<bool> Edit(LibaryFileListModel item)
     {
-        await Helpers.LibraryFileEditor.Open(Blocker, Editor, item.Uid);
+        await Helpers.LibraryFileEditor.Open(Blocker, Editor, item.Uid, Profile);
         return false;
     }
 
