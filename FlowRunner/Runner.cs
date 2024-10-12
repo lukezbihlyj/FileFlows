@@ -612,10 +612,10 @@ public class Runner
             Flow = flow,
             Runner = this
         };
-        Info.LibraryFile.Additional ??= new();
-        Info.LibraryFile.Additional.Version = Globals.Version;
 
         int result = flowExecutor.Execute(nodeParameters);
+        Info.LibraryFile.Additional ??= new();
+        Info.LibraryFile.Additional.Version = Globals.Version;
         Info.LibraryFile.Additional.ExecutedFlows.Add(Flow);
         
         if(Canceled)
