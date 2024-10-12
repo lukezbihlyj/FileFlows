@@ -6,7 +6,7 @@
   align-items: center;
   padding: 0.25rem 0;
 }
-@mixin backgroundBar($alpha:0.04) {
+@mixin backgroundBar($alpha:0.05) {
   background: rgba(255, 255, 255, $alpha);
   position: absolute;
   top: 0;
