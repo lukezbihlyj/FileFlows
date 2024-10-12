@@ -616,7 +616,7 @@ public class Runner
         int result = flowExecutor.Execute(nodeParameters);
         Info.LibraryFile.Additional ??= new();
         Info.LibraryFile.Additional.Version = Globals.Version;
-        Info.LibraryFile.Additional.ExecutedFlows.Add(Flow);
+        Info.LibraryFile.Additional.ExecutedFlows = ExecutedFlows ?? [];
         
         if(Canceled)
             SetStatus(FileStatus.ProcessingFailed);
