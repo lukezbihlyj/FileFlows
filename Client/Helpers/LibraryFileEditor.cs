@@ -117,6 +117,32 @@ public class LibraryFileEditor
                     }
                 });
             }
+            
+            #if(DEBUG)
+            if (model.Additional?.ExecutedFlows?.Any() == true)
+            {
+                tabs.Add("Pages.LibraryFile.Tabs.ExecutedFlows", new List<IFlowField>
+                {
+                    new ElementField()
+                    {
+                        InputType = FormInputType.Flow,
+                        Name = nameof(model.Additional.ExecutedFlows)
+                    }
+                });
+                
+            }
+            else if(model.ExecutedNodes?.Any() == true)
+            {
+                tabs.Add("Pages.LibraryFile.Tabs.ExecutedNodes", new List<IFlowField>
+                {
+                    new ElementField()
+                    {
+                        InputType = FormInputType.ExecutedFlowElementsRenderer,
+                        Name = nameof(model.ExecutedNodes)
+                    }
+                });
+            }
+            #endif
 
             var additionalButtons = new ActionButton[]
             {

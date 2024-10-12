@@ -191,7 +191,15 @@ public enum FormInputType
     /// <summary>
     /// A drop down is a modern select, with support for icons
     /// </summary>
-    DropDown = 43
+    DropDown = 43,
+    /// <summary>
+    /// Flow viewer
+    /// </summary>
+    Flow = 44,
+    /// <summary>
+    /// Executed Flow Elements Renderer
+    /// </summary>
+    ExecutedFlowElementsRenderer = 45
 }
 
 

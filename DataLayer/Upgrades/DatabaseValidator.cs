@@ -48,6 +48,12 @@ public class DatabaseValidator
                 await connector.CreateColumn("LibraryFile", "CustomVariables", "TEXT", "");
             }
 
+            if (await connector.ColumnExists("LibraryFile", "Additional") == false)
+            {
+                logger.ILog("Adding LibraryFile.Additional column");
+                await connector.CreateColumn("LibraryFile", "Additional", "TEXT", "");
+            }
+
             return true;
         }
         catch (Exception ex)

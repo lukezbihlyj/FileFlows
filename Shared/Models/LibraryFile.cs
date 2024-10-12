@@ -287,6 +287,29 @@ public class LibraryFile : FileFlowObject
     /// </summary>
     [Column]
     public Dictionary<string, object> CustomVariables { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the additional fields for this library file
+    /// </summary>
+    [SerializedColumn]
+    public LibraryFileAdditional Additional { get; set; }
+}
+
+/// <summary>
+/// Additional Library File Fields
+/// </summary>
+public class LibraryFileAdditional
+{
+    /// <summary>
+    /// Gets or sets the version of FileFlows this file was processed on
+    /// </summary>
+    public string? Version { get; set; } = null;
+
+    /// <summary>
+    /// Gets or sets the list of flows that were executed
+    /// </summary>
+    [Column]
+    public List<Flow>? ExecutedFlows { get; set; } = null;
 
 }
 
@@ -359,6 +382,11 @@ public class ExecutedNode
     /// Gets or sets the UID of the node part
     /// </summary>
     public string NodeUid { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the UID of the actual flow part from the flow
+    /// </summary>
+    public Guid FlowPartUid { get; set; }
     
     /// <summary>
     /// Gets or sets the time it took to process this node 

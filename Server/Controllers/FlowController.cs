@@ -502,7 +502,7 @@ public class FlowController : BaseController
     /// <param name="flowUid">the UID of the flow to get elements for</param>
     /// <param name="type">the type of flow to get flow elements for</param>
     /// <returns>all the flow elements</returns>
-    internal static async Task<FlowElement[]> GetFlowElements( Guid flowUid, FlowType? type = null)
+    internal static async Task<FlowElement[]> GetFlowElements(Guid flowUid, FlowType? type = null)
     {
         var plugins = await new PluginController(null).GetAll(includeElements: true);
         var results = plugins.Where(x => x.Enabled && x.Elements != null).SelectMany(x => x.Elements)?.Where(x =>

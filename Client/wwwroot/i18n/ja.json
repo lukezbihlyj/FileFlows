@@ -630,8 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "ダッシュボード",
-        "Savings": "節約",  "Statistics": "統計"
-
+        "Savings": "節約",
+        "Statistics": "統計"
       },
       "Widgets": {
         "CpuRam": {
@@ -640,11 +640,11 @@
         "Files": {
           "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
           "Finished": "{count, plural, zero {完了} other {# 完了}}",
-          "Title": "ファイル",
-          "Upcoming": "{count, plural, zero {今後} other {# 今後}}",
           "NoFailedFiles": "失敗したファイルはありません",
           "NoRecentlyFinishedFiles": "最近完了したファイルはありません",
-          "NoUpcomingFiles": "今後のファイルはありません"
+          "NoUpcomingFiles": "今後のファイルはありません",
+          "Title": "ファイル",
+          "Upcoming": "{count, plural, zero {今後} other {# 今後}}"
         },
         "FilesOverview": {
           "FilesProcessed": "処理済みファイル",
@@ -681,11 +681,11 @@
         },
         "Updates": {
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "修正済み",
+          "New": "新規",
           "Plugins": "{count, plural, zero {プラグイン} one {# プラグイン} other {# プラグイン}}",
           "Scripts": "{count, plural, zero {スクリプト} one {# スクリプト} other {# スクリプト}}",
-          "Title": "アップデート",
-          "New": "新規",
-          "Fixed": "修正済み"
+          "Title": "アップデート"
         }
       }
     },

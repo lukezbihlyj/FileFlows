@@ -640,11 +640,11 @@
         "Files": {
           "Failed": "{count, plural, zero {Failed} other {# Failed}}",
           "Finished": "{count, plural, zero {Finished} other {# Finished}}",
-          "Title": "Files",
-          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}",
           "NoFailedFiles": "No Failed Files",
           "NoRecentlyFinishedFiles": "No Recently Finished Files",
-          "NoUpcomingFiles": "No Upcoming Files"
+          "NoUpcomingFiles": "No Upcoming Files",
+          "Title": "Files",
+          "Upcoming": "{count, plural, zero {Upcoming} other {# Upcoming}}"
         },
         "FilesOverview": {
           "FilesProcessed": "Files Processed",
@@ -681,11 +681,11 @@
         },
         "Updates": {
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "Fixed",
+          "New": "New",
           "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
           "Scripts": "{count, plural, zero {Scripts} one {# Script} other {# Scripts}}",
-          "Title": "Updates",
-          "New": "New",
-          "Fixed": "Fixed"
+          "Title": "Updates"
         }
       }
     },

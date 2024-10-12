@@ -1,3 +1,4 @@
+using FileFlows.Client.Components.Dialogs;
 using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Components.Widgets;
@@ -33,9 +34,9 @@ public partial class RunnersComponent : ComponentBase, IDisposable
     private int Mode { get; set; }
 
     /// <summary>
-    /// The expanded runners
+    /// The expanded/collapsed state of the runners
     /// </summary>
-    private List<Guid> ExpandedRunners = new();
+    private Dictionary<Guid, bool> RunnersState = new();
 
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
@@ -44,7 +45,7 @@ public partial class RunnersComponent : ComponentBase, IDisposable
         if(Runners.Count == 0)
             await NoneOnLoad.InvokeAsync();
 #if(DEBUG)
-        //Runners = GenerateRandomExecutors(10);
+        // Runners = GenerateRandomExecutors(10);
 #endif
         ClientService.ExecutorsUpdated += ExecutorsUpdated;
     }
@@ -116,8 +117,15 @@ public partial class RunnersComponent : ComponentBase, IDisposable
     private void ExecutorsUpdated(List<FlowExecutorInfoMinified> obj)
     {
         Runners = obj ?? new();
-        // rempve the expanded runners that are no longer in the list
-        ExpandedRunners = ExpandedRunners.Where(x => Runners.Any(y => y.Uid == x)).ToList();
+        // remove the RunnersState that are no longer in the list
+        // do not add the runners that arent in the list to the list
+        RunnersState = RunnersState.Where(x => Runners.Any(y => y.Uid == x.Key))
+            .ToDictionary(x => x.Key, x => x.Value);
+
+        var first = Runners.FirstOrDefault();
+        if(first != null)
+            RunnersState.TryAdd(first.Uid, true);
+        
         StateHasChanged();
     }
     
@@ -142,6 +150,9 @@ public partial class RunnersComponent : ComponentBase, IDisposable
     /// <param name="runner">the runner to cancel</param>
     private async Task Cancel(FlowExecutorInfoMinified runner)
     {
+        if (await Confirm.Show("Labels.Cancel",
+                Translater.Instant("Pages.Dashboard.Messages.CancelMessage", new { runner.RelativeFile })) == false)
+            return; // rejected the confirmation
         await HttpHelper.Delete($"/api/library-file/{runner.Uid}");
     }
 
@@ -151,10 +162,7 @@ public partial class RunnersComponent : ComponentBase, IDisposable
     /// <param name="runner">the runner to toggle</param>
     private void ToggleExpand(FlowExecutorInfoMinified runner)
     {
-        if(ExpandedRunners.Contains(runner.Uid))
-            ExpandedRunners.Remove(runner.Uid);
-        else
-            ExpandedRunners.Add(runner.Uid);
-            
+        if (RunnersState.TryAdd(runner.Uid, true) == false)
+            RunnersState[runner.Uid] = !RunnersState[runner.Uid];
     }
 }

@@ -630,8 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "Instrumentbräda",
-        "Savings": "Besparingar",  "Statistics": "Statistik"
-
+        "Savings": "Besparingar",
+        "Statistics": "Statistik"
       },
       "Widgets": {
         "CpuRam": {
@@ -640,11 +640,11 @@
         "Files": {
           "Failed": "{count, plural, zero {Misslyckad} other {# Misslyckade}}",
           "Finished": "{count, plural, zero {Färdig} other {# Färdiga}}",
-          "Title": "Filer",
-          "Upcoming": "{count, plural, zero {Kommande} other {# Kommande}}",
           "NoFailedFiles": "Inga misslyckade filer",
           "NoRecentlyFinishedFiles": "Inga nyligen avslutade filer",
-          "NoUpcomingFiles": "Inga kommande filer"
+          "NoUpcomingFiles": "Inga kommande filer",
+          "Title": "Filer",
+          "Upcoming": "{count, plural, zero {Kommande} other {# Kommande}}"
         },
         "FilesOverview": {
           "FilesProcessed": "Bearbetade filer",
@@ -681,11 +681,11 @@
         },
         "Updates": {
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "Fixat",
+          "New": "Nytt",
           "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
           "Scripts": "{count, plural, zero {Skript} one {# Skript} other {# Skript}}",
-          "Title": "Uppdateringar",
-          "New": "Nytt",
-          "Fixed": "Fixat"
+          "Title": "Uppdateringar"
         }
       }
     },

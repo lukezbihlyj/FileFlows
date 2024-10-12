@@ -630,8 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "Dashboard",
-        "Savings": "Einsparungen",  "Statistics": "Statistiken"
-
+        "Savings": "Einsparungen",
+        "Statistics": "Statistiken"
       },
       "Widgets": {
         "CpuRam": {
@@ -640,11 +640,11 @@
         "Files": {
           "Failed": "{count, plural, zero {Fehlgeschlagen} other {# Fehlgeschlagen}}",
           "Finished": "{count, plural, zero {Abgeschlossen} other {# Abgeschlossen}}",
-          "Title": "Dateien",
-          "Upcoming": "{count, plural, zero {Bevorstehend} other {# Bevorstehend}}",
           "NoFailedFiles": "Keine fehlgeschlagenen Dateien",
           "NoRecentlyFinishedFiles": "Keine kürzlich fertiggestellten Dateien",
-          "NoUpcomingFiles": "Keine anstehenden Dateien"
+          "NoUpcomingFiles": "Keine anstehenden Dateien",
+          "Title": "Dateien",
+          "Upcoming": "{count, plural, zero {Bevorstehend} other {# Bevorstehend}}"
         },
         "FilesOverview": {
           "FilesProcessed": "Dateien verarbeitet",
@@ -681,11 +681,11 @@
         },
         "Updates": {
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "Behoben",
+          "New": "Neu",
           "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
           "Scripts": "{count, plural, zero {Scripts} one {# Script} other {# Scripts}}",
-          "Title": "Aktualisierungen",
-          "New": "Neu",
-          "Fixed": "Behoben"
+          "Title": "Aktualisierungen"
         }
       }
     },

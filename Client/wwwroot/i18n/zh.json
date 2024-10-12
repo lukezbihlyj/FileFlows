@@ -630,8 +630,8 @@
       },
       "Tabs": {
         "Dashboard": "仪表板",
-        "Savings": "节省",  "Statistics": "统计"
-
+        "Savings": "节省",
+        "Statistics": "统计"
       },
       "Widgets": {
         "CpuRam": {
@@ -640,11 +640,11 @@
         "Files": {
           "Failed": "{count, plural, zero {失败} other {# 失败}}",
           "Finished": "{count, plural, zero {完成} other {# 完成}}",
-          "Title": "文件",
-          "Upcoming": "{count, plural, zero {即将} other {# 即将}}",
           "NoFailedFiles": "没有失败的文件",
           "NoRecentlyFinishedFiles": "没有最近完成的文件",
-          "NoUpcomingFiles": "没有即将到来的文件"
+          "NoUpcomingFiles": "没有即将到来的文件",
+          "Title": "文件",
+          "Upcoming": "{count, plural, zero {即将} other {# 即将}}"
         },
         "FilesOverview": {
           "FilesProcessed": "已处理文件",
@@ -681,11 +681,11 @@
         },
         "Updates": {
           "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "已修复",
+          "New": "新",
           "Plugins": "{count, plural, zero {插件} one {# 个插件} other {# 个插件}}",
           "Scripts": "{count, plural, zero {脚本} one {# 个脚本} other {# 个脚本}}",
-          "Title": "更新",
-          "New": "新",
-          "Fixed": "已修复"
+          "Title": "更新"
         }
       }
     },

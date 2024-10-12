@@ -71,62 +71,14 @@ public class FlowEditor : IDisposable
         };
         
         lblObsoleteMessage = Translater.Instant("Labels.ObsoleteConfirm.Message");
-        await InitModel(Flow);
-
+        await ffFlow.InitModel(Flow);
+        
         await ffFlow.init(Flow.Parts, FlowPage.Available);
 
         //await WaitForRender();
         await ffFlow.redrawLines();
     }
 
-    private async Task InitModel(FileFlows.Shared.Models.Flow model)
-    {
-        //this.SetTitle();
-        model.Parts ??= new List<ffPart>(); // just incase its null
-        foreach (FlowPart p in model.Parts)
-        {
-            // FF-347: sane limits to flow positions
-            if (p.xPos < 10)
-                p.xPos = 50;
-            else if (p.xPos > 2400)
-                p.xPos = 2300;
-            
-            if (p.yPos < 10)
-                p.yPos = 50;
-            else if (p.yPos > 1780)
-                p.yPos = 1750;
-            
-            if (p.FlowElementUid == "FileFlows.BasicNodes.Functions.Matches" && p.Model is IDictionary<string, object> dict)
-            {
-                // special case, outputs is determine by the "Matches" count
-                if (dict.TryGetValue("MatchConditions", out var oMatches))
-                {
-                    p.Outputs = ObjectHelper.GetArrayLength(oMatches) + 1; // add +1 for not matching
-                }
-            }
-            
-            if (string.IsNullOrEmpty(p.Name) == false || string.IsNullOrEmpty(p?.FlowElementUid))
-                continue;
-            var type = p.FlowElementUid[(p.FlowElementUid.LastIndexOf('.') + 1)..];
-            var name = Translater.Instant($"Flow.Parts.{type}.Label", suppressWarnings: true);
-            if (name == "Label")
-                name = FlowHelper.FormatLabel(type);
-            p.Name = name;
-        }
-
-       // this.Name = model.Name ?? "";
-
-        var connections = new Dictionary<string, List<FlowConnection>>();
-        foreach (var part in Flow.Parts.Where(x => x.OutputConnections?.Any() == true || x.ErrorConnection != null))
-        {
-            var partConnections = part.OutputConnections ?? new ();
-            if(part.ErrorConnection != null)
-                partConnections.Add(part.ErrorConnection);
-            connections.Add(part.Uid.ToString(), partConnections);
-        }
-
-        await ffFlow.ioInitConnections(connections);
-    }
 
 
     public async Task<object> Edit(ffPart part, bool isNew)

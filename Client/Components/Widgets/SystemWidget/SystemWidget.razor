@@ -5,7 +5,10 @@
         <OptionButtons @ref=OptionButtons @bind-Value="Mode">
             <WidgetOption Label="@lblRunners" Value="0" Icon="fas fa-running" />
             <WidgetOption Label="@lblNodes" Value="1" Icon="fas fa-desktop" />
-            <WidgetOption Label="@lblSavings" Value="2" Icon="fas fa-dollar-sign" />
+            @if (App.Instance.IsMobile == false)
+            {
+                <WidgetOption Label="@lblSavings" Value="2" Icon="fas fa-dollar-sign"/>
+            }
         </OptionButtons>
     </Head>
     <Body>
@@ -16,8 +19,11 @@
     <div class="system-section nodes @(Mode == 1 ? "active" : "")">
         <NodeSummaryComponent />
     </div>
-    <div class="system-section savings @(Mode == 2 ? "active" : "")">
-        <LibrarySavingsComponent Mode="1" />
-    </div>
+    @if (App.Instance.IsMobile == false)
+    {
+        <div class="system-section savings @(Mode == 2 ? "active" : "")">
+            <LibrarySavingsComponent Mode="1"/>
+        </div>
+    }
     </Body>
 </ContainerWidget>

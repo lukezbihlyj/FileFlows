@@ -397,6 +397,16 @@
                 </div>   
             }
             break;
+        case FormInputType.Flow:
+        {
+            <InputExecutedFlowsRenderer Model="Editor?.Model" />
+        }
+            break;
+        case FormInputType.ExecutedFlowElementsRenderer:
+        {
+            <InputExecutedFlowElementsRenderer Model="Editor?.Model" />
+        }
+            break;
         case FormInputType.Label:
             {
                 <div class="input-label">

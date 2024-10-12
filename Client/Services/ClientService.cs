@@ -1,5 +1,4 @@
 ﻿using System.Timers;
-using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.JSInterop;
@@ -267,4 +266,17 @@ public partial class ClientService
         var result = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=" + days);
         return result.Success ? result.Data ?? [] : [];
     }
+
+    /// <summary>
+    /// Gets all the flow elements in the system
+    /// </summary>
+    /// <returns>all the flow elements in the system</returns>
+    public async Task<List<FlowElement>> GetAllFlowElements()
+        => await _cacheService.GetFromCache<List<FlowElement>>("AllFlowElements", 30,
+            async () =>
+            {
+                var result = await HttpHelper.Get<List<FlowElement>>("/api/flow/elements");
+                List<FlowElement> list = result.Success ? result.Data ?? [] : [];
+                return list;
+            });
 }

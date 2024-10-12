@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using FileFlows.Shared;
 using FileFlows.Shared.Json;
 using FileFlows.Shared.Models;
 
@@ -50,22 +51,56 @@ class CustomDbMapper : FileFlowsMapper<CustomDbMapper>
                     var result = JsonSerializer.Deserialize<Dictionary<string, object>>((string)value, JsonOptions);
                     return result;
                 };
-            if (destType == typeof(List<ExecutedNode>) && sourceType == typeof(string))
+            // if (destType == typeof(List<ExecutedNode>) && sourceType == typeof(string))
+            //     return (value) =>
+            //     {
+            //         if (value is string strValue == false)
+            //             return new List<ExecutedNode>();
+            //         try
+            //         {
+            //             if (string.IsNullOrEmpty(strValue) || strValue == "null")
+            //                 return new List<ExecutedNode>();
+            //             var result = JsonSerializer.Deserialize<List<ExecutedNode>>(strValue, JsonOptions);
+            //             return result;
+            //         }
+            //         catch (Exception)
+            //         {
+            //             // Logger.Instance.ELog("Error parsing ExecutedNodes: " + ex.Message + " , string value: " + strValue);
+            //             return new List<ExecutedNode>();
+            //         }
+            //     };
+            if (destType.IsGenericType && destType.GetGenericTypeDefinition() == typeof(List<>))
                 return (value) =>
                 {
                     if (value is string strValue == false)
-                        return new List<ExecutedNode>();
+                        return Activator.CreateInstance(destType);
                     try
                     {
                         if (string.IsNullOrEmpty(strValue) || strValue == "null")
-                            return new List<ExecutedNode>();
-                        var result = JsonSerializer.Deserialize<List<ExecutedNode>>(strValue, JsonOptions);
+                            return Activator.CreateInstance(destType);
+                        var result = JsonSerializer.Deserialize(strValue, destType, JsonOptions);
                         return result;
                     }
                     catch (Exception)
                     {
-                        // Logger.Instance.ELog("Error parsing ExecutedNodes: " + ex.Message + " , string value: " + strValue);
-                        return new List<ExecutedNode>();
+                        // Logger.Instance.ELog("Error parsing list: " + ex.Message + " , string value: " + strValue);
+                        return Activator.CreateInstance(destType);
+                    }
+                };
+            if(destType == typeof(LibraryFileAdditional) && sourceType == typeof(string))
+                return (value) =>
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(value as string))
+                            return new LibraryFileAdditional();
+
+                        var result = JsonSerializer.Deserialize<LibraryFileAdditional>((string)value, JsonOptions);
+                        return result;
+                    }
+                    catch (Exception)
+                    {
+                        return new LibraryFileAdditional();
                     }
                 };
         }
