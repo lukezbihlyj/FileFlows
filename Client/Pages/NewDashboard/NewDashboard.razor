@@ -7,16 +7,45 @@
 {
     <div class="dashboard-wrapper">
 
-        <FlowTabs @ref="Tabs" Style="TabStyle.NewStyle">
-            <FlowTab Title="@lblDashboard" Icon="fas fa-chart-pie" ClassName="dashboard">
-                @if (App.Instance.IsMobile)
-                {
-                    <StatusWidget OnUpdatesClicked="Status_OnUpdatesClicked"/>
-                    <SystemWidget/>
+        <FlowTabs @ref="Tabs" Style="TabStyle.NewStyle" TitleOnlyOnActive="App.Instance.IsSmallMobile">
+            @if (App.Instance.IsMobile)
+            {
+                <FlowTab Title="@lblDashboard" Icon="fas fa-chart-pie" ClassName="dashboard">
+                    <ContainerWidget Title="@lblRunners" Scroll="true">
+                        <Head>
+                            <OptionButtons>
+                                <WidgetOption Label="@PausedService.PausedLabel" Value="1"
+                                              Icon="@(PausedService.IsPaused ? "fas fa-play" : "fas fa-pause")"
+                                              OnClick="PausedService.Toggle"/>
+                            </OptionButtons>
+                        </Head>
+                        <Body>
+                        <RunnersComponent/>
+                        </Body>
+                    </ContainerWidget>
                     <FilesWidget/>
-                }
-                else
-                {
+                </FlowTab>
+                
+                <FlowTab Title="@lblNodes" Icon="fas fa-desktop" ClassName="nodes">
+                    <ContainerWidget Title="@lblNodes" Scroll="true">
+                        <Body>
+                        <NodeSummaryComponent/>
+                        </Body>
+                    </ContainerWidget>
+                </FlowTab>
+                <FlowTab Title="@lblSavings" Icon="fas fa-dollar-sign">
+                    <LibrarySavingsSummaryWidget/>
+                    <LargestSavingsWidget/>
+                </FlowTab>
+                <FlowTab Title="@lblStatistics" Icon="fas fa-chart-bar" ClassName="statistics">
+                    <FileOverviewWidget IsFilesProcessed="true"/>
+                    <FileOverviewWidget IsFilesProcessed="false"/>
+                    <CpuRamWidget/>
+                </FlowTab>
+            }
+            else
+            {
+                <FlowTab Title="@lblDashboard" Icon="fas fa-chart-pie" ClassName="dashboard">
                     <div class="grid grid-4">
                         <FileOverviewWidget IsFilesProcessed="true"/>
                         <FileOverviewWidget IsFilesProcessed="false"/>
@@ -28,54 +57,38 @@
                         <SystemWidget/>
                         <FilesWidget/>
                     </div>
-                }
-
-            </FlowTab>
-            <FlowTab Title="@lblSavings" Icon="fas fa-dollar-sign">
-                @if (App.Instance.IsMobile)
-                {
-                    <LibrarySavingsSummaryWidget/>
-                    <LargestSavingsWidget/>
-                }
-                else
-                {
+                </FlowTab>
+                <FlowTab Title="@lblSavings" Icon="fas fa-dollar-sign">
                     <div class="grid grid-60-40 flex-grow savings">
                         <LargestSavingsWidget/>
                         <LibrarySavingsSummaryWidget/>
                     </div>
-                }
-            </FlowTab>
-            @if (UpdateInfoData.HasUpdates)
-            {
-                <FlowTab Title="@lblUpdates" Icon="fas fa-cloud-download-alt" Uid="updates">
-                @if (UpdateInfoData.FileFlowsVersion != null && UpdateInfoData.HasExtensionUpdates)
-                {
-                    <div class="grid grid-60-40 flex-grow savings">
-                        <FileFlowsUpdateWidget Data="UpdateInfoData" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
-                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" />
-                    </div>
-                }
-                else if (UpdateInfoData.FileFlowsVersion != null)
-                {
-                    <div class="grid flex-grow">
-                        <FileFlowsUpdateWidget Data="UpdateInfoData" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))" />
-                    </div>
-                }
-                else if (UpdateInfoData.HasExtensionUpdates)
-                {
-                    <div class="grid flex-grow">
-                        <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile" />
-                    </div>
-                }
-
                 </FlowTab>
             }
-            @if (App.Instance.IsMobile)
+            
+            @if (UpdateInfoData.HasUpdates) // updates shown on both as the last page
             {
-                <FlowTab Title="@lblStatistics" Icon="fas fa-chart-bar" ClassName="statistics">
-                    <FileOverviewWidget IsFilesProcessed="true"/>
-                    <FileOverviewWidget IsFilesProcessed="false"/>
-                    <CpuRamWidget/>
+                <FlowTab Title="@lblUpdates" Icon="fas fa-cloud-download-alt" Uid="updates">
+                    @if (UpdateInfoData.FileFlowsVersion != null && UpdateInfoData.HasExtensionUpdates)
+                    {
+                        <div class="grid grid-60-40 flex-grow savings">
+                            <FileFlowsUpdateWidget Data="UpdateInfoData" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))"/>
+                            <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile"/>
+                        </div>
+                    }
+                    else if (UpdateInfoData.FileFlowsVersion != null)
+                    {
+                        <div class="grid flex-grow">
+                            <FileFlowsUpdateWidget Data="UpdateInfoData" CanUpdate="@(Profile.LicensedFor(LicenseFlags.AutoUpdates))"/>
+                        </div>
+                    }
+                    else if (UpdateInfoData.HasExtensionUpdates)
+                    {
+                        <div class="grid flex-grow">
+                            <ExtensionUpdatesWidget Data="UpdateInfoData" Profile="Profile"/>
+                        </div>
+                    }
+
                 </FlowTab>
             }
         </FlowTabs>

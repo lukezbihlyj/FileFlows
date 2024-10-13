@@ -19,6 +19,9 @@
     + .btn-option {
       margin-left:0.25rem;
     }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     background: transparent;
     border: solid 1px var(--border-color);
     outline: none;

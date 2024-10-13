@@ -17,6 +17,10 @@ public partial class NewDashboard : ComponentBase, IDisposable
     /// Gets or sets the profile service
     /// </summary>
     [Inject] public ProfileService ProfileService { get; set; }
+    /// <summary>
+    /// Gets or sets the paused service
+    /// </summary>
+    [Inject] private IPausedService PausedService { get; set; }
 
     /// <summary>
     /// The users profile
@@ -33,7 +37,7 @@ public partial class NewDashboard : ComponentBase, IDisposable
     /// </summary>
     private FlowTabs Tabs;
 
-    private string lblDashboard, lblSavings, lblUpdates, lblStatistics;
+    private string lblDashboard, lblSavings, lblUpdates, lblStatistics, lblNodes, lblRunners;
 
     private bool loaded = false;
 
@@ -43,6 +47,8 @@ public partial class NewDashboard : ComponentBase, IDisposable
         lblDashboard = Translater.Instant("Pages.Dashboard.Tabs.Dashboard");
         lblSavings = Translater.Instant("Pages.Dashboard.Tabs.Savings");
         lblStatistics = Translater.Instant("Pages.Dashboard.Tabs.Statistics");
+        lblNodes = Translater.Instant("Pages.Nodes.Title");
+        lblRunners = Translater.Instant("Pages.Dashboard.Widgets.System.Runners", new {count = 0});
         UpdateInfoData = await ClientService.GetCurrentUpdatesInfo();
         OnUpdatesUpdateInfo(UpdateInfoData);
         _ = await ClientService.GetCurrentFileOverData();
@@ -50,9 +56,16 @@ public partial class NewDashboard : ComponentBase, IDisposable
         ClientService.UpdatesUpdateInfo += OnUpdatesUpdateInfo;
         Profile = await ProfileService.Get();
 
+        if(App.Instance.IsMobile)
+            PausedService.OnPausedLabelChanged += OnPausedLabelChanged;
         //await Refresh();
         
         loaded = true;
+        StateHasChanged();
+    }
+
+    private void OnPausedLabelChanged(string label)
+    {
         StateHasChanged();
     }
 
@@ -87,5 +100,8 @@ public partial class NewDashboard : ComponentBase, IDisposable
     public void Dispose()
     {
         ClientService.UpdatesUpdateInfo -= OnUpdatesUpdateInfo;
+
+        if(App.Instance.IsMobile)
+            PausedService.OnPausedLabelChanged -= OnPausedLabelChanged;
     }
 }
