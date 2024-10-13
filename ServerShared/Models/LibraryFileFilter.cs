@@ -109,7 +109,9 @@ public class LibraryFileFilter
             }
             else if (Status == FileStatus.Unprocessed && file.Status == FileStatus.Unprocessed)
             {
-                // need to check that it isnt actually disabled
+                // need to check that it isn't actually disabled
+                if (file.IsForcedProcessing)
+                    return true; // its forced to process
                 if (file.LibraryUid != null && SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) && lib?.Enabled == false)
                     return false; // its actually disabled
                 if(file.HoldUntil > DateTime.UtcNow)

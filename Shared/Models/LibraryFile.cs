@@ -293,6 +293,12 @@ public class LibraryFile : FileFlowObject
     /// </summary>
     [SerializedColumn]
     public LibraryFileAdditional Additional { get; set; }
+
+    /// <summary>
+    /// Gets if this file is marked for forced processing
+    /// </summary>
+    [Ignore]
+    public bool IsForcedProcessing => Status == FileStatus.Unprocessed && Flags.HasFlag(LibraryFileFlags.ForceProcessing);
 }
 
 /// <summary>
