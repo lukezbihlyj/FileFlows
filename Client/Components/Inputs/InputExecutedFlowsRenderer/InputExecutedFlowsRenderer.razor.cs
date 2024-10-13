@@ -100,6 +100,11 @@ public partial class InputExecutedFlowsRenderer : ComponentBase, IAsyncDisposabl
                 part.Icon = "fas fa-sitemap";
                 part.CustomColor = "#a428a7";
             }
+            else if (IsDownloader(part))
+            {
+                part.Icon = "fas fa-download";
+                part.CustomColor = "#a428a7";
+            }
 
             var flow = Additional.ExecutedFlows.First(x => x.Parts.Contains(part));
             if (flow != currentFlow)
@@ -115,6 +120,12 @@ public partial class InputExecutedFlowsRenderer : ComponentBase, IAsyncDisposabl
                         last.yPos = 20;
                     yOffset = last.yPos - part.yPos + 100;
                     xOffset = last.xPos - part.xPos;
+                }
+                else if(last != null && part is { xPos: 0, yPos: 0 })
+                {
+                    // could be s startup flow element like the downloader
+                    part.yPos = last.yPos - part.yPos + 100;
+                    part.xPos = last.xPos;
                 }
                 else
                 {
@@ -163,8 +174,20 @@ public partial class InputExecutedFlowsRenderer : ComponentBase, IAsyncDisposabl
         return builtFlow;
     }
     
+    /// <summary>
+    /// If the flow part if the startup flow element
+    /// </summary>
+    /// <param name="part">the part to check</param>
+    /// <returns>true if it's the startup flow element</returns>
     private bool IsStartup(FlowPart part)
         => part.FlowElementUid?.Contains(".Startup") == true;
+    /// <summary>
+    /// If the flow part if the downloader flow element
+    /// </summary>
+    /// <param name="part">the part to check</param>
+    /// <returns>true if it's the downloader flow element</returns>
+    private bool IsDownloader(FlowPart part)
+        => part.FlowElementUid?.Contains(".RunnerFlowElements.FileDownloader") == true;
 
 
     private ffFlowWrapper ffFlow;

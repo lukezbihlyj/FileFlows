@@ -540,7 +540,8 @@ class ffFlow
     setOutputHint(part, output) {
         let element = this.getElement(part.flowElementUid);
         if (!element) {
-            console.error("Failed to find element: " + part.flowElementUid);
+            if(part.flowElementUid.contains('RunnerFlowElements') === false)
+                console.error("Failed to find element: " + part.flowElementUid);
             return;
         }
         if(output === -1){
