@@ -105,6 +105,13 @@ public partial class InputExecutedFlowsRenderer : ComponentBase, IAsyncDisposabl
                 part.Icon = "fas fa-download";
                 part.CustomColor = "#a428a7";
             }
+            
+            if(last != null && part is { xPos: 0, yPos: 0 })
+            {
+                // could be s startup flow element like the downloader
+                part.yPos = last.yPos - part.yPos + 100;
+                part.xPos = last.xPos;
+            }
 
             var flow = Additional.ExecutedFlows.First(x => x.Parts.Contains(part));
             if (flow != currentFlow)
@@ -120,12 +127,6 @@ public partial class InputExecutedFlowsRenderer : ComponentBase, IAsyncDisposabl
                         last.yPos = 20;
                     yOffset = last.yPos - part.yPos + 100;
                     xOffset = last.xPos - part.xPos;
-                }
-                else if(last != null && part is { xPos: 0, yPos: 0 })
-                {
-                    // could be s startup flow element like the downloader
-                    part.yPos = last.yPos - part.yPos + 100;
-                    part.xPos = last.xPos;
                 }
                 else
                 {
