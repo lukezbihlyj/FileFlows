@@ -10,17 +10,12 @@ namespace FileFlows.Client.Components.Inputs;
 /// <summary>
 /// Executed Flow Elements Renderer Viewer
 /// </summary>
-public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDisposable
+public partial class InputExecutedFlowElementsRenderer : ExecuteFlowElementView, IAsyncDisposable
 {
     /// <summary>
     /// Gets or sets the model
     /// </summary>
     [Parameter] public ExpandoObject Model { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the JavaScript runtime
-    /// </summary>
-    [Inject] protected IJSRuntime jsRuntime { get; set; }
     
     /// <summary>
     /// Gets or sets the client service
@@ -29,23 +24,30 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
     
     private List<ExecutedNode> ExecutedNodes = [];
     private List<FlowElement> FlowElements = [];
-    private readonly Guid Uid = Guid.NewGuid();
     private List<FlowPart> parts = [];
     private bool _needsRendering = false;
 
     private ffFlowWrapper ffFlow;
     private IJSObjectReference? jsObjectReference;
+    private Flow? Flow;
 
 
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        base.OnInitialized();
         _ = Initialize();
     }
 
     private async Task Initialize()
     {
-        (Model as IDictionary<string, object> ?? new Dictionary<string, object>()).TryGetValue(nameof(LibraryFile.ExecutedNodes), out var oExecutedNodes);
+        var dict = Model as IDictionary<string, object>;
+        if (dict == null)
+            return;
+        dict.TryGetValue("Log", out var oLog);
+        _Log = oLog as string ?? string.Empty;
+        
+        dict.TryGetValue(nameof(LibraryFile.ExecutedNodes), out var oExecutedNodes);
         if(oExecutedNodes == null)
             return;
         if(oExecutedNodes is JsonElement jsonElement)
@@ -63,9 +65,9 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
         if (height < 200)
             height = 880;
         //ready = true;
-        var flow = BuildFlow(height);
-        ffFlow = await ffFlowWrapper.Create(jsRuntime, Uid, true);
-        await ffFlow.InitModel(flow);
+        Flow = BuildFlow(height);
+        ffFlow = await ffFlowWrapper.Create(jsRuntime, Guid.NewGuid(), true);
+        await ffFlow.InitModel(Flow);
         await ffFlow.init(parts, FlowElements.ToArray());
 
         //Flow.Parts, FlowPage.Available);
@@ -93,6 +95,8 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
     {
         _needsRendering = false;
     }
+    
+    private Dictionary<Guid, ExecutedNode> ExecutedNodeDictionary = new();
 
     /// <summary>
     /// Builds the flow
@@ -107,6 +111,7 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
         for(int i=0;i<ExecutedNodes.Count;i++ )
         {
             var node = ExecutedNodes[i];
+            ExecutedNodeDictionary[nextUid] = node;
             var element = FlowElements.FirstOrDefault(x => x.Uid == node.NodeUid);
             var part = new FlowPart
             {
@@ -180,11 +185,18 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
     /// </summary>
     /// <param name="uid">the UID of the flow element</param>
     [JSInvokable]
-    public void OnDoubleClick(string uid)
+    public void OnDoubleClick(Guid uid)
     {
-        Logger.Instance.ILog("Double clicked on: " + uid);
+        var executed = ExecutedNodeDictionary.GetValueOrDefault(uid);
+        if (executed == null)
+            return;
+        
+        OpenLog(executed);
     }
 
+    /// <summary>
+    /// Disposes of the component
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
         if (jsObjectReference != null)

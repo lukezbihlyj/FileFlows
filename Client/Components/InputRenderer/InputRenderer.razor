@@ -369,6 +369,17 @@
                 <InputExecutedNodes Field=@field Label="@label" Value="@oValue" HideLabel=@hideLabel Log=@log />
             }
             break;
+        case FormInputType.Flow:
+        {
+            <InputExecutedFlowsRenderer Model="Editor?.Model" />
+        }
+            break;
+        case FormInputType.ExecutedFlowElementsRenderer:
+        {
+            var oValue = GetValue<List<ExecutedNode>>(field.Name);
+            <InputExecutedFlowElementsRenderer Model="Editor?.Model" Value="@oValue" />
+        }
+            break;
         case FormInputType.Metadata:
             {
                 var oValue = GetValue<Dictionary<string, object>>(field.Name);
@@ -396,16 +407,6 @@
                     @((MarkupString)html)
                 </div>   
             }
-            break;
-        case FormInputType.Flow:
-        {
-            <InputExecutedFlowsRenderer Model="Editor?.Model" />
-        }
-            break;
-        case FormInputType.ExecutedFlowElementsRenderer:
-        {
-            <InputExecutedFlowElementsRenderer Model="Editor?.Model" />
-        }
             break;
         case FormInputType.Label:
             {

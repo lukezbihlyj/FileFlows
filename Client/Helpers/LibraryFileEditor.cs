@@ -144,7 +144,11 @@ public class LibraryFileEditor
                         new ElementField()
                         {
                             InputType = FormInputType.ExecutedFlowElementsRenderer,
-                            Name = nameof(model.ExecutedNodes)
+                            Name = nameof(model.ExecutedNodes),
+                            Parameters =
+                            {
+                                // { "Log", model.Log }
+                            }
                         }
                     });
                 }
