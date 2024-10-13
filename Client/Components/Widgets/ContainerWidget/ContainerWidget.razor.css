@@ -20,7 +20,7 @@
   font-size: 1.1rem;
   font-weight: var(--bold, 600);
 }
-@media (min-width: 720.001px) {
+@media (min-width: 850.001px) {
   .flow-widget.scroll {
     display: flex;
     flex-direction: column;
@@ -28,5 +28,6 @@
   }
   .flow-widget.scroll ::deep .widget-content {
     flex-grow: 1;
+    overflow: auto;
   }
 }

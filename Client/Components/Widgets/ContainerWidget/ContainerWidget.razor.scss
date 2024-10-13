@@ -23,12 +23,13 @@
     font-weight: var(--bold, 600);
   }
   &.scroll {
-    @media (min-width: 720.001px) {
+    @media (min-width: 850.001px) {
       display: flex;
       flex-direction: column;
       height: 100%;
       ::deep .widget-content {
         flex-grow: 1;
+        overflow: auto;
       }
     }
   }
