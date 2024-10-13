@@ -574,6 +574,8 @@ internal class DbLibraryFileManager : BaseManager
                 if (Cache.TryGetValue(uid, out var file))
                 {
                     file.Status = status;
+                    if (status == FileStatus.Unprocessed)
+                        file.HoldUntil = new(1970, 1, 1);
                 }
             }
         }
