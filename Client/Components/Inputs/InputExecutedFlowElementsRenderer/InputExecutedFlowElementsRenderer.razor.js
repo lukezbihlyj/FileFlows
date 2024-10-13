@@ -36,4 +36,20 @@ export class ExecutedFlowElementsRenderer {
         return window.innerHeight || document.documentElement.clientHeight;
     }
 
+    captureDoubleClicks() {
+        for(let part of this.element.querySelectorAll('.flow-part .draggable')) {
+            part.addEventListener("dblclick", (e) => {
+                let uid = e.target.parentNode.getAttribute('x-uid');
+                this.dotnetObject.invokeMethodAsync('OnDoubleClick', uid);
+            });
+        }
+    }
+    
+    dispose(){
+        // remove all child elements
+        while (this.element.firstChild) {
+            this.element.removeChild(this.element.firstChild);
+        }
+    }
+
 }

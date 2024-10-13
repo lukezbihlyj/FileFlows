@@ -1,3 +1,13 @@
+.wrapper {
+  position: relative;
+}
+
 .flows-tabs-contents {
   position:relative;
+}
+
+::deep {
+  .flow-part .draggable {
+    cursor: pointer !important;
+  }
 }

@@ -193,27 +193,19 @@ class ffFlowLines {
         if (!input || !output)
             return;
 
-        let src = output;
-        let dest = input;
         if (output.classList.contains('connected') === false)
             output.classList.add('connected');
         if (input.classList.contains('connected') === false)
             input.classList.add('connected');
-        let srcBounds = src.getBoundingClientRect();
-        let destBounds = dest.getBoundingClientRect();
-
-        let canvas = this.ffFlow.canvas;
-        let canvasBounds = canvas.getBoundingClientRect();
-        let srcX = (srcBounds.left - canvasBounds.left) + this.ioOffset;
-        let srcY = (srcBounds.top - canvasBounds.top) + this.ioOffset;
-        let destX = (destBounds.left - canvasBounds.left) + this.ioOffset;
-        let destY = (destBounds.top - canvasBounds.top) + this.ioOffset;
+        
+        let src = this.getIOElementPosition(output);
+        let dest = this.getIOElementPosition(input);
 
         // eliminates any pixel off issues now the grid snaps to 10px
-        srcX = Math.round(srcX / 10) * 10;
-        srcY = Math.round(srcY / 10) * 10;
-        destX = Math.round(destX / 10) * 10;
-        destY = Math.round(destY / 10) * 10;
+        let srcX = Math.round(src.x / 10) * 10;
+        let srcY = Math.round(src.y / 10) * 10;
+        let destX = Math.round(dest.x / 10) * 10;
+        let destY = Math.round(dest.y / 10) * 10;
         
         let isError = /output--1/.test(output.className); 
         if(isError){
@@ -225,6 +217,29 @@ class ffFlowLines {
         
         this.drawLineToPoint({ srcX, srcY, destX, destY, output, connection, isError: isError });
     };
+    
+    getIOElementPosition(src)
+    {
+        let parent = src.parentNode.parentNode;        
+        let parentX = parseInt(parent.style.left, 10);
+        let parentY = parseInt(parent.style.top, 10);
+        let transform = parent.style.transform
+        if(transform) {
+            // get x, y from transform and adjust the parent x/y, it uses translate3d(x,y,z)
+            // these x,y may be negative numbers
+            let matches = transform.match(/translate3d\(([^,]+),([^,]+),/);
+            if(matches && matches.length > 2) {
+                parentX += parseInt(matches[1], 10);
+                parentY += parseInt(matches[2], 10);
+            }
+        }
+        let parentBounds = parent.getBoundingClientRect();
+        let yOffset = parentBounds.y - parentY;
+        let xOffset = parentBounds.x - parentX;
+        let bounds = src.getBoundingClientRect();
+
+        return { x: (bounds.left - xOffset) + this.ioOffset, y: (bounds.top - yOffset ) + this.ioOffset};
+    }
 
     drawLineToPoint({ srcX, srcY, destX, destY, output, connection, color, isError }) {
         if (!this.ioContext) {

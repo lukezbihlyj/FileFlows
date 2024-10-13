@@ -425,8 +425,6 @@ class ffFlow
         let result = this.elements.filter(x => x.uid === uid)[0];
         if(result)
             return result;
-        console.log('unable to get: ', uid);
-        console.log(this.elements);
     }
 
     getPart(partUid) {
@@ -540,7 +538,7 @@ class ffFlow
     setOutputHint(part, output) {
         let element = this.getElement(part.flowElementUid);
         if (!element) {
-            if(part.flowElementUid.contains('RunnerFlowElements') === false)
+            if(part.flowElementUid.indexOf('RunnerFlowElements') < 0)
                 console.error("Failed to find element: " + part.flowElementUid);
             return;
         }

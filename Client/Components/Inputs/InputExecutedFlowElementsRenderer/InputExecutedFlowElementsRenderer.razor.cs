@@ -26,22 +26,24 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
     /// Gets or sets the client service
     /// </summary>
     [Inject] private ClientService ClientService { get; set; }
-
-    /// <summary>
-    /// Reference to JS Report class
-    /// </summary>
-    //private IJSObjectReference jsObjectReference;
     
     private List<ExecutedNode> ExecutedNodes = [];
     private List<FlowElement> FlowElements = [];
     private readonly Guid Uid = Guid.NewGuid();
-    private bool initDone;
-    private bool ready = false;
     private List<FlowPart> parts = [];
+    private bool _needsRendering = false;
+
+    private ffFlowWrapper ffFlow;
+    private IJSObjectReference? jsObjectReference;
 
 
     /// <inheritdoc />
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
+    {
+        _ = Initialize();
+    }
+
+    private async Task Initialize()
     {
         (Model as IDictionary<string, object> ?? new Dictionary<string, object>()).TryGetValue(nameof(LibraryFile.ExecutedNodes), out var oExecutedNodes);
         if(oExecutedNodes == null)
@@ -52,45 +54,45 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
             ExecutedNodes = list;
         FlowElements = await ClientService.GetAllFlowElements();
 
+        var dotNetObjRef = DotNetObjectReference.Create(this);
+        var js = await jsRuntime.InvokeAsync<IJSObjectReference>("import",
+            $"./Components/Inputs/InputExecutedFlowElementsRenderer/InputExecutedFlowElementsRenderer.razor.js?v={Globals.Version}");
+        jsObjectReference = await js.InvokeAsync<IJSObjectReference>("createExecutedFlowElementsRenderer", dotNetObjRef, this.Uid);
         
-        ready = true;
+        int height = await jsObjectReference.InvokeAsync<int>("getVisibleHeight") - 200;
+        if (height < 200)
+            height = 880;
+        //ready = true;
+        var flow = BuildFlow(height);
+        ffFlow = await ffFlowWrapper.Create(jsRuntime, Uid, true);
+        await ffFlow.InitModel(flow);
+        await ffFlow.init(parts, FlowElements.ToArray());
+
+        //Flow.Parts, FlowPage.Available);
+        await WaitForRender();
+        await ffFlow.redrawLines();
+        await jsObjectReference.InvokeVoidAsync("captureDoubleClicks");
         StateHasChanged();
     }
-
-    private ffFlowWrapper ffFlow;
-    private IJSObjectReference? jsObjectReference;
-    /// <inheritdoc />
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    
+    /// <summary>
+    /// Waits for the component to render
+    /// </summary>
+    protected async Task WaitForRender()
     {
-        if (jsObjectReference == null)
+        _needsRendering = true;
+        StateHasChanged();
+        while (_needsRendering)
         {
-            var dotNetObjRef = DotNetObjectReference.Create(this);
-            var js = await jsRuntime.InvokeAsync<IJSObjectReference>("import",
-                $"./Components/Inputs/InputExecutedFlowElementsRenderer/InputExecutedFlowElementsRenderer.razor.js?v={Globals.Version}");
-            jsObjectReference = await js.InvokeAsync<IJSObjectReference>("createExecutedFlowElementsRenderer", dotNetObjRef, this.Uid);
-        }
-
-        if (initDone == false && ExecutedNodes.Count > 0 && ready)
-        {
-            bool isVisible = await jsObjectReference.InvokeAsync<bool>("isElementVisible");
-            if (isVisible == false)
-                return;
-            int height = await jsObjectReference.InvokeAsync<int>("getVisibleHeight") - 200;
-            if (height < 200)
-                height = 880;
-            
-            initDone = true;
-            var flow = BuildFlow(height);
-            ffFlow = await ffFlowWrapper.Create(jsRuntime, Uid, true);
-            await ffFlow.InitModel(flow);
-            await ffFlow.init(parts, FlowElements.ToArray());
-
-            //Flow.Parts, FlowPage.Available);
-            //await WaitForRender();
-            await ffFlow.redrawLines();
+            await Task.Delay(50);
         }
     }
 
+    /// <inheritdoc />
+    protected override void OnAfterRender(bool firstRender)
+    {
+        _needsRendering = false;
+    }
 
     /// <summary>
     /// Builds the flow
@@ -102,7 +104,7 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
         int xPos = 50;
         int yPos = 20;
         Guid nextUid = Guid.NewGuid();
-        for(int i=1;i<ExecutedNodes.Count;i++ )
+        for(int i=0;i<ExecutedNodes.Count;i++ )
         {
             var node = ExecutedNodes[i];
             var element = FlowElements.FirstOrDefault(x => x.Uid == node.NodeUid);
@@ -111,16 +113,18 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
                 Uid = nextUid,
                 Name = node.NodeName,
                 ReadOnly = true,
-                Inputs = element?.Inputs ?? 0,
+                Inputs = i > 0 ? 1 : 0,
                 Outputs = element?.Outputs ?? (node.NodeUid?.Contains(".Startup") == true ? 1 : 0),
                 Type = element?.Type ?? FlowElementType.Input,
-                Color = element?.CustomColor ?? "",
-                Icon = element?.Icon ?? "",
                 FlowElementUid = node.NodeUid,
                 Label = node.NodeName,
                 xPos = xPos,
                 yPos = yPos
             };
+            SetIcon(part, node, element);
+            if(part.Outputs < node.Output)
+                part.Outputs = node.Output;
+            
             nextUid = Guid.NewGuid();
             if(i < ExecutedNodes.Count - 1)
             {
@@ -139,7 +143,7 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
             if (yPos > height)
             {
                 yPos = 20;
-                xPos += 220;
+                xPos += 250;
             }
         }
         Flow flow = new();
@@ -147,11 +151,46 @@ public partial class InputExecutedFlowElementsRenderer : ComponentBase, IAsyncDi
         return flow;
     }
 
+    /// <summary>
+    /// Sets the icon for the element
+    /// </summary>
+    /// <param name="element">the element</param>
+    private void SetIcon(FlowPart part, ExecutedNode node, FlowElement? element)
+    {
+        if (string.IsNullOrWhiteSpace(element?.Icon) == false)
+        {
+            part.Icon = element.Icon;
+            if (string.IsNullOrWhiteSpace(element.CustomColor) == false)
+                part.CustomColor = element.CustomColor;
+        }
+        else if (node.NodeUid?.Contains(".Startup") == true)
+        {
+            part.Icon = "fas fa-sitemap";
+            part.CustomColor = "#a428a7";
+        }
+        else if (node.NodeUid?.Contains(".RunnerFlowElements.FileDownloader") == true)
+        {
+            part.Icon = "fas fa-download";
+            part.CustomColor = "#a428a7";
+        }
+    }
+
+    /// <summary>
+    /// A flow element was double clicked
+    /// </summary>
+    /// <param name="uid">the UID of the flow element</param>
+    [JSInvokable]
+    public void OnDoubleClick(string uid)
+    {
+        Logger.Instance.ILog("Double clicked on: " + uid);
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (jsObjectReference != null)
         {
             await ffFlow.dispose();
+            await jsObjectReference.InvokeVoidAsync("dispose");
             await jsObjectReference.DisposeAsync();
         }
     }

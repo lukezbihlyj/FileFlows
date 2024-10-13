@@ -29,5 +29,12 @@ export class InputExecutedFlowsRenderer {
             rect.right > 0
         );
     }
+    
+    captureDoubleClicks() {
+        this.element.querySelectorAll('.flow-part .draggable').addEventListener("dblclick", (e) => {
+            let uid = e.target.parentNode.getAttribute('x-uid');
+            this.dotnetObject.invokeMethodAsync('OnDoubleClick', uid);
+        });
+    }
 
 }
