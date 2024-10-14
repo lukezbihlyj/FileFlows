@@ -76,7 +76,6 @@ public partial class Scripts : ListPage<Guid, Script>
         {
             Type = SelectedType,
             Language = language,
-            Name = CommonVariables.FILE_DISPLAY_NAME,
             Outputs = language is ScriptLanguage.JavaScript || SelectedType != ScriptType.Flow
                 ? null
                 : [new(1, "Truthy"), new(2, "Falsy")]
@@ -85,6 +84,7 @@ public partial class Scripts : ListPage<Guid, Script>
         if ((int)language == 99)
         {
             // special case for FILE_DISPLAY_NAME
+            script.Name = CommonVariables.FILE_DISPLAY_NAME;
             script.Language = ScriptLanguage.JavaScript;
             script.Code = DEFAULT_FILE_DISPLAY_NAME_SCRIPT;
         }
