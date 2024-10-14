@@ -214,7 +214,7 @@ public abstract class FlowTest:TestBase
         // Start the task of waiting for the download
         var waitForDownloadTask = Page.WaitForDownloadAsync();
         // Perform the action that initiates download
-        await Page.Locator("button >> text='Download Log'").ClickAsync();
+        await Page.Locator("button[x-uid='download-log']").ClickAsync();
         // Wait for the download process to complete
         var download = await waitForDownloadTask;
         Logger.ILog(await download.PathAsync() ?? "Path is null");

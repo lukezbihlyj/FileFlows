@@ -161,6 +161,7 @@ public class LibraryFileEditor
                     or FileStatus.ReprocessByFlow
                     ? new()
                     {
+                        Uid = "download-log",
                         Label = App.Instance.IsMobile ? "Labels.DownloadLogShort" : "Labels.DownloadLog",
                         Clicked = (sender, e) => _ = DownloadLog(sender, libraryItemUid)
                     }

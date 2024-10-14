@@ -326,6 +326,11 @@ public class ActionButton
         get => _Label;
         set => _Label = Translater.TranslateIfNeeded(value);
     }
+    
+    /// <summary>
+    /// Gets or sets an optional UID for the button
+    /// </summary>
+    public string? Uid { get; set; }
 
     /// <summary>
     /// Gets or sets the click action
