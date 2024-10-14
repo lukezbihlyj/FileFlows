@@ -35,7 +35,7 @@ public class FileDisplayNameService
         try
         {
             var service = new ScriptService();
-            var script = service.GetByName(Globals.FileDisplayNameScript).Result;
+            var script = service.GetByName(CommonVariables.FILE_DISPLAY_NAME).Result;
             code = script?.Code;
         }
         catch(Exception)
@@ -59,7 +59,7 @@ public class FileDisplayNameService
         }
         catch (Exception ex)
         {
-            Logger.Instance.ELog($"Error in {Globals.FileDisplayNameScript} script: " + ex.Message);
+            Logger.Instance.ELog($"Error in {CommonVariables.FILE_DISPLAY_NAME} script: " + ex.Message);
             NoScript = true;
         }
     }

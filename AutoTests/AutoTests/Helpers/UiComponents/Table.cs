@@ -122,8 +122,8 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     /// <param name="name">the name of the table item</param>
     public async Task DoubleClick(string name)
     {
-        var icon = ItemLocator(name, false).Locator(".icon");
-        await icon.HighlightAsync();
-        await icon.DblClickAsync();
+        var item = ItemLocator(name, false);
+        await item.HighlightAsync();
+        await item.DblClickAsync();
     }
 }

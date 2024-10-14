@@ -75,11 +75,6 @@ public class Globals
     public static bool IsUnitTesting => false;
 #endif
     
-    
-    /// <summary>
-    /// The name of the special script ot alter file display names
-    /// </summary>
-    public const string FileDisplayNameScript = "FILE_DISPLAY_NAME";
 
     /// <summary>
     /// The UID for the flow failure input
