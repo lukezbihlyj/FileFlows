@@ -44,7 +44,7 @@
                                     string label = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Label", item.Name);
                                     string description = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Description", item.Description);
                                 }
-                                <span class="name"><span>@label</span></span>
+                                <span class="name"><span class="name-actual">@label</span></span>
                                 <span class="description">@description</span>
                                 <div class="info">
                                     @if (item.LatestRevision > item.Revision)
