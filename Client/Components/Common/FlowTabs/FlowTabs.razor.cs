@@ -91,12 +91,13 @@ public partial class FlowTabs : ComponentBase
     /// <summary>
     /// Sets the first visible tab as the active tab.
     /// </summary>
+    /// <param name="forced">If we are forcing the first tab to be active</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    public void SelectFirstTab()
+    public void SelectFirstTab(bool forced = false)
     {
         if (DisableChanging) return;
         
-        if (ActiveTab == null)
+        if (ActiveTab == null || forced)
         {
             ActiveTab = Tabs.FirstOrDefault(x => x.Visible);
             OnTabChanged.InvokeAsync(Tabs.IndexOf(ActiveTab));
@@ -127,6 +128,19 @@ public partial class FlowTabs : ComponentBase
     public void TriggerStateHasChanged()
     {
         StateHasChanged();
+    }
+
+    /// <summary>
+    /// Removes the current tab
+    /// </summary>
+    public void RemoveCurrentTab()
+    {
+        if (ActiveTab != null)
+        {
+            Tabs.Remove(ActiveTab);
+            ActiveTab = null;
+            SelectFirstTab(true);
+        }
     }
 }
 

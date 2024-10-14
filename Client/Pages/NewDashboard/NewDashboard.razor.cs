@@ -1,3 +1,4 @@
+using System.Diagnostics.Tracing;
 using FileFlows.Client.Components.Common;
 using Microsoft.AspNetCore.Components;
 
@@ -76,10 +77,16 @@ public partial class NewDashboard : ComponentBase, IDisposable
     private void OnUpdatesUpdateInfo(UpdateInfo info)
     {
         UpdateInfoData = info;
+        int count = UpdateInfoData?.NumberOfUpdates ?? 0;
         lblUpdates = Translater.Instant("Pages.Dashboard.Widgets.System.Updates",
-                 new { count = UpdateInfoData?.NumberOfUpdates ?? 0 });
-        Tabs?.TriggerStateHasChanged();
+                 new { count = 0 });
         StateHasChanged();
+        if (count == 0 && Tabs?.ActiveTab?.Uid == "updates")
+        {
+            Tabs.SelectFirstTab(true);
+        }
+        else
+            Tabs?.TriggerStateHasChanged();
     }
 
     
