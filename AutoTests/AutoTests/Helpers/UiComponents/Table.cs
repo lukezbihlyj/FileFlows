@@ -18,9 +18,10 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     private ILocator ItemLocator(string name, bool sideEditor = false)
     {
         var containerSelector = sideEditor ? ".vi-container " : ".main > .vi-container ";
-        var locator = Page.Locator(containerSelector).Locator(".flowtable-row span", new() 
+        var locator = Page.Locator(containerSelector).Locator(".flowtable-row", new() 
         {
-            HasText = name
+            //HasText = name,
+            HasTextString = name
         });
         return locator;
         // => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
