@@ -51,7 +51,6 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
             Assert.Fail("Table item not found: " + name);
         }
 
-        await locator.HighlightAsync();
         // get the parent of the locator whose class is .flowtable-row
         // Use XPath to find the nearest ancestor with the class .flowtable-row
         // var flowtableRowLocator = locator.First.Locator("xpath=ancestor::div[contains(@class, 'flowtable-row')]");
@@ -76,7 +75,6 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
             bool exists = await locator.CountAsync() > 0;
             if (exists)
             {
-                await locator.First.HighlightAsync();
                 logger.ILog("Table item exists: " + name);
             }
             else

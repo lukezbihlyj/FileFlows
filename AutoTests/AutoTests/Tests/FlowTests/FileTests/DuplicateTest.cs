@@ -6,7 +6,7 @@ namespace FileFlowsTests.Tests.FlowTests.FileTests;
 //[TestClass]
 public class DuplicateTest : FileTest
 {
-    static string duplicateFile = Guid.NewGuid() + ".duplicate";
+    static string duplicateFile = "DuplicateTest.duplicate";
     
     /// <summary>
     /// Manually creates an audiobook flow and tests it
