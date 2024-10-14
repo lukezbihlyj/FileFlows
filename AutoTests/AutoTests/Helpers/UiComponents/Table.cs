@@ -43,7 +43,7 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         if (await locator.CountAsync() == 0)
         {
             logger.WLog("Table item not found: " + name);
-            throw new Exception("Table item not found: " + name);
+            Assert.Fail("Table item not found: " + name);
         }
         // get the parent of the locator whose class is .flowtable-row
         // Use XPath to find the nearest ancestor with the class .flowtable-row
