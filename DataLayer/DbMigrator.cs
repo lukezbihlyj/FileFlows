@@ -43,7 +43,8 @@ internal class DbMigrator
             var source = DatabaseAccessManager.FromType(Logger!, sourceInfo.Type, sourceInfo.ConnectionString);
             var dest = DatabaseAccessManager.FromType(Logger!, destinationInfo.Type, destinationInfo.ConnectionString);
 
-            if (dest.Type == DatabaseType.Sqlite)
+            var destExternal = dest.Type is DatabaseType.Postgres or DatabaseType.MySql or DatabaseType.SqlServer;
+            if(destExternal == false)
             {
                 // move the db if it exists so we can create a new one
                 SQLiteConnector.MoveFileFromConnectionString(destinationInfo.ConnectionString);

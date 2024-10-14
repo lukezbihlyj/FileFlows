@@ -288,7 +288,7 @@ public abstract class FlowTest:TestBase
         
         await SelectItem(fileName);
         //await DoubleClickItem(fileName);
-        await FileFlows.Table.ButtonClick("Add");
+        await FileFlows.Table.ButtonClick("View");
         
 
         string log = await DownloadLog();
