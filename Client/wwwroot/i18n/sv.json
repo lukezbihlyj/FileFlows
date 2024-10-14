@@ -12,6 +12,7 @@
     "Audit": "Granskning",
     "BaseCodeOn": "Använd kodmall",
     "Browse": "Bläddra",
+    "Time": "Tid",
     "Cancel": "Avbryt",
     "CancelItems": "Är du säker på att du vill avbryta de valda {count, plural, one {objektet} other {objekten}}?",
     "CancelMessage": "Är du säker på att du vill avbryta och förlora alla osparade ändringar?",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Skapelsedatum",
-        "ExecutedNodes": "Utförda noder",
+        "ExecutedNodes": "Utförda flödeselement",
         "FailureReason": "Felorsak",
         "FinalMetadata": "Slutlig metadata",
         "FinalSize": "Slutlig storlek",

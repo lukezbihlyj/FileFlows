@@ -7,6 +7,7 @@
     "Advanced": "高级",
     "All": "全部",
     "And": "和",
+    "Time": "时间",
     "Any": "任何",
     "Architecture": "架构",
     "Audit": "审计",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "创建日期",
-        "ExecutedNodes": "执行节点",
+        "ExecutedNodes": "已执行的流程元素",
         "FailureReason": "失败原因",
         "FinalMetadata": "最终元数据",
         "FinalSize": "最终大小",

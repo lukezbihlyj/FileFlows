@@ -8,6 +8,7 @@
     "All": "All",
     "And": "And",
     "Any": "Any",
+    "Time": "Time",
     "Architecture": "Architecture",
     "Audit": "Audit",
     "BaseCodeOn": "Use Code Template",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Creation Date",
-        "ExecutedNodes": "Executed Nodes",
+        "ExecutedNodes": "Executed Flow Elements",
         "FailureReason": "Failure Reason",
         "FinalMetadata": "Final Metadata",
         "FinalSize": "Final Size",

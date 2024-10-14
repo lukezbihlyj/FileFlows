@@ -8,6 +8,7 @@
     "All": "Todos",
     "And": "E",
     "Any": "Qualquer",
+    "Time": "Tempo",
     "Architecture": "Arquitetura",
     "Audit": "Auditoria",
     "BaseCodeOn": "Usar Modelo de Código",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Data de Criação",
-        "ExecutedNodes": "Nodos Executados",
+        "ExecutedNodes": "Elementos de fluxo executados",
         "FailureReason": "Razão da Falha",
         "FinalMetadata": "Metadados Finais",
         "FinalSize": "Tamanho Final",

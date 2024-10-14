@@ -6,6 +6,7 @@
     "AdminRequired": "Se requiere administrador para completar la instalación.",
     "Advanced": "Avanzado",
     "All": "Todos",
+    "Time": "Tiempo",
     "And": "Y",
     "Any": "Cualquiera",
     "Architecture": "Arquitectura",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Fecha de Creación",
-        "ExecutedNodes": "Nodos Ejecutados",
+        "ExecutedNodes": "Elementos de Flujo Ejecutados",
         "FailureReason": "Razón de Fallo",
         "FinalMetadata": "Metadatos Finales",
         "FinalSize": "Tamaño Final",

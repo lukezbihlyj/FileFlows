@@ -140,7 +140,7 @@ public class LibraryFileEditor
                 // else 
                 if (model.ExecutedNodes?.Any() == true)
                 {
-                    tabs.Add("Pages.LibraryFile.Tabs.ExecutedNodes", new List<IFlowField>
+                    tabs.Add("Pages.LibraryFile.Fields.ExecutedNodes", new List<IFlowField>
                     {
                         new ElementField()
                         {

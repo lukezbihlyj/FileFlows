@@ -11,6 +11,7 @@
     "Architecture": "Architectuur",
     "Audit": "Audit",
     "BaseCodeOn": "Gebruik Code Sjabloon",
+    "Time": "Tijd",
     "Browse": "Bladeren",
     "Cancel": "Annuleren",
     "CancelItems": "Weet je zeker dat je de geselecteerde {count, plural, one {item} other {items}} wilt annuleren?",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Aanmaakdatum",
-        "ExecutedNodes": "Uitgevoerde Knopen",
+        "ExecutedNodes": "Uitgevoerde stromelementen",
         "FailureReason": "Reden van Fout",
         "FinalMetadata": "Eindmetadata",
         "FinalSize": "Eindgrootte",

@@ -10,6 +10,7 @@
     "Any": "Tout",
     "Architecture": "Architecture",
     "Audit": "Audit",
+    "Time": "Temps",
     "BaseCodeOn": "Utiliser le modèle de code",
     "Browse": "Parcourir",
     "Cancel": "Annuler",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Date de Création",
-        "ExecutedNodes": "Nœuds Exécutés",
+        "ExecutedNodes": "Éléments de Flow exécutés",
         "FailureReason": "Raison de l'Échec",
         "FinalMetadata": "Métadonnées Finales",
         "FinalSize": "Taille Finale",

@@ -8,6 +8,7 @@
     "All": "すべて",
     "And": "および",
     "Any": "任意",
+    "Time": "時間",
     "Architecture": "アーキテクチャ",
     "Audit": "監査",
     "BaseCodeOn": "コードテンプレートを使用",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "作成日",
-        "ExecutedNodes": "実行ノード",
+        "ExecutedNodes": "実行されたフロー要素",
         "FailureReason": "失敗理由",
         "FinalMetadata": "最終メタデータ",
         "FinalSize": "最終サイズ",

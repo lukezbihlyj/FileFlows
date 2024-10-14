@@ -10,6 +10,7 @@
     "Any": "Любой",
     "Architecture": "Архитектура",
     "Audit": "Аудит",
+    "Time": "Время",
     "BaseCodeOn": "Использовать шаблон кода",
     "Browse": "Обзор",
     "Cancel": "Отменить",
@@ -938,7 +939,7 @@
     "LibraryFile": {
       "Fields": {
         "CreationTime": "Дата создания",
-        "ExecutedNodes": "Выполненные узлы",
+        "ExecutedNodes": "Выполненные элементы потока",
         "FailureReason": "Причина сбоя",
         "FinalMetadata": "Итоговые метаданные",
         "FinalSize": "Итоговый размер",
