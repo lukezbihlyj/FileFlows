@@ -266,8 +266,6 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
         await ServiceLoader.Load<LibraryFileService>().MoveToTop(list);
     }
 
-
-
     /// <summary>
     /// Delete library files from the system
     /// </summary>
