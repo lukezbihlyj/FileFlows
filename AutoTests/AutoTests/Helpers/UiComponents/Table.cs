@@ -117,5 +117,5 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         => Expect(ItemLocator(name, sideEditor)).ToHaveCountAsync(0);
 
     public Task DoubleClick(string name)
-        => ItemLocator(name, false).First.DblClickAsync();
+        => ItemLocator(name, false).DblClickAsync();
 }
