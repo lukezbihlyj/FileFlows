@@ -20,7 +20,7 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         string locator = sideEditor
             ? ".vi-container "
             : ".main > .vi-container " +
-              $".flowtable-row .name-actual >> text='{name}'";
+              $".flowtable-row:has(.name-actual:text('{name}'))";
         return Page.Locator(locator);
         // return Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
         //                  + $".flowtable-row:has(span:text('{name}')) ");
