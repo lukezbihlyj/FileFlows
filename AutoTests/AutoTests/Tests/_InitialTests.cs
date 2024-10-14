@@ -338,4 +338,11 @@ public class InitialTests : TestBase
         await SetSelect("Type", "File Processed");
         await ButtonClick("Save");
     }
+    
+    [Test, Order(14)]
+    public async Task IT_14_TaskScript()
+    {
+        await GotoPage("Tasks");
+        await TableButtonClick("Add");
+    }
 }
