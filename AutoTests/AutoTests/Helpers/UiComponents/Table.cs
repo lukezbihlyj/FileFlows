@@ -17,11 +17,11 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
 
     private ILocator ItemLocator(string name, bool sideEditor = false)
     {
-        string locator = sideEditor
+        string locator = (sideEditor
             ? ".vi-container "
-            : ".main > .vi-container " +
-              $".flowtable-row:has(.name-actual:text('{name}'))";
-        return Page.Locator(locator);
+            : ".main > .vi-container ") +
+              $".flowtable-row:has(span:text('{name}'))";
+        return Page.Locator(locator).First;
         // return Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
         //                  + $".flowtable-row:has(span:text('{name}')) ");
         // => 
@@ -40,22 +40,30 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     public async Task SelectItem(string name, bool selectIt, bool sideEditor = false)
     {
         var locator = ItemLocator(name, sideEditor: sideEditor);
+        await locator.WaitForAsync(new()
+        {
+            Timeout = 5000,
+            State = WaitForSelectorState.Attached
+        });
         if (await locator.CountAsync() == 0)
         {
             logger.WLog("Table item not found: " + name);
             Assert.Fail("Table item not found: " + name);
         }
+
+        await locator.HighlightAsync();
         // get the parent of the locator whose class is .flowtable-row
         // Use XPath to find the nearest ancestor with the class .flowtable-row
-        var flowtableRowLocator = locator.First.Locator("xpath=ancestor::div[contains(@class, 'flowtable-row')]");
-        var checkbox = flowtableRowLocator.Locator(".flowtable-select input[type=checkbox]");
+        // var flowtableRowLocator = locator.First.Locator("xpath=ancestor::div[contains(@class, 'flowtable-row')]");
+        // await flowtableRowLocator.HighlightAsync();
+        var checkbox = locator.Locator(".flowtable-select input[type=checkbox]").First;
 
         var chk = await checkbox.IsCheckedAsync();
         if(chk)
-            await checkbox.First.ClickAsync();
+            await checkbox.ClickAsync();
         
         if(selectIt)
-            await flowtableRowLocator.First.ClickAsync();
+            await locator.ClickAsync();
         
     }
 
