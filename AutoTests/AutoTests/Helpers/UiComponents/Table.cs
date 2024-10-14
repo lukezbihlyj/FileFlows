@@ -17,15 +17,16 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
 
     private ILocator ItemLocator(string name, bool sideEditor = false)
     {
-        var containerSelector = sideEditor ? ".vi-container " : ".main > .vi-container ";
-        var locator = Page.Locator(containerSelector).Locator(".flowtable-row", new() 
-        {
-            //HasText = name,
-            HasTextString = name
-        });
-        return locator;
-        // => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
-        //                 + $".flowtable-row:has(span:text('{name}')) ");
+        // var containerSelector = sideEditor ? ".vi-container " : ".main > .vi-container ";
+        // var locator = Page.Locator(containerSelector).Locator(".flowtable-row", new() 
+        // {
+        //     //HasText = name,
+        //     HasTextString = name
+        // });
+        return Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
+                         + $".flowtable-row:has(span:text('{name}')) ");
+        //return locator;
+        // => 
     }
 
     // private ILocator ItemLocator(string name, bool sideEditor = false)
