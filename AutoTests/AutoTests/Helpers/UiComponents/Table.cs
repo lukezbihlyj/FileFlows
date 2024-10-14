@@ -39,15 +39,23 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     
     public async Task SelectItem(string name, bool selectIt, bool sideEditor = false)
     {
-        var locator = Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
-                                   + $".flowtable-row:has(span:text('{name}')) .flowtable-select input[type=checkbox]");
+        var locator = ItemLocator(name, sideEditor: sideEditor);
+        if (await locator.CountAsync() == 0)
+        {
+            logger.WLog("Table item not found: " + name);
+            throw new Exception("Table item not found: " + name);
+        }
+        // get the parent of the locator whose class is .flowtable-row
+        // Use XPath to find the nearest ancestor with the class .flowtable-row
+        var flowtableRowLocator = locator.First.Locator("xpath=ancestor::div[contains(@class, 'flowtable-row')]");
+        var checkbox = flowtableRowLocator.Locator(".flowtable-select input[type=checkbox]");
 
-        var chk = await locator.IsCheckedAsync();
+        var chk = await checkbox.IsCheckedAsync();
         if(chk)
-            await locator.First.ClickAsync();
+            await checkbox.First.ClickAsync();
         
         if(selectIt)
-            await locator.First.ClickAsync();
+            await flowtableRowLocator.First.ClickAsync();
         
     }
 
@@ -56,9 +64,13 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         try
         {
             logger.ILog("Check table item exists: " + name);
-            bool exists = await ItemLocator(name, sideEditor).CountAsync() > 0;
-            if(exists)
+            var locator = ItemLocator(name, sideEditor);
+            bool exists = await locator.CountAsync() > 0;
+            if (exists)
+            {
+                await locator.First.HighlightAsync();
                 logger.ILog("Table item exists: " + name);
+            }
             else
                 logger.ILog("Table item does not exist: " + name);
             return exists;

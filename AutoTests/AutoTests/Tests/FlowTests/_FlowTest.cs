@@ -52,7 +52,7 @@ public abstract class FlowTest:TestBase
             await FileFlows.Flow.SetTitle(name);
             await FileFlows.Flow.Save();
         }
-        Logger.ILog($"Flwo '{name}' created");
+        Logger.ILog($"Flow '{name}' created");
     }
 
     /// <summary>
