@@ -280,8 +280,8 @@ public abstract class FlowTest:TestBase
             await Task.Delay(1000);
         }
         
-        await SelectItem(fileName);
-        await FileFlows.Table.ButtonClick("View");
+        //await SelectItem(fileName);
+        await DoubleClickItem(fileName);
 
         string log = await DownloadLog();
         Logger.ILog(new string('-', 100) + Environment.NewLine + log);

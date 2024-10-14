@@ -116,6 +116,14 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     public Task ItemDoesNotExist(string name, bool sideEditor = false)
         => Expect(ItemLocator(name, sideEditor)).ToHaveCountAsync(0);
 
-    public Task DoubleClick(string name)
-        => ItemLocator(name, false).DblClickAsync();
+    /// <summary>
+    /// Double clicks a table item
+    /// </summary>
+    /// <param name="name">the name of the table item</param>
+    public async Task DoubleClick(string name)
+    {
+        var icon = ItemLocator(name, false).Locator(".icon");
+        await icon.HighlightAsync();
+        await icon.DblClickAsync();
+    }
 }
