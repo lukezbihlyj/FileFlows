@@ -105,6 +105,8 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 
     protected async override Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+
         this.SelectedStatus = FileFlows.Shared.Models.FileStatus.Unprocessed;
         lblForcedProcessing = Translater.Instant("Labels.ForceProcessing");
         lblMoveToTop = Translater.Instant("Pages.LibraryFiles.Buttons.MoveToTop");
@@ -113,7 +115,6 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         Title = lblLibraryFiles;// + ": " + Translater.Instant("Enums.FileStatus." + FileStatus.Unprocessed);
         this.lblSearch = Translater.Instant("Labels.Search");
         this.lblDeleteSwitch = Translater.Instant("Labels.DeleteLibraryFilesPhysicallySwitch");
-        base.OnInitialized(true);
         
         optionsSortBy = new ()
         {

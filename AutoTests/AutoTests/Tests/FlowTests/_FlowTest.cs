@@ -286,8 +286,8 @@ public abstract class FlowTest:TestBase
             await Task.Delay(1000);
         }
         
-        await SelectItem(fileName);
-        //await DoubleClickItem(fileName);
+        //await SelectItem(fileName);
+        await DoubleClickItem(fileName);
         await FileFlows.Table.ButtonClick("View");
         
 

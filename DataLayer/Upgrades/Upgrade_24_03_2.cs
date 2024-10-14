@@ -32,7 +32,7 @@ public class Upgrade_24_03_2
     /// <returns>the upgrade result</returns>
     public Result<bool> Run(ILogger logger, DatabaseType dbType, string connectionString)
     {
-        if (dbType == DatabaseType.Sqlite)
+        if (dbType is DatabaseType.Sqlite or DatabaseType.SqliteNewConnection or DatabaseType.SqliteNonCached)
             return RunSqlite(logger, connectionString);
         else
             return RunMySql(logger, connectionString);

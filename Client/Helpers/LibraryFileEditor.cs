@@ -121,7 +121,7 @@ public class LibraryFileEditor
             #if(DEBUG)
             bool executionRender = true;
             #else
-            bool executionRender = profile.LicensedFor(LicenseFlags.Enterprise);
+            bool executionRender = profile?.LicensedFor(LicenseFlags.Enterprise) == true;
             #endif
             if (executionRender)
             {
