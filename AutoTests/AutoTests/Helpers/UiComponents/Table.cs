@@ -4,11 +4,20 @@ namespace FileFlowsTests.Helpers.UiComponents;
 
 public class Table(TestBase test, ILogger logger) : UiComponent(test)
 {
-    private ILocator Button(string name, bool sideEditor = false) 
+    private ILocator Button(string name, bool sideEditor = false)
         => Page.Locator((sideEditor ? ".vi-container " : "") + $".flowtable-button >> text='{name}'");
-    
-    public Task ButtonClick(string name, bool sideEditor = false)
-        => Button(name, sideEditor).ClickAsync();
+
+    public async Task ButtonClick(string name, bool sideEditor = false)
+    {
+        var btn = Button(name, sideEditor);
+        await btn.WaitForAsync(new()
+        {
+            Timeout = 5000,
+            State = WaitForSelectorState.Visible
+        });
+        await btn.HighlightAsync();
+        await btn.ClickAsync();
+    }
 
     public async Task ButtonDisabled(string name, bool sideEditor = false)
         => ClassicAssert.IsTrue(await Button(name, sideEditor).IsDisabledAsync());
