@@ -177,7 +177,7 @@ public class FileFlowsHelper
     /// <returns>the task to await</returns>
     public async Task SkyBox(string name, bool waitFor = false)
     {
-        var locator = Page.Locator($".skybox-item.{name.Dehumanize()}");
+        var locator = Page.Locator($".skybox-item.{name.Replace(" ", "")}");
         if (waitFor)
         {
             // Wait for the item to appear, retrying every 500ms for up to 30 seconds.
