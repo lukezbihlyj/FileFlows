@@ -16,8 +16,7 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         => ClassicAssert.IsTrue(await Button(name, sideEditor).IsEnabledAsync());
 
     private ILocator ItemLocator(string name, bool sideEditor = false)
-        => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
-            + $".flowtable-row:has(span:text('{name}')) ");
+        => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ") + $".flowtable-row:has(span:text='{name}')");
 
     // private ILocator ItemLocator(string name, bool sideEditor = false)
     //     => Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
@@ -32,7 +31,7 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     public async Task SelectItem(string name, bool selectIt, bool sideEditor = false)
     {
         var locator = Page.Locator((sideEditor ? ".vi-container " : ".main > .vi-container ")
-                                   + $".flowtable-row:has(span:text('{name}')) .flowtable-select input[type=checkbox]");
+                                   + $".flowtable-row:has(span:text='{name}') .flowtable-select input[type=checkbox]");
 
         var chk = await locator.IsCheckedAsync();
         if(chk)
