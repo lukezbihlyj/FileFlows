@@ -317,7 +317,9 @@ public class FlowRunnerService : IFlowRunnerService
 
             await ServiceLoader.Load<StatisticService>()
                 .RecordStorageSaved(library.Name, existing.OriginalSize, existing.FinalSize);
-            _ = ServiceLoader.Load<DashboardFileOverviewService>().UpdateFileDataAsync(existing);
+            
+            if(existing.Status == FileStatus.Processed)
+                _ = ServiceLoader.Load<DashboardFileOverviewService>().UpdateFileDataAsync(existing);
         }
 
         
