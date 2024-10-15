@@ -118,41 +118,33 @@ public class LibraryFileEditor
                 });
             }
 
-            #if(DEBUG)
-            bool executionRender = true;
-            #else
-            bool executionRender = profile?.LicensedFor(LicenseFlags.Enterprise) == true;
-            #endif
-            if (executionRender)
+            // if (model.Additional?.ExecutedFlows?.Any() == true)
+            // {
+            //     tabs.Add("Pages.LibraryFile.Tabs.ExecutedFlows", new List<IFlowField>
+            //     {
+            //         new ElementField()
+            //         {
+            //             InputType = FormInputType.Flow,
+            //             Name = nameof(model.Additional.ExecutedFlows)
+            //         }
+            //     });
+            //
+            // }
+            // else 
+            if (model.ExecutedNodes?.Any() == true)
             {
-                // if (model.Additional?.ExecutedFlows?.Any() == true)
-                // {
-                //     tabs.Add("Pages.LibraryFile.Tabs.ExecutedFlows", new List<IFlowField>
-                //     {
-                //         new ElementField()
-                //         {
-                //             InputType = FormInputType.Flow,
-                //             Name = nameof(model.Additional.ExecutedFlows)
-                //         }
-                //     });
-                //
-                // }
-                // else 
-                if (model.ExecutedNodes?.Any() == true)
+                tabs.Add("Pages.LibraryFile.Fields.ExecutedNodes", new List<IFlowField>
                 {
-                    tabs.Add("Pages.LibraryFile.Fields.ExecutedNodes", new List<IFlowField>
+                    new ElementField()
                     {
-                        new ElementField()
+                        InputType = FormInputType.ExecutedFlowElementsRenderer,
+                        Name = nameof(model.ExecutedNodes),
+                        Parameters =
                         {
-                            InputType = FormInputType.ExecutedFlowElementsRenderer,
-                            Name = nameof(model.ExecutedNodes),
-                            Parameters =
-                            {
-                                // { "Log", model.Log }
-                            }
+                            // { "Log", model.Log }
                         }
-                    });
-                }
+                    }
+                });
             }
 
             var additionalButtons = new ActionButton[]

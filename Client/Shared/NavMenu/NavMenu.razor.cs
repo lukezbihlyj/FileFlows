@@ -188,10 +188,6 @@ public partial class NavMenu : IDisposable
         this.MenuItems.Clear();
         nmiPause = Profile.HasRole(UserRole.PauseProcessing) ? new(PausedService.PausedLabel, "far fa-pause-circle", "#pause") : null;
 
-        bool newDashboard = Profile.LicensedFor(LicenseFlags.Enterprise);
-        #if(DEBUG)
-        newDashboard = true;
-        #endif
 
         MenuItems.Add(new NavMenuGroup
         {
@@ -200,7 +196,7 @@ public partial class NavMenu : IDisposable
             Items = new List<NavMenuItem>
             {
                 new ("Pages.Dashboard.Title", "fas fa-chart-pie", ""),
-                newDashboard ? new ("Old Dashboard", "fas fa-chart-pie", "old-dashboard") : null,
+                // newDashboard ? new ("Old Dashboard", "fas fa-chart-pie", "old-dashboard") : null,
                 Profile.HasRole(UserRole.Files) ? new ("Pages.LibraryFiles.Title", "fas fa-copy", "library-files") : null,
                 nmiPause
             }.Where(x => x != null).ToList()
