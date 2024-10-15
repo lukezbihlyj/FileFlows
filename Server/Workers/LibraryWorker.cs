@@ -103,7 +103,7 @@ public class LibraryWorker : ServerWorker
         var libraries = new Services.LibraryService().GetAllAsync().Result;
         var libraryUids = libraries.Select(x => x.Uid + ":" + x.Path).ToList();            
 
-        Watch(libraries.Where(x => WatchedLibraries.ContainsKey(x.Uid + ":" + x.Path) == false).ToArray());
+        Watch(libraries.Where(x => x.Uid != CommonVariables.ManualLibraryUid && WatchedLibraries.ContainsKey(x.Uid + ":" + x.Path) == false).ToArray());
         Unwatch(WatchedLibraries.Keys.Where(x => libraryUids.Contains(x) == false).ToArray());
 
         foreach (var libwatcher in WatchedLibraries.Values)

@@ -88,7 +88,7 @@ public partial class NavMenu : IDisposable
         
         _ = RefreshBubbles();
         
-        this.ClientService.FileStatusUpdated += ClientServiceOnFileStatusUpdated;
+        ClientService.FileStatusUpdated += ClientServiceOnFileStatusUpdated;
         PausedService.OnPausedLabelChanged += PausedServiceOnOnPausedLabelChanged;
 
         ProfileService.OnRefresh += ProfileServiceOnOnRefresh; 
@@ -154,6 +154,7 @@ public partial class NavMenu : IDisposable
         Processing = data.Where(x => x.Status == FileStatus.Processing).Select(x => x.Count).FirstOrDefault();
         Failed = data.Where(x => x.Status == FileStatus.ProcessingFailed).Select(x => x.Count).FirstOrDefault();
         OnHold = data.Where(x => x.Status == FileStatus.OnHold).Select(x => x.Count).FirstOrDefault();
+        Logger.Instance.ILog($"NavMenu Updated: ({Unprocessed}) ({Processing}) ({Failed}) ({OnHold})");
         this.StateHasChanged();
     }
 
