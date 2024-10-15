@@ -369,7 +369,7 @@ public enum FileStatus
     /// </summary>
     MissingLibrary = 7,
     /// <summary>
-    /// Special case, the file has ben marked for reprocessing, this can only happen once
+    /// Special case, the file has been marked for reprocessing, this can only happen once
     /// </summary>
     ReprocessByFlow = 99
 }
