@@ -55,7 +55,9 @@ public class VariablesHelper
                 strValue = encoder(strValue);
             
             if (cleanSpecialCharacters && variablePath != null
-                && variablePath.StartsWith("file.") == false && variablePath.StartsWith("folder.") == false)
+                                       && variablePath != "temp"
+                                       && variablePath.StartsWith("file.") == false 
+                                       && variablePath.StartsWith("folder.") == false)
             {
                 // we dont want to replace user variables they set themselves, eg they may have set "DestPath" or something in the Function node
                 // so we dont want to replace that, or any of the file/folder variables
