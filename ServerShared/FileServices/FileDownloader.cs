@@ -83,11 +83,13 @@ public class FileDownloader
     /// </summary>
     /// <param name="path">The path of the file to download</param>
     /// <param name="destinationPath">The path where the downloaded file will be saved.</param>
+    /// <param name="cancellationToken">The cancelation token</param>
     /// <returns>A tuple indicating success (True) or failure (False) and an error message if applicable.</returns>
-    public async Task<Result<bool>> DownloadFile(string path, string destinationPath)
+    public async Task<Result<bool>> DownloadFile(string path, string destinationPath, CancellationToken? cancellationToken = null)
     {
         try
         {
+            cancellationToken ??= new CancellationTokenSource().Token;
             logger.ILog("Downloading file: " + path);
             logger.ILog("Destination file: " + destinationPath);
             string url = serverUrl;
@@ -106,7 +108,7 @@ public class FileDownloader
             request.Content  = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Send the request and read the response content as a stream
-            HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            HttpResponseMessage response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken.Value);
             if (response.IsSuccessStatusCode == false)
             {
                 string error = (await response.Content.ReadAsStringAsync()).EmptyAsNull() ?? "Failed to remotely download the file";
@@ -115,7 +117,7 @@ public class FileDownloader
                 return Result<bool>.Fail(error);
             }
 
-            using Stream contentStream = await response.Content.ReadAsStreamAsync();
+            using Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken.Value);
 
 
             long fileSize = 0;
@@ -153,9 +155,9 @@ public class FileDownloader
             double speed = 0; // Download speed in bytes per second
             
             OnProgress?.Invoke(0, null, null);
-            while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken.Value)) > 0)
             {
-                await fileStream.WriteAsync(buffer, 0, bytesRead);
+                await fileStream.WriteAsync(buffer, 0, bytesRead, cancellationToken.Value);
                 bytesReadTotal += bytesRead;
                 
                 // Calculate elapsed time and download speed
