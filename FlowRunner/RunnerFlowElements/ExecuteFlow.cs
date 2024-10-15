@@ -306,7 +306,7 @@ public class ExecuteFlow : Node
             return; // we dont record this output, the flow element that called the flow will record this for us
         
         TimeSpan executionTime = DateTime.UtcNow.Subtract(startTime);
-        string feName = part.Label?.EmptyAsNull() ?? part.Name?.EmptyAsNull() ?? flowElement.Name;
+        string feName = part.Name?.EmptyAsNull() ?? part.Label?.EmptyAsNull() ?? flowElement.Name;
         string feElementUid = part.FlowElementUid;
 
         int depthAdjustment = 0;
