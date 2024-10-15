@@ -107,6 +107,10 @@ input[type=checkbox]:disabled {
   cursor: not-allowed;
 }
 
+body button {
+  color: inherit;
+}
+
 .btn, a.btn, .btn-select {
   font-size: 0.9rem !important;
   height: var(--input-height, 2.1875rem);
