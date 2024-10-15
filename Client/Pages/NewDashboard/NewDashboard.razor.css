@@ -1,4 +1,4 @@
-@media (max-width: 850px) {
+@media (max-width: 720px) {
   .grid {
     display: flex !important;
     flex-direction: column !important;
@@ -47,9 +47,6 @@
 .dashboard-wrapper .grid {
   display: grid;
   grid-gap: 0.5rem;
-}
-.dashboard-wrapper .grid + .grid {
-  margin-top: 1rem;
 }
 .dashboard-wrapper .grid-2 {
   grid-template-columns: repeat(2, 1fr);
