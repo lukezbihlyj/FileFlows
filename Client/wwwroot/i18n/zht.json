@@ -1,0 +1,1683 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "About": "關於",
+    "Add": "新增",
+    "AdminRequired": "安裝完成需要管理員權限。",
+    "Advanced": "進階",
+    "All": "所有",
+    "And": "和",
+    "Any": "任何",
+    "Architecture": "架構",
+    "Audit": "審計",
+    "BaseCodeOn": "使用程式碼範本",
+    "Browse": "瀏覽",
+    "Cancel": "取消",
+    "CancelItems": "您確定要取消選定的 {count, plural, one {項目} other {項目}} 嗎？",
+    "CancelMessage": "您確定要取消並失去所有未儲存的變更嗎？",
+    "ChangePassword": "更改密碼",
+    "Clear": "清除",
+    "Close": "關閉",
+    "CommunityFlows": "社群流程",
+    "Confirm": "確認",
+    "CopiedToClipboard": "已將 ''{text}'' 複製到剪貼簿。",
+    "Copy": "複製",
+    "CopyToClipboard": "複製到剪貼簿",
+    "Decrease": "減少",
+    "Default": "預設",
+    "Delete": "刪除",
+    "DeleteItems": "您確定要刪除選定的 {count, plural, one {項目} other {項目}} 嗎？",
+    "DeleteLibraryFiles": "您確定要移除選定的 {count, plural, one {檔案} other {檔案}}？\n\n注意，這不會從磁碟刪除 {count, plural, one {檔案} other {檔案}}，{count, plural, one {它} other {它們}} 只會從 FileFlows 數據庫中移除。",
+    "DeleteLibraryFilesPhysicallyMessage": "您確定要刪除選定的 {count, plural, one {檔案} other {檔案}}？\n\n注意，這將永久刪除 {count, plural, one {檔案} other {檔案}}，並且無法恢復。",
+    "DeleteLibraryFilesPhysicallySwitch": "從磁碟刪除檔案",
+    "Deleting": "刪除中",
+    "Description": "描述",
+    "Disabled": "已禁用",
+    "Disconnected": "已斷開連接",
+    "Discord": "Discord",
+    "Download": "下載",
+    "DownloadLog": "下載日誌",
+    "DownloadLogShort": "日誌",
+    "Duplicate": "複製",
+    "Edit": "編輯",
+    "EditSubFlow": "編輯子流程",
+    "Enabled": "已啟用",
+    "Execute": "執行",
+    "Executing": "執行中",
+    "Export": "匯出",
+    "Failed": "失敗",
+    "Fields": "欄位",
+    "Filter": "篩選",
+    "FilterPlaceholder": "篩選 (/)",
+    "Finish": "完成",
+    "Flow": "流程",
+    "FlowElement": "流程元素",
+    "FlowElements": "流程元素",
+    "ForceProcessing": "強制處理",
+    "Forum": "論壇",
+    "Help": "幫助",
+    "Import": "匯入",
+    "Increase": "增加",
+    "Input": "輸入",
+    "Installed": "已安裝",
+    "InternalProcessingNode": "內部處理節點",
+    "InUse": "正在使用",
+    "LastRun": "最後執行",
+    "LastScanned": "最後掃描",
+    "License": "許可證",
+    "Loading": "載入中",
+    "Log": "日誌",
+    "Logout": "登出",
+    "LogPartialNotAvailable": "找不到節點的部分日誌。",
+    "MappingIssue": "映射問題",
+    "Memory": "記憶體",
+    "MissingDependencies": "缺少依賴項",
+    "MissingDependenciesMessage": "以下缺少的插件必須在使用此範本之前下載：\n\n#LIST#",
+    "MonthShort": "月",
+    "Name": "名稱",
+    "Never": "從不",
+    "Next": "下一步",
+    "No": "否",
+    "NoAuditHistoryAvailable": "無可用的審計歷史",
+    "Node": "節點",
+    "NoFilesCurrentlyProcessing": "目前沒有正在處理的檔案",
+    "NoFilesRecentlyFinished": "最近沒有完成的檔案",
+    "None": "無",
+    "NoUpcomingFiles": "沒有即將到來的檔案",
+    "Number": "數字",
+    "Ok": "確定",
+    "Open": "打開",
+    "OperatingSystem": "作業系統",
+    "Other": "其他",
+    "Output": "輸出",
+    "Paste": "貼上",
+    "Pause": "暫停處理",
+    "Paused": "恢復處理",
+    "PausedWithTime": "在此期間恢復",
+    "Percent": "百分比",
+    "Pixels": "像素",
+    "Plugins": "插件",
+    "PossibilityDisconnected": "可能已斷開連接",
+    "Previous": "上一步",
+    "ProcessingPaused": "處理目前已暫停",
+    "Prompt": "提示",
+    "Properties": "屬性",
+    "ReadOnly": "唯讀",
+    "Redo": "重做",
+    "Refresh": "刷新",
+    "Remove": "移除",
+    "Repository": "存儲庫",
+    "Reprocess": "重新處理",
+    "Rescan": "重新掃描",
+    "Reset": "重設",
+    "ResetLayout": "重設佈局",
+    "Restore": "還原",
+    "RestoredFailedMessage": "無法還原 {type}",
+    "RestoredMessage": "{type} 已還原",
+    "Restoring": "還原中",
+    "Resume": "恢復",
+    "ReturnCode": "返回代碼",
+    "Revisions": "修訂",
+    "Run": "執行",
+    "RunAt": "在此時執行",
+    "RunHistory": "執行歷史",
+    "Running": "運行中",
+    "Save": "保存",
+    "Saving": "保存中",
+    "Savings": "節省",
+    "Schedule": "排程",
+    "Scripts": "腳本",
+    "Search": "搜尋",
+    "Searching": "搜尋中",
+    "Select": "選擇",
+    "SelectOne": "選擇一個",
+    "SetStatusProcessed": "標記為已處理",
+    "Settings": "設定",
+    "ShowHidden": "顯示隱藏",
+    "Size": "大小",
+    "SpaceIncrease": "{size} 增加，{items} 項目",
+    "SpaceSavings": "{size} 節省，{items} 項目",
+    "Status": "狀態",
+    "SubFlow": "子流程",
+    "SubFlows": "子流程",
+    "Success": "成功",
+    "Test": "測試",
+    "Time": "時間",
+    "Total": "總計",
+    "Trigger": "觸發",
+    "Type": "類型",
+    "Undo": "撤銷",
+    "UnsavedChanges": "未儲存的變更",
+    "Update": "更新",
+    "UpdateAll": "全部更新",
+    "UpdateAvailable": "有新版本可用 {version}",
+    "UsedBy": "被使用者",
+    "Version": "版本",
+    "VersionNumber": "版本： {version}",
+    "View": "查看",
+    "ViewLog": "查看日誌",
+    "WeekShort": "週",
+    "When": "當",
+    "Yes": "是",
+    "DateRanges": {
+      "AnyTime": "任何時間",
+      "Last12Months": "過去12個月",
+      "Last24Hours": "過去24小時",
+      "Last31Days": "過去31天",
+      "Last3Days": "過去3天",
+      "Last3Months": "過去3個月",
+      "Last6Months": "過去6個月",
+      "Last7Days": "過去7天",
+      "Live": "即時",
+      "Today": "今天",
+      "Yesterday": "昨天"
+    },
+    "ObsoleteConfirm": {
+      "Message": "建議您切換到不同的流程元素。",
+      "Question": "此流程元素現已過時，將很快被移除。您確定要使用此元素嗎？",
+      "Title": "過時的流程元素"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' 已新增",
+    "ChangePassword": "用戶 ''{User}'' 更改密碼",
+    "Deleted": "{Type} ''{Name}'' 已刪除",
+    "Login": "用戶 ''{User}'' 登入",
+    "LoginFailed": "用戶 ''{User}'' 登入失敗",
+    "PasswordReset": "用戶 ''{User}'' 重設其密碼",
+    "PasswordResetRequest": "用戶 ''{User}'' 請求重設密碼",
+    "SettingsUpdated": "設置已更新",
+    "Updated": "{Type} ''{Name}'' 已更新"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "手動添加檔案或 URL 以進行處理。",
+      "Title": "添加檔案",
+      "Fields": {
+        "AnyNode": "任何節點",
+        "Flow": "流程",
+        "List": "清單",
+        "Mode": "輸入模式",
+        "Node": "節點",
+        "Raw": "批量輸入（文本區塊）"
+      }
+    },
+    "AuditEntry": {
+      "ViewerTitle": "變更",
+      "Columns": {
+        "Field": "欄位",
+        "Value": "值"
+      }
+    },
+    "ChangePassword": {
+      "Changed": "密碼已更改",
+      "InvalidPassword": "舊密碼無效",
+      "MinimumLength": "新密碼太短",
+      "NewPassword": "新密碼",
+      "NewPasswordConfirm": "確認",
+      "OldPassword": "舊密碼",
+      "PasswordMismatch": "密碼不匹配。",
+      "Title": "更改密碼"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "選擇目錄",
+      "FileTitle": "選擇檔案"
+    },
+    "FlowTemplatePicker": {
+      "Title": "選擇一個模板作為起點"
+    },
+    "Import": {
+      "Message": "選擇一個已導出的流程以導入系統。",
+      "Title": "導入流程"
+    },
+    "ImportScript": {
+      "Title": "導入腳本",
+      "Messages": {
+        "NoMoreImports": "此腳本沒有其他可用的導入"
+      }
+    },
+    "PauseDialog": {
+      "Message": "選擇暫停處理的時間。\n注意：當前流程將繼續執行，但在此期間不會執行其他流程。",
+      "Title": "暫停處理"
+    },
+    "ReprocessDialog": {
+      "Description": "使用以下參數重新處理所選的檔案",
+      "Title": "重新處理",
+      "Fields": {
+        "AnyNode": "任何節點",
+        "BottomOfQueue": "隊列底部",
+        "CustomVariables": "自定義變數",
+        "CustomVariablesKey": "自定義變數",
+        "CustomVariablesMode": "自定義變數",
+        "CustomVariablesValue": "值",
+        "Flow": "流程",
+        "Merge": "與原始合併自定義變數",
+        "Node": "節點",
+        "Original": "使用原始自定義變數",
+        "Position": "位置",
+        "Replace": "替換原始自定義變數",
+        "SameFlow": "無變更",
+        "TopOfQueue": "隊列頂部"
+      },
+      "ProcessOptions": {
+        "Description": "修改所選檔案的處理參數",
+        "Title": "處理選項"
+      }
+    },
+    "ResumeDialog": {
+      "Message": "您確定要恢復處理嗎？",
+      "Title": "恢復處理"
+    },
+    "ScriptLanguage": {
+      "Title": "腳本語言",
+      "Labels": {
+        "BatchDescription": "批次檔只能在 Windows 系統上運行。它們可以讀取基本變數，但在執行期間無法更新或訪問 FileFlows 對象。",
+        "CSharpDescription": "C# 腳本可以與 FileFlows 的更多部分互動，並且功能最強大。使用與 FileFlows 相同的語言，它們允許更大的系統交互。",
+        "FileDisplayName": "檔案顯示名稱",
+        "FileDisplayNameDescription": "一個專門的腳本，定制檔案名稱在 FileFlows 網頁控制台中的顯示方式。此腳本不修改實際檔案，只修改它們在界面中的顯示方式。",
+        "JavaScriptDescription": "JavaScript 腳本在 FileFlows 運行器內執行，允許您讀取和寫入變數並訪問 FileFlows 中的所有輔助功能。",
+        "PowerShellDescription": "PowerShell 腳本只能在 Windows 系統上運行。它們可以讀取基本變數，但在執行期間無法更新或訪問 FileFlows 對象。",
+        "ShellDescription": "Shell 腳本在基於 Unix 的系統（Linux、MacOS、Docker）上運行。它們可以讀取基本變數，但在執行期間無法更新或訪問 FileFlows 對象。"
+      }
+    }
+  },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip 是一個免費和開源的檔案壓縮工具，用於將一組檔案放入稱為 \"檔案\" 的壓縮容器中。",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip 是一個用於視頻檔案中的商業檢測的應用程序。它分析 MPEG 或 H.264 檔案，並生成包含廣告位置的輸出檔案。",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "在 Docker 內安裝 Docker。這使您能夠啟動同級 Docker 容器。",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg 是一個免費和開源的軟件項目，由一組用於處理視頻、音頻和其他多媒體檔案和流的庫和程序組成。其核心是命令行工具 ffmpeg，專為處理視頻和音頻檔案而設計。",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git 簡化了從遠程代碼庫下載和管理各種資源（如軟件包或配置）的過程，是用戶尋求高效訪問檔案和項目的重要工具。",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop 是一個用於類 Unix 操作系統的互動式進程查看器和系統監視器，提供用戶友好的界面來監視系統資源和管理進程。",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick，從命令行調用為 magick，是一個免費和開源的跨平台軟件套件，用於顯示、創建、轉換、修改和編輯光柵圖像。",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK 是 Java 平台標準版 (Java SE) 的開源實現，提供免費的跨平台開發環境，用於構建和運行 Java 應用程序。",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix 是一組用於創建、修改、分割、合併和檢查 Matroska (MKV) 檔案的工具。",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano 是一個簡單且易於使用的文本編輯器，適用於類 Unix 操作系統，在終端環境中提供基本的編輯功能。",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch 是用 Bash Shell 腳本語言編寫的系統資訊工具。默認情況下，左側顯示的是以 ASCII 藝術呈現的發行版標誌。",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js 是一個開源的跨平台 JavaScript 運行環境，允許在網頁瀏覽器外執行 JavaScript 代碼，使開發人員能夠構建伺服器端和網絡應用程序。",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 是一種高級的、解釋型的程式語言，以其簡單性、可讀性和多功能性而聞名，廣泛用於網頁開發、數據分析、人工智慧和腳本任務。",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR 是一種用於數據壓縮的檔案格式，而 UNRAR 是一個用於從 RAR 檔案中提取內容的工具。",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim 是一個免費和開源的基於螢幕的文本編輯器程序。它是 vi 的改進版克隆。",
+      "Label": "Vim"
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "已新增",
+      "ChangePassword": "更改密碼",
+      "Deleted": "已刪除",
+      "Login": "登入",
+      "LoginFailed": "登入失敗",
+      "PasswordReset": "重設密碼",
+      "PasswordResetRequest": "重設密碼請求",
+      "Updated": "已更新"
+    },
+    "DateCompareMode": {
+      "After": "之後",
+      "Any": "任何",
+      "Before": "之前",
+      "Between": "之間",
+      "GreaterThan": "大於",
+      "LessThan": "小於",
+      "NotBetween": "不在之間"
+    },
+    "Days": {
+      "Fri": "五",
+      "Friday": "星期五",
+      "Mon": "一",
+      "Monday": "星期一",
+      "Sat": "六",
+      "Saturday": "星期六",
+      "Sun": "日",
+      "Sunday": "星期日",
+      "Thu": "四",
+      "Thursday": "星期四",
+      "Tue": "二",
+      "Tuesday": "星期二",
+      "Wed": "三",
+      "Wednesday": "星期三"
+    },
+    "FilesSortBy": {
+      "Savings": "儲蓄",
+      "SavingsDesc": "儲蓄降冪",
+      "Size": "大小",
+      "SizeDesc": "大小降冪",
+      "Time": "時間",
+      "TimeDesc": "時間降冪"
+    },
+    "FileStatus": {
+      "Any": "任何",
+      "Disabled": "已禁用",
+      "Duplicate": "重複",
+      "FlowNotFound": "流程未找到",
+      "MappingIssue": "映射問題",
+      "MissingLibrary": "缺少庫",
+      "OnHold": "暫停",
+      "OutOfSchedule": "超出計劃",
+      "Processed": "已處理",
+      "Processing": "處理中",
+      "ProcessingFailed": "處理失敗",
+      "ReprocessByFlow": "按流程重新處理",
+      "Unprocessed": "未處理"
+    },
+    "FlowType": {
+      "Failure": "失敗",
+      "Standard": "標準",
+      "SubFlow": "子流程"
+    },
+    "LogType": {
+      "Debug": "調試",
+      "Error": "錯誤",
+      "Info": "信息",
+      "Warning": "警告"
+    },
+    "MatchRange": {
+      "After": "之後",
+      "Any": "任何",
+      "Before": "之前",
+      "Between": "之間",
+      "GreaterThan": "大於",
+      "LessThan": "小於",
+      "NotBetween": "不在之間"
+    },
+    "MathValue": {
+      "Between": "之間",
+      "Equals": "等於",
+      "GreaterThan": "大於",
+      "GreaterThanOrEqual": "大於或等於",
+      "LessThan": "小於",
+      "LessThanOrEqual": "小於或等於",
+      "NotBetween": "不在之間",
+      "NotEquals": "不等於"
+    },
+    "Periods": {
+      "Days": "天",
+      "Hours": "小時",
+      "Minutes": "分鐘",
+      "Weeks": "週"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "已禁用",
+      "HigherPriorityNodeAvailable": "可用的高優先級節點",
+      "Idle": "空閒",
+      "InstallingDockerMods": "正在安裝 DockerMods",
+      "MaximumRunnersReached": "已達到最大運行者數",
+      "Offline": "離線",
+      "OutOfSchedule": "超出計劃",
+      "Processing": "處理中",
+      "RestrictedByLibrary": "受庫限制",
+      "VersionMismatch": "版本不匹配"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "按字母順序",
+      "AsFound": "按發現順序 (默認)",
+      "LargestFirst": "最大優先",
+      "NewestFirst": "最新優先",
+      "OldestFirst": "最舊優先",
+      "Random": "隨機",
+      "SmallestFirst": "最小優先"
+    },
+    "ProcessingPriority": {
+      "High": "高",
+      "Highest": "最高",
+      "Low": "低",
+      "Lowest": "最低",
+      "Normal": "正常"
+    },
+    "ReportDirection": {
+      "Inbound": "入站",
+      "Outbound": "出站"
+    },
+    "ReportSchedule": {
+      "Daily": "每日",
+      "Monthly": "每月",
+      "Weekly": "每週"
+    },
+    "SecurityMode": {
+      "Local": "本地用戶",
+      "Off": "無",
+      "OpenIdConnect": "Open ID 連接"
+    },
+    "TaskType": {
+      "FileAdded": "檔案已新增",
+      "FileFlowsServerUpdateAvailable": "更新可用",
+      "FileFlowsServerUpdating": "伺服器正在更新",
+      "FileProcessed": "檔案已處理",
+      "FileProcessFailed": "處理失敗",
+      "FileProcessing": "檔案處理中",
+      "FileProcessSuccess": "處理成功"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "檔案",
+      "Flows": "流程",
+      "Libraries": "庫",
+      "Log": "日誌",
+      "Nodes": "節點",
+      "PauseProcessing": "暫停處理",
+      "Plugins": "插件",
+      "Revisions": "版本",
+      "Scripts": "腳本",
+      "Tasks": "任務",
+      "Variables": "變數",
+      "Webhooks": "網路鉤子"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "必須輸入兩個值",
+    "CannotDeleteInternalNode": "您無法刪除內部處理節點。",
+    "DeleteFailed": "刪除失敗",
+    "DuplicatesFound": "找到重複項",
+    "NameInUse": "名稱已被使用",
+    "NameRequired": "名稱為必填項",
+    "NoFlowSpecified": "未指定流，必須選擇一個流來創建庫",
+    "NotAllFilesCouldBeDeleted": "並非所有文件都可以被刪除。\n請查看日誌以獲取更多信息。",
+    "NotFound": "項目未找到",
+    "SaveFailed": "保存失敗",
+    "SetFileStatus": "設置文件狀態失敗",
+    "UnexpectedError": "發生意外錯誤"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "未指定輸入節點，每個流需要一個輸入節點",
+      "NoParts": "未指定流部件，必須有一些部件才能保存流",
+      "TooManyInputNodes": "只能有一個輸入節點"
+    },
+    "Parts": {
+      "Color": "顏色",
+      "Color-Placeholder": "自定義顏色",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "擴展名",
+          "Extensions-Help": "一個擴展名列表，如果匹配則將輸出到第一個輸出節點，否則將使用第二個輸出節點。"
+        }
+      }
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*大於*: 如果日期早於指定時間，則匹配。\n*小於*: 如果日期晚於指定時間，則匹配。\n*介於*: 如果日期在指定範圍內，則匹配。\n*之前*: 如果日期在指定日期之前，則匹配。\n*之後*: 如果日期在指定日期之後，則匹配。"
+    }
+  },
+  "MenuGroups": {
+    "Admin": "管理",
+    "Configuration": "配置",
+    "Extensions": "擴展",
+    "Information": "信息",
+    "Overview": "概覽",
+    "Security": "安全性",
+    "System": "系統",
+    "User": "用戶"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "訪問控制項目",
+      "Title": "訪問控制",
+      "Labels": {
+        "Console": "網頁控制台",
+        "Remote": "遠端 / 處理節點"
+      },
+      "Buttons": {
+        "MoveDown": "下移",
+        "MoveUp": "上移"
+      },
+      "Columns": {
+        "Allow": "允許",
+        "End": "結束",
+        "Start": "開始"
+      },
+      "Fields": {
+        "Allow": "允許",
+        "Allow-Help": "此訪問控制項目是否允許訪問系統。",
+        "Description": "描述",
+        "Description-Placeholder": "可選描述，用於描述此項目",
+        "End": "結束地址",
+        "End-Help": "可選結束 IP 地址，必須大於起始地址且為相同類型，否則將忽略此結束值。",
+        "End-Placeholder": "可選結束地址",
+        "Start": "開始地址",
+        "Start-Help": "起始 IP 地址可以是 IPv4 或 IPv6"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "結束地址必須大於起始地址",
+        "FamilyMismatch": "起始和結束 IP 地址必須是相同類型",
+        "InvalidIPAddress": "'{address}' 不是有效的 IP 地址。",
+        "MoveFailed": "移動項目失敗"
+      }
+    },
+    "Audit": {
+      "Title": "審計日誌",
+      "Columns": {
+        "Action": "操作",
+        "Date": "日期",
+        "IPAddress": "IP 地址",
+        "Operator": "操作員",
+        "Summary": "摘要",
+        "Type": "類型"
+      }
+    },
+    "Dashboard": {
+      "Title": "儀表板",
+      "Labels": {
+        "AddWidget": "添加小工具",
+        "CurrentlyPaused": "FileFlows 當前已暫停！",
+        "FinalSize": "最終大小",
+        "OriginalSize": "原始大小",
+        "Savings": "節省",
+        "ShrinkageTitle": "已節省的存儲空間"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "創建儀表板失敗",
+        "LogFailed": "無法檢索工作日誌"
+      },
+      "Fields": {
+        "Current": "當前",
+        "CurrentStep": "步驟",
+        "File": "文件",
+        "Library": "資料庫",
+        "Log": "日誌",
+        "Node": "節點",
+        "Overall": "總體",
+        "ProcessingTime": "處理時間",
+        "RecentlyFinished": "最近完成",
+        "Uid": "UID",
+        "Upcoming": "即將到來",
+        "WorkingFile": "正在處理的文件"
+      },
+      "Messages": {
+        "CancelMessage": "您確定要取消 {RelativeFile} 的工作嗎？",
+        "DeleteDashboard": "您確定要刪除當前的儀表板嗎？\n\n此操作無法撤銷。",
+        "DeleteWidget": "您確定要移除此小工具嗎？",
+        "Waiting": "等待處理文件"
+      },
+      "Tabs": {
+        "Dashboard": "儀表板",
+        "Savings": "節省",
+        "Statistics": "統計"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} 峰值"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
+          "Finished": "{count, plural, zero {完成} other {# 完成}}",
+          "NoFailedFiles": "沒有失敗的文件",
+          "NoRecentlyFinishedFiles": "沒有最近完成的文件",
+          "NoUpcomingFiles": "沒有即將到來的文件",
+          "Title": "文件",
+          "Upcoming": "{count, plural, zero {即將到來} other {# 即將到來}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "已處理文件",
+          "PerDay": "每天 {num}",
+          "PerHour": "每小時 {num}",
+          "StorageSaved": "已節省的存儲空間"
+        },
+        "LargestSavings": {
+          "Title": "最大節省"
+        },
+        "LibrarySavings": {
+          "NoSavings": "無節省",
+          "Title": "節省"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# 文件} other {# 文件}}"
+        },
+        "Status": {
+          "CurrentlyProcessing": "當前正在處理 {count, plural, one {# 個文件} other {# 個文件}}",
+          "DockerModUpdates": "{count, plural, one {# DockerMod 更新} other {# DockerMod 更新}}",
+          "FileFlowsUpdate": "FileFlows {version} 可用",
+          "Idle": "系統當前處於閒置狀態",
+          "OutOfSchedule": "超出計劃範圍",
+          "OutOfScheduleDay": "計劃於 {day} 的 {time} 恢復",
+          "OutOfScheduleHours": "計劃在大約 {hours, plural, one {一小時內} other {# 小時內}} 恢復",
+          "OutOfScheduleMinutes": "計劃在 {minutes, plural, one {不到一分鐘} other {# 分鐘內}} 恢復",
+          "PluginUpdates": "{count, plural, one {# 插件更新} other {# 插件更新}}",
+          "ScriptUpdates": "{count, plural, one {# 腳本更新} other {# 腳本更新}}"
+        },
+        "System": {
+          "Runners": "{count, plural, zero {運行者} one {# 個運行者} other {# 個運行者}}",
+          "Title": "系統",
+          "Updates": "{count, plural, zero {更新} one {# 更新} other {# 更新}}"
+        },
+        "Updates": {
+          "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "已修復",
+          "New": "新",
+          "Plugins": "{count, plural, zero {插件} one {# 插件} other {# 插件}}",
+          "Scripts": "{count, plural, zero {腳本} one {# 腳本} other {# 腳本}}",
+          "Title": "更新"
+        }
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMods",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "修訂版",
+        "UpdateAvailable": "可用更新"
+      },
+      "Fields": {
+        "Code": "代碼",
+        "Description": "描述"
+      },
+      "Messages": {
+        "FailedToExport": "導出失敗。",
+        "Updating": "正在更新"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "任務"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "任務歷史",
+      "Fields": {
+        "RunHistory": "歷史記錄"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "任務運行",
+      "Fields": {
+        "Log": "日誌",
+        "ReturnValue": "返回值",
+        "RunAt": "運行於",
+        "Success": "成功"
+      }
+    },
+    "Flow": {
+      "Title": "流程",
+      "Labels": {
+        "EditFlow": "流程: {Name}",
+        "FlowProperties": "流程屬性",
+        "OpenScriptBrowser": "打開腳本瀏覽器",
+        "OpenSubFlowBrowser": "打開子流程瀏覽器",
+        "SubFlowBrowser": "子流程瀏覽器",
+        "SubFlowHelp": "要向子流程添加輸入字段以便傳遞自定義參數，請在 `Fields` 標籤中創建這些字段。\n\n子流程必須有一個 `輸入`，它可以是任何有效的輸入流程元素，例如 `輸入文件`，`視頻文件` 等。"
+      },
+      "Fields": {
+        "Author": "作者",
+        "Author-Help": "可選的，指定此流程的作者。",
+        "Description": "描述。",
+        "MinimumVersion": "最低版本",
+        "Outputs": "輸出",
+        "Outputs-Help": "此子流程有多少個輸出。當在另一個流程中使用此子流程時，將提供這些輸出。",
+        "OutputsKey": "輸出",
+        "OutputsValue": "描述",
+        "Tags": "標籤",
+        "Variables": "變量",
+        "VariablesKey": "名稱",
+        "VariablesValue": "值",
+        "Field": {
+          "Default": "默認",
+          "DeleteIfEmpty": "如果為空則刪除",
+          "DeleteIfEmpty-Help": "如果此處添加了任何值，並且用戶選擇了“刪除原始文件”，則如果沒有與這些正則表達式匹配的文件，文件夾也將被刪除。",
+          "Description": "可選的描述，用於在此字段中顯示幫助文本。",
+          "FlowElementField": "元素字段",
+          "FlowElementField-Help": "可選的，使用格式“{Uid}.{FieldName}”設置，例如“53a72207-34a2-4b71-b3d8-8b12764a85fe.Force”直接設置流程元素中的字段。請參閱幫助以獲取更多信息。",
+          "IfName": "如果",
+          "IfName-Help": "如果另一個值匹配這些條件，則僅在這些條件匹配時顯示。",
+          "IfNot": "如果不",
+          "IfNot-Help": "如果應該反轉值，則僅在不匹配時顯示。",
+          "IfValue": "如果值",
+          "IfValue-Help": "要匹配的值，可以是正則表達式。對於布爾值，使用 true 或 false。",
+          "Inverse": "反轉",
+          "Inverse-Help": "如果應該反轉滑塊值，使較低的值顯示在右側。",
+          "Maximum": "最大值",
+          "Minimum": "最小值",
+          "Options": "選項",
+          "Options-Help": "選項列表的數組，使用 | 分隔符設置標籤和值，例如 `label|value`。",
+          "Required": "必須",
+          "Required-Help": "此值是否是必填的，必須設置。"
+        }
+      },
+      "Messages": {
+        "Close": "您確定要離開並丟失所有未保存的更改嗎？",
+        "FailedToLoadFlow": "加載流程失敗。",
+        "LoadingFlow": "正在加載流程"
+      }
+    },
+    "Flows": {
+      "Title": "流程",
+      "Labels": {
+        "FailureFlows": "失敗流程",
+        "StandardFlows": "標準流程",
+        "SubFlows": "子流程"
+      },
+      "Buttons": {
+        "Repository": "倉庫"
+      },
+      "Fields": {
+        "Author": "作者",
+        "Template": "模板"
+      },
+      "Messages": {
+        "DeleteUsed": "無法刪除正在使用中的流程",
+        "Duplicated": "流程 ''{name}'' 重複",
+        "FailedToExport": "無法導出流程。",
+        "FailureFlowDescription": "這是一種特殊的流程類型，當任何流程失敗時將會執行。\nFileFlows 將會搜尋用於失敗時的 '預設' 失敗流程，如果未找到，處理將會立即停止。",
+        "FlowImported": "流程 ''{name}'' 已導入",
+        "LoadingTemplates": "正在載入模板"
+      },
+      "Template": {
+        "Title": "添加流程",
+        "Fields": {
+          "PageDescription": "選擇一個模板來建立流程，這將幫助您開始一個流程。",
+          "Template": "模板"
+        }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "我已閱讀並同意最終用戶許可協議的條款",
+        "Language": "語言"
+      },
+      "Messages": {
+        "RunnersTop": "指定同時處理您的資料庫中的檔案的執行器數量。\n\n執行器是處理檔案的工作者。執行器數量越多，能同時處理的檔案就越多。\n\n此設置可隨時通過編輯內部處理節點進行調整。",
+        "Welcome": "歡迎使用 FileFlows！感謝您選擇我們的軟體。\n\n此精靈將引導您完成基本設置步驟，包括接受 EULA 並根據您的偏好選擇插件來添加功能。\n\n選擇不同類型檔案的插件，如視訊、音訊和圖像處理。",
+        "WelcomeUpdate": "我們最近更新了最終用戶許可協議 (EULA)。\n\n請花一些時間閱讀並接受更新的條款，然後繼續使用。\n\n接受後才能繼續使用 FileFlows。\n\n感謝您選擇 FileFlows。",
+        "Finish": {
+          "Bottom": "通過這些步驟，您已經在使用 FileFlows 的路上了。\n\n如果有任何問題或需要協助，隨時聯絡我們的支援團隊。",
+          "CreateALibrary": "創建一個資料庫：",
+          "CreateALibraryDescription": "建立一個資料庫來自動化文件處理。\n您的資料庫將根據指定的標準自動偵測並處理檔案，簡化工作流程，而不需要手動干預。",
+          "CreateFirstFlow": "創建您的第一個流程：",
+          "CreateFirstFlowDescription": "利用您選擇的插件來製作第一個流程。\n無論是處理視訊、音訊、圖像或任何其他類型的檔案，您的流程將根據您的具體需求定制檔案的處理，無論是簡單還是複雜。",
+          "Top": "您已成功配置 FileFlows。現在是時候讓它發揮作用了！"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "選擇要安裝的 DockerMods",
+        "Eula": "EULA",
+        "EulaDescription": "FileFlows 的最終用戶許可協議",
+        "Finish": "完成",
+        "FinishDescription": "初始配置完成",
+        "Plugins": "插件",
+        "PluginsDescription": "選擇要安裝的插件",
+        "Runners": "執行器",
+        "RunnersDescription": "指定執行器數量",
+        "Welcome": "歡迎",
+        "WelcomeDescription": "歡迎使用 FileFlows"
+      }
+    },
+    "Libraries": {
+      "Title": "資料庫",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {檔案} other {檔案}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "尚未配置流程。\n在添加或更新資料庫之前，請先創建一個流程。"
+      },
+      "Messages": {
+        "DeleteConfirm": "您確定要刪除選定的 {count, plural, one {資料庫} other {資料庫}}？",
+        "KeepLibraryFiles": "保留數據庫中的檔案以供統計",
+        "Reprocess": {
+          "Message": "您確定要重新處理選定的資料庫嗎？\n\n此操作將標記所有檔案為未處理並開始重新處理。請注意，此操作無法撤銷。",
+          "Title": "重新處理選定的資料庫"
+        },
+        "Reset": {
+          "Message": "您確定要重置選定的資料庫嗎？\n\n此操作將刪除所有檔案並重新掃描。請注意，此操作無法撤銷。",
+          "Title": "重置選定的資料庫"
+        }
+      }
+    },
+    "Library": {
+      "Title": "資料庫",
+      "Labels": {
+        "CreationTime": "建立時間",
+        "LastWriteTime": "最後寫入時間"
+      },
+      "Fields": {
+        "DetectFileCreation": "檔案建立",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "檔案最後寫入",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "檔案大小",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "在此您可以設定資料庫只檢測符合指定模式的檔案。\n\n例如，這允許您只包含以下檔案：\n\t- 建立於 7 天內的檔案\n\t- 最後寫入於 3 到 7 天前的檔案\n\t- 大小超過 1GB 的檔案",
+        "DownloadsDirectory": "下載目錄",
+        "DownloadsDirectory-Help": "一個特殊目錄，若成功處理的檔案在此目錄中被重新發現，該檔案將自動重新處理。\n這對於重新下載檔案很有幫助。",
+        "Enabled": "啟用",
+        "ExcludeHidden": "排除隱藏",
+        "ExcludeHidden-Help": "啟用後，隱藏的檔案和資料夾將不會被掃描",
+        "ExclusionFilters": "排除過濾器",
+        "ExclusionFilters-Help": "可選的過濾器列表，用於篩選檔案的完整名稱。",
+        "Extensions": "副檔名",
+        "Extensions-Help": "可選的副檔名列表，供此資料庫中包含的檔案使用。\n如果留空，將包含所有檔案，除非在 `進階` 標籤中定義了過濾器或排除過濾器。",
+        "FileSizeDetectionInterval": "檔案大小檢測間隔",
+        "FileSizeDetectionInterval-Help": "設定資料庫掃描器重新檢查檔案大小的時間間隔（以秒為單位）。適用於需要分塊寫入的應用程式，例如每 20 秒寫入一部分錄製內容的 PVR 應用程式。",
+        "FileSizeDetectionInterval-Suffix": "秒",
+        "Filters": "過濾器",
+        "Filters-Help": "可選的過濾器列表，用於篩選檔案的完整名稱。",
+        "Flow": "流程",
+        "Folders": "資料夾",
+        "Folders-Help": "如果此資料庫處理的是資料夾而不是檔案。\n這並不意味著要掃描子資料夾，資料庫已經會這麼做。\n這意味著會處理資料夾對象而非個別檔案。",
+        "FullScanDisabled": "禁用全掃描",
+        "FullScanDisabled-Help": "全掃描的目的是捕獲任何可能被檔案系統觀察事件遺漏的檔案。",
+        "FullScanIntervalMinutes": "全掃描間隔",
+        "FullScanIntervalMinutes-Help": "設置此資料庫應進行全掃描的間隔時間",
+        "HoldMinutes": "等待分鐘數",
+        "HoldMinutes-Help": "可選地將找到的檔案在處理前保留此時間段。\n每個檔案將保留此時間段。",
+        "HoldMinutes-Suffix": "分鐘",
+        "MaxRunners": "最大運行數",
+        "MaxRunners-Help": "同時處理此資料庫檔案的最大運行數。\n設為 0 表示無限制。",
+        "Name": "名稱",
+        "Path": "路徑",
+        "Priority": "優先順序",
+        "Priority-Help": "檔案處理的優先順序。如果高優先級的資料庫有待處理的檔案，這些檔案將首先處理。",
+        "ProcessingOrder": "處理順序",
+        "ProcessingOrder-Help": "資料庫檔案的處理順序。",
+        "ReprocessRecreatedFiles": "重新處理重建檔案",
+        "ReprocessRecreatedFiles-Help": "啟用後，如果檔案重新檢測到的創建時間與記錄的不一致，將自動重新處理該檔案。\n這在下載的檔案資料庫中很有幫助，您可能多次下載相同的檔案並希望每次處理它。",
+        "Scan": "掃描",
+        "Scan-Help": "啟用掃描時，資料庫將定期掃描新內容。\n停用掃描時，資料庫將監聽檔案系統事件以檢測新檔案。\n除非遇到檔案未被檢測到的問題，否則最好將此選項關閉。",
+        "ScanInterval": "掃描間隔",
+        "ScanInterval-Help": "兩次掃描之間的最短可能時間（以秒為單位）。不保證每次都會按此間隔掃描，因為另一掃描可能正在進行中。",
+        "ScanInterval-Suffix": "秒",
+        "Schedule": "排程",
+        "ScheduleDescription": "這允許您設定此資料庫的活動時間。\n\n在排程之外，資料庫掃描器將不會針對此資料庫運行，也不會處理任何檔案。",
+        "SkipFileAccessTests": "跳過檔案訪問測試",
+        "SkipFileAccessTests-Help": "啟用後，資料庫將不會測試是否能夠讀取或寫入檔案再將其加入檔案隊列。",
+        "Template": "模板",
+        "TopLevelOnly": "僅頂層",
+        "TopLevelOnly-Help": "僅掃描目錄根目錄中的檔案，不會搜尋子資料夾。",
+        "UpdateMovedFiles": "更新移動的檔案",
+        "UpdateMovedFiles-Help": "啟用後，如果檔案在同一資料庫內被檢測為移動，則將更新原始檔案以指向此新檔案。\n否則，停用時，會新增一個副本。\n檔案將被檢測為移動，當原始檔案不存在而新檔案的簽名相同時。",
+        "UseFingerprinting": "使用指紋檢測",
+        "UseFingerprinting-Help": "啟用後，檔案將在匯入和流程完成後運行校驗碼。\n任何匹配校驗碼的檔案將被跳過未來的資料庫匯入。",
+        "WaitTimeSeconds": "等待時間",
+        "WaitTimeSeconds-Help": "自最後一次變更寫入此資料夾後需要等待的秒數，才能將其掃描進資料庫。",
+        "WaitTimeSeconds-Suffix": "秒"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "建立日期",
+        "ExecutedNodes": "執行的流程元素",
+        "FailureReason": "失敗原因",
+        "FinalMetadata": "最終元數據",
+        "FinalSize": "最終大小",
+        "FinalSizeSuffix": "位元組",
+        "Fingerprint": "指紋",
+        "Flow": "流程",
+        "Library": "資料庫",
+        "Log": "日誌",
+        "Name": "原始檔案",
+        "Node": "處理節點",
+        "OriginalMetadata": "原始元數據",
+        "OriginalSize": "原始大小",
+        "OriginalSizeSuffix": "位元組",
+        "OutputPath": "輸出路徑",
+        "ProcessingTime": "處理時間",
+        "Status": "狀態"
+      },
+      "Tabs": {
+        "CustomVariables": "自訂變量",
+        "FinalMetadata": "輸出",
+        "OriginalMetadata": "輸入"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "檔案",
+      "Labels": {
+        "ScanTriggered": "已觸發所有啟用的資料庫掃描"
+      },
+      "Buttons": {
+        "Ignore": "忽略",
+        "MoveToTop": "移至頂部",
+        "Process": "處理",
+        "ProcessOptions": "處理選項",
+        "Reprocess": "重新處理",
+        "ToggleForce": "切換強制處理",
+        "Unhold": "解除",
+        "View": "檢視"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "無法下載日誌",
+        "FailedToReprocess": "無法重新處理",
+        "ReprocessingFile": "檔案已送往重新處理"
+      }
+    },
+    "Log": {
+      "Title": "日誌",
+      "Labels": {
+        "AutoRefresh": "自動重新整理",
+        "FailedToDownloadLog": "無法下載日誌。",
+        "NoMatchingData": "無符合的資料"
+      },
+      "Fields": {
+        "File": "檔案",
+        "IncludeHigherSeverity": "包含更高級別的嚴重性",
+        "Nodes": "節點",
+        "Severity": "嚴重性",
+        "Source": "來源",
+        "Text": "文本"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "取消",
+        "ForgotPassword": "忘記密碼？",
+        "Login": "登入",
+        "Password": "密碼",
+        "Reset": "重設",
+        "Username": "使用者名稱",
+        "UsernameOrEmail": "使用者名稱或電子郵件"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "使用者名稱或密碼無效",
+        "LockedOut": "登入嘗試錯誤次數過多，您目前被鎖定。",
+        "PasswordReset": "密碼重設"
+      }
+    },
+    "Nodes": {
+      "Title": "節點",
+      "Labels": {
+        "Address": "地址",
+        "Disconnected": "已斷線",
+        "DownloadNode": "下載節點",
+        "FileFlowsServer": "內部處理節點",
+        "FilesProcessed": "已處理的檔案",
+        "Internal": "內部",
+        "PossiblyDisconnected": "可能已斷線",
+        "Runners": "執行者",
+        "UpgradeRequired": "需要升級",
+        "UpgradeRequiredHint": "伺服器與節點必須為相同版本",
+        "Version": "版本"
+      },
+      "Fields": {
+        "Address": "地址",
+        "Enabled": "啟用",
+        "FlowRunners": "流程執行者"
+      }
+    },
+    "Notifications": {
+      "Title": "通知"
+    },
+    "Plugins": {
+      "Single": "插件",
+      "Title": "插件",
+      "Labels": {
+        "PluginBrowser": "插件瀏覽器"
+      },
+      "Fields": {
+        "Authors": "作者",
+        "Description": "描述",
+        "Elements": "節點",
+        "Url": "首頁",
+        "Version": "版本"
+      },
+      "Messages": {
+        "DeletePlugins": "您確定要刪除選定的 {count, plural, one {插件} other {插件}}？",
+        "DeleteUsed": "您無法刪除正在使用的插件",
+        "UpdatingPlugins": "正在更新插件"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "節點",
+      "Fields": {
+        "Address": "地址",
+        "Address-Help": "節點的地址（主機名或IP地址）。您不應更改此設置，除非您已更改節點的地址。例如，如果您更改了處理節點的計算機名稱。",
+        "AllLibraries": "所有資料庫",
+        "AllLibraries-Help": "該節點將處理哪些資料庫",
+        "CopyMappings": "複製映射",
+        "DontChangeOwner": "變更擁有者",
+        "DontChangeOwner-Help": "選中時，節點將更改任何新創建檔案的擁有者為環境變量中定義的PGID和PUID。\n如果未設置這些環境變量，擁有者將被更改為“users:nobody”。",
+        "DontSetPermissions": "設置權限",
+        "DontSetPermissions-Help": "選中時，將為新創建的檔案設置權限",
+        "Enabled": "啟用",
+        "FlowRunners": "流程執行者",
+        "FlowRunners-Help": "可用於執行流程的流程執行者實例數量。",
+        "InternalProcessingNodeDescription": "這是FileFlows內建的處理節點。\n\n此節點允許您在不需要在遠程系統上安裝任何其他節點的情況下運行FileFlows，並將FileFlows作為自包含的應用程式使用。\n\n您可以繼續使用此內部節點以及額外的處理節點，或者您可以禁用此節點並僅使用其他節點。",
+        "Libraries": "資料庫",
+        "Libraries-Help": "選擇此節點可以處理的資料庫",
+        "Mappings": "映射",
+        "MappingsDescription": "映射允許您將伺服器的路徑映射到節點上的位置。\n\n例如，您可以將伺服器：'/usr/local/bin/ffmpeg'映射到節點：'C:\\Utils\\ffmpeg\\ffmpeg.exe'\n\n您應該為所有資料庫和將在遠程系統上運行的工具添加映射。",
+        "MappingsKey": "伺服器",
+        "MappingsValue": "節點",
+        "MaxFileSizeMb": "最大檔案大小",
+        "MaxFileSizeMb-Help": "此處理節點可以處理的最大檔案大小。如果設置為0，則沒有大小限制。",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "檔案權限",
+        "PermissionsFiles-Help": "為新創建的檔案設置的權限。",
+        "PermissionsFolders": "資料夾權限",
+        "PermissionsFolders-Help": "為新創建的資料夾設置的權限。",
+        "PreExecuteScript": "預執行腳本",
+        "PreExecuteScript-Help": "在處理任何檔案之前執行的腳本。此腳本的結果必須為1，否則節點將不會處理檔案。",
+        "Priority": "優先級",
+        "Priority-Help": "數字越高優先級越高。具有較高優先級的節點將被優先考慮並首先分配檔案處理，除非這些節點超出排程、已禁用或達到其最大執行者數量。",
+        "ProcessFileCheckInterval": "檔案檢查間隔",
+        "ProcessFileCheckInterval-Help": "多久檢查一次處理節點中的新檔案。\n設置為0以使用系統值。",
+        "ProcessFileCheckInterval-Suffix": "秒",
+        "ProcessingDescription": "這允許您配置該處理節點可以處理的內容。\n\n例如，如果這是一個較低功率的節點，您可以將其限制為僅處理某些資料庫或最大檔案大小。",
+        "Schedule": "排程",
+        "Schedule-Help": "此排程在節點的時區內運行",
+        "ScheduleDescription": "這允許您配置該節點何時啟用。\n\n節點將在此配置的排程之外不處理任何檔案。",
+        "TempPath": "臨時目錄",
+        "TempPath-Help": "此目錄將由流程用於創建臨時檔案，此目錄將定期清理，因此不要在此保留重要檔案。",
+        "Variables": "變量",
+        "VariablesDescription": "變量允許您在處理節點上設置高級變量。",
+        "VariablesKey": "名稱",
+        "VariablesValue": "值"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "合併"
+      },
+      "Buttons": {
+        "Back": "返回",
+        "Generate": "生成"
+      },
+      "Fields": {
+        "Direction": "方向",
+        "Email": "電子郵件",
+        "Email-Placeholder": "輸入電子郵件地址",
+        "Flow": "流程",
+        "Library": "資料庫",
+        "Node": "節點",
+        "Period": "期間",
+        "Statistic": "統計"
+      },
+      "Messages": {
+        "FailedToFindReport": "未能找到報告。",
+        "FailedToGenerateReport": "生成報告失敗。",
+        "NoMatchingData": "無符合的數據",
+        "ReportEmailed": "報告生成後將發送至“{email}”。"
+      }
+    },
+    "Reporting": {
+      "Title": "報告",
+      "Labels": {
+        "Reports": "報告",
+        "ScheduledReports": "排程"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "資料庫對象",
+      "Fields": {
+        "Author": "作者",
+        "Code": "代碼",
+        "Description": "描述",
+        "Revision": "修訂"
+      }
+    },
+    "Revisions": {
+      "Title": "修訂"
+    },
+    "ScheduledReport": {
+      "Title": "預定報告",
+      "Labels": {
+        "LastSent": "上次發送",
+        "Never": "從未"
+      },
+      "Fields": {
+        "DayOfMonth": "月份日",
+        "DayOfMonth-Help": "每月執行此報告的日期。如果所選日期超出月份（例如2月的31日），報告將在當月的最後一天執行。",
+        "DayOfWeek": "星期日",
+        "DayOfWeek-Help": "選擇每週的某一天發送此預定報告。報告將包含這一天之前的7天數據。",
+        "Direction": "方向",
+        "Enabled": "已啟用",
+        "Enabled-Help": "此預定報告僅在啟用時執行。",
+        "Flows": "流程",
+        "Libraries": "庫",
+        "Name-Help": "報告的名稱，將出現在發送的電子郵件主題中。",
+        "Nodes": "節點",
+        "Recipients": "收件人",
+        "Recipients-Help": "將接收此報告的電子郵件地址列表，當報告執行時發送。",
+        "Report": "報告",
+        "Report-Help": "將發送的報告。",
+        "Schedule": "時間表",
+        "Schedule-Help": "何時生成並發送報告給收件人。"
+      }
+    },
+    "Script": {
+      "LanguageTitle": "{Language} 腳本",
+      "Title": "腳本",
+      "Fields": {
+        "Code": "代碼",
+        "Description": "描述",
+        "Name": "名稱",
+        "Outputs": "輸出",
+        "OutputsKey": "輸出鍵",
+        "OutputsValue": "描述"
+      },
+      "Messages": {
+        "FailedToExport": "導出失敗。"
+      }
+    },
+    "Scripts": {
+      "Title": "腳本",
+      "Labels": {
+        "ScriptBrowser": "腳本庫",
+        "UpdateAvailable": "可用更新",
+        "UpdatingScripts": "正在更新腳本"
+      },
+      "Buttons": {
+        "ScriptBrowser": "庫",
+        "UpdateAllScripts": "更新所有腳本"
+      },
+      "Fields": {
+        "Code": "代碼"
+      },
+      "Messages": {
+        "DeleteSystem": "您不能刪除系統腳本",
+        "DeleteUsed": "您不能刪除正在使用的腳本",
+        "Duplicated": "腳本 ''{name}'' 已重複",
+        "Imported": "腳本 ''{name}'' 已導入",
+        "NoRepositoryScriptsToUpdate": "沒有選擇的庫腳本需要更新"
+      }
+    },
+    "Settings": {
+      "Title": "設置",
+      "Labels": {
+        "CheckNow": "立即檢查",
+        "Database": "資料庫",
+        "Email": "電子郵件",
+        "EmailDescription": "這些設置是可選的，僅在使用電子郵件插件或使用本地用戶安全性時需要。",
+        "FileServer": "檔案伺服器",
+        "General": "一般",
+        "Logging": "日誌記錄",
+        "Restart": "重新啟動 FileFlows",
+        "System": "系統",
+        "Updates": "更新"
+      },
+      "Fields": {
+        "AutoUpdate": "自動更新",
+        "AutoUpdate-Help": "當啟用時，FileFlows 將定期檢查更新，如果發現更新，將自動下載並安裝。",
+        "AutoUpdateNodes": "自動更新節點",
+        "AutoUpdateNodes-Help": "當啟用時，外部節點將在 FileFlows 伺服器更新時自動更新。這意味著在分佈式環境中，您僅需更新 FileFlows 伺服器實例。",
+        "AutoUpdatePlugins": "自動更新插件",
+        "AutoUpdatePlugins-Help": "當啟用時，插件將定期檢查更新，如果發現任何更新將自動下載。",
+        "CheckForUpdateNow": "檢查更新",
+        "CheckForUpdateNow-Help": "立即檢查更新，如果發現將下載更新並在沒有正在執行的流程時安裝。",
+        "DelayBetweenNextFile": "文件之間的延遲",
+        "DelayBetweenNextFile-Help": "在開始一個文件和請求新文件之間等待的延遲（毫秒）。將此延遲設置為零意味著將立即請求新文件。如果延遲太短，負載平衡和庫運行器限制等功能可能無法正常運行，因為在下一次請求之前，文件可能尚未完全啟動。",
+        "DelayBetweenNextFile-Suffix": "毫秒",
+        "DockerModsOnServer": "伺服器上的 DockerMods",
+        "DockerModsOnServer-Help": "DockerMods 應在伺服器啟動時自動運行或在特別啟用時運行。否則，它們將僅在啟動工作流時執行。",
+        "HideProcessingFinishedNotifications": "處理完成通知",
+        "HideProcessingFinishedNotifications-Help": "在文件處理完成時是否應在網頁控制台顯示 toast 通知",
+        "HideProcessingStartedNotifications": "處理開始通知",
+        "HideProcessingStartedNotifications-Help": "在文件開始處理時是否應在網頁控制台顯示 toast 通知",
+        "KeepFailedFlowTempFiles": "保留失敗的臨時文件",
+        "KeepFailedFlowTempFiles-Help": "啟用此選項將保留流在失敗時使用的臨時文件，防止它們自動刪除。\n使用時請小心。",
+        "Language": "語言",
+        "Language-Help": "系統將使用的語言。\n注意：這些翻譯是由 AI 生成的，可能包含錯誤。請向支持團隊報告任何錯誤。",
+        "LogEveryRequest": "記錄每個請求",
+        "LogEveryRequest-Help": "是否應記錄對伺服器的每個請求。",
+        "LogFileRetention": "日誌文件保留",
+        "LogFileRetention-Help": "日誌文件應保留多久直到被刪除。",
+        "LogFileRetention-Suffix": "天",
+        "LoggingPath": "日誌目錄",
+        "LoggingPath-Help": "日誌文件將在此創建。",
+        "LogQueueMessages": "記錄隊列消息",
+        "LogQueueMessages-Help": "這將導致在庫監視器中對所有排隊/出隊的文件進行過度日誌記錄。\n如果您遇到文件未顯示的問題，請打開此選項，然後關閉以避免填滿日誌文件。",
+        "PluginRepositoryUrls": "插件庫",
+        "PluginRepositoryUrls-Help": "用於查找插件的插件庫 URL 列表，以換行分隔。\n順序很重要，如果多個庫包含相同的插件，將使用第一個庫作為其來源。\n默認庫將始終添加到此列表的末尾。",
+        "ProcessFileCheckInterval": "文件檢查間隔",
+        "ProcessFileCheckInterval-Help": "在處理節點中檢查新文件的頻率。",
+        "ProcessFileCheckInterval-Suffix": "秒",
+        "ShowFileAddedNotifications": "文件添加通知",
+        "ShowFileAddedNotifications-Help": "如果在找到並添加文件到隊列時應在網頁控制台顯示 toast 通知。",
+        "Telemetry": "遙測",
+        "Telemetry-Help": "遙測有助於了解我們需要支持哪些設備，哪些流程部分最常用，以及我們應該在哪裡專注開發。\n不會發送有關您的文件或身份的任何信息。",
+        "Database": {
+          "Description": "在這裡您可以配置 FileFlows 將使用的數據庫。\n注意：在此處進行的任何更改都需要重新啟動 FileFlows，以便它能夠遷移您的數據，並在必要時創建新的數據庫。",
+          "DontBackupOnUpgrade": "升級時不備份",
+          "DontBackupOnUpgrade-Help": "數據庫備份涉及將您所有的數據庫數據複製到 SQLite 文件中，這可能會耗費時間。如果您已經通過其他方式備份了外部數據庫，則可以選擇禁用此過程。",
+          "Name": "名稱",
+          "Name-Help": "要創建的數據庫名稱，如果留空將使用 'FileFlows'",
+          "Password": "密碼",
+          "Password-Help": "連接到數據庫的用戶密碼",
+          "Port": "端口",
+          "Port-Help": "MySQL 的默認端口是 3306",
+          "Port-Help-MySql": "MySQL 的默認端口是 3306",
+          "Port-Help-Postgres": "Postgres 的默認端口是 5432",
+          "Port-Help-SQLServer": "SQL Server 的默認端口是 1433",
+          "RecreateDatabase": "重新創建數據庫",
+          "RecreateDatabase-Help": "當啟用時，如果新數據庫已經存在，它將被刪除並重新創建。否則，如果關閉，且數據庫已經存在，則不會遷移任何數據，新數據庫將僅用作現有狀態。",
+          "Server": "服務器",
+          "Server-Help": "數據庫服務器的地址及所需的端口或命名實例",
+          "Type": "類型",
+          "Type-Help": "要使用的數據庫類型，默認類型為 SQLite，這不需要額外的設置或配置",
+          "User": "用戶",
+          "User-Help": "用於連接到數據庫的用戶"
+        },
+        "FileServer": {
+          "AllowList": "允許的路徑",
+          "AllowList-Help": "一個以新行分隔的路徑列表，允許被暴露的文件服務器訪問。\n這些是可以被遠程讀取/寫入的位置。\n注意：所有庫路徑自動允許。",
+          "AllowList-Placeholder": "如果留空，則允許所有非系統路徑。",
+          "Description": "這允許外部處理節點下載文件以進行處理而無需映射。\n\n這會通過您的網絡公開您的文件，因此如果不在受信任的網絡上，請禁用它。",
+          "Enabled": "啟用",
+          "FilePermissions": "文件權限",
+          "FilePermissions-Help": "給創建或修改的文件的可選權限。",
+          "FolderPermissions": "文件夾權限",
+          "FolderPermissions-Help": "給創建或修改的文件夾的可選權限。",
+          "OwnerGroup": "擁有者組",
+          "OwnerGroup-Help": "可選的擁有者:組，用於更改創建或修改的文件或文件夾的擁有者",
+          "OwnerGroup-Placeholder": "users:nobody"
+        },
+        "License": {
+          "Email": "授權電子郵件",
+          "ExpiryDate": "到期日期",
+          "Files": "文件",
+          "Flags": "功能",
+          "Key": "授權金鑰",
+          "Level": "級別",
+          "ProcessingNodes": "處理節點",
+          "Status": "狀態"
+        },
+        "Security": {
+          "AccessToken": "訪問令牌",
+          "AccessToken-Help": "處理節點用於連接到服務器的訪問令牌",
+          "Authority": "權威",
+          "Authority-Help": "輸入 Open ID 連接提供者的 URL（例如，https://accounts.google.com/）。",
+          "CallbackAddress": "回調地址",
+          "CallbackAddress-Help": "一個可選的回調地址，您可以用此來覆蓋默認的發送給客戶端的地址。\n例如，如果您在反向代理後面，而 FileFlows 在 HTTP 上監聽，但回調應在 HTTPS 上發生。",
+          "ClientId": "客戶端 ID",
+          "ClientId-Help": "在 Open ID 連接提供者中註冊的客戶端 ID。",
+          "ClientSecret": "客戶端密碼",
+          "ClientSecret-Help": "在 Open ID 連接提供者中註冊的客戶端密碼。",
+          "Description": "配置用戶安全將要求用戶登錄，並且處理節點需要提供訪問令牌以進行連接。\n\n[用戶](/users) 必須在他們能夠登錄或在您可以使用此功能之前添加。",
+          "LockoutMinutes": "鎖定持續時間",
+          "LockoutMinutes-Help": "用戶在重新嘗試登錄之前被鎖定的持續時間。",
+          "LockoutMinutes-Suffix": "分鐘",
+          "MaxAttempts": "最大嘗試次數",
+          "MaxAttempts-Help": "用戶被暫時阻止之前允許的最大登錄嘗試次數",
+          "Mode": "模式",
+          "Mode-Help": "啟用用戶身份驗證以訪問 FileFlows。\n當啟用時，用戶將必須登錄，並且處理節點將需要 API 令牌以訪問服務器。",
+          "Title": "安全性",
+          "TokenExpiryMinutes": "令牌到期",
+          "TokenExpiryMinutes-Help": "登錄令牌的持續時間，直到它過期。"
+        },
+        "Smtp": {
+          "From": "發件人",
+          "From-Help": "發送電子郵件的用戶的名稱",
+          "FromAddress": "發件人地址",
+          "FromAddress-Help": "發送電子郵件的用戶的電子郵件地址",
+          "Password": "密碼",
+          "Password-Help": "SMTP 用戶的密碼",
+          "Port": "端口",
+          "Port-Help": "電子郵件服務器端口",
+          "Security": "安全性",
+          "Security-Help": "發送電子郵件時使用的安全性",
+          "Server": "服務器",
+          "Server-Help": "電子郵件服務器",
+          "User": "用戶",
+          "User-Help": "可選的用戶名，用於發送電子郵件"
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "關閉自動數據庫備份意味著在應用程序更新期間不會進行備份。重要的是確保您有替代方法來外部備份數據庫，以保護您的數據。\n\n您確定要關閉這些備份嗎？",
+          "NoDatabase": "名稱是必填的",
+          "NoPassword": "密碼是必填的",
+          "NoServer": "伺服器是必填的",
+          "NoUser": "用戶是必填的",
+          "TestingDatabase": "測試數據庫連接中",
+          "TestSuccess": "成功連接到數據庫"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "您確定要禁用遙測嗎？\n\n請放心，不會記錄任何個人信息。發送的數據包括有關使用中的流元素、所使用的插件，以及處理和失敗的文件總數的信息。\n\n這些信息幫助我們了解用戶偏好，並告訴我們有關棄用未使用的流元素的決策。",
+          "Title": "禁用遙測"
+        },
+        "Restart": {
+          "Message": "您確定要重啟 FileFlows 嗎？\n\n您的設置將自動保存。\n\n注意：請確保沒有流在執行。",
+          "Title": "重啟 FileFlows"
+        },
+        "Update": {
+          "Downloading": "正在下載升級",
+          "Failed": "無法檢查更新",
+          "Message": "有新的更新可用，您想下載並安裝它嗎？",
+          "NotAvailable": "沒有可用的更新",
+          "Title": "可用的更新"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "統計"
+    },
+    "Task": {
+      "Title": "任務",
+      "Fields": {
+        "CustomSchedule": "自訂排程",
+        "CustomSchedule-Help": "此任務將在每個 15 分鐘的區塊開始時運行一次",
+        "Schedule": "排程",
+        "Schedule-Help": "此腳本應該在何時執行",
+        "Script": "腳本",
+        "Script-Help": "在配置的排程中執行的腳本",
+        "TimeSchedule": "排程",
+        "TimeSchedule-Help": "任務將在何時運行",
+        "Type": "類型",
+        "Type-Help": "這是任務的類型。基於時間的任務將在配置的時間執行，其他任務則是基於事件的"
+      }
+    },
+    "Tasks": {
+      "Title": "任務",
+      "Buttons": {
+        "EditScript": "編輯腳本"
+      },
+      "Messages": {
+        "NoHistory": "此任務沒有可用的運行歷史。",
+        "NoScripts": "未找到可創建任務的腳本。"
+      }
+    },
+    "Users": {
+      "Single": "用戶",
+      "Title": "用戶",
+      "Labels": {
+        "Address": "地址",
+        "Administrator": "管理員",
+        "LastLoggedIn": "最後登錄",
+        "Never": "從未"
+      },
+      "Fields": {
+        "Email": "電子郵件",
+        "IsAdmin": "管理員",
+        "Password": "密碼",
+        "Roles": "角色"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "您不能刪除自己。",
+        "EmailInUse": "電子郵件地址 ''{email}'' 已被另一用戶 ''{user}'' 使用。"
+      }
+    },
+    "Variable": {
+      "Title": "變數"
+    },
+    "Variables": {
+      "Title": "變數"
+    },
+    "Webhook": {
+      "Title": "網絡釘",
+      "Fields": {
+        "Code": "代碼",
+        "Method": "方法",
+        "Route": "路由"
+      }
+    },
+    "Webhooks": {
+      "Title": "網絡釘",
+      "Columns": {
+        "Method": "方法",
+        "Route": "路由"
+      }
+    },
+    "Widget": {
+      "Title": "小部件",
+      "Fields": {
+        "AudioCodecs": "音頻編解碼器",
+        "AudioContainers": "音頻容器",
+        "Codecs": "編解碼器",
+        "ComicFormats": "漫畫格式",
+        "ComicPages": "漫畫頁面",
+        "CpuUsage": "CPU 使用率",
+        "FilesRecentlyFinished": "最近完成",
+        "FilesUpcoming": "即將到來",
+        "ImageFormats": "圖片格式",
+        "LibraryProcessingTimes": "庫處理時間 [每兆字節秒數]",
+        "LogStorage": "日誌存儲",
+        "MemoryUsage": "內存使用率",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "打開的數據庫連接",
+        "Processing": "處理中",
+        "ProcessingNodes": "處理節點",
+        "ProcessingTimes": "處理時間",
+        "StorageSaved": "已節省存儲",
+        "TempStorage": "臨時存儲",
+        "VideoCodecs": "視頻編解碼器",
+        "VideoContainers": "視頻容器",
+        "VideoResolution": "視頻解析度"
+      }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "一個允許您向 Apprise 伺服器發送消息的插件。",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "一組音頻相關的流元素，用於幫助處理音頻文件。",
+      "Label": "音頻"
+    },
+    "BasicNodes": {
+      "Description": "FileFlows 的基本流元素。此插件包含處理文件的基本和常用流元素。\n此插件是 FileFlows 正常運行所必需的。",
+      "Label": "基本"
+    },
+    "ChecksumNodes": {
+      "Description": "提供對文件運行校驗和的流元素。",
+      "Label": "校驗和"
+    },
+    "ComicNodes": {
+      "Description": "用於處理漫畫書 (cbr, cbz, pdf 等) 的流元素。",
+      "Label": "漫畫"
+    },
+    "DiscordNodes": {
+      "Description": "一個允許您向 Discord 伺服器發送消息的插件。\n\nWebhook Id 和令牌可以從 webhook URL 獲取\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "此插件允許您在執行流程時發送電子郵件。",
+      "Label": "電子郵件"
+    },
+    "Emby": {
+      "Description": "一個允許您與 Emby 進行通信的插件。",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "一個允許您向 Gotify 伺服器發送消息的插件。",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "用於處理圖像文件的流元素。此插件包含用於轉換和操作圖像的節點。",
+      "Label": "圖像"
+    },
+    "MetaNodes": {
+      "Description": "一個包含用於查找文件元信息的元信息流元素的插件。\n\n包含從 TheMovieDB 查找電影信息的流元素，以及從文件中的 ID3 標籤中查找音樂信息的流元素。",
+      "Label": "元"
+    },
+    "Nextcloud": {
+      "Description": "一個允許您將文件上傳到 Nextcloud 的插件。",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "一個允許您與 Plex 進行通信的插件。",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "一個允許您向 Pushbullet 伺服器發送消息的插件。",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "一個允許您向 Pushover 伺服器發送消息的插件。",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "一個允許您發送 Telegram 消息的插件。",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "處理視頻文件的插件，包括但不限於視頻文件轉換、視頻文件檢測、放大、縮小和轉碼。",
+      "Label": "視頻"
+    },
+    "Web": {
+      "Description": "提供 Web 相關流元素的插件",
+      "Label": "Web"
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "一個空白的音頻模板，包含一個 ''音頻文件'' 輸入流元素。",
+        "Name": "音頻文件"
+      },
+      "ConvertComic": {
+        "Description": "一個將漫畫書從 CBR、CBZ、CB7、PDF、GZ、BZ2 轉換為 CBZ 或 PDF 的流程。",
+        "Name": "轉換漫畫"
+      },
+      "ConvertImage": {
+        "Description": "一個轉換圖像的流程。",
+        "Name": "轉換圖像"
+      },
+      "ConvertVideo": {
+        "Description": "一個將視頻文件轉換為另一種格式的流程。",
+        "Name": "轉換視頻"
+      },
+      "FailureFlow": {
+        "Description": "當流程因任何原因失敗時執行的基本失敗流程。",
+        "Name": "失敗流程"
+      },
+      "File": {
+        "Description": "一個空白的文件模板，包含一個 ''輸入文件'' 輸入流元素。",
+        "Name": "文件"
+      },
+      "Folder": {
+        "Description": "一個空白的文件夾模板，包含一個 ''輸入文件夾'' 輸入流元素。\n\n注意：此模板僅應用於處理文件夾，而不是文件。處理文件夾有處理限制，因為處理的是文件夾，而不是該文件夾中的文件。",
+        "Name": "文件夾"
+      },
+      "ImageFile": {
+        "Description": "一個空白的圖像模板，包含一個 ''圖像文件'' 輸入流元素。",
+        "Name": "圖像文件"
+      },
+      "VideoFile": {
+        "Description": "一個空白的圖像模板，包含一個 ''視頻文件'' 輸入流元素。",
+        "Name": "視頻文件"
+      }
+    },
+    "Groups": {
+      "Books": "書籍",
+      "DownloadClients": "下載客戶端",
+      "DVR": "DVR",
+      "General": "一般"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "搜索常見有聲書文件的有聲書庫",
+        "Name": "有聲書庫"
+      },
+      "ComicLibrary": {
+        "Description": "搜索常見漫畫書文件的漫畫庫",
+        "Name": "漫畫庫"
+      },
+      "eBookLibrary": {
+        "Description": "搜索常見電子書文件的電子書庫",
+        "Name": "電子書庫"
+      },
+      "ImageLibrary": {
+        "Description": "搜索常見圖像文件的圖像庫",
+        "Name": "圖像庫"
+      },
+      "MusicLibrary": {
+        "Description": "搜索常見音樂文件的音樂庫",
+        "Name": "音樂庫"
+      },
+      "PlexDVR": {
+        "Description": "監控 Plex DVR 錄音的庫，以便在完成後自動轉換這些錄音。",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "庫來監控來自 SABnzbd 的 “完成” 下載目錄。\n\n該庫可以使用流程將音樂轉換為目標格式，並將這些音樂文件放置在目標文件夾中，例如 “轉換”。\n\n指示 SABnzbd 進行下載的應用程序可以監控“轉換”文件夾以查找完成的文件。",
+        "Name": "SABnzbd 音樂"
+      },
+      "SABnzbdVideos": {
+        "Description": "庫來監控來自 SABnzbd 的 “完成” 下載目錄。\n\n該庫可以使用流程將視頻轉換為目標格式，並將這些視頻放置在目標文件夾中，例如 “轉換”。\n\n指示 SABnzbd 進行下載的應用程序可以監控“轉換”文件夾以查找完成的文件。",
+        "Name": "SABnzbd 視頻"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "在目錄中查找任何示例、預告片或預覽視頻文件，以便在必要時刪除它們。\n對於匹配的 “SABnzbd 視頻” 庫來說非常有用，以便在主文件處理後可以乾淨地刪除該文件夾。",
+        "Name": "樣本/預告片/預覽"
+      },
+      "VideoLibrary": {
+        "Description": "搜索常見視頻文件的視頻庫",
+        "Name": "視頻庫"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {天} other {天}} 前",
+    "HoursAgo": "{num} {num, plural, one {小時} other {小時}} 前",
+    "MinutesAgo": "{num} {num, plural, one {分鐘} other {分鐘}} 前",
+    "Never": "從未",
+    "SecondsAgo": "{num} {num, plural, one {秒} other {秒}} 前"
+  },
+  "Validators": {
+    "Pattern": "無效",
+    "Range": "必須在 {Minimum} 和 {Maximum} 之間",
+    "Required": "必填"
+  },
+  "Widgets": {
+    "AudioCodecs": "音頻編碼器",
+    "AudioContainers": "音頻容器",
+    "Codecs": "編碼器",
+    "ComicFormats": "漫畫格式",
+    "ComicPages": "漫畫頁面",
+    "CPUUsage": "CPU 使用率",
+    "CurrentRevision": "當前修訂",
+    "DatabaseConnections": "數據庫連接",
+    "DecoderParameters": "解碼器參數",
+    "Decoders": "解碼器",
+    "Encoders": "編碼器",
+    "ImageFormats": "圖像格式",
+    "LibraryProcessingTimes": "庫處理時間",
+    "LogStorage": "日誌存儲",
+    "MemoryUsage": "內存使用",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "處理中",
+    "ProcessingNodes": "處理節點",
+    "ProcessingTimes": "處理時間",
+    "RecentlyFinished": "最近完成",
+    "StorageSaved": "節省存儲",
+    "TemporaryFileStorage": "臨時文件存儲",
+    "Upcoming": "即將到來",
+    "VideoCodecs": "視頻編碼器",
+    "VideoContainers": "視頻容器",
+    "VideoResolutions": "視頻分辨率"
+  }
+}
