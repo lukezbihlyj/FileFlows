@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "Statistiche"
     },
+    "Tags": {
+      "Title": "Tag",
+      "Fields": {
+        "Description": "Descrizione",
+        "Icon": "Icona"
+      }
+    },
     "Task": {
       "Title": "Compito",
       "Fields": {

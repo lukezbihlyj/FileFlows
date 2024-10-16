@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "Statistik"
     },
+    "Tags": {
+      "Title": "Taggar",
+      "Fields": {
+        "Description": "Beskrivning",
+        "Icon": "Ikon"
+      }
+    },
     "Task": {
       "Title": "Uppgift",
       "Fields": {

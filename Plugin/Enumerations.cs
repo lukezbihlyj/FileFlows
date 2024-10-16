@@ -199,7 +199,11 @@ public enum FormInputType
     /// <summary>
     /// Executed Flow Elements Renderer
     /// </summary>
-    ExecutedFlowElementsRenderer = 45
+    ExecutedFlowElementsRenderer = 45,
+    /// <summary>
+    /// Input for selecting tag(s)
+    /// </summary>
+    TagSelection = 46
 }
 
 

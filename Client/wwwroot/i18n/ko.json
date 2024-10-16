@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "통계"
     },
+    "Tags": {
+      "Title": "태그",
+      "Fields": {
+        "Description": "설명",
+        "Icon": "아이콘"
+      }
+    },
     "Task": {
       "Title": "작업",
       "Fields": {

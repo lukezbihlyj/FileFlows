@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "Статистика"
     },
+    "Tags": {
+      "Title": "Теги",
+      "Fields": {
+        "Description": "Описание",
+        "Icon": "Иконка"
+      }
+    },
     "Task": {
       "Title": "Задача",
       "Fields": {

@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "Statistieken"
     },
+    "Tags": {
+      "Title": "Tags",
+      "Fields": {
+        "Description": "Beschrijving",
+        "Icon": "Icoon"
+      }
+    },
     "Task": {
       "Title": "Taak",
       "Fields": {

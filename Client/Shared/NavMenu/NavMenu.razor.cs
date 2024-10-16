@@ -213,7 +213,8 @@ public partial class NavMenu : IDisposable
             {
                 nmiFlows,
                 nmiLibraries,
-                Profile.HasRole(UserRole.Nodes) ? new ("Pages.Nodes.Title", "fas fa-desktop", "nodes") : null
+                Profile.HasRole(UserRole.Nodes) ? new ("Pages.Nodes.Title", "fas fa-desktop", "nodes") : null,
+                Profile.HasRole(UserRole.Tags) ? new("Pages.Tags.Title", "fas fa-tags", "tags") : null,
             }
         });
 

@@ -1381,6 +1381,13 @@
         }
       }
     },
+    "Tags": {
+      "Title": "Tags",
+      "Fields": {
+        "Description": "Beschreibung",
+        "Icon": "Symbol"
+      }
+    },
     "Statistics": {
       "Title": "Statistik"
     },

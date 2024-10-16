@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Components;
 namespace FileFlows.Client.Components.Inputs;
 
 /// <summary>
-/// Input to select a track, used by the Video plugin
+/// Input for selecting tags
 /// </summary>
-public partial class InputTrackSelector: Input<object>
+public partial class InputTagSelect : Input<List<Guid>>
 {
 }

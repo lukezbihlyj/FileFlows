@@ -44,6 +44,7 @@ public static class ServiceLoader
             .AddSingleton<AuditService>()
             .AddSingleton<DockerModService>()
             .AddSingleton<RepositoryService>()
+            .AddSingleton<TagService>()
             .AddSingleton<INotificationService, NotificationService>()
             .AddSingleton<ScheduledReportService>()
             .AddSingleton<FileDisplayNameService>()

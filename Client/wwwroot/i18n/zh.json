@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "统计"
     },
+    "Tags": {
+      "Title": "标签",
+      "Fields": {
+        "Description": "描述",
+        "Icon": "图标"
+      }
+    },
     "Task": {
       "Title": "任务",
       "Fields": {

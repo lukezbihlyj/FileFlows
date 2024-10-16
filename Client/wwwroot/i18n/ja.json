@@ -1384,6 +1384,13 @@
     "Statistics": {
       "Title": "統計"
     },
+    "Tags": {
+      "Title": "タグ",
+      "Fields": {
+        "Description": "説明",
+        "Icon": "アイコン"
+      }
+    },
     "Task": {
       "Title": "タスク",
       "Fields": {
