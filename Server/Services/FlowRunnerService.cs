@@ -272,6 +272,7 @@ public class FlowRunnerService : IFlowRunnerService
             existing.FailureReason = updated.FailureReason;
             existing.ExecutedNodes = updated.ExecutedNodes ?? new List<ExecutedNode>();
             existing.Additional = updated.Additional ?? new();
+            existing.HoldUntil = updated.HoldUntil;
             Logger.Instance.DLog("FinishWork: Executed flow elements: " +
                                  string.Join(", ", existing.ExecutedNodes.Select(x => x.NodeUid)));
             

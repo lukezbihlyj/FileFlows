@@ -131,7 +131,7 @@ public partial class InputSelect : Input<object>
                     break;
                 }
 
-                if (objReference.Uid != Guid.Empty)
+                if (objReference != null && objReference.Uid != Guid.Empty)
                 {
                     // incase the object reference name has changed, we look for the UID
                     var otherObjReference = TryParseObjectReference(optJson);
@@ -167,14 +167,19 @@ public partial class InputSelect : Input<object>
     /// <returns>the object reference, or empty if failed to parse</returns>
     private ObjectReference TryParseObjectReference(string json)
     {
+        ObjectReference? result = null;
         try
         {
-            return JsonSerializer.Deserialize<ObjectReference>(json);
+            result = JsonSerializer.Deserialize<ObjectReference>(json, new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true 
+            });
         }
         catch (Exception)
         {
-            return new ObjectReference { Name = string.Empty, Type = string.Empty, Uid = Guid.Empty };
+            // Ignored
         }
+        return result ?? new ObjectReference { Name = string.Empty, Type = string.Empty, Uid = Guid.Empty };
     }
 
     /// <summary>
