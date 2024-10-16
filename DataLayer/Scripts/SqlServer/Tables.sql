@@ -85,7 +85,8 @@ CREATE TABLE LibraryFile
     FinalMetadata       NVARCHAR(MAX)      NOT NULL,
     ExecutedNodes       NVARCHAR(MAX)      NOT NULL,
     CustomVariables     NVARCHAR(MAX)      NOT NULL,
-    Additional          NVARCHAR(MAX)      NOT NULL
+    Additional          NVARCHAR(MAX)      NOT NULL,
+    Tags                NVARCHAR(MAX)      NOT NULL
 );
 
 CREATE INDEX ix_Status ON LibraryFile (Status);

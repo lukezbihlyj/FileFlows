@@ -86,7 +86,8 @@ CREATE TABLE LibraryFile
     FinalMetadata       TEXT               COLLATE utf8_unicode_ci      NOT NULL,
     ExecutedNodes       TEXT               COLLATE utf8_unicode_ci      NOT NULL,
     CustomVariables     TEXT               COLLATE utf8_unicode_ci      NOT NULL,
-    Additional          TEXT               COLLATE utf8_unicode_ci      NOT NULL
+    Additional          TEXT               COLLATE utf8_unicode_ci      NOT NULL,
+    Tags                TEXT               COLLATE utf8_unicode_ci      NOT NULL
 );
 
 ALTER TABLE LibraryFile ADD INDEX (Status);

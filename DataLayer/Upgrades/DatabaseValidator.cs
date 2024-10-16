@@ -30,28 +30,20 @@ public class DatabaseValidator
         var connector = DatabaseConnectorLoader.LoadConnector(logger, dbType, connectionString);
         try
         {
-            if (await connector.ColumnExists("LibraryFile", "FailureReason") == false)
+            foreach (var column in new[]
+                     {
+                         ("LibraryFile", "FailureReason", "TEXT", "''"),
+                         ("LibraryFile", "ProcessOnNodeUid", "varchar(36)", "''"),
+                         ("LibraryFile", "CustomVariables", "TEXT", ""),
+                         ("LibraryFile", "Additional", "TEXT", ""),
+                         ("LibraryFile", "Tags", "TEXT", "")
+                     })
             {
-                logger.ILog("Adding LibraryFile.FailureReason column");
-                await connector.CreateColumn("LibraryFile", "FailureReason", "VARCHAR(512)", "''");
-            }
-
-            if (await connector.ColumnExists("LibraryFile", "ProcessOnNodeUid") == false)
-            {
-                logger.ILog("Adding LibraryFile.ProcessOnNodeUid column");
-                await connector.CreateColumn("LibraryFile", "ProcessOnNodeUid", "varchar(36)", "''");
-            }
-
-            if (await connector.ColumnExists("LibraryFile", "CustomVariables") == false)
-            {
-                logger.ILog("Adding LibraryFile.CustomVariables column");
-                await connector.CreateColumn("LibraryFile", "CustomVariables", "TEXT", "");
-            }
-
-            if (await connector.ColumnExists("LibraryFile", "Additional") == false)
-            {
-                logger.ILog("Adding LibraryFile.Additional column");
-                await connector.CreateColumn("LibraryFile", "Additional", "TEXT", "");
+                if (await connector.ColumnExists("LibraryFile", "FailureReason") == false)
+                {
+                    logger.ILog("Adding LibraryFile.FailureReason column");
+                    await connector.CreateColumn(column.Item1, column.Item2, column.Item3, column.Item4);
+                }
             }
 
             return true;

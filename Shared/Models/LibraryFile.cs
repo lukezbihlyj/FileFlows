@@ -294,6 +294,18 @@ public class LibraryFile : FileFlowObject
     [SerializedColumn]
     public LibraryFileAdditional Additional { get; set; }
 
+    private List<Guid> _Tags = [];
+
+    /// <summary>
+    /// Gets or sets the tags for this library file
+    /// </summary>
+    [SerializedColumn]
+    public List<Guid> Tags
+    {
+        get => _Tags;
+        set => _Tags = value ?? [];
+    }
+
     /// <summary>
     /// Gets if this file is marked for forced processing
     /// </summary>

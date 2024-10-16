@@ -273,6 +273,7 @@ public class FlowRunnerService : IFlowRunnerService
             existing.ExecutedNodes = updated.ExecutedNodes ?? new List<ExecutedNode>();
             existing.Additional = updated.Additional ?? new();
             existing.HoldUntil = updated.HoldUntil;
+            existing.Tags = updated.Tags ?? [];
             Logger.Instance.DLog("FinishWork: Executed flow elements: " +
                                  string.Join(", ", existing.ExecutedNodes.Select(x => x.NodeUid)));
             

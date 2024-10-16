@@ -86,7 +86,8 @@ CREATE TABLE "LibraryFile"
     "FinalMetadata"       TEXT                NOT NULL,
     "ExecutedNodes"       TEXT                NOT NULL,
     "CustomVariables"     TEXT                NOT NULL,
-    "Additional"          TEXT                NOT NULL
+    "Additional"          TEXT                NOT NULL,
+    "Tags"                TEXT                NOT NULL
 );
 
 CREATE INDEX ON "LibraryFile" ("Status");

@@ -591,6 +591,13 @@ public class Runner
         // must be done after GetToolPathActual so we can get the tools
         nodeParameters.ArchiveHelper = new ArchiveHelper(nodeParameters);
         nodeParameters.ImageHelper = new ImageHelper(logger, nodeParameters);
+        nodeParameters.SetTagsFunction = (tagUids, replace) =>
+        {
+            if(replace)
+                Info.LibraryFile.Tags = tagUids?.ToList() ?? [];
+            else // must be distinct
+                Info.LibraryFile.Tags = Info.LibraryFile.Tags.Union(tagUids).Distinct().ToList();
+        };
         
         nodeParameters.GetPluginSettingsJson = (pluginSettingsType) =>
         {

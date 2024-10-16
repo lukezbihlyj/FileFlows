@@ -154,6 +154,11 @@ public class NodeParameters
     /// Gets or sets the function responsible for getting plugin settings JSON configuration
     /// </summary>
     public Func<string, string> GetPluginSettingsJson { get; set; }
+
+    /// <summary>
+    /// Gets or sets the function responsible for settings the tags
+    /// </summary>
+    public Action<Guid[], bool> SetTagsFunction { get; set; }
     
     /// <summary>
     /// Gets or sets the function responsible for mapping a path
@@ -695,6 +700,18 @@ public class NodeParameters
     {
         if (Parameters.TryAdd(name, value) == false)
             Parameters.Add(name, value);
+    }
+
+    /// <summary>
+    /// Sets the tag on the file
+    /// </summary>
+    /// <param name="tags">the tags to set</param>
+    /// <param name="replace">if the tags should be replaced</param>
+    public void SetTags(IEnumerable<Guid> tags, bool replace)
+    {
+        if (SetTagsFunction == null)
+            return;
+        SetTagsFunction(tags.ToArray(), replace);
     }
     
     /// <summary>

@@ -116,6 +116,7 @@ internal class DbLibraryFileManager : BaseManager
         string strExecutedNodes = JsonEncode(file.ExecutedNodes);
         string strCustomVariables= JsonEncode(file.CustomVariables);
         string strAdditional = JsonEncode(file.Additional);
+        string strTags = JsonEncode(file.Tags ?? []);
         string sql =
             $"update {Wrap(nameof(LibraryFile))} set " +
             $" {Wrap(nameof(LibraryFile.Name))} = @0, " +
@@ -140,7 +141,8 @@ internal class DbLibraryFileManager : BaseManager
             $" {Wrap(nameof(LibraryFile.ExecutedNodes))}=@19, " +
             $" {Wrap(nameof(LibraryFile.CustomVariables))}=@20, " +
             $" {Wrap(nameof(LibraryFile.Additional))}=@21, " +
-            $" {Wrap(nameof(LibraryFile.FailureReason))}=@22, " +
+            $" {Wrap(nameof(LibraryFile.Tags))}=@22, " +
+            $" {Wrap(nameof(LibraryFile.FailureReason))}=@23, " +
             $" {Wrap("ProcessingOrder")}={file.Order}, " + // special case, since Order is reserved in sql
             $" {Wrap(nameof(LibraryFile.Status))} = {(int)file.Status}, " +
             $" {Wrap(nameof(LibraryFile.Flags))} = {(int)file.Flags}, " +
@@ -183,6 +185,7 @@ internal class DbLibraryFileManager : BaseManager
                 strExecutedNodes,
                 strCustomVariables,
                 strAdditional,
+                strTags,
                 file.FailureReason
             );
             //Logger.Instance.DLog("File: " + file.Name + "\nExecuted nodes: " + strExecutedNodes);
@@ -212,6 +215,7 @@ internal class DbLibraryFileManager : BaseManager
                 cachedFile.ExecutedNodes = file.ExecutedNodes;
                 cachedFile.CustomVariables = file.CustomVariables;
                 cachedFile.Additional = file.Additional;
+                cachedFile.Tags = file.Tags ?? [];
                 cachedFile.FailureReason = file.FailureReason;
                 cachedFile.Order = file.Order;
                 cachedFile.Status = file.Status;
@@ -294,6 +298,7 @@ internal class DbLibraryFileManager : BaseManager
                              $"{Wrap(nameof(LibraryFile.ExecutedNodes))}, " +
                              $"{Wrap(nameof(LibraryFile.CustomVariables))}, " +
                              $"{Wrap(nameof(LibraryFile.Additional))}, " +
+                             $"{Wrap(nameof(LibraryFile.Tags))}, " +
                              $"{Wrap(nameof(LibraryFile.FailureReason))} " +
                              " )" +
                              $" values (@{offset++},@{offset++}," +
@@ -316,7 +321,7 @@ internal class DbLibraryFileManager : BaseManager
                              DbConnector.FormatDateQuoted(file.HoldUntil) + ", " +
                              DbConnector.FormatDateQuoted(file.ProcessingStarted) + ", " +
                              DbConnector.FormatDateQuoted(file.ProcessingEnded) + ", " +
-                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
+                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
                              $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
                              $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++});\n";
 
@@ -343,6 +348,7 @@ internal class DbLibraryFileManager : BaseManager
                 parameters.Add(JsonEncode(file.ExecutedNodes));
                 parameters.Add(JsonEncode(file.CustomVariables));
                 parameters.Add(JsonEncode(file.Additional));
+                parameters.Add(JsonEncode(file.Tags ?? []));
                 parameters.Add(file.FailureReason ?? string.Empty);
                 if (await db.Db.ExecuteAsync(sql, parameters.ToArray()) > 0)
                 {
