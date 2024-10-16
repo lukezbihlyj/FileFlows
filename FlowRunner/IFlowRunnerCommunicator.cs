@@ -90,18 +90,45 @@ public class FlowRunnerCommunicator : IFlowRunnerCommunicator
         {
             connection?.DisposeAsync();
         }
-        catch (Exception) { } // not sure if this can throw, but just in case
+        catch (Exception)
+        {
+            // Ignore any exceptions here  
+        } 
     }
 
     /// <summary>
     /// Called when the Signalr connection is closed
     /// </summary>
-    /// <param name="obj">the connection object</param>
+    /// <param name="arg">the connection exception</param>
     /// <returns>a completed task</returns>
-    private Task Connection_Closed(Exception? arg)
+    private async Task Connection_Closed(Exception? arg)
     {
-        runInstance.LogInfo("Connection_Closed");
-        return Task.CompletedTask;
+        if (arg != null)
+        {
+            runInstance.LogError("Connection closed with error: " + arg.Message);
+        }
+        else
+        {
+            runInstance.LogInfo("Connection closed");
+        }
+
+        var retryUntil = DateTime.UtcNow.AddMinutes(2);
+        while (DateTime.UtcNow < retryUntil)
+        {
+            await Task.Delay(5000); // Wait for 5 seconds before attempting to reconnect
+            try
+            {
+                await connection.StartAsync();
+                runInstance.LogInfo("Reconnected to the server");
+                return;
+            }
+            catch (Exception ex)
+            {
+                runInstance.LogError("Failed to reconnect: " + ex.Message);
+            }
+        }
+
+        runInstance.LogError("Failed to reconnect within the retry period.");
     }
 
     /// <summary>
