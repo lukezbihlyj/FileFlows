@@ -46,7 +46,7 @@ public class ScheduledReportWorker:ServerWorker
                 case ReportSchedule.Daily:
                     startLocal = DateTime.Now.Date.AddDays(-1);
                     endLocal = DateTime.Now.Date.AddMilliseconds(-1);
-                    forceSend = report.LastSentUtc < DateTime.Now.AddDays(-1);
+                    forceSend = report.LastSentUtc < startLocal.ToUniversalTime().AddDays(-1);
                     break;
                 case ReportSchedule.Weekly:
                     if ((int)DateTime.Now.DayOfWeek != report.ScheduleInterval)

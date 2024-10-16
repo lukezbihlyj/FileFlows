@@ -622,11 +622,21 @@ public class Runner
             SetStatus(FileStatus.ProcessingFailed);
         else if (result == RunnerCodes.Completed)
         {
-            if (nodeParameters.ReprocessNode != null)
+            if (nodeParameters.Reprocess is { HoldForMinutes: > 0 })
             {
-                logger.ILog($"Setting ProcessOnNodeUid = '{nodeParameters.ReprocessNode.Uid}'");
-                Info.LibraryFile.ProcessOnNodeUid = nodeParameters.ReprocessNode.Uid;
+                logger.ILog($"Setting Hold For Minutes = {nodeParameters.Reprocess.HoldForMinutes}");
+                Info.LibraryFile.HoldUntil = DateTime.UtcNow.AddMinutes(nodeParameters.Reprocess.HoldForMinutes.Value);
+            }
+
+            if (nodeParameters.Reprocess.ReprocessNode != null)
+            {
+                logger.ILog($"Setting ProcessOnNodeUid = '{nodeParameters.Reprocess.ReprocessNode.Uid}'");
+                Info.LibraryFile.ProcessOnNodeUid = nodeParameters.Reprocess.ReprocessNode.Uid;
                 SetStatus(FileStatus.ReprocessByFlow);
+            }
+            else if (nodeParameters.Reprocess is { HoldForMinutes: > 0 })
+            {
+                SetStatus(FileStatus.Unprocessed);
             }
             else
                 SetStatus(FileStatus.Processed);

@@ -31,12 +31,17 @@ public class NodeParameters
     /// to change the file path this should be updated too
     /// </summary>
     public string WorkingFile { get; private set; }
-    
+
     /// <summary>
-    /// Gets or sets a another processing node to reprocess this file on.
-    /// This will be marked for reprocessing once completed.
+    /// Gets or sets reprocessing options
     /// </summary>
-    public ObjectReference ReprocessNode { get; set; }
+    public ReprocessOptions Reprocess { get; set; } = new();
+
+    public ObjectReference? ReprocessNode
+    {
+        get => Reprocess.ReprocessNode;
+        set => Reprocess.ReprocessNode = value;
+    }
 
     /// <summary>
     /// Gets the working file shortname
@@ -446,6 +451,7 @@ public class NodeParameters
         try
         {
             Logger.ILog("Initing file: " + filename);
+            long? folderSize = null;
             if (IsDirectory)
             {
                 Variables.TryAdd("folder.OriginalName", LibraryFileName);
@@ -469,9 +475,16 @@ public class NodeParameters
                         { "folder.Orig.Name", diOriginal.Name ?? "" },
                         { "folder.Orig.FullName", diOriginal.FullName ?? "" },
                     });
-                    
+
                     if (FileService.DirectorySize(diOriginal.FullName).Success(out var origSize))
+                    {
+                        folderSize = origSize;
                         Variables["folder.Orig.Size"] = origSize;
+                    }
+                    else
+                    {
+                        folderSize = 0;
+                    }
                 }
             }
             else
@@ -533,7 +546,15 @@ public class NodeParameters
                             { "folder.Orig.FullName", fiOriginal.Directory ?? "" }
                         });
                         if (FileService.DirectorySize(fiOriginal.Directory).Success(out var origSize))
+                        {
+                            folderSize = origSize;
                             Variables["folder.Orig.Size"] = origSize;
+                        }
+                        else
+                        {
+                            folderSize = 0;
+                        }
+
 
                         if (string.IsNullOrEmpty(this.LibraryPath) == false &&
                             fiOriginal.FullName.StartsWith(this.LibraryPath))
@@ -546,7 +567,10 @@ public class NodeParameters
                     }
                 }
             }
-            if (FileService.DirectorySize(filename).Success(out var size))
+
+            if (folderSize is > 0)
+                Variables["folder.Size"] = folderSize.Value;
+            else if (folderSize == null && FileService.DirectorySize(filename).Success(out var size))
                 Variables["folder.Size"] = size;
         }
         catch (Exception ex)
@@ -1014,4 +1038,21 @@ public enum NodeResult
     /// The execution succeeded
     /// </summary>
     Success = 1,
+}
+
+/// <summary>
+/// Reprocess options for a file
+/// </summary>
+public class ReprocessOptions
+{
+    /// <summary>
+    /// Gets or sets a another processing node to reprocess this file on.
+    /// This will be marked for reprocessing once completed.
+    /// </summary>
+    public ObjectReference? ReprocessNode { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the file should be held for a number of minutes before reprocessing
+    /// </summary>
+    public int? HoldForMinutes { get; set; }
 }
