@@ -16,10 +16,6 @@ public class FilesProcessed : Report
     /// <inheritdoc />
     public override Guid Uid => new Guid("7da09d69-5e19-49c1-8054-4205fb0376d4");
     /// <inheritdoc />
-    public override string Name => "Files Processed";
-    /// <inheritdoc />
-    public override string Description => "Reports on the files processed over a given period.";
-    /// <inheritdoc />
     public override string Icon => "fas fa-file-powerpoint";
     
     /// <inheritdoc />

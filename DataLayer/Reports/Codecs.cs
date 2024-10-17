@@ -14,10 +14,6 @@ public class Codecs : Report
     /// <inheritdoc />
     public override Guid Uid => new Guid("052bf1b7-9912-4e7e-90c7-c2e7ba7fcea3");
     /// <inheritdoc />
-    public override string Name => "Codecs";
-    /// <inheritdoc />
-    public override string Description => "Shows the different codecs processed through FileFlows.";
-    /// <inheritdoc />
     public override string Icon => "fas fa-photo-video";
     /// <inheritdoc />
     public override bool Direction => true;

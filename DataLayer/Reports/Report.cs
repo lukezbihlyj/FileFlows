@@ -18,16 +18,6 @@ public abstract class Report
     public abstract Guid Uid { get; }
 
     /// <summary>
-    /// Gets this reports name
-    /// </summary>
-    public abstract string Name { get; }
-
-    /// <summary>
-    /// Gets this reports description
-    /// </summary>
-    public abstract string Description { get; }
-
-    /// <summary>
     /// Gets this reports icon
     /// </summary>
     public abstract string Icon { get; }
@@ -53,6 +43,11 @@ public abstract class Report
     public virtual ReportSelection NodeSelection => ReportSelection.None;
 
     /// <summary>
+    /// Gets if this report supports tag selection
+    /// </summary>
+    public virtual ReportSelection TagSelection => ReportSelection.None;
+
+    /// <summary>
     /// Gets if the IO Direction is shown in this report
     /// </summary>
     public virtual bool Direction => false;
@@ -67,7 +62,7 @@ public abstract class Report
         [
             new FlowElementExecution(), new LibrarySavings(),
             new Codecs(), new Languages(), new FilesProcessed(),
-            new ProcessingSummary()
+            new ProcessingSummary(), new Files()
             //new NodeProcessing()
         ];
     }
@@ -151,6 +146,20 @@ public abstract class Report
         var nodeUids = GetUids("Node", model).Where(x => x != null).ToArray();
         if (nodeUids.Length > 0)
             sql += $" and {Wrap("NodeUid")} in ({string.Join(", ", nodeUids.Select(x => $"'{x}'"))})";
+    }
+    
+    /// <summary>
+    /// Adds the tags to the SQL command
+    /// </summary>
+    /// <param name="model">the model passed to the report</param>
+    /// <param name="sql">the SQL to update</param>
+    protected void AddTagsToSql(Dictionary<string, object> model, ref string sql)
+    {
+        var tagUids = GetUids("Tags", model).Where(x => x != null).ToArray();
+        foreach(var tagUid in tagUids)
+        {
+            sql += $" and {Wrap("Tags")} like '%{tagUid}%'";
+        }
     }
 
     /// <summary>

@@ -27,7 +27,6 @@
                 @{
                     var rd = ReportDefinitions.FirstOrDefault(x => x.Uid == item.Report.Uid) ?? new()
                     {
-                        Name = "Unknown",
                         Icon = "fas fa-chart-pie"
                     };
                 }
@@ -35,7 +34,7 @@
                     <TableItemIcon Icon="@rd.Icon" DefaultIcon="fas fa-pie-chart"/>
                     <div class="center">
                         <span class="name"><span class="name-actual">@item.Name</span></span>
-                        <span class="description"><span>@rd.Description</span></span>
+                        <span class="description"><span>@Translater.Instant($"Reports.{rd.Type}.Description")</span></span>
                         <div class="info">
                             <IconValue Color="IconValueColor.Blue" Icon="fas fa-chart-pie" Value="@item.Report.Name" />
                             @if(item.LastSentUtc.Year < 2020)

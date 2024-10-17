@@ -101,6 +101,8 @@
       }
       tbody tr td:first-child {
         width:12rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

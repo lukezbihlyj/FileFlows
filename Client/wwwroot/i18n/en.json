@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Shows the different codecs processed through FileFlows.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "A tabular report of all the files processed by FileFlows.",
+      "Name": "Files",
+      "Columns": {
+        "FinalSize": "Final Size",
+        "FlowName": "Flow",
+        "LibraryName": "Library",
+        "Name": "Name",
+        "NodeName": "Node",
+        "OriginalSize": "Original Size"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Reports on the files processed over a given period.",
+      "Name": "Files Processed"
+    },
+    "FlowElementExecution": {
+      "Description": "Shows the flow elements that have been executed in the system.",
+      "Name": "Flow Element Execution"
+    },
+    "Languages": {
+      "Description": "Shows the different languages processed through FileFlows.",
+      "Name": "Languages"
+    },
+    "LibrarySavings": {
+      "Description": "Shows the space savings for your libraries.",
+      "Name": "Library Savings"
+    },
+    "ProcessingSummary": {
+      "Description": "Detailed summary of files processed by library, node, time of day.",
+      "Name": "Processing Summary"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

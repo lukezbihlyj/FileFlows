@@ -11,14 +11,9 @@ public class ReportDefinition : IUniqueObject<Guid>
     public Guid Uid { get; set; }
     
     /// <summary>
-    /// Gets or sets the name
+    /// Gets or sets the type of report
     /// </summary>
-    public string Name { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the description
-    /// </summary>
-    public string Description { get; set; }
+    public string Type { get; set; }
     
     /// <summary>
     /// Gets or sets the icon
@@ -45,6 +40,11 @@ public class ReportDefinition : IUniqueObject<Guid>
     /// </summary>
     public ReportSelection NodeSelection { get; set; }
 
+    /// <summary>
+    /// Gets the tag selection for this report
+    /// </summary>
+    public ReportSelection TagSelection { get; set; }
+    
     /// <summary>
     /// Gets or sets if the IO Direction is shown
     /// </summary>

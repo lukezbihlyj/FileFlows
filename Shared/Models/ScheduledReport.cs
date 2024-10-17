@@ -56,6 +56,10 @@ public class ScheduledReport: FileFlowObject
     /// Gets or sets the UIDs of the Flows to run against
     /// </summary>
     public Guid[] Flows { get; set; }
+    /// <summary>
+    /// Gets or sets the UIDs of the Tags to run against
+    /// </summary>
+    public Guid[] Tags { get; set; }
 }
 
 /// <summary>

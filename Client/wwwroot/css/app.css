@@ -2753,6 +2753,8 @@ body.photino .paused-indicator {
 }
 .report-output .table-container table tbody tr td:first-child {
   width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .report-output .percentage {
   display: flex;

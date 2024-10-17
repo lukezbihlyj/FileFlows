@@ -1,7 +1,10 @@
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Web;
+using FileFlows.Shared;
 using Humanizer;
+using NPoco;
 
 namespace FileFlows.DataLayer.Reports.Helpers;
 
@@ -84,11 +87,12 @@ public class TableGenerator
     /// <summary>
     /// Generates an HTML table from a collection of data.
     /// </summary>
+    /// <param name="reportTypeName">The name of the report</param>
     /// <param name="data">The collection of data to generate the HTML table from.</param>
     /// <param name="dontWrap">If the table should not be wrapped with a table-container class</param>
     /// <param name="emailing">If this table is being emailed</param>
     /// <returns>An HTML string representing the table.</returns>
-    public static string Generate(IEnumerable<dynamic> data, bool dontWrap = false, bool emailing = false)
+    public static string Generate(string reportTypeName, IEnumerable<dynamic> data, bool dontWrap = false, bool emailing = false)
     {
         var list = data?.ToList();
         if (list?.Any() != true)
@@ -113,8 +117,11 @@ public class TableGenerator
             int count = 0;
             foreach (var prop in properties)
             {
+                if(prop.GetCustomAttribute<IgnoreAttribute>() != null)
+                    continue;
+                string name = Translater.Instant($"Reports.{reportTypeName}.Columns.{prop.Name}");
                 sb.AppendFormat("<th{1}><span>{0}</span></th>",
-                    System.Net.WebUtility.HtmlEncode(prop.Name.Humanize(LetterCasing.Title)),
+                    System.Net.WebUtility.HtmlEncode(name),
                     emailing && count == 0 ? " style=\"text-align:left\"" : string.Empty);
                 ++count;
             }
@@ -132,6 +139,8 @@ public class TableGenerator
             int count = 0;
             foreach (var prop in properties)
             {
+                if(prop.GetCustomAttribute<IgnoreAttribute>() != null)
+                    continue;
                 var value = prop.GetValue(item, null) ?? string.Empty;
                 sb.Append("<td");
                 if (emailing && count == 0)
