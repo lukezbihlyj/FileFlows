@@ -158,7 +158,12 @@ public class NodeParameters
     /// <summary>
     /// Gets or sets the function responsible for settings the tags
     /// </summary>
-    public Action<Guid[], bool> SetTagsFunction { get; set; }
+    public Func<Guid[], bool, int> SetTagsFunction { get; set; }
+
+    /// <summary>
+    /// Gets or sets the function responsible for settings the tags by their names
+    /// </summary>
+    public Func<string[], bool, int> SetTagsByNameFunction { get; set; }
     
     /// <summary>
     /// Gets or sets the function responsible for mapping a path
@@ -707,12 +712,23 @@ public class NodeParameters
     /// </summary>
     /// <param name="tags">the tags to set</param>
     /// <param name="replace">if the tags should be replaced</param>
-    public void SetTags(IEnumerable<Guid> tags, bool replace)
-    {
-        if (SetTagsFunction == null)
-            return;
-        SetTagsFunction(tags.ToArray(), replace);
-    }
+    public void SetTagsByUid(IEnumerable<Guid> tags, bool replace)
+        => SetTagsFunction?.Invoke(tags.ToArray(), replace);
+
+    /// <summary>
+    /// Adds a tags by their name
+    /// </summary>
+    /// <param name="names">the names of the tag</param>
+    /// <returns>the number of tags added</returns>
+    public int AddTags(params string[] names)
+        => SetTagsByNameFunction?.Invoke(names, false) ?? 0;
+    /// <summary>
+    /// Sets tags by their name
+    /// </summary>
+    /// <param name="names">the names of the tag</param>
+    /// <returns>the number of tags added</returns>
+    public int SetTags(params string[] names)
+        => SetTagsByNameFunction?.Invoke(names, true) ?? 0;
     
     /// <summary>
     /// Moves the working file

@@ -593,10 +593,25 @@ public class Runner
         nodeParameters.ImageHelper = new ImageHelper(logger, nodeParameters);
         nodeParameters.SetTagsFunction = (tagUids, replace) =>
         {
+            var allowed = tagUids.Where(runInstance.Config.Tags.ContainsKey).ToList();
+            if(replace)
+                Info.LibraryFile.Tags = allowed?.ToList() ?? [];
+            else // must be distinct
+                Info.LibraryFile.Tags = Info.LibraryFile.Tags.Union(allowed).Distinct().ToList();
+            return allowed.Count;
+        };
+        nodeParameters.SetTagsByNameFunction = (tagNames, replace) =>
+        {
+            // lookup tagnames in the runInstance.Config.Tags
+            var tagUids = tagNames.Select(x => runInstance.Config.Tags
+                .FirstOrDefault(y => string.Equals(y.Value, x, StringComparison.InvariantCultureIgnoreCase)).Key)
+                .ToList();
+            
             if(replace)
                 Info.LibraryFile.Tags = tagUids?.ToList() ?? [];
             else // must be distinct
                 Info.LibraryFile.Tags = Info.LibraryFile.Tags.Union(tagUids).Distinct().ToList();
+            return tagUids.Count;
         };
         
         nodeParameters.GetPluginSettingsJson = (pluginSettingsType) =>

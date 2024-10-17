@@ -42,6 +42,17 @@ public class ConfigurationRevision
     /// </summary>
     public Dictionary<string, string> Variables { get; set; }
 
+    private Dictionary<Guid, string> _Tags = [];
+
+    /// <summary>
+    /// Gets or sets the tags
+    /// </summary>
+    public Dictionary<Guid, string> Tags
+    {
+        get => _Tags; 
+        set => _Tags = value ?? [];
+    } 
+
     /// <summary>
     /// Gets or sets the shared Scripts
     /// </summary>

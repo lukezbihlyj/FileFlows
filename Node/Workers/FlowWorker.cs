@@ -767,6 +767,7 @@ public class FlowWorker : Worker
             config.MaxNodes,
             config.LicenseLevel,
             config.AllowRemote,
+            config.Tags,
             Variables = variables,
             config.Libraries,
             config.PluginNames,
