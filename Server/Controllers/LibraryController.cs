@@ -135,6 +135,7 @@ public class LibraryController : BaseController
         {
             library.Enabled = enable;
             library = await service.Update(library, await GetAuditDetails());
+            RefreshCaches();
         }
         return library;
     }
