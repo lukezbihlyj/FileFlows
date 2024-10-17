@@ -43,6 +43,8 @@ public class Files : Report
         AddNodesToSql(model, ref sql);
         AddTagsToSql(model, ref sql);
         
+        sql += " order by " + Wrap("Name");
+        
         var files = await db.Db.FetchAsync<FileData>(sql);
         if (files.Count < 1)
             return string.Empty; // no data
