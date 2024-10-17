@@ -1564,6 +1564,44 @@
       "Label": "网页"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "提供通过 FileFlows 处理的各种编解码器的概述，有助于理解编解码器使用趋势。",
+      "Name": "编解码器"
+    },
+    "Files": {
+      "Description": "显示通过 FileFlows 处理的所有文件的详细表格，提供对其流程、库和大小的洞察。",
+      "Name": "文件",
+      "Columns": {
+        "FinalSize": "最终大小",
+        "FlowName": "流程",
+        "LibraryName": "库",
+        "Name": "名称",
+        "NodeName": "节点",
+        "OriginalSize": "原始大小"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "提供在指定期间处理的所有文件的报告，展示系统的整体性能。",
+      "Name": "处理的文件"
+    },
+    "FlowElementExecution": {
+      "Description": "显示系统中已执行的流程元素的报告，允许分析其性能和频率。",
+      "Name": "流程元素执行"
+    },
+    "Languages": {
+      "Description": "提供处理文件时涉及的各种语言的信息，帮助跟踪媒体中的语言趋势。",
+      "Name": "语言"
+    },
+    "LibrarySavings": {
+      "Description": "显示通过处理不同库中的文件节省的存储空间，帮助监控效率提升。",
+      "Name": "库节省"
+    },
+    "ProcessingSummary": {
+      "Description": "提供按库、节点和时间分类的文件处理活动的详细摘要。",
+      "Name": "处理摘要"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

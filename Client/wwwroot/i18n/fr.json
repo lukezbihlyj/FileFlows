@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Offre une vue d'ensemble des différents codecs traités par FileFlows, aidant à comprendre les tendances d'utilisation des codecs.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Affiche un tableau détaillé de tous les fichiers traités par FileFlows, fournissant des informations sur leur flux, leur bibliothèque et leur taille.",
+      "Name": "Fichiers",
+      "Columns": {
+        "FinalSize": "Taille finale",
+        "FlowName": "Flux",
+        "LibraryName": "Bibliothèque",
+        "Name": "Nom",
+        "NodeName": "Nœud",
+        "OriginalSize": "Taille d'origine"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Fournit un rapport sur tous les fichiers traités sur une période spécifiée, montrant le débit global du système.",
+      "Name": "Fichiers traités"
+    },
+    "FlowElementExecution": {
+      "Description": "Affiche un rapport sur les éléments de flux exécutés dans le système, permettant d'analyser leur performance et leur fréquence.",
+      "Name": "Exécution des éléments de flux"
+    },
+    "Languages": {
+      "Description": "Fournit des informations sur les différentes langues traitées dans les fichiers, aidant à suivre les tendances linguistiques dans vos médias.",
+      "Name": "Langues"
+    },
+    "LibrarySavings": {
+      "Description": "Montre l'espace de stockage économisé en traitant des fichiers dans différentes bibliothèques, aidant à surveiller les gains d'efficacité.",
+      "Name": "Économies de bibliothèque"
+    },
+    "ProcessingSummary": {
+      "Description": "Fournit un résumé complet des activités de traitement des fichiers, classées par bibliothèque, nœud et heure de la journée.",
+      "Name": "Résumé du traitement"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

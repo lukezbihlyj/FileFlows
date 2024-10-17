@@ -1566,11 +1566,11 @@
   },
   "Reports": {
     "Codecs": {
-      "Description": "Shows the different codecs processed through FileFlows.",
+      "Description": "Provides an overview of the different codecs processed by FileFlows, helping you understand codec usage trends.",
       "Name": "Codecs"
     },
     "Files": {
-      "Description": "A tabular report of all the files processed by FileFlows.",
+      "Description": "Displays a detailed table of all files processed by FileFlows, offering insights into their flow, library, and size.",
       "Name": "Files",
       "Columns": {
         "FinalSize": "Final Size",
@@ -1582,23 +1582,23 @@
       }
     },
     "FilesProcessed": {
-      "Description": "Reports on the files processed over a given period.",
+      "Description": "Provides a report on all files processed over a specified time period, showing the overall throughput of the system.",
       "Name": "Files Processed"
     },
     "FlowElementExecution": {
-      "Description": "Shows the flow elements that have been executed in the system.",
+      "Description": "Displays a report on the flow elements executed across the system, allowing you to analyze their performance and frequency.",
       "Name": "Flow Element Execution"
     },
     "Languages": {
-      "Description": "Shows the different languages processed through FileFlows.",
+      "Description": "Offers insights into the different languages processed in files, helping track language trends in your media.",
       "Name": "Languages"
     },
     "LibrarySavings": {
-      "Description": "Shows the space savings for your libraries.",
+      "Description": "Shows how much storage space has been saved by processing files in different libraries, helping monitor efficiency gains.",
       "Name": "Library Savings"
     },
     "ProcessingSummary": {
-      "Description": "Detailed summary of files processed by library, node, time of day.",
+      "Description": "Provides a comprehensive summary of file processing activities, categorized by library, node, and time of day.",
       "Name": "Processing Summary"
     }
   },

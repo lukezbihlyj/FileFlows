@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Biedt een overzicht van de verschillende codecs die door FileFlows zijn verwerkt en helpt bij het begrijpen van codec-gebruikstrends.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Toont een gedetailleerde tabel van alle door FileFlows verwerkte bestanden en biedt inzicht in hun flow, bibliotheek en grootte.",
+      "Name": "Bestanden",
+      "Columns": {
+        "FinalSize": "Eindgrootte",
+        "FlowName": "Flow",
+        "LibraryName": "Bibliotheek",
+        "Name": "Naam",
+        "NodeName": "Node",
+        "OriginalSize": "Oorspronkelijke grootte"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Biedt een rapport over alle verwerkte bestanden gedurende een bepaalde periode en toont de totale prestaties van het systeem.",
+      "Name": "Verwerkte bestanden"
+    },
+    "FlowElementExecution": {
+      "Description": "Toont een rapport over de uitvoeringen van flow-elementen binnen het systeem, waarmee de prestaties en frequentie kunnen worden geanalyseerd.",
+      "Name": "Uitvoering van flow-elementen"
+    },
+    "Languages": {
+      "Description": "Geeft inzicht in de verschillende talen die in bestanden zijn verwerkt en helpt taaltrends in uw media te volgen.",
+      "Name": "Talen"
+    },
+    "LibrarySavings": {
+      "Description": "Toont hoeveel opslagruimte is bespaard door bestanden in verschillende bibliotheken te verwerken en helpt bij het monitoren van efficiëntiewinsten.",
+      "Name": "Bibliotheekbesparingen"
+    },
+    "ProcessingSummary": {
+      "Description": "Biedt een uitgebreide samenvatting van de verwerkingsactiviteiten van bestanden, ingedeeld naar bibliotheek, node en tijd van de dag.",
+      "Name": "Verwerkingssamenvatting"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

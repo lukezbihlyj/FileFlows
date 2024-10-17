@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Proporciona una visión general de los diferentes códecs procesados por FileFlows, ayudando a comprender las tendencias de uso de códecs.",
+      "Name": "Códecs"
+    },
+    "Files": {
+      "Description": "Muestra una tabla detallada de todos los archivos procesados por FileFlows, brindando información sobre su flujo, biblioteca y tamaño.",
+      "Name": "Archivos",
+      "Columns": {
+        "FinalSize": "Tamaño final",
+        "FlowName": "Flujo",
+        "LibraryName": "Biblioteca",
+        "Name": "Nombre",
+        "NodeName": "Nodo",
+        "OriginalSize": "Tamaño original"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Proporciona un informe de todos los archivos procesados durante un período de tiempo especificado, mostrando el rendimiento general del sistema.",
+      "Name": "Archivos procesados"
+    },
+    "FlowElementExecution": {
+      "Description": "Muestra un informe sobre los elementos de flujo ejecutados en el sistema, lo que permite analizar su rendimiento y frecuencia.",
+      "Name": "Ejecución de elementos de flujo"
+    },
+    "Languages": {
+      "Description": "Ofrece información sobre los diferentes idiomas procesados en archivos, ayudando a seguir las tendencias de idiomas en sus medios.",
+      "Name": "Idiomas"
+    },
+    "LibrarySavings": {
+      "Description": "Muestra cuánto espacio de almacenamiento se ha ahorrado al procesar archivos en diferentes bibliotecas, ayudando a monitorear las ganancias de eficiencia.",
+      "Name": "Ahorro en la biblioteca"
+    },
+    "ProcessingSummary": {
+      "Description": "Proporciona un resumen detallado de las actividades de procesamiento de archivos, categorizado por biblioteca, nodo y hora del día.",
+      "Name": "Resumen de procesamiento"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

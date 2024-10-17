@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Bietet einen Überblick über die verschiedenen Codecs, die von FileFlows verarbeitet wurden, und hilft, Codec-Nutzungstrends zu verstehen.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Zeigt eine detaillierte Tabelle aller von FileFlows verarbeiteten Dateien an und bietet Einblicke in ihren Flow, ihre Bibliothek und ihre Größe.",
+      "Name": "Dateien",
+      "Columns": {
+        "FinalSize": "Endgröße",
+        "FlowName": "Flow",
+        "LibraryName": "Bibliothek",
+        "Name": "Name",
+        "NodeName": "Knoten",
+        "OriginalSize": "Originalgröße"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Stellt einen Bericht über alle in einem bestimmten Zeitraum verarbeiteten Dateien bereit und zeigt den Gesamtdurchsatz des Systems.",
+      "Name": "Verarbeitete Dateien"
+    },
+    "FlowElementExecution": {
+      "Description": "Zeigt einen Bericht über die im System ausgeführten Flow-Elemente und ermöglicht die Analyse ihrer Leistung und Häufigkeit.",
+      "Name": "Flow-Element Ausführung"
+    },
+    "Languages": {
+      "Description": "Bietet Einblicke in die verschiedenen in Dateien verarbeiteten Sprachen und hilft, Sprachtrends in Ihren Medien zu verfolgen.",
+      "Name": "Sprachen"
+    },
+    "LibrarySavings": {
+      "Description": "Zeigt, wie viel Speicherplatz durch die Verarbeitung von Dateien in verschiedenen Bibliotheken eingespart wurde und hilft, Effizienzgewinne zu überwachen.",
+      "Name": "Bibliotheks-Einsparungen"
+    },
+    "ProcessingSummary": {
+      "Description": "Bietet eine umfassende Zusammenfassung der Datei-Verarbeitungsaktivitäten, kategorisiert nach Bibliothek, Knoten und Tageszeit.",
+      "Name": "Verarbeitungsübersicht"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

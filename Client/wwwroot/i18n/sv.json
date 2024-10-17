@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Ger en översikt över de olika codecs som bearbetats genom FileFlows, vilket hjälper till att förstå codec-användningstrender.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Visar en detaljerad tabell över alla filer som bearbetats av FileFlows och ger insikter i deras flöde, bibliotek och storlek.",
+      "Name": "Filer",
+      "Columns": {
+        "FinalSize": "Slutstorlek",
+        "FlowName": "Flöde",
+        "LibraryName": "Bibliotek",
+        "Name": "Namn",
+        "NodeName": "Nod",
+        "OriginalSize": "Originalstorlek"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Ger en rapport över alla filer som bearbetats under en viss tidsperiod och visar systemets övergripande prestanda.",
+      "Name": "Bearbetade filer"
+    },
+    "FlowElementExecution": {
+      "Description": "Visar en rapport om de flödeselement som körts i systemet, vilket gör det möjligt att analysera deras prestanda och frekvens.",
+      "Name": "Körning av flödeselement"
+    },
+    "Languages": {
+      "Description": "Ger insikter om de olika språken som bearbetats i filer och hjälper till att följa språkets trender i media.",
+      "Name": "Språk"
+    },
+    "LibrarySavings": {
+      "Description": "Visar hur mycket lagringsutrymme som har sparats genom att bearbeta filer i olika bibliotek och hjälper till att övervaka effektivitetsvinster.",
+      "Name": "Biblioteksbesparingar"
+    },
+    "ProcessingSummary": {
+      "Description": "Ger en omfattande sammanfattning av filbearbetningsaktiviteter, klassificerade efter bibliotek, nod och tid på dagen.",
+      "Name": "Sammanfattning av bearbetning"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

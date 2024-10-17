@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "提供透過 FileFlows 處理的各種編解碼器的概述，有助於理解編解碼器使用趨勢。",
+      "Name": "編解碼器"
+    },
+    "Files": {
+      "Description": "顯示通過 FileFlows 處理的所有文件的詳細表格，提供對其流程、庫和大小的洞察。",
+      "Name": "文件",
+      "Columns": {
+        "FinalSize": "最終大小",
+        "FlowName": "流程",
+        "LibraryName": "庫",
+        "Name": "名稱",
+        "NodeName": "節點",
+        "OriginalSize": "原始大小"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "提供在指定期間處理的所有文件的報告，展示系統的整體性能。",
+      "Name": "處理的文件"
+    },
+    "FlowElementExecution": {
+      "Description": "顯示系統中已執行的流程元素的報告，允許分析其性能和頻率。",
+      "Name": "流程元素執行"
+    },
+    "Languages": {
+      "Description": "提供處理文件時涉及的各種語言的資訊，幫助追蹤媒體中的語言趨勢。",
+      "Name": "語言"
+    },
+    "LibrarySavings": {
+      "Description": "顯示通過處理不同庫中的文件節省的存儲空間，幫助監控效率提升。",
+      "Name": "庫節省"
+    },
+    "ProcessingSummary": {
+      "Description": "提供按庫、節點和時間分類的文件處理活動的詳細摘要。",
+      "Name": "處理摘要"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

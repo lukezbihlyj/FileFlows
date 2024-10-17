@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "FileFlows によって処理されたさまざまなコーデックの概要を提供し、コーデック使用傾向を理解するのに役立ちます。",
+      "Name": "コーデック"
+    },
+    "Files": {
+      "Description": "FileFlows によって処理されたすべてのファイルの詳細なテーブルを表示し、フロー、ライブラリ、サイズに関する洞察を提供します。",
+      "Name": "ファイル",
+      "Columns": {
+        "FinalSize": "最終サイズ",
+        "FlowName": "フロー",
+        "LibraryName": "ライブラリ",
+        "Name": "名前",
+        "NodeName": "ノード",
+        "OriginalSize": "元のサイズ"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "指定された期間に処理されたすべてのファイルに関するレポートを提供し、システムの全体的なスループットを示します。",
+      "Name": "処理されたファイル"
+    },
+    "FlowElementExecution": {
+      "Description": "システムで実行されたフロー要素に関するレポートを表示し、そのパフォーマンスと頻度を分析することができます。",
+      "Name": "フロー要素の実行"
+    },
+    "Languages": {
+      "Description": "ファイルで処理されたさまざまな言語に関する情報を提供し、メディア内の言語の傾向を追跡するのに役立ちます。",
+      "Name": "言語"
+    },
+    "LibrarySavings": {
+      "Description": "さまざまなライブラリでファイルを処理することで節約されたストレージスペースを示し、効率の向上を監視するのに役立ちます。",
+      "Name": "ライブラリ節約"
+    },
+    "ProcessingSummary": {
+      "Description": "ライブラリ、ノード、時間帯ごとに分類された、ファイル処理活動の詳細な概要を提供します。",
+      "Name": "処理の概要"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {

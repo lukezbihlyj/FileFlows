@@ -1564,6 +1564,44 @@
       "Label": "Web"
     }
   },
+  "Reports": {
+    "Codecs": {
+      "Description": "Fornisce una panoramica dei diversi codec elaborati da FileFlows, aiutando a comprendere le tendenze di utilizzo dei codec.",
+      "Name": "Codec"
+    },
+    "Files": {
+      "Description": "Mostra una tabella dettagliata di tutti i file elaborati da FileFlows, fornendo informazioni sul flusso, la libreria e le dimensioni.",
+      "Name": "File",
+      "Columns": {
+        "FinalSize": "Dimensione finale",
+        "FlowName": "Flusso",
+        "LibraryName": "Libreria",
+        "Name": "Nome",
+        "NodeName": "Nodo",
+        "OriginalSize": "Dimensione originale"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Fornisce un rapporto sui file elaborati in un determinato periodo, mostrando le prestazioni complessive del sistema.",
+      "Name": "File elaborati"
+    },
+    "FlowElementExecution": {
+      "Description": "Mostra un rapporto sugli elementi del flusso eseguiti nel sistema, consentendo di analizzarne le prestazioni e la frequenza.",
+      "Name": "Esecuzione degli elementi del flusso"
+    },
+    "Languages": {
+      "Description": "Fornisce informazioni sulle diverse lingue elaborate nei file, aiutando a monitorare le tendenze linguistiche nei tuoi media.",
+      "Name": "Lingue"
+    },
+    "LibrarySavings": {
+      "Description": "Mostra quanto spazio di archiviazione è stato risparmiato elaborando file in diverse librerie, aiutando a monitorare i guadagni di efficienza.",
+      "Name": "Risparmi nella libreria"
+    },
+    "ProcessingSummary": {
+      "Description": "Fornisce un riepilogo dettagliato delle attività di elaborazione dei file, suddiviso per libreria, nodo e ora del giorno.",
+      "Name": "Riepilogo elaborazione"
+    }
+  },
   "Templates": {
     "Flows": {
       "AudioFile": {
