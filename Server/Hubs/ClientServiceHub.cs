@@ -150,4 +150,11 @@ public class ClientServiceManager
     /// <param name="data">the update data</param>
     public void UpdatesUpdate(UpdateInfo data)
         => _hubContext.Clients.All.SendAsync("UpdatesUpdateInfo", data);
+    
+    /// <summary>
+    /// Sends a update about tags available int the system
+    /// </summary>
+    /// <param name="tags">the tags in the system</param>
+    public void TagsUpdated(List<Tag> tags)
+        => _hubContext.Clients.All.SendAsync("TagsUpdated", tags);
 }

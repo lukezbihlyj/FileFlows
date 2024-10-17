@@ -1253,12 +1253,16 @@ input[type=file]{
     &.clickable {
         cursor: pointer;
     }
-
     i {
         padding: 0 0.5rem;
         background: var(--iv-color);
         display: flex;
         align-items: center;
+    }
+    
+    img {
+        max-height: 1.5rem;
+        width: 1.5rem;
     }
 
     .value {

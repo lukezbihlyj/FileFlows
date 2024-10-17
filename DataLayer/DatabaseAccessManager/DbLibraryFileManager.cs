@@ -116,7 +116,7 @@ internal class DbLibraryFileManager : BaseManager
         string strExecutedNodes = JsonEncode(file.ExecutedNodes);
         string strCustomVariables= JsonEncode(file.CustomVariables);
         string strAdditional = JsonEncode(file.Additional);
-        string strTags = JsonEncode(file.Tags ?? []);
+        string strTags = SemicolonEncode(file.Tags ?? []);
         string sql =
             $"update {Wrap(nameof(LibraryFile))} set " +
             $" {Wrap(nameof(LibraryFile.Name))} = @0, " +
@@ -348,7 +348,7 @@ internal class DbLibraryFileManager : BaseManager
                 parameters.Add(JsonEncode(file.ExecutedNodes));
                 parameters.Add(JsonEncode(file.CustomVariables));
                 parameters.Add(JsonEncode(file.Additional));
-                parameters.Add(JsonEncode(file.Tags ?? []));
+                parameters.Add(SemicolonEncode(file.Tags ?? []));
                 parameters.Add(file.FailureReason ?? string.Empty);
                 if (await db.Db.ExecuteAsync(sql, parameters.ToArray()) > 0)
                 {
@@ -1209,6 +1209,9 @@ internal class DbLibraryFileManager : BaseManager
             if (args.LibraryUid != null)
                 sql += $" and {Wrap(nameof(LibraryFile.LibraryUid))} = '{args.LibraryUid.Value}'";
             
+            if (args.TagUid != null)
+                sql += $" and {Wrap(nameof(LibraryFile.Tags))} LIKE '%{args.TagUid.Value}%'";
+            
             if (iStatus > 0)
             {
                 if (args.SortBy != null)
@@ -1699,6 +1702,23 @@ and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)}
         if (o == null)
             return string.Empty;
         return JsonSerializer.Serialize(o, JsonOptions);
+    }
+    
+    /// <summary>
+    /// Encodes an array of GUIDs into a semicolon-separated string, where each GUID is formatted as 'GUID;'.
+    /// </summary>
+    /// <param name="guids">An array of GUIDs to encode.</param>
+    /// <returns>
+    /// A semicolon-separated string of GUIDs, where each GUID is followed by a semicolon.
+    /// Returns an empty string if the input is null or empty.
+    /// </returns>
+    public static string SemicolonEncode(List<Guid> guids)
+    {
+        if (guids == null || guids.Count == 0)
+            return string.Empty;
+
+        // Ensure each GUID is formatted as 'GUID;'
+        return string.Join("", guids.Select(guid => $"{guid};"));
     }
 
     /// <summary>
@@ -2197,5 +2217,40 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
 
             await Update(file);
         }
+    }
+
+    /// <summary>
+    /// Deletes the tags from any file
+    /// </summary>
+    /// <param name="tagUids">the UIDs of the tags being deleted</param>
+    /// <param name="auditDetails">the audit details</param>
+    public async Task DeleteTags(Guid[] tagUids, AuditDetails auditDetails)
+    {
+        // need to remove the Tag from LibraryFile.Tags where the json field contains the tag
+        // where uids is the list of the tag Uids to remove
+        using var db = await DbConnector.GetDb();
+
+        foreach (var tagUid in tagUids)
+        {
+            string sql = $@"
+                        update {Wrap(nameof(LibraryFile))} 
+                        set {Wrap(nameof(LibraryFile.Tags))} = 
+                        REPLACE({Wrap(nameof(LibraryFile.Tags))}, '{tagUid};', '')
+                        where {Wrap(nameof(LibraryFile.Tags))} like '%{tagUid};%'";
+
+            await db.Db.ExecuteAsync(sql);
+        }
+
+        if (UseCache)
+        {
+            foreach(var file in Cache.Values.Where(x => x.Tags?.Any(tagUids.Contains) == true))
+            {
+                foreach (var tagUid in tagUids)
+                {
+                    file.Tags?.Remove(tagUid);
+                }
+            }
+        }
+
     }
 }

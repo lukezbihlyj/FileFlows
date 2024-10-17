@@ -65,27 +65,32 @@
             <FlowTableColumn TItem="LibaryFileListModel" NoHeight="true">
                 <Header>
                     <div class="header">
-                        <span class="column-header">File</span>
+                        <span class="column-header"></span>
                         <div class="filters">
                             @if (SelectedStatus is FileStatus.Processed)
                             {
                                 <FlowDropDown Options="optionsSortBy" OnSelected="SelectSortBy" SelectedValue="@SelectedSortBy"
-                                              Placeholder="Sort By" PlaceholderIcon="fas fa-sort"/>
+                                              Placeholder="@lblSortBy" PlaceholderIcon="fas fa-sort"/>
                             }
                             @if (optionsNodes?.Any() == true && SelectedStatus is FileStatus.Processed or FileStatus.ProcessingFailed)
                             {
                                 <FlowDropDown Options="optionsNodes" OnSelected="SelectNode" SelectedValue="@SelectedNode"
-                                              Placeholder="Node" PlaceholderIcon="fas fa-desktop"/>
+                                              Placeholder="@lblNode" PlaceholderIcon="fas fa-desktop"/>
                             }
                             @if (optionsFlows?.Any() == true && SelectedStatus is not FileStatus.Unprocessed and not FileStatus.Disabled and not FileStatus.OnHold)
                             {
                                 <FlowDropDown Options="optionsFlows" OnSelected="SelectFlow" SelectedValue="@SelectedFlow"
-                                              Placeholder="Flow" PlaceholderIcon="fas fa-sitemap"/>
+                                              Placeholder="@lblFlow" PlaceholderIcon="fas fa-sitemap"/>
                             }
                             @if (optionsLibraries?.Any() == true)
                             {
                                 <FlowDropDown Options="optionsLibraries" OnSelected="SelectLibrary" SelectedValue="@SelectedLibrary"
-                                              Placeholder="Library" PlaceholderIcon="fas fa-folder"/>
+                                              Placeholder="@lblLibrary" PlaceholderIcon="fas fa-folder"/>
+                            }
+                            @if (optionsTags?.Any() == true)
+                            {
+                            <FlowDropDown Options="optionsTags" OnSelected="SelectTag" SelectedValue="@SelectedTag"
+                                          Placeholder="@lblTag" PlaceholderIcon="fas fa-tag"/>
                             }
                         </div>
                     </div>
@@ -150,6 +155,21 @@
                                             <span class="value">@($@"{item.ProcessingTime:hh\:mm\:ss}")</span>
                                         }
                                     </div>
+                                }
+                                
+                                @if (item.Tags?.Any() == true)
+                                {
+                                    foreach (var tagUid in item.Tags)
+                                    {
+                                        var tag = optionsTags.FirstOrDefault(x => x.Value as Guid? == tagUid);
+                                        if (tag != null)
+                                        {
+                                            <div class="icon-value dark clickable" @onclick="() => SelectTag(tagUid)">
+                                                <TableItemIcon Icon="@tag.Icon" DefaultIcon="fas fa-tag" Unwrapped="true" />
+                                                <span class="value">@tag.Label</span>
+                                            </div>
+                                        }
+                                    }
                                 }
                             </div>
                         </div>

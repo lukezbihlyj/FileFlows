@@ -135,12 +135,14 @@
     "Settings": "Einstellungen",
     "ShowHidden": "Versteckte anzeigen",
     "Size": "Dateigröße",
+    "SortBy": "Sortieren nach",
     "SpaceIncrease": "{size} erhöht, {items} Elemente",
     "SpaceSavings": "{size} gespart, {items} Elemente",
     "Status": "Status",
     "SubFlow": "Sub Flow",
     "SubFlows": "Sub Flows",
     "Success": "Erfolgreich",
+    "Tag": "Tag",
     "Test": "Test",
     "Time": "Zeit",
     "Total": "Total",
@@ -1381,15 +1383,18 @@
         }
       }
     },
+    "Statistics": {
+      "Title": "Statistik"
+    },
     "Tags": {
       "Title": "Tags",
+      "Messages": {
+        "DeleteItems": "Sind Sie sicher, dass Sie die ausgewählten {count, plural, one {Tag} other {Tags}} löschen möchten?\n\n{count, plural, one {Dieser} other {Diese}} wird aus allen Dateien entfernt und dieser Vorgang kann nicht rückgängig gemacht werden."
+      },
       "Fields": {
         "Description": "Beschreibung",
         "Icon": "Symbol"
       }
-    },
-    "Statistics": {
-      "Title": "Statistik"
     },
     "Task": {
       "Title": "Aufgabe",

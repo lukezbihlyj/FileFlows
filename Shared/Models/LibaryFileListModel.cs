@@ -87,4 +87,9 @@ public class LibaryFileListModel: IUniqueObject<Guid>
     /// Gets or sets custom variables to use with this file
     /// </summary>
     public Dictionary<string, object> CustomVariables { get; set; }
+    
+    /// <summary>
+    /// Gets or sets any tags on the file
+    /// </summary>
+    public List<Guid>? Tags { get; set; }
 }

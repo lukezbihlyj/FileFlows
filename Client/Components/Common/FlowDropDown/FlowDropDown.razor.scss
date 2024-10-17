@@ -39,7 +39,7 @@
   align-items: center;
   margin-top: 0.25rem;
 
-  .icon {
+  ::deep .icon {
     background: var(--base-lightest);
     border-bottom-left-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
@@ -93,7 +93,7 @@
   &:hover {
     background:var(--base-lightest-2);
   }
-  .icon {
+  ::deep .icon {
     width:1.5rem;
     min-width:1.5rem;
     display: inline-block;

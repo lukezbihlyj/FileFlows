@@ -135,12 +135,14 @@
     "Settings": "Inställningar",
     "ShowHidden": "Visa dolda",
     "Size": "Storlek",
+    "SortBy": "Sortera efter",
     "SpaceIncrease": "{size} ökning, {items} objekt",
     "SpaceSavings": "{size} sparat, {items} objekt",
     "Status": "Status",
     "SubFlow": "Delflöde",
     "SubFlows": "Delflöden",
     "Success": "Lyckades",
+    "Tag": "Tagg",
     "Test": "Test",
     "Time": "Tid",
     "Total": "Totalt",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Taggar",
+      "Messages": {
+        "DeleteItems": "Är du säker på att du vill ta bort den valda {count, plural, one {taggen} other {taggarna}}?\n\n{count, plural, one {Denna} other {Dessa}} kommer att tas bort från alla filer och denna åtgärd kan inte ångras."
+      },
       "Fields": {
         "Description": "Beskrivning",
         "Icon": "Ikon"

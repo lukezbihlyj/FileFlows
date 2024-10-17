@@ -8,10 +8,10 @@
         <table class="flowtable">
             <thead>
             <tr>
-                <th class="name">@lblName</th>
-                <th class="ndoe">@lblFlowElement</th>
-                <th class="time">@lblTime</th>
                 <th class="output">@lblOutput</th>
+                <th class="name">@lblName</th>
+                <th class="node">@lblFlowElement</th>
+                <th class="time">@lblTime</th>
                 @if (string.IsNullOrEmpty(Log) == false)
                 {
                     <th class="view-log"></th>
@@ -35,12 +35,14 @@
                     
                     <tr class="@(item.Output == -1 ? "output-error" : item.Output == 0 ? "output-exit" : "")
 @(depthStart ? "depth-start": string.Empty) @(depthEnd ? "depth-end": string.Empty) @(isFailureFlowInput ? "failure-flow-input" : string.Empty)">
+                        <td class="output">
+                            @item.Output
+                        </td>
                         <td class="name">@FormatNodeName(item)</td>
                         <td class="node">@FormatNodeUid(item.NodeUid)</td>
                         @if (item.NodeUid == "FlowStart")
                         {
                             <td class="time"></td>
-                            <td class="output"></td>
                             @if (hasLog)
                             {
                                 <td class="view-log">
@@ -51,9 +53,6 @@
                         else
                         {
                             <td class="time">@item.ProcessingTime</td>
-                            <td class="output">
-                                @item.Output
-                            </td>
                             @if (hasLog)
                             {
                                 <td class="view-log">

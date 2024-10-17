@@ -51,6 +51,19 @@ class CustomDbMapper : FileFlowsMapper<CustomDbMapper>
                     var result = JsonSerializer.Deserialize<Dictionary<string, object>>((string)value, JsonOptions);
                     return result;
                 };
+            if (destType == typeof(List<Guid>) && sourceType == typeof(string))
+            {
+                // source is semicolon separated list of guids
+                return (value) =>
+                {
+                    if (string.IsNullOrEmpty(value as string))
+                        return new List<Guid>();
+                    var result = ((string)value).Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(Guid.Parse).ToList();
+                    return result;
+                };
+            }
+
             // if (destType == typeof(List<ExecutedNode>) && sourceType == typeof(string))
             //     return (value) =>
             //     {
@@ -112,6 +125,7 @@ class CustomDbMapper : FileFlowsMapper<CustomDbMapper>
     {
         if (Enable)
         {
+            var sourceType = sourceMemberInfo.GetMemberInfoType();
             // this break postgres
             // if (sourceMemberInfo.GetMemberInfoType() == typeof(Guid))
             //     return (value) =>
@@ -122,7 +136,7 @@ class CustomDbMapper : FileFlowsMapper<CustomDbMapper>
             //             return string.Empty;
             //         return value.ToString() ?? string.Empty;
             //     };
-            if (sourceMemberInfo.GetMemberInfoType() == typeof(Guid?))
+            if (sourceType == typeof(Guid?))
                 return (value) =>
                 {
                     if (value == null)
@@ -132,16 +146,16 @@ class CustomDbMapper : FileFlowsMapper<CustomDbMapper>
 
                     return value.ToString() ?? string.Empty;
                 };
-            if (sourceMemberInfo.GetMemberInfoType() == typeof(string))
+            if (sourceType == typeof(string))
                 return (value) => value?.ToString() ?? string.Empty;
-            if (sourceMemberInfo.GetMemberInfoType() == typeof(Dictionary<string, object>))
+            if (sourceType == typeof(Dictionary<string, object>))
                 return (value) =>
                 {
                     if (value is Dictionary<string, object> dict == false || dict.Any() == false)
                         return string.Empty;
                     return JsonSerializer.Serialize(dict, JsonOptions);
                 };
-            if (sourceMemberInfo.GetMemberInfoType() == typeof(List<ExecutedNode>))
+            if (sourceType== typeof(List<ExecutedNode>))
                 return (value) =>
                 {
                     if (value is List<ExecutedNode> list == false || list.Any() == false)

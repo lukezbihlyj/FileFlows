@@ -135,12 +135,14 @@
     "Settings": "Instellingen",
     "ShowHidden": "Verste Hidden",
     "Size": "Grootte",
+    "SortBy": "Sorteren op",
     "SpaceIncrease": "{size} toename, {items} items",
     "SpaceSavings": "{size} bespaard, {items} items",
     "Status": "Status",
     "SubFlow": "Sub Stroom",
     "SubFlows": "Sub Stromen",
     "Success": "Succes",
+    "Tag": "Tag",
     "Test": "Test",
     "Time": "Tijd",
     "Total": "Totaal",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Tags",
+      "Messages": {
+        "DeleteItems": "Weet u zeker dat u de geselecteerde {count, plural, one {tag} other {tags}} wilt verwijderen?\n\n{count, plural, one {Deze} other {Deze}} wordt verwijderd uit alle bestanden en deze actie kan niet ongedaan worden gemaakt."
+      },
       "Fields": {
         "Description": "Beschrijving",
         "Icon": "Icoon"

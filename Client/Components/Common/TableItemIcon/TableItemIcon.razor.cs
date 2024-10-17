@@ -16,4 +16,9 @@ public partial class TableItemIcon : ComponentBase
     /// Gets or sets the default icon to show if there is no icon
     /// </summary>
     [Parameter] public string DefaultIcon { get; set; }
+
+    /// <summary>
+    /// Gets or sets if the icon isnt wrapped and only the img or i is shown
+    /// </summary>
+    [Parameter] public bool Unwrapped { get; set; }
 }

@@ -37,11 +37,12 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
     /// <param name="library">[Optional] library to filter by</param>
     /// <param name="flow">[Optional] flow to filter by</param>
     /// <param name="sortBy">[Optional] sort by method</param>
+    /// <param name="tag">[Optional] tag to filter by</param>
     /// <returns>a slimmed down list of files with only needed information</returns>
     [HttpGet("list-all")]
     public async Task<LibraryFileDatalistModel> ListAll([FromQuery] int status, [FromQuery] int page = 0, 
         [FromQuery] int pageSize = 0, [FromQuery] string? filter = null, [FromQuery] Guid? node = null, 
-        [FromQuery] Guid? library = null, [FromQuery] Guid? flow = null, [FromQuery] FilesSortBy? sortBy = null)
+        [FromQuery] Guid? library = null, [FromQuery] Guid? flow = null, [FromQuery] FilesSortBy? sortBy = null, [FromQuery] Guid? tag = null)
     {
         var service = ServiceLoader.Load<LibraryFileService>();
         var lfStatus = await service.GetStatus();
@@ -64,6 +65,7 @@ public class LibraryFileController : Controller //ControllerStore<LibraryFile>
             NodeUid = node,
             LibraryUid = library,
             FlowUid = flow,
+            TagUid = LicenseHelper.IsLicensed() ? tag : null,
             SortBy = sortBy,
             SysInfo = sysInfo,
         };

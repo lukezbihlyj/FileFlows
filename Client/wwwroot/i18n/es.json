@@ -135,12 +135,14 @@
     "Settings": "Configuraciones",
     "ShowHidden": "Mostrar Ocultos",
     "Size": "Tamaño",
+    "SortBy": "Ordenar por",
     "SpaceIncrease": "{size} incremento, {items} elementos",
     "SpaceSavings": "{size} ahorrados, {items} elementos",
     "Status": "Estado",
     "SubFlow": "Sub Flow",
     "SubFlows": "Sub Flows",
     "Success": "Éxito",
+    "Tag": "Etiqueta",
     "Test": "Probar",
     "Time": "Tiempo",
     "Total": "Total",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Etiquetas",
+      "Messages": {
+        "DeleteItems": "¿Está seguro de que desea eliminar la(s) {count, plural, one {etiqueta} other {etiquetas}} seleccionada(s)?\n\n{count, plural, one {Esta} other {Estas}} se eliminará(n) de todos los archivos y esta operación no se puede deshacer."
+      },
       "Fields": {
         "Description": "Descripción",
         "Icon": "Icono"

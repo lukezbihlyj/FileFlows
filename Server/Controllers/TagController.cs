@@ -9,7 +9,7 @@ namespace FileFlows.Server.Controllers;
 /// Tag Controller
 /// </summary>
 [Route("/api/tag")]
-[FileFlowsAuthorize(UserRole.Tags)]
+[FileFlowsAuthorize]
 public class TagController : BaseController
 {   
     /// <summary>
@@ -44,6 +44,7 @@ public class TagController : BaseController
     /// <param name="tag">The tag to save</param>
     /// <returns>The saved instance</returns>
     [HttpPost]
+    [FileFlowsAuthorize(UserRole.Tags)]
     public async Task<IActionResult> Save([FromBody] Tag tag)
     {
         var result = await ServiceLoader.Load<TagService>().Update(tag, await GetAuditDetails());
@@ -58,6 +59,7 @@ public class TagController : BaseController
     /// <param name="model">A reference model containing UIDs to delete</param>
     /// <returns>an awaited task</returns>
     [HttpDelete]
+    [FileFlowsAuthorize(UserRole.Tags)]
     public async Task Delete([FromBody] ReferenceModel<Guid> model)
         => await ServiceLoader.Load<TagService>().Delete(model.Uids, await GetAuditDetails());
 }

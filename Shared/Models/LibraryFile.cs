@@ -299,7 +299,7 @@ public class LibraryFile : FileFlowObject
     /// <summary>
     /// Gets or sets the tags for this library file
     /// </summary>
-    [SerializedColumn]
+    [Column]
     public List<Guid> Tags
     {
         get => _Tags;

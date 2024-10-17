@@ -135,12 +135,14 @@
     "Settings": "Configurações",
     "ShowHidden": "Mostrar Ocultos",
     "Size": "Tamanho",
+    "SortBy": "Ordenar por",
     "SpaceIncrease": "Aumento de {size}, {items} itens",
     "SpaceSavings": "{size} economizado, {items} itens",
     "Status": "Status",
     "SubFlow": "Sub Flow",
     "SubFlows": "Sub Flows",
     "Success": "Sucesso",
+    "Tag": "Tag",
     "Test": "Teste",
     "Time": "Tempo",
     "Total": "Total",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Tags",
+      "Messages": {
+        "DeleteItems": "Você tem certeza de que deseja excluir a(s) {count, plural, one {tag} other {tags}} selecionada(s)?\n\n{count, plural, one {Esta} other {Estas}} será(ão) removida(s) de todos os arquivos e esta operação não pode ser desfeita."
+      },
       "Fields": {
         "Description": "Descrição",
         "Icon": "Ícone"

@@ -9,6 +9,8 @@ public class LibraryFileEditor
 {
     static string ApIUrl => "/api/library-file";
 
+    private static List<Tag> Tags = [];
+
     private static async Task<RequestResult<LibraryFileModel>> GetLibraryFile(string url)
     {
 #if (DEMO)
@@ -33,6 +35,7 @@ public class LibraryFileEditor
     public static async Task Open(Blocker blocker, Editor editor, Guid libraryItemUid, Profile profile)
     {
         LibraryFileModel? model = null;
+        Tags = await App.Instance.ClientService.GetTags();
         string logUrl = ApIUrl + "/" + libraryItemUid + "/log";
         blocker.Show();
         try
@@ -54,6 +57,7 @@ public class LibraryFileEditor
 
             var logResult = await GetLibraryFileLog(logUrl);
             model.Log = (logResult.Success ? logResult.Data : string.Empty) ?? string.Empty;
+            
 
         }
         finally
@@ -343,6 +347,22 @@ public class LibraryFileEditor
             Name = nameof(item.Status),
             ReadOnlyValue = Translater.Instant("Enums.FileStatus." + item.Status)
         });
+
+        if (item.Tags?.Any() == true && Tags?.Any() == true)
+        {
+            var known = Tags.Where(x => item.Tags.Contains(x.Uid)).Select(x => x.Name)
+                .OrderBy(x => x.ToLowerInvariant())
+                .ToList();
+            if (known.Count > 0)
+            {
+                fields.Add(new ElementField()
+                {
+                    InputType = FormInputType.TextLabel,
+                    Name = nameof(item.Tags),
+                    ReadOnlyValue = string.Join(", ", known)
+                });
+            }
+        }
 
         if (string.IsNullOrWhiteSpace(item.FailureReason) == false && item.Status == FileStatus.ProcessingFailed)
         {

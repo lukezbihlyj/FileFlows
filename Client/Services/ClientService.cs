@@ -244,6 +244,19 @@ public partial class ClientService
             CurrentSystemInfo ??= result.Data;
         return CurrentSystemInfo;
     }
+
+    /// <summary>
+    /// Gets the tags in the system
+    /// </summary>
+    /// <returns>the tags</returns>
+    public async Task<List<Tag>> GetTags()
+    {
+        if (Tags != null) return Tags;
+        var result = await HttpHelper.Get<List<Tag>>("/api/tag");
+        if (result.Success)
+            Tags ??= result.Data;
+        return Tags ?? [];
+    }
     
     /// <summary>
     /// Gets the all library savings data

@@ -1,6 +1,7 @@
 .flowtable .output {
   width: 6rem;
   text-align: center;
+  padding-left: 0 !important;
 }
 .flowtable .node {
   width: auto;
@@ -52,5 +53,3 @@
     border-left: none;
   }
 }
-
-/*# sourceMappingURL=InputExecutedNodes.razor.css.map */

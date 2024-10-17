@@ -135,12 +135,14 @@
     "Settings": "設定",
     "ShowHidden": "顯示隱藏",
     "Size": "大小",
+    "SortBy": "排序依據",
     "SpaceIncrease": "{size} 增加，{items} 項目",
     "SpaceSavings": "{size} 節省，{items} 項目",
     "Status": "狀態",
     "SubFlow": "子流程",
     "SubFlows": "子流程",
     "Success": "成功",
+    "Tag": "標籤",
     "Test": "測試",
     "Time": "時間",
     "Total": "總計",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "標籤",
+      "Messages": {
+        "DeleteItems": "您確定要刪除選定的 {count, plural, one {標籤} other {標籤}} 嗎？\n\n{count, plural, one {該} other {這些}} 將從所有文件中刪除，這個操作無法撤銷。"
+      },
       "Fields": {
         "Description": "描述",
         "Icon": "圖標"

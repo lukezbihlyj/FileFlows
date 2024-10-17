@@ -135,12 +135,14 @@
     "Settings": "設定",
     "ShowHidden": "隠しを表示",
     "Size": "サイズ",
+    "SortBy": "並べ替え",
     "SpaceIncrease": "{size} 増加, {items} アイテム",
     "SpaceSavings": "{size} 節約, {items} アイテム",
     "Status": "ステータス",
     "SubFlow": "サブフロー",
     "SubFlows": "サブフロー",
     "Success": "成功",
+    "Tag": "タグ",
     "Test": "テスト",
     "Time": "時間",
     "Total": "合計",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "タグ",
+      "Messages": {
+        "DeleteItems": "選択した {count, plural, one {タグ} other {タグ}} を削除してもよろしいですか？\n\n{count, plural, one {この} other {これらの}}ファイルから削除され、この操作は元に戻せません。"
+      },
       "Fields": {
         "Description": "説明",
         "Icon": "アイコン"

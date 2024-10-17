@@ -63,6 +63,10 @@ public partial class ClientService
     /// </summary>
     private SystemInfo? CurrentSystemInfo { get; set; }
     /// <summary>
+    /// Gets or sets the tags in the system
+    /// </summary>
+    private List<Tag> Tags { get; set; }
+    /// <summary>
     /// Gets the current node status summaries
     /// </summary>
     private List<NodeStatusSummary>? CurrentNodeStatusSummaries { get; set; }
@@ -140,6 +144,10 @@ public partial class ClientService
                 {
                     CurrentUpdatesInfo = data;
                     UpdatesUpdateInfo?.Invoke(data);
+                });
+                _hubConnection.On<List<Tag>>("TagsUpdated", (data) =>
+                {
+                    Tags = data;
                 });
                 
                 _hubConnection.On<int>("SystemPaused", UpdateSystemPaused);

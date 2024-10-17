@@ -135,12 +135,14 @@
     "Settings": "Настройки",
     "ShowHidden": "Показать скрытые",
     "Size": "Размер",
+    "SortBy": "Сортировать по",
     "SpaceIncrease": "{size} увеличение, {items} элементов",
     "SpaceSavings": "{size} сэкономлено, {items} элементов",
     "Status": "Статус",
     "SubFlow": "Под поток",
     "SubFlows": "Под потоки",
     "Success": "Успех",
+    "Tag": "Тег",
     "Test": "Тест",
     "Time": "Время",
     "Total": "Всего",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Теги",
+      "Messages": {
+        "DeleteItems": "Вы уверены, что хотите удалить выбранные {count, plural, one {тег} other {теги}}?\n\n{count, plural, one {Этот} other {Эти}} будут удалены из всех файлов, и это действие нельзя отменить."
+      },
       "Fields": {
         "Description": "Описание",
         "Icon": "Иконка"

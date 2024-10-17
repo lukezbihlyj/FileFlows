@@ -135,12 +135,14 @@
     "Settings": "Paramètres",
     "ShowHidden": "Afficher les éléments cachés",
     "Size": "Taille",
+    "SortBy": "Trier par",
     "SpaceIncrease": "{size} augmentation, {items} éléments",
     "SpaceSavings": "{size} économisés, {items} éléments",
     "Status": "Statut",
     "SubFlow": "Sous Flow",
     "SubFlows": "Sous Flows",
     "Success": "Succès",
+    "Tag": "Tag",
     "Test": "Tester",
     "Time": "Temps",
     "Total": "Total",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Étiquettes",
+      "Messages": {
+        "DeleteItems": "Êtes-vous sûr de vouloir supprimer le(s) {count, plural, one {tag} other {tags}} sélectionné(s) ?\n\n{count, plural, one {Ce} other {Ces}} sera(ont) supprimé(e)(s) de tous les fichiers et cette opération ne peut pas être annulée."
+      },
       "Fields": {
         "Description": "Description",
         "Icon": "Icône"

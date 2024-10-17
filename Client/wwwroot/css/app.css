@@ -4032,6 +4032,10 @@ hr {
   display: flex;
   align-items: center;
 }
+.icon-value img {
+  max-height: 1.5rem;
+  width: 1.5rem;
+}
 .icon-value .value {
   font-weight: var(--bold, 600);
   padding: 0 0.5rem;

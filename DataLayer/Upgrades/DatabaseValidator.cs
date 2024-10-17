@@ -39,7 +39,7 @@ public class DatabaseValidator
                          ("LibraryFile", "Tags", "TEXT", "")
                      })
             {
-                if (await connector.ColumnExists("LibraryFile", "FailureReason") == false)
+                if (await connector.ColumnExists(column.Item1, column.Item2) == false)
                 {
                     logger.ILog("Adding LibraryFile.FailureReason column");
                     await connector.CreateColumn(column.Item1, column.Item2, column.Item3, column.Item4);

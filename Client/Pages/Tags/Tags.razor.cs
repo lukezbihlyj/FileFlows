@@ -16,6 +16,8 @@ public partial class Tags : ListPage<Guid, Tag>
     /// The item being edited
     /// </summary>
     private Tag EditingItem = null;
+    /// <inheritdoc />
+    protected override string DeleteMessage => "Pages.Tags.Messages.DeleteItems";
 
     /// <summary>
     /// Adds a new tag

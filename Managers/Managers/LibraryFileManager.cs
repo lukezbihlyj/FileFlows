@@ -295,4 +295,12 @@ public class LibraryFileManager
     /// <param name="onlySetProcessInfo">if only the process information should be set, ie these are unprocessed files</param>
     public Task Reprocess(ReprocessModel model, bool onlySetProcessInfo)
         => DatabaseAccessManager.Instance.LibraryFileManager.Reprocess(model, onlySetProcessInfo);
+
+    /// <summary>
+    /// Deletes the tags from any file
+    /// </summary>
+    /// <param name="uids">the UIDs of the tags being deleted</param>
+    /// <param name="auditDetails">the audit details</param>
+    public async Task DeleteTags(Guid[] uids, AuditDetails auditDetails)
+        => await DatabaseAccessManager.Instance.LibraryFileManager.DeleteTags(uids, auditDetails);
 }

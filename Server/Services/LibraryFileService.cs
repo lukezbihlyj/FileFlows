@@ -282,6 +282,18 @@ public class LibraryFileService
     /// <inheritdoc />
     public async Task<LibraryFile> Update(LibraryFile libraryFile)
     {
+        // ensure the tags are known
+        if (libraryFile.Tags?.Any() == true)
+        {
+            var knownTags = await new TagManager().GetAll();
+            for(int i=libraryFile.Tags.Count - 1;i>=0;i--)
+            {
+                var tag = libraryFile.Tags[i];
+                if (knownTags.Any(x => x.Uid == tag) == false)
+                    libraryFile.Tags.RemoveAt(i);
+            }
+        }
+
         await new LibraryFileManager().UpdateFile(libraryFile);
         return libraryFile;
     }

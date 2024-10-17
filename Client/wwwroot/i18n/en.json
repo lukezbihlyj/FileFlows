@@ -135,12 +135,14 @@
     "Settings": "Settings",
     "ShowHidden": "Show Hidden",
     "Size": "Size",
+    "SortBy": "Sort By",
     "SpaceIncrease": "{size} increase, {items} items",
     "SpaceSavings": "{size} saved, {items} items",
     "Status": "Status",
     "SubFlow": "Sub Flow",
     "SubFlows": "Sub Flows",
     "Success": "Success",
+    "Tag": "Tag",
     "Test": "Test",
     "Time": "Time",
     "Total": "Total",
@@ -1386,6 +1388,9 @@
     },
     "Tags": {
       "Title": "Tags",
+      "Messages": {
+        "DeleteItems": "Are you sure you want to delete the selected {count, plural, one {tag} other {tags}}?\n\n{count, plural, one {This tag} other {These tags}} will be removed from all files, and this operation cannot be undone."
+      },
       "Fields": {
         "Description": "Description",
         "Icon": "Icon"

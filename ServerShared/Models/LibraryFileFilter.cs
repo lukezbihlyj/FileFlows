@@ -72,6 +72,11 @@ public class LibraryFileFilter
     public Guid? FlowUid { get; set; }
     
     /// <summary>
+    /// Gets or sets a Tag UID to filter by
+    /// </summary>
+    public Guid? TagUid { get; set; }
+    
+    /// <summary>
     /// Gets or sets a specific sort by to sort by
     /// </summary>
     public FilesSortBy? SortBy { get; set; }
@@ -139,6 +144,8 @@ public class LibraryFileFilter
         if (LibraryUid != null && file.LibraryUid != LibraryUid)
             return false;
         if (FlowUid != null && file.FlowUid != FlowUid)
+            return false;
+        if (TagUid != null && file.Tags?.Contains(TagUid.Value) != true)
             return false;
 
         return true;
