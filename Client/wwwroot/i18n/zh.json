@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "标签",
-      "Messages": {
-        "DeleteItems": "您确定要删除所选的 {count, plural, one {标签} other {标签}} 吗？\n\n{count, plural, one {该} other {这些}} 将从所有文件中删除，此操作无法撤销。"
-      },
       "Fields": {
         "Description": "描述",
         "Icon": "图标"
+      },
+      "Messages": {
+        "DeleteItems": "您确定要删除所选的 {count, plural, one {标签} other {标签}} 吗？\n\n{count, plural, one {该} other {这些}} 将从所有文件中删除，此操作无法撤销。"
       }
     },
     "Task": {

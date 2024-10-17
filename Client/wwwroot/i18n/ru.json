@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Теги",
-      "Messages": {
-        "DeleteItems": "Вы уверены, что хотите удалить выбранные {count, plural, one {тег} other {теги}}?\n\n{count, plural, one {Этот} other {Эти}} будут удалены из всех файлов, и это действие нельзя отменить."
-      },
       "Fields": {
         "Description": "Описание",
         "Icon": "Иконка"
+      },
+      "Messages": {
+        "DeleteItems": "Вы уверены, что хотите удалить выбранные {count, plural, one {тег} other {теги}}?\n\n{count, plural, one {Этот} other {Эти}} будут удалены из всех файлов, и это действие нельзя отменить."
       }
     },
     "Task": {

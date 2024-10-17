@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Taggar",
-      "Messages": {
-        "DeleteItems": "Är du säker på att du vill ta bort den valda {count, plural, one {taggen} other {taggarna}}?\n\n{count, plural, one {Denna} other {Dessa}} kommer att tas bort från alla filer och denna åtgärd kan inte ångras."
-      },
       "Fields": {
         "Description": "Beskrivning",
         "Icon": "Ikon"
+      },
+      "Messages": {
+        "DeleteItems": "Är du säker på att du vill ta bort den valda {count, plural, one {taggen} other {taggarna}}?\n\n{count, plural, one {Denna} other {Dessa}} kommer att tas bort från alla filer och denna åtgärd kan inte ångras."
       }
     },
     "Task": {

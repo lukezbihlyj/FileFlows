@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "태그",
-      "Messages": {
-        "DeleteItems": "선택한 {count, plural, one {태그} other {태그}}를 삭제하시겠습니까?\n\n{count, plural, one {이} other {이들}}는 모든 파일에서 제거되며 이 작업은 실행 취소할 수 없습니다."
-      },
       "Fields": {
         "Description": "설명",
         "Icon": "아이콘"
+      },
+      "Messages": {
+        "DeleteItems": "선택한 {count, plural, one {태그} other {태그}}를 삭제하시겠습니까?\n\n{count, plural, one {이} other {이들}}는 모든 파일에서 제거되며 이 작업은 실행 취소할 수 없습니다."
       }
     },
     "Task": {

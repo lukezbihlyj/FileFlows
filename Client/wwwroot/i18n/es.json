@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Etiquetas",
-      "Messages": {
-        "DeleteItems": "¿Está seguro de que desea eliminar la(s) {count, plural, one {etiqueta} other {etiquetas}} seleccionada(s)?\n\n{count, plural, one {Esta} other {Estas}} se eliminará(n) de todos los archivos y esta operación no se puede deshacer."
-      },
       "Fields": {
         "Description": "Descripción",
         "Icon": "Icono"
+      },
+      "Messages": {
+        "DeleteItems": "¿Está seguro de que desea eliminar la(s) {count, plural, one {etiqueta} other {etiquetas}} seleccionada(s)?\n\n{count, plural, one {Esta} other {Estas}} se eliminará(n) de todos los archivos y esta operación no se puede deshacer."
       }
     },
     "Task": {

@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Tags",
-      "Messages": {
-        "DeleteItems": "Você tem certeza de que deseja excluir a(s) {count, plural, one {tag} other {tags}} selecionada(s)?\n\n{count, plural, one {Esta} other {Estas}} será(ão) removida(s) de todos os arquivos e esta operação não pode ser desfeita."
-      },
       "Fields": {
         "Description": "Descrição",
         "Icon": "Ícone"
+      },
+      "Messages": {
+        "DeleteItems": "Você tem certeza de que deseja excluir a(s) {count, plural, one {tag} other {tags}} selecionada(s)?\n\n{count, plural, one {Esta} other {Estas}} será(ão) removida(s) de todos os arquivos e esta operação não pode ser desfeita."
       }
     },
     "Task": {

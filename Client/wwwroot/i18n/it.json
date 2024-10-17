@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Tag",
-      "Messages": {
-        "DeleteItems": "Sei sicuro di voler eliminare il/i {count, plural, one {tag} other {tags}} selezionato/i?\n\n{count, plural, one {Questo} other {Questi}} verrà(anno) rimosso/i da tutti i file e questa operazione non può essere annullata."
-      },
       "Fields": {
         "Description": "Descrizione",
         "Icon": "Icona"
+      },
+      "Messages": {
+        "DeleteItems": "Sei sicuro di voler eliminare il/i {count, plural, one {tag} other {tags}} selezionato/i?\n\n{count, plural, one {Questo} other {Questi}} verrà(anno) rimosso/i da tutti i file e questa operazione non può essere annullata."
       }
     },
     "Task": {

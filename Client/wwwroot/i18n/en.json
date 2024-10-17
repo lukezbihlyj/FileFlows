@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Tags",
-      "Messages": {
-        "DeleteItems": "Are you sure you want to delete the selected {count, plural, one {tag} other {tags}}?\n\n{count, plural, one {This tag} other {These tags}} will be removed from all files, and this operation cannot be undone."
-      },
       "Fields": {
         "Description": "Description",
         "Icon": "Icon"
+      },
+      "Messages": {
+        "DeleteItems": "Are you sure you want to delete the selected {count, plural, one {tag} other {tags}}?\n\n{count, plural, one {This tag} other {These tags}} will be removed from all files, and this operation cannot be undone."
       }
     },
     "Task": {

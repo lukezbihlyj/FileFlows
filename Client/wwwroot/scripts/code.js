@@ -214,12 +214,6 @@ SetParameter: function (key:string, value) { },
  */
 NewGuid: function ():string { }, 
 /**
- * Adds a tag to the file by the tag name
- * @param {string} name - The name of the tag
- * @returs {bool} - True if the tag was added, otherwise false
- */
-AddTagByName: function (name:string):bool { }, 
-/**
  * Add a tags to the file by their tag name
  * @param {string[]} names - The names of the tags
  * @returns {bool} - The number of tags added

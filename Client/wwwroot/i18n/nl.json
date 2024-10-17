@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Tags",
-      "Messages": {
-        "DeleteItems": "Weet u zeker dat u de geselecteerde {count, plural, one {tag} other {tags}} wilt verwijderen?\n\n{count, plural, one {Deze} other {Deze}} wordt verwijderd uit alle bestanden en deze actie kan niet ongedaan worden gemaakt."
-      },
       "Fields": {
         "Description": "Beschrijving",
         "Icon": "Icoon"
+      },
+      "Messages": {
+        "DeleteItems": "Weet u zeker dat u de geselecteerde {count, plural, one {tag} other {tags}} wilt verwijderen?\n\n{count, plural, one {Deze} other {Deze}} wordt verwijderd uit alle bestanden en deze actie kan niet ongedaan worden gemaakt."
       }
     },
     "Task": {

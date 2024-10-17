@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "Tags",
-      "Messages": {
-        "DeleteItems": "Sind Sie sicher, dass Sie die ausgewählten {count, plural, one {Tag} other {Tags}} löschen möchten?\n\n{count, plural, one {Dieser} other {Diese}} wird aus allen Dateien entfernt und dieser Vorgang kann nicht rückgängig gemacht werden."
-      },
       "Fields": {
         "Description": "Beschreibung",
         "Icon": "Symbol"
+      },
+      "Messages": {
+        "DeleteItems": "Sind Sie sicher, dass Sie die ausgewählten {count, plural, one {Tag} other {Tags}} löschen möchten?\n\n{count, plural, one {Dieser} other {Diese}} wird aus allen Dateien entfernt und dieser Vorgang kann nicht rückgängig gemacht werden."
       }
     },
     "Task": {

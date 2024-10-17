@@ -1388,12 +1388,12 @@
     },
     "Tags": {
       "Title": "タグ",
-      "Messages": {
-        "DeleteItems": "選択した {count, plural, one {タグ} other {タグ}} を削除してもよろしいですか？\n\n{count, plural, one {この} other {これらの}}ファイルから削除され、この操作は元に戻せません。"
-      },
       "Fields": {
         "Description": "説明",
         "Icon": "アイコン"
+      },
+      "Messages": {
+        "DeleteItems": "選択した {count, plural, one {タグ} other {タグ}} を削除してもよろしいですか？\n\n{count, plural, one {この} other {これらの}}ファイルから削除され、この操作は元に戻せません。"
       }
     },
     "Task": {
