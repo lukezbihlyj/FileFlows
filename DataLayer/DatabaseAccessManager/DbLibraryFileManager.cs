@@ -1718,7 +1718,7 @@ and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)}
             return string.Empty;
 
         // Ensure each GUID is formatted as 'GUID;'
-        return string.Join("", guids.Select(guid => $"{guid};"));
+        return string.Join("", guids.Select(guid => $"{guid};").OrderBy(x => x));
     }
 
     /// <summary>
