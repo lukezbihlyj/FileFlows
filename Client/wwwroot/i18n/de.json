@@ -1578,7 +1578,8 @@
         "LibraryName": "Bibliothek",
         "Name": "Name",
         "NodeName": "Knoten",
-        "OriginalSize": "Originalgröße"
+        "OriginalSize": "Originalgröße",
+        "Percentage": "Prozentsatz"
       }
     },
     "FilesProcessed": {

@@ -1578,7 +1578,8 @@
         "LibraryName": "Bibliothèque",
         "Name": "Nom",
         "NodeName": "Nœud",
-        "OriginalSize": "Taille d'origine"
+        "OriginalSize": "Taille d'origine",
+        "Percentage": "Pourcentage"
       }
     },
     "FilesProcessed": {

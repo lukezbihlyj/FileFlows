@@ -1578,7 +1578,8 @@
         "LibraryName": "Biblioteca",
         "Name": "Nombre",
         "NodeName": "Nodo",
-        "OriginalSize": "Tamaño original"
+        "OriginalSize": "Tamaño original",
+        "Percentage": "Porcentaje"
       }
     },
     "FilesProcessed": {

@@ -1578,7 +1578,8 @@
         "LibraryName": "Bibliotek",
         "Name": "Namn",
         "NodeName": "Nod",
-        "OriginalSize": "Originalstorlek"
+        "OriginalSize": "Originalstorlek",
+        "Percentage": "Procent"
       }
     },
     "FilesProcessed": {

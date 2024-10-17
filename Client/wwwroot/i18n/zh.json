@@ -1578,7 +1578,8 @@
         "LibraryName": "库",
         "Name": "名称",
         "NodeName": "节点",
-        "OriginalSize": "原始大小"
+        "OriginalSize": "原始大小",
+        "Percentage": "百分比"
       }
     },
     "FilesProcessed": {

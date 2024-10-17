@@ -1578,7 +1578,8 @@
         "LibraryName": "ライブラリ",
         "Name": "名前",
         "NodeName": "ノード",
-        "OriginalSize": "元のサイズ"
+        "OriginalSize": "元のサイズ",
+        "Percentage": "パーセンテージ"
       }
     },
     "FilesProcessed": {

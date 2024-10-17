@@ -103,5 +103,10 @@ public class Files : Report
         /// </summary>
         [Ignore]
         public DateTime ProcessingEnded { get; set; }
+
+        /// <summary>
+        /// Gets the percentage of the final size compared to the original size.
+        /// </summary>
+        public double Percentage => ((double)FinalSize / OriginalSize * 100);
     }
 }

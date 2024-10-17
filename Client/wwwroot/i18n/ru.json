@@ -1578,7 +1578,8 @@
         "LibraryName": "Библиотека",
         "Name": "Имя",
         "NodeName": "Узел",
-        "OriginalSize": "Исходный размер"
+        "OriginalSize": "Исходный размер",
+        "Percentage": "Процент"
       }
     },
     "FilesProcessed": {

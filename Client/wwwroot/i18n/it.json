@@ -1578,7 +1578,8 @@
         "LibraryName": "Libreria",
         "Name": "Nome",
         "NodeName": "Nodo",
-        "OriginalSize": "Dimensione originale"
+        "OriginalSize": "Dimensione originale",
+        "Percentage": "Percentuale"
       }
     },
     "FilesProcessed": {

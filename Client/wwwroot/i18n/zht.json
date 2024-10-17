@@ -1578,7 +1578,8 @@
         "LibraryName": "庫",
         "Name": "名稱",
         "NodeName": "節點",
-        "OriginalSize": "原始大小"
+        "OriginalSize": "原始大小",
+        "Percentage": "百分比"
       }
     },
     "FilesProcessed": {

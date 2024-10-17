@@ -1578,7 +1578,8 @@
         "LibraryName": "라이브러리",
         "Name": "이름",
         "NodeName": "노드",
-        "OriginalSize": "원본 크기"
+        "OriginalSize": "원본 크기",
+        "Percentage": "백분율"
       }
     },
     "FilesProcessed": {
