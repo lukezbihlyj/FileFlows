@@ -45,6 +45,11 @@ public class LibaryFileListModelHelper
             {
                 item.ProcessingTime = x.HoldUntil.Subtract(DateTime.UtcNow);
             }
+            if (status == FileStatus.Unprocessed && x.ProcessOnNodeUid != null
+                                                 && nodeNames.TryGetValue(x.ProcessOnNodeUid.Value, out var nodeName) && string.IsNullOrWhiteSpace(nodeName) == false)
+            {
+                item.Node = nodeName;
+            }
 
             if (status == FileStatus.Processing)
             {

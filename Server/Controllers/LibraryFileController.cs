@@ -22,9 +22,8 @@ namespace FileFlows.Server.Controllers;
 /// </summary>
 [Route("/api/library-file")]
 [FileFlowsAuthorize(UserRole.Files)]
-public class LibraryFileController : Controller //ControllerStore<LibraryFile>
+public class LibraryFileController : Controller 
 {
-    private static CacheStore CacheStore = new();
 
     /// <summary>
     /// Lists all the library files, only intended for the UI

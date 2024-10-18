@@ -139,7 +139,7 @@ public class LibraryFileFilter
             return false;
         if (NodeUid != null && file.NodeUid != NodeUid)
             return false;
-        if (ProcessingNodeUid != null && file.ProcessOnNodeUid != null && file.ProcessOnNodeUid != ProcessingNodeUid)
+        if (ProcessingNodeUid != null && file.ProcessOnNodeUid != null && file.ProcessOnNodeUid != Guid.Empty && file.ProcessOnNodeUid != ProcessingNodeUid)
             return false;
         if (LibraryUid != null && file.LibraryUid != LibraryUid)
             return false;

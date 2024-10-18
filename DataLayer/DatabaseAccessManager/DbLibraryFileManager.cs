@@ -2199,17 +2199,18 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
                 file.FlowUid = model.Flow.Uid;
                 file.FlowName = model.Flow.Name;
             }
-            else if(onlySetProcessInfo == false)
+            else if(onlySetProcessInfo == false && file.LibraryUid != CommonVariables.ManualLibraryUid)
             {
                 file.FlowUid = null;
                 file.FlowName = string.Empty;
             }
+            
             if (model.Node != null)
             {
-                file.NodeUid = model.Node.Uid;
-                file.NodeName = model.Node.Name;
+                file.ProcessOnNodeUid = model.Node.Uid;
             }
-            else if (onlySetProcessInfo == false)
+            
+            if (onlySetProcessInfo == false)
             {
                 file.NodeUid = null;
                 file.NodeName = string.Empty;
