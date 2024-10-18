@@ -517,6 +517,11 @@ public class HardwareInfoService
         cpu = cpu.Replace("Apple ", "", StringComparison.InvariantCultureIgnoreCase); // Remove Apple prefix
         cpu = cpu.Replace("AMD ", "", StringComparison.InvariantCultureIgnoreCase); // Remove AMD prefix
         cpu = cpu.Replace("(TM)", ""); // Remove (TM) suffix
+        cpu = cpu.Replace("(R)", ""); // Remove (R) suffix
+        cpu = cpu.Replace(" CPU", ""); // Remove CPU suffix
+        cpu = cpu.Replace(" Genuine 0000", ""); // Remove Genuine 0000 suffix
+        // remove @ 3.60GHz etc
+        cpu = Regex.Replace(cpu, @"@\s*\d+\.\d+GHz", "");
         while (cpu.Contains("  "))
             cpu = cpu.Replace("  ", " ");
         return (vendor, cpu.Trim());
@@ -544,7 +549,9 @@ public class HardwareInfoService
         model = model.Replace("NVIDIA ", "", StringComparison.InvariantCultureIgnoreCase); // Remove NVIDIA prefix
         model = model.Replace("Apple ", "", StringComparison.InvariantCultureIgnoreCase); // Remove Apple prefix
         model = model.Replace("AMD ", "", StringComparison.InvariantCultureIgnoreCase); // Remove AMD prefix
+        model = model.Replace(" Lite Hash Rate", "", StringComparison.InvariantCultureIgnoreCase); 
         model = model.Replace("(TM)", ""); // Remove (TM) suffix
+        model = model.Replace("(R)", ""); // Remove (R) suffix
         model = model.Replace("Graphics", ""); // Remove Graphics suffix
         while (model.Contains("  "))
             model = model.Replace("  ", " ");
