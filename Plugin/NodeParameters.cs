@@ -704,7 +704,7 @@ public class NodeParameters
     public void SetParameter(string name, object value)
     {
         if (Parameters.TryAdd(name, value) == false)
-            Parameters.Add(name, value);
+            Parameters[name] = value;
     }
 
     /// <summary>
