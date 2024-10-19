@@ -159,7 +159,6 @@ public class WebServer
             
             options.Filters.Add<TrimStringsFilter>();
         });
-        
         builder.Services.AddSignalR();
         builder.Services.AddResponseCompression();
         builder.Services.AddControllers().AddJsonOptions(options =>
