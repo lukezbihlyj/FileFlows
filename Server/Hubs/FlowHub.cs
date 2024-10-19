@@ -21,6 +21,9 @@ public class FlowHub : Hub
     {
         try
         {
+            if (runnerUid == Guid.Empty)
+                return; // test message
+            
             await LibraryFileLogHelper.AppendToLog(libraryFileUid, message);
         }
         catch (Exception)

@@ -126,6 +126,12 @@ public class Runner
                 if (updated == null)
                     return (false, false); // failed to update
                 var communicator = FlowRunnerCommunicator.Load(runInstance, Info.LibraryFile.Uid);
+                var connected = communicator.InitializeAsync().Result;
+                if (connected == false)
+                {
+                    logger.ELog("Failed to connect to Server via SignalR");
+                    return (false, false);
+                }
                 communicator.OnCancel += Communicator_OnCancel;
                 logger.SetCommunicator(communicator);
                 bool finished = false;

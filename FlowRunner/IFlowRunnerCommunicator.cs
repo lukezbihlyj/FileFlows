@@ -22,7 +22,7 @@ public interface IFlowRunnerCommunicator
 /// <summary>
 /// A communicator by the flow runner to communicate with the FileFlows server
 /// </summary>
-public class FlowRunnerCommunicator : IFlowRunnerCommunicator
+public class FlowRunnerCommunicator : IFlowRunnerCommunicator, IAsyncDisposable
 {
     /// <summary>
     /// Gets or sets the URL to the signalr endpoint on the FileFlows server
@@ -55,6 +55,12 @@ public class FlowRunnerCommunicator : IFlowRunnerCommunicator
     private readonly RunInstance runInstance;
 
     /// <summary>
+    /// Indicates whether the connection is established.
+    /// </summary>
+    public bool IsConnected => connection?.State == HubConnectionState.Connected;
+
+
+    /// <summary>
     /// Creates an instance of the flow runner communicator
     /// </summary>
     /// <param name="runInstance">the run instance running this</param>
@@ -65,22 +71,65 @@ public class FlowRunnerCommunicator : IFlowRunnerCommunicator
         this.runInstance = runInstance;
         this.LibraryFileUid = libraryFileUid;
         runInstance.LogInfo("SignalrUrl: " + SignalrUrl);
+
+        // Build the SignalR connection
         connection = new HubConnectionBuilder()
-                            .WithUrl(new Uri(SignalrUrl))
-                            .WithAutomaticReconnect()
-                            .Build();
+            .WithUrl(new Uri(SignalrUrl))
+            .WithAutomaticReconnect()
+            .Build();
+
         connection.Closed += Connection_Closed;
-        connection.On<Guid>("AbortFlow", (uid) =>
-        {
-            if (uid != LibraryFileUid)
-                return;
-            OnCancel?.Invoke();
-        });
-        connection.StartAsync().Wait();
-        if (connection.State == HubConnectionState.Disconnected)
-            throw new Exception("Failed to connect to signalr");
+        connection.On<Guid>("AbortFlow", OnAbortFlow);
     }
 
+    /// <summary>
+    /// Initializes the SignalR connection to the server asynchronously and tests the connection.
+    /// </summary>
+    /// <returns>True if the connection was successful; otherwise, false.</returns>
+    public async Task<bool> InitializeAsync()
+    {
+        return await StartConnectionAsync();
+    }
+
+    /// <summary>
+    /// Starts the SignalR connection asynchronously and sends a test message to the server.
+    /// </summary>
+    /// <returns>True if the connection was successful; otherwise, false.</returns>
+    private async Task<bool> StartConnectionAsync()
+    {
+        try
+        {
+            await connection.StartAsync();
+            if (connection.State == HubConnectionState.Disconnected)
+            {
+                runInstance.LogError("Initial connection failed; attempting reconnection...");
+                await Connection_Closed(new Exception("Initial connection failed."));
+                return false;
+            }
+
+            // Send a test message to the server
+            await LogMessage(Guid.Empty, "Connected");
+            runInstance.LogInfo("Successfully connected to the server and sent test message.");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            runInstance.LogError($"Error starting connection: {ex.Message}");
+            return false;
+        }
+    }
+    
+    /// <summary>
+    /// Handles the "AbortFlow" event from the SignalR server.
+    /// </summary>
+    /// <param name="uid">The UID of the flow that should be aborted.</param>
+    private void OnAbortFlow(Guid uid)
+    {
+        if (uid != LibraryFileUid)
+            return;
+        OnCancel?.Invoke();
+    }
+    
     /// <summary>
     /// Closes the Signalr connection to the server
     /// </summary>
@@ -105,39 +154,38 @@ public class FlowRunnerCommunicator : IFlowRunnerCommunicator
     {
         if (arg != null)
         {
-            runInstance.LogError("Connection closed with error: " + arg.Message);
+            runInstance.LogError($"Connection closed with error: {arg.Message}");
+            while (arg.InnerException != null)
+            {
+                arg = arg.InnerException;
+                runInstance.LogError($"Connection closed with inner exception: {arg.Message}");
+            }
         }
         else
-        {
-            runInstance.LogInfo("Connection closed");
-        }
+            runInstance.LogInfo("Connection closed.");
 
-        var retryUntil = DateTime.UtcNow.AddMinutes(2);
-        while (DateTime.UtcNow < retryUntil)
+        var retryCount = 0;
+        var maxRetries = 5;
+        var retryDelay = TimeSpan.FromSeconds(5);
+
+        while (retryCount < maxRetries)
         {
-            await Task.Delay(5000); // Wait for 5 seconds before attempting to reconnect
             try
             {
+                await Task.Delay(retryDelay);
                 await connection.StartAsync();
-                runInstance.LogInfo("Reconnected to the server");
+                runInstance.LogInfo("Reconnected to the server.");
                 return;
             }
             catch (Exception ex)
             {
-                runInstance.LogError("Failed to reconnect: " + ex.Message);
+                runInstance.LogError($"Reconnection attempt {retryCount + 1} failed: {ex.Message}");
+                retryCount++;
+                retryDelay = TimeSpan.FromSeconds(Math.Pow(2, retryCount)); // Exponential backoff
             }
         }
 
-        runInstance.LogError("Failed to reconnect within the retry period.");
-    }
-
-    /// <summary>
-    /// Called when the Signalr connection is received
-    /// </summary>
-    /// <param name="obj">the connection object</param>
-    private void Connection_Received(string obj)
-    {
-        runInstance.LogInfo("Connection_Received");
+        runInstance.LogError("Failed to reconnect after multiple attempts.");
     }
 
     /// <summary>
@@ -210,4 +258,23 @@ public class FlowRunnerCommunicator : IFlowRunnerCommunicator
         return new FlowRunnerCommunicator(runInstance, libraryFileUid);
 
     }
+    
+    /// <summary>
+    /// Disposes of the FlowRunnerCommunicator
+    /// </summary>
+    public async ValueTask DisposeAsync()
+    {
+        if (connection != null)
+        {
+            try
+            {
+                await connection.DisposeAsync();
+            }
+            catch (Exception ex)
+            {
+                runInstance.LogError($"Error disposing SignalR connection: {ex.Message}");
+            }
+        }
+    }
+
 }
