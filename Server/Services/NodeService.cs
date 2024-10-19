@@ -87,7 +87,7 @@ public class NodeService //: INodeService
     /// Gets an instance of the internal processing node
     /// </summary>
     /// <returns>an instance of the internal processing node</returns>
-    public async Task<ProcessingNode> GetServerNodeAsync()
+    public async Task<ProcessingNode?> GetServerNodeAsync()
     {
         var manager = new NodeManager();
         var node = await manager.GetByUid(CommonVariables.InternalNodeUid);
@@ -96,7 +96,7 @@ public class NodeService //: INodeService
         
         Logger.Instance.ILog("Adding Internal Processing Node");
         bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);                
-        node = await manager.Update(new ProcessingNode
+        var result = await manager.Update(new ProcessingNode
         {
             Uid = CommonVariables.InternalNodeUid,
             Name = CommonVariables.InternalNodeName,
@@ -112,6 +112,12 @@ public class NodeService //: INodeService
             TempPath = Globals.IsDocker ? "/temp" : Path.Combine(DirectoryHelper.BaseDirectory, "Temp"),
 #endif
         }, auditDetails: AuditDetails.ForServer());
+        if (result.Failed(out var error))
+        {
+            Logger.Instance.ELog("Failed creating internal node: " + error);
+            return null;
+        }
+        node = result.Value;
         node.SignalrUrl = "flow";
         return node;
     } 

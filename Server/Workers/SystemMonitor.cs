@@ -186,7 +186,9 @@ public class SystemMonitor:Worker
     }
     private async Task<long> GetTempStorageSize()
     {
-        var node = await new FileFlows.Server.Services.NodeService().GetServerNodeAsync();
+        var node = await ServiceLoader.Load<NodeService>().GetServerNodeAsync();
+        if (node == null)
+            return 0;
         var tempPath = node?.TempPath;
         return GetDirectorySize(tempPath);
     }
