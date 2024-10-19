@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using FileFlows.DataLayer.Converters;
 using FileFlows.Plugin;
@@ -32,7 +33,7 @@ public class MySqlConnector : IDatabaseConnector
 
     /// <inheritdoc />
     public string FormatDateQuoted(DateTime date)
-        => "'" + date.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+        => "'" + date.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + "'";
     
     /// <inheritdoc />
     public string TimestampDiffSeconds(string start, string end, string asColumn)

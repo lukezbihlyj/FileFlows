@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Globalization;
 using FileFlows.DataLayer.Converters;
 using FileFlows.Plugin;
 using NPoco;
@@ -38,7 +39,7 @@ public class PostgresConnector : IDatabaseConnector
 
     /// <inheritdoc />
     public string FormatDateQuoted(DateTime date)
-        => "'" + date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") + "'::timestamp";
+        => "'" + date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) + "'::timestamp";
 
     /// <inheritdoc />
     public string TimestampDiffSeconds(string start, string end, string asColumn)

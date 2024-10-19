@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 using FileFlows.Plugin;
@@ -428,14 +429,14 @@ public class RunInstance
         if(Logger != null)
             Logger.ILog(message);
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [INFO] -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [INFO] -> " + message);
     }
     internal void LogWarning(string message)
     {
         if(Logger != null)
             Logger.WLog(message);
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [WARN] -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [WARN] -> " + message);
     }
 
     internal void LogError(string message)
@@ -443,6 +444,6 @@ public class RunInstance
         if (Logger != null)
             Logger.ELog(message);
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [ERRR] -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [ERRR] -> " + message);
     }
 }

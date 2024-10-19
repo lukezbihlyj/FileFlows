@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using FileFlows.Plugin;
 using FileFlows.RemoteServices;
 using FileFlows.ServerShared;
@@ -446,7 +447,7 @@ public class FlowWorker : Worker
     /// <param name="completeLog">the complete log</param>
     /// <param name="message">the message to add</param>
     private void AppendToCompleteLog(StringBuilder completeLog, string message, string type = "INFO")
-        => completeLog.AppendLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} [{type}] -> {message}");
+        => completeLog.AppendLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture)} [{type}] -> {message}");
 
     private bool PreExecuteScriptTest(ProcessingNode node)
     {

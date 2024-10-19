@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -172,7 +173,7 @@ public class HttpHelper
                 logger.ILog(message);
         }
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " - " + (error ? "ERRR" : "INFO") + " -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " - " + (error ? "ERRR" : "INFO") + " -> " + message);
     }
 
     /// <summary>

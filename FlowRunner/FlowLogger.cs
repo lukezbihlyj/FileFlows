@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
@@ -167,7 +168,7 @@ public class FlowLogger : ILogger
             _ => ""
         };
 
-        string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [" + prefix + "] -> " +
+        string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [" + prefix + "] -> " +
             string.Join(", ", args.Select(x =>
             x == null ? "null" :
             x.GetType().IsPrimitive || x is string ? x.ToString() :
