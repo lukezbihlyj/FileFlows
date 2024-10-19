@@ -414,6 +414,7 @@ public class LocalFileService : IFileService
                 try
                 {
                     fileInfo.MoveTo(destination, overwrite);
+                    break;
                 }
                 catch (Exception ex)
                 {
@@ -513,7 +514,7 @@ public class LocalFileService : IFileService
                 try
                 {
                     fileInfo.CopyTo(destination, overwrite);
-
+                    break;
                 }
                 catch (Exception ex)
                 {
