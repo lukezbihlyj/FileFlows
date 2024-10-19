@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.Common;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using FileFlows.ServerShared.Helpers;
@@ -23,7 +24,7 @@ public class SQLiteConnector : IDatabaseConnector
 
     /// <inheritdoc />
     public string FormatDateQuoted(DateTime date)
-        => "datetime('" + date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") + "', 'utc')"; 
+        => "datetime('" + date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) + "', 'utc')"; 
     // ^^ this worked for all but one, that one user had many other issues, reverting to this 
     
     //     // if Z is added to the end here, it causes the timezone bias to be applied twice
