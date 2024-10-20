@@ -204,14 +204,10 @@ public class ImageMagickHelper
                         startInfo.ArgumentList.Add("-resize");
                         startInfo.ArgumentList.Add($"{newWidth}x{newHeight}>"); // Only shrink the image if larger, no upscaling
                         break;
-
+                    
                     case ResizeMode.Max:
                         startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}^"); // Ensure neither dimension is smaller
-                        startInfo.ArgumentList.Add("-gravity");
-                        startInfo.ArgumentList.Add("center");
-                        startInfo.ArgumentList.Add("-extent");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}^"); // Resize to ensure at least one dimension is at least the target, keeping aspect ratio
                         break;
 
                     case ResizeMode.Pad:
