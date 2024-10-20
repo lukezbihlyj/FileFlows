@@ -309,6 +309,7 @@ public class ImageHelper : IImageHelper
         {
             if (ImageMagick.CanUseImageMagick())
             {
+                Logger.ILog("Using ImageMagick for resizing");
                 var result = ImageMagick.ConvertImage(imagePath,destination, new ()
                 {
                     Width = width,
@@ -318,6 +319,11 @@ public class ImageHelper : IImageHelper
                 });
                 if (result.IsFailed == false)
                     return true;
+                Logger.ILog("Failed to resize using ImageMagick, falling back to ImageSharp");
+            }
+            else
+            {
+                Logger.ILog("Using ImageSharp for resizing");
             }
             
             using var image = Image.Load(imagePath);

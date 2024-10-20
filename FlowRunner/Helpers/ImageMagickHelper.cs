@@ -176,6 +176,8 @@ public class ImageMagickHelper
 
                 // Apply image resizing logic
                 (int newWidth, int newHeight) = ImageHelper.CalculateNewDimensions(width, height, options);
+                Logger.ILog("New Dimensions: " + newWidth + "x" + newHeight);
+                Logger.ILog("Mode: " + options.Mode);
                 
                 switch (options.Mode)
                 {
@@ -219,6 +221,8 @@ public class ImageMagickHelper
                     AddQuality(startInfo, destination, options.Quality.Value);
             } 
             startInfo.ArgumentList.Add(destination);
+            
+            Logger.ILog("Arguments: " + string.Join(" ", startInfo.ArgumentList.Select(x => x.Contains(' ') ? $"\"{x}\"" : x)));
             
             using Process? process = Process.Start(startInfo);
             process.WaitForExit();
