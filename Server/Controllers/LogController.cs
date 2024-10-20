@@ -100,7 +100,7 @@ public class LogController : Controller
     [HttpGet("download")]
     public async Task<IActionResult> Download([FromQuery] string source)
     {
-        if (Regex.IsMatch(source, @"^[a-zA-Z0-9\-]+\.log$") == false)
+        if (Regex.IsMatch(source, @"^[a-zA-Z0-9\-\.]+\.log$") == false || source.Contains(".."))
             return BadRequest("Invalid file: " + source);
 
         // Combine the base directory and the file name
