@@ -728,4 +728,50 @@ public class ImageHelper : IImageHelper
         dateTime = null;
         return false;
     }
+    
+    /// <summary>
+    /// Calculates the darkness of an image on a scale of 0 to 100.
+    /// </summary>
+    /// <param name="imagePath">The path to the image.</param>
+    /// <returns>A value between 0 and 100 indicating how dark the image is.</returns>
+    public Result<int> CalculateImageDarkness(string imagePath)
+    {
+        if (string.IsNullOrWhiteSpace(imagePath))
+            return Result<int>.Fail("No image given");
+        if (File.Exists(imagePath) == false)
+            return Result<int>.Fail($"Image '{imagePath}' does not exist");
+
+        try
+        {
+            using var image = Image.Load<Rgb24>(imagePath);
+            long totalBrightness = 0;
+            int pixelCount = image.Width * image.Height;
+
+            image.ProcessPixelRows(accessor =>
+            {
+                for (int y = 0; y < accessor.Height; y++)
+                {
+                    var row = accessor.GetRowSpan(y);
+                    for (int x = 0; x < row.Length; x++)
+                    {
+                        var pixel = row[x];
+                        // Calculate brightness as the average of the RGB components
+                        int brightness = (pixel.R + pixel.G + pixel.B) / 3;
+                        totalBrightness += brightness;
+                    }
+                }
+            });
+
+            // Calculate average brightness
+            double averageBrightness = totalBrightness / (double)pixelCount;
+            // Scale to 0-100 where 0 is completely black and 100 is completely white
+            int darkness = (int)((255 - averageBrightness) / 255 * 100);
+
+            return Result<int>.Success(darkness);
+        }
+        catch (Exception ex)
+        {
+            return Result<int>.Fail("Failed to calculate image darkness: " + ex.Message);
+        }
+    }
 }
