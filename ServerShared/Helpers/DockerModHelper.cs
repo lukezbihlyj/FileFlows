@@ -34,10 +34,22 @@ public static class DockerModHelper
         try
         {
             var directory = DirectoryHelper.DockerModsDirectory;
-            var file = Path.Combine(directory, mod.Name.Replace(" ","-").TrimStart('.').Replace("/", "-") + ".sh");
+            // make mod.Name safe for file name, need to replace all unsafe characters
+            var safeName = FileHelper.RemoveIllegalCharacters(mod.Name);
+            
+            var file = Path.Combine(directory, GetDockerModFileName(mod));
+            
             if (Directory.Exists(directory) == false)
                 Directory.CreateDirectory(directory);
-            await File.WriteAllTextAsync(file, mod.Code.Replace("\r\n", "\n"));
+            if (Directory.Exists(DirectoryHelper.DockerModsCommonDirectory) == false)
+                Directory.CreateDirectory(DirectoryHelper.DockerModsCommonDirectory);
+            string code = mod.Code.Replace("\r\n", "\n");
+            if (code.StartsWith("#!/bin/bash", StringComparison.InvariantCultureIgnoreCase) == false)
+            {
+                code = "#!/bin/bash\n\n";
+            }
+            code = code.Insert(code.IndexOf('\n') + 1, "common=\"" + DirectoryHelper.DockerModsCommonDirectory + "\"\n\n");
+            await File.WriteAllTextAsync(file, code);
 
             // Set execute permission for the file
             await Process.Start("chmod", $"+x {file}").WaitForExitAsync();
@@ -134,7 +146,16 @@ public static class DockerModHelper
             _semaphore.Release();
         }
     }
-    
+
+    /// <summary>
+    /// Gets the filename for a DockerMod
+    /// </summary>
+    /// <param name="mod">the DockerMod</param>
+    /// <returns>the File name</returns>
+    private static string GetDockerModFileName(DockerMod mod)
+    {
+        return FileHelper.RemoveIllegalCharacters(mod.Name + ".sh");
+    }
     
     //
     // /// <summary>
@@ -154,10 +175,10 @@ public static class DockerModHelper
     /// <param name="mods">The known DockerMods</param>
     public static async Task UninstallUnknownMods(List<DockerMod> mods)
     {
-        var modNames = mods?.Select(x => x.Name.ToLowerInvariant())?.ToList() ?? new (); // Convert to list for efficient lookup
+        var modNames = mods?.Select(GetDockerModFileName)?.ToList() ?? new (); // Convert to list for efficient lookup
         var modFiles = new DirectoryInfo(DirectoryHelper.DockerModsDirectory).GetFiles("*.sh");
         var unknownMods = modFiles
-            .Where(file => !modNames.Contains(Path.GetFileNameWithoutExtension(file.Name).ToLowerInvariant())).ToList();
+            .Where(file => modNames.Contains(file.Name) == false).ToList();
 
         foreach (var unknown in unknownMods)
         {
