@@ -3234,11 +3234,9 @@ hr {
   text-align: right;
 }
 .search-fields .search-field .value select {
-  width: 100%;
   height: var(--input-height);
 }
 .search-fields .search-field .value input[type=text] {
-  width: 100%;
   height: var(--input-height);
 }
 
@@ -3293,6 +3291,12 @@ hr {
 .daterangepicker .ranges li:hover {
   background: rgba(var(--accent-rgb), 0.5) !important;
   color: var(--color) !important;
+}
+.daterangepicker .calendar-table .prev:hover, .daterangepicker .calendar-table .next:hover {
+  background-color: #333 !important;
+}
+.daterangepicker .calendar-table .prev span, .daterangepicker .calendar-table .next span {
+  border-color: #fff !important;
 }
 
 @media screen and (min-width: 850px) {

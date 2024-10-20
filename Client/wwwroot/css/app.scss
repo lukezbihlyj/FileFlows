@@ -360,11 +360,9 @@ input[type=file]{
         }
         .value {
             select {
-                width:100%;
                 height: var(--input-height);
             }
             input[type=text] {
-                width:100%;
                 height: var(--input-height);
             }
         } 
@@ -424,6 +422,16 @@ input[type=file]{
     {
         background:rgba(var(--accent-rgb), 0.5) !important;
         color: var(--color) !important;
+    }
+    .calendar-table  {
+        .prev, .next {
+            &:hover {
+                background-color: #333 !important;
+            }
+            span {
+                border-color:#fff !important;
+            }
+        }
     }
 }
 
