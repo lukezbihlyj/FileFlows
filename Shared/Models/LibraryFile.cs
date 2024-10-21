@@ -301,7 +301,6 @@ public class LibraryFile : FileFlowObject
     [JsonIgnore]
     public string TagsString
     {
-        get => Tags.Count > 0 ? string.Join(";", Tags) + ";" : string.Empty;
         set
         {
             if (string.IsNullOrEmpty(value))
