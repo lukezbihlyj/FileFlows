@@ -48,11 +48,11 @@ public static class DockerModHelper
             {
                 code = "#!/bin/bash\n\n";
             }
-            code = code.Insert(code.IndexOf('\n') + 1, "common=\"" + DirectoryHelper.DockerModsCommonDirectory + "\"\n\n");
+            code = code.Insert(code.IndexOf('\n') + 1, "\ncommon=\"" + DirectoryHelper.DockerModsCommonDirectory + "\"\n\n");
             await File.WriteAllTextAsync(file, code);
 
             // Set execute permission for the file
-            await Process.Start("chmod", $"+x {file}").WaitForExitAsync();
+            await MakeExecutable(file);
 
             if (forceExecution == false && ExecutedDockerMods.TryGetValue(mod.Uid, out int value) &&
                 value == mod.Revision)
@@ -145,6 +145,15 @@ public static class DockerModHelper
         {
             _semaphore.Release();
         }
+    }
+
+    /// <summary>
+    /// Makes a script (.sh) file executable
+    /// </summary>
+    /// <param name="scriptFile">the script file</param>
+    private static async Task MakeExecutable(string scriptFile)
+    {
+        await Process.Start("chmod", new[] { "+x", scriptFile }).WaitForExitAsync();
     }
 
     /// <summary>
