@@ -868,6 +868,8 @@
       "Title": "ライブラリ",
       "Labels": {
         "CreationTime": "作成時間",
+        "Duplicated": "ライブラリ「{name}」が複製されました",
+        "FailedToDuplicate": "複製に失敗しました",
         "LastWriteTime": "最終書き込み時間"
       },
       "Fields": {

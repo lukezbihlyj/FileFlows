@@ -868,6 +868,8 @@
       "Title": "库",
       "Labels": {
         "CreationTime": "创建时间",
+        "Duplicated": "库 ''{name}'' 已复制",
+        "FailedToDuplicate": "复制失败",
         "LastWriteTime": "最后写入时间"
       },
       "Fields": {

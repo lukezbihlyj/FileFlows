@@ -868,6 +868,8 @@
       "Title": "Bibliotheek",
       "Labels": {
         "CreationTime": "Aanmaaktijd",
+        "Duplicated": "Bibliotheek ''{name}'' gedupliceerd",
+        "FailedToDuplicate": "Dupliceren mislukt",
         "LastWriteTime": "Laatste wijzingstijd"
       },
       "Fields": {

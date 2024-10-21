@@ -868,6 +868,8 @@
       "Title": "라이브러리",
       "Labels": {
         "CreationTime": "생성 시간",
+        "Duplicated": "라이브러리 ''{name}'' 중복됨",
+        "FailedToDuplicate": "복제에 실패했습니다",
         "LastWriteTime": "마지막 작성 시간"
       },
       "Fields": {

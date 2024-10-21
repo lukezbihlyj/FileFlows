@@ -58,4 +58,12 @@ public class LibraryService : ILibraryService
     /// <returns>a task to await</returns>
     public Task UpdateFlowName(Guid uid, string name)
         => new LibraryManager().UpdateFlowName(uid, name);
+
+    /// <summary>
+    /// Gets a new unique name
+    /// </summary>
+    /// <param name="name">the name to base it off</param>
+    /// <returns>a new unique name</returns>
+    public Task<string> GetNewUniqueName(string name)
+        => new LibraryManager().GetNewUniqueName(name);
 }

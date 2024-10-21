@@ -868,6 +868,8 @@
       "Title": "Bibliotek",
       "Labels": {
         "CreationTime": "Skapelsedatum",
+        "Duplicated": "Biblioteket ''{name}'' duplicerat",
+        "FailedToDuplicate": "Misslyckades att duplicera",
         "LastWriteTime": "Senast skrivna tid"
       },
       "Fields": {

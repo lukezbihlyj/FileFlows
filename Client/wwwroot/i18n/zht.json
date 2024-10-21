@@ -868,6 +868,8 @@
       "Title": "資料庫",
       "Labels": {
         "CreationTime": "建立時間",
+        "Duplicated": "庫 ''{name}'' 已複製",
+        "FailedToDuplicate": "複製失敗",
         "LastWriteTime": "最後寫入時間"
       },
       "Fields": {

@@ -108,6 +108,9 @@ public partial class Flows : ListPage<Guid, FlowListModel>
         }
     }
 
+    /// <summary>
+    /// Duplicate the selected item
+    /// </summary>
     private async Task Duplicate()
     {
         Blocker.Show();

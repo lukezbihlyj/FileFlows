@@ -64,6 +64,31 @@ public class LibraryController : BaseController
         ServiceLoader.Load<LibraryService>().GetByUidAsync(uid);
 
     /// <summary>
+    /// Duplicates a library
+    /// </summary>
+    /// <param name="uid">The UID of the library</param>
+    /// <returns>The duplicated library</returns>
+    [HttpPost("duplicate/{uid}")]
+    public async Task<IActionResult> Duplicate([FromRoute] Guid uid)
+    {
+        var service = ServiceLoader.Load<LibraryService>();
+        var library = await service.GetByUidAsync(uid);
+        if (library == null)
+            return null;
+        
+        string json = JsonSerializer.Serialize(library, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+        library = JsonSerializer.Deserialize<Library>(json);
+        library.Uid = Guid.Empty;
+        library.Name = await service.GetNewUniqueName(library.Name);
+        library.LastScanned = DateTime.MinValue;
+        library.Enabled = false;
+        return await Save(library);
+    }
+    
+    /// <summary>
     /// Saves a library
     /// </summary>
     /// <param name="library">The library to save</param>

@@ -868,6 +868,8 @@
       "Title": "Библиотека",
       "Labels": {
         "CreationTime": "Время создания",
+        "Duplicated": "Библиотека ''{name}'' дублирована",
+        "FailedToDuplicate": "Не удалось дублировать",
         "LastWriteTime": "Время последнего изменения"
       },
       "Fields": {

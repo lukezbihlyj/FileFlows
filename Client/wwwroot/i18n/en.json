@@ -868,6 +868,8 @@
       "Title": "Library",
       "Labels": {
         "CreationTime": "Creation Time",
+        "Duplicated": "Library ''{name}'' duplicated",
+        "FailedToDuplicate": "Failed to duplicate",
         "LastWriteTime": "Last Write Time"
       },
       "Fields": {
