@@ -58,7 +58,7 @@ class CustomDbMapper : FileFlowsMapper<CustomDbMapper>
                 {
                     if (string.IsNullOrEmpty(value as string))
                         return new List<Guid>();
-                    var result = ((string)value).Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
+                    var result = ((string)value).Split([";"], StringSplitOptions.RemoveEmptyEntries)
                         .Select(Guid.Parse).ToList();
                     return result;
                 };

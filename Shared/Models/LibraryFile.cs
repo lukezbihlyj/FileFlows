@@ -19,7 +19,7 @@ public class LibraryFile : FileFlowObject
     [DbIgnore] // ignores serialization for models, if we removes this it can be kept in unwanted serializations
     [NPoco.Ignore] // ignores the insert from PetaPoco, if we remove this, migration fails.  we have both to prevent dependency of NPoco outside of server
     public string DisplayName { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the relative path of the library file.
     /// This is the path relative to the library
@@ -30,7 +30,7 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the path of the final output file
     /// </summary>
     public string OutputPath { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the reason this file failed, if it failed
     /// </summary>
@@ -40,7 +40,7 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the flow that executed this file
     /// </summary>
     [Ignore]
-    public ObjectReference Flow 
+    public ObjectReference Flow
     {
         get
         {
@@ -72,7 +72,7 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the library this library files belongs to
     /// </summary>
     [Ignore]
-    public ObjectReference Library 
+    public ObjectReference Library
     {
         get
         {
@@ -99,7 +99,7 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the Name of Library that owns this file
     /// </summary>
     public string LibraryName { get; set; }
-    
+
     /// <summary>
     /// Gets or sets an object reference to an existing
     /// library file that this file is a duplicate of
@@ -137,17 +137,17 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the size of the original library file
     /// </summary>
     public long OriginalSize { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the size of the final file after processing
     /// </summary>
     public long FinalSize { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the fingerprint of the file
     /// </summary>
     public string Fingerprint { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the final fingerprint of the file
     /// </summary>
@@ -194,12 +194,12 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the UID a UID this file should be processed on
     /// </summary>
     public Guid? ProcessOnNodeUid { get; set; }
-    
+
     /// <summary>
     /// Gets or sets when the file began processing
     /// </summary>
     public DateTime ProcessingStarted { get; set; }
-    
+
     /// <summary>
     /// Gets or sets when the file finished processing
     /// </summary>
@@ -209,12 +209,12 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets the processing status of the file
     /// </summary>
     public FileStatus Status { get; set; }
-    
+
     /// <summary>
     /// Gets or sets if the file no longer exists after it was processed
     /// </summary>
     public bool NoLongerExistsAfterProcessing { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the order of the file when the file should be processed
     /// </summary>
@@ -225,7 +225,7 @@ public class LibraryFile : FileFlowObject
     /// Gets or sets if this library file is a directory
     /// </summary>
     public bool IsDirectory { get; set; }
-    
+
     /// <summary>
     /// Gets or sets any flags that are being applied to this file
     /// </summary>
@@ -248,17 +248,17 @@ public class LibraryFile : FileFlowObject
             return ProcessingEnded.Subtract(ProcessingStarted);
         }
     }
-    
+
     /// <summary>
     /// Gets or sets the data to hold this file for
     /// </summary>
     public DateTime HoldUntil { get; set; }
-    
+
     /// <summary>
     /// Gets or sets when the file was created
     /// </summary>
     public DateTime CreationTime { get; set; }
-    
+
     /// <summary>
     /// Gets or sets when the file was written to
     /// </summary>
@@ -269,42 +269,58 @@ public class LibraryFile : FileFlowObject
     /// </summary>
     [SerializedColumn]
     public List<ExecutedNode> ExecutedNodes { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the original metadata for a file
     /// </summary>
     [Column]
     public Dictionary<string, object> OriginalMetadata { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the final metadata for the file
     /// </summary>
     [Column]
     public Dictionary<string, object> FinalMetadata { get; set; }
-    
+
     /// <summary>
     /// Gets or sets custom variables to use with this file
     /// </summary>
     [Column]
     public Dictionary<string, object> CustomVariables { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the additional fields for this library file
     /// </summary>
     [SerializedColumn]
     public LibraryFileAdditional Additional { get; set; }
 
-    private List<Guid> _Tags = [];
+    /// <summary>
+    /// Gets or sets the tags string
+    /// </summary>
+    [Column("Tags")]
+    [JsonIgnore]
+    public string TagsString
+    {
+        get => Tags.Count > 0 ? string.Join(";", Tags) + ";" : string.Empty;
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+                return; // we only read this in the db fetch
+            Tags = value.Split(';', StringSplitOptions.RemoveEmptyEntries).Select(x =>
+            {
+                if (Guid.TryParse(x, out var guid))
+                    return guid;
+                return Guid.Empty;
+            }).Where(x => x != Guid.Empty)?.ToList() ?? [];
+        }
+    }
+
 
     /// <summary>
     /// Gets or sets the tags for this library file
     /// </summary>
-    [Column]
-    public List<Guid> Tags
-    {
-        get => _Tags;
-        set => _Tags = value ?? [];
-    }
+    [DbIgnore]
+    public List<Guid> Tags { get; set; } = [];
 
     /// <summary>
     /// Gets if this file is marked for forced processing
@@ -326,7 +342,6 @@ public class LibraryFileAdditional
     /// <summary>
     /// Gets or sets the list of flows that were executed
     /// </summary>
-    [Column]
     public List<Flow>? ExecutedFlows { get; set; } = null;
 
 }
