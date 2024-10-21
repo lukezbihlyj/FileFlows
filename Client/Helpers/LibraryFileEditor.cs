@@ -13,29 +13,19 @@ public class LibraryFileEditor
 
     private static async Task<RequestResult<LibraryFileModel>> GetLibraryFile(string url)
     {
-#if (DEMO)
-        var file = new LibraryFileModel
-        {
-            Name = "Demo Library File.mkv"
-        };
-        return new RequestResult<LibraryFileModel> { Success = true, Data = file };
-#else
         return await HttpHelper.Get<LibraryFileModel>(url);
-#endif
     }
     private static async Task<RequestResult<string>> GetLibraryFileLog(string url)
     {
-#if (DEMO)
-        return new RequestResult<string> { Success = true, Data = "This is a sample log file." };
-#else
         return await HttpHelper.Get<string>(url);
-#endif
     }
 
     public static async Task Open(Blocker blocker, Editor editor, Guid libraryItemUid, Profile profile)
     {
         LibraryFileModel? model = null;
         Tags = await App.Instance.ClientService.GetTags();
+        foreach(var tag in Tags)
+            Logger.Instance.ILog("Known Tag: " + tag.Name);
         string logUrl = ApIUrl + "/" + libraryItemUid + "/log";
         blocker.Show();
         try
@@ -57,6 +47,12 @@ public class LibraryFileEditor
 
             var logResult = await GetLibraryFileLog(logUrl);
             model.Log = (logResult.Success ? logResult.Data : string.Empty) ?? string.Empty;
+
+            if (model.Tags?.Any() == true)
+            {
+                foreach(var tag in model.Tags)
+                    Logger.Instance.ILog("Model Tag: " + tag);
+            }
             
 
         }
