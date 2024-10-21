@@ -207,3 +207,4 @@ customizes
 specialized
 categorized
 jpg
+AniList
