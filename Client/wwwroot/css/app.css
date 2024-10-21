@@ -3235,9 +3235,11 @@ hr {
 }
 .search-fields .search-field .value select {
   height: var(--input-height);
+  width: 100%;
 }
 .search-fields .search-field .value input[type=text] {
   height: var(--input-height);
+  width: 100%;
 }
 
 .daterangeinput {
@@ -3280,6 +3282,7 @@ hr {
 .daterangepicker select {
   background: var(--input-background) !important;
   border: solid 1px var(--border-color) !important;
+  width: unset !important;
 }
 .daterangepicker .applyBtn:disabled {
   display: none !important;

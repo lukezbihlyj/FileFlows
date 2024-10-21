@@ -73,7 +73,7 @@ public static class DockerModHelper
             {
                 //FileName = "/bin/bash",
                 FileName = "/bin/su",
-                ArgumentList = { "-c", file },
+                ArgumentList = { "-c", $"\"{file}\"" },
                 RedirectStandardOutput = true,
                 RedirectStandardError = true, // Redirect standard error stream
                 UseShellExecute = false,
