@@ -287,7 +287,12 @@ public abstract class EditorBase : InputRegister
         var dictionary = (IDictionary<string, object>)expando!;
 
         foreach (var property in model.GetType().GetProperties())
+        {
+            if (property.CanRead == false)
+                continue;
             dictionary.Add(property.Name, property.GetValue(model));
+        }
+
         return expando;
     }
     
