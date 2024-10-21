@@ -92,9 +92,29 @@ Time Processing: {{ time.processing }}
         Logger.ILog(rendered);
         
         Assert.IsTrue(rendered.Contains("Time Processing: 00:10"));
-        
     }
 
+    [TestMethod]
+    public void ScribanLibraryNameTest()
+    {
+        VariablesHelper.StartedAt = DateTime.Now.AddMinutes(-10);
+        string text = @"
+Library: {{ Library.Name }}
+".Trim();
+        var tempFile = GetTempFileName();
+        var random = new Random(DateTime.UtcNow.Millisecond);
+        File.WriteAllText(tempFile, string.Join("\n", Enumerable.Range(0, random.Next(1000, 100000)).Select(x => Guid.NewGuid().ToString())));
+        var args = new NodeParameters(tempFile, Logger, false, string.Empty, new LocalFileService());
+        args.InitFile(tempFile);
+        args.Variables["Library.Name"] = "Test Library";
+        
+        var renderer = new ScribanRenderer();
+        var rendered = renderer.Render(args, text);
+        Logger.ILog(rendered);
+        
+        Assert.AreEqual("Library: Test Library", rendered);
+    }
+    
 //     [TestMethod]
 //     public void HandlebarTest()
 //     {
