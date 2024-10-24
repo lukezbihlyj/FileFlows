@@ -34,7 +34,7 @@ public class ImageMagickHelper
     {
         Logger = logger;
         EXE_CONVERT = args.GetToolPath("convert")?.EmptyAsNull() ??
-                      (OperatingSystem.IsWindows() ? "convert.exe" : "convert");
+                      (OperatingSystem.IsWindows() ? "magick.exe" : "convert");
         EXE_IDENTIFY = args.GetToolPath("identify")?.EmptyAsNull() ??
                        (OperatingSystem.IsWindows() ? "identify.exe" : "identify");
     }
