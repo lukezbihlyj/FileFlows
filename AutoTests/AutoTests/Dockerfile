@@ -19,7 +19,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 RUN /dotnet/dotnet dev-certs https
 
 # Create directories for logs and test results
-RUN mkdir -p /app/FileFlows/Logs /app/tests-results
+RUN mkdir -p /app/FileFlows/Logs /app/test-results
 
 # Make the entrypoint script executable
 RUN chmod +x /app/docker-entrypoint.sh
