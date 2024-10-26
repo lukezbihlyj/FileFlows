@@ -24,8 +24,8 @@ done
 echo Running Docker image
 docker run --rm \
     -p 19222:5276 \
-    -v "$(FF_HOST_OUTPUT)$(pwd)/logs:/app/FileFlows/Logs" \
-    -v "$(FF_HOST_OUTPUT)$(pwd)/test-results:/app/test-results" \
+    -v "$FF_HOST_OUTPUT$(pwd)/logs:/app/FileFlows/Logs" \
+    -v "$FF_HOST_OUTPUT$(pwd)/test-results:/app/test-results" \
     -v "/appdata/tools:/tools" \
     -e FF_TEMP_PATH=/app/test-results \
     -e FF_LICENSE_EMAIL=$FF_LICENSE_EMAIL \
