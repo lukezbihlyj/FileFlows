@@ -4,6 +4,8 @@ rm -rf test-results > /dev/null 2>&1 &
 rm -rf logs > /dev/null 2>&1 &
 
 echo "Current directory: $(pwd)"
+echo "Host directory Logs: $FF_TEMP_PATH$(pwd)/logs"
+echo "Host directory test-results: $FF_TEMP_PATH$(pwd)/test-results"
 mkdir -p "$(pwd)/logs"
 mkdir -p "$(pwd)/test-results"
 
