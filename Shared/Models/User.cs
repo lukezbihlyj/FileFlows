@@ -94,6 +94,10 @@ public enum UserRole
     /// </summary>
     Reports = 8192,
     /// <summary>
+    /// Tags
+    /// </summary>
+    Tags = 16384,
+    /// <summary>
     /// Administrator
     /// </summary>
     Admin = 65535

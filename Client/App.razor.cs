@@ -1,5 +1,3 @@
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,10 +34,14 @@ public partial class App : ComponentBase
     public int DisplayWidth { get; private set; }
     public int DisplayHeight { get; private set; }
 
-    public bool IsMobile => DisplayWidth > 0 && DisplayWidth <= 768;
-
-    public FileFlows.Shared.Models.Flow NewFlowTemplate { get; set; }
-
+    /// <summary>
+    /// Gets if being viewed on a mobile device
+    /// </summary>
+    public bool IsMobile => DisplayWidth is > 0 and <= 850;
+    /// <summary>
+    /// Gets if being viewed on a small mobile device
+    /// </summary>
+    public bool IsSmallMobile => DisplayWidth is > 0 and <= 600;
     public static int PageSize { get; set; }
 
     /// <summary>
@@ -48,57 +50,61 @@ public partial class App : ComponentBase
     public delegate void EscapePushed(OnEscapeArgs args);
 
     /// <summary>
-    /// Event that is fired when the escape key is pushed
+    /// Instance of the escape event publisher.
     /// </summary>
-    public event EscapePushed OnEscapePushed;
-
-    // public FileFlowsStatus FileFlowsSystem { get; private set; }
+    public EscapeEventPublisher OnEscapePublisher { get; } = new();
+    /// <summary>
+    /// A list of the already subscribed listeners
+    /// </summary>
+    private readonly HashSet<EscapePushedEventHandler> _subscribedHandlers = new();
+    /// <summary>
+    /// Expose the OnEscapePushed event.
+    /// </summary>
+    public event EscapePushedEventHandler OnEscapePushed
+    {
+        add
+        {
+            // Only add the handler if it's not already in the set
+            if (_subscribedHandlers.Add(value))
+            {
+                OnEscapePublisher.OnEscapePushed += value;
+            }
+        }
+        remove
+        {
+            if (_subscribedHandlers.Remove(value))
+            {
+                OnEscapePublisher.OnEscapePushed -= value;
+            }
+        }
+    }
     
     /// <summary>
     /// Gets or sets if the nav menu is collapsed
     /// </summary>
     public bool NavMenuCollapsed { get; set; }
 
-    //public delegate void FileFlowsSystemUpdated(FileFlowsStatus system);
-
-    //public event FileFlowsSystemUpdated OnFileFlowsSystemUpdated;
     
+    /// <summary>
+    /// Gest the client service that can be used by helper methods like LibraryFileEditor
+    /// </summary>
+    [Inject] public ClientService ClientService { get; set; }
 
-    public async Task LoadLanguage(string language, bool loadPlugin = true)
+
+    /// <summary>
+    /// Loads the language files from the server
+    /// </summary>
+    /// <param name="language">Optional language to load</param>
+    public async Task LoadLanguage(string? language = null)
     {
-        List<string> langFiles = new();
-
-        bool nonEnglishLanguage = string.IsNullOrWhiteSpace(language) == false &&
-                                  language.ToLowerInvariant() != "en" && Regex.IsMatch(language, "^[a-z]{2,3}$",
-                                      RegexOptions.IgnoreCase);
-        langFiles.Add(await LoadLanguageFile("i18n/en.json?version=" + Globals.Version));
-        if (nonEnglishLanguage)
-        {
-            var other = await LoadLanguageFile("i18n/" + language + ".json?version=" + Globals.Version);
-            if (string.IsNullOrWhiteSpace(other) == false)
-                langFiles.Add(other);
-        }
-
-        if (loadPlugin)
-        {
-            langFiles.Add(
-                await LoadLanguageFile("/api/plugin/language/en.json?ts=" + DateTime.UtcNow.ToFileTime()));
-            if (nonEnglishLanguage)
-            {
-                var other = await LoadLanguageFile("/api/plugin/language/" + language + ".json?version=" +
-                                                   Globals.Version);
-                if (string.IsNullOrWhiteSpace(other) == false)
-                    langFiles.Add(other);
-            }
-        }
-
-        Translater.Init(langFiles.ToArray());
+        var langFile = await LoadLanguageFile($"/api/language?version={Globals.Version}&t={DateTime.Now.Ticks}&language={language}");;
+        Translater.Init(langFile);
     }
 
     /// <summary>
     /// Reinitialize the app after a login
     /// </summary>
-    public async Task Reinitialize(bool forced = false)
+    public async Task Reinitialize()
     {
         var token = await LocalStorage.GetAccessToken();
         if (string.IsNullOrWhiteSpace(token) == false)
@@ -107,15 +113,7 @@ public partial class App : ComponentBase
                 = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        if (forced || NavigationManager.Uri.Contains("/login") == false)
-        {
-            var profile = await ProfileService.Get();
-            await LoadLanguage(profile.Language);
-        }
-        else
-        {
-            await LoadLanguage(null, loadPlugin: false);
-        }
+        await LoadLanguage();
         LanguageLoaded = true;
         StateHasChanged();
     }
@@ -138,7 +136,7 @@ public partial class App : ComponentBase
         new ClientConsoleLogger();
         HttpHelper.Client = Client;
         PageSize = await LocalStorage.GetItemAsync<int>(nameof(PageSize));
-        if (PageSize < 100 || PageSize > 5000)
+        if (PageSize is < 100 or > 5000)
             PageSize = 1000;
 
         var dimensions = await jsRuntime.InvokeAsync<Dimensions>("ff.deviceDimensions");
@@ -150,6 +148,19 @@ public partial class App : ComponentBase
         _ = jsRuntime.InvokeVoidAsync("ff.setCSharp",  new object[] { dotNetObjRef });
 
         await Reinitialize();
+        var profile = await ProfileService.Get();
+        
+        if ((profile.ConfigurationStatus & ConfigurationStatus.InitialConfig) != ConfigurationStatus.InitialConfig || 
+            (profile.ConfigurationStatus & ConfigurationStatus.EulaAccepted) != ConfigurationStatus.EulaAccepted)
+        {
+            if (profile.IsAdmin == false)
+            {
+                await ProfileService.Logout("Labels.AdminRequired");
+                return;
+            }
+            if(NavigationManager.Uri.Contains("/initial-config") == false)
+                NavigationManager.NavigateTo("/initial-config");
+        }
 
         this.StateHasChanged();
     }
@@ -175,7 +186,7 @@ public partial class App : ComponentBase
     [JSInvokable]
     public void OnEscape(OnEscapeArgs args)
     {
-        OnEscapePushed?.Invoke(args);
+        OnEscapePublisher.RaiseEscapePushed();
     }
     
     
@@ -228,4 +239,9 @@ public class OnEscapeArgs
     /// Gets if the log partial viewer is open 
     /// </summary>
     public bool HasLogPartialViewer { get; init; }
+    
+    /// <summary>
+    /// Gets or sets if propagation should be stopped
+    /// </summary>
+    public bool StopPropagation { get; set; }
 }

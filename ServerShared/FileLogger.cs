@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using FileFlows.Plugin;
 using FileFlows.Shared;
 
@@ -83,7 +84,7 @@ public class FileLogger : ILogWriter
                     return JsonSerializer.Serialize(x);
                 }));
 
-            string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + prefix + " -> " + text;
+            string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + prefix + " -> " + text;
             if (message.IndexOf((char)0) >= 0)
             {
                 message = message.Replace(new string((char)0, 1), string.Empty);

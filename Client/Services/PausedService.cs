@@ -65,13 +65,11 @@ public interface IPausedService
 /// <summary>
 /// Service that monitors the systems paused status
 /// </summary>
-public class PausedService : IPausedService
+public class PausedService : IPausedService, IDisposable
 {
-    private SystemInfo SystemInfo = new SystemInfo();
+    private SystemInfo SystemInfo = new ();
     private TimeSpan TimeDiff;
-    private DateTime LastUpdated = DateTime.MinValue;
     private string lblPause, lblPaused, lblPausedWithTime;
-    private bool Refreshing = false;
     
     /// <inheritdoc />
     public string PausedLabel { get; private set; }
@@ -80,28 +78,38 @@ public class PausedService : IPausedService
     public bool IsPaused => SystemInfo?.IsPaused == true;
 
     private bool translated = false;
-
+    private ClientService clientService;
     /// <summary>
     /// Constructs an instance of the paused worker
     /// </summary>
     public PausedService(ClientService clientService)
     {
+        this.clientService = clientService;
         var bkgTask = new BackgroundTask(TimeSpan.FromMilliseconds(1_000), () => _ = DoWork());
         bkgTask.Start();
         SystemInfo = new SystemInfo()
         {
             IsPaused = clientService.IsPaused
         };
+        clientService.SystemInfoUpdated += OnSystemInfoUpdated;
+        
+        // translated a little later on
         lblPause = "Pause Processing";
         lblPaused = "Resume Processing";
         lblPausedWithTime = "Pause for";
-        PausedLabel = IsPaused ? "Resume Processing" : "Pause Processing";
+        PausedLabel = IsPaused ? lblPaused : lblPause;
     }
-    
+
+    private void OnSystemInfoUpdated(SystemInfo info)
+    {
+        TimeDiff = DateTime.UtcNow - info.CurrentTime;
+        SystemInfo = info;
+    }
+
     /// <summary>
     /// Do the work to update the paused state
     /// </summary>
-    private async Task DoWork()
+    private Task DoWork()
     {
         if (translated == false && Translater.InitDone)
         {
@@ -110,14 +118,10 @@ public class PausedService : IPausedService
             lblPaused = Translater.Instant("Labels.Paused");
             lblPausedWithTime = Translater.Instant("Labels.PausedWithTime");
         }
-        if (LastUpdated < DateTime.UtcNow.AddSeconds(-5))
-        {
-            await Refresh();
-        }
 
-        string originalLabel = PausedLabel;
         UpdateTime();
         OnPausedLabelChanged?.Invoke(PausedLabel);
+        return Task.CompletedTask;
     }
     /// <summary>
     /// Update the Pause Label
@@ -141,37 +145,6 @@ public class PausedService : IPausedService
         PausedLabel = lblPausedWithTime + " " + time.ToString(@"h\:mm\:ss");
     }
     
-    /// <summary>
-    /// Refreshes the paused state
-    /// </summary>
-    async Task Refresh()
-    {
-        if (Refreshing)
-            return;
-        Refreshing = true;
-        try
-        {
-            RequestResult<SystemInfo> systemInfoResult = await GetSystemInfo();
-            
-            if (systemInfoResult.Success)
-            {
-                TimeDiff = DateTime.UtcNow - systemInfoResult.Data.CurrentTime;
-                this.SystemInfo = systemInfoResult.Data;
-                UpdateTime();
-            }
-                
-        }
-        catch (Exception)
-        {
-            // Ignore
-        }
-        finally
-        {
-            LastUpdated = DateTime.UtcNow;
-            Refreshing = false;
-        }
-    }
-
     Task<RequestResult<SystemInfo>> GetSystemInfo() => HttpHelper.Get<SystemInfo>("/api/system/info");
 
     /// <inheritdoc />
@@ -235,4 +208,12 @@ public class PausedService : IPausedService
     public event OnPausedLabelChangedEventHandler OnPausedLabelChanged;
     public event OnPausedEventHandler OnPaused;
     public event OnResumeEventHandler OnResume;
+
+    /// <summary>
+    /// Disposes of the service
+    /// </summary>
+    public void Dispose()
+    {
+        clientService.SystemInfoUpdated -= OnSystemInfoUpdated;
+    }
 }

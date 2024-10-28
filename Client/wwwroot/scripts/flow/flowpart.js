@@ -286,7 +286,6 @@ class ffFlowPart
 
         // Calculate the number of lines based on the height and line height
         let numberOfLines = Math.round(height / lineHeight);
-        console.log(text + ', height: ' +  height + ', lines: ' + numberOfLines);
         return Math.min(3, numberOfLines); // 3 line limit
         
         

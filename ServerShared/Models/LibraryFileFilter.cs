@@ -72,6 +72,11 @@ public class LibraryFileFilter
     public Guid? FlowUid { get; set; }
     
     /// <summary>
+    /// Gets or sets a Tag UID to filter by
+    /// </summary>
+    public Guid? TagUid { get; set; }
+    
+    /// <summary>
     /// Gets or sets a specific sort by to sort by
     /// </summary>
     public FilesSortBy? SortBy { get; set; }
@@ -80,6 +85,71 @@ public class LibraryFileFilter
     /// Gets or sets the system info
     /// </summary>
     public LibraryFilterSystemInfo SysInfo { get; set; } = new();
+
+    /// <summary>
+    /// Tests if a file matches the filter
+    /// </summary>
+    /// <param name="file">the file</param>
+    /// <returns>true if matches</returns>
+    public bool Matches(LibraryFile file)
+    {
+        // test if it matches
+        if (Status != null)
+        {
+            if (Status == FileStatus.Disabled)
+            {
+                if ((file.Flags & LibraryFileFlags.ForceProcessing) == LibraryFileFlags.ForceProcessing)
+                    return false; // its force, therefore not disabled
+                if (file.Status != FileStatus.Unprocessed)
+                    return false;
+                if(file.LibraryUid == null || SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) == false || lib?.Enabled != false)
+                    return false;
+            }
+            else if (Status == FileStatus.OnHold)
+            {
+                if (file.Status != FileStatus.Unprocessed)
+                    return false;
+                if(file.HoldUntil < DateTime.UtcNow)
+                    return false;
+            }
+            else if (Status == FileStatus.Unprocessed && file.Status == FileStatus.Unprocessed)
+            {
+                // need to check that it isn't actually disabled
+                if (file.IsForcedProcessing)
+                    return true; // its forced to process
+                if (file.LibraryUid != null && SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) && lib?.Enabled == false)
+                    return false; // its actually disabled
+                if(file.HoldUntil > DateTime.UtcNow)
+                    return false; // its on hold
+            }
+            else if (file.Status != Status)
+                return false;
+        }
+
+        if (AllowedLibraries != null && 
+            (file.LibraryUid == null || AllowedLibraries!.Contains(file.LibraryUid.Value) == false))
+            return false;
+        if (MaxSizeMBs is > 0 && file.OriginalSize > MaxSizeMBs * 1_000_000)
+            return false;
+        if (ExclusionUids != null && ExclusionUids.Contains(file.Uid))
+            return false;
+        if (ForcedOnly && (file.Flags & LibraryFileFlags.ForceProcessing) == 0)
+            return false;
+        if (!string.IsNullOrEmpty(Filter) && !file.Name.Contains(Filter, StringComparison.OrdinalIgnoreCase))
+            return false;
+        if (NodeUid != null && file.NodeUid != NodeUid)
+            return false;
+        if (ProcessingNodeUid != null && file.ProcessOnNodeUid != null && file.ProcessOnNodeUid != Guid.Empty && file.ProcessOnNodeUid != ProcessingNodeUid)
+            return false;
+        if (LibraryUid != null && file.LibraryUid != LibraryUid)
+            return false;
+        if (FlowUid != null && file.FlowUid != FlowUid)
+            return false;
+        if (TagUid != null && file.Tags?.Contains(TagUid.Value) != true)
+            return false;
+
+        return true;
+    }
 }
 
 /// <summary>

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using FileFlows.DataLayer.Converters;
 using FileFlows.Plugin;
@@ -31,7 +32,7 @@ public class SQLiteConnectorNewConnection : IDatabaseConnector
 
     /// <inheritdoc />
     public string FormatDateQuoted(DateTime date)
-        => "datetime('" + date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") + "', 'utc')"; 
+        => "datetime('" + date.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) + "', 'utc')"; 
     // ^^ this worked for all but one, that one user had many other issues, reverting to this 
     
     //     // if Z is added to the end here, it causes the timezone bias to be applied twice
@@ -46,6 +47,9 @@ public class SQLiteConnectorNewConnection : IDatabaseConnector
     /// <inheritdoc />
     public int GetOpenedConnections()
         => connectionPool.OpenedConnections;
+    
+    /// <inheritdoc />
+    public bool Cached => true;
     
     /// <summary>
     /// Initialise a new connector
@@ -83,7 +87,8 @@ public class SQLiteConnectorNewConnection : IDatabaseConnector
             // Converters.UtcDateConverter.UseInstance()
         };
         db.Execute("PRAGMA synchronous=FULL;");
-        return new DatabaseConnection(db, false);
+        var dbConn = new DatabaseConnection(db, true);
+        return dbConn;
     }
     
     /// <inheritdoc />

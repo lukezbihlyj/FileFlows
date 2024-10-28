@@ -25,7 +25,7 @@ public class ReportController : BaseController
             return BadRequest("Not licensed");
         
         var results = new ReportManager().GetReports();
-        return Ok(results.OrderBy(x => x.Name.ToLowerInvariant()));
+        return Ok(results);
     }
 
     /// <summary>

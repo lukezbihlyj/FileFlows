@@ -2,6 +2,7 @@ using FileFlows.Server.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using FileFlows.Shared.Models;
 using FileFlows.Server.Helpers;
+using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
 
@@ -39,19 +40,7 @@ public class NodeController : BaseController
         {
             if (totalFiles.TryGetValue(node.Uid, out int pValue))
                 node.ProcessedFiles = pValue;
-            
-            if (node.Enabled == false)
-                node.Status = ProcessingNodeStatus.Disabled;
-            else if (TimeHelper.InSchedule(node.Schedule) == false)
-                node.Status = ProcessingNodeStatus.OutOfSchedule;
-            else if (node.Version != Globals.Version && node.Uid != CommonVariables.InternalNodeUid)
-                node.Status = ProcessingNodeStatus.VersionMismatch;
-            else if (node.LastSeen < DateTime.UtcNow.AddMinutes(-5) && node.Uid != CommonVariables.InternalNodeUid)
-                node.Status = ProcessingNodeStatus.Offline;
-            else if (FlowRunnerService.Executors.Any(x => x.Value.NodeUid == node.Uid))
-                node.Status = ProcessingNodeStatus.Processing;
-            else
-                node.Status = ProcessingNodeStatus.Idle;
+            node.Status = service.GetStatus(node);
         }
         
         return nodes.OrderBy(x => x.Name.ToLowerInvariant());
@@ -169,7 +158,7 @@ public class NodeController : BaseController
                 internalNode.Libraries = node.Libraries;
                 internalNode = await service.Update(internalNode, await GetAuditDetails());
                 await CheckLicensedNodes(internalNode.Uid, internalNode.Enabled);
-                
+                _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
                 await RevisionIncrement();
                 return Ok(internalNode);
             }
@@ -184,6 +173,7 @@ public class NodeController : BaseController
             node = await service.Update(node, await GetAuditDetails());
             await CheckLicensedNodes(node.Uid, node.Enabled);
             await RevisionIncrement();
+            _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
             return Ok(node);
         }
         else
@@ -197,6 +187,7 @@ public class NodeController : BaseController
             Logger.Instance.ILog("Updated external processing node: " + node.Name);
             await CheckLicensedNodes(node.Uid, node.Enabled);
             await RevisionIncrement();
+            _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
             return Ok(node);
         }
     }
@@ -221,6 +212,7 @@ public class NodeController : BaseController
         if (model.Uids.Contains(internalNode))
             throw new Exception("ErrorMessages.CannotDeleteInternalNode");
         await ServiceLoader.Load<NodeService>().Delete(model.Uids, await GetAuditDetails());
+        _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
     }
 
     /// <summary>
@@ -242,6 +234,7 @@ public class NodeController : BaseController
             node = await service.Update(node, await GetAuditDetails());
         }
         await CheckLicensedNodes(uid, enable == true);
+        _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
         return Ok(node);
     }
 
@@ -295,6 +288,7 @@ public class NodeController : BaseController
         if (existing != null)
         {
             existing.SignalrUrl = "flow";
+            _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
             return existing;
         }
 
@@ -318,6 +312,7 @@ public class NodeController : BaseController
         node = await service.Update(node, await GetAuditDetails());
         node.SignalrUrl = "flow";
         await CheckLicensedNodes(Guid.Empty, false);
+        _ = ClientServiceManager.Instance.UpdateNodeStatusSummaries();
         return node;
     }
 

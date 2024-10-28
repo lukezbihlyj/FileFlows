@@ -1,181 +1,26 @@
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using System.Threading.Tasks;
-using System.Transactions;
-using FileFlows.Client.Pages;
 using Humanizer;
 
 namespace FileFlows.Client.Components.Inputs;
 
-
-public partial class InputExecutedNodes: Input<IEnumerable<ExecutedNode>>
+/// <summary>
+/// Input Executed Nodes
+/// </summary>
+public partial class InputExecutedNodes: ExecuteFlowElementView
 {
     /// <summary>
-    /// Gets or sets the log for this item
+    /// Translated labels
     /// </summary>
-    [Parameter]
-    public string Log { get; set; }
+    private string lblName, lblFlowElement, lblTime, lblOutput;
 
-    private string PartialLog;
-    private ExecutedNode PartialLogNode;
-    private string lblClose, lblLogPartialNotAvailable, lblViewLog;
-    private bool Maximised { get; set; }
-
-    private bool InitializeResizer = false;
-    private string ResizerUid;
-
-    // Unicode character for vertical line
-    const char verticalLine = '\u2514'; 
-    // Unicode character for horizontal line
-    const char horizontalLine = '\u2500'; 
-
-    private List<string> _LogLines;
-    private List<string> LogLines
-    {
-        get
-        {
-            if (_LogLines == null)
-            {
-                _LogLines = (Log ?? string.Empty).Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            }
-
-            return _LogLines;
-        }
-    }
-
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        this.lblClose = Translater.Instant("Labels.Close");
-        this.lblLogPartialNotAvailable = Translater.Instant("Labels.LogPartialNotAvailable");
-        this.lblViewLog = Translater.Instant("Labels.ViewLog");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (InitializeResizer)
-            await jsRuntime.InvokeVoidAsync("ff.resizableEditor", ResizerUid);
-    }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (args.HasModal == false)
-        {
-            ClosePartialLog();
-            this.StateHasChanged();
-        }
-    }
-
-
-    private string FormatNodeUid(string name)
-    {
-        //FlowElement.FormatName(name);
-        return name.Substring(name.LastIndexOf(".") + 1).Humanize(LetterCasing.Title)
-            .Replace("File Flows", "FileFlows")
-            .Replace("MKV", "MKV")
-            .Replace("Mp4", "MP4")
-            .Replace("MP 4", "MP4")
-            .Replace("Ffmpeg Builder", "FFMPEG Builder:")
-            .Replace("Audio Track Remover", "Track Remover"); // FF-235
-    }
-    
-    private string FormatNodeName(ExecutedNode node)
-    {
-        string prefix = GetFlowPartPrefix(node.Depth);
-        
-        if (string.IsNullOrEmpty(node.NodeName))
-            return prefix + FormatNodeUid(node.NodeUid);
-        
-        string nodeUid = Regex.Match(node.NodeUid.Substring(node.NodeUid.LastIndexOf(".", StringComparison.Ordinal) + 1), "[a-zA-Z0-9]+").Value.ToLower();
-        string nodeName = Regex.Match(node.NodeName ?? string.Empty, "[a-zA-Z0-9]+").Value.ToLower();
-
-        //if (string.IsNullOrEmpty(node.NodeName) || nodeUid == nodeName)
-        //    return FormatNodeUid(node.NodeUid);
-        
-        return prefix + node.NodeName;
-    }
-    
-    
-    /// <summary>
-    /// Gets the prefix to show in front of the executed flow element
-    /// </summary>
-    /// <param name="depth">the depth the flow element was executed in</param>
-    /// <returns>the prefix to show</returns>
-    private string GetFlowPartPrefix(int depth)
-    {
-        if (depth < 1)
-            return string.Empty;
-        var prefix = string.Empty + verticalLine + horizontalLine;
-        for (int i = 1; i < depth; i++)
-            prefix += horizontalLine.ToString() + horizontalLine;
-        
-        return prefix + " ";
-
-    }
-
-    private void ClosePartialLog()
-    {
-        PartialLogNode = null;
-        PartialLog = null;
-    }
-
-    private void  OpenLog(ExecutedNode node)
-    {
-        int index = Value.ToList().IndexOf(node);
-        if (index < 0)
-        {
-            Toast.ShowWarning(lblLogPartialNotAvailable);
-            return;
-        }
-
-        this.Maximised = false;
-        ++index;
-        var lines  = LogLines;
-        int startIndex = lines.FindIndex(x =>
-            x.IndexOf($"Executing Flow Element {index}:", StringComparison.Ordinal) > 0 ||
-            x.IndexOf($"Executing Node {index}:", StringComparison.Ordinal) > 0);
-        if (startIndex < 1)
-        {
-            Toast.ShowWarning(lblLogPartialNotAvailable);
-            return;
-        }
-
-        --startIndex;
-
-        var remainingLindex = lines.Skip(startIndex + 3).ToList();
-
-        int endIndex = remainingLindex.FindIndex(x => x.IndexOf("======================================================================", StringComparison.Ordinal) > 0);
-
-        string sublog;
-        if (endIndex > -1)
-        {
-            endIndex += startIndex + 4;
-            sublog = string.Join("\n", lines.ToArray()[startIndex..endIndex]);
-        }
-        else
-        {
-            sublog = string.Join("\n", lines.ToArray()[startIndex..]);
-        }
-
-        PartialLog = sublog;
-        PartialLogNode = node;
-        ResizerUid = Guid.NewGuid().ToString();
-        InitializeResizer = true;
-    }
-    
-    
-    void OnMaximised(bool maximised)
-    {
-        this.Maximised = maximised;
-    }
-
-    public override void Dispose()
-    {
-        base.Dispose();
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
+        lblName = Translater.Instant("Labels.Name");
+        lblFlowElement = Translater.Instant("Labels.FlowElement");
+        lblTime = Translater.Instant("Labels.Time");
+        lblOutput = Translater.Instant("Labels.Output");
     }
 }

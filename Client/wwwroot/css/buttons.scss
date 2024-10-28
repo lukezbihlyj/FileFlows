@@ -1,32 +1,34 @@
-﻿button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select 
+﻿body button { color: inherit }
+
+.btn, a.btn, .btn-select 
 {
-    font-size: 0.8rem !important;
-    text-transform: uppercase;
-    border-radius: unset !important;
+    font-size: 0.9rem !important;
     height: var(--input-height, 2.1875rem);
-    font-weight: normal;
     outline: none !important;
     line-height: initial;
     box-shadow: none;
-    border-radius: unset !important;
-    font-size: .8rem !important;
-    text-transform: uppercase;
-    border: solid 1px var(--accent);
-    background-color: transparent;
-    color: var(--color);
+    border-radius: var(--button-border-radius) !important;
+    border: solid 1px var(--border-color);
+    background-color: var(--input-background);
+    color: var(--color) !important;
     overflow: hidden;
+    font-weight: var(--bold, 600);
 
-    &:hover:not(:disabled):not(.toast-button-btn), &:active:not(:disabled):not(.toast-button-btn) {        
-        background-image: var(--btn-background-image, linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3))) !important;
-        box-shadow: var(--btn-box-shadow, inset 0 -3px 0 0 var(--accent)) !important;
+    &:hover:not(:disabled), &:active:not(:disabled){        
+        //background-image: var(--btn-background-image, linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3))) !important;
+        background:#515151;
+        //box-shadow: var(--btn-box-shadow, inset 0 -3px 0 0 var(--accent)) !important;
+        color: var(--color) !important;
     }
 
     &:disabled {
-        border-color: var(--input-background);
-        color: var(--input-background)
+        opacity: 0.5;
+        cursor: not-allowed;
     }
     &:focus:not(.toast-button-btn) {
-        background:var(--btn-focus-background, rgba(var(--accent-rgb), 0.2)) !important;
+        //background:var(--btn-focus-background, rgba(var(--accent-rgb), 0.2)) !important;
+        background:#515151;
+        outline: solid 1px var(--border-color) !important;
     }
 }
 a.btn {

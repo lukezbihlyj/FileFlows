@@ -45,8 +45,8 @@ namespace FileFlows.Client.Components.Inputs
                 this.UpdateValue();
                 await OnSubmit.InvokeAsync();
             }
-            else if (e.Code == "Escape")
-                await OnClose.InvokeAsync();
+            // else if (e.Code == "Escape")
+            //     await OnClose.InvokeAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Inputs;
 using FileFlows.Plugin;
+using Microsoft.AspNetCore.Components;
 
 namespace FileFlows.Client.Pages;
 
@@ -13,6 +14,12 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
     /// Gets or sets the report form editor component
     /// </summary>
     private Editor ReportFormEditor { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the client service
+    /// </summary>
+    [Inject]
+    private ClientService ClientService { get; set; }
 
     /// <inheritdoc />
     public override string ApiUrl => "/api/scheduled-report";
@@ -23,9 +30,9 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
     /// <summary>
     /// The types we can show in the report editor
     /// </summary>
-    private List<ListOption> Flows, Libraries, Nodes;
+    private List<ListOption> Flows, Libraries, Nodes, Tags;
 
-    private ElementField efFlows, efLibraries, efNodes, efDirection;
+    private ElementField efFlows, efLibraries, efNodes, efTags, efDirection;
     
     private ElementField efShowLibraries = new ()
     {
@@ -41,6 +48,11 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
     {
         InputType = FormInputType.Hidden,
         Name = "ShowFlows"
+    };
+    private ElementField efShowTags = new ()
+    {
+        InputType = FormInputType.Hidden,
+        Name = "ShowTags"
     };
     private ElementField efShowDirection = new ()
     {
@@ -97,21 +109,27 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
                 {
                     Label = x.Value,
                     Value = x.Key
-                })?.OrderBy(x => x.Label)?.ToList() ?? new List<ListOption>();
+                }).OrderBy(x => x.Label?.ToLowerInvariant())?.ToList() ?? [];
 
                 var nodesResult = await HttpHelper.Get<Dictionary<Guid, string>>("/api/node/basic-list");
                 Nodes = nodesResult?.Data?.Select(x => new ListOption
                 {
                     Label = x.Value,
                     Value = x.Key
-                })?.OrderBy(x => x.Label)?.ToList() ?? new List<ListOption>();
+                }).OrderBy(x => x.Label?.ToLowerInvariant())?.ToList() ?? [];
 
                 var flowsResult = await HttpHelper.Get<Dictionary<Guid, string>>("/api/flow/basic-list");
                 Flows = flowsResult?.Data?.Select(x => new ListOption
                 {
                     Label = x.Value,
                     Value = x.Key
-                })?.OrderBy(x => x.Label)?.ToList() ?? new List<ListOption>();
+                }).OrderBy(x => x.Label?.ToLowerInvariant())?.ToList() ?? [];
+
+                Tags = (await ClientService.GetTags() ?? []).Select(x => new ListOption()
+                {
+                    Label = x.Name,
+                    Value = x.Uid
+                }).OrderBy(x => x.Label?.ToLowerInvariant())?.ToList() ?? [];
             }
             Blocker.Hide();
             blockerShow = false;
@@ -144,10 +162,11 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
         var rd = ReportDefinitions.FirstOrDefault(x => x.Uid == item.Report?.Uid);
 
         var reportOptions = ReportDefinitions.Select(x => new ListOption()
-        {
-            Label = x.Name,
-            Value = new ObjectReference { Uid = x.Uid, Name = x.Name }
-        }).ToList();
+            {
+                Label = Translater.Instant($"Reports.{x.Type}.Name"),
+                Value = new ObjectReference { Uid = x.Uid, Name = x.Type }
+            })
+            .OrderBy(x => x.Label.ToLowerInvariant()).ToList();
 
         fields.Add(new ElementField
         {
@@ -246,10 +265,12 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
         var showNodes = rd != null && rd.NodeSelection != ReportSelection.None;
         var showFlows = rd != null && rd.FlowSelection != ReportSelection.None;
         var showLibraries = rd != null && rd.LibrarySelection != ReportSelection.None;
+        var showTags = rd != null && rd.TagSelection != ReportSelection.None;
         var showDirection = rd?.Direction == true;
         fields.Add(efShowNodes);
         fields.Add(efShowLibraries);
         fields.Add(efShowFlows);
+        fields.Add(efShowTags);
         fields.Add(efShowDirection);
         
         
@@ -324,6 +345,23 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
             }
         };
         fields.Add(efFlows);
+        efTags = new ElementField()
+        {
+            Name = nameof(item.Tags),
+            Label = "Pages.Tags.Title",
+            InputType = FormInputType.MultiSelect,
+            Parameters = new()
+            {
+                { nameof(InputMultiSelect.Options), Tags },
+                { nameof(InputMultiSelect.AnyOrAll), true },
+                { "LabelAny", Translater.Instant("Labels.Any") }
+            },
+            Conditions = new List<Condition>()
+            {
+                new(efShowTags, showTags, value: true)
+            }
+        };
+        fields.Add(efTags);
         return (fields, new
         {
             item.Uid,
@@ -335,13 +373,15 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
             Nodes = GetUidValues(rd?.NodeSelection, item.Nodes),
             Flows = GetUidValues(rd?.FlowSelection, item.Flows),
             Libraries = GetUidValues(rd?.LibrarySelection, item.Libraries),
+            Tags = GetUidValues(rd?.TagSelection, item.Tags),
             item.Direction,
             DayOfWeek = dayOfWeek,
             DayOfMonth = dayOfMonth,
             ShowNodes = showNodes,
             ShowFlows = showFlows,
             ShowLibraries = showLibraries,
-            ShowDirection = showDirection
+            ShowTags = showTags,
+            ShowDirection = showDirection,
         });
     }
 
@@ -400,6 +440,7 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
             report.Nodes = rd.NodeSelection != ReportSelection.None ? GetUids(dict, "Nodes") : null;
             report.Libraries = rd.LibrarySelection != ReportSelection.None ? GetUids(dict, "Libraries") : null;
             report.Flows = rd.FlowSelection != ReportSelection.None ? GetUids(dict, "Flows") : null;
+            report.Tags = rd.FlowSelection != ReportSelection.None ? GetUids(dict, "Tags") : null;
 
             var saveResult = await HttpHelper.Post<ScheduledReport>($"{ApiUrl}", report);
             if (saveResult.Success == false)
@@ -485,6 +526,7 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
         bool showNodes = rd.NodeSelection != ReportSelection.None;
         bool showLibraries = rd.LibrarySelection != ReportSelection.None;
         bool showFlows = rd.FlowSelection != ReportSelection.None;
+        bool showTags = rd.TagSelection != ReportSelection.None;
         bool showDirection = rd.Direction;
         
         if (model["ShowNodes"] as bool? != showNodes)
@@ -502,10 +544,15 @@ public partial class ScheduledReports : ListPage<Guid, ScheduledReport>
             SetModelProperty("ShowFlows", showFlows);
             efFlows.InvokeChange(efFlows.Conditions[0], showFlows == false);
         }
+        if (model["ShowTags"] as bool? != showTags)
+        {
+            SetModelProperty("ShowTags", showTags);
+            efTags.InvokeChange(efTags.Conditions[0], showTags == false);
+        }
         if (model["ShowDirection"] as bool? != showDirection)
         {
             SetModelProperty("ShowDirection", showDirection);
-            efFlows.InvokeChange(efDirection.Conditions[0], showDirection == false);
+            efDirection.InvokeChange(efDirection.Conditions[0], showDirection == false);
         }
         
         editor.TriggerStateHasChanged();

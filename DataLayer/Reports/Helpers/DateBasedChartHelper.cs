@@ -1,3 +1,4 @@
+using System.Globalization;
 using FileFlows.DataLayer.Reports.Charts;
 
 namespace FileFlows.DataLayer.Reports.Helpers;
@@ -94,7 +95,7 @@ public static class DateBasedChartHelper
             while (current <= maxDateUtc)
             {
                 AddRowToTable(tableData, data, current, current.AddHours(1), "{0:HH}:00", tableDataFormatter);
-                labels.Add(current.ToString("yyyy-MM-dd HH:00"));
+                labels.Add(current.ToString("yyyy-MM-dd HH:00", CultureInfo.InvariantCulture));
                 current = current.AddHours(1);
 
                 // Ensure the line data contains an entry for every single day between minDateUtc and maxDateUtc
@@ -107,7 +108,7 @@ public static class DateBasedChartHelper
             while (current <= maxDateUtc)
             {
                 AddRowToTable(tableData, data, current, current.AddDays(1), "{0:yyyy}-{0:MM}-{0:dd}", tableDataFormatter);
-                labels.Add(current.ToString("yyyy-MM-dd"));
+                labels.Add(current.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
                 current = current.AddDays(1);
             }
         }
@@ -128,7 +129,7 @@ public static class DateBasedChartHelper
             {
                 var startOfNextMonth = new DateTime(current.Year, current.Month, 1).AddMonths(1);
                 AddRowToTable(tableData, data, current, startOfNextMonth, "{0:MMM} '{0:yy}", tableDataFormatter);
-                labels.Add(current.ToString("yyyy-MM"));
+                labels.Add(current.ToString("yyyy-MM", CultureInfo.InvariantCulture));
                 current = startOfNextMonth;
             }
         }

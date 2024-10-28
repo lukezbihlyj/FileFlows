@@ -6,10 +6,11 @@
 
 .main {
   flex: 1;
+  background: var(--main-background);
 }
 
 .sidebar {
-  background-color: var(--base);
+  background-color: var(--nav-menu-background);
   border-right: 1px solid var(--border-color);
   z-index: 3;
 }
@@ -49,8 +50,8 @@
     width: 1.25rem;
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
-    border-left: solid 2px var(--base);
-    background: var(--base);
+    border-left: solid 2px var(--nav-menu-background);
+    background: var(--nav-menu-background);
     font-size: 0.8rem;
     padding-left: 0.25rem;
     color: rgba(var(--color-rgb), 0.3);

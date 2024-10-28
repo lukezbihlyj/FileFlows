@@ -13,6 +13,7 @@ namespace FileFlows.Managers;
 public class NodeManager : CachedManager<ProcessingNode>
 {
     public override bool IncrementsConfiguration => false;
+    private readonly Dictionary<Guid, DateTime> NodeLastSeenUpdate = new();
 
     /// <summary>
     /// Updates the last seen date for a node
@@ -25,9 +26,17 @@ public class NodeManager : CachedManager<ProcessingNode>
         if (UseCache)
         {
             var node = _Data?.FirstOrDefault(x => x.Uid == nodeUid);
-            if(node != null)
+            if (node != null)
+            {
                 node.LastSeen = lastSeen;
+                if(NodeLastSeenUpdate.TryGetValue(node.Uid, out var lsDate) && lsDate > DateTime.UtcNow.AddMinutes(-5))
+                    return;
+                NodeLastSeenUpdate[node.Uid] = lastSeen;
+            }
         }
+
+        if (nodeUid == CommonVariables.InternalNodeUid)
+            return; // no need to update this one
 
         string dt = lastSeen.ToString("o"); // same format as json
         await DatabaseAccessManager.Instance.ObjectManager.SetDataValue(nodeUid, typeof(ProcessingNode).FullName,

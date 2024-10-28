@@ -581,7 +581,6 @@ public partial class Flow : ComponentBase, IDisposable
                     if (optProperty.ValueKind == JsonValueKind.String)
                     {
                         var optp = optProperty.GetString();
-                        Logger.Instance.DLog("OptionsProperty = " + optp);
                         if (optp is "FLOW_LIST" or "SUB_FLOW_LIST")
                         {
                             if (flowOptions == null)
@@ -612,27 +611,29 @@ public partial class Flow : ComponentBase, IDisposable
                             if (variableOptions == null)
                             {
                                 variableOptions = new List<ListOption>();
-                                var variableResult = await HttpHelper.Get<Variable[]>($"/api/variable");
-                                if (variableResult.Success)
+                                variableOptions.AddRange(variables.Select(x => new ListOption()
                                 {
-                                    variableOptions = variableResult.Data?.OrderBy(x => x.Name)?.Select(x =>
-                                        new ListOption
-                                        {
-                                            Label = x.Name,
-                                            Value = new ObjectReference
+                                    Label = x.Key,
+                                    Value = x.Key
+                                }));
+                                var variableResult = await HttpHelper.Get<Variable[]>($"/api/variable");
+                                if (variableResult.Success && variableResult.Data?.Any() == true)
+                                {
+                                    variableOptions.AddRange(variableResult.Data.OrderBy(x => x.Name).Select(x =>
+                                            new ListOption
                                             {
-                                                Name = x.Name,
-                                                Uid = x.Uid,
-                                                Type = x.GetType().FullName
-                                            }
-                                        })?.ToList() ?? new List<ListOption>();
+                                                Label = x.Name,
+                                                Value = x.Name
+                                            }));
                                 }
+
+                                variableOptions = variableOptions.OrderBy(x => x.Label.ToLowerInvariant()).ToList();
 
                             }
 
                             field.Parameters["Options"] = variableOptions;
                         }
-                        else if (optp == "NODE_LIST")
+                        else if (optp is "NODE_LIST" or "NODE_LIST_ANY")
                         {
                             if (nodeOptions == null)
                             {
@@ -654,7 +655,18 @@ public partial class Flow : ComponentBase, IDisposable
                                 }
                             }
 
-                            field.Parameters["Options"] = nodeOptions;
+                            var list = nodeOptions.ToList();
+                            if (optp == "NODE_LIST_ANY")
+                            {
+                                list.Insert(0, new ListOption
+                                {
+                                    Label = Translater.Instant("Labels.Any"),
+                                    Value = null
+                                });
+                                field.Parameters["AllowClear"] = false;
+                            }
+
+                            field.Parameters["Options"] = list;
                         }
                         else if (optp == "LIBRARY_LIST")
                         {

@@ -15,10 +15,6 @@ public class ProcessingSummary: Report
     /// <inheritdoc />
     public override Guid Uid => new Guid("c0ca274b-b651-489e-a709-bee0e7d3870f");
     /// <inheritdoc />
-    public override string Name => "Processing Summary";
-    /// <inheritdoc />
-    public override string Description => "Detailed summary of files processed by library, node, time of day";
-    /// <inheritdoc />
     public override string Icon => "fas fa-chart-area";
     /// <inheritdoc />
     public override ReportSelection LibrarySelection => ReportSelection.AnyOrAll;

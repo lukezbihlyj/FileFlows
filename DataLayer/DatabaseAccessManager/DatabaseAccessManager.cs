@@ -88,21 +88,7 @@ internal  class DatabaseAccessManager
     /// <param name="connectionString">the connection string</param>
     /// <returns>the database access manager instance</returns>
     internal static DatabaseAccessManager FromType(ILogger logger, DatabaseType type, string connectionString)
-    {
-        switch (type)
-        {
-            case DatabaseType.MySql:
-                return new DatabaseAccessManager(logger, DatabaseType.MySql, connectionString);
-            case DatabaseType.Postgres:
-                return new DatabaseAccessManager(logger, DatabaseType.Postgres, connectionString);
-            case DatabaseType.SqlServer:
-                return new DatabaseAccessManager(logger, DatabaseType.SqlServer, connectionString);
-            case DatabaseType.SqliteNewConnection:
-                return new DatabaseAccessManager(logger, DatabaseType.SqliteNewConnection, connectionString);
-            default: 
-                return new DatabaseAccessManager(logger, DatabaseType.Sqlite, connectionString);
-        }
-    }
+        => new DatabaseAccessManager(logger, type, connectionString);
 
     /// <summary>
     /// Initializes the database access manager instance

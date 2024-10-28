@@ -136,8 +136,8 @@ public partial class InputMathValue : Input<string>
     {
         if (e.Code == "Enter")
             await OnSubmit.InvokeAsync();
-        else if (e.Code == "Escape")
-            await OnClose.InvokeAsync();
+        // else if (e.Code == "Escape")
+        //     await OnClose.InvokeAsync();
     }
 
     /// <summary>

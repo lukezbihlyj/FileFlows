@@ -1,0 +1,1736 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "About": "Sobre",
+    "Add": "Adicionar",
+    "AdminRequired": "Administrador necessário para concluir a instalação.",
+    "Advanced": "Avançado",
+    "All": "Todos",
+    "And": "E",
+    "Any": "Qualquer",
+    "Architecture": "Arquitetura",
+    "Audit": "Auditoria",
+    "BaseCodeOn": "Usar Modelo de Código",
+    "Browse": "Navegar",
+    "Cancel": "Cancelar",
+    "CancelItems": "Tem certeza de que deseja cancelar o(s) item(ns) selecionado(s) {count, plural, one {item} other {itens}}?",
+    "CancelMessage": "Tem certeza de que deseja cancelar e perder todas as alterações não salvas?",
+    "ChangePassword": "Alterar Senha",
+    "Clear": "Limpar",
+    "Close": "Fechar",
+    "CommunityFlows": "Community Flows",
+    "Confirm": "Confirmar",
+    "CopiedToClipboard": "Copiado ''{text}'' para a área de transferência.",
+    "Copy": "Copiar",
+    "CopyToClipboard": "Copiar para a área de transferência",
+    "Decrease": "Diminuir",
+    "Default": "Padrão",
+    "Delete": "Excluir",
+    "DeleteItems": "Tem certeza de que deseja excluir o(s) item(ns) selecionado(s) {count, plural, one {item} other {itens}}?",
+    "DeleteLibraryFiles": "Tem certeza de que deseja remover o(s) arquivo(s) selecionado(s) {count, plural, one {file} other {files}}?\n\nObserve que isso não excluirá o(s) arquivo(s) do disco, {count, plural, one {ele} other {eles}} será(ão) removido(s) apenas do banco de dados do FileFlows.",
+    "DeleteLibraryFilesPhysicallyMessage": "Tem certeza de que deseja excluir o(s) arquivo(s) selecionado(s) {count, plural, one {file} other {files}}?\n\nObserve que isso excluirá permanentemente o(s) arquivo(s) do disco e não poderá ser desfeito.",
+    "DeleteLibraryFilesPhysicallySwitch": "Excluir arquivos do disco",
+    "Deleting": "Excluindo",
+    "Description": "Descrição",
+    "Disabled": "Desativado",
+    "Disconnected": "Desconectado",
+    "Discord": "Discord",
+    "Download": "Baixar",
+    "DownloadLog": "Baixar Log",
+    "DownloadLogShort": "Log",
+    "Duplicate": "Duplicar",
+    "Edit": "Editar",
+    "EditSubFlow": "Editar Sub Flow",
+    "Enabled": "Ativado",
+    "Execute": "Executar",
+    "Executing": "Executando",
+    "Export": "Exportar",
+    "Failed": "Falhou",
+    "Fields": "Campos",
+    "Filter": "Filtrar",
+    "FilterPlaceholder": "Filtrar (/)",
+    "Finish": "Concluir",
+    "Flow": "Flow",
+    "FlowElement": "Elemento do Flow",
+    "FlowElements": "Elementos do Flow",
+    "ForceProcessing": "Forçar Processamento",
+    "Forum": "Fórum",
+    "Help": "Ajuda",
+    "Import": "Importar",
+    "Increase": "Aumentar",
+    "Input": "Entrada",
+    "Installed": "Instalado",
+    "InternalProcessingNode": "Nó de processamento interno",
+    "InUse": "Em Uso",
+    "LastRun": "Última Execução",
+    "LastScanned": "Última Verificação",
+    "License": "Licença",
+    "Loading": "Carregando",
+    "Log": "Log",
+    "Logout": "Sair",
+    "LogPartialNotAvailable": "Não foi possível encontrar log parcial para o nó.",
+    "MappingIssue": "Problema de Mapeamento",
+    "Memory": "Memória",
+    "MissingDependencies": "Dependências Faltando",
+    "MissingDependenciesMessage": "Os seguintes plugins faltantes devem ser baixados antes de usar este modelo:\n\n#LIST#",
+    "MonthShort": "Mês",
+    "Name": "Nome",
+    "Never": "Nunca",
+    "Next": "Próximo",
+    "No": "Não",
+    "NoAuditHistoryAvailable": "Sem histórico de auditoria disponível",
+    "Node": "Nó",
+    "NoFilesCurrentlyProcessing": "Nenhum arquivo em processamento no momento",
+    "NoFilesRecentlyFinished": "Nenhum arquivo terminado recentemente",
+    "None": "Nenhum",
+    "NoUpcomingFiles": "Nenhum arquivo próximo",
+    "Number": "Número",
+    "Ok": "OK",
+    "Open": "Abrir",
+    "OperatingSystem": "Sistema Operacional",
+    "Other": "Outro",
+    "Output": "Saída",
+    "Paste": "Colar",
+    "Pause": "Pausar Processamento",
+    "Paused": "Processamento Pausado",
+    "PausedWithTime": "Resumir Em",
+    "Percent": "Porcentagem",
+    "Pixels": "Pixels",
+    "Plugins": "Plugins",
+    "PossibilityDisconnected": "Possivelmente Desconectado",
+    "Previous": "Anterior",
+    "ProcessingPaused": "O processamento está pausado no momento",
+    "Prompt": "Solicitação",
+    "Properties": "Propriedades",
+    "ReadOnly": "Somente Leitura",
+    "Redo": "Refazer",
+    "Refresh": "Atualizar",
+    "Remove": "Remover",
+    "Repository": "Repositório",
+    "Reprocess": "Reprocessar",
+    "Rescan": "Reverificar",
+    "Reset": "Redefinir",
+    "ResetLayout": "Redefinir Layout",
+    "Restore": "Restaurar",
+    "RestoredFailedMessage": "Falha ao restaurar {type}",
+    "RestoredMessage": "{type} restaurado",
+    "Restoring": "Restaurando",
+    "Resume": "Retomar",
+    "ReturnCode": "Código de Retorno",
+    "Revisions": "Revisões",
+    "Run": "Executar",
+    "RunAt": "Executar Em",
+    "RunHistory": "Histórico de Execuções",
+    "Running": "Executando",
+    "Save": "Salvar",
+    "Saving": "Salvando",
+    "Savings": "Economias",
+    "Schedule": "Cronograma",
+    "Scripts": "Scripts",
+    "Search": "Pesquisar",
+    "Searching": "Pesquisando",
+    "Select": "Selecionar",
+    "SelectOne": "Selecionar Um",
+    "SetStatusProcessed": "Marcar como Processado",
+    "Settings": "Configurações",
+    "ShowHidden": "Mostrar Ocultos",
+    "Size": "Tamanho",
+    "SortBy": "Ordenar por",
+    "SpaceIncrease": "Aumento de {size}, {items} itens",
+    "SpaceSavings": "{size} economizado, {items} itens",
+    "Status": "Status",
+    "SubFlow": "Sub Flow",
+    "SubFlows": "Sub Flows",
+    "Success": "Sucesso",
+    "Tag": "Tag",
+    "Test": "Teste",
+    "Time": "Tempo",
+    "Total": "Total",
+    "Trigger": "Disparar",
+    "Type": "Tipo",
+    "Undo": "Desfazer",
+    "UnsavedChanges": "Alterações não salvas",
+    "Update": "Atualizar",
+    "UpdateAll": "Atualizar tudo",
+    "UpdateAvailable": "Nova versão disponível {version}",
+    "UsedBy": "Usado Por",
+    "Version": "Versão",
+    "VersionNumber": "Versão: {version}",
+    "View": "Visualizar",
+    "ViewLog": "Visualizar Log",
+    "WeekShort": "Sem",
+    "When": "Quando",
+    "Yes": "Sim",
+    "DateRanges": {
+      "AnyTime": "Qualquer Momento",
+      "Last12Months": "Últimos 12 Meses",
+      "Last24Hours": "Últimas 24 Horas",
+      "Last31Days": "Últimos 31 Dias",
+      "Last3Days": "Últimos 3 Dias",
+      "Last3Months": "Últimos 3 Meses",
+      "Last6Months": "Últimos 6 Meses",
+      "Last7Days": "Últimos 7 Dias",
+      "Live": "Ao Vivo",
+      "Today": "Hoje",
+      "Yesterday": "Ontem"
+    },
+    "ObsoleteConfirm": {
+      "Message": "Recomenda-se que você altere para um outro elemento de flow.",
+      "Question": "Este elemento de flow está obsoleto e será removido em breve. Tem certeza de que deseja usá-lo?",
+      "Title": "Elemento de Flow Obsoleto"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' adicionado",
+    "ChangePassword": "Usuário ''{User}'' alterou a senha",
+    "Deleted": "{Type} ''{Name}'' excluído",
+    "Login": "Usuário ''{User}'' fez login",
+    "LoginFailed": "Falha de login do usuário ''{User}''",
+    "PasswordReset": "Usuário ''{User}'' redefiniu sua senha",
+    "PasswordResetRequest": "Usuário ''{User}'' solicitou redefinição de senha",
+    "SettingsUpdated": "Configurações atualizadas",
+    "Updated": "{Type} ''{Name}'' atualizado"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "Adicionar arquivos ou URLs manualmente para processamento.",
+      "Title": "Adicionar Arquivo",
+      "Fields": {
+        "AnyNode": "Qualquer Nó",
+        "Flow": "Flow",
+        "List": "Lista",
+        "Mode": "Modo de Entrada",
+        "Node": "Nó",
+        "Raw": "Entrada em Massa (Bloco de Texto)"
+      }
+    },
+    "AuditEntry": {
+      "ViewerTitle": "Alterações",
+      "Columns": {
+        "Field": "Campo",
+        "Value": "Valor"
+      }
+    },
+    "ChangePassword": {
+      "Changed": "Senha alterada",
+      "InvalidPassword": "Senha antiga inválida",
+      "MinimumLength": "A nova senha é muito curta",
+      "NewPassword": "Nova Senha",
+      "NewPasswordConfirm": "Confirmar",
+      "OldPassword": "Senha Antiga",
+      "PasswordMismatch": "As senhas não coincidem.",
+      "Title": "Alterar Senha"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "Selecione Um Diretório",
+      "FileTitle": "Selecione Um Arquivo"
+    },
+    "FlowTemplatePicker": {
+      "Title": "Selecione um modelo para começar"
+    },
+    "Import": {
+      "Message": "Selecione um flow exportado para importar no sistema.",
+      "Title": "Importar Flow"
+    },
+    "ImportScript": {
+      "Title": "Importar Script",
+      "Messages": {
+        "NoMoreImports": "Não há mais importações disponíveis para este script"
+      }
+    },
+    "PauseDialog": {
+      "Message": "Selecione o tempo de pausa para o processamento.\nNota: Os flows atuais continuarão a ser executados, mas nenhum outro flow será executado até que esse tempo se esgote.",
+      "Title": "Pausar Processamento"
+    },
+    "ReprocessDialog": {
+      "Description": "Reprocessar o(s) arquivo(s) selecionado(s) usando os seguintes parâmetros",
+      "Title": "Reprocessar",
+      "Fields": {
+        "AnyNode": "Qualquer Nó",
+        "BottomOfQueue": "Fim da fila",
+        "CustomVariables": "Variáveis Personalizadas",
+        "CustomVariablesKey": "Variável Personalizada",
+        "CustomVariablesMode": "Variáveis Personalizadas",
+        "CustomVariablesValue": "Valor",
+        "Flow": "Flow",
+        "Merge": "Mesclar variáveis personalizadas com o original",
+        "Node": "Nó",
+        "Original": "Usar variáveis personalizadas originais",
+        "Position": "Posição",
+        "Replace": "Substituir variáveis personalizadas originais",
+        "SameFlow": "Sem alteração",
+        "TopOfQueue": "Início da fila"
+      },
+      "ProcessOptions": {
+        "Description": "Modificar os parâmetros de processamento para o(s) arquivo(s) selecionado(s)",
+        "Title": "Opções de Processamento"
+      }
+    },
+    "ResumeDialog": {
+      "Message": "Tem certeza de que deseja retomar o processamento?",
+      "Title": "Retomar Processamento"
+    },
+    "ScriptLanguage": {
+      "Title": "Linguagem do Script",
+      "Labels": {
+        "BatchDescription": "Arquivos Batch só podem ser executados em sistemas Windows. Eles podem ler variáveis básicas, mas não podem atualizar ou acessar objetos do FileFlows durante a execução.",
+        "CSharpDescription": "Scripts em C# podem interagir com mais partes do FileFlows e são os mais poderosos. Usando a mesma linguagem que o FileFlows, permitem maior interação com o sistema.",
+        "FileDisplayName": "Nome de exibição do arquivo",
+        "FileDisplayNameDescription": "Um script especializado que personaliza como os nomes de arquivos são exibidos no console web do FileFlows. Este script não modifica os arquivos reais, apenas sua aparência na interface.",
+        "JavaScriptDescription": "Scripts em JavaScript são executados dentro do executor do FileFlows, permitindo ler e gravar variáveis e acessar todas as funções auxiliares dentro do FileFlows.",
+        "PowerShellDescription": "Scripts PowerShell só podem ser executados em sistemas Windows. Eles podem ler variáveis básicas, mas não podem atualizar ou acessar objetos do FileFlows durante a execução.",
+        "ShellDescription": "Scripts Shell são executados em sistemas baseados em Unix (Linux, MacOS, Docker). Eles podem ler variáveis básicas, mas não podem atualizar ou acessar objetos do FileFlows durante a execução."
+      }
+    }
+  },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip é um arquivador de arquivos livre e de código aberto, uma utilidade usada para colocar grupos de arquivos em contêineres comprimidos conhecidos como \"arquivos\".",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip é uma aplicação usada para detecção de comerciais em arquivos de vídeo. Ele analisa arquivos MPEG ou H.264 e gera arquivos de saída contendo a localização dos comerciais.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Instala o Docker dentro do Docker. Isso permite que você inicie contêineres Docker irmãos.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg é um projeto de software livre e de código aberto que consiste em um conjunto de bibliotecas e programas para manipulação de arquivos e streams de vídeo, áudio e outros multimídia. No seu núcleo está a ferramenta de linha de comando ffmpeg, projetada para processar arquivos de vídeo e áudio.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git simplifica o processo de download e gerenciamento de vários recursos, como pacotes de software ou configurações, de repositórios remotos, tornando-se uma ferramenta essencial para usuários que buscam acesso eficiente a arquivos e projetos.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop é um visualizador de processos interativo e monitor de sistema para sistemas operacionais semelhantes ao Unix, fornecendo uma interface amigável para monitorar recursos do sistema e gerenciar processos.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, invocado da linha de comando como magick, é um conjunto de software livre e de código aberto multiplataforma para exibir, criar, converter, modificar e editar imagens raster.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK é uma implementação de código aberto da Plataforma Java, Edição Padrão (Java SE), fornecendo um ambiente de desenvolvimento gratuito e multiplataforma para construir e executar aplicações Java.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix é um conjunto de ferramentas para criar, alterar, dividir, unir e inspecionar arquivos Matroska (MKV).",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano é um editor de texto simples e amigável para sistemas operacionais semelhantes ao Unix, oferecendo capacidades básicas de edição em um ambiente de terminal.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch é uma ferramenta de informação do sistema escrita na linguagem de script de shell Bash. Por padrão, do lado esquerdo, há um logo da distribuição, renderizado em arte ASCII.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js é um ambiente de execução JavaScript de código aberto e multiplataforma que executa código JavaScript fora de um navegador da web, permitindo que os desenvolvedores criem aplicações de rede e do lado do servidor.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 é uma linguagem de programação de alto nível e interpretada, conhecida por sua simplicidade, legibilidade e versatilidade, amplamente utilizada para desenvolvimento web, análise de dados, inteligência artificial e tarefas de scripting.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR é um formato de arquivo de arquivamento utilizado para compressão de dados, enquanto UNRAR é uma utilidade para extrair conteúdo de arquivos RAR.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim é um programa de editor de texto livre e de código aberto, baseado em tela. É um clone melhorado do vi.",
+      "Label": "Vim"
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "Adicionado",
+      "ChangePassword": "Alterar Senha",
+      "Deleted": "Excluído",
+      "Login": "Login",
+      "LoginFailed": "Falha no Login",
+      "PasswordReset": "Redefinir Senha",
+      "PasswordResetRequest": "Solicitação de Redefinição de Senha",
+      "Updated": "Atualizado"
+    },
+    "DateCompareMode": {
+      "After": "Depois",
+      "Any": "Qualquer",
+      "Before": "Antes",
+      "Between": "Entre",
+      "GreaterThan": "Maior Que",
+      "LessThan": "Menor Que",
+      "NotBetween": "Não Entre"
+    },
+    "Days": {
+      "Fri": "Sex",
+      "Friday": "Sexta-feira",
+      "Mon": "Seg",
+      "Monday": "Segunda-feira",
+      "Sat": "Sáb",
+      "Saturday": "Sábado",
+      "Sun": "Dom",
+      "Sunday": "Domingo",
+      "Thu": "Qui",
+      "Thursday": "Quinta-feira",
+      "Tue": "Ter",
+      "Tuesday": "Terça-feira",
+      "Wed": "Qua",
+      "Wednesday": "Quarta-feira"
+    },
+    "FilesSortBy": {
+      "Savings": "Economia",
+      "SavingsDesc": "Economia Descendente",
+      "Size": "Tamanho",
+      "SizeDesc": "Tamanho Descendente",
+      "Time": "Tempo",
+      "TimeDesc": "Tempo Descendente"
+    },
+    "FileStatus": {
+      "Any": "Qualquer",
+      "Disabled": "Desativado",
+      "Duplicate": "Duplicado",
+      "FlowNotFound": "Flow Não Encontrado",
+      "MappingIssue": "Problema de Mapeamento",
+      "MissingLibrary": "Biblioteca Ausente",
+      "OnHold": "Em Espera",
+      "OutOfSchedule": "Fora do Horário",
+      "Processed": "Processado",
+      "Processing": "Processando",
+      "ProcessingFailed": "Processamento Falhou",
+      "ReprocessByFlow": "Reprocessar Pelo Flow",
+      "Unprocessed": "Não Processado"
+    },
+    "FlowType": {
+      "Failure": "Falha",
+      "Standard": "Padrão",
+      "SubFlow": "Sub Flow"
+    },
+    "LogType": {
+      "Debug": "Depuração",
+      "Error": "Erro",
+      "Info": "Informação",
+      "Warning": "Aviso"
+    },
+    "MatchRange": {
+      "After": "Depois",
+      "Any": "Qualquer",
+      "Before": "Antes",
+      "Between": "Entre",
+      "GreaterThan": "Maior Que",
+      "LessThan": "Menor Que",
+      "NotBetween": "Não Entre"
+    },
+    "MathValue": {
+      "Between": "Entre",
+      "Equals": "Igual",
+      "GreaterThan": "Maior Que",
+      "GreaterThanOrEqual": "Maior ou Igual",
+      "LessThan": "Menor Que",
+      "LessThanOrEqual": "Menor ou Igual",
+      "NotBetween": "Não Entre",
+      "NotEquals": "Diferente"
+    },
+    "Periods": {
+      "Days": "Dias",
+      "Hours": "Horas",
+      "Minutes": "Minutos",
+      "Weeks": "Semanas"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "Desativado",
+      "HigherPriorityNodeAvailable": "Nó de Prioridade Superior Disponível",
+      "Idle": "Ocioso",
+      "InstallingDockerMods": "Instalando DockerMods",
+      "MaximumRunnersReached": "Máximo de Executores Atingido",
+      "Offline": "Offline",
+      "OutOfSchedule": "Fora do Horário",
+      "Processing": "Processando",
+      "RestrictedByLibrary": "Restringido pela Biblioteca",
+      "VersionMismatch": "Incompatibilidade de Versão"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "Alfabética",
+      "AsFound": "Conforme Encontrado (Padrão)",
+      "LargestFirst": "Maior Primeiro",
+      "NewestFirst": "Mais Novo Primeiro",
+      "OldestFirst": "Mais Antigo Primeiro",
+      "Random": "Aleatório",
+      "SmallestFirst": "Menor Primeiro"
+    },
+    "ProcessingPriority": {
+      "High": "Alta",
+      "Highest": "Mais Alta",
+      "Low": "Baixa",
+      "Lowest": "Mais Baixa",
+      "Normal": "Normal"
+    },
+    "ReportDirection": {
+      "Inbound": "Entrada",
+      "Outbound": "Saída"
+    },
+    "ReportSchedule": {
+      "Daily": "Diário",
+      "Monthly": "Mensal",
+      "Weekly": "Semanal"
+    },
+    "SecurityMode": {
+      "Local": "Usuários Locais",
+      "Off": "Nenhum",
+      "OpenIdConnect": "Open ID Connect"
+    },
+    "TaskType": {
+      "FileAdded": "Arquivo Adicionado",
+      "FileFlowsServerUpdateAvailable": "Atualização Disponível",
+      "FileFlowsServerUpdating": "Servidor Atualizando",
+      "FileProcessed": "Arquivo Processado",
+      "FileProcessFailed": "Falha no Processamento",
+      "FileProcessing": "Processando Arquivo",
+      "FileProcessSuccess": "Processamento Bem-Sucedido"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "Arquivos",
+      "Flows": "Flows",
+      "Libraries": "Bibliotecas",
+      "Log": "Log",
+      "Nodes": "Nós",
+      "PauseProcessing": "Pausar Processamento",
+      "Plugins": "Plugins",
+      "Revisions": "Revisões",
+      "Scripts": "Scripts",
+      "Tasks": "Tarefas",
+      "Variables": "Variáveis",
+      "Webhooks": "Webhooks"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "Ambos os valores devem ser inseridos",
+    "CannotDeleteInternalNode": "Você não pode excluir o nó de processamento interno.",
+    "DeleteFailed": "Falha ao excluir",
+    "DuplicatesFound": "Duplicatas encontradas",
+    "NameInUse": "O nome já está em uso",
+    "NameRequired": "O nome é obrigatório",
+    "NoFlowSpecified": "Nenhum flow especificado, você deve selecionar um flow para criar uma biblioteca",
+    "NotAllFilesCouldBeDeleted": "Nem todos os arquivos puderam ser excluídos.\nConsulte o log para mais informações.",
+    "NotFound": "Item não encontrado",
+    "SaveFailed": "Falha ao salvar",
+    "SetFileStatus": "Falha ao definir o status do arquivo",
+    "UnexpectedError": "Ocorreu um erro inesperado"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "Nenhum nó de entrada específico, cada flow precisa de um nó de entrada",
+      "NoParts": "Nenhuma parte do flow específica, você deve ter algumas partes para salvar um flow",
+      "TooManyInputNodes": "Você só pode ter um nó de entrada"
+    },
+    "Parts": {
+      "Color": "Cor",
+      "Color-Placeholder": "Cor personalizada",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "Extensões",
+          "Extensions-Help": "Uma lista de extensões que, se coincidirem, serão enviadas para o primeiro nó de saída; caso contrário, o segundo nó de saída será usado."
+        }
+      }
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*Maior Que*: Coincide se a data for mais antiga que o período dado.\n*Menor Que*: Coincide se a data for mais recente que o período dado.\n*Entre*: Coincide se a data estiver dentro do intervalo especificado.\n*Antes*: Coincide se a data for anterior à data especificada.\n*Depois*: Coincide se a data for posterior à data especificada."
+    }
+  },
+  "MenuGroups": {
+    "Admin": "Admin",
+    "Configuration": "Configuração",
+    "Extensions": "Extensões",
+    "Information": "Informação",
+    "Overview": "Visão geral",
+    "Security": "Segurança",
+    "System": "Sistema",
+    "User": "Usuário"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "Entrada de Controle de Acesso",
+      "Title": "Controle de Acesso",
+      "Labels": {
+        "Console": "Console Web",
+        "Remote": "Remoto / Nós de Processamento"
+      },
+      "Buttons": {
+        "MoveDown": "Mover para Baixo",
+        "MoveUp": "Mover para Cima"
+      },
+      "Columns": {
+        "Allow": "Permitir",
+        "End": "Fim",
+        "Start": "Início"
+      },
+      "Fields": {
+        "Allow": "Permitir",
+        "Allow-Help": "Se esta entrada de controle de acesso é permitida para acessar o sistema ou não.",
+        "Description": "Descrição",
+        "Description-Placeholder": "Uma descrição opcional para descrever esta entrada",
+        "End": "Endereço Final",
+        "End-Help": "Endereço IP final opcional, deve ser maior que o endereço de início se definido e do mesmo tipo. Caso contrário, este valor final será ignorado.",
+        "End-Placeholder": "Endereço final opcional",
+        "Start": "Endereço Inicial",
+        "Start-Help": "O endereço IP inicial pode ser IPv4 ou IPv6"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "O endereço final deve ser maior que o endereço de início",
+        "FamilyMismatch": "Os endereços IP de início e fim devem ser do mesmo tipo",
+        "InvalidIPAddress": "'{address}' não é um endereço IP válido.",
+        "MoveFailed": "Falha ao mover entradas"
+      }
+    },
+    "Audit": {
+      "Title": "Registro de Auditoria",
+      "Columns": {
+        "Action": "Ação",
+        "Date": "Data",
+        "IPAddress": "Endereço IP",
+        "Operator": "Operador",
+        "Summary": "Resumo",
+        "Type": "Tipo"
+      }
+    },
+    "Dashboard": {
+      "Title": "Painel",
+      "Labels": {
+        "AddWidget": "Adicionar Widget",
+        "CurrentlyPaused": "O FileFlows está atualmente pausado!",
+        "FinalSize": "Tamanho Final",
+        "OriginalSize": "Tamanho Original",
+        "Savings": "Economias",
+        "ShrinkageTitle": "Armazenamento Salvo"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "Falha ao criar painel",
+        "LogFailed": "Falha ao recuperar log para o trabalhador"
+      },
+      "Fields": {
+        "Current": "Atual",
+        "CurrentStep": "Etapa",
+        "File": "Arquivo",
+        "Library": "Biblioteca",
+        "Log": "Log",
+        "Node": "Nó",
+        "Overall": "Total",
+        "ProcessingTime": "Tempo de Processamento",
+        "RecentlyFinished": "Recentemente Concluído",
+        "Uid": "UID",
+        "Upcoming": "Próximo",
+        "WorkingFile": "Arquivo de Trabalho"
+      },
+      "Messages": {
+        "CancelMessage": "Tem certeza de que deseja cancelar o trabalhador para {RelativeFile}?",
+        "DeleteDashboard": "Tem certeza de que deseja excluir o painel atual?\n\nIsso não pode ser desfeito.",
+        "DeleteWidget": "Tem certeza de que deseja remover este Widget?",
+        "Waiting": "Aguardando um arquivo para processar"
+      },
+      "Tabs": {
+        "Dashboard": "Painel",
+        "Savings": "Economias",
+        "Statistics": "Estatísticas"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Pico"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Falhou} other {# Falhados}}",
+          "Finished": "{count, plural, zero {Concluído} other {# Concluídos}}",
+          "NoFailedFiles": "Nenhum arquivo com falha",
+          "NoRecentlyFinishedFiles": "Nenhum arquivo recentemente finalizado",
+          "NoUpcomingFiles": "Nenhum arquivo próximo",
+          "Title": "Arquivos",
+          "Upcoming": "{count, plural, zero {Próximo} other {# Próximos}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Arquivos processados",
+          "PerDay": "{num} por dia",
+          "PerHour": "{num} por hora",
+          "StorageSaved": "Armazenamento salvo"
+        },
+        "LargestSavings": {
+          "Title": "Maiores Economias"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Sem economias",
+          "Title": "Economias"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# Arquivo} other {# Arquivos}}"
+        },
+        "Status": {
+          "CurrentlyProcessing": "Atualmente processando {count, plural, one {# arquivo} other {# arquivos}}",
+          "DockerModUpdates": "{count, plural, one {# Atualização de DockerMod} other {# Atualizações de DockerMods}}",
+          "FileFlowsUpdate": "FileFlows {version} disponível",
+          "Idle": "O sistema está atualmente ocioso",
+          "OutOfSchedule": "Fora da programação",
+          "OutOfScheduleDay": "Agendado para retomar em {day} às {time}",
+          "OutOfScheduleHours": "Agendado para retomar em cerca de {hours, plural, one {uma hora} other {# horas}}",
+          "OutOfScheduleMinutes": "Agendado para retomar em {minutes, plural, one {menos de um minuto} other {# minutos}}",
+          "PluginUpdates": "{count, plural, one {# Atualização de Plugin} other {# Atualizações de Plugins}}",
+          "ScriptUpdates": "{count, plural, one {# Atualização de Script} other {# Atualizações de Scripts}}"
+        },
+        "System": {
+          "Runners": "{count, plural, zero {Executores} one {# Executor} other {# Executores}}",
+          "Title": "Sistema",
+          "Updates": "{count, plural, zero {Atualizações} one {# Atualização} other {# Atualizações}}"
+        },
+        "Updates": {
+          "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "Corrigido",
+          "New": "Novo",
+          "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
+          "Scripts": "{count, plural, zero {Scripts} one {# Script} other {# Scripts}}",
+          "Title": "Atualizações"
+        }
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMods",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "Revisão",
+        "UpdateAvailable": "Atualização Disponível"
+      },
+      "Fields": {
+        "Code": "Código",
+        "Description": "Descrição"
+      },
+      "Messages": {
+        "FailedToExport": "Falha ao exportar.",
+        "Updating": "Atualizando"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "Tarefa"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "Histórico de Tarefas",
+      "Fields": {
+        "RunHistory": "Histórico"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "Execução de Tarefa",
+      "Fields": {
+        "Log": "Log",
+        "ReturnValue": "Valor de Retorno",
+        "RunAt": "Executar Em",
+        "Success": "Sucesso"
+      }
+    },
+    "Flow": {
+      "Title": "Flow",
+      "Labels": {
+        "EditFlow": "Flow: {Name}",
+        "FlowProperties": "Propriedades do Flow",
+        "OpenScriptBrowser": "Abrir Navegador de Script",
+        "OpenSubFlowBrowser": "Abrir Navegador de Sub Flow",
+        "SubFlowBrowser": "Navegador de Sub Flow",
+        "SubFlowHelp": "Para adicionar campos de entrada a um sub flow, para que você possa passar parâmetros personalizados para este sub flow, crie-os na aba `Fields`.\n\nUm sub flow deve ter um único `Input`, que pode ser qualquer elemento de flow de entrada válido, por exemplo, `Input File`, `Video File`, etc."
+      },
+      "Fields": {
+        "Author": "Autor",
+        "Author-Help": "Opcionalmente, especifique o autor deste flow.",
+        "Description": "Descrição.",
+        "MinimumVersion": "Versão Mínima",
+        "Outputs": "Saídas",
+        "Outputs-Help": "O número de saídas que este sub flow possui. Este é o número de saídas que estarão disponíveis ao usar este sub flow em outro flow",
+        "OutputsKey": "Saída",
+        "OutputsValue": "Descrição",
+        "Tags": "Tags",
+        "Variables": "Variáveis",
+        "VariablesKey": "Nome",
+        "VariablesValue": "Valor",
+        "Field": {
+          "Default": "Padrão",
+          "DeleteIfEmpty": "Excluir se Vazio",
+          "DeleteIfEmpty-Help": "Se algum valor for adicionado aqui e o usuário selecionar 'Excluir Original', a pasta também será excluída se nenhum arquivo correspondente a essas expressões regulares corresponder.",
+          "Description": "Uma descrição opcional a ser mostrada com este campo. Isso pode ser texto de ajuda para o campo.",
+          "FlowElementField": "Campo do Elemento do Flow",
+          "FlowElementField-Help": "Opcional, defina isso no formato '{Uid}.{FieldName}' por exemplo ''53a72207-34a2-4b71-b3d8-8b12764a85fe.Force'' para definir um campo diretamente em um elemento de flow. Consulte a ajuda para mais informações.",
+          "IfName": "Se",
+          "IfName-Help": "Se isso deve ser mostrado ao usuário somente se outro valor corresponder a essas condições.",
+          "IfNot": "Se Não",
+          "IfNot-Help": "Se o valor deve ser invertido e deve ser mostrado somente se o valor não corresponder.",
+          "IfValue": "Se Valor",
+          "IfValue-Help": "O valor a ser comparado, pode ser uma expressão regular. Para booleanos, use true ou false.",
+          "Inverse": "Inverso",
+          "Inverse-Help": "Se os valores do slider devem ser invertidos com valores mais baixos mostrados à direita.",
+          "Maximum": "Máximo",
+          "Minimum": "Mínimo",
+          "Options": "Opções",
+          "Options-Help": "Uma matriz de opções de lista, para definir um rótulo e valor use um separador | por exemplo `label|value`",
+          "Required": "Obrigatório",
+          "Required-Help": "Se este valor é obrigatório e deve ser definido."
+        }
+      },
+      "Messages": {
+        "Close": "Tem certeza de que deseja sair e perder todas as alterações não salvas?",
+        "FailedToLoadFlow": "Falha ao carregar o flow.",
+        "LoadingFlow": "Carregando Flow"
+      }
+    },
+    "Flows": {
+      "Title": "Flows",
+      "Labels": {
+        "FailureFlows": "Failure Flows",
+        "StandardFlows": "Standard Flows",
+        "SubFlows": "Sub Flows"
+      },
+      "Buttons": {
+        "Repository": "Repositório"
+      },
+      "Fields": {
+        "Author": "Autor",
+        "Template": "Modelo"
+      },
+      "Messages": {
+        "DeleteUsed": "Você não pode excluir um flow que está em uso",
+        "Duplicated": "Flow ''{name}'' duplicado",
+        "FailedToExport": "Falha ao exportar flow(s).",
+        "FailureFlowDescription": "Este é um tipo especial de flow que será executado se algum flow falhar.\nFileFlows procurará o 'Default' Failure Flow para usar se um flow falhar; se não encontrado, o processamento será interrompido imediatamente.",
+        "FlowImported": "Flow ''{name}'' importado",
+        "LoadingTemplates": "Carregando Modelos"
+      },
+      "Template": {
+        "Title": "Adicionar Flow",
+        "Fields": {
+          "PageDescription": "Selecione um modelo para basear o flow, isso ajudará você a começar com um flow.",
+          "Template": "Modelo"
+        }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Eu li e concordo com os termos do Contrato de Licença de Usuário Final",
+        "Language": "Idioma"
+      },
+      "Messages": {
+        "RunnersTop": "Especifique o número de runners que podem processar arquivos simultaneamente em suas bibliotecas.\n\nOs runners são os trabalhadores que processam arquivos em suas bibliotecas. Quanto mais runners você tiver, mais arquivos poderão ser processados ao mesmo tempo.\n\nEsta configuração pode ser ajustada a qualquer momento editando o Nó de Processamento Interno.",
+        "Welcome": "Bem-vindo ao FileFlows! Obrigado por escolher nosso software.\n\nEste assistente irá guiá-lo pelos passos essenciais de configuração, incluindo a aceitação do EULA e a seleção de plugins para adicionar funcionalidades com base nas suas preferências.\n\nEscolha entre uma variedade de plugins adaptados para processar diferentes tipos de arquivos, como vídeo, áudio e imagens.",
+        "WelcomeUpdate": "Recentemente, atualizamos nosso Contrato de Licença de Usuário Final (EULA).\n\nPor favor, reserve um momento para revisar e aceitar os termos atualizados antes de continuar.\n\nSua aceitação é necessária para prosseguir com o uso do FileFlows.\n\nObrigado por escolher o FileFlows.",
+        "Finish": {
+          "Bottom": "Com esses passos, você está no caminho certo para maximizar o poder do FileFlows.\n\nSe tiver dúvidas ou precisar de ajuda, não hesite em entrar em contato com nossa equipe de suporte.",
+          "CreateALibrary": "Criar uma Biblioteca:",
+          "CreateALibraryDescription": "Crie uma biblioteca para automatizar o processamento de arquivos.\nSua biblioteca detectará e processará arquivos automaticamente com base nos critérios especificados,\nsimplificando seu flow de trabalho sem a necessidade de intervenção manual.",
+          "CreateFirstFlow": "Crie seu Primeiro Flow:",
+          "CreateFirstFlowDescription": "Utilize os plugins que você selecionou para criar seu primeiro flow.\nSeja para processar arquivos de vídeo, faixas de áudio, imagens ou qualquer outro tipo de arquivo, seu flow\npermite que você ajuste o tratamento dos arquivos às suas necessidades específicas, sejam elas simples\nou complexas.",
+          "Top": "Você configurou o FileFlows com sucesso de acordo com suas necessidades. Agora é hora de colocá-lo em ação!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Escolha quais DockerMods instalar",
+        "Eula": "EULA",
+        "EulaDescription": "Contrato de Licença de Usuário Final do FileFlows",
+        "Finish": "Concluir",
+        "FinishDescription": "Configuração Inicial Concluída",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Escolha quais plugins instalar",
+        "Runners": "Runners",
+        "RunnersDescription": "Especifique o número de runners",
+        "Welcome": "Bem-vindo",
+        "WelcomeDescription": "Bem-vindo ao FileFlows"
+      }
+    },
+    "Libraries": {
+      "Title": "Bibliotecas",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {Arquivo} other {Arquivos}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "Não há flows configurados.\nCrie um flow antes de adicionar ou atualizar uma biblioteca."
+      },
+      "Messages": {
+        "DeleteConfirm": "Tem certeza de que deseja excluir a {count, plural, one {biblioteca} other {bibliotecas}} selecionada?",
+        "KeepLibraryFiles": "Manter arquivos no banco de dados para estatísticas",
+        "Reprocess": {
+          "Message": "Tem certeza de que deseja continuar com o reprocessamento das bibliotecas selecionadas?\n\nEsta ação marcará todos os arquivos como não processados e iniciará seu reprocessamento. Observe que esta ação não pode ser desfeita.",
+          "Title": "Reprocessar Bibliotecas Selecionadas"
+        },
+        "Reset": {
+          "Message": "Tem certeza de que deseja continuar com a redefinição das bibliotecas selecionadas?\n\nEsta ação removerá todos os arquivos e iniciará uma nova verificação. Observe que esta ação não pode ser desfeita.",
+          "Title": "Redefinir Bibliotecas Selecionadas"
+        }
+      }
+    },
+    "Library": {
+      "Title": "Biblioteca",
+      "Labels": {
+        "CreationTime": "Data de Criação",
+        "Duplicated": "Biblioteca ''{name}'' duplicada",
+        "FailedToDuplicate": "Falha ao duplicar",
+        "LastWriteTime": "Última Data de Modificação"
+      },
+      "Fields": {
+        "DetectFileCreation": "Criação de Arquivo",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "Última Modificação de Arquivo",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "Tamanho do Arquivo",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "Aqui você pode configurar uma biblioteca para detectar apenas arquivos que correspondam aos padrões dados.\n\nPor exemplo, isso permite incluir apenas arquivos que são\n\t- Arquivos que foram criados há menos de 7 dias\n\t- Arquivos que foram modificados entre 3 e 7 dias atrás\n\t- O tamanho do arquivo é maior que 1 gigabyte",
+        "DownloadsDirectory": "Diretório de Downloads",
+        "DownloadsDirectory-Help": "Um diretório especial onde, se um arquivo que foi processado com sucesso for redescoberto nesta pasta, esse arquivo será automaticamente reprocessado.\nIsso é útil se você redownload um arquivo.",
+        "Enabled": "Habilitado",
+        "ExcludeHidden": "Excluir Ocultos",
+        "ExcludeHidden-Help": "Quando habilitado, arquivos e pastas ocultos não serão escaneados",
+        "ExclusionFilters": "Exclusões",
+        "ExclusionFilters-Help": "Lista opcional de inclusões para executar contra o nome completo dos arquivos.",
+        "Extensions": "Extensões",
+        "Extensions-Help": "Uma lista opcional de extensões para arquivos a serem incluídos nesta biblioteca.\nSe deixado em branco, todos os arquivos serão incluídos, a menos que um filtro ou filtro de exclusão seja definido na aba `Avançado`.",
+        "FileSizeDetectionInterval": "Intervalo de Detecção de Tamanho do Arquivo",
+        "FileSizeDetectionInterval-Help": "O tempo em segundos a aguardar para verificar novamente o tamanho do arquivo durante o scanner da biblioteca. Use isso se outro aplicativo estiver gravando em um arquivo em partes, por exemplo, um aplicativo PVR gravando partes de uma gravação a cada 20 segundos.",
+        "FileSizeDetectionInterval-Suffix": "Segundos",
+        "Filters": "Filtros",
+        "Filters-Help": "Lista opcional de filtros para executar contra o nome completo dos arquivos.",
+        "Flow": "Flow",
+        "Folders": "Pastas",
+        "Folders-Help": "Se esta biblioteca processa Pastas em vez de Arquivos.\nIsso não significa escanear subpastas, uma biblioteca já fará isso.\nIsso significa que um objeto Pasta será processado em vez de arquivos individuais.",
+        "FullScanDisabled": "Desativar Escaneamento Completo",
+        "FullScanDisabled-Help": "O objetivo pretendido do escaneamento completo é capturar quaisquer arquivos que possam ser perdidos pelos eventos de monitoramento do sistema de arquivos.",
+        "FullScanIntervalMinutes": "Intervalo de Escaneamento Completo",
+        "FullScanIntervalMinutes-Help": "O intervalo quando um escaneamento completo desta biblioteca deve ocorrer",
+        "HoldMinutes": "Minutos de Retenção",
+        "HoldMinutes-Help": "Opcionalmente, retenha qualquer arquivo encontrado nesta biblioteca por essa quantidade de minutos antes de processá-los. Cada arquivo será retido por esse tempo.",
+        "HoldMinutes-Suffix": "minutos",
+        "MaxRunners": "Máximo de Runners",
+        "MaxRunners-Help": "O número máximo de runners que podem processar arquivos nesta biblioteca ao mesmo tempo.\nDefina como 0 para ilimitado.",
+        "Name": "Nome",
+        "Path": "Caminho",
+        "Priority": "Prioridade",
+        "Priority-Help": "A prioridade com que os arquivos devem ser processados. Se uma biblioteca de prioridade mais alta tiver arquivos esperando para serem processados, esses serão feitos primeiro.",
+        "ProcessingOrder": "Ordem de Processamento",
+        "ProcessingOrder-Help": "A ordem em que os arquivos serão processados por esta biblioteca.",
+        "ReprocessRecreatedFiles": "Reprocessar Arquivos Recriados",
+        "ReprocessRecreatedFiles-Help": "Quando habilitado, se um arquivo for redetectado com um tempo de criação diferente do que está gravado, o arquivo será automaticamente definido para reprocessar.\nIsso é útil em uma biblioteca de arquivos baixados, onde você pode baixar o mesmo arquivo várias vezes e desejar processá-lo a cada vez.",
+        "Scan": "Escanear",
+        "Scan-Help": "Quando Escanear está habilitado, a biblioteca será regularmente escaneada em busca de novos conteúdos.\nQuando desabilitado, a biblioteca ouvirá eventos do sistema de arquivos para detectar novos arquivos.\nÉ melhor deixar isso desativado, a menos que você esteja tendo problemas com arquivos não sendo detectados.",
+        "ScanInterval": "Intervalo de Escaneamento",
+        "ScanInterval-Help": "O menor tempo possível em segundos entre escaneamentos. Não é garantido escanear neste intervalo toda vez, pois outro escaneamento pode estar em andamento.",
+        "ScanInterval-Suffix": "Segundos",
+        "Schedule": "Programação",
+        "ScheduleDescription": "Isso permite que você configure quando esta biblioteca estará ativa.\n\nO scanner da biblioteca não funcionará nesta biblioteca nem os arquivos serão processados fora da programação.\n",
+        "SkipFileAccessTests": "Pular Testes de Acesso a Arquivos",
+        "SkipFileAccessTests-Help": "Quando habilitado, a biblioteca não testará se pode ler ou gravar no arquivo antes de adicioná-lo à fila de Arquivos.",
+        "Template": "Modelo",
+        "TopLevelOnly": "Somente Nível Superior",
+        "TopLevelOnly-Help": "Escanear apenas arquivos na raiz do diretório e nenhuma subpasta será pesquisada.",
+        "UpdateMovedFiles": "Atualizar Arquivos Movidos",
+        "UpdateMovedFiles-Help": "Quando habilitado, se um arquivo foi detectado como movido dentro da mesma biblioteca, então o arquivo original será atualizado para apontar para este novo arquivo.\nCaso contrário, quando desabilitado, um duplicado será adicionado em vez disso.\n\nUm arquivo será detectado como movido se o arquivo original não existir e um novo arquivo for encontrado com a mesma assinatura.",
+        "UseFingerprinting": "Usar Impressão Digital",
+        "UseFingerprinting-Help": "Quando habilitado, os arquivos terão uma verificação de checksum executada contra eles ao serem importados e após a conclusão de um flow. Qualquer arquivo com checksum correspondente será pulado de importações futuras da biblioteca.",
+        "WaitTimeSeconds": "Tempo de Espera",
+        "WaitTimeSeconds-Help": "O número de segundos que devem ter passado desde a última alteração escrita nesta pasta para que ela seja escaneada na biblioteca.",
+        "WaitTimeSeconds-Suffix": "segundos"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "Data de Criação",
+        "ExecutedNodes": "Elementos de fluxo executados",
+        "FailureReason": "Razão da Falha",
+        "FinalMetadata": "Metadados Finais",
+        "FinalSize": "Tamanho Final",
+        "FinalSizeSuffix": "Bytes",
+        "Fingerprint": "Impressão Digital",
+        "Flow": "Flow",
+        "Library": "Biblioteca",
+        "Log": "Log",
+        "Name": "Arquivo Original",
+        "Node": "Nó de Processamento",
+        "OriginalMetadata": "Metadados Originais",
+        "OriginalSize": "Tamanho Original",
+        "OriginalSizeSuffix": "Bytes",
+        "OutputPath": "Caminho de Saída",
+        "ProcessingTime": "Tempo de Processamento",
+        "Status": "Status"
+      },
+      "Tabs": {
+        "CustomVariables": "Variáveis Personalizadas",
+        "FinalMetadata": "Saída",
+        "OriginalMetadata": "Entrada"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "Arquivos",
+      "Labels": {
+        "ScanTriggered": "Escaneamento acionado para todas as bibliotecas habilitadas"
+      },
+      "Buttons": {
+        "Ignore": "Ignorar",
+        "MoveToTop": "Mover Para o Topo",
+        "Process": "Processar",
+        "ProcessOptions": "Opções de Processamento",
+        "Reprocess": "Reprocessar",
+        "ToggleForce": "Alternar Processamento Forçado",
+        "Unhold": "Liberar",
+        "View": "Ver"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "Falha ao baixar o log",
+        "FailedToReprocess": "Falha ao reprocessar",
+        "ReprocessingFile": "Arquivo enviado para reprocessamento"
+      }
+    },
+    "Log": {
+      "Title": "Log",
+      "Labels": {
+        "AutoRefresh": "Atualização Automática",
+        "FailedToDownloadLog": "Falha ao baixar o log.",
+        "NoMatchingData": "Nenhum dado correspondente"
+      },
+      "Fields": {
+        "File": "Arquivo",
+        "IncludeHigherSeverity": "Incluir Maior Severidade",
+        "Nodes": "Nós",
+        "Severity": "Severidade",
+        "Source": "Fonte",
+        "Text": "Texto"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "Cancelar",
+        "ForgotPassword": "Esqueceu a Senha?",
+        "Login": "Entrar",
+        "Password": "Senha",
+        "Reset": "Redefinir",
+        "Username": "Nome de Usuário",
+        "UsernameOrEmail": "Nome de Usuário ou Email"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "Nome de usuário ou senha inválidos",
+        "LockedOut": "Muitas tentativas de login incorretas, você está atualmente bloqueado.",
+        "PasswordReset": "Redefinição de Senha"
+      }
+    },
+    "Nodes": {
+      "Title": "Nodes",
+      "Labels": {
+        "Address": "Endereço",
+        "Disconnected": "Desconectado",
+        "DownloadNode": "Baixar Node",
+        "FileFlowsServer": "Node de Processamento Interno",
+        "FilesProcessed": "Arquivos Processados",
+        "Internal": "Interno",
+        "PossiblyDisconnected": "Possivelmente Desconectado",
+        "Runners": "Runners",
+        "UpgradeRequired": "Atualização Necessária",
+        "UpgradeRequiredHint": "O Servidor e os Nodes devem estar na mesma versão",
+        "Version": "Versão"
+      },
+      "Fields": {
+        "Address": "Endereço",
+        "Enabled": "Habilitado",
+        "FlowRunners": "Flow Runners"
+      }
+    },
+    "Notifications": {
+      "Title": "Notificações"
+    },
+    "Plugins": {
+      "Single": "Plugin",
+      "Title": "Plugins",
+      "Labels": {
+        "PluginBrowser": "Navegador de Plugins"
+      },
+      "Fields": {
+        "Authors": "Autores",
+        "Description": "Descrição",
+        "Elements": "Nodes",
+        "Url": "Página Inicial",
+        "Version": "Versão"
+      },
+      "Messages": {
+        "DeletePlugins": "Você tem certeza de que deseja excluir o(s) {count, plural, one {plugin} other {plugins}} selecionado(s)?",
+        "DeleteUsed": "Você não pode excluir um plugin que está em uso",
+        "UpdatingPlugins": "Atualizando Plugins"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "Node",
+      "Fields": {
+        "Address": "Endereço",
+        "Address-Help": "O endereço (hostname ou endereço IP) do node. Você não deve alterar isso, a menos que tenha mudado o endereço do node. Por exemplo, se você mudou o nome do computador do node de processamento.",
+        "AllLibraries": "Todas as Bibliotecas",
+        "AllLibraries-Help": "Quais bibliotecas este node processará",
+        "CopyMappings": "Copiar Mapeamentos",
+        "DontChangeOwner": "Alterar Proprietário",
+        "DontChangeOwner-Help": "Quando marcado, o node mudará o proprietário de qualquer arquivo recém-criado para o PGID e PUID definidos nos valores ambientais. Se essas variáveis ambientais não estiverem definidas, o proprietário será alterado para ''users:nobody''.",
+        "DontSetPermissions": "Definir Permissões",
+        "DontSetPermissions-Help": "Quando marcado, as permissões de arquivo serão definidas em qualquer arquivo recém-criado",
+        "Enabled": "Habilitado",
+        "FlowRunners": "Flow Runners",
+        "FlowRunners-Help": "O número de instâncias de flow runner disponíveis para executar um flow.",
+        "InternalProcessingNodeDescription": "Este é o node de processamento integrado no FileFlows. Este node permite que você execute o FileFlows sem se preocupar em instalar outros nodes em sistemas remotos e permite que você use o FileFlows como um aplicativo autônomo. Você pode continuar usando este node interno e nodes de processamento adicionais se desejar, ou pode desativar este node e usar apenas nodes adicionais.",
+        "Libraries": "Bibliotecas",
+        "Libraries-Help": "Selecione quais bibliotecas este node pode processar",
+        "Mappings": "Mapeamentos",
+        "MappingsDescription": "Os mapeamentos permitem que você mapeie um caminho do servidor para um local no node. Por exemplo, você pode mapear Server:'/usr/local/bin/ffmpeg' para Node:'C:\\Utils\\ffmpeg\\ffmpeg.exe'. Você deve adicionar mapeamentos para todas as bibliotecas e ferramentas que serão necessárias para executar no sistema remoto.",
+        "MappingsKey": "Servidor",
+        "MappingsValue": "Node",
+        "MaxFileSizeMb": "Tamanho Máximo do Arquivo",
+        "MaxFileSizeMb-Help": "O tamanho máximo de arquivo que este Node de Processamento pode processar. Se definido como 0, não haverá limite.",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "Permissões de Arquivo",
+        "PermissionsFiles-Help": "As permissões a serem definidas em qualquer arquivo recém-criado.",
+        "PermissionsFolders": "Permissões de Pasta",
+        "PermissionsFolders-Help": "As permissões a serem definidas em qualquer pasta recém-criada.",
+        "PreExecuteScript": "Script Pré-Execução",
+        "PreExecuteScript-Help": "Um script que será executado antes que qualquer arquivo seja processado. O resultado deste script deve ser 1 para passar; qualquer outra coisa e o node não processará um arquivo.",
+        "Priority": "Prioridade",
+        "Priority-Help": "Quanto maior o número, maior a prioridade. Nodes com maior prioridade serão favorecidos e receberão arquivos para processar primeiro, a menos que esses nodes estejam fora do cronograma, desativados ou no seu máximo de runners.",
+        "ProcessFileCheckInterval": "Intervalo de Verificação de Arquivo",
+        "ProcessFileCheckInterval-Help": "Com que frequência verificar se há um novo arquivo para processamento nos nodes de processamento. Defina como 0 para usar o valor do sistema.",
+        "ProcessFileCheckInterval-Suffix": "segundos",
+        "ProcessingDescription": "Isso permite que você configure o que este Node de Processamento pode processar. Por exemplo, você pode limitar este node a processar apenas certas bibliotecas ou um tamanho máximo de arquivo se este node for de menor potência.",
+        "Schedule": "Cronograma",
+        "Schedule-Help": "Este cronograma é executado no fuso horário do node",
+        "ScheduleDescription": "Isso permite que você configure quando este node estará ativo. O node não processará nenhum arquivo fora deste cronograma configurado.",
+        "TempPath": "Diretório Temp",
+        "TempPath-Help": "Este diretório será usado por flows para criar arquivos temporários à medida que o flow é processado. Este diretório será regularmente limpo, então não mantenha nada importante aqui.",
+        "Variables": "Variáveis",
+        "VariablesDescription": "As variáveis permitem que você configure variáveis avançadas para definir em um node de processamento.",
+        "VariablesKey": "Nome",
+        "VariablesValue": "Valor"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "Combinado"
+      },
+      "Buttons": {
+        "Back": "Voltar",
+        "Generate": "Gerar"
+      },
+      "Fields": {
+        "Direction": "Direção",
+        "Email": "Email",
+        "Email-Placeholder": "Digite um endereço de email",
+        "Flow": "Flow",
+        "Library": "Biblioteca",
+        "Node": "Node",
+        "Period": "Período",
+        "Statistic": "Estatística"
+      },
+      "Messages": {
+        "FailedToFindReport": "Falha ao encontrar o relatório.",
+        "FailedToGenerateReport": "Falha ao gerar o relatório.",
+        "NoMatchingData": "Sem dados correspondentes",
+        "ReportEmailed": "O relatório será enviado por email para ''{email}'' assim que for gerado."
+      }
+    },
+    "Reporting": {
+      "Title": "Relatório",
+      "Labels": {
+        "Reports": "Relatórios",
+        "ScheduledReports": "Agendados"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "Objeto do Repositório",
+      "Fields": {
+        "Author": "Autor",
+        "Code": "Código",
+        "Description": "Descrição",
+        "Revision": "Revisão"
+      }
+    },
+    "Revisions": {
+      "Title": "Revisões"
+    },
+    "ScheduledReport": {
+      "Title": "Relatório Agendado",
+      "Labels": {
+        "LastSent": "Último Enviado",
+        "Never": "Nunca"
+      },
+      "Fields": {
+        "DayOfMonth": "Dia do Mês",
+        "DayOfMonth-Help": "O dia do mês para executar este relatório. Se o dia selecionado estiver fora do mês (por exemplo, 31 em fevereiro), o relatório será executado no último dia do mês.",
+        "DayOfWeek": "Dia da Semana",
+        "DayOfWeek-Help": "O dia da semana para enviar este relatório agendado. Isso incluirá dados dos 7 dias anteriores a esse dia.",
+        "Direction": "Direção",
+        "Enabled": "Habilitado",
+        "Enabled-Help": "Este relatório agendado só será executado se estiver habilitado.",
+        "Flows": "Flows",
+        "Libraries": "Bibliotecas",
+        "Name-Help": "O nome do relatório, este aparecerá no assunto do email enviado.",
+        "Nodes": "Nodes",
+        "Recipients": "Destinatários",
+        "Recipients-Help": "Uma lista de endereços de email que receberão este relatório quando ele for executado.",
+        "Report": "Relatório",
+        "Report-Help": "O relatório que será enviado.",
+        "Schedule": "Cronograma",
+        "Schedule-Help": "Quando este relatório será gerado e enviado por email aos destinatários."
+      }
+    },
+    "Script": {
+      "LanguageTitle": "{Language} Script",
+      "Title": "Script",
+      "Fields": {
+        "Code": "Código",
+        "Description": "Descrição",
+        "Name": "Nome",
+        "Outputs": "Saídas",
+        "OutputsKey": "Saída",
+        "OutputsValue": "Descrição"
+      },
+      "Messages": {
+        "FailedToExport": "Falha ao exportar."
+      }
+    },
+    "Scripts": {
+      "Title": "Scripts",
+      "Labels": {
+        "ScriptBrowser": "Script Repository",
+        "UpdateAvailable": "Atualização Disponível",
+        "UpdatingScripts": "Atualizando Scripts"
+      },
+      "Buttons": {
+        "ScriptBrowser": "Repositório",
+        "UpdateAllScripts": "Atualizar Todos os Scripts"
+      },
+      "Fields": {
+        "Code": "Código"
+      },
+      "Messages": {
+        "DeleteSystem": "Você não pode excluir um script do sistema",
+        "DeleteUsed": "Você não pode excluir um script que está em uso",
+        "Duplicated": "Scripts ''{name}'' duplicados",
+        "Imported": "Script ''{name}'' importado",
+        "NoRepositoryScriptsToUpdate": "Nenhum script do repositório selecionado para atualizar"
+      }
+    },
+    "Settings": {
+      "Title": "Configurações",
+      "Labels": {
+        "CheckNow": "Verificar Agora",
+        "Database": "Banco de Dados",
+        "Email": "Email",
+        "EmailDescription": "Essas configurações são opcionais e só são necessárias se você estiver usando o plugin de e-mail ou a segurança de usuário local.",
+        "FileServer": "Servidor de Arquivos",
+        "General": "Geral",
+        "Logging": "Registro",
+        "Restart": "Reiniciar FileFlows",
+        "System": "Sistema",
+        "Updates": "Atualizações"
+      },
+      "Fields": {
+        "AutoUpdate": "Atualização Automática",
+        "AutoUpdate-Help": "Quando ativado, o FileFlows será verificado regularmente em busca de atualizações e, se uma atualização for encontrada, será baixada e instalada automaticamente.",
+        "AutoUpdateNodes": "Atualização Automática de Nós",
+        "AutoUpdateNodes-Help": "Quando ativado, nós externos serão atualizados automaticamente quando o servidor FileFlows for atualizado. Isso significa que você só precisará atualizar a instância do servidor FileFlows em um ambiente distribuído.",
+        "AutoUpdatePlugins": "Atualização Automática de Plugins",
+        "AutoUpdatePlugins-Help": "Quando ativado, os plugins serão verificados regularmente em busca de atualizações e, se qualquer atualização for encontrada, será baixada automaticamente.",
+        "CheckForUpdateNow": "Verificar Atualização Agora",
+        "CheckForUpdateNow-Help": "Verifica se há uma atualização agora e, se encontrada, fará o download da atualização e a instalará quando nenhum Flow estiver em execução.",
+        "DelayBetweenNextFile": "Atraso Entre Arquivos",
+        "DelayBetweenNextFile-Help": "O atraso em milissegundos a esperar entre o início de um arquivo e a solicitação de um novo. Definir esse atraso como zero significa que ele solicitará imediatamente um novo arquivo. Se o atraso for muito curto, recursos como balanceamento de carga e limites do executor de biblioteca podem não funcionar corretamente, pois um arquivo pode não ter iniciado completamente antes da próxima solicitação.",
+        "DelayBetweenNextFile-Suffix": "milissegundos",
+        "DockerModsOnServer": "DockerMods No Servidor",
+        "DockerModsOnServer-Help": "DockerMods devem ser executados automaticamente ao iniciar o servidor ou quando especificamente ativados. Caso contrário, eles só serão executados quando um flow de trabalho for iniciado.",
+        "HideProcessingFinishedNotifications": "Notificações de Processamento Finalizado",
+        "HideProcessingFinishedNotifications-Help": "Se uma notificação de toast deve ser exibida no console da web quando um arquivo terminar de processar.",
+        "HideProcessingStartedNotifications": "Notificações de Processamento Iniciado",
+        "HideProcessingStartedNotifications-Help": "Se uma notificação de toast deve ser exibida no console da web quando um arquivo começar a processar.",
+        "KeepFailedFlowTempFiles": "Manter Arquivos Temporários Falhados",
+        "KeepFailedFlowTempFiles-Help": "Ativar esta opção reterá os arquivos temporários usados por um flow em caso de falha, evitando que sejam excluídos automaticamente.\nUse com cautela.",
+        "Language": "Idioma",
+        "Language-Help": "A língua que será usada no sistema.\nNota: Estas traduções são geradas por IA e podem conter erros. Por favor, relate quaisquer erros à equipe de suporte.",
+        "LogEveryRequest": "Registrar Cada Solicitação",
+        "LogEveryRequest-Help": "Se cada solicitação ao servidor deve ser registrada.",
+        "LogFileRetention": "Retenção de Arquivos de Log",
+        "LogFileRetention-Help": "Por quanto tempo os arquivos de log devem ser mantidos antes de serem excluídos.",
+        "LogFileRetention-Suffix": "Dias",
+        "LoggingPath": "Diretório de Registro",
+        "LoggingPath-Help": "É aqui que os arquivos de log serão criados.",
+        "LogQueueMessages": "Registrar Mensagens de Fila",
+        "LogQueueMessages-Help": "Isso causará um registro excessivo de todos os arquivos sendo enfileirados/desenfileirados no monitor da biblioteca.\nAtive isso se você estiver tendo problemas com arquivos não aparecendo, desligue novamente depois para evitar encher seus arquivos de log com registros excessivos.",
+        "PluginRepositoryUrls": "Repositórios de Plugins",
+        "PluginRepositoryUrls-Help": "Uma lista separada por linhas de URLs de repositórios de plugins a serem usadas ao procurar plugins.\nA ordem é importante; se vários repositórios contiverem o mesmo plugin, o primeiro repositório será usado como sua fonte.\nO repositório padrão sempre será adicionado ao final desta lista.",
+        "ProcessFileCheckInterval": "Intervalo de Verificação de Arquivos",
+        "ProcessFileCheckInterval-Help": "Com que frequência verificar se há um novo arquivo para processamento nos nós de processamento.",
+        "ProcessFileCheckInterval-Suffix": "segundos",
+        "ShowFileAddedNotifications": "Notificações de Arquivo Adicionado",
+        "ShowFileAddedNotifications-Help": "Se uma notificação de toast deve ser exibida no console da web quando um arquivo foi encontrado e adicionado à fila.",
+        "Telemetry": "Telemetria",
+        "Telemetry-Help": "A telemetria é útil para ajudar a saber quais dispositivos precisamos suportar, quais partes do Flow são as mais usadas e onde devemos focar no desenvolvimento.\nNenhuma informação sobre seus arquivos ou informações de identificação é enviada.",
+        "Database": {
+          "Description": "Aqui você pode configurar qual Banco de Dados o FileFlows usará.\nNota: Quaisquer alterações aqui exigirão que você reinicie o FileFlows para que ele possa migrar seus dados e, se necessário, criar o novo banco de dados.",
+          "DontBackupOnUpgrade": "Não Fazer Backup na Atualização",
+          "DontBackupOnUpgrade-Help": "Os backups de banco de dados envolvem copiar todos os dados do seu banco de dados para um arquivo SQLite, o que pode ser demorado. Se você já faz backup do seu banco de dados externo por outros meios, você pode optar por desativar esse processo.",
+          "Name": "Nome",
+          "Name-Help": "O nome do banco de dados a ser criado; se deixado em branco, ''FileFlows'' será usado.",
+          "Password": "Senha",
+          "Password-Help": "A senha do usuário para conectar ao banco de dados.",
+          "Port": "Porta",
+          "Port-Help": "A porta padrão para MySQL é 3306",
+          "Port-Help-MySql": "A porta padrão para MySQL é 3306",
+          "Port-Help-Postgres": "A porta padrão para Postgres é 5432",
+          "Port-Help-SQLServer": "A porta padrão para SQL Server é 1433",
+          "RecreateDatabase": "Recriar Banco de Dados",
+          "RecreateDatabase-Help": "Quando ativado, se o novo banco de dados já existir, ele será excluído e recriado. Caso contrário, se desativado e o banco de dados já existir, nenhum dado será migrado e o novo banco de dados será usado como está.",
+          "Server": "Servidor",
+          "Server-Help": "O endereço do servidor de banco de dados e a porta ou instância nomeada, se necessário.",
+          "Type": "Tipo",
+          "Type-Help": "O tipo de banco de dados a ser usado; o tipo padrão é SQLite, que não requer configuração adicional.",
+          "User": "Usuário",
+          "User-Help": "O usuário usado para conectar ao banco de dados."
+        },
+        "FileServer": {
+          "AllowList": "Caminhos Permitidos",
+          "AllowList-Help": "Uma lista separada por novas linhas de caminhos permitidos a serem acessados pelo servidor de arquivos exposto.\nEsses são os locais que podem ser lidos/escritos remotamente.\nNota: Todos os caminhos da biblioteca são automaticamente permitidos.",
+          "AllowList-Placeholder": "Se deixado vazio, todos, exceto os caminhos do sistema, serão permitidos.",
+          "Description": "Isso permite que nós de processamento externos baixem um arquivo para processamento sem mapeamento.\n\nIsso expõe seus arquivos pela sua rede, portanto desative se não estiver em uma rede confiável.",
+          "Enabled": "Ativado",
+          "FilePermissions": "Permissões de Arquivo",
+          "FilePermissions-Help": "Permissões opcionais a serem dadas a arquivos criados ou modificados.",
+          "FolderPermissions": "Permissões de Pasta",
+          "FolderPermissions-Help": "Permissões opcionais a serem dadas a pastas criadas ou modificadas.",
+          "OwnerGroup": "Grupo de Proprietários",
+          "OwnerGroup-Help": "Grupo de proprietário:opção a ser usado para alterar o proprietário de arquivos ou pastas criados ou modificados.",
+          "OwnerGroup-Placeholder": "usuarios:nobody"
+        },
+        "License": {
+          "Email": "Email da Licença",
+          "ExpiryDate": "Data de Expiração",
+          "Files": "Arquivos",
+          "Flags": "Recursos",
+          "Key": "Chave de Licença",
+          "Level": "Nível",
+          "ProcessingNodes": "Nós de Processamento",
+          "Status": "Status"
+        },
+        "Security": {
+          "AccessToken": "Token de Acesso",
+          "AccessToken-Help": "Token de acesso usado pelos nós de processamento para se conectar ao servidor.",
+          "Authority": "Autoridade",
+          "Authority-Help": "Digite a URL do provedor Open ID Connect (por exemplo, https://accounts.google.com/).",
+          "CallbackAddress": "Endereço de Callback",
+          "CallbackAddress-Help": "Um endereço de callback opcional, você pode usar isso para substituir o endereço padrão que será enviado ao cliente.\nPor exemplo, se você estiver atrás de um proxy reverso e o FileFlows estiver ouvindo em HTTP, mas o callback deve ocorrer em HTTPS.",
+          "ClientId": "ID do Cliente",
+          "ClientId-Help": "O ID do cliente registrado com o provedor Open ID Connect.",
+          "ClientSecret": "Segredo do Cliente",
+          "ClientSecret-Help": "O segredo do cliente registrado com o provedor Open ID Connect.",
+          "Description": "Configurar a segurança do usuário exigirá que os usuários façam login e que os nós de processamento forneçam o Token de Acesso para se conectar.\n\n[Usuários](/users) devem ser adicionados antes que possam fazer login ou antes que você possa usar este recurso.",
+          "LockoutMinutes": "Duração do Bloqueio",
+          "LockoutMinutes-Help": "A duração que o usuário será bloqueado antes de poder tentar fazer login novamente.",
+          "LockoutMinutes-Suffix": "minutos",
+          "MaxAttempts": "Máximo de Tentativas",
+          "MaxAttempts-Help": "O número máximo de tentativas de login que o usuário pode fazer antes de ser temporariamente bloqueado.",
+          "Mode": "Modo",
+          "Mode-Help": "Ative a autenticação de usuários para acessar o FileFlows.\nQuando ativado, os usuários terão que fazer login e os nós de processamento precisarão do Token da API para acessar o servidor.",
+          "Title": "Segurança",
+          "TokenExpiryMinutes": "Expiração do Token",
+          "TokenExpiryMinutes-Help": "A duração do token de login antes de expirar."
+        },
+        "Smtp": {
+          "From": "De",
+          "From-Help": "O nome do usuário de quem os emails serão enviados.",
+          "FromAddress": "Endereço de De",
+          "FromAddress-Help": "O endereço de email do usuário de quem os emails serão enviados.",
+          "Password": "Senha",
+          "Password-Help": "A senha para o usuário SMTP.",
+          "Port": "Porta",
+          "Port-Help": "A porta do servidor de email.",
+          "Security": "Segurança",
+          "Security-Help": "A segurança a ser usada ao enviar emails.",
+          "Server": "Servidor",
+          "Server-Help": "O servidor de email.",
+          "User": "Usuário",
+          "User-Help": "Um nome de usuário opcional para enviar emails."
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "Desativar backups automáticos do banco de dados significa que nenhum backup será realizado durante as atualizações do aplicativo. É importante garantir que você tenha um método alternativo para fazer backup do seu banco de dados externamente para proteger seus dados.\n\nVocê tem certeza de que deseja desativar esses backups?",
+          "NoDatabase": "O nome é obrigatório",
+          "NoPassword": "A senha é obrigatória",
+          "NoServer": "O servidor é obrigatório",
+          "NoUser": "O usuário é obrigatório",
+          "TestingDatabase": "Testando Conexão com o Banco de Dados",
+          "TestSuccess": "Conectado ao banco de dados com sucesso"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "Você tem certeza de que deseja desativar a telemetria?\n\nFique tranquilo, nenhuma informação pessoal é registrada. Os dados enviados incluem informações sobre os elementos de flow em uso, plugins utilizados, bem como o número total de arquivos falhados e processados.\n\nEssas informações nos ajudam a entender as preferências dos usuários e informam nossas decisões sobre a descontinuação de elementos de flow não utilizados.",
+          "Title": "Desativar Telemetria"
+        },
+        "Restart": {
+          "Message": "Você tem certeza de que deseja reiniciar o FileFlows?\n\nSuas configurações serão salvas automaticamente primeiro.\n\nNota: Certifique-se de que não há flows em execução.",
+          "Title": "Reiniciar FileFlows"
+        },
+        "Update": {
+          "Downloading": "Atualização sendo baixada",
+          "Failed": "Falha ao verificar uma atualização",
+          "Message": "Uma nova atualização está disponível, você gostaria de baixar e instalá-la?",
+          "NotAvailable": "Nenhuma atualização disponível",
+          "Title": "Atualização Disponível"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "Estatísticas"
+    },
+    "Tags": {
+      "Title": "Tags",
+      "Fields": {
+        "Description": "Descrição",
+        "Icon": "Ícone"
+      },
+      "Messages": {
+        "DeleteItems": "Você tem certeza de que deseja excluir a(s) {count, plural, one {tag} other {tags}} selecionada(s)?\n\n{count, plural, one {Esta} other {Estas}} será(ão) removida(s) de todos os arquivos e esta operação não pode ser desfeita."
+      }
+    },
+    "Task": {
+      "Title": "Tarefa",
+      "Fields": {
+        "CustomSchedule": "Agenda Personalizada",
+        "CustomSchedule-Help": "Esta tarefa será executada uma vez por bloco de 15 minutos no início desse bloco.",
+        "Schedule": "Agenda",
+        "Schedule-Help": "Quando este script deve ser executado.",
+        "Script": "Script",
+        "Script-Help": "O script a ser executado na agenda configurada.",
+        "TimeSchedule": "Agenda",
+        "TimeSchedule-Help": "Quando a tarefa será executada.",
+        "Type": "Tipo",
+        "Type-Help": "O tipo de tarefa. Tarefas baseadas em tempo serão executadas nos horários configurados. Outras tarefas são baseadas em eventos."
+      }
+    },
+    "Tasks": {
+      "Title": "Tarefas",
+      "Buttons": {
+        "EditScript": "Editar Script"
+      },
+      "Messages": {
+        "NoHistory": "Esta tarefa não possui histórico de execução disponível.",
+        "NoScripts": "Nenhum script encontrado para criar uma tarefa."
+      }
+    },
+    "Users": {
+      "Single": "Usuário",
+      "Title": "Usuários",
+      "Labels": {
+        "Address": "Endereço",
+        "Administrator": "Administrador",
+        "LastLoggedIn": "Último Login",
+        "Never": "Nunca"
+      },
+      "Fields": {
+        "Email": "Email",
+        "IsAdmin": "Administrador",
+        "Password": "Senha",
+        "Roles": "Funções"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "Você não pode se excluir.",
+        "EmailInUse": "O endereço de email ''{email}'' já está em uso por outro usuário ''{user}''."
+      }
+    },
+    "Variable": {
+      "Title": "Variável"
+    },
+    "Variables": {
+      "Title": "Variáveis"
+    },
+    "Webhook": {
+      "Title": "Webhook",
+      "Fields": {
+        "Code": "Código",
+        "Method": "Método",
+        "Route": "Rota"
+      }
+    },
+    "Webhooks": {
+      "Title": "Webhooks",
+      "Columns": {
+        "Method": "Método",
+        "Route": "Rota"
+      }
+    },
+    "Widget": {
+      "Title": "Widget",
+      "Fields": {
+        "AudioCodecs": "Codecs de Áudio",
+        "AudioContainers": "Container de Áudio",
+        "Codecs": "Codecs",
+        "ComicFormats": "Formatos de Quadrinhos",
+        "ComicPages": "Páginas de Quadrinhos",
+        "CpuUsage": "Uso da CPU",
+        "FilesRecentlyFinished": "Finalizados Recentemente",
+        "FilesUpcoming": "Próximos",
+        "ImageFormats": "Formatos de Imagem",
+        "LibraryProcessingTimes": "Tempos de Processamento da Biblioteca [Segundos por Megabyte]",
+        "LogStorage": "Armazenamento de Logs",
+        "MemoryUsage": "Uso de Memória",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "Conexões de Banco de Dados Abertas",
+        "Processing": "Processando",
+        "ProcessingNodes": "Nós de Processamento",
+        "ProcessingTimes": "Tempos de Processamento",
+        "StorageSaved": "Armazenamento Economizado",
+        "TempStorage": "Armazenamento Temporário",
+        "VideoCodecs": "Codecs de Vídeo",
+        "VideoContainers": "Container de Vídeo",
+        "VideoResolution": "Resolução de Vídeo"
+      }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Apprise.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Uma coleção de elementos de fluxo relacionados ao áudio para ajudar no processamento de arquivos de áudio.",
+      "Label": "Áudio"
+    },
+    "BasicNodes": {
+      "Description": "Elementos de fluxo básicos para FileFlows. Este plugin contém elementos de fluxo básicos e comuns para processar arquivos.\nEste plugin é necessário para que o FileFlows funcione.",
+      "Label": "Básico"
+    },
+    "ChecksumNodes": {
+      "Description": "Elementos de fluxo que fornecem a capacidade de executar um checksum em um arquivo.",
+      "Label": "Checksum"
+    },
+    "ComicNodes": {
+      "Description": "Elementos de fluxo para processar quadrinhos (cbr, cbz, pdf, etc.)",
+      "Label": "Quadrinhos"
+    },
+    "DiscordNodes": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Discord.\n\nO ID do Webhook e o token podem ser obtidos a partir da URL do webhook\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Este plugin permite que você envie um e-mail enquanto executa um fluxo.",
+      "Label": "Email"
+    },
+    "Emby": {
+      "Description": "Um plugin que permite comunicar-se com Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Gotify.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Elementos de fluxo para processar arquivos de imagem. Este plugin contém nós para converter e manipular imagens.",
+      "Label": "Imagem"
+    },
+    "MetaNodes": {
+      "Description": "Um plugin que contém elementos de fluxo de informações meta usados para procurar informações meta sobre arquivos.\n\nContém elementos de fluxo para procurar informações sobre filmes do TheMovieDB e informações musicais das tags ID3 dentro do arquivo.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Um plugin que permite enviar arquivos para o Nextcloud.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Um plugin que permite comunicar-se com o Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Pushbullet.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Um plugin que permite enviar mensagens para um servidor Pushover.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Um plugin que permite enviar mensagens do Telegram.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin para o processamento de arquivos de vídeo, incluindo, mas não se limitando a, conversão de arquivos de vídeo, detecção de arquivos de vídeo, upscale, downscale e transcodificação.",
+      "Label": "Vídeo"
+    },
+    "Web": {
+      "Description": "Plugin que fornece elementos de fluxo relacionados à web.",
+      "Label": "Web"
+    }
+  },
+  "Reports": {
+    "Codecs": {
+      "Description": "Fornece uma visão geral dos diferentes codecs processados pelo FileFlows, ajudando a entender as tendências de uso de codecs.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Mostra uma tabela detalhada de todos os arquivos processados pelo FileFlows, fornecendo informações sobre seu fluxo, biblioteca e tamanho.",
+      "Name": "Arquivos",
+      "Columns": {
+        "FinalSize": "Tamanho final",
+        "FlowName": "Fluxo",
+        "LibraryName": "Biblioteca",
+        "Name": "Nome",
+        "NodeName": "Nó",
+        "OriginalSize": "Tamanho original",
+        "Percentage": "Percentagem"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Fornece um relatório de todos os arquivos processados durante um período especificado, mostrando o desempenho geral do sistema.",
+      "Name": "Arquivos processados"
+    },
+    "FlowElementExecution": {
+      "Description": "Exibe um relatório sobre os elementos de fluxo executados no sistema, permitindo analisar seu desempenho e frequência.",
+      "Name": "Execução de elementos de fluxo"
+    },
+    "Languages": {
+      "Description": "Oferece insights sobre os diferentes idiomas processados em arquivos, ajudando a acompanhar as tendências linguísticas em seus meios.",
+      "Name": "Idiomas"
+    },
+    "LibrarySavings": {
+      "Description": "Mostra quanto espaço de armazenamento foi economizado ao processar arquivos em diferentes bibliotecas, ajudando a monitorar ganhos de eficiência.",
+      "Name": "Economias de biblioteca"
+    },
+    "ProcessingSummary": {
+      "Description": "Fornece um resumo detalhado das atividades de processamento de arquivos, categorizado por biblioteca, nó e horário.",
+      "Name": "Resumo do processamento"
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "Um template de Áudio em branco com um único elemento de flow de entrada ''Audio File''.",
+        "Name": "Audio File"
+      },
+      "ConvertComic": {
+        "Description": "Um flow que irá converter quadrinhos de CBR, CBZ, CB7, PDF, GZ, BZ2 para CBZ ou PDF.",
+        "Name": "Convert Comic"
+      },
+      "ConvertImage": {
+        "Description": "Um flow que converte imagens.",
+        "Name": "Convert Image"
+      },
+      "ConvertVideo": {
+        "Description": "Um flow que irá converter um arquivo de vídeo para outro formato.",
+        "Name": "Convert Video"
+      },
+      "FailureFlow": {
+        "Description": "Flow de falha básico que será executado quando um flow falhar por qualquer motivo.",
+        "Name": "Failure Flow"
+      },
+      "File": {
+        "Description": "Um template de arquivo em branco com um único elemento de flow de entrada ''Input File''.",
+        "Name": "File"
+      },
+      "Folder": {
+        "Description": "Um template de pasta em branco com um único elemento de flow de entrada ''Input Folder''.\n\nNOTA: Este template deve ser usado apenas para processar uma Folder em vez de Files. Processar uma Folder tem limitações de processamento, pois a Folder está sendo processada e não os arquivos contidos nessa pasta.",
+        "Name": "Folder"
+      },
+      "ImageFile": {
+        "Description": "Um template de Imagem em branco com um único elemento de flow de entrada ''Image File''.",
+        "Name": "Image File"
+      },
+      "VideoFile": {
+        "Description": "Um template de Imagem em branco com um único elemento de flow de entrada ''Video File''.",
+        "Name": "Video File"
+      }
+    },
+    "Groups": {
+      "Books": "Books",
+      "DownloadClients": "Download Clients",
+      "DVR": "DVR",
+      "General": "General"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "Biblioteca de Audiolivros que procura por arquivos de audiolivro comuns",
+        "Name": "Audio Book Library"
+      },
+      "ComicLibrary": {
+        "Description": "Biblioteca de Quadrinhos que procura por arquivos de quadrinhos comuns",
+        "Name": "Comic Library"
+      },
+      "eBookLibrary": {
+        "Description": "Biblioteca de eBooks que procura por arquivos de eBook comuns",
+        "Name": "eBook Library"
+      },
+      "ImageLibrary": {
+        "Description": "Biblioteca de Imagens que procura por arquivos de imagem comuns",
+        "Name": "Image Library"
+      },
+      "MusicLibrary": {
+        "Description": "Biblioteca de Música que procura por arquivos de música comuns",
+        "Name": "Music Library"
+      },
+      "PlexDVR": {
+        "Description": "Biblioteca para monitorar gravações do Plex DVR para que você possa convertê-las automaticamente após a conclusão.",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "Biblioteca para monitorar um diretório de downloads ''completo'' do SABnzbd.\n\nEsta biblioteca pode então usar um flow para converter música em um formato alvo e colocar esses arquivos de música em uma pasta de destino, por exemplo, ''converted''.\n\nO aplicativo que instruiu o SABnzbd a fazer o download pode monitorar a pasta ''converted'' para arquivos concluídos.",
+        "Name": "SABnzbd Music"
+      },
+      "SABnzbdVideos": {
+        "Description": "Biblioteca para monitorar um diretório de downloads ''completo'' do SABnzbd.\n\nEsta biblioteca pode então usar um flow para converter vídeos em um formato alvo e colocar esses vídeos em uma pasta de destino, por exemplo, ''converted''.\n\nO aplicativo que instruiu o SABnzbd a fazer o download pode monitorar a pasta ''converted'' para arquivos concluídos.",
+        "Name": "SABnzbd Videos"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "Encontra qualquer amostra, trailers ou arquivos de vídeo de pré-visualização em um diretório para que você possa excluí-los se necessário.\nÚtil para uma biblioteca 'SABnzbd Videos' correspondente para que a pasta possa ser excluída após o processamento do arquivo principal.",
+        "Name": "Samples/Trailers/Previews"
+      },
+      "VideoLibrary": {
+        "Description": "Biblioteca de Vídeo que procura por arquivos de vídeo comuns",
+        "Name": "Video Library"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {dia} other {dias}} atrás",
+    "HoursAgo": "{num} {num, plural, one {hora} other {horas}} atrás",
+    "MinutesAgo": "{num} {num, plural, one {minuto} other {minutos}} atrás",
+    "Never": "Nunca",
+    "SecondsAgo": "{num} {num, plural, one {segundo} other {segundos}} atrás"
+  },
+  "Validators": {
+    "Pattern": "Não é válido",
+    "Range": "Deve estar entre {Minimum} e {Maximum}",
+    "Required": "Obrigatório"
+  },
+  "Widgets": {
+    "AudioCodecs": "Codecs de Áudio",
+    "AudioContainers": "Containers de Áudio",
+    "Codecs": "Codecs",
+    "ComicFormats": "Formatos de Quadrinhos",
+    "ComicPages": "Páginas de Quadrinhos",
+    "CPUUsage": "Uso da CPU",
+    "CurrentRevision": "Revisão Atual",
+    "DatabaseConnections": "Conexões de Banco de Dados",
+    "DecoderParameters": "Parâmetros do Decodificador",
+    "Decoders": "Decodificadores",
+    "Encoders": "Codificadores",
+    "ImageFormats": "Formatos de Imagem",
+    "LibraryProcessingTimes": "Tempos de Processamento da Biblioteca",
+    "LogStorage": "Armazenamento de Logs",
+    "MemoryUsage": "Uso de Memória",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "Processando",
+    "ProcessingNodes": "Nós de Processamento",
+    "ProcessingTimes": "Tempos de Processamento",
+    "RecentlyFinished": "Recentemente Concluído",
+    "StorageSaved": "Armazenamento Economizado",
+    "TemporaryFileStorage": "Armazenamento de Arquivos Temporários",
+    "Upcoming": "Próximos",
+    "VideoCodecs": "Codecs de Vídeo",
+    "VideoContainers": "Containers de Vídeo",
+    "VideoResolutions": "Resoluções de Vídeo"
+  }
+}

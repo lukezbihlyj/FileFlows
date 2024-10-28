@@ -1,7 +1,7 @@
 @namespace FileFlows.Client.Pages
 @using FileFlows.Client.Components.Dashboard;
 
-@page "/"
+@page "/old-dashboard"
 
 @if (App.Instance.IsMobile && (int)ConfiguredStatus >= 3)
 {
@@ -33,7 +33,7 @@
                     <button class="btn" @onclick=@AddWidget>@lblAddWidget</button>
                 }
 
-                @if (Profile.LicensedFor(LicenseFlags.Dashboards))
+                @if (Profile?.LicensedFor(LicenseFlags.Dashboards) == true)
                 {
                     <div class="dashboard-selector">
                         <select @bind="ActiveDashboardUid">
@@ -53,7 +53,7 @@
 
             @if (App.Instance.IsMobile == false && Profile?.HasRole(UserRole.PauseProcessing) == true)
             {
-                <PauseResume/>
+                <PauseResume />
             }
         </Head>
 
@@ -61,7 +61,7 @@
             @if (IsPaused)
             {
                 <div class="system-paused" @onclick="() => PausedService.Resume()">
-                    <i class="fas fa-pause"></i> FileFlows is currently paused!
+                    <i class="fas fa-pause"></i> @lblCurrentlyPaused
                 </div>
             }
             <CustomDashboard ActiveDashboardUid=@ActiveDashboardUid />

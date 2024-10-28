@@ -170,19 +170,26 @@ return 1;
             _ => item.Language.ToString()
         };
         string title = Translater.Instant("Pages.Script.LanguageTitle", new { Language = langTitle });
-
+        
         if (readOnly)
         {
             title += ": " + item.Name;
         }
         else if(item.Language == ScriptLanguage.JavaScript)
         {
-            fields.Add(new ElementField
+            if (item.Name != CommonVariables.FILE_DISPLAY_NAME)
             {
-                InputType = FormInputType.Text,
-                Name = nameof(item.Name),
-                Validators = flowScript ? [ new Required() ] : []
-            });
+                fields.Add(new ElementField
+                {
+                    InputType = FormInputType.Text,
+                    Name = nameof(item.Name),
+                    Validators = flowScript ? [new Required()] : []
+                });
+            }
+            else
+            {
+                title = Translater.Instant("Dialogs.ScriptLanguage.Labels.FileDisplayName");
+            }
         }
         else if(item.Type == ScriptType.Flow)
         {
@@ -258,7 +265,7 @@ return 1;
             Large = true,
             ReadOnly = readOnly,
             SaveCallback = SaveCallback ?? Save, HelpUrl = "https://fileflows.com/docs/webconsole/extensions/scripts",
-            AdditionalButtons = readOnly || item.Language != ScriptLanguage.JavaScript ? null : new ActionButton[]
+            AdditionalButtons = readOnly || item.Language != ScriptLanguage.JavaScript || item.Type == ScriptType.Shared ? null : new ActionButton[]
             {
                 new ()
                 {

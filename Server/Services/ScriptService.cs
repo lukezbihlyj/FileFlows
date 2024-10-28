@@ -329,7 +329,7 @@ public Result<bool> ValidateScript(string code)
         if(old != null && old.Name != script.Name)
             await UpdateScriptReferences(old.Name, script.Name, auditDetails);
 
-        if(script.Language == ScriptLanguage.JavaScript && script.Name == Globals.FileDisplayNameScript)
+        if(script is { Language: ScriptLanguage.JavaScript, Name: CommonVariables.FILE_DISPLAY_NAME })
             ServiceLoader.Load<FileDisplayNameService>().Reinitialize();
 
         return script;

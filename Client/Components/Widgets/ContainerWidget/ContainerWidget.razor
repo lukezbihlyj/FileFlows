@@ -1,0 +1,22 @@
+@namespace FileFlows.Client.Components.Widgets
+
+
+<div class="flow-widget @(Scroll ? "scroll" : "")" id="@Uid">
+    <div class="head">
+        @if (string.IsNullOrEmpty(Icon) == false)
+        {
+            <TableItemIcon Icon="Icon" />
+        }
+        @if (string.IsNullOrEmpty(Title) == false)
+        {
+            <span class="title">@Title</span>
+        }
+    </div>
+    @Head
+    @* <OptionButtons Value="Mode" ValueChanged="OnModeChanged"> *@
+    @*     @Options *@
+    @* </OptionButtons> *@
+    <div class="widget-content">
+        @Body
+    </div>
+</div>

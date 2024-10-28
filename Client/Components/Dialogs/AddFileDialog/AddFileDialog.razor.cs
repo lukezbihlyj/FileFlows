@@ -7,12 +7,8 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Dialog used when adding a file manually
 /// </summary>
-public partial class AddFileDialog : ComponentBase, IDisposable
+public partial class AddFileDialog : VisibleEscapableComponent
 {
-    /// <summary>
-    /// Gets or sets if this dialog is visible
-    /// </summary>
-    private bool Visible { get; set; }
     /// <summary>
     /// The task returned when showing the dialog
     /// </summary>
@@ -78,7 +74,6 @@ public partial class AddFileDialog : ComponentBase, IDisposable
             new() { Label = lblList, Value = 0 },
             new() { Label = lblRaw, Value = 1 },
         ];
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
     }
 
     /// <summary>
@@ -122,19 +117,6 @@ public partial class AddFileDialog : ComponentBase, IDisposable
             Files.Add(result);
         StateHasChanged();
     }
-
-    /// <summary>
-    /// Escaped is pressed
-    /// </summary>
-    /// <param name="args">the escape arguments</param>
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
-    }
     
     /// <summary>
     /// Shows the language picker
@@ -166,11 +148,10 @@ public partial class AddFileDialog : ComponentBase, IDisposable
     /// <summary>
     /// Cancels the dialog
     /// </summary>
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         ShowTask.TrySetResult(new ());
-        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -196,14 +177,6 @@ public partial class AddFileDialog : ComponentBase, IDisposable
             Files = Mode == 0 ? Files : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList()
         });
         await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Disposes of the component
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
     
     /// <summary>

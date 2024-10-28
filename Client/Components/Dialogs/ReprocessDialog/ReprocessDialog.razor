@@ -1,5 +1,5 @@
 @namespace FileFlows.Client.Components.Dialogs
-
+@inherits VisibleEscapableComponent
 
 <Modal Title="@lblTitle" Visible="Visible" Styling="width: min(650px, 90vw);">
 
@@ -23,7 +23,7 @@
     </div>
     </Body>
     <Footer>
-        <button @onclick=@Save>@(ProcessOptionsMode ? lblSave : lblReprocess)</button>
-        <button @onclick=@Cancel>@lblCancel</button>
+        <button class="btn" @onclick=@Save>@(ProcessOptionsMode ? lblSave : lblReprocess)</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

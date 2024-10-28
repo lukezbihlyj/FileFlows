@@ -1,5 +1,6 @@
 @using FileFlows.Plugin
 @namespace FileFlows.Client.Components.Dialogs
+@inherits VisibleEscapableComponent
 
 <Modal Title="@Title" Visible="Visible" Styling="@(App.Instance.IsMobile ? "" : "width: min(60rem, 90vw);max-width: min(60rem, 90vw);")">
 
@@ -15,8 +16,14 @@
                       ("Batch (.bat)", ScriptLanguage.Batch, lblBatchDescription, "svg:dos", true, false),
                       ("PowerShell (.ps1)", ScriptLanguage.PowerShell, lblPowerShellDescription, "svg:powershell", true, false),
                       ("Shell (.sh)", ScriptLanguage.Shell, lblShellDescription, "svg:bash", false, true),
+                      (lblFileDisplayName, (ScriptLanguage)99, lblFileDisplayNameDescription, "fas fa-signature", false, false)
                   })
         {
+            if (lang.Item1 == lblFileDisplayName && showFileDisplayScript == false)
+            {
+                continue;
+            }
+
             var name = lang.Item1;
             var language = lang.Item2;
             var desc = lang.Item3;
@@ -32,7 +39,7 @@
                  @ondblclick="() => SetLanguage(language, true)">
                 <TableItemIcon Icon="@icon" DefaultIcon="fas fa-scroll"/>
                 <div class="center with-desc">
-                    <span class="name"><span>@name</span></span>
+                    <span class="name"><span class="name-actual">@name</span></span>
                     <span class="description"><span>@desc</span></span>
                     <div class="info">
                         @if (onlyWindows)
@@ -58,7 +65,7 @@
 
     </Body>
     <Footer>
-        <button @onclick=@Next>@lblNext</button>
-        <button @onclick=@Cancel>@lblCancel</button>
+        <button class="btn" @onclick=@Next>@lblNext</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

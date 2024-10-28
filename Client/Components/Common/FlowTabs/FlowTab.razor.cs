@@ -11,6 +11,11 @@ public partial class FlowTab:ComponentBase
     /// Gets or sets the <see cref="FlowTabs"/> component containing this tab.
     /// </summary>
     [CascadingParameter] FlowTabs Tabs { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional class name to apply to the tab.
+    /// </summary>
+    [Parameter] public string? ClassName { get; set; }
 
     private bool _Visible = true;
 
@@ -49,6 +54,11 @@ public partial class FlowTab:ComponentBase
     /// Gets or sets the icon associated with the tab.
     /// </summary>
     [Parameter] public string Icon { get; set; }
+    
+    /// <summary>
+    /// Gets or sets an optional unique identifier for the tab.
+    /// </summary>
+    [Parameter] public string? Uid { get; set; }
     
     /// <summary>
     /// Gets or sets the content of the tab.

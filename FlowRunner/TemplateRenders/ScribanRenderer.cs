@@ -32,6 +32,16 @@ public class ScribanRenderer: ITemplateRenderer
                 if (dict.ContainsKey(newKey) == false)
                     dict.Add(newKey, args.Variables[key]);
             }
+
+            if (VariablesHelper.StartedAt != null)
+            {
+                tcode = tcode.Replace("time.processing", "Variables.timeprocessing");
+                tcode = tcode.Replace("time.processingRaw", "Variables.timeprocessingRaw");
+                dict["timeprocessing"] = DateTime.Now.Subtract(VariablesHelper.StartedAt.Value).ToString();
+                dict["timeprocessingRaw"] = DateTime.Now.Subtract(VariablesHelper.StartedAt.Value);
+            }
+            dict["timenow"] = DateTime.Now.ToShortTimeString();
+            tcode = tcode.Replace("time.now", "Variables.timenow");
             // foreach (string k in args.Variables.Keys.OrderByDescending(x => x.Length))
             // {
             //     string keyRegex = @"Variables(\?)?\." + k.Replace(".", @"(\?)?\.");

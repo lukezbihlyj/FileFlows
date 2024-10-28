@@ -31,7 +31,8 @@ public partial class Scripts : ListPage<Guid, Script>
     private List<Script> DataShared = new();
     private ScriptType SelectedType = ScriptType.Flow;
 
-    private string lblUpdateScripts, lblUpdatingScripts, lblInUse, lblReadOnly, lblUpdateAvailable;
+    private string lblUpdateScripts, lblUpdatingScripts, lblInUse, lblReadOnly, lblUpdateAvailable,
+        lblFileDisplayName ,lblFileDisplayNameDescription;
 
     /// <summary>
     /// Gets or sets the instance of the ScriptBrowser
@@ -46,8 +47,10 @@ public partial class Scripts : ListPage<Guid, Script>
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        this.lblUpdateScripts = Translater.Instant("Pages.Scripts.Buttons.UpdateAllScripts");
-        this.lblUpdatingScripts = Translater.Instant("Pages.Scripts.Labels.UpdatingScripts");
+        lblUpdateScripts = Translater.Instant("Pages.Scripts.Buttons.UpdateAllScripts");
+        lblUpdatingScripts = Translater.Instant("Pages.Scripts.Labels.UpdatingScripts");
+        lblFileDisplayName = Translater.Instant("Dialogs.ScriptLanguage.Labels.FileDisplayName");
+        lblFileDisplayNameDescription = Translater.Instant("Dialogs.ScriptLanguage.Labels.FileDisplayNameDescription");
         lblInUse = Translater.Instant("Labels.InUse");
         lblReadOnly = Translater.Instant("Labels.ReadOnly");
         lblUpdateAvailable = Translater.Instant("Pages.Scripts.Labels.UpdateAvailable");
@@ -61,19 +64,32 @@ public partial class Scripts : ListPage<Guid, Script>
             language = ScriptLanguage.JavaScript;
         else
         {
-            var result = await LanguagePicker.Show();
+            bool displayNameScript = SelectedType == ScriptType.System &&
+                                     Data.Any(x => x.Name == CommonVariables.FILE_DISPLAY_NAME) == false;
+            var result = await LanguagePicker.Show(displayNameScript);
             if (result.IsFailed)
                 return;
             language = result.Value;
         }
 
-        await Edit(new Script()
+        var script = new Script()
         {
             Type = SelectedType,
             Language = language,
-            Outputs = language is ScriptLanguage.JavaScript || SelectedType != ScriptType.Flow ? null :
-                [new (1, "Truthy"), new (2, "Falsy") ]
-        });
+            Outputs = language is ScriptLanguage.JavaScript || SelectedType != ScriptType.Flow
+                ? null
+                : [new(1, "Truthy"), new(2, "Falsy")]
+        };
+        
+        if ((int)language == 99)
+        {
+            // special case for FILE_DISPLAY_NAME
+            script.Name = CommonVariables.FILE_DISPLAY_NAME;
+            script.Language = ScriptLanguage.JavaScript;
+            script.Code = DEFAULT_FILE_DISPLAY_NAME_SCRIPT;
+        }
+
+        await Edit(script);
     }
 
 
@@ -333,7 +349,7 @@ public partial class Scripts : ListPage<Guid, Script>
         string nameLower = item.Name.ToLowerInvariant();
         if (nameLower.StartsWith("video"))
             return "/icons/video.svg";
-        if (item.Name == "FILE_DISPLAY_NAME")
+        if (item.Name == CommonVariables.FILE_DISPLAY_NAME)
             return "fas fa-signature";
         if (nameLower.StartsWith("fileflows"))
             return "/favicon.svg";
@@ -371,4 +387,65 @@ public partial class Scripts : ListPage<Guid, Script>
         //return "fas fa-scroll";
 
     }
+
+
+    private const string DEFAULT_FILE_DISPLAY_NAME_SCRIPT = @"
+function getDisplayName(fullName, relativePath, libraryName) 
+{
+    if(/(movies|tv)/i.test(libraryName) === false)
+        return relativePath;
+
+    let extension = relativePath.substring(relativePath.lastIndexOf('.') + 1);
+
+    if(/([/])[\w\d]+\.[\w\d]{2,6}$/i.test(relativePath))
+        relativePath = relativePath.substring(0, relativePath.lastIndexOf('/'));
+    else if(/([\\])[\w\d]+\.[\w\d]{2,6}$/i.test(relativePath))
+        relativePath = relativePath.substring(0, relativePath.lastIndexOf('\\'));
+
+    let hdr = /[\.\s\-]hdr/i.test(relativePath) === true;
+    let tenbit = /[\.\s\-]10(\-)?bit/i.test(relativePath) === true;
+    let twelvebit = /[\.\s\-]12(\-)?bit/i.test(relativePath) === true;
+    let resolution = ((resolutionMatch = /[\.\s\-](1080p|1080i|720p|420p|4k)/i.exec(relativePath)) && resolutionMatch[1]) || '';
+    let year = ((yearMatch = /[\.\s\-]((19|20)[\d]{2})[\.\s\-]/.exec(relativePath)) && yearMatch[1]) || '';
+
+    let yearIndex = year ? relativePath.indexOf(year) : -1;
+    let resolutionIndex = resolution ? relativePath.indexOf(resolution) : -1;
+
+    if(yearIndex > 0 || resolutionIndex > 0)
+    {
+      let closest = Math.min(yearIndex === -1 ? 9999999 : yearIndex, resolutionIndex === -1 ? 9999999 : resolutionIndex);
+      relativePath = relativePath.substring(0, closest);
+      relativePath = relativePath.replace(/\./g, ' ').replace(/.*[\/\\]/, '').trim();
+    }
+
+    relativePath = relativePath.replace(/(S\d+E\d+)/, ' - $1 - ');
+    if(relativePath.indexOf(' - .') > 0){
+        relativePath = relativePath.substring(0, relativePath.indexOf(' - .'));
+        relativePath = relativePath.replace(/\./g, ' ').replace(/.*[\/\\]/, '').trim();
+    }
+    relativePath = relativePath.replace(/\s{2,}/g, ' ');
+    
+    let additional = [];
+    if(year)
+      additional.push(year);
+    if(resolution)
+      additional.push(resolution);
+    if(tenbit)
+      additional.push('10-Bit');
+    else if(twelvebit)
+      additional.push('12-Bit');
+    if(hdr)
+      additional.push('HDR');
+
+    relativePath = relativePath.trim();
+
+    if(relativePath.trim().endsWith(' -'))
+      relativePath = relativePath.substring(0, relativePath.length - 2);
+
+    if(additional.length)
+      relativePath += ' - ' + additional.join(' / ');
+
+    return relativePath + '.' + extension;
+}
+";
 }

@@ -1,0 +1,13 @@
+.system-section {
+  display: none;
+}
+.system-section.active {
+  display: unset;
+}
+.system-section.active.savings {
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 1rem 1rem;
+}

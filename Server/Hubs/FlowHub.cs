@@ -11,6 +11,24 @@ namespace FileFlows.Server.Hubs;
 /// </summary>
 public class FlowHub : Hub
 {
+    /// <inheritdoc />
+    public override Task OnConnectedAsync()
+    {
+        Logger.Instance.ILog($"FlowHub Client connected: {Context.ConnectionId}");
+        return base.OnConnectedAsync();
+    }
+    
+    /// <inheritdoc />
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        if (exception != null)
+            Logger.Instance.ELog($"FlowHub Client disconnected with error: {exception.Message}");
+        else
+            Logger.Instance.ILog($"FlowHub Client disconnected: {Context.ConnectionId}");
+        
+        await base.OnDisconnectedAsync(exception);
+    }
+
     /// <summary>
     /// Logs a message
     /// </summary>
@@ -21,6 +39,9 @@ public class FlowHub : Hub
     {
         try
         {
+            if (runnerUid == Guid.Empty)
+                return; // test message
+            
             await LibraryFileLogHelper.AppendToLog(libraryFileUid, message);
         }
         catch (Exception)

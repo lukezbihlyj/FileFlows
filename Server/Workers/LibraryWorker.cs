@@ -100,10 +100,11 @@ public class LibraryWorker : ServerWorker
     private void UpdateLibrariesInstance()
     {
         Logger.DLog("LibraryWorker: Updating Libraries");
-        var libraries = new Services.LibraryService().GetAllAsync().Result;
+        var libraries = new Services.LibraryService().GetAllAsync().Result
+            .Where(x => x.Enabled && x.Uid != CommonVariables.ManualLibraryUid).ToList();
         var libraryUids = libraries.Select(x => x.Uid + ":" + x.Path).ToList();            
 
-        Watch(libraries.Where(x => WatchedLibraries.ContainsKey(x.Uid + ":" + x.Path) == false).ToArray());
+        Watch(libraries.Where(x =>  WatchedLibraries.ContainsKey(x.Uid + ":" + x.Path) == false).ToArray());
         Unwatch(WatchedLibraries.Keys.Where(x => libraryUids.Contains(x) == false).ToArray());
 
         foreach (var libwatcher in WatchedLibraries.Values)

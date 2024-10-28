@@ -2,6 +2,7 @@ using FileFlows.DataLayer.Models;
 using FileFlows.Plugin;
 using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace FileFlows.Managers;
 
@@ -144,6 +145,11 @@ public abstract class CachedManager<T> where T : FileFlowObject, new()
         Logger.Instance.ILog($"Updating {item.GetType().Name}: '{item.Name}'");
         var result = await DatabaseAccessManager.Instance.FileFlowsObjectManager
             .AddOrUpdateObject(item, auditDetails, saveRevision: SaveRevisions);
+        if (result.Failed(out var error))
+        {
+            Logger.Instance.ELog($"Failed updating {item.GetType().Name}: '{item.Name}' : {error}");
+            return Result<T>.Fail(error);
+        }
         
         if (result is { IsFailed: false, Value.changed: true } && dontIncrementConfigRevision == false)
             await IncrementConfigurationRevision();

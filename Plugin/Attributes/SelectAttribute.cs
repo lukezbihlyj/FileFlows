@@ -1,14 +1,18 @@
-namespace FileFlows.Plugin.Attributes
-{
-    using System;
-    using System.Collections.Generic;
+namespace FileFlows.Plugin.Attributes;
 
-    public class SelectAttribute : FormInputAttribute
+/// <summary>
+/// Attribute to indicate a select input should be used for a property
+/// </summary>
+/// <param name="optionsProperty">the property with the list options are defined</param>
+/// <param name="order">the order this input will appear</param>
+public class SelectAttribute(string optionsProperty, int order) : FormInputAttribute(FormInputType.Select, order)
+{
+    /// <summary>
+    /// Gets or sets the property with the list options are defined
+    /// </summary>
+    public string OptionsProperty
     {
-        public string OptionsProperty { get; set; }
-        public SelectAttribute(string optionsProperty, int order) : base(FormInputType.Select, order)
-        { 
-            this.OptionsProperty = optionsProperty;
-        }
+        get => optionsProperty;
+        set => optionsProperty = value;
     }
 }

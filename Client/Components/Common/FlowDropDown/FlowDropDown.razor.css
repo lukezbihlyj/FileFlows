@@ -40,7 +40,7 @@
   align-items: center;
   margin-top: 0.25rem;
 }
-.dd-btn .icon {
+.dd-btn ::deep .icon {
   background: var(--base-lightest);
   border-bottom-left-radius: 0.5rem;
   border-top-left-radius: 0.5rem;
@@ -48,7 +48,7 @@
   text-align: -webkit-center;
   margin-right: 0.5rem;
 }
-.dd-btn .icon img {
+.dd-btn ::deep .icon img {
   height: 1rem;
 }
 .dd-btn .label {
@@ -94,16 +94,14 @@
 .option:hover {
   background: var(--base-lightest-2);
 }
-.option .icon {
+.option ::deep .icon {
   width: 1.5rem;
   min-width: 1.5rem;
   display: inline-block;
   text-align: center;
 }
-.option .icon img {
+.option ::deep .icon img {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.5rem;
 }
-
-/*# sourceMappingURL=FlowDropDown.razor.css.map */

@@ -11,7 +11,7 @@ public class Globals
     /// Gets the version of FileFlows
     /// </summary>
     #if(DEBUG)
-    public static readonly string Version = DateTime.UtcNow.ToString("yy.MM") + ".4.3218";
+    public static readonly string Version = DateTime.UtcNow.ToString("yy.MM") + ".9.9999";
     #else
     public const string Version = "23.10.2.2469";
     #endif
@@ -75,11 +75,6 @@ public class Globals
     public static bool IsUnitTesting => false;
 #endif
     
-    
-    /// <summary>
-    /// The name of the special script ot alter file display names
-    /// </summary>
-    public const string FileDisplayNameScript = "FILE_DISPLAY_NAME";
 
     /// <summary>
     /// The UID for the flow failure input
@@ -121,9 +116,18 @@ public class Globals
     /// The processing storage saved statistic
     /// </summary>
     public const string STAT_STORAGE_SAVED = "STORAGE_SAVED";
+    /// <summary>
+    /// The processing storage saved statistic for the month
+    /// </summary>
+    public const string STAT_STORAGE_SAVED_MONTH = "STORAGE_SAVED_MONTH";
 
     /// <summary>
     /// The processing total files statistic
     /// </summary>
     public const string STAT_TOTAL_FILES = "TOTAL_FILES";
+    
+    /// <summary>
+    /// Optional URL to use for auto updates
+    /// </summary>
+    public static string? AutoUpdateUrl { get; set; }
 }

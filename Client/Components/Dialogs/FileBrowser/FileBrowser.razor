@@ -1,4 +1,5 @@
 @namespace FileFlows.Client.Components.Dialogs
+@inherits VisibleEscapableComponent
 
 <Modal Title="@Title" Visible="Visible">
 
@@ -45,7 +46,7 @@
                 <span>@lblShowHidden</span>
             </label>
         }
-        <button @onclick=@Select disabled="@(Selected == null ? "disabled" : null)">@lblSelect</button>
-        <button @onclick=@Cancel>@lblCancel</button>
+        <button class="btn" @onclick=@Select disabled="@(Selected == null ? "disabled" : null)">@lblSelect</button>
+        <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>

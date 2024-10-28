@@ -9,7 +9,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// A prompt dialog that asks the user for text input
 /// </summary>
-public partial class Prompt : ComponentBase, IDisposable
+public partial class Prompt : VisibleEscapableComponent
 {
     private string lblOk, lblCancel;
     private string Message, Title;
@@ -22,11 +22,6 @@ public partial class Prompt : ComponentBase, IDisposable
     /// Gets or sets the singleton instance
     /// </summary>
     private static Prompt Instance { get; set; }
-
-    /// <summary>
-    /// Gets or sets if this is visible
-    /// </summary>
-    private bool Visible { get; set; }
 
     /// <summary>
     /// Gets or sets the current value
@@ -56,20 +51,6 @@ public partial class Prompt : ComponentBase, IDisposable
         this.lblOk = Translater.Instant("Labels.Ok");
         this.lblCancel = Translater.Instant("Labels.Cancel");
         Instance = this;
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-    /// <summary>
-    /// Called when escape is pushed
-    /// </summary>
-    /// <param name="args">the args for the event</param>
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
     }
 
     /// <summary>
@@ -147,18 +128,9 @@ public partial class Prompt : ComponentBase, IDisposable
     /// <summary>
     /// Cancel the dialog
     /// </summary>
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         Instance.ShowTask.TrySetResult("");
-        await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Disposes of the cancel
-    /// </summary>
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 
 namespace FileFlows.Client.Components.Dialogs;
 
-public partial class ImportScript : ComponentBase, IDisposable
+public partial class ImportScript : VisibleEscapableComponent
 {
     private string lblImport, lblCancel;
     private string Title;
@@ -12,7 +12,6 @@ public partial class ImportScript : ComponentBase, IDisposable
     private List<ListOption> AvailableScript;
 
     private List<object> CheckedItems = new();
-    private bool Visible { get; set; }
 
     [Inject] private IJSRuntime jsRuntime { get; set; }
 
@@ -21,18 +20,7 @@ public partial class ImportScript : ComponentBase, IDisposable
         this.lblImport = Translater.Instant("Labels.Import");
         this.lblCancel = Translater.Instant("Labels.Cancel");
         this.Title = Translater.Instant("Dialogs.ImportScript.Title");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
     }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            this.StateHasChanged();
-        }
-    }
-
 
     public Task<List<string>> Show(List<string> availableScripts)
     {
@@ -65,16 +53,9 @@ public partial class ImportScript : ComponentBase, IDisposable
         await Task.CompletedTask;
     }
 
-    private async void Cancel()
+    public override void Cancel()
     {
         this.Visible = false;
         ShowTask.TrySetResult(new List<string>());
-        await Task.CompletedTask;
-    }
-
-
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

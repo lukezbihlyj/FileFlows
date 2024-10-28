@@ -9,7 +9,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// A modal dialog for selecting a flow template
 /// </summary>
-public partial class FlowTemplatePicker : ComponentBase
+public partial class FlowTemplatePicker : VisibleEscapableComponent
 {
     /// <summary>
     /// Gets or sets the blocker to use
@@ -18,7 +18,6 @@ public partial class FlowTemplatePicker : ComponentBase
     private string lblTitle, lblFilter, lblNext, lblCancel, lblOpen;
     private string lblMissingDependencies, lblMissingDependenciesMessage;
     private string FilterText = string.Empty;
-    private bool Visible { get; set; }
     TaskCompletionSource<FlowTemplatePickerResult> ShowTask;
 
     private FlowTemplateModel Selected = null;
@@ -43,16 +42,6 @@ public partial class FlowTemplatePicker : ComponentBase
         lblOpen = Translater.Instant("Labels.Open");
         lblMissingDependencies = Translater.Instant("Labels.MissingDependencies");
         lblMissingDependenciesMessage = Translater.Instant("Labels.MissingDependenciesMessage");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
-    }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            Cancel();
-            StateHasChanged();
-        }
     }
 
     public Task<FlowTemplatePickerResult> Show(FlowType type)
@@ -150,7 +139,7 @@ public partial class FlowTemplatePicker : ComponentBase
         
     }
 
-    void Cancel()
+    public override void Cancel()
     {
         ShowTask.SetResult(new FlowTemplatePickerResult { Result = FlowTemplatePickerResult.ResultCode.Cancel });
         this.Visible = false;
@@ -207,6 +196,8 @@ public partial class FlowTemplatePicker : ComponentBase
         FilteredTemplates = Templates.Where(x =>
                 x.Name?.ToLowerInvariant().Contains(text) == true || x.Description?.ToLowerInvariant().Contains(text) == true || x.Author?.ToLowerInvariant().Contains(text) == true)
             .ToList();
+        // clear the selected tag
+        SelectedTag = string.Empty;
     }
     
     /// <summary>

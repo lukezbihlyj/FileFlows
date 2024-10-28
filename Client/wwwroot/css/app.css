@@ -107,33 +107,34 @@ input[type=checkbox]:disabled {
   cursor: not-allowed;
 }
 
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn), a.btn, .btn-select {
-  font-size: 0.8rem !important;
-  text-transform: uppercase;
-  border-radius: unset !important;
+body button {
+  color: inherit;
+}
+
+.btn, a.btn, .btn-select {
+  font-size: 0.9rem !important;
   height: var(--input-height, 2.1875rem);
-  font-weight: normal;
   outline: none !important;
   line-height: initial;
   box-shadow: none;
-  border-radius: unset !important;
-  font-size: 0.8rem !important;
-  text-transform: uppercase;
-  border: solid 1px var(--accent);
-  background-color: transparent;
-  color: var(--color);
+  border-radius: var(--button-border-radius) !important;
+  border: solid 1px var(--border-color);
+  background-color: var(--input-background);
+  color: var(--color) !important;
   overflow: hidden;
+  font-weight: var(--bold, 600);
 }
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):hover:not(:disabled):not(.toast-button-btn), button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):active:not(:disabled):not(.toast-button-btn), a.btn:hover:not(:disabled):not(.toast-button-btn), a.btn:active:not(:disabled):not(.toast-button-btn), .btn-select:hover:not(:disabled):not(.toast-button-btn), .btn-select:active:not(:disabled):not(.toast-button-btn) {
-  background-image: var(--btn-background-image, linear-gradient(rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.3))) !important;
-  box-shadow: var(--btn-box-shadow, inset 0 -3px 0 0 var(--accent)) !important;
+.btn:hover:not(:disabled), .btn:active:not(:disabled), a.btn:hover:not(:disabled), a.btn:active:not(:disabled), .btn-select:hover:not(:disabled), .btn-select:active:not(:disabled) {
+  background: #515151;
+  color: var(--color) !important;
 }
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):disabled, a.btn:disabled, .btn-select:disabled {
-  border-color: var(--input-background);
-  color: var(--input-background);
+.btn:disabled, a.btn:disabled, .btn-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
-button:not(.flowtable-button):not(.navbar-toggler):not(.dd-btn):focus:not(.toast-button-btn), a.btn:focus:not(.toast-button-btn), .btn-select:focus:not(.toast-button-btn) {
-  background: var(--btn-focus-background, rgba(var(--accent-rgb), 0.2)) !important;
+.btn:focus:not(.toast-button-btn), a.btn:focus:not(.toast-button-btn), .btn-select:focus:not(.toast-button-btn) {
+  background: #515151;
+  outline: solid 1px var(--border-color) !important;
 }
 
 a.btn {
@@ -2752,6 +2753,8 @@ body.photino .paused-indicator {
 }
 .report-output .table-container table tbody tr td:first-child {
   width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .report-output .percentage {
   display: flex;
@@ -2760,7 +2763,7 @@ body.photino .paused-indicator {
   border-radius: 0.5rem;
   overflow: hidden;
   background: #13191b;
-  border: solid 2px #33b2df;
+  border: solid 2px var(--accent-2);
   font-size: 0.8rem;
   height: 1.5rem;
   position: relative;
@@ -2784,7 +2787,7 @@ body.photino .paused-indicator {
 .report-output .percentage .bar {
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
-  background: rgba(51, 178, 223, 0.3803921569);
+  background: var(--accent-2) 61;
   background: linear-gradient(to right, rgba(51, 178, 223, 0.25), rgba(51, 178, 223, 0.5));
 }
 .report-output .percentage.over-100 {
@@ -2936,7 +2939,8 @@ html, body {
 }
 
 a, .btn-link {
-  color: var(--accent) !important;
+  color: var(--accent-2) !important;
+  font-weight: var(--bold, 600);
 }
 
 td a, span.column a {
@@ -2962,10 +2966,6 @@ td a:hover, span.column a:hover {
   color: var(--color);
   background-color: var(--primary);
   border-color: var(--primary);
-}
-
-.content {
-  padding-top: 1.1rem;
 }
 
 .valid.modified:not([type=checkbox]):not(:focus) {
@@ -3005,9 +3005,9 @@ td a:hover, span.column a:hover {
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: var(--scroller-width);
   height: 10px;
-  border-radius: 6px;
+  border-radius: var(--scroller-width);
   --scrollbar-track-color: #333;
   background-color: var(--scrollbar-track-color);
 }
@@ -3018,7 +3018,7 @@ td a:hover, span.column a:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 6px !important;
+  border-radius: var(--scroller-width) !important;
   --scrollbar-thumb-color: #444;
   background-color: var(--scrollbar-thumb-color);
 }
@@ -3104,22 +3104,28 @@ hr {
   color: var(--color);
   font-size: 0.85rem;
   position: relative;
-  border: solid 1px var(--yellow);
+  border: solid 2px var(--accent-2);
   white-space: pre-line !important;
   margin-bottom: 1rem;
+  border-radius: var(--container-border-radius);
 }
 .box.info::before {
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
-  content: "\f071";
+  content: "\f05a";
   position: absolute;
-  left: 1rem;
-  color: var(--yellow);
-}
-.box.info a {
-  color: var(--yellow) !important;
-  font-weight: var(--bold, 600);
-  text-decoration: underline;
+  background: var(--accent-2);
+  color: #000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2.5rem;
+  text-align-last: center;
+  align-content: center;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-pane {
@@ -3228,12 +3234,12 @@ hr {
   text-align: right;
 }
 .search-fields .search-field .value select {
-  width: 100%;
   height: var(--input-height);
+  width: 100%;
 }
 .search-fields .search-field .value input[type=text] {
-  width: 100%;
   height: var(--input-height);
+  width: 100%;
 }
 
 .daterangeinput {
@@ -3276,6 +3282,7 @@ hr {
 .daterangepicker select {
   background: var(--input-background) !important;
   border: solid 1px var(--border-color) !important;
+  width: unset !important;
 }
 .daterangepicker .applyBtn:disabled {
   display: none !important;
@@ -3287,6 +3294,12 @@ hr {
 .daterangepicker .ranges li:hover {
   background: rgba(var(--accent-rgb), 0.5) !important;
   color: var(--color) !important;
+}
+.daterangepicker .calendar-table .prev:hover, .daterangepicker .calendar-table .next:hover {
+  background-color: #333 !important;
+}
+.daterangepicker .calendar-table .prev span, .daterangepicker .calendar-table .next span {
+  border-color: #fff !important;
 }
 
 @media screen and (min-width: 850px) {
@@ -3329,11 +3342,13 @@ hr {
 }
 .widget .inner {
   border: solid 1px var(--base-lightest);
+  background: var(--widget-background);
   position: absolute;
   left: 0.25rem;
   right: 0.25rem;
   bottom: 0.25rem;
   top: 0.25rem;
+  border-radius: var(--container-border-radius);
 }
 .widget .title {
   height: 2.5rem;
@@ -3999,6 +4014,9 @@ hr {
 .icon-value.blue {
   --iv-color: #345772;
 }
+.icon-value.dark {
+  --iv-color:var(--dark);
+}
 .icon-value.purple {
   --iv-color: #780746;
 }
@@ -4023,10 +4041,15 @@ hr {
   display: flex;
   align-items: center;
 }
+.icon-value img {
+  max-height: 1.5rem;
+  width: 1.5rem;
+}
 .icon-value .value {
   font-weight: var(--bold, 600);
   padding: 0 0.5rem;
   align-self: center;
+  white-space: nowrap;
 }
 
 .top-right {

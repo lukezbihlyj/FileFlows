@@ -1,0 +1,17 @@
+.release-note {
+  padding: 1rem;
+}
+.release-note + .release-note {
+  border-top: 1px solid var(--border-color);
+}
+.release-note h1 {
+  font-size: 1.1rem;
+  font-weight: var(--bold, 600);
+  padding: 0 0 0.5rem;
+  margin: 0;
+}
+.release-note h2 {
+  font-size: 1rem;
+  padding: 0.25rem 0;
+  margin: 0;
+}

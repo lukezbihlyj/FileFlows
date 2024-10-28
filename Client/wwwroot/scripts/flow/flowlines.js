@@ -193,27 +193,19 @@ class ffFlowLines {
         if (!input || !output)
             return;
 
-        let src = output;
-        let dest = input;
         if (output.classList.contains('connected') === false)
             output.classList.add('connected');
         if (input.classList.contains('connected') === false)
             input.classList.add('connected');
-        let srcBounds = src.getBoundingClientRect();
-        let destBounds = dest.getBoundingClientRect();
-
-        let canvas = this.ffFlow.canvas;
-        let canvasBounds = canvas.getBoundingClientRect();
-        let srcX = (srcBounds.left - canvasBounds.left) + this.ioOffset;
-        let srcY = (srcBounds.top - canvasBounds.top) + this.ioOffset;
-        let destX = (destBounds.left - canvasBounds.left) + this.ioOffset;
-        let destY = (destBounds.top - canvasBounds.top) + this.ioOffset;
+        
+        let src = this.getIOElementPosition(output);
+        let dest = this.getIOElementPosition(input);
 
         // eliminates any pixel off issues now the grid snaps to 10px
-        srcX = Math.round(srcX / 10) * 10;
-        srcY = Math.round(srcY / 10) * 10;
-        destX = Math.round(destX / 10) * 10;
-        destY = Math.round(destY / 10) * 10;
+        let srcX = Math.round(src.x / 10) * 10;
+        let srcY = Math.round(src.y / 10) * 10;
+        let destX = Math.round(dest.x / 10) * 10;
+        let destY = Math.round(dest.y / 10) * 10;
         
         let isError = /output--1/.test(output.className); 
         if(isError){
@@ -225,6 +217,78 @@ class ffFlowLines {
         
         this.drawLineToPoint({ srcX, srcY, destX, destY, output, connection, isError: isError });
     };
+    
+    getIOElementPosition(src)
+    {
+        let parent = src.parentNode.parentNode;        
+        let parentX = parseInt(parent.style.left, 10);
+        let parentY = parseInt(parent.style.top, 10);
+        let transform = parent.style.transform;
+        if(transform) {
+            // get x, y from transform and adjust the parent x/y, it uses translate3d(x,y,z)
+            // these x,y may be negative numbers
+            let matches = transform.match(/translate3d\(([^,]+),([^,]+),/);
+            if(matches && matches.length > 2) {
+                parentX += parseInt(matches[1], 10);
+                parentY += parseInt(matches[2], 10);
+            }
+        }
+        let parentBounds = parent.getBoundingClientRect();
+        let yOffset = parentBounds.y - parentY;
+        let xOffset = parentBounds.x - parentX;
+        let bounds = src.getBoundingClientRect();
+        if (bounds.left === 0 && bounds.top === 0 && bounds.x === 0 && bounds.y === 0) {
+            bounds = this.getHiddenElementPosition(parent, src);
+        }
+
+        return { x: (bounds.left - xOffset) + this.ioOffset, y: (bounds.top - yOffset ) + this.ioOffset};
+    } 
+    
+    getHiddenElementPosition(parent, element) {
+        if (!parent || !element) return { top: 0, left: 0 };
+
+        // Clone the parent and all its children (including the target element)
+        const clonedParent = parent.cloneNode(true);
+
+        // Apply temporary styles to the cloned parent to make it part of the layout but invisible
+        clonedParent.style.position = 'fixed';
+        clonedParent.style.visibility = 'hidden';
+        clonedParent.style.display = 'block';  // Ensure the parent is visible in layout
+        clonedParent.style.top = '0';
+        clonedParent.style.left = '0';
+
+        // Append the cloned parent to the body
+        document.body.appendChild(clonedParent);
+
+        // Find the cloned version of the element by index
+
+        // Find the cloned element by matching its classes with the original element
+        const clonedElement = [...clonedParent.querySelectorAll('*')].find(clonedChild => {
+            // Match the element by comparing class lists (and potentially other attributes)
+            return clonedChild.className === element.className;
+        });
+
+        if (!clonedElement) {
+            // Clean up if something went wrong
+            document.body.removeChild(clonedParent);
+            return { top: 0, left: 0 };
+        }
+
+        // Get the bounding rectangles for both the cloned element and cloned parent
+        const elementRect = clonedElement.getBoundingClientRect();
+        const parentRect = clonedParent.getBoundingClientRect();
+
+        // Calculate position relative to the parent
+        const position = {
+            top: elementRect.top,
+            left: elementRect.left
+        };
+
+        // Remove the cloned parent from the body
+        document.body.removeChild(clonedParent);
+
+        return position;
+    }
 
     drawLineToPoint({ srcX, srcY, destX, destY, output, connection, color, isError }) {
         if (!this.ioContext) {

@@ -1,0 +1,102 @@
+@mixin row {
+  display: flex;
+  flex-direction: row;
+  border-bottom:1px solid var(--border-color);
+  font-size: 0.9rem;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+@mixin backgroundBar($alpha:0.05) {
+  background: rgba(255, 255, 255, $alpha);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+@mixin bottomBar {
+  position:absolute;
+  bottom:0;
+  left:0;
+  height:0.25rem;
+  background:var(--accent-2);
+}
+
+.file-table {
+  height: 100%;
+
+}
+
+.file-table-row {
+  @include row;
+  position:relative;
+  &.has-message .center {
+    display:grid;
+    grid-template-columns: 1fr 8rem;
+    .message {
+      grid-column: 1 / span 2;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--red);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      > span {
+        cursor: pointer;
+        position:relative;
+      }
+    }
+  }
+  .center {
+    display: flex;
+    align-content: center;
+    width: 100%;
+    overflow: hidden;
+    align-items: center;
+  }
+}
+.path {
+  flex-grow:1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  > span {
+    cursor: pointer;
+    position:relative;
+  }
+}
+.time {
+  width:8rem;
+  min-width:8rem;
+  text-align: center;
+  > span {
+    cursor: pointer;
+    position:relative;
+  }
+}
+.savings {
+  @include backgroundBar;
+}
+
+.icon {
+  width:3rem;
+  .icon {
+    height:2.25rem;
+    cursor: pointer;
+    position: relative;
+  }
+}
+
+.no-files {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 95%;
+  place-content: center;
+  font-size: 1.2rem;
+  font-weight: var(--bold, 600);
+  padding:1.47rem;
+  i {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+  }
+}

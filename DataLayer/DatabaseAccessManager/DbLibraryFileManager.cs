@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using FileFlows.DataLayer.DatabaseConnectors;
@@ -9,6 +10,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.Shared;
 using FileFlows.Shared.Json;
 using FileFlows.Shared.Models;
+using Jint.Runtime.Debugger;
 using FileHelper = FileFlows.Plugin.Helpers.FileHelper;
 
 namespace FileFlows.DataLayer;
@@ -19,6 +21,12 @@ namespace FileFlows.DataLayer;
 internal class DbLibraryFileManager : BaseManager
 {
     /// <summary>
+    /// Gets or sets if the cache should be used
+    /// </summary>
+    public bool UseCache { get; set; } = false;
+    private ConcurrentDictionary<Guid, LibraryFile> Cache = new();
+    
+    /// <summary>
     /// Initializes a new instance of the LibraryFile manager
     /// </summary>
     /// <param name="logger">the logger</param>
@@ -27,6 +35,32 @@ internal class DbLibraryFileManager : BaseManager
     public DbLibraryFileManager(ILogger logger, DatabaseType dbType, IDatabaseConnector dbConnector)
         : base(logger, dbType, dbConnector)
     {
+        UseCache = dbConnector.Cached;
+        if (UseCache)
+            LoadCache().Wait();
+    }
+    
+    /// <summary>
+    /// Loads the cached data
+    /// </summary>
+    private async Task LoadCache()
+    {
+        var allFiles = await GetAllFromDb();
+        foreach (var file in allFiles)
+        {
+            Cache[file.Uid] = file;
+        }
+    }
+    
+    /// <summary>
+    /// Fetches all LibraryFile items from the database.
+    /// </summary>
+    /// <returns>A list of all LibraryFile items.</returns>
+    private async Task<List<LibraryFile>> GetAllFromDb()
+    {
+        using var db = await DbConnector.GetDb();
+        string sql = $"SELECT * FROM {Wrap(nameof(LibraryFile))}";
+        return await db.Db.FetchAsync<LibraryFile>(sql);
     }
     
     /// <summary>
@@ -81,6 +115,8 @@ internal class DbLibraryFileManager : BaseManager
         string strFinalMetadata = JsonEncode(file.FinalMetadata);
         string strExecutedNodes = JsonEncode(file.ExecutedNodes);
         string strCustomVariables= JsonEncode(file.CustomVariables);
+        string strAdditional = JsonEncode(file.Additional);
+        string strTags = SemicolonEncode(file.Tags ?? []);
         string sql =
             $"update {Wrap(nameof(LibraryFile))} set " +
             $" {Wrap(nameof(LibraryFile.Name))} = @0, " +
@@ -104,7 +140,9 @@ internal class DbLibraryFileManager : BaseManager
             $" {Wrap(nameof(LibraryFile.FinalMetadata))}=@18, " +
             $" {Wrap(nameof(LibraryFile.ExecutedNodes))}=@19, " +
             $" {Wrap(nameof(LibraryFile.CustomVariables))}=@20, " +
-            $" {Wrap(nameof(LibraryFile.FailureReason))}=@21, " +
+            $" {Wrap(nameof(LibraryFile.Additional))}=@21, " +
+            $" {Wrap(nameof(LibraryFile.Tags))}=@22, " +
+            $" {Wrap(nameof(LibraryFile.FailureReason))}=@23, " +
             $" {Wrap("ProcessingOrder")}={file.Order}, " + // special case, since Order is reserved in sql
             $" {Wrap(nameof(LibraryFile.Status))} = {(int)file.Status}, " +
             $" {Wrap(nameof(LibraryFile.Flags))} = {(int)file.Flags}, " +
@@ -146,9 +184,52 @@ internal class DbLibraryFileManager : BaseManager
                 strFinalMetadata,
                 strExecutedNodes,
                 strCustomVariables,
+                strAdditional,
+                strTags,
                 file.FailureReason
             );
             //Logger.Instance.DLog("File: " + file.Name + "\nExecuted nodes: " + strExecutedNodes);
+            
+            // update cache
+            if (UseCache && Cache.TryGetValue(file.Uid, out var cachedFile))
+            {
+                cachedFile.Name = file.Name;
+                cachedFile.RelativePath = file.RelativePath;
+                cachedFile.Fingerprint = file.Fingerprint;
+                cachedFile.FinalFingerprint = file.FinalFingerprint;
+                cachedFile.IsDirectory = file.IsDirectory;
+                cachedFile.LibraryUid = file.LibraryUid;
+                cachedFile.LibraryName = file.LibraryName;
+                cachedFile.FlowUid = file.FlowUid;
+                cachedFile.FlowName = file.FlowName;
+                cachedFile.DuplicateUid = file.DuplicateUid;
+                cachedFile.DuplicateName = file.DuplicateName;
+                cachedFile.NodeUid = file.NodeUid;
+                cachedFile.NodeName = file.NodeName;
+                cachedFile.WorkerUid = file.WorkerUid;
+                cachedFile.ProcessOnNodeUid = file.ProcessOnNodeUid;
+                cachedFile.OutputPath = file.OutputPath;
+                cachedFile.NoLongerExistsAfterProcessing = file.NoLongerExistsAfterProcessing;
+                cachedFile.OriginalMetadata = file.OriginalMetadata;
+                cachedFile.FinalMetadata = file.FinalMetadata;
+                cachedFile.ExecutedNodes = file.ExecutedNodes;
+                cachedFile.CustomVariables = file.CustomVariables;
+                cachedFile.Additional = file.Additional;
+                cachedFile.Tags = file.Tags ?? [];
+                cachedFile.FailureReason = file.FailureReason;
+                cachedFile.Order = file.Order;
+                cachedFile.Status = file.Status;
+                cachedFile.Flags = file.Flags;
+                cachedFile.OriginalSize = file.OriginalSize;
+                cachedFile.FinalSize = file.FinalSize;
+                cachedFile.DateCreated = file.DateCreated;
+                cachedFile.DateModified = file.DateModified;
+                cachedFile.CreationTime = file.CreationTime;
+                cachedFile.LastWriteTime = file.LastWriteTime;
+                cachedFile.HoldUntil = file.HoldUntil;
+                cachedFile.ProcessingStarted = file.ProcessingStarted;
+                cachedFile.ProcessingEnded = file.ProcessingEnded;
+            }
         }
         catch (Exception ex)
         {
@@ -216,6 +297,8 @@ internal class DbLibraryFileManager : BaseManager
                              $"{Wrap(nameof(LibraryFile.FinalMetadata))}, " +
                              $"{Wrap(nameof(LibraryFile.ExecutedNodes))}, " +
                              $"{Wrap(nameof(LibraryFile.CustomVariables))}, " +
+                             $"{Wrap(nameof(LibraryFile.Additional))}, " +
+                             $"{Wrap(nameof(LibraryFile.Tags))}, " +
                              $"{Wrap(nameof(LibraryFile.FailureReason))} " +
                              " )" +
                              $" values (@{offset++},@{offset++}," +
@@ -238,8 +321,8 @@ internal class DbLibraryFileManager : BaseManager
                              DbConnector.FormatDateQuoted(file.HoldUntil) + ", " +
                              DbConnector.FormatDateQuoted(file.ProcessingStarted) + ", " +
                              DbConnector.FormatDateQuoted(file.ProcessingEnded) + ", " +
-                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
-                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
+                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
+                             $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++}," +
                              $"@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++},@{offset++});\n";
 
                 parameters.Add(DbType is DatabaseType.Sqlite ? file.Uid.ToString() : file.Uid);
@@ -264,8 +347,17 @@ internal class DbLibraryFileManager : BaseManager
                 parameters.Add(JsonEncode(file.FinalMetadata));
                 parameters.Add(JsonEncode(file.ExecutedNodes));
                 parameters.Add(JsonEncode(file.CustomVariables));
+                parameters.Add(JsonEncode(file.Additional));
+                parameters.Add(SemicolonEncode(file.Tags ?? []));
                 parameters.Add(file.FailureReason ?? string.Empty);
-                await db.Db.ExecuteAsync(sql, parameters.ToArray());
+                if (await db.Db.ExecuteAsync(sql, parameters.ToArray()) > 0)
+                {
+                    // update cache 
+                    if (UseCache)
+                    {
+                        Cache[file.Uid] = file;
+                    }
+                }
             }
 
             db.Db.CompleteTransaction();
@@ -282,6 +374,9 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>the items</returns>
     internal async Task<List<LibraryFile>> GetAll()
     {
+        if (UseCache)
+            return Cache.Values.ToList();
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.FetchAsync<LibraryFile>();
     }
@@ -293,6 +388,9 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>the total number of files</returns>
     internal async Task<int> GetTotal()
     {
+        if (UseCache)
+            return Cache.Count;
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteScalarAsync<int>("select count(*) from " + Wrap(nameof(LibraryFile)));
     }
@@ -307,6 +405,11 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>The library file if found, otherwise null</returns>
     public async Task<LibraryFile?> Get(Guid uid)
     {
+        if (UseCache)
+        {
+            Cache.TryGetValue(uid, out var file);
+            return file;
+        }
         using var db = await DbConnector.GetDb();
         return await db.Db.FirstOrDefaultAsync<LibraryFile>($"where {Wrap(nameof(LibraryFile.Uid))}='{uid}'");
     }
@@ -321,12 +424,21 @@ internal class DbLibraryFileManager : BaseManager
     {
         if (string.IsNullOrWhiteSpace(path))
             return null;
+        string folder = FileHelper.GetDirectory(path);
+        
+        if (UseCache)
+        {
+            var cachedFile = Cache.Values.FirstOrDefault(file =>
+                (file.Name.Equals(path, StringComparison.OrdinalIgnoreCase) ||
+                 (!string.IsNullOrWhiteSpace(folder) && file.OutputPath.Equals(path, StringComparison.OrdinalIgnoreCase) && file.OutputPath.StartsWith(folder, StringComparison.OrdinalIgnoreCase))) &&
+                (!libraryUid.HasValue || file.LibraryUid == libraryUid.Value));
+            return cachedFile;
+        }
         using var db = await DbConnector.GetDb();
         string where = "where ";
         if (libraryUid != null)
             where += $" {Wrap(nameof(LibraryFile.LibraryUid))} = '{libraryUid.Value}' and ";
         string whereOutput;
-        string folder = FileHelper.GetDirectory(path);
         if (string.IsNullOrWhiteSpace(folder) == false)
         {
             whereOutput =
@@ -350,6 +462,15 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>the library file if it is known</returns>
     public async Task<LibraryFile?> GetFileByFingerprint(Guid libraryUid, string fingerprint)
     {
+        if (UseCache)
+        {
+            var cachedFile = Cache.Values.FirstOrDefault(file =>
+                file.LibraryUid == libraryUid &&
+                (file.Fingerprint.Equals(fingerprint, StringComparison.OrdinalIgnoreCase) ||
+                 file.FinalFingerprint.Equals(fingerprint, StringComparison.OrdinalIgnoreCase)));
+            return cachedFile;
+        }
+        
         string sql =
             $"select * from {Wrap(nameof(LibraryFile))} where {Wrap(nameof(LibraryFile.LibraryUid))} = '{libraryUid}' and " +
             $"( {Wrap(nameof(LibraryFile.Fingerprint))} = @0 or {Wrap(nameof(LibraryFile.FinalFingerprint))} = @0 )";
@@ -384,6 +505,15 @@ internal class DbLibraryFileManager : BaseManager
         
         using var db = await DbConnector.GetDb();
         await db.Db.ExecuteAsync(sql);
+        
+        // delete from cache
+        if (UseCache)
+        {
+            foreach (var uid in uids)
+            {
+                Cache.TryRemove(uid, out _);
+            }
+        }
     }
     
     /// <summary>
@@ -400,9 +530,20 @@ internal class DbLibraryFileManager : BaseManager
         
         using var db = await DbConnector.GetDb();
         await db.Db.ExecuteAsync(sql);
+        
+        // delete from cache
+        if (UseCache)
+        {
+            foreach (var uid in libraryUids)
+            {
+                foreach (var file in Cache.Values.Where(x => x.LibraryUid == uid))
+                {
+                    Cache.TryRemove(file.Uid, out _);
+                }
+            }
+        }
     }
     #endregion
-    
     
     #region updates
     
@@ -430,7 +571,22 @@ internal class DbLibraryFileManager : BaseManager
                      $" where {Wrap(nameof(LibraryFile.Uid))} in ({inStr})";
         
         using var db = await DbConnector.GetDb();
-        return await db.Db.ExecuteAsync(sql) > 0;
+        bool updated = await db.Db.ExecuteAsync(sql) > 0;
+        if(updated && UseCache)
+        {
+            // update cache
+            foreach (var uid in uids)
+            {
+                if (Cache.TryGetValue(uid, out var file))
+                {
+                    file.Status = status;
+                    if (status == FileStatus.Unprocessed)
+                        file.HoldUntil = new(1970, 1, 1);
+                }
+            }
+        }
+
+        return updated;
     }
     
     /// <summary>
@@ -458,6 +614,21 @@ internal class DbLibraryFileManager : BaseManager
                          DbConnector.FormatDateQuoted(new DateTime(1970, 1, 1)) +
                          $" where {Wrap(nameof(LibraryFile.Uid))} = '{uid}'";
 
+            // update cache
+            if (UseCache && Cache.TryGetValue(uid, out var file))
+            {
+                file.ExecutedNodes = new();
+                file.OriginalMetadata =  new();
+                file.FinalMetadata =  new();
+                file.FinalSize = 0;
+                file.OutputPath = string.Empty;
+                file.FailureReason = string.Empty;
+                file.ProcessOnNodeUid = null;
+                file.FlowUid = flowUid;
+                file.FlowName = flowName ?? string.Empty;
+                file.ProcessingEnded = new DateTime(1970, 1, 1);
+            }
+            
             using var db = await DbConnector.GetDb();
             return await db.Db.ExecuteAsync(sql, flowName ?? string.Empty) > 0;
         }
@@ -481,6 +652,12 @@ internal class DbLibraryFileManager : BaseManager
                      $" {Wrap(nameof(LibraryFile.OriginalSize))} = {size} " +
                      $" where {Wrap(nameof(LibraryFile.Uid))} = '{uid}'";
         
+        // update cache
+        if (UseCache && Cache.TryGetValue(uid, out var file))
+        {
+            file.OriginalSize = size;
+        }
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql) > 0;
     }
@@ -498,6 +675,15 @@ internal class DbLibraryFileManager : BaseManager
                      $" {Wrap(nameof(LibraryFile.FlowName))} = @0 " +
                      $" where {Wrap(nameof(LibraryFile.FlowUid))} = '{uid}'";
         
+        // update cache
+        if (UseCache)
+        {
+            foreach (var file in Cache.Values.Where(x => x.FlowUid == uid))
+            {
+                file.FlowName = name;
+            }
+        }
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql, name) > 0;
     }
@@ -514,6 +700,15 @@ internal class DbLibraryFileManager : BaseManager
                      $" {Wrap(nameof(LibraryFile.LibraryName))} = @0 " +
                      $" where {Wrap(nameof(LibraryFile.LibraryUid))} = '{uid}'";
         
+        // update cache
+        if (UseCache)
+        {
+            foreach (var file in Cache.Values.Where(x => x.LibraryUid == uid))
+            {
+                file.LibraryName = name;
+            }
+        }
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql, name) > 0;
     }
@@ -529,6 +724,15 @@ internal class DbLibraryFileManager : BaseManager
         string sql = $"update {Wrap(nameof(LibraryFile))} set " +
                      $" {Wrap(nameof(LibraryFile.NodeName))} = @0 " +
                      $" where {Wrap(nameof(LibraryFile.NodeUid))} = '{uid}'";
+        
+        // update cache
+        if (UseCache)
+        {
+            foreach (var file in Cache.Values.Where(x => x.NodeUid == uid))
+            {
+                file.NodeName = name;
+            }
+        }
         
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql, name) > 0;
@@ -547,6 +751,18 @@ internal class DbLibraryFileManager : BaseManager
         string sql = $"update {Wrap(nameof(LibraryFile))} set " +
                      $" {Wrap(nameof(LibraryFile.Flags))} = {Wrap(nameof(LibraryFile.Flags))} | {((int)LibraryFileFlags.ForceProcessing)}" +
                      $" where {Wrap(nameof(LibraryFile.Uid))} in ({inStr})";
+        
+        // update cache
+        if (UseCache)
+        {
+            foreach (var uid in uids)
+            {
+                if (Cache.TryGetValue(uid, out var file))
+                {
+                    file.Flags |= LibraryFileFlags.ForceProcessing;
+                }
+            }
+        }
         
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql) > 0;
@@ -570,6 +786,22 @@ internal class DbLibraryFileManager : BaseManager
                      $" else {Wrap(nameof(LibraryFile.Flags))} | {iflag} " +
                      $" end " +
                      $" where {Wrap(nameof(LibraryFile.Uid))} in ({inStr})";
+        
+        // update cache
+        if (UseCache)
+        {
+            foreach (var uid in uids)
+            {
+                if (Cache.TryGetValue(uid, out var file))
+                {
+                    if ((file.Flags & flag) > 0)
+                        file.Flags &= ~flag;
+                    else
+                        file.Flags |= flag;
+                }
+            }
+        }
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql) > 0;
     }
@@ -589,6 +821,18 @@ internal class DbLibraryFileManager : BaseManager
                      $" {Wrap(nameof(LibraryFile.Status))} = 0 " +
                      $" where {Wrap(nameof(LibraryFile.LibraryUid))} in ({inStr}) " +
                      $" and {Wrap(nameof(LibraryFile.Status))} <> {(int)FileStatus.Processing}";
+        
+        // update cache
+        if (UseCache)
+        {
+            foreach (var uid in libraryUids)
+            {
+                foreach (var file in Cache.Values.Where(x => x.LibraryUid == uid && x.Status != FileStatus.Processing))
+                {
+                    file.Status = FileStatus.Unprocessed;
+                }
+            }
+        }
         
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql) > 0;
@@ -617,6 +861,19 @@ internal class DbLibraryFileManager : BaseManager
                      Wrap(nameof(LibraryFile.FinalMetadata)) + " = '', " +
                      Wrap(nameof(LibraryFile.ExecutedNodes)) + " = '' " +
                      "where " + Wrap(nameof(LibraryFile.Uid)) + $" = '{uid}'";
+        
+        // update cache
+        if (UseCache && Cache.TryGetValue(uid, out var file))
+        {
+            file.NodeUid = nodeUid;
+            file.NodeName = nodeName;
+            file.WorkerUid = workerUid;
+            file.Status = FileStatus.Processing;
+            file.ProcessingStarted = DateTime.UtcNow;
+            file.OriginalMetadata = new();
+            file.FinalMetadata = new();
+            file.ExecutedNodes = new();
+        }
         
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql, nodeName)  > 0;
@@ -647,6 +904,12 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>the total number of items matching</returns>
     public async Task<int> GetTotalMatchingItems(LibraryFileFilter filter)
     {
+        // use cache 
+        if (UseCache)
+        {
+            return Cache.Values.Count(filter.Matches);
+        }
+        
         string sql;
         try
         {
@@ -749,6 +1012,9 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>the UIDs of known library files</returns>
     public async Task<List<Guid>> GetUids()
     {
+        // use cache
+        if (UseCache)
+            return Cache.Keys.ToList();
         using var db = await DbConnector.GetDb();
         return await db.Db.FetchAsync<Guid>($"select {Wrap(nameof(LibraryFile.Uid))} from {Wrap(nameof(LibraryFile))}");
     }
@@ -760,6 +1026,14 @@ internal class DbLibraryFileManager : BaseManager
     /// <returns>a list of matching library files</returns>
     public async Task<List<LibraryFile>> GetAll(LibraryFileFilter filter)
     {
+        if (UseCache)
+        {
+            // use cache, also use filter.Skip and filter.Rows
+            var cachedFiles = Cache.Values.Where(filter.Matches).ToList();
+            var sortedFiles = SortLibraryFiles(cachedFiles, filter);
+            return sortedFiles.Skip(filter.Skip).Take(filter.Rows).ToList();
+        }
+        
         var sql = await ConstructQuery(filter);
         if (string.IsNullOrWhiteSpace(sql))
             return new List<LibraryFile>();
@@ -778,7 +1052,102 @@ internal class DbLibraryFileManager : BaseManager
         using var db = await DbConnector.GetDb();
         return await db.Db.FetchAsync<LibraryFile>(sql);
     }
+    
+    /// <summary>
+    /// Sorts the cached files
+    /// </summary>
+    /// <param name="files">the files to sort</param>
+    /// <param name="filter">the filter</param>
+    /// <returns>the sorted files</returns>
+    private IEnumerable<LibraryFile> SortLibraryFiles(IEnumerable<LibraryFile> files, LibraryFileFilter filter)
+    {
+        var libraryFiles = files as LibraryFile[] ?? files.ToArray();
+        IOrderedEnumerable<LibraryFile> sortedFiles = libraryFiles.OrderBy(file => 0); // Initial dummy ordering
 
+        if (filter.SortBy != null)
+        {
+            switch (filter.SortBy)
+            {
+                case FilesSortBy.Size:
+                    sortedFiles = sortedFiles.ThenBy(file => file.OriginalSize);
+                    break;
+                case FilesSortBy.SizeDesc:
+                    sortedFiles = sortedFiles.ThenByDescending(file => file.OriginalSize);
+                    break;
+                case FilesSortBy.Savings:
+                    sortedFiles = sortedFiles.ThenBy(file => file.FinalSize > 0 ? file.OriginalSize - file.FinalSize : long.MaxValue);
+                    break;
+                case FilesSortBy.SavingsDesc:
+                    sortedFiles = sortedFiles.ThenByDescending(file => file.FinalSize > 0 ? file.OriginalSize - file.FinalSize : 0);
+                    break;
+                case FilesSortBy.Time:
+                    sortedFiles = sortedFiles.ThenBy(file => (file.ProcessingEnded - file.ProcessingStarted).TotalSeconds);
+                    break;
+                case FilesSortBy.TimeDesc:
+                    sortedFiles = sortedFiles.ThenByDescending(file => (file.ProcessingEnded - file.ProcessingStarted).TotalSeconds);
+                    break;
+            }
+        }
+
+        if (filter.Status is FileStatus.Processed or FileStatus.ProcessingFailed)
+        {
+            sortedFiles = sortedFiles
+                .ThenByDescending(file =>
+                    file.ProcessingEnded > file.ProcessingStarted ? file.ProcessingEnded : file.ProcessingStarted)
+                .ThenByDescending(file => file.DateModified);
+        }
+        else if (filter.Status is FileStatus.Unprocessed)
+        {
+            // sort by order
+            sortedFiles = sortedFiles.ThenBy(file => file.Order > 0 ? file.Order : int.MaxValue);
+            // then by library order
+            Random random = new (DateTime.Now.Millisecond);
+            foreach (var library in filter.SysInfo.AllLibraries.Values.OrderByDescending(x => x.Priority))
+            {
+                switch (library.ProcessingOrder)
+                {
+                    case ProcessingOrder.Alphabetical:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.Name : new string('z', 999));
+                    break;
+                    case ProcessingOrder.Random:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? random.Next(0, 100000) : 100000);
+                        break;
+                    case ProcessingOrder.OldestFirst:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.CreationTime.Ticks : long.MaxValue);
+                        break;
+                    case ProcessingOrder.NewestFirst:
+                        sortedFiles = sortedFiles.ThenByDescending(file =>
+                            file.LibraryUid == library.Uid ? file.CreationTime.Ticks : 0);
+                        break;
+                    case ProcessingOrder.AsFound:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.DateCreated.Ticks : long.MaxValue);
+                        break;
+                    case ProcessingOrder.LargestFirst:
+                        sortedFiles = sortedFiles.ThenByDescending(file =>
+                            file.LibraryUid == library.Uid ? file.OriginalSize : -1);
+                        break;
+                    case ProcessingOrder.SmallestFirst:
+                        sortedFiles = sortedFiles.ThenBy(file =>
+                            file.LibraryUid == library.Uid ? file.OriginalSize : long.MaxValue);
+                        break;
+                    
+                }
+            }
+            // finally as found
+            sortedFiles = sortedFiles.ThenBy(file => file.DateCreated);
+        }
+        else
+        {
+            sortedFiles = sortedFiles.ThenBy(file => file.DateCreated);
+        }
+
+        return sortedFiles;
+    }
+    
     /// <summary>
     /// Constructs the query of the cached data
     /// </summary>
@@ -839,6 +1208,9 @@ internal class DbLibraryFileManager : BaseManager
 
             if (args.LibraryUid != null)
                 sql += $" and {Wrap(nameof(LibraryFile.LibraryUid))} = '{args.LibraryUid.Value}'";
+            
+            if (args.TagUid != null)
+                sql += $" and {Wrap(nameof(LibraryFile.Tags))} LIKE '%{args.TagUid.Value}%'";
             
             if (iStatus > 0)
             {
@@ -1171,75 +1543,142 @@ end ");
     /// <returns>the library status overview</returns>
     public async Task<List<LibraryStatus>> GetStatus(List<Library> libraries)
     {
+        List<LibraryStatus> results = new();
+
         var disabled = libraries.Where(x => x.Enabled == false).Select(x => x.Uid).ToList();
         List<Guid> libraryUids = libraries.Select(x => x.Uid).ToList();
         int quarter = TimeHelper.GetCurrentQuarter();
-        var outOfSchedule = libraries.Where(x => disabled.Contains(x.Uid) == false && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
-            .Select(x => x.Uid).ToList();
-
-        string AND_NOT_FORCED =
-            $" and {Wrap(nameof(LibraryFile.Flags))} & {(int)LibraryFileFlags.ForceProcessing} = 0";
+        var outOfSchedule = libraries
+            .Where(x => disabled.Contains(x.Uid) == false && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
+            .Select(x => x.Uid)
+            .ToList();
         
-        using var db = await DbConnector.GetDb();
+        if (UseCache)
+        {
+            var cachedFiles = Cache.Values.ToList();
 
-        string sql = $@"select {Wrap(nameof(LibraryFile.Status))}, count(*) AS {Wrap("StatusCount")}
+            // Count distinct statuses from the cache
+            var groupedStatus = cachedFiles
+                .Where(x => x.Status != FileStatus.Unprocessed)
+                .GroupBy(f => f.Status)
+                .Select(g => new LibraryStatus { Status = g.Key, Count = g.Count() })
+                .ToList();
+
+            // Add the counts from the cache to the results
+            results.AddRange(groupedStatus);
+
+            // Calculate Disabled count
+            List<Guid> disabledUids = [];
+            if (disabled.Any())
+            {
+                disabledUids = cachedFiles.Where(f => f.Status == FileStatus.Unprocessed &&
+                              disabled.Contains(f.LibraryUid ?? Guid.Empty) &&
+                              (f.Flags & LibraryFileFlags.ForceProcessing) == 0)
+                    .Select(x => x.Uid)
+                    .ToList();
+                results.Add(new LibraryStatus { Count = disabledUids.Count, Status = FileStatus.Disabled });
+            }
+
+            // Calculate OutOfSchedule count
+            List<Guid> outOfScheduled = [];
+            if (outOfSchedule.Any())
+            {
+                outOfScheduled = cachedFiles.Where(f => f.Status == FileStatus.Unprocessed &&
+                                                        disabledUids.Contains(f.Uid) == false &&
+                                                        outOfSchedule.Contains(f.LibraryUid ?? Guid.Empty) &&
+                                                        (f.Flags & LibraryFileFlags.ForceProcessing) == 0)
+                    .Select(x => x.Uid)
+                    .ToList();
+                results.Add(new LibraryStatus { Count = outOfScheduled.Count, Status = FileStatus.OutOfSchedule });
+            }
+
+            // Calculate OnHold count
+            List<Guid> onHold = cachedFiles.Where(f => f.Status == FileStatus.Unprocessed &&
+                                                       disabledUids.Contains(f.Uid) == false &&
+                                                       outOfScheduled.Contains(f.Uid) == false &&
+                f.HoldUntil > DateTime.UtcNow &&
+                ((f.Flags & LibraryFileFlags.ForceProcessing) > 0 || !disabled.Union(outOfSchedule).Contains(f.LibraryUid ?? Guid.Empty)))
+                .Select(x => x.Uid)
+                .ToList();
+            results.Add(new LibraryStatus { Count = onHold.Count, Status = FileStatus.OnHold });
+
+            // Calculate Unprocessed count
+            var unProcessed = cachedFiles.Where(f => f.Status == FileStatus.Unprocessed &&
+                                                          ((onHold.Contains(f.Uid) == false &&
+                                                          disabledUids.Contains(f.Uid) == false &&
+                                                          outOfScheduled.Contains(f.Uid) == false) || f.IsForcedProcessing))
+                .ToList();
+                
+            results.Add(new LibraryStatus { Count = unProcessed.Count, Status = FileStatus.Unprocessed });
+
+            return results;
+        }
+        else
+        {
+            string AND_NOT_FORCED =
+                $" and {Wrap(nameof(LibraryFile.Flags))} & {(int)LibraryFileFlags.ForceProcessing} = 0";
+
+            using var db = await DbConnector.GetDb();
+
+            string sql = $@"select {Wrap(nameof(LibraryFile.Status))}, count(*) AS {Wrap("StatusCount")}
 from {Wrap(nameof(LibraryFile))}
 where {Wrap(nameof(LibraryFile.Status))} > 0
 group by {Wrap(nameof(LibraryFile.Status))}";
-        var results = db.Db.Fetch<LibraryStatus>(sql);
-        
-        // now for the complicated bit
-        
-        if (disabled.Any())
-        {
-            string inStr = string.Join(",", disabled.Select(x => $"'{x}'"));
-            
-            var disabledCount = await db.Db.ExecuteScalarAsync<int>($@"select count(*)
+            results = db.Db.Fetch<LibraryStatus>(sql);
+            // now for the complicated bit
+
+            if (disabled.Any())
+            {
+                string inStr = string.Join(",", disabled.Select(x => $"'{x}'"));
+
+                var disabledCount = await db.Db.ExecuteScalarAsync<int>($@"select count(*)
 from {Wrap(nameof(LibraryFile))}
 where {Wrap(nameof(LibraryFile.Status))} = 0
 {AND_NOT_FORCED}
 and {Wrap(nameof(LibraryFile.LibraryUid))} in ({inStr})
 ");
-            results.Add(new () { Count = disabledCount, Status = FileStatus.Disabled});
-        }
-        
-        
-        if (outOfSchedule.Any())
-        {
-            string inStr = string.Join(",", outOfSchedule.Select(x => $"'{x}'"));
-            
-            var disabledCount = await db.Db.ExecuteScalarAsync<int>($@"select count(*)
+                results.Add(new() { Count = disabledCount, Status = FileStatus.Disabled });
+            }
+
+
+            if (outOfSchedule.Any())
+            {
+                string inStr = string.Join(",", outOfSchedule.Select(x => $"'{x}'"));
+
+                var disabledCount = await db.Db.ExecuteScalarAsync<int>($@"select count(*)
 from {Wrap(nameof(LibraryFile))}
 where {Wrap(nameof(LibraryFile.Status))} = 0
 {AND_NOT_FORCED}
 and {Wrap(nameof(LibraryFile.LibraryUid))} in ({inStr})
 ");
-            results.Add(new () { Count = disabledCount, Status = FileStatus.OutOfSchedule});
-        }
+                results.Add(new() { Count = disabledCount, Status = FileStatus.OutOfSchedule });
+            }
 
-        string disabledOutOfScheduled = string.Join(",", disabled.Union(outOfSchedule).Select(x => $"'{x}'"));
+            string disabledOutOfScheduled = string.Join(",", disabled.Union(outOfSchedule).Select(x => $"'{x}'"));
 
-        string FORCED_OR_LIBRARY = disabledOutOfScheduled == ""
-            ? string.Empty
-            : $" and ( ({Wrap(nameof(LibraryFile.Flags))} & {(int)LibraryFileFlags.ForceProcessing} > 0) or " +
-              $"({Wrap(nameof(LibraryFile.LibraryUid))} not in ({disabledOutOfScheduled})) )";
-        
-        string onHoldCountSql = $@"select count(*)
+            string FORCED_OR_LIBRARY = disabledOutOfScheduled == ""
+                ? string.Empty
+                : $" and ( ({Wrap(nameof(LibraryFile.Flags))} & {(int)LibraryFileFlags.ForceProcessing} > 0) or " +
+                  $"({Wrap(nameof(LibraryFile.LibraryUid))} not in ({disabledOutOfScheduled})) )";
+
+            string onHoldCountSql = $@"select count(*)
 from {Wrap(nameof(LibraryFile))}
 where {Wrap(nameof(LibraryFile.Status))} = 0
 and {Wrap(nameof(LibraryFile.HoldUntil))} > {Date(DateTime.UtcNow)}
 {FORCED_OR_LIBRARY}";
-        var onHoldCount = await db.Db.ExecuteScalarAsync<int>(onHoldCountSql);
-        results.Add(new () { Count = onHoldCount, Status = FileStatus.OnHold});
+            var onHoldCount = await db.Db.ExecuteScalarAsync<int>(onHoldCountSql);
+            results.Add(new() { Count = onHoldCount, Status = FileStatus.OnHold });
 
-        string sqlUnprocesed = $@"select count(*)
+            string sqlUnprocesed = $@"select count(*)
 from {Wrap(nameof(LibraryFile))}
 where {Wrap(nameof(LibraryFile.Status))} = 0
 and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)}
 {FORCED_OR_LIBRARY}
 ";
-        var unProcessedCount = await db.Db.ExecuteScalarAsync<int>(sqlUnprocesed);
-        results.Add(new () { Count = unProcessedCount, Status = FileStatus.Unprocessed});
+            var unProcessedCount = await db.Db.ExecuteScalarAsync<int>(sqlUnprocesed);
+            results.Add(new() { Count = unProcessedCount, Status = FileStatus.Unprocessed });
+
+        }
 
         return results;
     }
@@ -1264,6 +1703,23 @@ and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)}
             return string.Empty;
         return JsonSerializer.Serialize(o, JsonOptions);
     }
+    
+    /// <summary>
+    /// Encodes an array of GUIDs into a semicolon-separated string, where each GUID is formatted as 'GUID;'.
+    /// </summary>
+    /// <param name="guids">An array of GUIDs to encode.</param>
+    /// <returns>
+    /// A semicolon-separated string of GUIDs, where each GUID is followed by a semicolon.
+    /// Returns an empty string if the input is null or empty.
+    /// </returns>
+    public static string SemicolonEncode(List<Guid> guids)
+    {
+        if (guids == null || guids.Count == 0)
+            return string.Empty;
+
+        // Ensure each GUID is formatted as 'GUID;'
+        return string.Join("", guids.Select(guid => $"{guid};").OrderBy(x => x));
+    }
 
     /// <summary>
     /// Gets the processing time for each library file 
@@ -1271,6 +1727,20 @@ and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)}
     /// <returns>the processing time for each library file</returns>
     public async Task<List<LibraryFileProcessingTime>> GetLibraryProcessingTimes()
     {
+        if (UseCache)
+        {
+            var cachedFiles = Cache.Values
+                .Where(f => f.Status == FileStatus.Processed && f.ProcessingEnded > f.ProcessingStarted)
+                .GroupBy(f => f.LibraryName)
+                .Select(g => new LibraryFileProcessingTime
+                {
+                    Library = g.Key,
+                    OriginalSize = g.Sum(f => f.OriginalSize),
+                    Seconds = g.Sum(f => (int)(f.ProcessingEnded - f.ProcessingStarted).TotalSeconds)
+                })
+                .ToList();
+            return cachedFiles;
+        }
         string sql = @$"select 
 {Wrap(nameof(LibraryFile.LibraryName))} as {Wrap(nameof(LibraryFileProcessingTime.Library))},
 {Wrap(nameof(LibraryFile.OriginalSize))}, " +
@@ -1294,6 +1764,15 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
             $"update {Wrap(nameof(LibraryFile))} set {Wrap(nameof(LibraryFile.Status))} = 0 where {Wrap(nameof(LibraryFile.Status))} = {(int)FileStatus.Processing}";
         if (nodeUid != null && nodeUid != Guid.Empty)
             sql += $" and {Wrap(nameof(LibraryFile.NodeUid))} = '{nodeUid}'";
+        if (UseCache)
+        {
+            // update cache
+            foreach (var file in Cache.Values.Where(x => x.Status == FileStatus.Processing 
+                                                         && (nodeUid == null || x.NodeUid == nodeUid)))
+            {
+                file.Status = FileStatus.Unprocessed;
+            }
+        }
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql) > 0;
     }
@@ -1305,6 +1784,13 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
     /// <returns>the current status of the file</returns>
     public async Task<FileStatus?> GetFileStatus(Guid uid)
     {
+        if (UseCache)
+        {
+            // update cache
+            if (Cache.TryGetValue(uid, out var file))
+                return file.Status;
+            return null;
+        }
         using var db = await DbConnector.GetDb();
         var istatus = await db.Db.ExecuteScalarAsync<int?>("select " + Wrap(nameof(LibraryFile.Status)) + " from " + Wrap(nameof(LibraryFile)) +
                                   " where " + Wrap(nameof(LibraryFile.Uid)) + $" = '{uid}'");
@@ -1312,37 +1798,6 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
             return null;
         return (FileStatus)istatus.Value;
     }
-
-    // dont want to have to update the db while a file is processing, this adds too much strain
-    // /// <summary>
-    // /// Special case used by the flow runner to update a processing library file
-    // /// </summary>
-    // /// <param name="file">the processing library file</param>
-    // public async Task UpdateWork(LibraryFile file)
-    // {
-    //     if (file == null)
-    //         return;
-    //     
-    //     string sql = $"update {Wrap(nameof(LibraryFile))} set " +
-    //                  $" {Wrap(nameof(LibraryFile.Status))} = {((int)file.Status)}, " + 
-    //                  $" {Wrap(nameof(LibraryFile.FinalSize))} = {file.FinalSize}, " +
-    //                  (file.Node == null ? "" : (
-    //                      $" {Wrap(nameof(LibraryFile.NodeUid))} = '{file.NodeUid}', {Wrap(nameof(LibraryFile.NodeName))} = '{file.NodeName.Replace("'", "''")}', "
-    //                  )) +
-    //                  $" {Wrap(nameof(LibraryFile.WorkerUid))} = '{file.WorkerUid}', " +
-    //                  $" {Wrap(nameof(LibraryFile.ProcessingStarted))} = {DbConnector.FormatDateQuoted(file.ProcessingStarted)}, " +
-    //                  $" {Wrap(nameof(LibraryFile.ProcessingEnded))} = {DbConnector.FormatDateQuoted(file.ProcessingEnded)}, " +
-    //                  $" {Wrap(nameof(LibraryFile.WorkerUid))} = @0 " +
-    //                  (file.Status != FileStatus.Processing ? $", {Wrap(nameof(LibraryFile.Flags))} = 0 " : string.Empty) + // clear flags on processed files
-    //                  $" where {Wrap(nameof(LibraryFile.Uid))} = '{file.Uid}'";
-    //     
-    //     string executedJson = file.ExecutedNodes?.Any() != true
-    //         ? string.Empty
-    //         : JsonSerializer.Serialize(file.ExecutedNodes, CustomDbMapper.JsonOptions);
-    //     
-    //     using var db = await DbConnector.GetDb();
-    //     await db.Db.ExecuteAsync(sql, executedJson);
-    // }
 
     /// <summary>
     /// Moves the passed in UIDs to the top of the processing order
@@ -1372,6 +1827,14 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
             var file = sorted[i];
             file.Order = i + 1;
             commands.Add($"update {Wrap(nameof(LibraryFile))}  set {Wrap("ProcessingOrder")} = {file.Order} where {Wrap(nameof(LibraryFile.Uid))} = '{file.Uid}';");
+            if (UseCache)
+            {
+                // update cache
+                if (Cache.TryGetValue(file.Uid, out var cachedFile))
+                {
+                    cachedFile.Order = file.Order;
+                }
+            }
         }
 
         await db.Db.ExecuteAsync(string.Join("\n", commands));
@@ -1390,6 +1853,18 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
                      $" {Wrap(nameof(LibraryFile.CreationTime))} = {DbConnector.FormatDateQuoted(file.CreationTime)}, " +
                      $" {Wrap(nameof(LibraryFile.LastWriteTime))} = {DbConnector.FormatDateQuoted(file.LastWriteTime)} " +
                      $" where {Wrap(nameof(LibraryFile.Uid))} = '{file.Uid}'";
+        if (UseCache)
+        {
+            // update cache 
+            if (Cache.TryGetValue(file.Uid, out var cachedFile))
+            {
+                cachedFile.Name = file.Name;
+                cachedFile.RelativePath = file.RelativePath;
+                cachedFile.OutputPath = file.OutputPath;
+                cachedFile.CreationTime = file.CreationTime;
+                cachedFile.LastWriteTime = file.LastWriteTime;
+            }
+        }
         using var db = await DbConnector.GetDb();
         return await db.Db.ExecuteAsync(sql, file.Name, file.RelativePath, file.OutputPath) > 0;
     }
@@ -1401,6 +1876,18 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
     /// <returns>a list of all filenames</returns>
     public async Task<List<KnownFileInfo>> GetKnownLibraryFilesWithCreationTimes(Guid libraryUid)
     {
+        if (UseCache)
+        {
+            // use cache 
+            return Cache.Where(x => x.Value.LibraryUid == libraryUid)
+                .Select(x => new KnownFileInfo()
+                {
+                    Status = x.Value.Status,
+                    Name = x.Value.Name,
+                    CreationTime = x.Value.CreationTime,
+                    LastWriteTime = x.Value.LastWriteTime
+                }).ToList();
+        }
         using var db = await DbConnector.GetDb();
         var list = await db.Db.FetchAsync<KnownFileInfo>(
             $"select {Wrap(nameof(KnownFileInfo.Name))},{Wrap(nameof(KnownFileInfo.Status))}," +
@@ -1416,6 +1903,13 @@ where {Wrap(nameof(LibraryFile.Status))} = 1 and {Wrap(nameof(LibraryFile.Proces
     /// <returns>the total storage saved</returns>
     public async Task<long> GetTotalStorageSaved()
     {
+        if (UseCache)
+        {
+            // use cache
+            return Cache.Values
+                .Where(f => f.Status == FileStatus.Processed && f.FinalSize < f.OriginalSize)
+                .Sum(f => f.OriginalSize - f.FinalSize);
+        }
         string sql = $@"SELECT SUM(
     CASE 
         WHEN {Wrap(nameof(LibraryFile.Status))} = {(int)FileStatus.Processed} AND {Wrap(nameof(LibraryFile.FinalSize))} < {Wrap(nameof(LibraryFile.OriginalSize))} 
@@ -1432,22 +1926,61 @@ FROM {Wrap(nameof(LibraryFile))}";
     /// <summary>
     /// Gets the total rows, sum of OriginalSize, and sum of FinalSize from the LibraryFile table grouped by Library.
     /// </summary>
+    /// <param name="lastDays">The number of last days to get, or 0 for all</param>
     /// <returns>A list of library statistics</returns>
-    public async Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats()
+    public async Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats(int lastDays = 0)
     {
+        if (UseCache)
+        {
+            // use cache
+            
+            // Aggregate data from the cache
+            var cacheResults = Cache.Values
+                .Where(lf =>
+                {
+                    if (lf.LibraryUid == null)
+                        return false;
+                    if(lastDays > 0 && lf.ProcessingEnded < DateTime.UtcNow.AddDays(-lastDays))
+                        return false;
+                    return true;
+                })
+                .GroupBy(lf => lf.LibraryUid!.Value)
+                .Select(g => new
+                {
+                    LibraryUid = g.Key,
+                    TotalFiles = g.Count(),
+                    SumOriginalSize = g.Sum(lf => lf.OriginalSize),
+                    SumFinalSize = g.Sum(lf => lf.FinalSize)
+                })
+                .ToList();
+
+            var cachedResult = cacheResults.Select(cr => (cr.LibraryUid, cr.TotalFiles, cr.SumOriginalSize, cr.SumFinalSize))
+                .ToList();
+            return cachedResult;
+        }
         string sql = $@"
         SELECT 
             {Wrap(nameof(LibraryFile.LibraryUid))} AS {Wrap("LibraryUid")},
             COUNT(*) AS {Wrap("TotalFiles")}, 
             SUM({Wrap(nameof(LibraryFile.OriginalSize))}) AS {Wrap("SumOriginalSize")}, 
             SUM({Wrap(nameof(LibraryFile.FinalSize))}) AS {Wrap("SumFinalSize")} 
-        FROM {Wrap(nameof(LibraryFile))}
-        GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
-    
-        using var db = await DbConnector.GetDb();
-        var results = await db.Db.FetchAsync<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>(sql);
+        FROM {Wrap(nameof(LibraryFile))}";
+        if(lastDays > 0)
+            sql += $" WHERE {Wrap(nameof(LibraryFile.ProcessingEnded))} >= {Date(DateTime.UtcNow.AddDays(-lastDays))}";
+        sql += $" GROUP BY {Wrap(nameof(LibraryFile.LibraryUid))}";
 
-        return results;
+        try
+        {
+            using var db = await DbConnector.GetDb();
+            var results =
+                await db.Db.FetchAsync<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>(sql);
+            return results;
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Failed Getting Library File Stats: " + ex.Message + Environment.NewLine + sql);
+            return [];
+        }
     }
 
     /// <summary>
@@ -1457,11 +1990,74 @@ FROM {Wrap(nameof(LibraryFile))}";
     /// <returns>the matching files</returns>
     public async Task<List<LibraryFile>> Search(LibraryFileSearchModel filter)
     {
+        if (UseCache)
+        {
+            var cachedResults = Cache.Values.AsQueryable();
+
+            // Filter by CreationTime
+            if(filter.FromDate.Year > 1970 && filter.ToDate.Year is < 2200 and > 2000)
+                cachedResults = cachedResults.Where(lf => lf.CreationTime >= filter.FromDate && lf.CreationTime <= filter.ToDate);
+            else if(filter.FromDate.Year > 1970)
+                cachedResults = cachedResults.Where(lf => lf.CreationTime >= filter.FromDate);
+            else if(filter.ToDate < DateTime.MaxValue && filter.ToDate.Year > 2000)
+                cachedResults = cachedResults.Where(lf => lf.CreationTime <= filter.ToDate);
+            
+            if(filter.FinishedProcessingFrom != null)
+                cachedResults = cachedResults.Where(lf => lf.ProcessingEnded >= filter.FinishedProcessingFrom);
+            if(filter.FinishedProcessingTo != null)
+                cachedResults = cachedResults.Where(lf => lf.ProcessingEnded <= filter.FinishedProcessingTo);
+
+            // Filter by Status
+            if (filter.Status != null)
+            {
+                cachedResults = cachedResults.Where(lf => lf.Status == filter.Status.Value);
+            }
+
+
+            // Filter by LibraryName (case-insensitive, contains)
+            if (string.IsNullOrWhiteSpace(filter.LibraryName) == false)
+            {
+                string libraryName = filter.LibraryName.ToLowerInvariant();
+                cachedResults = cachedResults.Where(lf => lf.LibraryName.ToLowerInvariant().Contains(libraryName));
+            }
+            
+            // Filter by Path (case-insensitive, contains)
+            if (!string.IsNullOrWhiteSpace(filter.Path))
+            {
+                string path = filter.Path.ToLowerInvariant();
+                cachedResults = cachedResults.Where(lf =>
+                    lf.Name.Contains(path, StringComparison.CurrentCultureIgnoreCase) ||
+                    lf.OutputPath.Contains(path, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            if (filter is { Status: FileStatus.Processed, OrderBy: LibraryFileSearchOrderBy.Savings })
+                cachedResults = cachedResults.OrderByDescending(lf => lf.OriginalSize - lf.FinalSize);
+            
+            // Apply Limit
+            if (filter.Limit > 0)
+                cachedResults = cachedResults.Take(filter.Limit);
+            return cachedResults.ToList();
+
+        }
         List<string> wheres = new();
 
-        wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " between " +
-                   DbConnector.FormatDateQuoted(filter.FromDate.Year > 1970 ? filter.FromDate : new DateTime(1970,1,1)) + " and " +
-                   DbConnector.FormatDateQuoted(filter.ToDate.Year < 2200 ? filter.ToDate : new DateTime(2200,12, 31)));
+        if(filter.FromDate.Year > 1970 && filter.ToDate.Year is > 1970 and < 2200)
+            wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " between " +
+                   DbConnector.FormatDateQuoted(new DateTime(1970,1,1)) + " and " +
+                   DbConnector.FormatDateQuoted(new DateTime(2200,12, 31)));
+        else if(filter.FromDate > new DateTime(1970,1,1))
+            wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " >= " + DbConnector.FormatDateQuoted(filter.FromDate));
+        else if(filter.ToDate.Year is > 1970 and < 2200)
+            wheres.Add(Wrap(nameof(LibraryFile.CreationTime)) + " <= " + DbConnector.FormatDateQuoted(filter.ToDate));
+        
+        if(filter.FinishedProcessingFrom != null && filter.FinishedProcessingTo != null)
+            wheres.Add(Wrap(nameof(LibraryFile.ProcessingEnded)) + " between " +
+                       DbConnector.FormatDateQuoted(filter.FinishedProcessingFrom.Value) + " and " +
+                       DbConnector.FormatDateQuoted(filter.FinishedProcessingTo.Value));
+        else if(filter.FinishedProcessingFrom != null)
+            wheres.Add(Wrap(nameof(LibraryFile.ProcessingEnded)) + " >= " + DbConnector.FormatDateQuoted(filter.FinishedProcessingFrom.Value));
+        else if(filter.FinishedProcessingTo != null)
+            wheres.Add(Wrap(nameof(LibraryFile.ProcessingEnded)) + " <= " + DbConnector.FormatDateQuoted(filter.FinishedProcessingTo.Value));
 
         if (filter.Status != null)
         {
@@ -1487,14 +2083,28 @@ FROM {Wrap(nameof(LibraryFile))}";
         string sql = "select * from " + Wrap(nameof(LibraryFile)) + " " +
                      "where " + string.Join(" and ", wheres);
         
-        sql += DbType switch
+        if (filter is { Status: FileStatus.Processed, OrderBy: LibraryFileSearchOrderBy.Savings })
+            sql += " order by " + Wrap(nameof(LibraryFile.OriginalSize)) + " - " + Wrap(nameof(LibraryFile.FinalSize)) + " desc";
+
+        if (filter.Limit > 0)
         {
-            DatabaseType.SqlServer => $" OFFSET 0 ROWS FETCH NEXT {filter.Limit} ROWS ONLY",
-            _ => $" LIMIT {filter.Limit}",
-        };
-        
-        using var db = await DbConnector.GetDb();
-        return await db.Db.FetchAsync<LibraryFile>(sql);
+            sql += DbType switch
+            {
+                DatabaseType.SqlServer => $" OFFSET 0 ROWS FETCH NEXT {filter.Limit} ROWS ONLY",
+                _ => $" LIMIT {filter.Limit}",
+            };
+        }
+
+        try
+        {
+            using var db = await DbConnector.GetDb();
+            return await db.Db.FetchAsync<LibraryFile>(sql);
+        }
+        catch (Exception ex)
+        {
+            Logger.WLog("Failed Searching Library Files: " + ex.Message + Environment.NewLine + sql);
+            return [];
+        }
     }
 
 
@@ -1504,6 +2114,21 @@ FROM {Wrap(nameof(LibraryFile))}";
     /// <returns>A dictionary of the total files indexed by the node UID</returns>
     public async Task<Dictionary<Guid, int>> GetNodeTotalFiles()
     {
+        if (UseCache)
+        {
+            // Aggregate file counts from the cache
+            var cacheResults = Cache.Values
+                .Where(lf => lf.NodeUid != null && lf.NodeUid != Guid.Empty) // Filter out empty GUIDs
+                .GroupBy(lf => lf.NodeUid!)
+                .Select(g => new
+                {
+                    NodeUid = g.Key,
+                    FileCount = g.Count() // Count files per NodeUid
+                })
+                .ToDictionary(x => x.NodeUid!.Value, x => x.FileCount);
+
+            return cacheResults;
+        }
         string sql = $@"SELECT {Wrap(nameof(LibraryFile.NodeUid))}, COUNT(*) AS {Wrap("FileCount")}
 FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
             
@@ -1521,6 +2146,11 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
     /// <returns>true if exists, otherwise false</returns>
     public async Task<bool> FileExists(string name)
     {
+        if (UseCache)
+        {
+            // Check if the file exists in the cache
+            return Cache.Values.Any(lf => lf.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
         string sql =
             $"select {Wrap(nameof(LibraryFile.Uid))} from {Wrap(nameof(LibraryFile))} where {Wrap(nameof(LibraryFile.Name))} = @0";
         
@@ -1549,6 +2179,9 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
                 if (model.BottomOfQueue)
                     file.DateCreated = DateTime.UtcNow;
             }
+            else if(file.Status == FileStatus.Duplicate)
+                file.Status = FileStatus.Unprocessed;
+                
 
             if (model.Mode == ReprocessModel.CustomVariablesMode.Replace)
                 file.CustomVariables = model.CustomVariables ?? new ();
@@ -1566,17 +2199,18 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
                 file.FlowUid = model.Flow.Uid;
                 file.FlowName = model.Flow.Name;
             }
-            else if(onlySetProcessInfo == false)
+            else if(onlySetProcessInfo == false && file.LibraryUid != CommonVariables.ManualLibraryUid)
             {
                 file.FlowUid = null;
                 file.FlowName = string.Empty;
             }
+            
             if (model.Node != null)
             {
-                file.NodeUid = model.Node.Uid;
-                file.NodeName = model.Node.Name;
+                file.ProcessOnNodeUid = model.Node.Uid;
             }
-            else if (onlySetProcessInfo == false)
+            
+            if (onlySetProcessInfo == false)
             {
                 file.NodeUid = null;
                 file.NodeName = string.Empty;
@@ -1584,5 +2218,40 @@ FROM {Wrap(nameof(LibraryFile))} GROUP BY {Wrap(nameof(LibraryFile.NodeUid))};";
 
             await Update(file);
         }
+    }
+
+    /// <summary>
+    /// Deletes the tags from any file
+    /// </summary>
+    /// <param name="tagUids">the UIDs of the tags being deleted</param>
+    /// <param name="auditDetails">the audit details</param>
+    public async Task DeleteTags(Guid[] tagUids, AuditDetails auditDetails)
+    {
+        // need to remove the Tag from LibraryFile.Tags where the json field contains the tag
+        // where uids is the list of the tag Uids to remove
+        using var db = await DbConnector.GetDb();
+
+        foreach (var tagUid in tagUids)
+        {
+            string sql = $@"
+                        update {Wrap(nameof(LibraryFile))} 
+                        set {Wrap(nameof(LibraryFile.Tags))} = 
+                        REPLACE({Wrap(nameof(LibraryFile.Tags))}, '{tagUid};', '')
+                        where {Wrap(nameof(LibraryFile.Tags))} like '%{tagUid};%'";
+
+            await db.Db.ExecuteAsync(sql);
+        }
+
+        if (UseCache)
+        {
+            foreach(var file in Cache.Values.Where(x => x.Tags?.Any(tagUids.Contains) == true))
+            {
+                foreach (var tagUid in tagUids)
+                {
+                    file.Tags?.Remove(tagUid);
+                }
+            }
+        }
+
     }
 }

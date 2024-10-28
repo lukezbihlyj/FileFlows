@@ -31,12 +31,17 @@ public class NodeParameters
     /// to change the file path this should be updated too
     /// </summary>
     public string WorkingFile { get; private set; }
-    
+
     /// <summary>
-    /// Gets or sets a another processing node to reprocess this file on.
-    /// This will be marked for reprocessing once completed.
+    /// Gets or sets reprocessing options
     /// </summary>
-    public ObjectReference ReprocessNode { get; set; }
+    public ReprocessOptions Reprocess { get; set; } = new();
+
+    public ObjectReference? ReprocessNode
+    {
+        get => Reprocess.ReprocessNode;
+        set => Reprocess.ReprocessNode = value;
+    }
 
     /// <summary>
     /// Gets the working file shortname
@@ -149,6 +154,16 @@ public class NodeParameters
     /// Gets or sets the function responsible for getting plugin settings JSON configuration
     /// </summary>
     public Func<string, string> GetPluginSettingsJson { get; set; }
+
+    /// <summary>
+    /// Gets or sets the function responsible for settings the tags
+    /// </summary>
+    public Func<Guid[], bool, int> SetTagsFunction { get; set; }
+
+    /// <summary>
+    /// Gets or sets the function responsible for settings the tags by their names
+    /// </summary>
+    public Func<string[], bool, int> SetTagsByNameFunction { get; set; }
     
     /// <summary>
     /// Gets or sets the function responsible for mapping a path
@@ -445,6 +460,8 @@ public class NodeParameters
         if (Fake) return;
         try
         {
+            Logger.ILog("Initing file: " + filename);
+            long? folderSize = null;
             if (IsDirectory)
             {
                 Variables.TryAdd("folder.OriginalName", LibraryFileName);
@@ -468,9 +485,16 @@ public class NodeParameters
                         { "folder.Orig.Name", diOriginal.Name ?? "" },
                         { "folder.Orig.FullName", diOriginal.FullName ?? "" },
                     });
-                    
+
                     if (FileService.DirectorySize(diOriginal.FullName).Success(out var origSize))
+                    {
+                        folderSize = origSize;
                         Variables["folder.Orig.Size"] = origSize;
+                    }
+                    else
+                    {
+                        folderSize = 0;
+                    }
                 }
             }
             else
@@ -497,48 +521,66 @@ public class NodeParameters
 
                 if (initDone == false)
                 {
+                    Logger.ILog("init not done");
                     initDone = true;
-                    var fiOrigResult = FileService.FileInfo(this.FileName);
-                    if (fiOrigResult.IsFailed)
-                        return;
-                    var fiOriginal = fiOrigResult.Value;
-                    UpdateVariables(new Dictionary<string, object>
-                    {
-                        { "file.Create", fiOriginal.CreationTime },
-                        { "file.Create.Year", fiOriginal.CreationTime.Year },
-                        { "file.Create.Month", fiOriginal.CreationTime.Month },
-                        { "file.Create.Day", fiOriginal.CreationTime.Day },
-
-                        { "file.Modified", fiOriginal.LastWriteTime },
-                        { "file.Modified.Year", fiOriginal.LastWriteTime.Year },
-                        { "file.Modified.Month", fiOriginal.LastWriteTime.Month },
-                        { "file.Modified.Day", fiOriginal.LastWriteTime.Day },
-
-                        { "file.Orig.Extension", fiOriginal.Extension ?? string.Empty },
-                        { "file.Orig.FileName", fiOriginal.Name ?? string.Empty },
-                        { "file.Orig.Name", fiOriginal.Name ?? string.Empty },
-                        { "file.Orig.FileNameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
-                        { "file.Orig.NameNoExtension", FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty },
-                        { "file.Orig.FullName", fiOriginal.FullName ?? string.Empty },
-                        { "file.Orig.Size", fiOriginal.Length },
-
-                        { "folder.Orig.Name", FileHelper.GetDirectoryName(fiOriginal.FullName) ?? string.Empty },
-                        { "folder.Orig.FullName", fiOriginal.Directory ?? "" }
-                    });
-                    if (FileService.DirectorySize(fiOriginal.Directory).Success(out var origSize))
-                        Variables["folder.Orig.Size"] = origSize;
-
-                    if (string.IsNullOrEmpty(this.LibraryPath) == false &&
-                        fiOriginal.FullName.StartsWith(this.LibraryPath))
+                    if (FileName.StartsWith("http", StringComparison.InvariantCultureIgnoreCase) == false 
+                        && FileService.FileInfo(this.FileName).Success(out var fiOriginal))
                     {
                         UpdateVariables(new Dictionary<string, object>
                         {
-                            { "file.Orig.RelativeName", fiOriginal.FullName.Substring(LibraryPath.Length + 1) }
+                            { "file.Create", fiOriginal.CreationTime },
+                            { "file.Create.Year", fiOriginal.CreationTime.Year },
+                            { "file.Create.Month", fiOriginal.CreationTime.Month },
+                            { "file.Create.Day", fiOriginal.CreationTime.Day },
+
+                            { "file.Modified", fiOriginal.LastWriteTime },
+                            { "file.Modified.Year", fiOriginal.LastWriteTime.Year },
+                            { "file.Modified.Month", fiOriginal.LastWriteTime.Month },
+                            { "file.Modified.Day", fiOriginal.LastWriteTime.Day },
+
+                            { "file.Orig.Extension", fiOriginal.Extension ?? string.Empty },
+                            { "file.Orig.FileName", fiOriginal.Name ?? string.Empty },
+                            { "file.Orig.Name", fiOriginal.Name ?? string.Empty },
+                            {
+                                "file.Orig.FileNameNoExtension",
+                                FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty
+                            },
+                            {
+                                "file.Orig.NameNoExtension",
+                                FileHelper.GetShortFileNameWithoutExtension(fiOriginal.FullName) ?? string.Empty
+                            },
+                            { "file.Orig.FullName", fiOriginal.FullName ?? string.Empty },
+                            { "file.Orig.Size", fiOriginal.Length },
+
+                            { "folder.Orig.Name", FileHelper.GetDirectoryName(fiOriginal.FullName) ?? string.Empty },
+                            { "folder.Orig.FullName", fiOriginal.Directory ?? "" }
                         });
+                        if (FileService.DirectorySize(fiOriginal.Directory).Success(out var origSize))
+                        {
+                            folderSize = origSize;
+                            Variables["folder.Orig.Size"] = origSize;
+                        }
+                        else
+                        {
+                            folderSize = 0;
+                        }
+
+
+                        if (string.IsNullOrEmpty(this.LibraryPath) == false &&
+                            fiOriginal.FullName.StartsWith(this.LibraryPath))
+                        {
+                            UpdateVariables(new Dictionary<string, object>
+                            {
+                                { "file.Orig.RelativeName", fiOriginal.FullName.Substring(LibraryPath.Length + 1) }
+                            });
+                        }
                     }
                 }
             }
-            if (FileService.DirectorySize(filename).Success(out var size))
+
+            if (folderSize is > 0)
+                Variables["folder.Size"] = folderSize.Value;
+            else if (folderSize == null && FileService.DirectorySize(filename).Success(out var size))
                 Variables["folder.Size"] = size;
         }
         catch (Exception ex)
@@ -662,8 +704,31 @@ public class NodeParameters
     public void SetParameter(string name, object value)
     {
         if (Parameters.TryAdd(name, value) == false)
-            Parameters.Add(name, value);
+            Parameters[name] = value;
     }
+
+    /// <summary>
+    /// Sets the tag on the file
+    /// </summary>
+    /// <param name="tags">the tags to set</param>
+    /// <param name="replace">if the tags should be replaced</param>
+    public void SetTagsByUid(IEnumerable<Guid> tags, bool replace)
+        => SetTagsFunction?.Invoke(tags.ToArray(), replace);
+
+    /// <summary>
+    /// Adds a tags by their name
+    /// </summary>
+    /// <param name="names">the names of the tag</param>
+    /// <returns>the number of tags added</returns>
+    public int AddTags(params string[] names)
+        => SetTagsByNameFunction?.Invoke(names, false) ?? 0;
+    /// <summary>
+    /// Sets tags by their name
+    /// </summary>
+    /// <param name="names">the names of the tag</param>
+    /// <returns>the number of tags added</returns>
+    public int SetTags(params string[] names)
+        => SetTagsByNameFunction?.Invoke(names, true) ?? 0;
     
     /// <summary>
     /// Moves the working file
@@ -858,7 +923,6 @@ public class NodeParameters
         return result;
     }
 
-
     /// <summary>
     /// Gets a new guid as a string
     /// </summary>
@@ -1007,4 +1071,21 @@ public enum NodeResult
     /// The execution succeeded
     /// </summary>
     Success = 1,
+}
+
+/// <summary>
+/// Reprocess options for a file
+/// </summary>
+public class ReprocessOptions
+{
+    /// <summary>
+    /// Gets or sets a another processing node to reprocess this file on.
+    /// This will be marked for reprocessing once completed.
+    /// </summary>
+    public ObjectReference? ReprocessNode { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the file should be held for a number of minutes before reprocessing
+    /// </summary>
+    public int? HoldForMinutes { get; set; }
 }

@@ -83,7 +83,7 @@ public partial class InputNumber<TItem> : Input<TItem>
     {
         if (e.Code == "Enter")
             await OnSubmit.InvokeAsync();
-        else if (e.Code == "Escape")
-            await OnClose.InvokeAsync();
+        // else if (e.Code == "Escape")
+        //     await OnClose.InvokeAsync();
     }
 }

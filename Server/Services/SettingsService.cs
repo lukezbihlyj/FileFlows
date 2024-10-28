@@ -69,6 +69,7 @@ public class SettingsService : ISettingsService
             cfg.Libraries = await ServiceLoader.Load<LibraryService>().GetAllAsync();
             cfg.LicenseLevel = (LicenseHelper.IsLicensed() ? LicenseHelper.GetLicense()?.Level : null) ?? LicenseLevel.Free;
             cfg.AllowRemote = settings.FileServerDisabled == false && LicenseHelper.IsLicensed(LicenseFlags.FileServer);
+            cfg.Tags = (await ServiceLoader.Load<TagService>().GetAllAsync()).ToDictionary(x => x.Uid, x => x.Name);
             cfg.PluginSettings = await new PluginService().GetAllPluginSettings();
             cfg.MaxNodes = LicenseHelper.IsLicensed() ? 250 : 30;
             cfg.KeepFailedFlowTempFiles = settings.KeepFailedFlowTempFiles;

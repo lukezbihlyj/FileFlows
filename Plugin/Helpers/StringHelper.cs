@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace FileFlows.Plugin.Helpers;
@@ -14,8 +15,39 @@ public class StringHelper(ILogger _logger)
     /// <param name="input">The input string to check.</param>
     /// <returns>True if the input is a regular expression, otherwise false.</returns>
     public static bool IsRegex(string input)
+        => input.StartsWith('/') && input.EndsWith('/') && input.Length > 2;
+    // {
+    //     return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
+    // }
+    
+    /// <summary>
+    /// Matches an object, if value is a boolean then 1 or true will match true, and 0 or false will match false
+    /// </summary>
+    /// <param name="matchExpression">the match expression</param>
+    /// <param name="value">the value</param>
+    /// <returns>true if matches, otherwise false</returns>
+    public bool Matches(string matchExpression, object? value)
     {
-        return new[] { "?", "|", "^", "$", "*" }.Any(ch => input.Contains(ch));
+        if (value is JsonElement jsonElement)
+        {
+            if (jsonElement.ValueKind == JsonValueKind.False)
+                value = false;
+            else if (jsonElement.ValueKind == JsonValueKind.True)
+                value = true;
+            else if (jsonElement.ValueKind == JsonValueKind.Null)
+                value = null;
+        }
+        
+        if (value is bool bValue)
+        {
+            if (matchExpression is "1" or "^0")
+                return bValue;
+            if (matchExpression is "0" or "^1")
+                return !bValue;
+            value = value.ToString().ToLowerInvariant();
+        }
+
+        return Matches(matchExpression, value.ToString());
     }
 
     /// <summary>
@@ -54,6 +86,9 @@ public class StringHelper(ILogger _logger)
     {
         matchExpression = matchExpression?.Trim() ?? string.Empty;
         value = value?.Trim() ?? string.Empty;
+        
+        _logger?.ILog("Testing match expression: " + matchExpression);
+        _logger?.ILog("Testing match value: " + value);
 
         bool invert = false;
 
@@ -61,6 +96,8 @@ public class StringHelper(ILogger _logger)
         {
             invert = true;
             matchExpression = matchExpression[1..];
+            _logger?.ILog("Expression is inverted");
+            _logger?.ILog("Match expression: " + matchExpression);
         }
 
         // Handle exact match
@@ -93,6 +130,15 @@ public class StringHelper(ILogger _logger)
             _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !endsWith : endsWith;
         }
+        
+        if((matchExpression.Equals("false", StringComparison.InvariantCultureIgnoreCase) && value == "0") || 
+           (matchExpression.Equals("true", StringComparison.InvariantCultureIgnoreCase) && value == "1") ||
+           (matchExpression.Equals("0", StringComparison.InvariantCultureIgnoreCase) && value == "false") || 
+           (matchExpression.Equals("1", StringComparison.InvariantCultureIgnoreCase) && value == "true"))
+        {
+            _logger?.ILog("Boolean match found");
+            return !invert;
+        }
 
         if (IsRegex(matchExpression) == false)
             return invert;
@@ -100,6 +146,9 @@ public class StringHelper(ILogger _logger)
         // Handle regex
         try
         {
+            if (matchExpression.StartsWith("/") && matchExpression.EndsWith("/"))
+                matchExpression = matchExpression[1..^1];
+            
             var rgx = new Regex(matchExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
             bool matchesRegex = rgx.IsMatch(value);
             _logger?.ILog($"Match found: '{value}' matches pattern '{matchExpression}'" + (invert ? " (negated)" : ""));

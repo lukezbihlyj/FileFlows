@@ -51,7 +51,8 @@ html, body {
 }
 
 a, .btn-link {
-    color: var(--accent) !important;
+    color: var(--accent-2) !important;
+    font-weight: var(--bold, 600);
 }
 
 td a, span.column a {
@@ -79,10 +80,6 @@ td a, span.column a {
     color: var(--color);
     background-color: var(--primary);
     border-color: var(--primary);
-}
-
-.content {
-    padding-top: 1.1rem;
 }
 
 .valid.modified:not([type=checkbox]):not(:focus) {
@@ -125,9 +122,9 @@ td a, span.column a {
 
 
 ::-webkit-scrollbar{
-    width: 6px;
+    width: var(--scroller-width);
     height: 10px;
-    border-radius: 6px;
+    border-radius: var(--scroller-width);
     --scrollbar-track-color: #333;
     background-color: var(--scrollbar-track-color);
     
@@ -137,7 +134,7 @@ td a, span.column a {
     border-radius: 0px;
 }
 ::-webkit-scrollbar-thumb {
-    border-radius: 6px !important;
+    border-radius: var(--scroller-width) !important;
     --scrollbar-thumb-color: #444;
     background-color: var(--scrollbar-thumb-color);
 }
@@ -224,24 +221,32 @@ input[type=file]{
 
 }
 
-.box.info {
-    padding:1rem 1rem 1rem 3rem ;
-    color:var(--color);
-    font-size:0.85rem;
-    position:relative;
-    border:solid 1px var(--yellow);
-    white-space:pre-line !important;
-    margin-bottom:1rem;
+.box.info { 
+    padding: 1rem 1rem 1rem 3rem;
+    color: var(--color);
+    font-size: 0.85rem;
+    position: relative;
+    border: solid 2px var(--accent-2);
+    white-space: pre-line !important;
+    margin-bottom: 1rem;
+    border-radius: var(--container-border-radius);
     &::before {
-        font-family: "Font Awesome 5 Free"; font-weight: 900; content: "\f071";
-        position:absolute;
-        left:1rem;
-        color:var(--yellow);
-    }
-    a {
-        color: var(--yellow) !important;
-        font-weight: var(--bold, 600);
-        text-decoration: underline;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f05a";
+        position: absolute;
+        background: var(--accent-2);
+        color: #000;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 2.5rem;
+        text-align-last: center;
+        align-content: center;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -355,12 +360,12 @@ input[type=file]{
         }
         .value {
             select {
-                width:100%;
                 height: var(--input-height);
+                width: 100%;
             }
             input[type=text] {
-                width:100%;
                 height: var(--input-height);
+                width: 100%;
             }
         } 
     }
@@ -406,6 +411,7 @@ input[type=file]{
     select {
         background: var(--input-background) !important;
         border: solid 1px var(--border-color) !important;
+        width: unset !important;
     }
     .applyBtn:disabled {
         display: none !important;
@@ -419,6 +425,16 @@ input[type=file]{
     {
         background:rgba(var(--accent-rgb), 0.5) !important;
         color: var(--color) !important;
+    }
+    .calendar-table  {
+        .prev, .next {
+            &:hover {
+                background-color: #333 !important;
+            }
+            span {
+                border-color:#fff !important;
+            }
+        }
     }
 }
 
@@ -467,11 +483,13 @@ input[type=file]{
     
     .inner {
         border: solid 1px var(--base-lightest);
+        background:var(--widget-background);
         position: absolute;
         left: 0.25rem;
         right: 0.25rem;
         bottom: 0.25rem;
         top: 0.25rem;
+        border-radius: var(--container-border-radius);
     }
     
 
@@ -1210,6 +1228,9 @@ input[type=file]{
     &.blue {
         --iv-color: #345772;
     }
+    &.dark {
+        --iv-color:var(--dark);
+    }
 
     &.purple {
         --iv-color: #780746;
@@ -1243,18 +1264,23 @@ input[type=file]{
     &.clickable {
         cursor: pointer;
     }
-
     i {
         padding: 0 0.5rem;
         background: var(--iv-color);
         display: flex;
         align-items: center;
     }
+    
+    img {
+        max-height: 1.5rem;
+        width: 1.5rem;
+    }
 
     .value {
         font-weight: var(--bold, 600);
         padding: 0 0.5rem;
         align-self: center;
+        white-space: nowrap;
     }
 }
 

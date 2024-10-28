@@ -1,0 +1,1736 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "About": "Over",
+    "Add": "Toevoegen",
+    "AdminRequired": "Administrator vereist om installatie te voltooien.",
+    "Advanced": "Geavanceerd",
+    "All": "Alle",
+    "And": "En",
+    "Any": "Enige",
+    "Architecture": "Architectuur",
+    "Audit": "Audit",
+    "BaseCodeOn": "Gebruik Code Sjabloon",
+    "Browse": "Bladeren",
+    "Cancel": "Annuleren",
+    "CancelItems": "Weet je zeker dat je de geselecteerde {count, plural, one {item} other {items}} wilt annuleren?",
+    "CancelMessage": "Weet je zeker dat je wilt annuleren en alle niet-opgeslagen wijzigingen wilt verliezen?",
+    "ChangePassword": "Wachtwoord Wijzigen",
+    "Clear": "Wissen",
+    "Close": "Sluiten",
+    "CommunityFlows": "Community Stromen",
+    "Confirm": "Bevestigen",
+    "CopiedToClipboard": "Gekopieerd ''{text}'' naar het klembord.",
+    "Copy": "Kopiëren",
+    "CopyToClipboard": "Kopiëren naar klembord",
+    "Decrease": "Afnemen",
+    "Default": "Standaard",
+    "Delete": "Verwijderen",
+    "DeleteItems": "Weet je zeker dat je de geselecteerde {count, plural, one {item} other {items}} wilt verwijderen?",
+    "DeleteLibraryFiles": "Weet je zeker dat je de geselecteerde {count, plural, one {file} other {files}} wilt verwijderen?\n\nLet op, dit verwijdert de {count, plural, one {file} other {files}} niet van de schijf, {count, plural, one {het} other {ze}} zullen alleen uit de FileFlows-database worden verwijderd.",
+    "DeleteLibraryFilesPhysicallyMessage": "Weet je zeker dat je de geselecteerde {count, plural, one {file} other {files}} wilt verwijderen?\n\nLet op, dit verwijdert de {count, plural, one {file} other {files}} permanent van de schijf en kan niet ongedaan worden gemaakt.",
+    "DeleteLibraryFilesPhysicallySwitch": "Verwijder bestanden van schijf",
+    "Deleting": "Verwijderen",
+    "Description": "Beschrijving",
+    "Disabled": "Uitgeschakeld",
+    "Disconnected": "Verbonden",
+    "Discord": "Discord",
+    "Download": "Downloaden",
+    "DownloadLog": "Download Log",
+    "DownloadLogShort": "Log",
+    "Duplicate": "Dupliceren",
+    "Edit": "Bewerken",
+    "EditSubFlow": "Bewerk Sub Flow",
+    "Enabled": "Ingeschakeld",
+    "Execute": "Uitvoeren",
+    "Executing": "Uitvoeren",
+    "Export": "Exporteren",
+    "Failed": "Mislukt",
+    "Fields": "Velden",
+    "Filter": "Filter",
+    "FilterPlaceholder": "Filter (/)",
+    "Finish": "Voltooien",
+    "Flow": "Stroom",
+    "FlowElement": "Stroom Element",
+    "FlowElements": "Stroom Elementen",
+    "ForceProcessing": "Dwing Verwerking Af",
+    "Forum": "Forum",
+    "Help": "Help",
+    "Import": "Importeren",
+    "Increase": "Verhogen",
+    "Input": "Invoer",
+    "Installed": "Geïnstalleerd",
+    "InternalProcessingNode": "Interne verwerkingsknooppunt",
+    "InUse": "In Gebruik",
+    "LastRun": "Laatste Uitvoering",
+    "LastScanned": "Laatste Gescand",
+    "License": "Licentie",
+    "Loading": "Laden",
+    "Log": "Log",
+    "Logout": "Uitloggen",
+    "LogPartialNotAvailable": "Kon gedeeltelijke log voor knooppunt niet vinden.",
+    "MappingIssue": "Mapping Probleem",
+    "Memory": "Geheugen",
+    "MissingDependencies": "Ontbrekende Afhankelijkheden",
+    "MissingDependenciesMessage": "De volgende ontbrekende plugins moeten worden gedownload voordat je deze sjabloon kunt gebruiken:\n\n#LIST#",
+    "MonthShort": "Mnd",
+    "Name": "Naam",
+    "Never": "Nooit",
+    "Next": "Volgende",
+    "No": "Nee",
+    "NoAuditHistoryAvailable": "Geen auditgeschiedenis beschikbaar",
+    "Node": "Knooppunt",
+    "NoFilesCurrentlyProcessing": "Geen bestanden worden momenteel verwerkt",
+    "NoFilesRecentlyFinished": "Geen bestanden recentelijk voltooid",
+    "None": "Geen",
+    "NoUpcomingFiles": "Geen aankomende bestanden",
+    "Number": "Nummer",
+    "Ok": "OK",
+    "Open": "Openen",
+    "OperatingSystem": "Besturingssysteem",
+    "Other": "Overig",
+    "Output": "Uitvoer",
+    "Paste": "Plakken",
+    "Pause": "Verwerking Pauseren",
+    "Paused": "Verwerking Hervatten",
+    "PausedWithTime": "Hervatten In",
+    "Percent": "Percentage",
+    "Pixels": "Pixels",
+    "Plugins": "Plugins",
+    "PossibilityDisconnected": "Mogelijk Verbonden",
+    "Previous": "Vorige",
+    "ProcessingPaused": "Verwerking is momenteel gepauzeerd",
+    "Prompt": "Prompt",
+    "Properties": "Eigenschappen",
+    "ReadOnly": "Alleen Lezen",
+    "Redo": "Opnieuw",
+    "Refresh": "Vernieuwen",
+    "Remove": "Verwijderen",
+    "Repository": "Repository",
+    "Reprocess": "Herverwerken",
+    "Rescan": "Herscannen",
+    "Reset": "Resetten",
+    "ResetLayout": "Reset Lay-out",
+    "Restore": "Herstellen",
+    "RestoredFailedMessage": "Herstellen van {type} mislukt",
+    "RestoredMessage": "{type} hersteld",
+    "Restoring": "Herstellen",
+    "Resume": "Hervatten",
+    "ReturnCode": "Retourcode",
+    "Revisions": "Herzieningen",
+    "Run": "Uitvoeren",
+    "RunAt": "Uitvoeren Op",
+    "RunHistory": "Uitvoergeschiedenis",
+    "Running": "Lopen",
+    "Save": "Opslaan",
+    "Saving": "Opslaan",
+    "Savings": "Besparingen",
+    "Schedule": "Schema",
+    "Scripts": "Scripts",
+    "Search": "Zoeken",
+    "Searching": "Zoeken",
+    "Select": "Selecteren",
+    "SelectOne": "Selecteer Eén",
+    "SetStatusProcessed": "Markeren als Verwerkt",
+    "Settings": "Instellingen",
+    "ShowHidden": "Verste Hidden",
+    "Size": "Grootte",
+    "SortBy": "Sorteren op",
+    "SpaceIncrease": "{size} toename, {items} items",
+    "SpaceSavings": "{size} bespaard, {items} items",
+    "Status": "Status",
+    "SubFlow": "Sub Stroom",
+    "SubFlows": "Sub Stromen",
+    "Success": "Succes",
+    "Tag": "Tag",
+    "Test": "Test",
+    "Time": "Tijd",
+    "Total": "Totaal",
+    "Trigger": "Trigger",
+    "Type": "Type",
+    "Undo": "Ongedaan Maken",
+    "UnsavedChanges": "Niet-opgeslagen Wijzigingen",
+    "Update": "Bijwerken",
+    "UpdateAll": "Alles bijwerken",
+    "UpdateAvailable": "Nieuwe versie beschikbaar {version}",
+    "UsedBy": "Gebruikt Door",
+    "Version": "Versie",
+    "VersionNumber": "Versie: {version}",
+    "View": "Bekijk",
+    "ViewLog": "Bekijk Log",
+    "WeekShort": "Wk",
+    "When": "Wanneer",
+    "Yes": "Ja",
+    "DateRanges": {
+      "AnyTime": "Elke Tijd",
+      "Last12Months": "Laatste 12 Maanden",
+      "Last24Hours": "Laatste 24 Uren",
+      "Last31Days": "Laatste 31 Dagen",
+      "Last3Days": "Laatste 3 Dagen",
+      "Last3Months": "Laatste 3 Maanden",
+      "Last6Months": "Laatste 6 Maanden",
+      "Last7Days": "Laatste 7 Dagen",
+      "Live": "Live",
+      "Today": "Vandaag",
+      "Yesterday": "Gisteren"
+    },
+    "ObsoleteConfirm": {
+      "Message": "Het wordt aanbevolen om over te schakelen naar een ander stroomelement.",
+      "Question": "Dit stroomelement is nu verouderd en zal binnenkort worden verwijderd. Weet je zeker dat je dit wilt gebruiken?",
+      "Title": "Verouderd Stroomelement"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' toegevoegd",
+    "ChangePassword": "Gebruiker ''{User}'' heeft wachtwoord veranderd",
+    "Deleted": "{Type} ''{Name}'' verwijderd",
+    "Login": "Gebruiker ''{User}'' ingelogd",
+    "LoginFailed": "Inloggen van gebruiker ''{User}'' mislukt",
+    "PasswordReset": "Gebruiker ''{User}'' heeft hun wachtwoord gereset",
+    "PasswordResetRequest": "Gebruiker ''{User}'' heeft een wachtwoordreset aangevraagd",
+    "SettingsUpdated": "Instellingen bijgewerkt",
+    "Updated": "{Type} ''{Name}'' bijgewerkt"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "Voeg handmatig bestanden of URL's toe voor verwerking.",
+      "Title": "Voeg Bestanden Toe",
+      "Fields": {
+        "AnyNode": "Elke Knoop",
+        "Flow": "Stroom",
+        "List": "Lijst",
+        "Mode": "Invoermodus",
+        "Node": "Knoop",
+        "Raw": "Bulkinvoer (Tekstblok)"
+      }
+    },
+    "AuditEntry": {
+      "ViewerTitle": "Wijzigingen",
+      "Columns": {
+        "Field": "Veld",
+        "Value": "Waarde"
+      }
+    },
+    "ChangePassword": {
+      "Changed": "Wachtwoord gewijzigd",
+      "InvalidPassword": "Oude wachtwoord is ongeldig",
+      "MinimumLength": "Nieuw wachtwoord is te kort",
+      "NewPassword": "Nieuw Wachtwoord",
+      "NewPasswordConfirm": "Bevestigen",
+      "OldPassword": "Oude Wachtwoord",
+      "PasswordMismatch": "Wachtwoorden komen niet overeen.",
+      "Title": "Wachtwoord Wijzigen"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "Selecteer Een Directory",
+      "FileTitle": "Selecteer Een Bestand"
+    },
+    "FlowTemplatePicker": {
+      "Title": "Selecteer een sjabloon om mee te beginnen"
+    },
+    "Import": {
+      "Message": "Selecteer een geëxporteerde stroom om in het systeem te importeren.",
+      "Title": "Importeer Stroom"
+    },
+    "ImportScript": {
+      "Title": "Script Importeren",
+      "Messages": {
+        "NoMoreImports": "Er zijn geen extra importen beschikbaar voor dit script"
+      }
+    },
+    "PauseDialog": {
+      "Message": "Selecteer de hoeveelheid tijd om de verwerking te pauzeren.\nOpmerking: De huidige stromen blijven uitvoeren, maar er zullen geen andere stromen worden uitgevoerd totdat deze tijd verstreken is.",
+      "Title": "Pauzeer Verwerking"
+    },
+    "ReprocessDialog": {
+      "Description": "Herladen van de geselecteerde bestand(en) met de volgende parameters",
+      "Title": "Herladen",
+      "Fields": {
+        "AnyNode": "Elke Knoop",
+        "BottomOfQueue": "Onderaan de wachtrij",
+        "CustomVariables": "Aangepaste Variabelen",
+        "CustomVariablesKey": "Aangepaste Variabele",
+        "CustomVariablesMode": "Aangepaste Variabelen",
+        "CustomVariablesValue": "Waarde",
+        "Flow": "Stroom",
+        "Merge": "Voeg aangepaste variabelen samen met origineel",
+        "Node": "Knoop",
+        "Original": "Gebruik originele aangepaste variabelen",
+        "Position": "Positie",
+        "Replace": "Vervang originele aangepaste variabelen",
+        "SameFlow": "Geen verandering",
+        "TopOfQueue": "Bovenaan de wachtrij"
+      },
+      "ProcessOptions": {
+        "Description": "Wijzig de verwerkingsparameters voor de geselecteerde bestand(en)",
+        "Title": "Verwerkingsopties"
+      }
+    },
+    "ResumeDialog": {
+      "Message": "Weet u zeker dat u de verwerking wilt hervatten?",
+      "Title": "Hervat Verwerking"
+    },
+    "ScriptLanguage": {
+      "Title": "Script Taal",
+      "Labels": {
+        "BatchDescription": "Batchbestanden kunnen alleen worden uitgevoerd op Windows-systemen. Ze kunnen basisvariabelen lezen maar kunnen geen FileFlows-objecten bijwerken of openen tijdens uitvoering.",
+        "CSharpDescription": "C#-scripts kunnen met meer delen van FileFlows interageren en zijn het krachtigst. Ze gebruiken dezelfde taal als FileFlows, waardoor een grotere interactie met het systeem mogelijk is.",
+        "FileDisplayName": "Bestandsweergavenaam",
+        "FileDisplayNameDescription": "Een gespecialiseerd script dat aanpast hoe bestandsnamen worden weergegeven in de FileFlows-webconsole. Dit script wijzigt de daadwerkelijke bestanden niet, alleen hoe ze in de interface worden weergegeven.",
+        "JavaScriptDescription": "JavaScript-scripts worden uitgevoerd binnen de FileFlows-loper, waardoor je variabelen kunt lezen en schrijven en toegang hebt tot alle hulpfuncties binnen FileFlows.",
+        "PowerShellDescription": "PowerShell-scripts kunnen alleen worden uitgevoerd op Windows-systemen. Ze kunnen basisvariabelen lezen maar kunnen geen FileFlows-objecten bijwerken of openen tijdens uitvoering.",
+        "ShellDescription": "Shell-scripts worden uitgevoerd op Unix-gebaseerde systemen (Linux, MacOS, Docker). Ze kunnen basisvariabelen lezen maar kunnen geen FileFlows-objecten bijwerken of openen tijdens uitvoering."
+      }
+    }
+  },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip is een gratis en open-source bestandsarchiveringsprogramma, een hulpprogramma dat wordt gebruikt om groepen bestanden in gecomprimeerde containers, bekend als 'archieven', te plaatsen.",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip is een applicatie die wordt gebruikt voor het detecteren van reclames in videobestanden. Het analyseert MPEG- of H.264-bestanden en genereert uitvoerbestanden die de locatie van reclames bevatten.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installeert Docker binnen Docker. Dit stelt je in staat om zuster-Docker-containers te starten.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg is een gratis en open-source softwareproject dat bestaat uit een suite van bibliotheken en programma's voor het verwerken van video-, audio- en andere multimedia-bestanden en -streams. In het hart van het project bevindt zich het commandoregelprogramma ffmpeg, dat is ontworpen voor de verwerking van video- en audiobestanden.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git vereenvoudigt het proces van het downloaden en beheren van verschillende bronnen, zoals softwarepakketten of configuraties, uit externe repositories, waardoor het een essentieel hulpmiddel is voor gebruikers die efficiënte toegang tot bestanden en projecten zoeken.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop is een interactieve procesviewer en systeemonitor voor Unix-achtige besturingssystemen, die een gebruiksvriendelijke interface biedt om systeembronnen te bewaken en processen te beheren.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, opgeroepen vanuit de opdrachtregel als magick, is een gratis en open-source cross-platform softwarepakket voor het weergeven, creëren, converteren, wijzigen en bewerken van rasterafbeeldingen.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK is een open-source implementatie van het Java Platform, Standard Edition (Java SE), dat een gratis en cross-platform ontwikkelomgeving biedt voor het bouwen en uitvoeren van Java-toepassingen.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix is een set tools om Matroska (MKV) bestanden te maken, te wijzigen, te splitsen, samen te voegen en te inspecteren.",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano is een eenvoudige en gebruiksvriendelijke teksteditor voor Unix-achtige besturingssystemen, die basisbewerkingsmogelijkheden biedt in een terminalomgeving.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch is een systeeminformatiehulpmiddel geschreven in de Bash-shell scriptingtaal. Standaard bevindt zich aan de linkerkant een logo van de distributie, weergegeven in ASCII-kunst.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js is een open-source, cross-platform JavaScript-runtime-omgeving die JavaScript-code uitvoert buiten een webbrowser, waardoor ontwikkelaars server-side en netwerkt toepassingen kunnen bouwen.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 is een high-level, geïnterpreteerde programmeertaal die bekend staat om zijn eenvoud, leesbaarheid en veelzijdigheid, en veel wordt gebruikt voor webontwikkeling, data-analyse, kunstmatige intelligentie en scriptingtaken.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR is een archieffileformaat dat wordt gebruikt voor gegevenscompressie, terwijl UNRAR een hulpprogramma is om inhoud uit RAR-archieven te extraheren.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim is een gratis en open-source, schermgebaseerd tekstbewerkingsprogramma. Het is een verbeterde kloon van vi.",
+      "Label": "Vim"
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "Toegevoegd",
+      "ChangePassword": "Wachtwoord Wijzigen",
+      "Deleted": "Verwijderd",
+      "Login": "Inloggen",
+      "LoginFailed": "Inloggen Mislukt",
+      "PasswordReset": "Wachtwoord Herstel",
+      "PasswordResetRequest": "Aanvraag voor Wachtwoord Herstel",
+      "Updated": "Bijgewerkt"
+    },
+    "DateCompareMode": {
+      "After": "Na",
+      "Any": "Elke",
+      "Before": "Voor",
+      "Between": "Tussen",
+      "GreaterThan": "Groter Dan",
+      "LessThan": "Kleiner Dan",
+      "NotBetween": "Niet Tussen"
+    },
+    "Days": {
+      "Fri": "Vri",
+      "Friday": "Vrijdag",
+      "Mon": "Maa",
+      "Monday": "Maandag",
+      "Sat": "Zat",
+      "Saturday": "Zaterdag",
+      "Sun": "Zon",
+      "Sunday": "Zondag",
+      "Thu": "Don",
+      "Thursday": "Donderdag",
+      "Tue": "Din",
+      "Tuesday": "Dinsdag",
+      "Wed": "Woe",
+      "Wednesday": "Woensdag"
+    },
+    "FilesSortBy": {
+      "Savings": "Besparingen",
+      "SavingsDesc": "Besparingen Afnemend",
+      "Size": "Grootte",
+      "SizeDesc": "Grootte Afnemend",
+      "Time": "Tijd",
+      "TimeDesc": "Tijd Afnemend"
+    },
+    "FileStatus": {
+      "Any": "Elke",
+      "Disabled": "Uitgeschakeld",
+      "Duplicate": "Duplicaat",
+      "FlowNotFound": "Stroom Niet Gevonden",
+      "MappingIssue": "Mapping Probleem",
+      "MissingLibrary": "Ontbrekende Bibliotheek",
+      "OnHold": "In Afwachting",
+      "OutOfSchedule": "Buiten Schema",
+      "Processed": "Verwerkt",
+      "Processing": "Bezig Met Verwerken",
+      "ProcessingFailed": "Verwerken Mislukt",
+      "ReprocessByFlow": "Herladen Door Stroom",
+      "Unprocessed": "Onverwerkt"
+    },
+    "FlowType": {
+      "Failure": "Fout",
+      "Standard": "Standaard",
+      "SubFlow": "Sub Stroom"
+    },
+    "LogType": {
+      "Debug": "Debug",
+      "Error": "Fout",
+      "Info": "Informatie",
+      "Warning": "Waarschuwing"
+    },
+    "MatchRange": {
+      "After": "Na",
+      "Any": "Elke",
+      "Before": "Voor",
+      "Between": "Tussen",
+      "GreaterThan": "Groter Dan",
+      "LessThan": "Kleiner Dan",
+      "NotBetween": "Niet Tussen"
+    },
+    "MathValue": {
+      "Between": "Tussen",
+      "Equals": "Gelijk",
+      "GreaterThan": "Groter Dan",
+      "GreaterThanOrEqual": "Groter Of Gelijk",
+      "LessThan": "Kleiner Dan",
+      "LessThanOrEqual": "Kleiner Of Gelijk",
+      "NotBetween": "Niet Tussen",
+      "NotEquals": "Niet Gelijk"
+    },
+    "Periods": {
+      "Days": "Dagen",
+      "Hours": "Uren",
+      "Minutes": "Minuten",
+      "Weeks": "Weeken"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "Uitgeschakeld",
+      "HigherPriorityNodeAvailable": "Knooppunt met hogere prioriteit beschikbaar",
+      "Idle": "Inactief",
+      "InstallingDockerMods": "DockerMods worden geïnstalleerd",
+      "MaximumRunnersReached": "Maximaal aantal runners bereikt",
+      "Offline": "Offline",
+      "OutOfSchedule": "Buiten Schema",
+      "Processing": "Bezig Met Verwerken",
+      "RestrictedByLibrary": "Beperkt door bibliotheek",
+      "VersionMismatch": "Versie Mismatch"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "Alfabetisch",
+      "AsFound": "Zoals Gevonden (Standaard)",
+      "LargestFirst": "Grootste Eerst",
+      "NewestFirst": "Nieuwste Eerst",
+      "OldestFirst": "Oudste Eerst",
+      "Random": "Willekeurig",
+      "SmallestFirst": "Kleinste Eerst"
+    },
+    "ProcessingPriority": {
+      "High": "Hoog",
+      "Highest": "Het Hoogste",
+      "Low": "Laag",
+      "Lowest": "Het Laagste",
+      "Normal": "Normaal"
+    },
+    "ReportDirection": {
+      "Inbound": "Inkomend",
+      "Outbound": "Uitgaand"
+    },
+    "ReportSchedule": {
+      "Daily": "Dagelijks",
+      "Monthly": "Maandelijks",
+      "Weekly": "Wekelijks"
+    },
+    "SecurityMode": {
+      "Local": "Lokale Gebruikers",
+      "Off": "Geen",
+      "OpenIdConnect": "Open ID Connect"
+    },
+    "TaskType": {
+      "FileAdded": "Bestand Toegevoegd",
+      "FileFlowsServerUpdateAvailable": "Update Beschikbaar",
+      "FileFlowsServerUpdating": "Server Aan Het Bijwerken",
+      "FileProcessed": "Bestand Verwerkt",
+      "FileProcessFailed": "Verwerking Mislukt",
+      "FileProcessing": "Bestand Wordt Verwerkt",
+      "FileProcessSuccess": "Verwerking Succesvol"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "Bestanden",
+      "Flows": "Flows",
+      "Libraries": "Bibliotheken",
+      "Log": "Log",
+      "Nodes": "Knopen",
+      "PauseProcessing": "Verwerking Pauzeren",
+      "Plugins": "Plugins",
+      "Revisions": "Herzieningen",
+      "Scripts": "Scripts",
+      "Tasks": "Taken",
+      "Variables": "Variabelen",
+      "Webhooks": "Webhooks"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "Beide waarden moeten worden ingevoerd",
+    "CannotDeleteInternalNode": "Je kunt de interne verwerkingsknoop niet verwijderen.",
+    "DeleteFailed": "Verwijderen mislukt",
+    "DuplicatesFound": "Duplicaten gevonden",
+    "NameInUse": "Naam is al in gebruik",
+    "NameRequired": "Naam is vereist",
+    "NoFlowSpecified": "Geen flow opgegeven, je moet een flow selecteren om een bibliotheek te maken",
+    "NotAllFilesCouldBeDeleted": "Niet alle bestanden konden worden verwijderd.\nZie het logboek voor meer informatie.",
+    "NotFound": "Item niet gevonden",
+    "SaveFailed": "Opslaan mislukt",
+    "SetFileStatus": "Instellen van de bestandsstatus is mislukt",
+    "UnexpectedError": "Er is een onverwachte fout opgetreden"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "Geen invoerknoop gespecificeerd, elke flow heeft één invoerknoop nodig",
+      "NoParts": "Geen flowonderdelen gespecificeerd, je moet enkele onderdelen hebben om een flow op te slaan",
+      "TooManyInputNodes": "Je kunt maar één invoerknoop hebben"
+    },
+    "Parts": {
+      "Color": "Kleur",
+      "Color-Placeholder": "Aangepaste Kleur",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "Extensies",
+          "Extensions-Help": "Een lijst van extensies die, indien overeenkomend, naar de eerste uitvoerknoop worden uitgevoerd; anders wordt de tweede uitvoerknoop gebruikt."
+        }
+      }
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*Groter Dan*: Stem overeen als de datum ouder is dan de opgegeven periode.\n*Kleiner Dan*: Stem overeen als de datum nieuwer is dan de opgegeven periode.\n*Tussen*: Stem overeen als de datum binnen het opgegeven bereik ligt.\n*Voor*: Stem overeen als de datum vóór de opgegeven datum ligt.\n*Na*: Stem overeen als de datum na de opgegeven datum ligt."
+    }
+  },
+  "MenuGroups": {
+    "Admin": "Admin",
+    "Configuration": "Configuratie",
+    "Extensions": "Extensies",
+    "Information": "Informatie",
+    "Overview": "Overzicht",
+    "Security": "Beveiliging",
+    "System": "Systeem",
+    "User": "Gebruiker"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "Toegangscontrole-invoer",
+      "Title": "Toegangscontrole",
+      "Labels": {
+        "Console": "Webconsole",
+        "Remote": "Afstands- / Verwerkingsknooppunten"
+      },
+      "Buttons": {
+        "MoveDown": "Naar Beneden Verplaatsen",
+        "MoveUp": "Naar Boven Verplaatsen"
+      },
+      "Columns": {
+        "Allow": "Toestaan",
+        "End": "Eind",
+        "Start": "Begin"
+      },
+      "Fields": {
+        "Allow": "Toestaan",
+        "Allow-Help": "Of deze toegangscontrole-invoer is toegestaan om toegang te krijgen tot het systeem of niet.",
+        "Description": "Beschrijving",
+        "Description-Placeholder": "Een optionele beschrijving voor deze invoer",
+        "End": "Eindadres",
+        "End-Help": "Optioneel eind IP-adres, moet groter zijn dan het beginadres als het is ingesteld en van hetzelfde type zijn. Anders wordt deze eindwaarde genegeerd.",
+        "End-Placeholder": "Optioneel eindadres",
+        "Start": "Beginadres",
+        "Start-Help": "Het begin IP-adres kan IPv4 of IPv6 zijn"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "Het eindadres moet groter zijn dan het beginadres",
+        "FamilyMismatch": "De begin- en eind-IP-adressen moeten van hetzelfde type zijn",
+        "InvalidIPAddress": "'{address}' is geen geldig IP-adres.",
+        "MoveFailed": "Verplaatsen van invoeren mislukt"
+      }
+    },
+    "Audit": {
+      "Title": "Audit Log",
+      "Columns": {
+        "Action": "Actie",
+        "Date": "Datum",
+        "IPAddress": "IP-adres",
+        "Operator": "Operator",
+        "Summary": "Samenvatting",
+        "Type": "Type"
+      }
+    },
+    "Dashboard": {
+      "Title": "Dashboard",
+      "Labels": {
+        "AddWidget": "Widget Toevoegen",
+        "CurrentlyPaused": "FileFlows is momenteel gepauzeerd!",
+        "FinalSize": "Eindgrootte",
+        "OriginalSize": "Oorspronkelijke Grootte",
+        "Savings": "Besparingen",
+        "ShrinkageTitle": "Opgeslagen Opslag"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "Mislukt om dashboard te maken",
+        "LogFailed": "Mislukt om log voor werker op te halen"
+      },
+      "Fields": {
+        "Current": "Huidig",
+        "CurrentStep": "Stap",
+        "File": "Bestand",
+        "Library": "Bibliotheek",
+        "Log": "Log",
+        "Node": "Knoop",
+        "Overall": "Totaal",
+        "ProcessingTime": "Verwerkingstijd",
+        "RecentlyFinished": "Onlangs Voltooid",
+        "Uid": "UID",
+        "Upcoming": "Aanstaande",
+        "WorkingFile": "Werkbestand"
+      },
+      "Messages": {
+        "CancelMessage": "Weet je zeker dat je de werker voor {RelativeFile} wilt annuleren?",
+        "DeleteDashboard": "Weet je zeker dat je het huidige dashboard wilt verwijderen?\n\nDit kan niet ongedaan worden gemaakt.",
+        "DeleteWidget": "Weet je zeker dat je deze widget wilt verwijderen?",
+        "Waiting": "Wachten op een bestand om te verwerken"
+      },
+      "Tabs": {
+        "Dashboard": "Dashboard",
+        "Savings": "Besparingen",
+        "Statistics": "Statistieken"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Piek"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Mislukt} other {# Mislukt}}",
+          "Finished": "{count, plural, zero {Voltooid} other {# Voltooid}}",
+          "NoFailedFiles": "Geen mislukte bestanden",
+          "NoRecentlyFinishedFiles": "Geen recent voltooide bestanden",
+          "NoUpcomingFiles": "Geen aankomende bestanden",
+          "Title": "Bestanden",
+          "Upcoming": "{count, plural, zero {Aankomend} other {# Aankomend}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Verwerkte bestanden",
+          "PerDay": "{num} per dag",
+          "PerHour": "{num} per uur",
+          "StorageSaved": "Opgeslagen opslag"
+        },
+        "LargestSavings": {
+          "Title": "Grootste Besparingen"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Geen besparingen",
+          "Title": "Besparingen"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# Bestand} other {# Bestanden}}"
+        },
+        "Status": {
+          "CurrentlyProcessing": "Momenteel wordt {count, plural, one {# bestand} other {# bestanden}} verwerkt",
+          "DockerModUpdates": "{count, plural, one {# DockerMod-update} other {# DockerMod-updates}}",
+          "FileFlowsUpdate": "FileFlows {version} beschikbaar",
+          "Idle": "Het systeem is momenteel inactief",
+          "OutOfSchedule": "Buiten het schema",
+          "OutOfScheduleDay": "Hervatting gepland op {day} om {time}",
+          "OutOfScheduleHours": "Hervatting gepland over ongeveer {hours, plural, one {een uur} other {# uur}}",
+          "OutOfScheduleMinutes": "Hervatting gepland over {minutes, plural, one {minder dan een minuut} other {# minuten}}",
+          "PluginUpdates": "{count, plural, one {# Plugin-update} other {# Plugin-updates}}",
+          "ScriptUpdates": "{count, plural, one {# Script-update} other {# Script-updates}}"
+        },
+        "System": {
+          "Runners": "{count, plural, zero {Processors} one {# Processor} other {# Processors}}",
+          "Title": "Systeem",
+          "Updates": "{count, plural, zero {Updates} one {# Update} other {# Updates}}"
+        },
+        "Updates": {
+          "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "Opgelost",
+          "New": "Nieuw",
+          "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
+          "Scripts": "{count, plural, zero {Scripts} one {# Script} other {# Scripts}}",
+          "Title": "Updates"
+        }
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMods",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "Revisie",
+        "UpdateAvailable": "Update Beschikbaar"
+      },
+      "Fields": {
+        "Code": "Code",
+        "Description": "Beschrijving"
+      },
+      "Messages": {
+        "FailedToExport": "Mislukt om te exporteren.",
+        "Updating": "Bijwerken"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "Taak"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "Taakgeschiedenis",
+      "Fields": {
+        "RunHistory": "Geschiedenis"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "Taakuitvoering",
+      "Fields": {
+        "Log": "Log",
+        "ReturnValue": "Terugwaarde",
+        "RunAt": "Uitgevoerd op",
+        "Success": "Succes"
+      }
+    },
+    "Flow": {
+      "Title": "Stroom",
+      "Labels": {
+        "EditFlow": "Stroom: {Name}",
+        "FlowProperties": "Stroominstellingen",
+        "OpenScriptBrowser": "Scriptbrowser openen",
+        "OpenSubFlowBrowser": "Substroombrowser openen",
+        "SubFlowBrowser": "Substroombrowser",
+        "SubFlowHelp": "Om invoervelden aan een substroom toe te voegen zodat je aangepaste parameters naar deze substroom kunt doorgeven, maak deze op het tabblad `Velden`.\n\nEen substroom moet een enkele `Invoer` hebben, die elk geldig invoerstroomelement kan zijn, bijv. `Invoerbestand`, `Videobestand`, enz."
+      },
+      "Fields": {
+        "Author": "Auteur",
+        "Author-Help": "Optioneel de auteur van deze stroom opgeven.",
+        "Description": "Beschrijving.",
+        "MinimumVersion": "Minimale versie",
+        "Outputs": "Uitgangen",
+        "Outputs-Help": "Het aantal uitgangen dat deze substroom heeft. Dit is het aantal uitgangen dat beschikbaar zal zijn bij het gebruik van deze substroom in een andere stroom.",
+        "OutputsKey": "Uitgang",
+        "OutputsValue": "Beschrijving",
+        "Tags": "Tags",
+        "Variables": "Variabelen",
+        "VariablesKey": "Naam",
+        "VariablesValue": "Waarde",
+        "Field": {
+          "Default": "Standaard",
+          "DeleteIfEmpty": "Verwijder als leeg",
+          "DeleteIfEmpty-Help": "Als hier waarden worden toegevoegd en de gebruiker 'Verwijder origineel' selecteert, wordt de map ook verwijderd als er geen bestand overeenkomt met een van deze reguliere expressies.",
+          "Description": "Een optionele beschrijving die met dit veld wordt weergegeven. Dit kan helptekst voor het veld zijn.",
+          "FlowElementField": "Elementveld",
+          "FlowElementField-Help": "Optioneel, stel dit in het formaat '{Uid}.{FieldName}' in, bijv. '53a72207-34a2-4b71-b3d8-8b12764a85fe.Force' om een veld in een stroomelement rechtstreeks in te stellen. Zie de help voor meer informatie.",
+          "IfName": "Als",
+          "IfName-Help": "Als dit alleen aan de gebruiker moet worden weergegeven als een andere waarde aan deze voorwaarden voldoet.",
+          "IfNot": "Als niet",
+          "IfNot-Help": "Als de waarde omgekeerd moet zijn en alleen moet worden weergegeven als de waarde niet overeenkomt.",
+          "IfValue": "Als waarde",
+          "IfValue-Help": "De waarde om tegen te matchen, kan een reguliere expressie zijn. Gebruik voor booleans true of false.",
+          "Inverse": "Omgekeerd",
+          "Inverse-Help": "Als de schuifwaarden omgekeerd moeten worden weergegeven, met lagere waarden aan de rechterkant.",
+          "Maximum": "Maximum",
+          "Minimum": "Minimum",
+          "Options": "Opties",
+          "Options-Help": "Een array van lijstopties, om een label en waarde in te stellen gebruik een | scheidingsteken, bijv. 'label|waarde'",
+          "Required": "Verplicht",
+          "Required-Help": "Als deze waarde verplicht is en moet worden ingesteld."
+        }
+      },
+      "Messages": {
+        "Close": "Weet je zeker dat je wilt afsluiten en alle onopgeslagen wijzigingen wilt verliezen?",
+        "FailedToLoadFlow": "Mislukt om stroom te laden.",
+        "LoadingFlow": "Stroom laden"
+      }
+    },
+    "Flows": {
+      "Title": "Stromen",
+      "Labels": {
+        "FailureFlows": "Foutstromen",
+        "StandardFlows": "Standaardstromen",
+        "SubFlows": "Substromen"
+      },
+      "Buttons": {
+        "Repository": "Repository"
+      },
+      "Fields": {
+        "Author": "Auteur",
+        "Template": "Sjabloon"
+      },
+      "Messages": {
+        "DeleteUsed": "Je kunt een stroom die in gebruik is niet verwijderen",
+        "Duplicated": "Stroom ''{name}'' gedupliceerd",
+        "FailedToExport": "Mislukt om stroom(s) te exporteren.",
+        "FailureFlowDescription": "Dit is een speciaal stroomtype dat wordt uitgevoerd als een stroom faalt.\nFileFlows zoekt naar de 'Standaard' foutstroom om te gebruiken als een stroom faalt; als deze niet wordt gevonden, wordt de verwerking onmiddellijk gestopt.",
+        "FlowImported": "Stroom ''{name}'' geïmporteerd",
+        "LoadingTemplates": "Sjablonen laden"
+      },
+      "Template": {
+        "Title": "Stroom toevoegen",
+        "Fields": {
+          "PageDescription": "Selecteer een sjabloon om de stroom op te baseren, dit helpt je om te beginnen met een stroom.",
+          "Template": "Sjabloon"
+        }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Ik heb de voorwaarden van de Eindgebruikerslicentieovereenkomst gelezen en ga akkoord",
+        "Language": "Taal"
+      },
+      "Messages": {
+        "RunnersTop": "Geef het aantal runners op dat tegelijkertijd bestanden in uw bibliotheken kan verwerken.\n\nRunners zijn de werkers die bestanden in uw bibliotheken verwerken. Hoe meer runners u hebt, hoe meer bestanden er tegelijkertijd kunnen worden verwerkt.\n\nDeze instelling kan op elk moment worden aangepast door de Interne Verwerkingsknooppunt te bewerken.",
+        "Welcome": "Welkom bij FileFlows! Bedankt dat je voor onze software hebt gekozen.\n\nDeze wizard begeleidt je door de essentiële configuratiestappen, inclusief het accepteren van de EULA en het selecteren van plug-ins om functies toe te voegen op basis van je voorkeuren.\n\nKies uit een verscheidenheid aan plug-ins die zijn afgestemd op het verwerken van verschillende soorten bestanden, zoals video's, audio en afbeeldingen.",
+        "WelcomeUpdate": "We hebben onlangs onze Eindgebruikerslicentieovereenkomst (EULA) bijgewerkt.\n\nNeem even de tijd om de bijgewerkte voorwaarden door te lezen en te accepteren voordat je verdergaat.\n\nJe moet akkoord gaan om verder te kunnen met het gebruik van FileFlows.\n\nBedankt dat je voor FileFlows hebt gekozen.",
+        "Finish": {
+          "Bottom": "Met deze stappen ben je goed op weg om het maximale uit FileFlows te halen.\n\nAls je vragen hebt of hulp nodig hebt, aarzel dan niet om contact op te nemen met ons ondersteuningsteam.",
+          "CreateALibrary": "Maak een Bibliotheek:",
+          "CreateALibraryDescription": "Stel een bibliotheek in om de verwerking van bestanden te automatiseren.\nJe bibliotheek detecteert en verwerkt automatisch bestanden op basis van jouw specifieke criteria,\nwaardoor je workflow wordt vereenvoudigd zonder handmatige interventie.",
+          "CreateFirstFlow": "Maak je Eerste Flow:",
+          "CreateFirstFlowDescription": "Gebruik de geselecteerde plug-ins om je eerste flow te maken.\nOf het nu gaat om het verwerken van videobestanden, audiotracks, afbeeldingen of een ander type bestand, jouw flow\ngeeft je de mogelijkheid om de verwerking van je bestanden aan te passen aan je specifieke behoeften, of deze nu eenvoudig\nof complex zijn.",
+          "Top": "Je hebt FileFlows succesvol geconfigureerd naar jouw wensen. Tijd om het aan het werk te zetten!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Kies welke DockerMods je wilt installeren",
+        "Eula": "EULA",
+        "EulaDescription": "Eindgebruikerslicentieovereenkomst van FileFlows",
+        "Finish": "Voltooien",
+        "FinishDescription": "Initiële Configuratie Voltooid",
+        "Plugins": "Plug-ins",
+        "PluginsDescription": "Kies welke plug-ins je wilt installeren",
+        "Runners": "Runners",
+        "RunnersDescription": "Geef het aantal runners op",
+        "Welcome": "Welkom",
+        "WelcomeDescription": "Welkom bij FileFlows"
+      }
+    },
+    "Libraries": {
+      "Title": "Bibliotheken",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {Bestand} other {Bestanden}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "Er zijn geen stromingen geconfigureerd.\nMaak een stroom aan voordat je een bibliotheek toevoegt of bijwerkt."
+      },
+      "Messages": {
+        "DeleteConfirm": "Weet je zeker dat je de geselecteerde {count, plural, one {bibliotheek} other {bibliotheken}} wilt verwijderen?",
+        "KeepLibraryFiles": "Bestanden in database behouden voor statistieken",
+        "Reprocess": {
+          "Message": "Weet je zeker dat je door wilt gaan met het opnieuw verwerken van de geselecteerde bibliotheken?\n\nDeze actie markeert alle bestanden als onbewerkt en start hun herverwerking. Houd er rekening mee dat deze actie niet ongedaan kan worden gemaakt.",
+          "Title": "Herprocessen geselecteerde bibliotheken"
+        },
+        "Reset": {
+          "Message": "Weet je zeker dat je door wilt gaan met het resetten van de geselecteerde bibliotheken?\n\nDeze actie verwijdert alle bestanden en start een nieuwe scan. Houd er rekening mee dat deze actie niet ongedaan kan worden gemaakt.",
+          "Title": "Reset geselecteerde bibliotheken"
+        }
+      }
+    },
+    "Library": {
+      "Title": "Bibliotheek",
+      "Labels": {
+        "CreationTime": "Aanmaaktijd",
+        "Duplicated": "Bibliotheek ''{name}'' gedupliceerd",
+        "FailedToDuplicate": "Dupliceren mislukt",
+        "LastWriteTime": "Laatste wijzingstijd"
+      },
+      "Fields": {
+        "DetectFileCreation": "Bestand Aanmaak",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "Bestand Laatst Geschreven",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "Bestandsgrootte",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "Hier kunt u een bibliotheek configureren om alleen bestanden te detecteren die aan de gegeven patronen voldoen.\n\nBijvoorbeeld, hiermee kunt u alleen bestanden opnemen die\n\t- Bestanden zijn die minder dan 7 dagen geleden zijn aangemaakt\n\t- Bestanden die tussen 3 en 7 dagen geleden zijn geschreven\n\t- Bestandsgrootte groter dan 1 gigabyte",
+        "DownloadsDirectory": "Downloadmap",
+        "DownloadsDirectory-Help": "Een speciale map waarin als een bestand dat succesvol is verwerkt opnieuw wordt ontdekt in deze map, dat bestand automatisch opnieuw zal worden verwerkt.\nDit is handig als u een bestand opnieuw downloadt.",
+        "Enabled": "Ingeschakeld",
+        "ExcludeHidden": "Verberg Verborgen",
+        "ExcludeHidden-Help": "Wanneer ingeschakeld, worden verborgen bestanden en mappen niet gescand.",
+        "ExclusionFilters": "Uitsluitingen",
+        "ExclusionFilters-Help": "Optionele lijst van uitsluitingen om te draaien tegen de volledige naam van de bestanden.",
+        "Extensions": "Extensies",
+        "Extensions-Help": "Een optionele lijst van extensies voor bestanden die in deze bibliotheek moeten worden opgenomen.\nAls dit leeg is, worden alle bestanden opgenomen, tenzij een filter of uitsluitingsfilter is gedefinieerd op het tabblad 'Geavanceerd'.",
+        "FileSizeDetectionInterval": "Bestand Detectie Interval",
+        "FileSizeDetectionInterval-Help": "De tijd in seconden om te wachten om de bestandsgrootte opnieuw te controleren tijdens de bibliotheekscanner. Gebruik dit als een andere applicatie misschien een bestand in delen schrijft, bijv. een PVR-applicatie die delen van een opname elke 20 seconden schrijft.",
+        "FileSizeDetectionInterval-Suffix": "Seconden",
+        "Filters": "Filters",
+        "Filters-Help": "Optionele lijst van filters om te draaien tegen de volledige naam van de bestanden.",
+        "Flow": "Stroom",
+        "Folders": "Mappen",
+        "Folders-Help": "Als deze bibliotheek mappen in plaats van bestanden verwerkt.\nDit betekent niet dat submappen worden gescand, een bibliotheek doet dit al.\nDit betekent dat een mapobject wordt verwerkt in plaats van individuele bestanden.",
+        "FullScanDisabled": "Volledige Scan Uitschakelen",
+        "FullScanDisabled-Help": "Het doel van de volledige scan is om bestanden te vangen die mogelijk zijn gemist door de gebeurtenissen van het bestandssysteem.",
+        "FullScanIntervalMinutes": "Volledige Scan Interval",
+        "FullScanIntervalMinutes-Help": "Het interval wanneer een volledige scan van deze bibliotheek moet plaatsvinden.",
+        "HoldMinutes": "Vasthouden Minuten",
+        "HoldMinutes-Help": "Optioneel om bestanden die in deze bibliotheek zijn gevonden voor deze hoeveelheid minuten vast te houden voordat ze worden verwerkt. Elk bestand wordt voor deze hoeveelheid tijd vastgehouden.",
+        "HoldMinutes-Suffix": "minuten",
+        "MaxRunners": "Max. Runner",
+        "MaxRunners-Help": "Het maximale aantal runners dat bestanden in deze bibliotheek tegelijkertijd kan verwerken.\nStel in op 0 voor onbeperkt.",
+        "Name": "Naam",
+        "Path": "Pad",
+        "Priority": "Prioriteit",
+        "Priority-Help": "De prioriteit waarmee bestanden moeten worden verwerkt. Als een bibliotheek met een hogere prioriteit bestanden heeft die wachten om te worden verwerkt, zullen deze eerst worden gedaan.",
+        "ProcessingOrder": "Verwerkingsvolgorde",
+        "ProcessingOrder-Help": "De volgorde waarin bestanden door deze bibliotheek zullen worden verwerkt.",
+        "ReprocessRecreatedFiles": "Herprocessen van Hercreërde Bestanden",
+        "ReprocessRecreatedFiles-Help": "Wanneer ingeschakeld, als een bestand opnieuw wordt gedetecteerd met een andere aanmaaktijd dan die is geregistreerd, wordt het bestand automatisch ingesteld om opnieuw te worden verwerkt.\nDit is nuttig bij een bibliotheek van gedownloade bestanden, waar u hetzelfde bestand meerdere keren kunt downloaden en het elke keer wilt verwerken.",
+        "Scan": "Scannen",
+        "Scan-Help": "Wanneer Scannen is ingeschakeld, zal de bibliotheek routinematig worden gescand op nieuwe inhoud.\nWanneer uitgeschakeld, luistert de bibliotheek naar gebeurtenissen van het bestandssysteem om nieuwe bestanden te detecteren.\nHet is het beste om dit uit te laten staan, tenzij u problemen ondervindt met bestanden die niet worden gedetecteerd.",
+        "ScanInterval": "Scan Interval",
+        "ScanInterval-Help": "De kortst mogelijke tijd in seconden tussen scans. Het is niet gegarandeerd dat op dit interval elke keer wordt gescand, aangezien een andere scan mogelijk al bezig is.",
+        "ScanInterval-Suffix": "Seconden",
+        "Schedule": "Schema",
+        "ScheduleDescription": "Hiermee kunt u configureren wanneer deze bibliotheek actief zal zijn.\n\nDe bibliotheekscanner zal niet tegen deze bibliotheek draaien en er zullen geen bestanden worden verwerkt buiten het schema.",
+        "SkipFileAccessTests": "Sla Bestand Toegangs Tests Over",
+        "SkipFileAccessTests-Help": "Wanneer ingeschakeld, test de bibliotheek niet of deze kan lezen of schrijven naar het bestand voordat het aan de Bestandenwachtrij wordt toegevoegd.",
+        "Template": "Sjabloon",
+        "TopLevelOnly": "Alleen Topniveau",
+        "TopLevelOnly-Help": "Sla alleen bestanden in de hoofdmap over en geen submappen worden doorzocht.",
+        "UpdateMovedFiles": "Bijwerken van Verplaatste Bestanden",
+        "UpdateMovedFiles-Help": "Wanneer ingeschakeld, als een bestand is gedetecteerd als verplaatst binnen dezelfde bibliotheek, wordt het oorspronkelijke bestand bijgewerkt om naar dit nieuwe bestand te wijzen.\nAnders, wanneer uitgeschakeld, wordt er in plaats daarvan een duplicaat toegevoegd.\n\nEen bestand wordt gedetecteerd als verplaatst als het oorspronkelijke bestand niet bestaat en er een nieuw bestand wordt gevonden met dezelfde handtekening.",
+        "UseFingerprinting": "Gebruik Vingerafdrukken",
+        "UseFingerprinting-Help": "Wanneer ingeschakeld, wordt er een checksum uitgevoerd tegen bestanden wanneer ze worden geïmporteerd en nadat een stroom is voltooid. Elke overeenkomstige checksum-bestand wordt overgeslagen voor toekomstige bibliotheekimporten.",
+        "WaitTimeSeconds": "Wachtijd",
+        "WaitTimeSeconds-Help": "Het aantal seconden dat moet zijn verstreken sinds de laatste wijziging die in deze map is geschreven om deze in de bibliotheek te scannen.",
+        "WaitTimeSeconds-Suffix": "seconden"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "Aanmaakdatum",
+        "ExecutedNodes": "Uitgevoerde stromelementen",
+        "FailureReason": "Reden van Fout",
+        "FinalMetadata": "Eindmetadata",
+        "FinalSize": "Eindgrootte",
+        "FinalSizeSuffix": "Bytes",
+        "Fingerprint": "Vingerafdruk",
+        "Flow": "Stroom",
+        "Library": "Bibliotheek",
+        "Log": "Log",
+        "Name": "Oorspronkelijk Bestand",
+        "Node": "Verwerkingsknoop",
+        "OriginalMetadata": "Oorspronkelijke Metadata",
+        "OriginalSize": "Oorspronkelijke Grootte",
+        "OriginalSizeSuffix": "Bytes",
+        "OutputPath": "Uitvoerpad",
+        "ProcessingTime": "Verwerkingstijd",
+        "Status": "Status"
+      },
+      "Tabs": {
+        "CustomVariables": "Aangepaste Variabelen",
+        "FinalMetadata": "Uitvoer",
+        "OriginalMetadata": "Invoer"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "Bestanden",
+      "Labels": {
+        "ScanTriggered": "Scannen geactiveerd voor alle ingeschakelde bibliotheken"
+      },
+      "Buttons": {
+        "Ignore": "Negeer",
+        "MoveToTop": "Naar boven verplaatsen",
+        "Process": "Verwerken",
+        "ProcessOptions": "Verwerkingsopties",
+        "Reprocess": "Opnieuw verwerken",
+        "ToggleForce": "Forceer verwerking omzetten",
+        "Unhold": "Vrijgeven",
+        "View": "Bekijken"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "Downloaden van log is mislukt",
+        "FailedToReprocess": "Opnieuw verwerken is mislukt",
+        "ReprocessingFile": "Bestand verzonden voor opnieuw verwerken"
+      }
+    },
+    "Log": {
+      "Title": "Log",
+      "Labels": {
+        "AutoRefresh": "Automatische vernieuwing",
+        "FailedToDownloadLog": "Downloaden van log is mislukt.",
+        "NoMatchingData": "Geen overeenkomende gegevens"
+      },
+      "Fields": {
+        "File": "Bestand",
+        "IncludeHigherSeverity": "Inclusief hogere ernst",
+        "Nodes": "Knooppunten",
+        "Severity": "Ernst",
+        "Source": "Bron",
+        "Text": "Tekst"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "Annuleren",
+        "ForgotPassword": "Wachtwoord vergeten?",
+        "Login": "Inloggen",
+        "Password": "Wachtwoord",
+        "Reset": "Resetten",
+        "Username": "Gebruikersnaam",
+        "UsernameOrEmail": "Gebruikersnaam of E-mail"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "Ongeldige gebruikersnaam of wachtwoord",
+        "LockedOut": "Te veel onjuiste inlogpogingen, u bent momenteel geblokkeerd.",
+        "PasswordReset": "Wachtwoord resetten"
+      }
+    },
+    "Nodes": {
+      "Title": "Knooppunten",
+      "Labels": {
+        "Address": "Adres",
+        "Disconnected": "Afgekoppeld",
+        "DownloadNode": "Downloadknooppunt",
+        "FileFlowsServer": "Interne verwerkingsknooppunt",
+        "FilesProcessed": "Verwerkte bestanden",
+        "Internal": "Intern",
+        "PossiblyDisconnected": "Mogelijk afgekoppeld",
+        "Runners": "Runners",
+        "UpgradeRequired": "Upgrade vereist",
+        "UpgradeRequiredHint": "De server en knooppunten moeten op dezelfde versie staan",
+        "Version": "Versie"
+      },
+      "Fields": {
+        "Address": "Adres",
+        "Enabled": "Ingeschakeld",
+        "FlowRunners": "Flow runners"
+      }
+    },
+    "Notifications": {
+      "Title": "Meldingen"
+    },
+    "Plugins": {
+      "Single": "Plugin",
+      "Title": "Plugins",
+      "Labels": {
+        "PluginBrowser": "Pluginbrowser"
+      },
+      "Fields": {
+        "Authors": "Auteurs",
+        "Description": "Beschrijving",
+        "Elements": "Knooppunten",
+        "Url": "Homepage",
+        "Version": "Versie"
+      },
+      "Messages": {
+        "DeletePlugins": "Weet je zeker dat je de geselecteerde {count, plural, one {plugin} other {plugins}} wilt verwijderen?",
+        "DeleteUsed": "Je kunt een plugin die in gebruik is niet verwijderen",
+        "UpdatingPlugins": "Plugins bijwerken"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "Knooppunt",
+      "Fields": {
+        "Address": "Adres",
+        "Address-Help": "Het adres (hostnaam of IP-adres) van het knooppunt. Je zou dit niet moeten wijzigen, tenzij je het adres van het knooppunt hebt gewijzigd. Bijvoorbeeld, als je de computernamen van het verwerkingsknooppunt hebt gewijzigd.",
+        "AllLibraries": "Alle Bibliotheken",
+        "AllLibraries-Help": "Welke bibliotheken deze knooppunt zal verwerken",
+        "CopyMappings": "Kopieer Mappingen",
+        "DontChangeOwner": "Verander Eigenaar",
+        "DontChangeOwner-Help": "Wanneer aangevinkt, zal het knooppunt de eigenaar van nieuwe bestanden wijzigen naar de PGID en PUID die zijn gedefinieerd in de omgevingsvariabelen.\nAls deze omgevingsvariabelen niet zijn ingesteld, wordt de eigenaar gewijzigd in ''users:nobody''.",
+        "DontSetPermissions": "Stel Machtigingen In",
+        "DontSetPermissions-Help": "Wanneer aangevinkt, zullen bestandsmachtigingen worden ingesteld op nieuwe bestanden",
+        "Enabled": "Ingeschakeld",
+        "FlowRunners": "Flow Runners",
+        "FlowRunners-Help": "Het aantal beschikbare flow runner-instanties om een flow uit te voeren.",
+        "InternalProcessingNodeDescription": "Dit is het ingebouwde verwerkingsknooppunt in FileFlows.\n\nDit knooppunt stelt je in staat om FileFlows uit te voeren zonder je zorgen te maken over het installeren van andere knooppunten op externe systemen en stelt je in staat om FileFlows als een zelfstandige applicatie te gebruiken.\n\nJe kunt dit interne knooppunt blijven gebruiken en extra verwerkingsknooppunten toevoegen als je dat wilt, of je kunt dit knooppunt uitschakelen en alleen gebruik maken van extra knooppunten.",
+        "Libraries": "Bibliotheken",
+        "Libraries-Help": "Selecteer welke bibliotheken dit knooppunt kan verwerken",
+        "Mappings": "Mappingen",
+        "MappingsDescription": "Mappingen stellen je in staat om een pad van de server naar een locatie op het knooppunt te mappen.\n\nBijvoorbeeld, je kunt Server:'/usr/local/bin/ffmpeg' mappen naar Node:'C:\\Utils\\ffmpeg\\ffmpeg.exe'\n\nJe zou mappingen moeten toevoegen voor alle bibliotheken en tools die nodig zijn om op het externe systeem uit te voeren.",
+        "MappingsKey": "Server",
+        "MappingsValue": "Knooppunt",
+        "MaxFileSizeMb": "Maximale Bestandsgrootte",
+        "MaxFileSizeMb-Help": "De maximale bestandsgrootte die dit Verwerkingsknooppunt kan verwerken. Als ingesteld op 0, is er geen limiet.",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "Bestandsmachtigingen",
+        "PermissionsFiles-Help": "De machtigingen die moeten worden ingesteld op nieuwe bestanden.",
+        "PermissionsFolders": "Mapmachtigingen",
+        "PermissionsFolders-Help": "De machtigingen die moeten worden ingesteld op nieuwe mappen.",
+        "PreExecuteScript": "Pre-Execute Script",
+        "PreExecuteScript-Help": "Een script dat zal worden uitgevoerd voordat een bestand wordt verwerkt. Het resultaat van dit script moet 1 zijn om door te gaan; anders zal het knooppunt geen bestand verwerken.",
+        "Priority": "Prioriteit",
+        "Priority-Help": "Hoe hoger het getal, hoe hoger de prioriteit. Knooppunten met een hogere prioriteit worden bevoordeeld en krijgen als eerste bestanden om te verwerken, tenzij die knooppunten buiten schema zijn, zijn uitgeschakeld of op hun maximale runners zitten.",
+        "ProcessFileCheckInterval": "Bestand Controle Interval",
+        "ProcessFileCheckInterval-Help": "Hoe vaak er gecontroleerd moet worden op een nieuw bestand om te verwerken in de verwerkingsknooppunten.\nStel in op 0 om de systeewaarde te gebruiken.",
+        "ProcessFileCheckInterval-Suffix": "seconden",
+        "ProcessingDescription": "Dit stelt je in staat om te configureren wat dit Verwerkingsknooppunt kan verwerken.\n\nBijvoorbeeld, je kunt dit knooppunt beperken tot alleen bepaalde bibliotheken of een maximale bestandsgrootte als dit knooppunt een minder krachtige knooppunt is.",
+        "Schedule": "Schema",
+        "Schedule-Help": "Dit schema draait in de tijdzone van het knooppunt",
+        "ScheduleDescription": "Dit stelt je in staat om te configureren wanneer dit knooppunt actief zal zijn.\n\nHet knooppunt verwerkt geen bestanden buiten dit geconfigureerde schema.",
+        "TempPath": "Tijdelijke Directory",
+        "TempPath-Help": "Deze directory zal worden gebruikt door flows om tijdelijke bestanden te maken terwijl de flow wordt verwerkt; deze directory zal regelmatig worden opgeschoond, dus sla hier niets belangrijks op.",
+        "Variables": "Variabelen",
+        "VariablesDescription": "Variabelen stellen je in staat om geavanceerde variabelen in te stellen op een verwerkingsknooppunt.",
+        "VariablesKey": "Naam",
+        "VariablesValue": "Waarde"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "Gecombineerd"
+      },
+      "Buttons": {
+        "Back": "Terug",
+        "Generate": "Genereren"
+      },
+      "Fields": {
+        "Direction": "Richting",
+        "Email": "E-mail",
+        "Email-Placeholder": "Voer een e-mailadres in",
+        "Flow": "Stroom",
+        "Library": "Bibliotheek",
+        "Node": "Knooppunt",
+        "Period": "Periode",
+        "Statistic": "Statistiek"
+      },
+      "Messages": {
+        "FailedToFindReport": "Kon het rapport niet vinden.",
+        "FailedToGenerateReport": "Kon het rapport niet genereren.",
+        "NoMatchingData": "Geen overeenkomende gegevens",
+        "ReportEmailed": "Het rapport zal naar ''{email}'' worden gemaild zodra het is gegenereerd."
+      }
+    },
+    "Reporting": {
+      "Title": "Rapportage",
+      "Labels": {
+        "Reports": "Rapporten",
+        "ScheduledReports": "Geplande rapporten"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "Repository-object",
+      "Fields": {
+        "Author": "Auteur",
+        "Code": "Code",
+        "Description": "Beschrijving",
+        "Revision": "Herziening"
+      }
+    },
+    "Revisions": {
+      "Title": "Herzieningen"
+    },
+    "ScheduledReport": {
+      "Title": "Gepland Rapport",
+      "Labels": {
+        "LastSent": "Laatst Verzonden",
+        "Never": "Nooit"
+      },
+      "Fields": {
+        "DayOfMonth": "Dag van de Maand",
+        "DayOfMonth-Help": "De dag van de maand waarop dit rapport wordt uitgevoerd. Als de geselecteerde dag buiten de maand valt (bijv. 31 in februari), wordt het rapport op de laatste dag van de maand uitgevoerd.",
+        "DayOfWeek": "Dag van de Week",
+        "DayOfWeek-Help": "De dag van de week waarop dit geplande rapport wordt verzonden. Dit omvat gegevens voor de 7 dagen voorafgaand aan deze dag.",
+        "Direction": "Richting",
+        "Enabled": "Ingeschakeld",
+        "Enabled-Help": "Dit geplande rapport wordt alleen uitgevoerd als het is ingeschakeld.",
+        "Flows": "Stromen",
+        "Libraries": "Bibliotheken",
+        "Name-Help": "De naam van het rapport, deze verschijnt in de onderwerpregel van de verzonden e-mail.",
+        "Nodes": "Knooppunten",
+        "Recipients": "Ontvangers",
+        "Recipients-Help": "Een lijst van e-mailadressen die dit rapport ontvangen wanneer het wordt uitgevoerd.",
+        "Report": "Rapport",
+        "Report-Help": "Het rapport dat zal worden verzonden.",
+        "Schedule": "Schema",
+        "Schedule-Help": "Wanneer dit rapport zal worden gegenereerd en gemaild naar de ontvangers."
+      }
+    },
+    "Script": {
+      "LanguageTitle": "{Language} Script",
+      "Title": "Script",
+      "Fields": {
+        "Code": "Code",
+        "Description": "Beschrijving",
+        "Name": "Naam",
+        "Outputs": "Uitgangen",
+        "OutputsKey": "Uitgang",
+        "OutputsValue": "Beschrijving"
+      },
+      "Messages": {
+        "FailedToExport": "Exporteren is mislukt."
+      }
+    },
+    "Scripts": {
+      "Title": "Scripts",
+      "Labels": {
+        "ScriptBrowser": "Scriptrepository",
+        "UpdateAvailable": "Update Beschikbaar",
+        "UpdatingScripts": "Scripts Bijwerken"
+      },
+      "Buttons": {
+        "ScriptBrowser": "Repository",
+        "UpdateAllScripts": "Update Alle Scripts"
+      },
+      "Fields": {
+        "Code": "Code"
+      },
+      "Messages": {
+        "DeleteSystem": "Je kunt een systeemscript niet verwijderen",
+        "DeleteUsed": "Je kunt een script dat in gebruik is niet verwijderen",
+        "Duplicated": "Scripts ''{name}'' gedupliceerd",
+        "Imported": "Script ''{name}'' geïmporteerd",
+        "NoRepositoryScriptsToUpdate": "Geen repository-scripts geselecteerd om bij te werken"
+      }
+    },
+    "Settings": {
+      "Title": "Instellingen",
+      "Labels": {
+        "CheckNow": "Nu Controleren",
+        "Database": "Database",
+        "Email": "E-mail",
+        "EmailDescription": "Deze instellingen zijn optioneel en alleen nodig als je de E-mail plugin gebruikt of lokale gebruikersbeveiliging gebruikt.",
+        "FileServer": "Bestandserver",
+        "General": "Algemeen",
+        "Logging": "Logging",
+        "Restart": "Herstart FileFlows",
+        "System": "Systeem",
+        "Updates": "Updates"
+      },
+      "Fields": {
+        "AutoUpdate": "Automatische Update",
+        "AutoUpdate-Help": "Wanneer ingeschakeld, wordt FileFlows routinematig gecontroleerd op updates. Als er een update wordt gevonden, wordt deze automatisch gedownload en geïnstalleerd.",
+        "AutoUpdateNodes": "Automatische Update Nodes",
+        "AutoUpdateNodes-Help": "Wanneer ingeschakeld, worden externe nodes automatisch bijgewerkt wanneer de FileFlows-server wordt bijgewerkt. Dit betekent dat je alleen de FileFlows-serverinstantie in een gedistribueerde omgeving hoeft bij te werken.",
+        "AutoUpdatePlugins": "Automatische Update Plugins",
+        "AutoUpdatePlugins-Help": "Wanneer ingeschakeld, worden plugins routinematig gecontroleerd op updates, en als er updates worden gevonden, worden deze automatisch gedownload.",
+        "CheckForUpdateNow": "Controleer nu op update",
+        "CheckForUpdateNow-Help": "Controleert nu op een update en als deze wordt gevonden, wordt de update gedownload en geïnstalleerd wanneer er geen flows worden uitgevoerd.",
+        "DelayBetweenNextFile": "Vertraging Tussen Bestanden",
+        "DelayBetweenNextFile-Help": "De vertraging in milliseconden om te wachten tussen het starten van een bestand en het aanvragen van een nieuw bestand. Het instellen van deze vertraging op nul betekent dat er onmiddellijk een nieuw bestand wordt aangevraagd. Als de vertraging te kort is, werken functies zoals load balancing en bibliotheekrunner-limieten mogelijk niet goed, omdat een bestand mogelijk niet volledig is gestart voordat de volgende aanvraag wordt gedaan.",
+        "DelayBetweenNextFile-Suffix": "milliseconden",
+        "DockerModsOnServer": "DockerMods Op Server",
+        "DockerModsOnServer-Help": "DockerMods moeten automatisch draaien bij het opstarten van de server of wanneer specifiek ingeschakeld. Anders worden ze alleen uitgevoerd wanneer een workflow wordt geïnitieerd.",
+        "HideProcessingFinishedNotifications": "Verwerken Voltooid Meldingen",
+        "HideProcessingFinishedNotifications-Help": "Als er een toastmelding moet worden weergegeven in de webconsole wanneer een bestand is voltooid met verwerken.",
+        "HideProcessingStartedNotifications": "Verwerken Gestart Meldingen",
+        "HideProcessingStartedNotifications-Help": "Als er een toastmelding moet worden weergegeven in de webconsole wanneer een bestand begint met verwerken.",
+        "KeepFailedFlowTempFiles": "Behoud Mislukte Temp Bestanden",
+        "KeepFailedFlowTempFiles-Help": "Door deze optie in te schakelen, worden de tijdelijke bestanden die door een flow worden gebruikt in geval van een mislukking behouden, zodat ze niet automatisch worden verwijderd.\nGebruik met voorzichtigheid.",
+        "Language": "Taal",
+        "Language-Help": "De taal die in het systeem wordt gebruikt.\nOpmerking: Deze vertalingen worden gegenereerd door AI en kunnen fouten bevatten. Gelieve eventuele fouten te melden aan het ondersteuningsteam.",
+        "LogEveryRequest": "Log Elke Aanroep",
+        "LogEveryRequest-Help": "Of elke aanvraag naar de server moet worden gelogd.",
+        "LogFileRetention": "Logbestand Bewaartermijn",
+        "LogFileRetention-Help": "Hoe lang logbestanden moeten worden bewaard voordat ze worden verwijderd.",
+        "LogFileRetention-Suffix": "Dagen",
+        "LoggingPath": "Logging Directory",
+        "LoggingPath-Help": "Hier worden logbestanden aangemaakt.",
+        "LogQueueMessages": "Log Wachtrij Berichten",
+        "LogQueueMessages-Help": "Dit zal leiden tot overmatige logging van alle bestanden die in de wachtrij worden geplaatst/verwijderd in de bibliotheekwachter.\nSchakel dit in als je problemen hebt met het niet verschijnen van bestanden, schakel het daarna weer uit om te voorkomen dat je logbestanden met overmatige logging worden gevuld.",
+        "PluginRepositoryUrls": "Plugin Repositories",
+        "PluginRepositoryUrls-Help": "Een lijst met plugin-repository-URL's gescheiden door regels die moeten worden gebruikt bij het zoeken naar plugins.\nDe volgorde is belangrijk; als meerdere repositories dezelfde plugin bevatten, wordt de eerste repository gebruikt als bron.\nDe standaardrepository wordt altijd aan het einde van deze lijst toegevoegd.",
+        "ProcessFileCheckInterval": "Bestand Controle Interval",
+        "ProcessFileCheckInterval-Help": "Hoe vaak er moet worden gecontroleerd op een nieuw bestand om te verwerken in de verwerkingsnodes.",
+        "ProcessFileCheckInterval-Suffix": "seconden",
+        "ShowFileAddedNotifications": "Bestand Toegevoegd Meldingen",
+        "ShowFileAddedNotifications-Help": "Als er een toastmelding moet worden weergegeven in de webconsole wanneer een bestand is gevonden en aan de wachtrij is toegevoegd.",
+        "Telemetry": "Telemetrie",
+        "Telemetry-Help": "Telemetrie is nuttig om te weten welke apparaten we moeten ondersteunen, welke Flow-onderdelen het meest worden gebruikt en waar we ons op de ontwikkeling moeten richten.\nEr worden geen informatie over jouw bestanden of identificerende informatie verzonden.",
+        "Database": {
+          "Description": "Hier kun je configureren welke database FileFlows zal gebruiken.\nLet op: Wijzigingen hier vereisen dat je FileFlows opnieuw opstart, zodat het je gegevens kan migreren en indien nodig de nieuwe database kan aanmaken.",
+          "DontBackupOnUpgrade": "Maak Geen Back-up Bij Upgrade",
+          "DontBackupOnUpgrade-Help": "Database-back-ups houden in dat al je databasegegevens naar een SQLite-bestand worden gekopieerd, wat tijdrovend kan zijn. Als je je externe database al op andere manieren back-upt, kun je ervoor kiezen dit proces uit te schakelen.",
+          "Name": "Naam",
+          "Name-Help": "De naam van de te maken database. Als dit leeg wordt gelaten, wordt ''FileFlows'' gebruikt.",
+          "Password": "Wachtwoord",
+          "Password-Help": "Het wachtwoord van de gebruiker om verbinding te maken met de database.",
+          "Port": "Poort",
+          "Port-Help": "De standaardpoort voor MySQL is 3306.",
+          "Port-Help-MySql": "De standaardpoort voor MySQL is 3306.",
+          "Port-Help-Postgres": "De standaardpoort voor Postgres is 5432.",
+          "Port-Help-SQLServer": "De standaardpoort voor SQL Server is 1433.",
+          "RecreateDatabase": "Database Hernoemen",
+          "RecreateDatabase-Help": "Wanneer ingeschakeld, als de nieuwe database al bestaat, wordt deze verwijderd en opnieuw aangemaakt. Als het uit is, en de database al bestaat, worden er geen gegevens gemigreerd en zal de nieuwe database gewoon worden gebruikt zoals deze is.",
+          "Server": "Server",
+          "Server-Help": "Het adres van de databaseserver en de poort of genoteerde instantie indien nodig.",
+          "Type": "Type",
+          "Type-Help": "Het type database dat moet worden gebruikt, het standaardtype is SQLite, wat geen extra setup of configuratie vereist.",
+          "User": "Gebruiker",
+          "User-Help": "De gebruiker die wordt gebruikt om verbinding te maken met de database."
+        },
+        "FileServer": {
+          "AllowList": "Toegestane Paden",
+          "AllowList-Help": "Een lijst van paden, gescheiden door nieuwe regels, die toegankelijk zijn voor de blootgestelde bestanden server.\nDit zijn de locaties die op afstand kunnen worden gelezen/schreven.\nLet op: Alle bibliotheekpaden zijn automatisch toegestaan.",
+          "AllowList-Placeholder": "Als dit leeg wordt gelaten, worden alle paden behalve systeem paden toegestaan.",
+          "Description": "Dit maakt het mogelijk voor externe verwerkingsnodes om een bestand te downloaden voor verwerking zonder mapping.\n\nDit stelt je bestanden bloot over je netwerk, dus schakel het uit als je niet op een vertrouwd netwerk bent.",
+          "Enabled": "Ingeschakeld",
+          "FilePermissions": "Bestandstoestemmingen",
+          "FilePermissions-Help": "Optionele toestemmingen voor te maken of gewijzigde bestanden.",
+          "FolderPermissions": "Mapstoestemmingen",
+          "FolderPermissions-Help": "Optionele toestemmingen voor te maken of gewijzigde mappen.",
+          "OwnerGroup": "Eigenaar Groep",
+          "OwnerGroup-Help": "Optionele eigenaar:groep om te gebruiken om de eigenaar van gemaakte of gewijzigde bestanden of mappen te wijzigen.",
+          "OwnerGroup-Placeholder": "users:nobody"
+        },
+        "License": {
+          "Email": "Licentie E-mail",
+          "ExpiryDate": "Vervaldatum",
+          "Files": "Bestanden",
+          "Flags": "Kenmerken",
+          "Key": "Licentie Sleutel",
+          "Level": "Niveau",
+          "ProcessingNodes": "Verwerkingsnodes",
+          "Status": "Status"
+        },
+        "Security": {
+          "AccessToken": "Toegangstoken",
+          "AccessToken-Help": "Toegangstoken dat door verwerkingsnodes wordt gebruikt om verbinding te maken met de server.",
+          "Authority": "Autoriteit",
+          "Authority-Help": "Voer de URL in van de Open ID Connect-provider (bijv. https://accounts.google.com/).",
+          "CallbackAddress": "Callbackadres",
+          "CallbackAddress-Help": "Een optioneel callbackadres. Je kunt dit gebruiken om het standaardadres te overschrijven dat naar de client wordt verzonden.\nBijvoorbeeld als je achter een reverse proxy zit en FileFlows luistert op HTTP, maar de callback moet plaatsvinden op HTTPS.",
+          "ClientId": "Cliënt-ID",
+          "ClientId-Help": "De cliënt-ID die is geregistreerd bij de Open ID Connect-provider.",
+          "ClientSecret": "Cliëntgeheim",
+          "ClientSecret-Help": "Het cliëntgeheim dat is geregistreerd bij de Open ID Connect-provider.",
+          "Description": "Het configureren van gebruikersbeveiliging vereist dat gebruikers inloggen en dat verwerkingsnodes het toegangstoken verstrekken om verbinding te maken.\n\n[Gebruikers](/users) moeten worden toegevoegd voordat ze kunnen inloggen of voordat je deze functie kunt gebruiken.",
+          "LockoutMinutes": "Lockout Duur",
+          "LockoutMinutes-Help": "De duur waarvoor de gebruiker wordt buitengesloten voordat ze opnieuw kunnen proberen in te loggen.",
+          "LockoutMinutes-Suffix": "minuten",
+          "MaxAttempts": "Max Pogingen",
+          "MaxAttempts-Help": "Het maximale aantal inlogpogingen dat de gebruiker mag doen voordat ze tijdelijk worden geblokkeerd.",
+          "Mode": "Modus",
+          "Mode-Help": "Schakel gebruikersauthenticatie in om toegang te krijgen tot FileFlows.\nWanneer ingeschakeld moeten gebruikers inloggen en vereisen verwerkingsnodes het API-token om toegang te krijgen tot de server.",
+          "Title": "Beveiliging",
+          "TokenExpiryMinutes": "Token Vervaldatum",
+          "TokenExpiryMinutes-Help": "De duur van het inlogtoken voordat het vervalt."
+        },
+        "Smtp": {
+          "From": "Van",
+          "From-Help": "De naam van de gebruiker van wie de e-mails worden verzonden.",
+          "FromAddress": "Van Adres",
+          "FromAddress-Help": "Het e-mailadres van de gebruiker van wie de e-mails worden verzonden.",
+          "Password": "Wachtwoord",
+          "Password-Help": "Het wachtwoord voor de SMTP-gebruiker.",
+          "Port": "Poort",
+          "Port-Help": "De poort van de e-mailserver.",
+          "Security": "Beveiliging",
+          "Security-Help": "De beveiliging die moet worden gebruikt bij het verzenden van e-mails.",
+          "Server": "Server",
+          "Server-Help": "De e-mailserver.",
+          "User": "Gebruiker",
+          "User-Help": "Een optionele gebruikersnaam om e-mails van te verzenden."
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "Het uitschakelen van automatische databaseback-ups betekent dat er tijdens applicatie-updates geen back-up wordt gemaakt. Het is belangrijk om ervoor te zorgen dat je een alternatieve methode hebt om je database extern te back-uppen om je gegevens te beschermen.\n\nWeet je zeker dat je deze back-ups wilt uitschakelen?",
+          "NoDatabase": "Naam is verplicht",
+          "NoPassword": "Wachtwoord is verplicht",
+          "NoServer": "Server is verplicht",
+          "NoUser": "Gebruiker is verplicht",
+          "TestingDatabase": "Databaseverbinding testen",
+          "TestSuccess": "Succesvol verbonden met de database"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "Weet je zeker dat je de telemetrie wilt uitschakelen?\n\nWees gerust, er worden geen persoonlijke gegevens geregistreerd. De verzonden gegevens bevatten informatie over de gebruikte flow-elementen, gebruikte plug-ins, evenals het totale aantal mislukte en verwerkte bestanden.\n\nDeze informatie helpt ons de voorkeuren van gebruikers te begrijpen en informeert onze beslissingen met betrekking tot het afschaffen van ongebruikte flow-elementen.",
+          "Title": "Telemetrie Uitschakelen"
+        },
+        "Restart": {
+          "Message": "Weet je zeker dat je FileFlows wilt herstarten?\n\nJe instellingen worden eerst automatisch opgeslagen.\n\nOpmerking: Zorg ervoor dat er geen flows worden uitgevoerd.",
+          "Title": "FileFlows Herstarten"
+        },
+        "Update": {
+          "Downloading": "Upgrade wordt gedownload",
+          "Failed": "Mislukt om een update te controleren",
+          "Message": "Er is een nieuwe update beschikbaar, wil je deze downloaden en installeren?",
+          "NotAvailable": "Geen update beschikbaar",
+          "Title": "Update Beschikbaar"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "Statistieken"
+    },
+    "Tags": {
+      "Title": "Tags",
+      "Fields": {
+        "Description": "Beschrijving",
+        "Icon": "Icoon"
+      },
+      "Messages": {
+        "DeleteItems": "Weet u zeker dat u de geselecteerde {count, plural, one {tag} other {tags}} wilt verwijderen?\n\n{count, plural, one {Deze} other {Deze}} wordt verwijderd uit alle bestanden en deze actie kan niet ongedaan worden gemaakt."
+      }
+    },
+    "Task": {
+      "Title": "Taak",
+      "Fields": {
+        "CustomSchedule": "Aangepast Schema",
+        "CustomSchedule-Help": "Deze taak wordt eenmaal per blok van 15 minuten uitgevoerd aan het begin van dat blok.",
+        "Schedule": "Schema",
+        "Schedule-Help": "Wanneer dit script moet worden uitgevoerd",
+        "Script": "Script",
+        "Script-Help": "Het script dat moet worden uitgevoerd volgens het geconfigureerde schema",
+        "TimeSchedule": "Schema",
+        "TimeSchedule-Help": "Wanneer de taak zal worden uitgevoerd",
+        "Type": "Type",
+        "Type-Help": "Het type taak. Tijdgebonden taken worden op de geconfigureerde tijden uitgevoerd. Andere taken zijn op gebeurtenissen gebaseerd."
+      }
+    },
+    "Tasks": {
+      "Title": "Taken",
+      "Buttons": {
+        "EditScript": "Script Bewerken"
+      },
+      "Messages": {
+        "NoHistory": "Deze taak heeft geen beschikbare uitvoeringsgeschiedenis.",
+        "NoScripts": "Geen scripts gevonden om een taak voor te maken."
+      }
+    },
+    "Users": {
+      "Single": "Gebruiker",
+      "Title": "Gebruikers",
+      "Labels": {
+        "Address": "Adres",
+        "Administrator": "Beheerder",
+        "LastLoggedIn": "Laatst Ingelogd",
+        "Never": "Nooit"
+      },
+      "Fields": {
+        "Email": "E-mail",
+        "IsAdmin": "Beheerder",
+        "Password": "Wachtwoord",
+        "Roles": "Rollen"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "Je kunt jezelf niet verwijderen.",
+        "EmailInUse": "E-mailadres ''{email}'' is al in gebruik door een andere gebruiker ''{user}''."
+      }
+    },
+    "Variable": {
+      "Title": "Variabele"
+    },
+    "Variables": {
+      "Title": "Variabelen"
+    },
+    "Webhook": {
+      "Title": "Webhook",
+      "Fields": {
+        "Code": "Code",
+        "Method": "Methode",
+        "Route": "Route"
+      }
+    },
+    "Webhooks": {
+      "Title": "Webhooks",
+      "Columns": {
+        "Method": "Methode",
+        "Route": "Route"
+      }
+    },
+    "Widget": {
+      "Title": "Widget",
+      "Fields": {
+        "AudioCodecs": "Audio Codecs",
+        "AudioContainers": "Audio Container",
+        "Codecs": "Codecs",
+        "ComicFormats": "Stripformaten",
+        "ComicPages": "Strippagina's",
+        "CpuUsage": "CPU-gebruik",
+        "FilesRecentlyFinished": "Recent Voltooid",
+        "FilesUpcoming": "Komend",
+        "ImageFormats": "Afbeeldingsformaten",
+        "LibraryProcessingTimes": "Verwerkingstijden Bibliotheek [Seconden Per Megabyte]",
+        "LogStorage": "Logopslag",
+        "MemoryUsage": "Geheugengebruik",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "Open Databaseverbindingen",
+        "Processing": "Verwerking",
+        "ProcessingNodes": "Verwerkingsknopen",
+        "ProcessingTimes": "Verwerkingstijden",
+        "StorageSaved": "Opgeslagen Opslag",
+        "TempStorage": "Tijdelijke Opslag",
+        "VideoCodecs": "Video Codecs",
+        "VideoContainers": "Video Container",
+        "VideoResolution": "Videoresolutie"
+      }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Een plugin waarmee je berichten kunt verzenden naar een Apprise-server.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "Een verzameling van audio-gerelateerde stroomelementen om te helpen bij het verwerken van audiobestanden.",
+      "Label": "Audio"
+    },
+    "BasicNodes": {
+      "Description": "Basisstroomelementen voor FileFlows. Deze plugin bevat basis- en algemene stroomelementen voor het verwerken van bestanden.\nDeze plugin is vereist om FileFlows te laten werken.",
+      "Label": "Basis"
+    },
+    "ChecksumNodes": {
+      "Description": "Stroomelementen die de mogelijkheid bieden om een controlegetal op een bestand uit te voeren.",
+      "Label": "Controlegetal"
+    },
+    "ComicNodes": {
+      "Description": "Stroomelementen voor het verwerken van stripboeken (cbr, cbz, pdf, enz.)",
+      "Label": "Strip"
+    },
+    "DiscordNodes": {
+      "Description": "Een plugin die je in staat stelt om berichten naar een Discord-server te sturen.\n\nDe Webhook-ID en token kunnen worden verkregen via de webhook-URL\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Deze plugin stelt je in staat om een e-mail te verzenden tijdens het uitvoeren van een flow.",
+      "Label": "E-mail"
+    },
+    "Emby": {
+      "Description": "Een plugin die je in staat stelt te communiceren met Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Een plugin waarmee je berichten naar een Gotify-server kunt sturen.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Stroomelementen voor het verwerken van afbeeldingsbestanden. Deze plugin bevat knooppunten om afbeeldingen te converteren en te manipuleren.",
+      "Label": "Afbeelding"
+    },
+    "MetaNodes": {
+      "Description": "Een plugin die meta-informatie flow-elementen bevat die worden gebruikt om meta-informatie over bestanden op te zoeken.\n\nBevat flow-elementen om filmgegevens van TheMovieDB en muziekinformatie van ID3-tags in het bestand op te zoeken.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Een plugin waarmee je bestanden naar Nextcloud kunt uploaden.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Een plugin die je in staat stelt te communiceren met Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Een plugin die je in staat stelt om berichten naar een Pushbullet-server te verzenden.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Een plugin die je in staat stelt berichten naar een Pushover-server te verzenden.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Een plugin die je in staat stelt om Telegram-berichten te verzenden.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin voor het verwerken van videobestanden, inclusief maar niet beperkt tot videobestandconversie, videobestandsdetectie, opschaling, afschaling en transcodering.",
+      "Label": "Video"
+    },
+    "Web": {
+      "Description": "Plugin die webgerelateerde stromen biedt.",
+      "Label": "Web"
+    }
+  },
+  "Reports": {
+    "Codecs": {
+      "Description": "Biedt een overzicht van de verschillende codecs die door FileFlows zijn verwerkt en helpt bij het begrijpen van codec-gebruikstrends.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Toont een gedetailleerde tabel van alle door FileFlows verwerkte bestanden en biedt inzicht in hun flow, bibliotheek en grootte.",
+      "Name": "Bestanden",
+      "Columns": {
+        "FinalSize": "Eindgrootte",
+        "FlowName": "Flow",
+        "LibraryName": "Bibliotheek",
+        "Name": "Naam",
+        "NodeName": "Node",
+        "OriginalSize": "Oorspronkelijke grootte",
+        "Percentage": "Percentage"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Biedt een rapport over alle verwerkte bestanden gedurende een bepaalde periode en toont de totale prestaties van het systeem.",
+      "Name": "Verwerkte bestanden"
+    },
+    "FlowElementExecution": {
+      "Description": "Toont een rapport over de uitvoeringen van flow-elementen binnen het systeem, waarmee de prestaties en frequentie kunnen worden geanalyseerd.",
+      "Name": "Uitvoering van flow-elementen"
+    },
+    "Languages": {
+      "Description": "Geeft inzicht in de verschillende talen die in bestanden zijn verwerkt en helpt taaltrends in uw media te volgen.",
+      "Name": "Talen"
+    },
+    "LibrarySavings": {
+      "Description": "Toont hoeveel opslagruimte is bespaard door bestanden in verschillende bibliotheken te verwerken en helpt bij het monitoren van efficiëntiewinsten.",
+      "Name": "Bibliotheekbesparingen"
+    },
+    "ProcessingSummary": {
+      "Description": "Biedt een uitgebreide samenvatting van de verwerkingsactiviteiten van bestanden, ingedeeld naar bibliotheek, node en tijd van de dag.",
+      "Name": "Verwerkingssamenvatting"
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "Een leeg audio-template met een enkele ''Audio File'' invoer stroomelement.",
+        "Name": "Audio Bestand"
+      },
+      "ConvertComic": {
+        "Description": "Een stroom die stripboeken van CBR, CBZ, CB7, PDF, GZ, BZ2 naar CBZ of PDF converteert.",
+        "Name": "Converteer Strip"
+      },
+      "ConvertImage": {
+        "Description": "Een stroom die afbeeldingen converteert.",
+        "Name": "Converteer Afbeelding"
+      },
+      "ConvertVideo": {
+        "Description": "Een stroom die een videobestand naar een ander formaat converteert.",
+        "Name": "Converteer Video"
+      },
+      "FailureFlow": {
+        "Description": "Basisfoutstroom die wordt uitgevoerd wanneer een stroom om welke reden dan ook mislukt.",
+        "Name": "Foutstroom"
+      },
+      "File": {
+        "Description": "Een leeg bestand-template met een enkele ''Input File'' invoer stroomelement.",
+        "Name": "Bestand"
+      },
+      "Folder": {
+        "Description": "Een leeg mapp-template met een enkele ''Input Folder'' invoer stroomelement.\n\nOPMERKING: Dit sjabloon mag alleen worden gebruikt om een map te verwerken in plaats van bestanden. Het verwerken van een map heeft verwerkingsbeperkingen, omdat de map wordt verwerkt en niet de bestanden die in die map zijn opgenomen.",
+        "Name": "Map"
+      },
+      "ImageFile": {
+        "Description": "Een leeg afbeeldingssjabloon met een enkele ''Image File'' invoer stroomelement.",
+        "Name": "Afbeelding Bestand"
+      },
+      "VideoFile": {
+        "Description": "Een leeg afbeeldingssjabloon met een enkele ''Video File'' invoer stroomelement.",
+        "Name": "Video Bestand"
+      }
+    },
+    "Groups": {
+      "Books": "Boeken",
+      "DownloadClients": "Downloadclients",
+      "DVR": "DVR",
+      "General": "Algemeen"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "Audioboekenbibliotheek die zoekt naar gangbare audioboekbestanden.",
+        "Name": "Audioboekenbibliotheek"
+      },
+      "ComicLibrary": {
+        "Description": "Stripbibliotheek die zoekt naar gangbare stripboekbestanden.",
+        "Name": "Stripbibliotheek"
+      },
+      "eBookLibrary": {
+        "Description": "eBook-bibliotheek die zoekt naar gangbare eBook-bestanden.",
+        "Name": "eBook-bibliotheek"
+      },
+      "ImageLibrary": {
+        "Description": "Afbeeldingsbibliotheek die zoekt naar gangbare afbeeldingsbestanden.",
+        "Name": "Afbeeldingsbibliotheek"
+      },
+      "MusicLibrary": {
+        "Description": "Muziekbibliotheek die zoekt naar gangbare muziekbestanden.",
+        "Name": "Muziekbibliotheek"
+      },
+      "PlexDVR": {
+        "Description": "Bibliotheek om Plex DVR-opnamen te monitoren, zodat je deze automatisch kunt converteren nadat ze zijn voltooid.",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "Bibliotheek om een \"voltooid\" downloadsdirectory van SABnzbd te monitoren.\n\nDeze bibliotheek kan vervolgens een stroom gebruiken om muziek naar een doelformaat te converteren en die muziekbestanden in een bestemmingsmap, bijv. \"geconverteerd\", te plaatsen.\n\nDe toepassing die SABnzbd heeft geïnstrueerd om de download uit te voeren, kan de map \"geconverteerd\" monitoren voor voltooide bestanden.",
+        "Name": "SABnzbd Muziek"
+      },
+      "SABnzbdVideos": {
+        "Description": "Bibliotheek om een \"voltooid\" downloadsdirectory van SABnzbd te monitoren.\n\nDeze bibliotheek kan vervolgens een stroom gebruiken om video's naar een doelformaat te converteren en die video's in een bestemmingsmap, bijv. \"geconverteerd\", te plaatsen.\n\nDe toepassing die SABnzbd heeft geïnstrueerd om de download uit te voeren, kan de map \"geconverteerd\" monitoren voor voltooide bestanden.",
+        "Name": "SABnzbd Video's"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "Zoekt naar monsters, trailers of previewvideo-bestanden in een directory, zodat je deze indien nodig kunt verwijderen.\nNuttig voor een bijpassende 'SABnzbd Video's' bibliotheek zodat de map schoon kan worden verwijderd nadat het hoofdbestand is verwerkt.",
+        "Name": "Monsters/Trailers/Vooruitzichten"
+      },
+      "VideoLibrary": {
+        "Description": "Videobibliotheek die zoekt naar gangbare videobestanden.",
+        "Name": "Videobibliotheek"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {dag} other {dagen}} geleden",
+    "HoursAgo": "{num} {num, plural, one {uur} other {uren}} geleden",
+    "MinutesAgo": "{num} {num, plural, one {minuut} other {minuten}} geleden",
+    "Never": "Nooit",
+    "SecondsAgo": "{num} {num, plural, one {seconde} other {seconden}} geleden"
+  },
+  "Validators": {
+    "Pattern": "Is niet geldig",
+    "Range": "Moet tussen {Minimum} en {Maximum} liggen",
+    "Required": "Verplicht"
+  },
+  "Widgets": {
+    "AudioCodecs": "Audio Codecs",
+    "AudioContainers": "Audio Containers",
+    "Codecs": "Codecs",
+    "ComicFormats": "Stripformaten",
+    "ComicPages": "Strippagina's",
+    "CPUUsage": "CPU-gebruik",
+    "CurrentRevision": "Huidige Revisie",
+    "DatabaseConnections": "Databaseverbindingen",
+    "DecoderParameters": "Decoderparameters",
+    "Decoders": "Decoders",
+    "Encoders": "Encoders",
+    "ImageFormats": "Afbeeldingsformaten",
+    "LibraryProcessingTimes": "Verwerkingstijden Bibliotheek",
+    "LogStorage": "Logopslag",
+    "MemoryUsage": "Geheugengebruik",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "Verwerking",
+    "ProcessingNodes": "Verwerkingsnodes",
+    "ProcessingTimes": "Verwerkingstijden",
+    "RecentlyFinished": "Onlangs Voltooid",
+    "StorageSaved": "Opgeslagen Opslag",
+    "TemporaryFileStorage": "Tijdelijke Bestandsopslag",
+    "Upcoming": "Aanstaande",
+    "VideoCodecs": "Video Codecs",
+    "VideoContainers": "Video Containers",
+    "VideoResolutions": "Videoresoluties"
+  }
+}

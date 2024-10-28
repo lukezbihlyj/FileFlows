@@ -93,7 +93,8 @@ public class LanguageHelper
             new () {English = "Chibcha",French = "chibcha",German = "Chibcha-Sprachen",Iso2 = "chb"},
             new () {English = "Chechen",French = "tch\u00E9tch\u00E8ne",German = "Tschetschenisch",Iso2 = "che",Iso1 = "ce"},
             new () {English = "Chagatai",French = "djaghata\u00EF",German = "Tschagataisch",Iso2 = "chg"},
-            new () {English = "Chinese",French = "chinois", German = "Chinesisch",Iso2 = "zho",Iso1 = "zh", Aliases = new [] { "chi"}},
+            new () {English = "Chinese",French = "chinois", German = "Chinesisch",Iso2 = "zho",Iso1 = "zh", Aliases = ["chi"], NativeName = "中文" },
+            new () {English = "Chinese Traditional", French = "chinois traditionnel", German = "Traditionelles Chinesisch", Iso2 = "zht", Iso1 = "zh-Hant", Aliases = ["cht"], NativeName = "繁體中文" },
             new () {English = "Chuukese",French = "chuuk",German = "Trukesisch",Iso2 = "chk"},
             new () {English = "Mari",French = "mari",German = "Tscheremissisch",Iso2 = "chm"},
             new () {English = "Chinook jargon",French = "chinook, jargon",German = "Chinook-Jargon",Iso2 = "chn"},
@@ -123,7 +124,7 @@ public class LanguageHelper
             new () {English = "Land Dayak languages",French = "dayak, langues",German = "Dajakisch",Iso2 = "day"},
             new () {English = "Delaware",French = "delaware",German = "Delaware-Sprache",Iso2 = "del"},
             new () {English = "Slave (Athapascan)",French = "esclave (athapascan)",German = "Slave-Sprache",Iso2 = "den"},
-            new () {English = "German",French = "allemand",German = "Deutsch", Iso2 = "deu", Iso1 = "de", Aliases = new [] { "ger" }},
+            new () {English = "German",French = "allemand",German = "Deutsch", Iso2 = "deu", Iso1 = "de", Aliases = [ "ger" ], NativeName = "Deutsch"},
             new () {English = "Dogrib",French = "dogrib",German = "Dogrib-Sprache",Iso2 = "dgr"},
             new () {English = "Dinka",French = "dinka",German = "Dinka-Sprache",Iso2 = "din"},
             new () {English = "Divehi",French = "maldivien",German = "Maledivisch",Iso2 = "div",Iso1 = "dv"},
@@ -132,7 +133,7 @@ public class LanguageHelper
             new () {English = "Lower Sorbian",French = "bas-sorabe",German = "Niedersorbisch",Iso2 = "dsb"},
             new () {English = "Duala",French = "douala",German = "Duala-Sprachen",Iso2 = "dua"},
             new () {English = "Dutch, Middle (ca.1050-1350)",French = "n\u00E9erlandais moyen (ca. 1050-1350)",German = "Mittelniederl\u00E4ndisch",Iso2 = "dum"},
-            new () {English = "Dutch",French = "n\u00E9erlandais",German = "Niederl\u00E4ndisch",Iso2 = "nld",Iso1 = "nl", Aliases = new [] { "dut"}},
+            new () {English = "Dutch",French = "n\u00E9erlandais",German = "Niederl\u00E4ndisch",Iso2 = "nld",Iso1 = "nl", Aliases = ["dut"],NativeName = "Nederlands"},
             new () {English = "Dyula",French = "dioula",German = "Dyula-Sprache",Iso2 = "dyu"},
             new () {English = "Dzongkha",French = "dzongkha",German = "Dzongkha",Iso2 = "dzo",Iso1 = "dz"},
             new () {English = "Efik",French = "efik",German = "Efik",Iso2 = "efi"},
@@ -140,7 +141,7 @@ public class LanguageHelper
             new () {English = "Ekajuk",French = "ekajuk",German = "Ekajuk",Iso2 = "eka"},
             new () {English = "Greek, Modern (1453-)",French = "grec moderne (apr\u00E8s 1453)",German = "Neugriechisch",Iso2 = "ell",Iso1 = "el"},
             new () {English = "Elamite",French = "\u00E9lamite",German = "Elamisch",Iso2 = "elx"},
-            new () {English = "English",French = "anglais",German = "Englisch",Iso2 = "eng",Iso1 = "en"},
+            new () {English = "English",French = "anglais",German = "Englisch",Iso2 = "eng",Iso1 = "en" , NativeName = "English"},
             new () {English = "English, Middle (1100-1500)",French = "anglais moyen (1100-1500)",German = "Mittelenglisch",Iso2 = "enm"},
             new () {English = "Esperanto",French = "esp\u00E9ranto",German = "Esperanto",Iso2 = "epo",Iso1 = "eo"},
             new () {English = "Estonian",French = "estonien",German = "Estnisch",Iso2 = "est",Iso1 = "et"},
@@ -156,7 +157,7 @@ public class LanguageHelper
             new () {English = "Finnish",French = "finnois",German = "Finnisch",Iso2 = "fin",Iso1 = "fi"},
             new () {English = "Finno-Ugrian languages",French = "finno-ougriennes,  langues",German = "Finnougrische Sprachen (Andere)",Iso2 = "fiu"},
             new () {English = "Fon",French = "fon",German = "Fon-Sprache",Iso2 = "fon"},
-            new () {English = "French",French = "fran\u00E7ais",German = "Franz\u00F6sisch",Iso2 = "fre",Iso1 = "fr", Aliases = new [] { "fra" }},
+            new () {English = "French",French = "fran\u00E7ais",German = "Franz\u00F6sisch",Iso2 = "fre",Iso1 = "fr", Aliases = ["fra"], NativeName = "Français"},
             new () {English = "French, Middle (ca.1400-1600)",French = "fran\u00E7ais moyen (1400-1600)",German = "Mittelfranz\u00F6sisch",Iso2 = "frm"},
             new () {English = "French, Old (842-ca.1400)",French = "fran\u00E7ais ancien (842-ca.1400)",German = "Altfranz\u00F6sisch",Iso2 = "fro"},
             new () {English = "French (Canada)", French = "Français (Canada)", German = "Französisch (Kanada)", Iso2 = "fra-CA", Iso1 = "fr-CA"},
@@ -170,7 +171,6 @@ public class LanguageHelper
             new () {English = "Gbaya",French = "gbaya",German = "Gbaya-Sprache",Iso2 = "gba"},
             new () {English = "Germanic languages",French = "Germaniques, langues",German = "Germanische Sprachen (Andere)",Iso2 = "gem"},
             new () {English = "Georgian",French = "g\u00E9orgien",German = "Georgisch",Iso2 = "kat",Iso1 = "ka"},
-            new () {English = "German",French = "allemand",German = "Deutsch",Iso2 = "deu",Iso1 = "de"},
             new () {English = "Geez",French = "gu\u00E8ze",German = "Alt\u00E4thiopisch",Iso2 = "gez"},
             new () {English = "Gilbertese",French = "kiribati",German = "Gilbertesisch",Iso2 = "gil"},
             new () {English = "Gaelic",French = "ga\u00E9lique",German = "G\u00E4lisch-Schottisch",Iso2 = "gla",Iso1 = "gd"},
@@ -224,10 +224,10 @@ public class LanguageHelper
             new () {English = "Iranian languages",French = "iraniennes, langues",German = "Iranische Sprachen (Andere)",Iso2 = "ira"},
             new () {English = "Iroquoian languages",French = "iroquoises, langues",German = "Irokesische Sprachen",Iso2 = "iro"},
             new () {English = "Icelandic",French = "islandais",German = "Isl\u00E4ndisch",Iso2 = "isl",Iso1 = "is"},
-            new () {English = "Italian",French = "italien",German = "Italienisch",Iso2 = "ita",Iso1 = "it"},
+            new () {English = "Italian",French = "italien",German = "Italienisch",Iso2 = "ita",Iso1 = "it", NativeName = "Italiano"},
             new () {English = "Javanese",French = "javanais",German = "Javanisch",Iso2 = "jav",Iso1 = "jv"},
             new () {English = "Lojban",French = "lojban",German = "Lojban",Iso2 = "jbo"},
-            new () {English = "Japanese",French = "japonais",German = "Japanisch",Iso2 = "jpn",Iso1 = "ja"},
+            new () {English = "Japanese",French = "japonais",German = "Japanisch",Iso2 = "jpn",Iso1 = "ja", NativeName = "日本語"},
             new () {English = "Judeo-Persian",French = "jud\u00E9o-persan",German = "J\u00FCdisch-Persisch",Iso2 = "jpr"},
             new () {English = "Judeo-Arabic",French = "jud\u00E9o-arabe",German = "J\u00FCdisch-Arabisch",Iso2 = "jrb"},
             new () {English = "Kara-Kalpak",French = "karakalpak",German = "Karakalpakisch",Iso2 = "kaa"},
@@ -254,7 +254,7 @@ public class LanguageHelper
             new () {English = "Konkani",French = "konkani",German = "Konkani",Iso2 = "kok"},
             new () {English = "Komi",French = "kom",German = "Komi-Sprache",Iso2 = "kom",Iso1 = "kv"},
             new () {English = "Kongo",French = "kongo",German = "Kongo-Sprache",Iso2 = "kon",Iso1 = "kg"},
-            new () {English = "Korean",French = "cor\u00E9en",German = "Koreanisch",Iso2 = "kor",Iso1 = "ko"},
+            new () {English = "Korean",French = "cor\u00E9en",German = "Koreanisch",Iso2 = "kor",Iso1 = "ko",NativeName = "한국어"},
             new () {English = "Kosraean",French = "kosrae",German = "Kosraeanisch",Iso2 = "kos"},
             new () {English = "Kpelle",French = "kpell\u00E9",German = "Kpelle-Sprache",Iso2 = "kpe"},
             new () {English = "Karachay-Balkar",French = "karatchai balkar",German = "Karatschaiisch-Balkarisch",Iso2 = "krc"},
@@ -376,7 +376,7 @@ public class LanguageHelper
             new () {English = "Pali",French = "pali",German = "Pali",Iso2 = "pli",Iso1 = "pi"},
             new () {English = "Polish",French = "polonais",German = "Polnisch",Iso2 = "pol",Iso1 = "pl"},
             new () {English = "Pohnpeian",French = "pohnpei",German = "Ponapeanisch",Iso2 = "pon"},
-            new () {English = "Portuguese",French = "portugais",German = "Portugiesisch",Iso2 = "por",Iso1 = "pt"},
+            new () {English = "Portuguese",French = "portugais",German = "Portugiesisch",Iso2 = "por",Iso1 = "pt", NativeName = "Português"},
             new () {English = "Portuguese (Brazil)", French = "Portugais (Brésil)", German = "Portugiesisch (Brasilien)", Iso2 = "por-BR", Iso1 = "pt-BR"},
             new () {English = "Prakrit languages",French = "pr\u00E2krit, langues",German = "Prakrit",Iso2 = "pra"},
             new () {English = "Proven\u00E7al, Old (to 1500)",French = "proven\u00E7al ancien (jusqu\u0027\u00E0 1500)",German = "Altokzitanisch",Iso2 = "pro"},
@@ -392,7 +392,7 @@ public class LanguageHelper
             new () {English = "Romanian",French = "roumain",German = "Rum\u00E4nisch",Iso2 = "ron",Iso1 = "ro"},
             new () {English = "Rundi",French = "rundi",German = "Rundi-Sprache",Iso2 = "run",Iso1 = "rn"},
             new () {English = "Aromanian",French = "aroumain",German = "Aromunisch",Iso2 = "rup"},
-            new () {English = "Russian",French = "russe",German = "Russisch",Iso2 = "rus",Iso1 = "ru"},
+            new () {English = "Russian",French = "russe",German = "Russisch",Iso2 = "rus",Iso1 = "ru", NativeName = "Русский"},
             new () {English = "Sandawe",French = "sandawe",German = "Sandawe-Sprache",Iso2 = "sad"},
             new () {English = "Sango",French = "sango",German = "Sango-Sprache",Iso2 = "sag",Iso1 = "sg"},
             new () {English = "Yakut",French = "iakoute",German = "Jakutisch",Iso2 = "sah"},
@@ -431,7 +431,7 @@ public class LanguageHelper
             new () {English = "Somali",French = "somali",German = "Somali",Iso2 = "som",Iso1 = "so"},
             new () {English = "Songhai languages",French = "songhai, langues",German = "Songhai-Sprache",Iso2 = "son"},
             new () {English = "Sotho, Southern",French = "sotho du Sud",German = "S\u00FCd-Sotho-Sprache",Iso2 = "sot",Iso1 = "st"},
-            new () {English = "Spanish",French = "espagnol",German = "Spanisch",Iso2 = "spa",Iso1 = "es"},
+            new () {English = "Spanish",French = "espagnol",German = "Spanisch",Iso2 = "spa",Iso1 = "es", NativeName = "Español"},
             new () {English = "Spanish (Latin America)", French = "Espagnol (Amérique latine) ", German = "Spanisch (Lateinamerika)", Iso2 = "spa-419", Iso1 = "es-419"},
             new () {English = "Albanian",French = "albanais",German = "Albanisch",Iso2 = "sqi",Iso1 = "sq"},
             new () {English = "Sardinian",French = "sarde",German = "Sardisch",Iso2 = "srd",Iso1 = "sc"},
@@ -445,7 +445,7 @@ public class LanguageHelper
             new () {English = "Susu",French = "soussou",German = "Susu",Iso2 = "sus"},
             new () {English = "Sumerian",French = "sum\u00E9rien",German = "Sumerisch",Iso2 = "sux"},
             new () {English = "Swahili",French = "swahili",German = "Swahili",Iso2 = "swa",Iso1 = "sw"},
-            new () {English = "Swedish",French = "su\u00E9dois",German = "Schwedisch",Iso2 = "swe",Iso1 = "sv"},
+            new () {English = "Swedish",French = "su\u00E9dois",German = "Schwedisch",Iso2 = "swe",Iso1 = "sv", NativeName = "Svenska"},
             new () {English = "Classical Syriac",French = "syriaque classique",German = "Syrisch",Iso2 = "syc"},
             new () {English = "Syriac",French = "syriaque",German = "Neuostaram\u00E4isch",Iso2 = "syr"},
             new () {English = "Tahitian",French = "tahitien",German = "Tahitisch",Iso2 = "tah",Iso1 = "ty"},
@@ -559,6 +559,17 @@ public class LanguageHelper
         var lang = FindLanguage(language);
         return lang?.English?.EmptyAsNull() ?? language;
     }
+
+    /// <summary>
+    /// Gets the native name for a language
+    /// </summary>
+    /// <param name="language">the language to get the native name for</param>
+    /// <returns>the native name of a language</returns>
+    public static string GetNativeName(string language)
+    {
+        var lang = FindLanguage(language);
+        return lang?.NativeName?.EmptyAsNull() ?? lang?.English?.EmptyAsNull() ?? language;
+    }
     
     /// <summary>
     /// Gets the ISO-639-1 code for a language
@@ -624,15 +635,127 @@ public class LanguageHelper
             return false;
         }
     }
+
+    /// <summary>
+    /// Tests if a language
+    /// </summary>
+    /// <param name="comparison">the string comparison eg /en|fr/</param>
+    /// <param name="value">the value of the language, eg en, or english, or eng etc</param>
+    /// <returns>true if matches, otherwise false</returns>
+    public static bool Matches(NodeParameters args, string comparison, string value)
+    {
+        bool inverse = comparison.StartsWith('!');
+        if (inverse)
+            comparison = comparison[1..];
+        bool result = RunComparison();
+        return inverse ? !result : result;
+        
+        bool RunComparison ()
+        {
+            if (Regex.IsMatch(comparison,
+                    @"^/([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+)(\|([a-z]{2}(-[a-z]{2})?|[a-zA-Z\-]+))*?/$"))
+            {
+                // Remove the leading and trailing slashes
+                string innerContent = comparison.Trim('/');
+
+                // Split the inner content by '|'
+                var languages = innerContent.Split('|');
+
+                // Loop through each language
+                foreach (var language in languages)
+                {
+                    // Process each individual language
+                    if (Matches(args, language, value))
+                        return true;
+                }
+
+                return false;
+            }
+
+            comparison = args.ReplaceVariables(comparison.Replace("{orig}", "{OriginalLanguage}"), stripMissing: false);
+            if (args.Variables.TryGetValue("OriginalLanguage", out var oOrigLanguage) &&
+                oOrigLanguage is string origLanguage &&
+                string.IsNullOrWhiteSpace(origLanguage) == false)
+            {
+                comparison = comparison.Replace("OriginalLanguage", origLanguage,
+                    StringComparison.InvariantCultureIgnoreCase);
+                comparison = comparison.Replace("original", origLanguage);
+                comparison = comparison.Replace("orig", origLanguage);
+            }
+
+            string iso1 = GetIso1Code(value);
+            string iso2 = GetIso2Code(value);
+            string english = GetEnglishFor(value);
+            var iso1Matches = ValueMatch(comparison, iso1);
+            var iso2Matches = ValueMatch(comparison, iso2);
+            var engMatches = ValueMatch(comparison, english);
+
+            bool anyMatches = iso1Matches || iso2Matches || engMatches;
+            if (anyMatches == false)
+            {
+                args.Logger.ILog("Language does not match: " + value);
+                return false;
+            }
+
+            if (iso1Matches)
+                args.Logger?.ILog($"Language ISO-1 match found: '{iso1}' vs '{comparison}'");
+            if (iso2Matches)
+                args.Logger?.ILog($"Language ISO-2 match found: '{iso2}' vs '{comparison}'");
+            if (engMatches)
+                args.Logger?.ILog($"Language English match found: '{english}' vs '{comparison}'");
+            return true;
+        }
+
+        bool ValueMatch(string pattern, string value)
+        {
+            if (string.IsNullOrWhiteSpace(pattern))
+                return false;
+            if (string.IsNullOrEmpty(value))
+                return false;
+            return args.StringHelper.Matches(pattern, value);
+        }
+    }
     
+    /// <summary>
+    /// Represents a language definition with various properties such as English, French, German names, 
+    /// ISO-639-1 and ISO-639-2 codes, native name, and aliases.
+    /// </summary>
     class LanguageDefintion
     {
+        /// <summary>
+        /// Gets or sets the English name of the language.
+        /// </summary>
         public string English { get; set; }
+
+        /// <summary>
+        /// Gets or sets the French name of the language.
+        /// </summary>
         public string French { get; set; }
+
+        /// <summary>
+        /// Gets or sets the German name of the language.
+        /// </summary>
         public string German { get; set; }
+
+        /// <summary>
+        /// Gets or sets the native name of the language.
+        /// </summary>
+        public string NativeName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ISO-639-1 code of the language.
+        /// </summary>
         public string Iso1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ISO-639-2 code of the language.
+        /// </summary>
         public string Iso2 { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the aliases of the language.
+        /// </summary>
         public string[] Aliases { get; set; }
     }
+    
 }

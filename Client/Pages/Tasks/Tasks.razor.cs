@@ -81,7 +81,7 @@ public partial class Tasks : ListPage<Guid, FileFlowsTask>
         {
             var result = await HttpHelper.Get<Dictionary<Guid, string>>("/api/script/basic-list?type=system");
             if (result.Success)
-                Scripts = result.Data.Where(x => x.Value != "FILE_DISPLAY_NAME").ToDictionary();
+                Scripts = result.Data.Where(x => x.Value != CommonVariables.FILE_DISPLAY_NAME).ToDictionary();
         }
         catch (Exception)
         {

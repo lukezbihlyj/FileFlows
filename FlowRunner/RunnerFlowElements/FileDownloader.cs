@@ -1,7 +1,5 @@
 using FileFlows.Plugin;
 using FileFlows.RemoteServices;
-using FileFlows.ServerShared.FileServices;
-using FileFlows.ServerShared.Services;
 
 namespace FileFlows.FlowRunner.RunnerFlowElements;
 
@@ -14,6 +12,11 @@ public class FileDownloader : Node
     /// The run instance running this
     /// </summary>
     private readonly RunInstance runInstance;
+    
+    /// <summary>
+    /// The cancelation token source
+    /// </summary>
+    CancellationTokenSource cancellation = new CancellationTokenSource();
     
     /// <summary>
     /// Creates a new instance of the file downloader
@@ -42,8 +45,7 @@ public class FileDownloader : Node
             args.RecordAdditionalInfo("Speed", speed, 1, new TimeSpan(0, 1, 0));
             args.RecordAdditionalInfo("ETA", eta == null ? null : Plugin.Helpers.TimeHelper.ToHumanReadableString(eta.Value),1, new TimeSpan(0, 1, 0));
         };
-        
-        var result = downloader.DownloadFile(args.LibraryFileName, dest).Result;
+        var result = downloader.DownloadFile(args.LibraryFileName, dest, cancellationToken: cancellation.Token).Result;
         if (result.IsFailed)
         {
             args.Logger?.ELog("Failed to remotely download file: " + result.Error);
@@ -52,5 +54,15 @@ public class FileDownloader : Node
 
         args.SetWorkingFile(dest);
         return 1;
+    }
+    
+    /// <summary>
+    /// Cancels the conversion
+    /// </summary>
+    /// <returns>the task to await</returns>
+    public override Task Cancel()
+    {
+        cancellation.Cancel();
+        return base.Cancel();
     }
 }

@@ -15,6 +15,45 @@ namespace FileFlows.Server.Controllers;
 [FileFlowsAuthorize]
 public class DashboardController : BaseController
 {
+    /// <summary>
+    /// Gets the basic info for loading of the dashboard
+    /// </summary>
+    /// <returns>the info</returns>
+    [HttpGet("info")]
+    public SystemInfo GetInfo()
+        => ServiceLoader.Load<DashboardService>().GetSystemInfo();
+    
+    /// <summary>
+    /// Gets the file overview
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("file-overview")]
+    public FileOverviewData GetFileOverview()
+        => ServiceLoader.Load<DashboardFileOverviewService>().GetData();
+
+    /// <summary>
+    /// Gets the processing node
+    /// </summary>
+    /// <returns>the processing node</returns>
+    [HttpGet("node-summary")]
+    public async Task<List<NodeStatusSummary>> GetNodeSummary()
+        => await ServiceLoader.Load<NodeService>().GetStatusSummaries();
+
+    /// <summary>
+    /// Gets the executors info minified
+    /// </summary>
+    /// <returns>the executors info minified</returns>
+    [HttpGet("executors-info-minified")]
+    public async Task<List<FlowExecutorInfoMinified>> GetExecutorsInfoMinified()
+        => (await ServiceLoader.Load<FlowRunnerService>().GetExecutors()).Values.ToList();
+    
+    /// <summary>
+    /// Gets any updates
+    /// </summary>
+    /// <returns>the updates</returns>
+    [HttpGet("updates")]
+    public UpdateInfo GetUpates()
+        => ServiceLoader.Load<UpdateService>().Info;
     
     /// <summary>
     /// Get all dashboards in the system
@@ -25,8 +64,9 @@ public class DashboardController : BaseController
     {
         if (LicenseHelper.IsLicensed(LicenseFlags.Dashboards) == false)
              return new List<Dashboard>();
-        
-        var dashboards = (await new DashboardService().GetAll())
+
+        var service = ServiceLoader.Load<DashboardService>();
+        var dashboards = (await service.GetAll())
             .OrderBy(x => x.Name.ToLower()).ToList();
         if (dashboards.Any() == false)
         {
@@ -42,10 +82,10 @@ public class DashboardController : BaseController
     [HttpGet("list")]
     public async Task<List<ListOption>> ListAll()
     {
-
+        var service = ServiceLoader.Load<DashboardService>();
         var dashboards = LicenseHelper.IsLicensed(LicenseFlags.Dashboards) == false
             ? new List<ListOption>()
-            : (await new DashboardService().GetAll())
+            : (await service.GetAll())
                 .OrderBy(x => x.Name.ToLower()).Select(x => new ListOption
                 {
                     Label = x.Name,
@@ -73,7 +113,7 @@ public class DashboardController : BaseController
         if (LicenseHelper.IsLicensed(LicenseFlags.Dashboards) == false)
             uid = Dashboard.DefaultDashboardUid;
         var service = ServiceLoader.Load<DashboardService>();
-        var db = await new DashboardService().GetByUid(uid);;
+        var db = await service.GetByUid(uid);
         if ((db == null || db.Uid == Guid.Empty) && uid == Dashboard.DefaultDashboardUid)
         {
             var nodes = (await ServiceLoader.Load<NodeService>().GetAllAsync()).Count(x => x.Enabled);

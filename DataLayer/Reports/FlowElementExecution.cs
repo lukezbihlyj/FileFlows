@@ -13,10 +13,6 @@ public class FlowElementExecution : Report
     /// <inheritdoc />
     public override Guid Uid => new Guid("9eca7456-c974-4fec-a754-c584bc823fae");
     /// <inheritdoc />
-    public override string Name => "Flow Element Execution";
-    /// <inheritdoc />
-    public override string Description => "Shows the flow elements that have been executed in the system.";
-    /// <inheritdoc />
     public override string Icon => "fas fa-sitemap";
     /// <inheritdoc />
     public override ReportSelection LibrarySelection => ReportSelection.Any;
@@ -43,7 +39,7 @@ public class FlowElementExecution : Report
         var builder = new ReportBuilder(emailing);
         
         builder.StartLargeTableRow();
-        builder.AddRowItem(TableGenerator.Generate(nodeCounts, emailing: emailing));
+        builder.AddRowItem(TableGenerator.Generate(nameof(FlowElementExecution), nodeCounts, emailing: emailing));
         builder.EndRow();
         
         return builder.ToString();

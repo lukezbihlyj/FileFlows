@@ -154,15 +154,15 @@
         case FormInputType.Float:
         {
             var value = GetValue<float>(field.Name);
-            var min = GetParameter<int>(field, "Min");
-            var max = GetParameter<int>(field, "Max");
+            float min = GetParameter<int>(field, "Min");
+            float max = GetParameter<int>(field, "Max");
             if (min == 0 && max == 0)
             {
                 (min, max) = GetRange(field);
             }
-            <InputNumber TItem="float" Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-                         Validators=@field.Validators Placeholder="@field.Placeholder" Min="@((float)min)" Max="@((float)max)" 
-                         @* ReSharper disable CSharpWarnings::CS8619 *@
+            <InputNumber TItem="float" Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                         ValueChanged="@(x => UpdateValue(field, x))"
+                         Validators=@field.Validators Placeholder="@field.Placeholder" Min="@min" Max="@max" 
                          HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
         }
             break;
@@ -186,6 +186,13 @@
                               AnyOrAll="anyOrAll" LabelAny="@labelAny"
                               Validators=@field.Validators Options="@options" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             @* ReSharper restore CSharpWarnings::CS8619 *@
+        }
+            break;
+        case FormInputType.TagSelection:
+        {
+            var value = GetValue<List<Guid>>(field.Name);
+            <InputTagSelect Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))" 
+                              Validators=@field.Validators  HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
         }
             break;
         case FormInputType.Slider:
@@ -234,6 +241,26 @@
                 <InputSelect Field=@field Label="@label" Value="@value" ReadOnly=@readOnly Options=@options AllowClear=@allowClear
                              ValueChanged="@(x => UpdateValue(field, x))" Placeholder="@field.Placeholder" 
                              ShowDescription=@showDescription HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+            }
+            break;
+        case FormInputType.DropDown:
+        {
+            var value = GetValue<object>(field.Name, "");
+            bool allowClear = GetParameter<bool>(field, nameof(InputSelect.AllowClear), true);
+            bool showDescription= GetParameter<bool>(field, nameof(InputSelect.ShowDescription), true);
+            var options = GetParameter<List<FileFlows.Plugin.ListOption>>(field, "Options");
+            <InputDropDown Field=@field Label="@label" Value="@value" ReadOnly=@readOnly Options=@options AllowClear=@allowClear
+                         ValueChanged="@(x => UpdateValue(field, x))" Placeholder="@field.Placeholder" 
+                         ShowDescription=@showDescription HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
+        case FormInputType.Combobox:
+            {
+                var value = GetValue<string>(field.Name, "");
+                var options = GetParameter<List<FileFlows.Plugin.ListOption>>(field, "Options");
+                <InputCombobox Field=@field Label="@label" Value="@value" ReadOnly=@readOnly Options=@options
+                             ValueChanged="@(x => UpdateValue(field, x))" Placeholder="@field.Placeholder" 
+                             HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
             break;
         case FormInputType.File:
@@ -348,6 +375,17 @@
                 var log = GetParameter<string>(field, nameof(InputExecutedNodes.Log));
                 <InputExecutedNodes Field=@field Label="@label" Value="@oValue" HideLabel=@hideLabel Log=@log />
             }
+            break;
+        case FormInputType.Flow:
+        {
+            <InputExecutedFlowsRenderer Model="Editor?.Model" />
+        }
+            break;
+        case FormInputType.ExecutedFlowElementsRenderer:
+        {
+            var oValue = GetValue<List<ExecutedNode>>(field.Name);
+            <InputExecutedFlowElementsRenderer Model="Editor?.Model" Value="@oValue" />
+        }
             break;
         case FormInputType.Metadata:
             {

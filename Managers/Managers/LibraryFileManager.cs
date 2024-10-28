@@ -86,8 +86,8 @@ public class LibraryFileManager
     /// </summary>
     /// <param name="filter">the filter to get files for</param>
     /// <returns>a list of matching library files</returns>
-    public Task<List<LibraryFile>> GetAll(LibraryFileFilter filter)
-        => DatabaseAccessManager.Instance.LibraryFileManager.GetAll(filter);
+    public async Task<List<LibraryFile>> GetAll(LibraryFileFilter filter)
+        => await DatabaseAccessManager.Instance.LibraryFileManager.GetAll(filter);
 
     /// <summary>
     /// Gets the total items matching the filter
@@ -267,9 +267,10 @@ public class LibraryFileManager
     /// <summary>
     /// Gets the total rows, sum of OriginalSize, and sum of FinalSize from the LibraryFile table grouped by Library.
     /// </summary>
+    /// <param name="lastDays">The number of last days to get, or 0 for all</param>
     /// <returns>A list of library statistics</returns>
-    public Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats()
-        => DatabaseAccessManager.Instance.LibraryFileManager.GetLibraryFileStats();
+    public Task<List<(Guid LibraryUid, int TotalFiles, long SumOriginalSize, long SumFinalSize)>> GetLibraryFileStats(int lastDays = 0)
+        => DatabaseAccessManager.Instance.LibraryFileManager.GetLibraryFileStats(lastDays);
 
     /// <summary>
     /// Performs a search for files
@@ -294,4 +295,12 @@ public class LibraryFileManager
     /// <param name="onlySetProcessInfo">if only the process information should be set, ie these are unprocessed files</param>
     public Task Reprocess(ReprocessModel model, bool onlySetProcessInfo)
         => DatabaseAccessManager.Instance.LibraryFileManager.Reprocess(model, onlySetProcessInfo);
+
+    /// <summary>
+    /// Deletes the tags from any file
+    /// </summary>
+    /// <param name="uids">the UIDs of the tags being deleted</param>
+    /// <param name="auditDetails">the audit details</param>
+    public async Task DeleteTags(Guid[] uids, AuditDetails auditDetails)
+        => await DatabaseAccessManager.Instance.LibraryFileManager.DeleteTags(uids, auditDetails);
 }

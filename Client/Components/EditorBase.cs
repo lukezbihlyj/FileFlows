@@ -287,7 +287,12 @@ public abstract class EditorBase : InputRegister
         var dictionary = (IDictionary<string, object>)expando!;
 
         foreach (var property in model.GetType().GetProperties())
+        {
+            if (property.CanRead == false)
+                continue;
             dictionary.Add(property.Name, property.GetValue(model));
+        }
+
         return expando;
     }
     
@@ -326,6 +331,11 @@ public class ActionButton
         get => _Label;
         set => _Label = Translater.TranslateIfNeeded(value);
     }
+    
+    /// <summary>
+    /// Gets or sets an optional UID for the button
+    /// </summary>
+    public string? Uid { get; set; }
 
     /// <summary>
     /// Gets or sets the click action

@@ -12,11 +12,20 @@ namespace FileFlows.Plugin;
 /// </summary>
 public class FairSemaphore
 {
+    /// <summary>
+    /// The base semaphore
+    /// </summary>
     private readonly SemaphoreSlim semaphore;
 
+    /// <summary>
+    /// The queue for hte semaphore
+    /// </summary>
     private readonly ConcurrentQueue<TaskCompletionSource<bool>> queue = new();
 
-    public Queue<string> StackTraces = new Queue<string>();
+    /// <summary>
+    /// The stack traces for the queue
+    /// </summary>
+    public Queue<string> StackTraces = new ();
     
     /// <summary>
     /// Gets the current queue length

@@ -1,4 +1,5 @@
 using System.Text;
+using FileFlows.Client.Models;
 
 namespace FileFlows.Client.Pages;
 
@@ -46,14 +47,19 @@ public partial class Settings : InputRegister
 
     private bool IsSaving { get; set; }
 
-    private string lblSave, lblSaving, lblHelp, lblEmail, lblAdvanced, lblDatabase, lblLogging, 
+    private string lblSave, lblSaving, lblHelp, lblEmail, lblDatabase, lblGeneral, lblLogging, 
         lblDbDescription, lblFileServerDescription, lblTest, lblRestart, lblSecurity, mdSecurityDescription, 
-        lblLicense, lblUpdates, lblCheckNow, lblTestingDatabase, lblFileServer;
+        lblLicense, lblUpdates, lblCheckNow, lblTestingDatabase, lblFileServer, lblEmailDescription;
 
     private string OriginalDatabase, OriginalServer;
     private DatabaseType OriginalDbType;
 
     private SettingsUiModel Model { get; set; } = new ();
+
+    /// <summary>
+    /// The language options
+    /// </summary>
+    private List<IconListOption> LanguageOptions = new ();
     private string LicenseFlagsString = string.Empty;
     // indicates if the page has rendered or not
     private DateTime firstRenderedAt = DateTime.MaxValue;
@@ -77,15 +83,6 @@ public partial class Settings : InputRegister
         new() { Label = "Auto", Value = EmailSecurity.Auto },
         new() { Label = "TLS", Value = EmailSecurity.TLS },
         new() { Label = "SSL", Value = EmailSecurity.SSL },
-    };
-
-    /// <summary>
-    /// The languages available in the system
-    /// </summary>
-    private readonly List<ListOption> LanguageOptions = new()
-    {
-        new() { Label = "English", Value = "en" },
-        new() { Label = "Deutsch", Value = "de" },
     };
 
     /// <summary>
@@ -163,9 +160,10 @@ public partial class Settings : InputRegister
         lblSave = Translater.Instant("Labels.Save");
         lblSaving = Translater.Instant("Labels.Saving");
         lblHelp = Translater.Instant("Labels.Help");
-        lblAdvanced = Translater.Instant("Labels.Advanced");
+        lblGeneral = Translater.Instant("Pages.Settings.Labels.General");
         lblLicense = Translater.Instant("Labels.License");
         lblEmail = Translater.Instant("Pages.Settings.Labels.Email");
+        lblEmailDescription = Translater.Instant("Pages.Settings.Labels.EmailDescription");
         lblUpdates = Translater.Instant("Pages.Settings.Labels.Updates");
         lblSecurity = Translater.Instant("Pages.Settings.Fields.Security.Title");
         lblDatabase = Translater.Instant("Pages.Settings.Labels.Database");
@@ -179,25 +177,15 @@ public partial class Settings : InputRegister
         lblFileServerDescription = Translater.Instant("Pages.Settings.Fields.FileServer.Description");
         mdSecurityDescription = RenderMarkdown("Pages.Settings.Fields.Security.Description");
         
-        if(LicensedFor(LicenseFlags.ExternalDatabase))
-        {
-            DbTypes =
-            [
-                new() { Label = "SQLite", Value = DatabaseType.Sqlite },
-                new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
-                new() { Label = "MySQL", Value = DatabaseType.MySql },
-                new() { Label = "Postgres", Value = DatabaseType.Postgres },
-                new() { Label = "SQL Server", Value = DatabaseType.SqlServer }
-            ];
-        }
-        else
-        {
-            DbTypes =
-            [
-                new() { Label = "SQLite", Value = DatabaseType.Sqlite },
-                new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection }
-            ];
-        }
+        LanguageOptions = Profile.LanguageOptions?.Select(x =>
+            new IconListOption()
+            {
+                Label = x.Label,
+                Value = x.Value,
+                IconUrl = $"/icons/flags/{x.Value}.svg"
+            }
+        ).ToList();
+        
         InitSecurityModes();
         Blocker.Show("Loading Settings");
         try
@@ -302,6 +290,28 @@ public partial class Settings : InputRegister
 
             if (Model != null && string.IsNullOrWhiteSpace(Model.AccessToken))
                 Model.AccessToken = Guid.NewGuid().ToString("N");
+            
+            if(LicensedFor(LicenseFlags.ExternalDatabase))
+            {
+                DbTypes =
+                [
+                    new() { Label = "SQLite", Value = DatabaseType.Sqlite },
+                    new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
+                    new() { Label = "SQLite (Non-Cached)", Value = DatabaseType.SqliteNonCached },
+                    new() { Label = "MySQL", Value = DatabaseType.MySql },
+                    new() { Label = "Postgres", Value = DatabaseType.Postgres },
+                    new() { Label = "SQL Server", Value = DatabaseType.SqlServer }
+                ];
+            }
+            else
+            {
+                DbTypes =
+                [
+                    new() { Label = "SQLite", Value = DatabaseType.Sqlite },
+                    new() { Label = "SQLite (New Connection)", Value = DatabaseType.SqliteNewConnection },
+                    new() { Label = "SQLite (Non-Cached)", Value = DatabaseType.SqliteNonCached }
+                ];
+            }
         }
 
         this.StateHasChanged();
@@ -424,35 +434,34 @@ public partial class Settings : InputRegister
         return (Model.LicenseFlags & feature) == feature;
     }
 
+    /// <summary>
+    /// Check for an update
+    /// </summary>
     private async Task CheckForUpdateNow()
     {
-        try
+        Blocker.Show();
+        var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
+        Blocker.Hide();
+        if (available.Success == false)
         {
-            var available = await HttpHelper.Post<bool>("/api/settings/check-for-update-now");
-            if (available.Success == false)
-            {
-                Toast.ShowError("Pages.Settings.Messages.Update.Failed");
-                return;
-            }
-
-            if (available.Data == false)
-            {
-                Toast.ShowInfo("Pages.Settings.Messages.Update.NotAvailable");
-                return;
-            }
-
-            if (await Confirm.Show("Pages.Settings.Messages.Update.Title",
-                    "Pages.Settings.Messages.Update.Message") == false)
-                return;
-            await HttpHelper.Post("/api/settings/upgrade-now");
-            Toast.ShowInfo("Pages.Settings.Messages.Update.Downloading");
+            Toast.ShowError("Pages.Settings.Messages.Update.Failed");
+            return;
         }
-        catch (Exception)
+
+        if (available.Data == false)
         {
-            Toast.ShowError("Pages.Settings.Messages.CheckUpdateFailed");
+            Toast.ShowInfo("Pages.Settings.Messages.Update.NotAvailable");
+            return;
         }
+
+        if (await Confirm.Show("Pages.Settings.Messages.Update.Title",
+                "Pages.Settings.Messages.Update.Message") == false)
+            return;
+        await HttpHelper.Post("/api/settings/upgrade-now");
+        Toast.ShowInfo("Pages.Settings.Messages.Update.Downloading");
+
     }
-    
+
     /// <summary>
     /// Enumerates through the specified enum flags and returns a comma-separated string
     /// containing the names of the enum values that are present in the given flags.

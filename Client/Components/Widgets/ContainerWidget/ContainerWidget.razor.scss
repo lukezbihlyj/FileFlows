@@ -1,0 +1,36 @@
+@media (max-width: 850px){
+  .flow-widget {
+    height: fit-content !important;
+    overflow: unset !important;
+    min-height: fit-content !important;
+  }
+}
+
+.flow-widget {
+  border: solid 1px var(--border-color);
+  border-radius: var(--container-border-radius);
+  background: var(--widget-background);
+  position:relative;
+  min-height: 10rem;
+  overflow: hidden;
+  
+  .head {
+    padding:0.5rem;
+  }
+  
+  .title {
+    font-size:1.1rem;
+    font-weight: var(--bold, 600);
+  }
+  &.scroll {
+    @media (min-width: 850.001px) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      ::deep .widget-content {
+        flex-grow: 1;
+        overflow: auto;
+      }
+    }
+  }
+}

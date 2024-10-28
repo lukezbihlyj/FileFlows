@@ -15,10 +15,6 @@ public class Languages : Report
     /// <inheritdoc />
     public override Guid Uid => new Guid("1e7b9a5f-44d6-40e9-bb4b-b1b9e9677fac");
     /// <inheritdoc />
-    public override string Name => "Languages";
-    /// <inheritdoc />
-    public override string Description => "Shows the different languages processed through FileFlows.";
-    /// <inheritdoc />
     public override string Icon => "fas fa-comments";
     
     /// <inheritdoc />

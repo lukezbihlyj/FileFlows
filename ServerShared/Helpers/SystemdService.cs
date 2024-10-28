@@ -14,23 +14,28 @@ public class SystemdService
     /// Gets the location where to save the users systemd service file
     /// </summary>
     /// <returns></returns>
-    private static string GetSystemdServiceFolder()
-        => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config", "systemd", "user");
+    private static string GetSystemdServiceFolder(bool root)
+        => root ? "/etc/systemd/system" :
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config", "systemd", "user");
     
     /// <summary>
     /// Installs the service
     /// </summary>
     /// <param name="baseDirectory">the base directory for the FileFiles install, DirectoryHelper.BaseDirectory</param>
     /// <param name="isNode">if installing node or server</param>
-    public static void Install(string baseDirectory, bool isNode)
+    /// <param name="root">if running as root</param>
+    public static void Install(string baseDirectory, bool isNode, bool root = false)
     {
         string bashScript = CreateEntryPoint(baseDirectory, isNode);
-        if (SaveServiceFile(baseDirectory, isNode, bashScript) == false)
+        if (SaveServiceFile(baseDirectory, isNode, bashScript, root) == false)
             return;
-        RunService(isNode);
+        RunService(isNode, root);
         Console.WriteLine("Run the following to check the status of the service: ");
         string name = isNode ? "fileflows-node" : "fileflows";
-        Console.WriteLine($"systemctl --user status {name}.service ");
+        if(root)
+            Console.WriteLine($"systemctl status {name}.service ");
+        else
+            Console.WriteLine($"systemctl --user status {name}.service ");
         Console.WriteLine();
     }
 
@@ -38,31 +43,51 @@ public class SystemdService
     /// Uninstall the service
     /// </summary>
     /// <param name="isNode">if uninstalling node or server</param>
-    public static void Uninstall(bool isNode)
+    /// <param name="root">If running as root or not</param>
+    public static void Uninstall(bool isNode, bool root = false)
     {
         string name = isNode ? "fileflows-node" : "fileflows";
         
         Process.Start("systemctl", "--user stop " + name);
         Process.Start("systemctl", "--user disable " + name);
 
-        string serviceFile = Path.Combine(GetSystemdServiceFolder(), name + ".service");
+        string serviceFile = Path.Combine(GetSystemdServiceFolder(root), name + ".service");
         if(File.Exists(serviceFile))
             File.Delete(serviceFile);
-        
-        Process.Start("systemctl", "--user daemon-reload");
-        Process.Start("systemctl", "--user reset-failed");
+
+        if (root)
+        {
+            Process.Start("systemctl", "daemon-reload");
+            Process.Start("systemctl", "reset-failed");
+        }
+        else
+        {
+            Process.Start("systemctl", "--user daemon-reload");
+            Process.Start("systemctl", "--user reset-failed");
+        }
     }
 
     /// <summary>
     /// Runs the service
     /// </summary>
     /// <param name="isNode">if installing node or server</param>
-    private static void RunService(bool isNode)
+    /// <param name="root">if the user is root</param>
+    private static void RunService(bool isNode, bool root)
     {
         string name = isNode ? "fileflows-node" : "fileflows";
-        Process.Start("systemctl", $"--user enable {name}.service");
-        Process.Start("systemctl", "--user daemon-reload");
-        Process.Start("systemctl", $"--user start {name}.service");
+        if (root)
+        {
+            Process.Start("systemctl", $"enable {name}.service");
+            Process.Start("systemctl", "daemon-reload");
+            Process.Start("systemctl", $"start {name}.service");
+            
+        }
+        else
+        {
+            Process.Start("systemctl", $"--user enable {name}.service");
+            Process.Start("systemctl", "--user daemon-reload");
+            Process.Start("systemctl", $"--user start {name}.service");
+        }
     }
 
     private static string GetDotnetLocation()
@@ -151,8 +176,9 @@ exec {dotnet} {dll} --no-gui --systemd-service
     /// <param name="baseDirectory">the base directory for the FileFiles install, DirectoryHelper.BaseDirectory</param>
     /// <param name="isNode">if installing node or server</param>
     /// <param name="bashScript">the bash script used to run the service</param>
+    /// <param name="root">if the user is root</param>
     /// <returns>if it was successful or not</returns>
-    private static bool SaveServiceFile(string baseDirectory, bool isNode, string bashScript)
+    private static bool SaveServiceFile(string baseDirectory, bool isNode, string bashScript, bool root)
     {
         string contents = $@"[Unit]
 Description={(isNode ? "FileFlows Node" :"FileFlows")}
@@ -167,7 +193,7 @@ RestartSec=10
 [Install]
 WantedBy=multi-user.target";
 
-        string file = Path.Combine(GetSystemdServiceFolder(), $"fileflows{(isNode ? "-node" : "")}.service");
+        string file = Path.Combine(GetSystemdServiceFolder(root), $"fileflows{(isNode ? "-node" : "")}.service");
         var fileInfo = new FileInfo(file);
         if (fileInfo.Directory?.Exists == false)
         {

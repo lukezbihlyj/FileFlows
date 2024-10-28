@@ -8,7 +8,7 @@
     bool invalid = string.IsNullOrEmpty(Input?.ErrorMessage) == false;
 
 }
-<div x-id="@Input?.Field?.Name" class="row @(NoSpacing ? "mt-0" : "") @(invalid ? "error" : "") 
+<div x-id="@(Input?.Field?.Name?.EmptyAsNull() ?? Input?.CustomXID)" class="row @(NoSpacing ? "mt-0" : "") @(invalid ? "error" : "") 
 @(Input?.Field?.FlexGrow == true ? "flex-grow" : "") 
 @(Input?.HideLabel == true ? "hide-label" : "") 
 @(Input?.Disabled == true ? "disabled" : "")

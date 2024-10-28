@@ -14,6 +14,7 @@ using FileFlows.RemoteServices;
 using FileFlows.ServerShared;
 using FileFlows.ServerShared.Helpers;
 using FileFlows.ServerShared.Workers;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.Node;
 
@@ -83,9 +84,6 @@ public class NodeManager
                         return false;
                     }
 
-                    //AppSettings.Instance.Enabled = settings.Enabled;
-                    //AppSettings.Instance.Runners = settings.FlowRunners;
-                    // AppSettings.Instance.TempPath = settings.TempPath;
                     AppSettings.Instance.Save();
 
                     var serverVersion = ServiceLoader.Load<ISettingsService>().GetServerVersion().Result;
@@ -156,11 +154,23 @@ public class NodeManager
             return (false, "Server URL not set");
         
         RemoteService.AccessToken = settings.AccessToken;
+        HardwareInfo? hardwareInfo = null;
+        try
+        {
+            hardwareInfo = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+            Logger.Instance?.ILog("Hardware Info: " + Environment.NewLine + hardwareInfo);
+        }
+        catch(Exception ex)
+        {
+            Logger.Instance?.ELog("Failed to get hardware info: " + ex.Message);
+        }
+
+        
         var nodeService = ServiceLoader.Load<INodeService>();
         Shared.Models.ProcessingNode? result;
         try
         {
-            result = await nodeService.Register(settings.ServerUrl, settings.HostName, tempPath, mappings);
+            result = await nodeService.Register(settings.ServerUrl, settings.HostName, tempPath, mappings, hardwareInfo);
             if (result == null)
             {
                 this.Registered = false;
@@ -185,12 +195,12 @@ public class NodeManager
         if(result.Uid != CommonVariables.InternalNodeUid) // internal node uid is already set elsewhere to a unique UID for security
             RemoteService.NodeUid = result.Uid;
         RemoteService.ServiceBaseUrl = settings.ServerUrl;
-        if (RemoteService.ServiceBaseUrl.EndsWith("/"))
+        if (RemoteService.ServiceBaseUrl.EndsWith('/'))
             RemoteService.ServiceBaseUrl = RemoteService.ServiceBaseUrl[..^1];
 
         Logger.Instance?.ILog("Successfully registered node");
-        //settings.Enabled = result.Enabled;
-        //settings.Runners = result.FlowRunners;
+
+
         settings.Save();
         this.Registered = true;
         return (true, string.Empty);

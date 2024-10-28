@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using FileFlows.DataLayer.DatabaseConnectors;
@@ -205,7 +206,7 @@ internal  class DbObjectManager : BaseManager
             sql += $" {dataColumnName} = json_set({dataColumnName}, '$.{field}', @0)";
 
         if (value is DateTime dt)
-            value = dt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+            value = dt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
         if (value is bool bValue)
             value = bValue ? 1 : 0;
         

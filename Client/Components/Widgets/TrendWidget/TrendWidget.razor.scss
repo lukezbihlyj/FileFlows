@@ -1,0 +1,40 @@
+svg {
+  position:absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: unset;
+  height: unset;
+  z-index:0;
+}
+.details {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  z-index: 1;
+  position: relative;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 1), /* Stroke effect - outer shadow */
+  0 0 8px rgba(0, 0, 0, 0.8); /* Inner shadow */
+
+  .icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+  }
+
+  .details-main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .total {
+    font-size: 1.5rem;
+  }
+
+  .suffix {
+    color: #ffffffb3;
+    font-weight: var(--bold, 600);
+    font-size: 1.1rem;
+    position: relative;
+    top: -0.25rem;
+  }
+}

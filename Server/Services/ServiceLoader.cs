@@ -22,10 +22,13 @@ public static class ServiceLoader
             .AddSingleton<StartupService>()
             .AddSingleton<DatabaseService>()
             .AddSingleton<ISettingsService, SettingsService>()
+            .AddSingleton<LanguageService>()
             //.AddSingleton<DatabaseLogService>()
             .AddSingleton<StatisticService>()
             .AddSingleton<DashboardService>()
+            .AddSingleton<DashboardFileOverviewService>()
             .AddSingleton<FlowService>()
+            .AddSingleton<PausedService>()
             .AddSingleton<LibraryService>()
             .AddSingleton<LibraryFileService>()
             .AddSingleton<NodeService>()
@@ -41,9 +44,13 @@ public static class ServiceLoader
             .AddSingleton<AuditService>()
             .AddSingleton<DockerModService>()
             .AddSingleton<RepositoryService>()
+            .AddSingleton<TagService>()
             .AddSingleton<INotificationService, NotificationService>()
             .AddSingleton<ScheduledReportService>()
             .AddSingleton<FileDisplayNameService>()
+            .AddSingleton<HardwareInfoService>()
+            .AddSingleton<UpdateService>() 
+            
             .BuildServiceProvider(); // Build the service provider
     }
     

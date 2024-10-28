@@ -9,30 +9,23 @@ public class LibraryFileEditor
 {
     static string ApIUrl => "/api/library-file";
 
+    private static List<Tag> Tags = [];
+
     private static async Task<RequestResult<LibraryFileModel>> GetLibraryFile(string url)
     {
-#if (DEMO)
-        var file = new LibraryFileModel
-        {
-            Name = "Demo Library File.mkv"
-        };
-        return new RequestResult<LibraryFileModel> { Success = true, Data = file };
-#else
         return await HttpHelper.Get<LibraryFileModel>(url);
-#endif
     }
     private static async Task<RequestResult<string>> GetLibraryFileLog(string url)
     {
-#if (DEMO)
-        return new RequestResult<string> { Success = true, Data = "This is a sample log file." };
-#else
         return await HttpHelper.Get<string>(url);
-#endif
     }
 
-    public static async Task Open(Blocker blocker, Editor editor, Guid libraryItemUid)
+    public static async Task Open(Blocker blocker, Editor editor, Guid libraryItemUid, Profile profile)
     {
         LibraryFileModel? model = null;
+        Tags = await App.Instance.ClientService.GetTags();
+        foreach(var tag in Tags)
+            Logger.Instance.ILog("Known Tag: " + tag.Name);
         string logUrl = ApIUrl + "/" + libraryItemUid + "/log";
         blocker.Show();
         try
@@ -54,6 +47,13 @@ public class LibraryFileEditor
 
             var logResult = await GetLibraryFileLog(logUrl);
             model.Log = (logResult.Success ? logResult.Data : string.Empty) ?? string.Empty;
+
+            if (model.Tags?.Any() == true)
+            {
+                foreach(var tag in model.Tags)
+                    Logger.Instance.ILog("Model Tag: " + tag);
+            }
+            
 
         }
         finally
@@ -118,6 +118,35 @@ public class LibraryFileEditor
                 });
             }
 
+            // if (model.Additional?.ExecutedFlows?.Any() == true)
+            // {
+            //     tabs.Add("Pages.LibraryFile.Tabs.ExecutedFlows", new List<IFlowField>
+            //     {
+            //         new ElementField()
+            //         {
+            //             InputType = FormInputType.Flow,
+            //             Name = nameof(model.Additional.ExecutedFlows)
+            //         }
+            //     });
+            //
+            // }
+            // else 
+            if (model.ExecutedNodes?.Any() == true)
+            {
+                tabs.Add("Pages.LibraryFile.Fields.ExecutedNodes", new List<IFlowField>
+                {
+                    new ElementField()
+                    {
+                        InputType = FormInputType.ExecutedFlowElementsRenderer,
+                        Name = nameof(model.ExecutedNodes),
+                        Parameters =
+                        {
+                            // { "Log", model.Log }
+                        }
+                    }
+                });
+            }
+
             var additionalButtons = new ActionButton[]
             {
                 model.Status is FileStatus.Processed or FileStatus.MappingIssue or FileStatus.MissingLibrary
@@ -125,6 +154,7 @@ public class LibraryFileEditor
                     or FileStatus.ReprocessByFlow
                     ? new()
                     {
+                        Uid = "download-log",
                         Label = App.Instance.IsMobile ? "Labels.DownloadLogShort" : "Labels.DownloadLog",
                         Clicked = (sender, e) => _ = DownloadLog(sender, libraryItemUid)
                     }
@@ -272,7 +302,7 @@ public class LibraryFileEditor
             item.Status != FileStatus.OutOfSchedule)
         {
             if(item.Node?.Name == "FileFlowsServer")
-                item.Node.Name = "Internal Processing Node";
+                item.Node.Name = Translater.Instant("Labels.InternalProcessingNode");
             fields.Add(new ElementField
             {
                 InputType = FormInputType.TextLabel,
@@ -313,6 +343,22 @@ public class LibraryFileEditor
             Name = nameof(item.Status),
             ReadOnlyValue = Translater.Instant("Enums.FileStatus." + item.Status)
         });
+
+        if (item.Tags?.Any() == true && Tags?.Any() == true)
+        {
+            var known = Tags.Where(x => item.Tags.Contains(x.Uid)).Select(x => x.Name)
+                .OrderBy(x => x.ToLowerInvariant())
+                .ToList();
+            if (known.Count > 0)
+            {
+                fields.Add(new ElementField()
+                {
+                    InputType = FormInputType.TextLabel,
+                    Name = nameof(item.Tags),
+                    ReadOnlyValue = string.Join(", ", known)
+                });
+            }
+        }
 
         if (string.IsNullOrWhiteSpace(item.FailureReason) == false && item.Status == FileStatus.ProcessingFailed)
         {

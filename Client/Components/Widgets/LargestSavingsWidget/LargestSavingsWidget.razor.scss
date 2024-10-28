@@ -1,0 +1,64 @@
+@mixin bottomBar {
+  position:absolute;
+  bottom:0;
+  left:0;
+  height:0.25rem;
+  background:var(--accent-2);
+  z-index: 0;
+}
+@mixin backgroundBar($alpha:0.05) {
+  background: rgba(255, 255, 255, $alpha);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.library-saving {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  flex-direction: column;
+  line-height: 2;
+  padding: 0;
+  margin: 0.75rem;
+  border-radius: var(--container-border-radius);
+  overflow: hidden;
+  border: solid 1px var(--border-color);
+  .library-saving-content {
+    z-index:1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+  }
+  .path {
+    font-size: 0.9rem;
+    word-break: break-all;
+  }
+  .info {
+    padding-bottom: 0.5rem;
+  }
+  .right {
+    width:10rem;
+    min-width:10rem;
+  }
+  .time {
+    padding-top: 2rem;
+    display: block;
+    font-size: 0.9rem;
+    font-weight: var(--bold, 600);
+    text-align: right;
+    padding-right: 0.5rem;
+  }
+  .savings-background {
+    @include backgroundBar;
+  }
+}
+.icon {
+  width:3rem;
+  .icon {
+    height:2.25rem;
+  }
+}

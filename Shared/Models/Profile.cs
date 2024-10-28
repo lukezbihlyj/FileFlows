@@ -62,7 +62,11 @@ public class Profile
     /// Gets or sets the number of unread notifications
     /// </summary>
     public UnreadNotifications UnreadNotifications { get; set; }
-    
+
+    /// <summary>
+    /// Gets or sets the language options
+    /// </summary>
+    public List<ListOption> LanguageOptions { get; set; } = new();
     
     
 

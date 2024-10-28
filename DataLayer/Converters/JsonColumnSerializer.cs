@@ -14,9 +14,9 @@ public class JsonColumnSerializer: IColumnSerializer
     {
         if (value == null) 
             return string.Empty;
-        if (value is IList list && list.Count == 0)
+        if (value is IList { Count: 0 })
             return string.Empty;
-        if (value is IDictionary dict && dict.Count == 0)
+        if (value is IDictionary { Count: 0 })
             return string.Empty;
         return System.Text.Json.JsonSerializer.Serialize(value, CustomDbMapper.JsonOptions);
     }
@@ -27,6 +27,8 @@ public class JsonColumnSerializer: IColumnSerializer
         {
             if (targetType == typeof(List<ExecutedNode>))
                 return new List<ExecutedNode>();
+            if (targetType == typeof(List<Flow>))
+                return new List<Flow>();
             if (targetType == typeof(Dictionary<string,object>))
                 return new Dictionary<string,object>();
             return null;

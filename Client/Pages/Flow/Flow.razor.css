@@ -17,9 +17,9 @@
 
 .flow-elements {
   width: var(--flow-elements-width);
-  padding-top: 0.75rem;
   z-index: 4;
   background: var(--base-darker);
+  padding: 0.75rem 0.5rem 0;
 }
 .flow-elements.flow-elements-on-top {
   z-index: 6;
@@ -219,7 +219,7 @@
   margin-right: 0.25rem;
   display: flex;
   align-items: center;
-  height: 2.1875rem;
+  height: var(--input-height, 2.1875rem);
   font-weight: normal;
   outline: none !important;
   line-height: initial;

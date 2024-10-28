@@ -93,6 +93,18 @@ public class NodeController : BaseController
     }
 
     /// <summary>
+    /// Sets the status of a node
+    /// </summary>
+    /// <param name="uid">the UID of the node</param>
+    /// <param name="status">the status</param>
+    [HttpPost("{uid}/status/{status?}")]
+    public void SetStatus(Guid uid, [FromRoute] ProcessingNodeStatus? status)
+    {
+        var service = ServiceLoader.Load<NodeService>();
+        service.UpdateStatus(uid, status);
+    }
+
+    /// <summary>
     /// Gets the version an node update available
     /// </summary>
     /// <returns>the version an node update available</returns>
@@ -175,16 +187,7 @@ public class NodeController : BaseController
     /// <param name="minutes">The minutes to pause the system for</param>
     [HttpPost("pause")]
     public async Task Pause([FromQuery] int minutes)
-    {
-        var service = (SettingsService)ServiceLoader.Load<ISettingsService>();
-        var settings = await service.Get();
-        if (settings.IsPaused)
-            return; // already paused
-        
-        settings.PausedUntil = DateTime.UtcNow.AddMinutes(minutes);
-        ClientServiceManager.Instance.SystemPaused(minutes);
-        await service.Save(settings, await GetAuditDetails());
-    }
+        => await ServiceLoader.Load<PausedService>().Pause(minutes);
     
     /// <summary>
     /// Gets if the system is paused
@@ -213,6 +216,12 @@ public class NodeController : BaseController
         if (string.IsNullOrWhiteSpace(model?.TempPath))
             throw new ArgumentNullException(nameof(model.TempPath));
 
+        Logger.Instance.ILog("Registering Node: " + model.Address);
+        if (model.HardwareInfo != null)
+            Logger.Instance.ILog($"Node {model.Address} Hardware Info: " + Environment.NewLine + model.HardwareInfo);
+        else
+            Logger.Instance.ILog($"Node {model.Address} provided no Hardware Info");
+
         var address = model.Address.ToLowerInvariant().Trim();
         var service = ServiceLoader.Load<NodeService>();
         var data = await service.GetAllAsync();
@@ -228,6 +237,7 @@ public class NodeController : BaseController
                 existing.Architecture = model.Architecture;
                 existing.OperatingSystem = model.OperatingSystem;
                 existing.Version = model.Version;
+                existing.HardwareInfo = model.HardwareInfo;
                 existing = await service.Update(existing, await GetAuditDetails());
             }
             existing.SignalrUrl = "flow";
@@ -267,7 +277,8 @@ public class NodeController : BaseController
             Mappings = model.Mappings?.Select(x => new KeyValuePair<string, string>(x.Server, x.Local))?.ToList() ??
                        variables?.Select(x => new
                            KeyValuePair<string, string>(x.Value, "")
-                       )?.ToList() ?? new()
+                       )?.ToList() ?? new(),
+            HardwareInfo = model.HardwareInfo
         };
         var result = await service.Update(node, await GetAuditDetails());
         if (result.Failed(out string error))

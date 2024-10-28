@@ -18,25 +18,6 @@ input {
     cursor:pointer;
   }
 
-  button {
-    width: fit-content;
-    min-width: fit-content;
-    padding: 0 1rem;    
-    margin: 0 0.5rem 0 0;
-    border:none;
-    background: rgba(var(--input-background-rgb), 0.5);
-    &:hover {
-      box-shadow: none !important;
-      border: solid 1px var(--accent);
-    }
-  }
-  &:focus-within {
-    button {
-      border-left: solid 1px var(--accent);
-    }
-  }
-
-
   ::deep {
     > div {
       flex-grow: 1;

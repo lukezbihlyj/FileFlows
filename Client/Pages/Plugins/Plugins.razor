@@ -59,7 +59,10 @@
                                 }
                             </span>
                             <div class="center">
-                                <span class="name"><span>@item.Name</span></span>
+                                @{
+                                string label = Translater.TranslateIfHasTranslation($"Plugins.{item.PackageName.Replace(".", "")}.Label", item.Name);
+                                }
+                                <span class="name"><span class="name-actual">@label</span></span>
                                 <div class="info">
                                     <IconValue Color="IconValueColor.Blue" OnClick="() => _ = About(item)" Icon="fas fa-sitemap" Value="@(item.Elements.Count + " " + (item.Elements.Count == 1 ? lblFlowElement : lblFlowElements))" />
                                     @if (item.HasSettings)

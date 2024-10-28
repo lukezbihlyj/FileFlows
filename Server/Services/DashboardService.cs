@@ -1,5 +1,6 @@
 using FileFlows.Managers;
 using FileFlows.Plugin;
+using FileFlows.Server.Workers;
 using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Models;
 
@@ -8,7 +9,8 @@ namespace FileFlows.Server.Services;
 /// <summary>
 /// Dashboard Service
 /// </summary>
-public class DashboardService
+/// <param name="pausedService">The paused service</param>
+public class DashboardService(PausedService pausedService)
 {
     /// <summary>
     /// Gets all dashboards in the system
@@ -41,4 +43,19 @@ public class DashboardService
     /// /// <returns>the result of the update, if successful the updated item</returns>
     public Task<Result<Dashboard>> Update(Dashboard item, AuditDetails? auditDetails)
         => new DashboardManager().Update(item, auditDetails, dontIncrementConfigRevision: true);
+
+    /// <summary>
+    /// Gets the current system info
+    /// </summary>
+    /// <returns>the current system info</returns>
+    public SystemInfo GetSystemInfo()
+    {
+        return new()
+        {
+            MemoryUsage = SystemMonitor.LatestMemoryUsage,
+            CpuUsage = SystemMonitor.LatestCpuUsage,
+            PausedUntil = pausedService.PausedUntil,
+            IsPaused = pausedService.IsPaused
+        };
+    }
 }

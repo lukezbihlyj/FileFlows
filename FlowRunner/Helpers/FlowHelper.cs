@@ -152,6 +152,7 @@ public class FlowHelper
         {
             // special type
             var nodeScript = new ScriptNode();
+            nodeScript.Uid = part.Uid;
             nodeScript.Model = part.Model;
             if (Guid.TryParse(part.FlowElementUid[7..], out Guid scriptUid) == false) // 7 to remove "Scripts."
                 return Result<Node>.Fail("Failed to parse script UID: " + part.FlowElementUid[7..]);
@@ -269,7 +270,7 @@ public class FlowHelper
     /// <param name="flowElementType">the flow element type</param>
     /// <param name="variables">the variables to load</param>
     /// <returns>an instance of the flow element</returns>
-    private Node CreateFlowElementInstance(ILogger logger, FlowPart part, Type flowElementType, Dictionary<string, object> variables)
+    public Node CreateFlowElementInstance(ILogger logger, FlowPart part, Type flowElementType, Dictionary<string, object> variables)
     {
         object? node;
         if (flowElementType == typeof(Startup))
@@ -415,8 +416,9 @@ public class FlowHelper
             return typeof(SubFlowInput);
         if (fullName.EndsWith(nameof(SubFlowOutput)) || fullName.StartsWith(nameof(SubFlowOutput)))
             return typeof(SubFlowOutput);
-        
-        foreach (var dll in new DirectoryInfo(runInstance.WorkingDirectory).GetFiles("*.dll", SearchOption.AllDirectories))
+
+        var dlls = new DirectoryInfo(runInstance.WorkingDirectory).GetFiles("*.dll", SearchOption.AllDirectories);
+        foreach (var dll in dlls)
         {
             try
             {
@@ -432,6 +434,10 @@ public class FlowHelper
                 runInstance.Logger.WLog("Failed to load assembly: " + dll.FullName + " > " + ex.Message);
             }
         }
+
+        runInstance.Logger.WLog(
+            $"Failed to load '{fullName}' from any of the following DLLs:{Environment.NewLine} {string.Join(Environment.NewLine, dlls.Select(x => " - " + x.FullName))}");
+        
         return null;
     }
 }

@@ -26,6 +26,11 @@ public partial class ClientService
     private readonly IMemoryCache _cache;
 
     /// <summary>
+    /// The instance of the cache service
+    /// </summary>
+    private readonly CacheService _cacheService;
+
+    /// <summary>
     /// The javascript runtime
     /// </summary>
     private readonly IJSRuntime _jsRuntime;
@@ -57,10 +62,12 @@ public partial class ClientService
     /// <param name="profileService">The profile service</param>
     /// <param name="memoryCache">The memory cache instance used for caching.</param>
     /// <param name="jsRuntime">The javascript runtime.</param>
-    public ClientService(NavigationManager navigationManager, ProfileService profileService, IMemoryCache memoryCache, IJSRuntime jsRuntime)
+    /// <param name="cacheService">The cache service instance.</param>
+    public ClientService(NavigationManager navigationManager, ProfileService profileService, IMemoryCache memoryCache, IJSRuntime jsRuntime, CacheService cacheService)
     {
         this._profileService = profileService;
-        _jsRuntime = jsRuntime; 
+        _jsRuntime = jsRuntime;
+        _cacheService = cacheService;
         _navigationManager = navigationManager; 
         _cache = memoryCache;
         _ = InitializeSystemInfo();
@@ -173,4 +180,116 @@ public partial class ClientService
     {
         SystemPausedUpdated(false);
     }
+
+    /// <summary>
+    /// Gets the current update info
+    /// </summary>
+    /// <returns>the update info</returns>
+    public async Task<UpdateInfo?> GetCurrentUpdatesInfo()
+    {
+        if (CurrentUpdatesInfo != null) return CurrentUpdatesInfo;
+        var result = await HttpHelper.Get<UpdateInfo>("/api/dashboard/updates");
+        if (result.Success)
+            CurrentUpdatesInfo ??= result.Data;
+        return CurrentUpdatesInfo;
+    }
+
+    /// <summary>
+    /// Gets the current update info
+    /// </summary>
+    /// <returns>the update info</returns>
+    public async Task<List<FlowExecutorInfoMinified>> GetCurrentExecutorInfoMinifed()
+    {
+        if (CurrentExecutorInfoMinified != null) return CurrentExecutorInfoMinified;
+        var result = await HttpHelper.Get<List<FlowExecutorInfoMinified>>("/api/dashboard/executors-info-minified");
+        if (result.Success)
+            CurrentExecutorInfoMinified ??= result.Data;
+        return CurrentExecutorInfoMinified ?? [];
+    }
+    /// <summary>
+    /// Gets the current node status summaries
+    /// </summary>
+    /// <returns>the current node status summaries</returns>
+    public async Task<List<NodeStatusSummary>> GetCurrentNodeStatusSummaries()
+    {
+        if (CurrentNodeStatusSummaries != null) return CurrentNodeStatusSummaries;
+        var result = await HttpHelper.Get<List<NodeStatusSummary>>("/api/dashboard/node-summary");
+        if (result.Success)
+            CurrentNodeStatusSummaries ??= result.Data;
+        return CurrentNodeStatusSummaries;
+    }
+
+    /// <summary>
+    /// Gets the current file overview data
+    /// </summary>
+    /// <returns>the current file overview data</returns>
+    public async Task<FileOverviewData?> GetCurrentFileOverData()
+    {
+        if (CurrentFileOverData != null) return CurrentFileOverData;
+        var result = await HttpHelper.Get<FileOverviewData>("/api/dashboard/file-overview");
+        if (result.Success)
+            CurrentFileOverData ??= result.Data;
+        return CurrentFileOverData;
+    }
+
+    /// <summary>
+    /// Gets the current system info
+    /// </summary>
+    /// <returns>the current system info</returns>
+    public async Task<SystemInfo?> GetCurrentSystemInfo()
+    {
+        if (CurrentSystemInfo != null) return CurrentSystemInfo;
+        var result = await HttpHelper.Get<SystemInfo>("/api/dashboard/info");
+        if (result.Success)
+            CurrentSystemInfo ??= result.Data;
+        return CurrentSystemInfo;
+    }
+
+    /// <summary>
+    /// Gets the tags in the system
+    /// </summary>
+    /// <returns>the tags</returns>
+    public async Task<List<Tag>> GetTags()
+    {
+        if (Tags != null) return Tags;
+        var result = await HttpHelper.Get<List<Tag>>("/api/tag");
+        if (result.Success)
+            Tags ??= result.Data;
+        return Tags ?? [];
+    }
+    
+    /// <summary>
+    /// Gets the all library savings data
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<StorageSavedData>> GetLibrarySavingsAllData()
+        => await _cacheService.GetFromCache("LibraryFilesAllData", 5 * 60,
+            async () => await GetLibraryFileData(0));
+
+    /// <summary>
+    /// Gets the month library savings data
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<StorageSavedData>> GetLibrarySavingsMonthData()
+        => await _cacheService.GetFromCache("LibraryFilesMonthData", 5 * 60,
+                async () => await GetLibraryFileData(31));
+    
+    private async Task<List<StorageSavedData>> GetLibraryFileData(int days)
+    {
+        var result = await HttpHelper.Get<List<StorageSavedData>>("/api/statistics/storage-saved-raw?days=" + days);
+        return result.Success ? result.Data ?? [] : [];
+    }
+
+    /// <summary>
+    /// Gets all the flow elements in the system
+    /// </summary>
+    /// <returns>all the flow elements in the system</returns>
+    public async Task<List<FlowElement>> GetAllFlowElements()
+        => await _cacheService.GetFromCache<List<FlowElement>>("AllFlowElements", 30,
+            async () =>
+            {
+                var result = await HttpHelper.Get<List<FlowElement>>("/api/flow/elements");
+                List<FlowElement> list = result.Success ? result.Data ?? [] : [];
+                return list;
+            });
 }

@@ -34,15 +34,19 @@ public class TelemetryReporter : ServerWorker
             TelemetryData data = new TelemetryData();
             data.ClientUid = settings.Uid;
             data.Version = Globals.Version;
+            data.Language = settings.Language?.EmptyAsNull() ?? "en";
             data.DatabaseProvider = ServiceLoader.Load<AppSettingsService>().Settings.DatabaseType.ToString();
             var pNodes = ServiceLoader.Load<NodeService>().GetAllAsync().Result.Where(x => x.Enabled).ToList();
-            data.ProcessingNodes = pNodes.Count();
+            data.ProcessingNodes = pNodes.Count;
+            var hardwareInfo = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+            data.HardwareInfo = hardwareInfo;
             data.ProcessingNodeData = pNodes.Select(x => new ProcessingNodeData()
             {
                 OS = x.OperatingSystem,
                 Architecture = x.Architecture,
                 Runners = x.FlowRunners,
-                Internal = x.Uid == CommonVariables.InternalNodeUid || x.Name == CommonVariables.InternalNodeName
+                Internal = x.Uid == CommonVariables.InternalNodeUid || x.Name == CommonVariables.InternalNodeName,
+                HardwareInfo = x.Uid == CommonVariables.InternalNodeUid ? hardwareInfo : x.HardwareInfo
             }).ToList();
             data.Architecture = RuntimeInformation.ProcessArchitecture.ToString();
             data.OS = isDocker ? "Docker" :
@@ -68,7 +72,9 @@ public class TelemetryReporter : ServerWorker
             data.FilesProcessed = filesProcessed;
             var repo = ServiceLoader.Load<RepositoryService>().GetRepository().Result ?? new ();
             var repoScripts = repo.FlowScripts.Union(repo.SharedScripts).Union(repo.SystemScripts)
-                .Select(x => x.Name).Distinct().ToList();
+                .Where(x => x.Uid != null)
+                .DistinctBy(x => x.Uid)
+                .ToDictionary(x => x.Uid!.Value, x => x);
             
             var flows = ServiceLoader.Load<FlowService>().GetAllAsync().Result;
             var dictNodes = new Dictionary<string, int>();
@@ -76,16 +82,19 @@ public class TelemetryReporter : ServerWorker
             {
                 if (fp == null)
                     continue;
-                if (fp.FlowElementUid.StartsWith("SubFlow:"))
+                var flowElementUid = fp.FlowElementUid;
+                if (flowElementUid.StartsWith("SubFlow:"))
                     continue;
-                if (fp.FlowElementUid.StartsWith("Script:"))
+                if (flowElementUid.StartsWith("Script:"))
                 {
-                    string name = fp.FlowElementUid[7..];
-                    if (repoScripts.Contains(name) == false)
+                    string uid = flowElementUid[7..];
+                    if (Guid.TryParse(uid, out var guid) == false || repoScripts.TryGetValue(guid, out var rs) == false)
                         continue;
+                    // we use a variable here so we dont update the actual cached flow object
+                    flowElementUid = "Script:" + rs.Name; // so we get the name of the script in telemetry
                 }
-                if (!dictNodes.TryAdd(fp.FlowElementUid, 1))
-                    dictNodes[fp.FlowElementUid] += 1;
+                if (!dictNodes.TryAdd(flowElementUid, 1))
+                    dictNodes[flowElementUid] += 1;
             }
 
             data.Nodes = dictNodes.Select(x => new TelemetryDataSet
@@ -160,11 +169,21 @@ public class TelemetryReporter : ServerWorker
         /// Gets or sets the architecture of the client's operating system.
         /// </summary>
         public string Architecture { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the language being used by the system
+        /// </summary>
+        public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the number of processing nodes in the client.
         /// </summary>
         public int ProcessingNodes { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the hardware information of the server
+        /// </summary>
+        public HardwareInfo HardwareInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the data of individual processing nodes in the client.
@@ -247,5 +266,10 @@ public class TelemetryReporter : ServerWorker
         /// Gets or sets if this is the internal processing node
         /// </summary>
         public bool Internal { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the hardware information of the processing node.
+        /// </summary>
+        public HardwareInfo HardwareInfo { get; set; }
     }
 }

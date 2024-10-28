@@ -3,19 +3,7 @@
 
 <div id="@Uid" class="flow-drop-down">
     <span class="dd-btn" @onclick="() => Toggle()">
-        <span class="icon">
-            @{
-                string icon = Selected?.Icon ?? PlaceholderIcon;
-            }
-            @if (icon.StartsWith("fa"))
-            {
-                <i class="@icon"></i>
-            }
-            else
-            {
-                <img src="@icon"/>
-            }
-        </span>
+        <TableItemIcon Icon="@Selected?.Icon" DefaultIcon="@PlaceholderIcon" />
         <span class="label">
             @(Selected?.Label ?? Placeholder)
         </span>
@@ -31,16 +19,7 @@
         @foreach (var opt in Options)
         {
             <span class="option" @onclick="() => Select(opt)">
-                <span class="icon">
-                    @if (opt.Icon.StartsWith("fa"))
-                    {
-                        <i class="@opt.Icon"></i>
-                    }
-                    else
-                    {
-                        <img src="@opt.Icon"/>
-                    }
-                </span>
+                <TableItemIcon Icon="@opt.Icon" DefaultIcon="@PlaceholderIcon" />
                 @opt.Label
             </span>
         }

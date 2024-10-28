@@ -408,7 +408,29 @@ public class LocalFileService : IFileService
             CreateDirectoryIfNotExists(destDir?.FullName!);
 
             Logger?.ILog($"About to move file '{fileInfo.FullName}' to '{destination}'");
-            fileInfo.MoveTo(destination, overwrite);
+            int count = 0;
+            while (count++ < 4)
+            {
+                try
+                {
+                    fileInfo.MoveTo(destination, overwrite);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    if(OperatingSystem.IsMacOS() && ex.Message.Contains("Input/output error", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Logger?.ILog("Input/output error, retrying move");
+                        Thread.Sleep(count * 30_000);
+                    }
+                    else
+                    {
+                        return Result<bool>.Fail(ex.Message);
+                    }
+                }
+            }
+
+
             SetPermissions(destination);
             return true;
         }
@@ -486,7 +508,28 @@ public class LocalFileService : IFileService
             var destDir = new FileInfo(destination).Directory;
             CreateDirectoryIfNotExists(destDir?.FullName!);
 
-            fileInfo.CopyTo(destination, overwrite);
+            int count = 0;
+            while (count++ < 4)
+            {
+                try
+                {
+                    fileInfo.CopyTo(destination, overwrite);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    if (OperatingSystem.IsMacOS() && ex.Message.Contains("Input/output error", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Logger?.ILog("Input/output error, retrying move");
+                        Thread.Sleep(count * 30_000);
+                    }
+                    else
+                    {
+                        return Result<bool>.Fail(ex.Message);
+                    }
+                }
+            }
+
             SetPermissions(destination);
             return true;
         }

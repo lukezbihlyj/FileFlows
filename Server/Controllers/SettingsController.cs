@@ -1,3 +1,4 @@
+using FileFlows.Plugin;
 using FileFlows.RemoteServices;
 using FileFlows.Server.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
 using Microsoft.AspNetCore.Authorization;
+using NodeService = FileFlows.Server.Services.NodeService;
 using ServiceLoader = FileFlows.Server.Services.ServiceLoader;
 using SettingsService = FileFlows.Server.Services.SettingsService;
 
@@ -97,6 +99,8 @@ public class SettingsController : BaseController
         if(uiModel.DbType != DatabaseType.Sqlite)
             uiModel.DontBackupOnUpgrade = Settings.DontBackupOnUpgrade;
 
+        uiModel.Language = settings.Language?.EmptyAsNull() ?? "en";
+
         uiModel.Security = ServiceLoader.Load<AppSettingsService>().Settings.Security;
         if (uiModel.TokenExpiryMinutes < 1)
             uiModel.TokenExpiryMinutes = 24 * 60;
@@ -108,6 +112,7 @@ public class SettingsController : BaseController
         
         return uiModel;
     }
+
 
     /// <summary>
     /// Get the system settings
@@ -150,12 +155,14 @@ public class SettingsController : BaseController
         if (model == null)
             return;
 
+        var existing = await ServiceLoader.Load<ISettingsService>().Get();
         if (model.SmtpPassword == DUMMY_PASSWORD)
         {
             // need to get the existing password
-            var existing = await ServiceLoader.Load<ISettingsService>().Get();
             model.SmtpPassword = existing.SmtpPassword;
         }
+
+        bool langChanged = existing.Language != model.Language;
         
         // validate license it
         Settings.LicenseKey = model.LicenseKey?.Trim();
@@ -209,8 +216,6 @@ public class SettingsController : BaseController
         
         Settings.Security = model.Security;
         
-        TranslaterHelper.InitTranslater(model.Language?.EmptyAsNull() ?? "en");
-        
         var newConnectionString = GetConnectionString(model, model.DbType);
         if (IsConnectionSame(Settings.DatabaseConnection, newConnectionString) == false)
         {
@@ -229,6 +234,13 @@ public class SettingsController : BaseController
         Settings.DontBackupOnUpgrade = model.DbType != DatabaseType.Sqlite && model.DbType != DatabaseType.SqliteNewConnection && model.DontBackupOnUpgrade;
         // save AppSettings with updated license and db migration if set
         SettingsService.Save();
+
+        if (langChanged)
+        {
+            PluginScanner.Scan();
+            await ServiceLoader.Load<LanguageService>().Initialize();
+
+        }
     }
     
     /// <summary>
@@ -321,16 +333,17 @@ public class SettingsController : BaseController
     /// Triggers a check for an update
     /// </summary>
     [HttpPost("check-for-update-now")]
-    public bool CheckForUpdateNow()
+    public async Task<bool> CheckForUpdateNow()
     {
+        var service = ServiceLoader.Load<UpdateService>();
+        await service.Trigger();
+        
         if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
             return false;
 
-        if (ServerUpdater.Instance == null)
+        if (string.IsNullOrEmpty(service.Info.FileFlowsVersion))
             return false;
-
-        var available = ServerUpdater.Instance.GetLatestOnlineVersion();
-        return available.updateAvailable;
+        return true;
     }
 
     /// <summary>
@@ -436,6 +449,19 @@ public class SettingsController : BaseController
         var settings = await service.Get();
         settings.EulaAccepted = model.EulaAccepted;
         settings.InitialConfigDone = true;
+        settings.Language = model.Language?.EmptyAsNull() ?? "en";
+
+        if (model.Runners > 0)
+        {
+            var nodeService = ServiceLoader.Load<NodeService>();
+            var node = await nodeService.GetServerNodeAsync();
+            if (node != null)
+            {
+                node.FlowRunners = model.Runners;
+                await nodeService.Update(node, null);
+            }
+        }
+
         await service.Save(settings, await GetAuditDetails());
 
         if (model.DockerMods?.Any() == true)
@@ -470,5 +496,13 @@ public class SettingsController : BaseController
         /// Gets or sets the DockerMods to install
         /// </summary>
         public List<RepositoryObject> DockerMods { get; set; }
+        /// <summary>
+        /// Gets or sets the language
+        /// </summary>
+        public string Language { get; set; }
+        /// <summary>
+        /// Gets or sets the flow runners
+        /// </summary>
+        public int Runners { get; set; }
     }
 }

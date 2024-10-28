@@ -1,0 +1,39 @@
+.progress-donut {
+  width: 100px;
+  height: 100px;
+  position: relative;
+}
+.progress-donut .circular-chart {
+  max-width: 100%;
+  max-height: 100%;
+  transform: rotate(-90deg);
+}
+.progress-donut .circular-chart .circle {
+  fill: none;
+  stroke-width: 2.8;
+}
+.progress-donut .circular-chart .outer-circle {
+  stroke: #00bcd4;
+}
+.progress-donut .circular-chart .inner-circle {
+  stroke: #ff4081;
+}
+.progress-donut .circular-chart .current-text {
+  font-size: 5px;
+  fill: #ffffff;
+  font-weight: bold;
+}
+.progress-donut .circular-chart .overall-text {
+  font-size: 3px;
+  fill: #ffffff;
+}
+
+.current-progress-text {
+  fill: #fff;
+  font-size: 18px;
+}
+
+.overall-text {
+  fill: #fff;
+  font-size: 12px;
+}

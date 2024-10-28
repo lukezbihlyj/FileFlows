@@ -18,6 +18,7 @@ public class LibaryFileListModelHelper
     /// <returns>a list of files in the list model</returns>
     public static IEnumerable<LibaryFileListModel> ConvertToListModel(IEnumerable<LibraryFile> files, FileStatus status, IEnumerable<Library> libraries, Dictionary<Guid, string> nodeNames)
     {
+        bool licensed = LicenseHelper.IsLicensed();
         files = files.ToList();
         var dictLibraries = libraries.ToDictionary(x => x.Uid, x => x);
         return files.Select(x =>
@@ -32,7 +33,8 @@ public class LibaryFileListModelHelper
                 Name = x.Name,
                 OriginalSize = x.OriginalSize,
                 Forced = (x.Flags & LibraryFileFlags.ForceProcessing) == LibraryFileFlags.ForceProcessing,
-                CustomVariables = x.CustomVariables
+                CustomVariables = x.CustomVariables,
+                Tags = licensed ? x.Tags : null
             };
 
             if (status == FileStatus.Unprocessed || status == FileStatus.OutOfSchedule || status == FileStatus.Disabled)
@@ -42,6 +44,11 @@ public class LibaryFileListModelHelper
             if (status == FileStatus.OnHold && x.Library != null && dictLibraries.ContainsKey(x.Library.Uid))
             {
                 item.ProcessingTime = x.HoldUntil.Subtract(DateTime.UtcNow);
+            }
+            if (status == FileStatus.Unprocessed && x.ProcessOnNodeUid != null
+                                                 && nodeNames.TryGetValue(x.ProcessOnNodeUid.Value, out var nodeName) && string.IsNullOrWhiteSpace(nodeName) == false)
+            {
+                item.Node = nodeName;
             }
 
             if (status == FileStatus.Processing)

@@ -1,0 +1,8 @@
+@namespace FileFlows.Client.Components.Inputs
+@inherits Input<string>
+
+<InputWrapper Input="@this">
+    <div class="combobox-wrapper">
+        <input id="@Uid" @bind="Value" placeholder="Select or type..." />
+    </div>
+</InputWrapper>

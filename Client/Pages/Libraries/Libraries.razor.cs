@@ -34,6 +34,39 @@ public partial class Libraries : ListPage<Guid, Library>
         });
     }
 
+    /// <summary>
+    /// Duplicate the selected item
+    /// </summary>
+    private async Task Duplicate()
+    {
+        Blocker.Show();
+        try
+        {
+            var item = Table.GetSelected()?.FirstOrDefault();
+            if (item == null)
+                return;
+            string url = $"/api/library/duplicate/{item.Uid}";
+#if (DEBUG)
+            url = "http://localhost:6868" + url;
+#endif
+            var newItem = await HttpHelper.Post<Library>(url);
+            if (newItem is { Success: true })
+            {
+                await this.Refresh();
+                Toast.ShowSuccess(Translater.Instant("Pages.Library.Labels.Duplicated",
+                    new { name = newItem.Data.Name }));
+            }
+            else
+            {
+                Toast.ShowError(newItem.Body?.EmptyAsNull() ?? "Pages.Library.Labels.FailedToDuplicate");
+            }
+        }
+        finally
+        {
+            Blocker.Hide();
+        }
+    }
+    
     private Task<RequestResult<Dictionary<Guid, string>>> GetFlows()
         => HttpHelper.Get<Dictionary<Guid, string>>("/api/flow/basic-list?type=Standard");
 
@@ -71,10 +104,10 @@ public partial class Libraries : ListPage<Guid, Library>
         SetModelProperty(nameof(template.Name), template.Name);
         SetModelProperty(nameof(template.Template), template.Name);
         SetModelProperty(nameof(template.FileSizeDetectionInterval), template.FileSizeDetectionInterval);
-        SetModelProperty(nameof(template.Filter), template.Filter);
+        SetModelProperty(nameof(template.Filters), template.Filters);
         SetModelProperty(nameof(template.Extensions), template.Extensions?.ToArray() ?? new string[] { });
         SetModelProperty(nameof(template.UseFingerprinting), template.UseFingerprinting);
-        SetModelProperty(nameof(template.ExclusionFilter), template.ExclusionFilter);
+        SetModelProperty(nameof(template.ExclusionFilters), template.ExclusionFilters);
         SetModelProperty(nameof(template.Path), template.Path);
         SetModelProperty(nameof(template.Priority), template.Priority);
         SetModelProperty(nameof(template.ScanInterval), template.ScanInterval);

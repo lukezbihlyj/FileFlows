@@ -30,16 +30,59 @@ public partial class ClientService
     /// Event raised when the executors have bene updated
     /// </summary>
     public event Action<List<FlowExecutorInfoMinified>> ExecutorsUpdated;
-
+    /// <summary>
+    /// Event raised when the system info has bene updated
+    /// </summary>
+    public event Action<SystemInfo> SystemInfoUpdated;
+    /// <summary>
+    /// Events raised when the node status summaries are updated
+    /// </summary>
+    public event Action<List<NodeStatusSummary>> NodeStatusSummaryUpdated;
     /// <summary>
     /// Event raised when the system is paused/unpaused
     /// </summary>
     public event Action<bool> SystemPausedUpdated;
+
+    /// <summary>
+    /// Event raised when the file overview has bene updated
+    /// </summary>
+    public event Action<FileOverviewData> FileOverviewUpdated;
+    
+    /// <summary>
+    /// Event raised when the file overview has bene updated
+    /// </summary>
+    public event Action<UpdateInfo> UpdatesUpdateInfo;
     
     /// <summary>
     /// Event raised when the file status have bene updated
     /// </summary>
     public event Action<List<LibraryStatus>> FileStatusUpdated;
+    
+    /// <summary>
+    /// Gets the current system info
+    /// </summary>
+    private SystemInfo? CurrentSystemInfo { get; set; }
+    /// <summary>
+    /// Gets or sets the tags in the system
+    /// </summary>
+    private List<Tag> Tags { get; set; }
+    /// <summary>
+    /// Gets the current node status summaries
+    /// </summary>
+    private List<NodeStatusSummary>? CurrentNodeStatusSummaries { get; set; }
+    /// <summary>
+    /// Gets the current file overview data
+    /// </summary>
+    private FileOverviewData? CurrentFileOverData { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the current update info
+    /// </summary>
+    private UpdateInfo CurrentUpdatesInfo { get; set; }
+    /// <summary>
+    /// Gets or sets the current executor info
+    /// </summary>
+    public List<FlowExecutorInfoMinified>? CurrentExecutorInfoMinified { get; set; }
 
 
     /// <summary>
@@ -57,9 +100,7 @@ public partial class ClientService
     {
         while (true) // Retry indefinitely
         {
-            // string url = ServerUri.Replace("https", "wss").Replace("http", "ws");
-            string url = ServerUri; //ServerUri.Replace("wss", "https").Replace("ws", "http");
-            Logger.Instance.ILog("ServerUri: " + url);
+            string url = ServerUri;
             try
             {
                 _hubConnection = new HubConnectionBuilder()
@@ -74,10 +115,41 @@ public partial class ClientService
                 };
 
                 _hubConnection.On<ToastData>("Toast", HandleToast);
-                _hubConnection.On<Dictionary<Guid, FlowExecutorInfoMinified>>("UpdateExecutors", UpdateExecutors);
+                _hubConnection.On<Dictionary<Guid, FlowExecutorInfoMinified>>("UpdateExecutors", (executors) =>
+                {
+                    CurrentExecutorInfoMinified = executors?.Values?.ToList() ?? [];
+                    UpdateExecutors(executors);
+                });
                 _hubConnection.On<List<LibraryStatus>>("UpdateFileStatus", UpdateFileStatus);
                 _hubConnection.On<LibraryFile>("StartProcessing", StartProcessing);
                 _hubConnection.On<LibraryFile>("FinishProcessing", FinishProcessing);
+                _hubConnection.On<SystemInfo>("SystemInfo", (info) =>
+                {
+                    CurrentSystemInfo = info;
+                    SystemInfoUpdated?.Invoke(info);
+                });
+                _hubConnection.On<List<NodeStatusSummary>>("UpdateNodeStatusSummaries", (info) =>
+                {
+                    CurrentNodeStatusSummaries = info;
+                    NodeStatusSummaryUpdated?.Invoke(info);
+                });
+                _hubConnection.On<FileOverviewData>("FileOverviewUpdate", (data) =>
+                {
+                    CurrentFileOverData = data;
+                    _cacheService.Clear("LibraryFilesAllData");
+                    _cacheService.Clear("LibraryFilesMonthData");
+                    FileOverviewUpdated?.Invoke(data);
+                });
+                _hubConnection.On<UpdateInfo>("UpdatesUpdateInfo", (data) =>
+                {
+                    CurrentUpdatesInfo = data;
+                    UpdatesUpdateInfo?.Invoke(data);
+                });
+                _hubConnection.On<List<Tag>>("TagsUpdated", (data) =>
+                {
+                    Tags = data;
+                });
+                
                 _hubConnection.On<int>("SystemPaused", UpdateSystemPaused);
                 _hubConnection.On<NotificationData>("Notification", HandleNotification);
 
@@ -160,10 +232,11 @@ public partial class ClientService
     {
         FileStatusUpdated?.Invoke(data);
     }
+    
     /// <summary>
     /// Called when the system is paused/unpaused
     /// </summary>
-    /// <param name="minutes">the how many minutes to pause the system for</param>
+    /// <param name="minutes">how many minutes to pause the system for</param>
     private void UpdateSystemPaused(int minutes)
     {
         SetPausedFor(minutes);

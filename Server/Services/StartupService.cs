@@ -106,7 +106,7 @@ public class StartupService
 
             ScanForPlugins();
 
-            TranslaterHelper.InitTranslater(settings.Language?.EmptyAsNull() ?? "en");
+            ServiceLoader.Load<LanguageService>().Initialize().Wait();
 
             LibraryWorker.ResetProcessing(internalOnly: true);
 
@@ -188,7 +188,8 @@ public class StartupService
             new FileFlowsTasksWorker(),
             new RepositoryUpdaterWorker(),
             new ScheduledReportWorker(),
-            new StatisticSyncer()
+            new StatisticSyncer(),
+            new UpdateWorker()
             //new LibraryFileServiceUpdater()
         );
     }
@@ -308,12 +309,15 @@ public class StartupService
         if (upgradeRequired.Failed(out error))
             return Result<bool>.Fail(error);
 
-        bool needsUpgrade = upgradeRequired.Value.Required; 
+        bool needsUpgrade = upgradeRequired.Value.Required;
 
         if (needsUpgrade == false)
+        {
+            upgrader.EnsureColumnsExist(appSettingsService);
             return true;
-        
-        
+        }
+
+
         UpdateStatus("Backing up old database...");
         upgrader.Backup(upgradeRequired.Value.Current, appSettingsService.Settings, (details) =>
         {

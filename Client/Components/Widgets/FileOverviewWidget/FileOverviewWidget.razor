@@ -1,0 +1,10 @@
+@namespace FileFlows.Client.Components.Widgets
+
+<TrendWidget Title="@Label" @bind-Mode="Mode" Color="@Color" 
+             Icon="@Icon" 
+             Suffix=@Average 
+             Total=@Total
+             Data=@Data>
+    <WidgetOption Label="@lblWeek" Value="0" />
+    <WidgetOption Label="@lblMonth" Value="1" />
+</TrendWidget>

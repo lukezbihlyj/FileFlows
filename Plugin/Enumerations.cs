@@ -183,7 +183,27 @@ public enum FormInputType
     /// <summary>
     /// Key Value Int
     /// </summary>
-    KeyValueInt = 41
+    KeyValueInt = 41,
+    /// <summary>
+    /// Comobobox
+    /// </summary>
+    Combobox = 42,
+    /// <summary>
+    /// A drop down is a modern select, with support for icons
+    /// </summary>
+    DropDown = 43,
+    /// <summary>
+    /// Flow viewer
+    /// </summary>
+    Flow = 44,
+    /// <summary>
+    /// Executed Flow Elements Renderer
+    /// </summary>
+    ExecutedFlowElementsRenderer = 45,
+    /// <summary>
+    /// Input for selecting tag(s)
+    /// </summary>
+    TagSelection = 46
 }
 
 

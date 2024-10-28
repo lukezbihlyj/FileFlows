@@ -46,9 +46,9 @@ public class Program
         if (Globals.IsLinux && options.InstallService)
         {
             if(options.Uninstall)
-                SystemdService.Uninstall(true);
+                SystemdService.Uninstall(true, root: options.Root);
             else
-                SystemdService.Install(DirectoryHelper.BaseDirectory, true);
+                SystemdService.Install(DirectoryHelper.BaseDirectory, true, root: options.Root);
             return;
         }
 

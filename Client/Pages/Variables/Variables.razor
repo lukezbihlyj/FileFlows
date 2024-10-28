@@ -26,12 +26,12 @@
                         @Globals.lblName
                     </Header>
                     <Cell Context="item">
-                        <span>@item.Name</span>
+                        <span class="name-actual">@item.Name</span>
                     </Cell>
                 </FlowTableColumn>
                 <FlowTableColumn TItem="Variable" MobileWidth="0">
                     <Header>
-                        Value
+                        @lblValue
                     </Header>
                     <Cell Context="item">
                         <span>@item.Value</span>

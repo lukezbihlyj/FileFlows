@@ -1,0 +1,78 @@
+@using FileFlows.Client.Helpers
+@using FileFlows.Plugin.Formatters
+@namespace FileFlows.Client.Components.Widgets
+
+<ContainerWidget Title="@lblTitle" Scroll="true">
+<Head>
+    <OptionButtons>
+        <WidgetOption Label="@PausedService.PausedLabel" Value="1" Icon="@(PausedService.IsPaused ? "fas fa-play" : "fas fa-pause")" OnClick="TogglePause" />
+    </OptionButtons>
+</Head>
+<Body>
+    @switch (GetStatus())
+    {
+        case SystemStatus.Paused:
+        {
+            <div class="sw-status sw-paused" @onclick="TogglePause">
+                <i class="sw-icon far fa-pause-circle"></i>
+            </div>
+        }
+        break;
+        case SystemStatus.Processing:
+        {
+            <div class="sw-status sw-processing">
+                <i class="sw-icon fas fa-running"></i>
+                <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.CurrentlyProcessing", new { count = _executors.Count })</span>
+            </div>
+        }
+        break;
+        case SystemStatus.OutOfSchedule:
+        {
+            var utcDate = _sysInfo.NodeStatuses.Where(x => x is { Enabled: true, ScheduleResumesAtUtc: not null } && x.ScheduleResumesAtUtc > DateTime.UtcNow)
+                .Min(x => x.ScheduleResumesAtUtc);
+            <div class="sw-status sw-out-of-schedule">
+                <i class="sw-icon fas fa-clock"></i>
+                <span class="label">@ScheduleHelper.HumanReadable(utcDate)</span>
+            </div>
+        }
+        break;
+        case SystemStatus.UpdateAvailable:
+        {
+            <div class="sw-status sw-update-available">
+                <div class="sw-clickable" @onclick="(() => OnUpdatesClicked.InvokeAsync())">
+                    @if (_updateInfo.FileFlowsVersion != null)
+                    {
+                        <img src="favicon.svg"/>
+                        <span>@Translater.Instant("Pages.Dashboard.Widgets.Status.FileFlowsUpdate", new { version = _updateInfo.FileFlowsVersion })</span>
+                    }
+                    else
+                    {
+                        <i class="sw-icon fas fa-cloud-download-alt"></i>
+                        if (_updateInfo.PluginUpdates.Count > 0)
+                        {
+                            <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.PluginUpdates", new { count = _updateInfo.PluginUpdates.Count })</span>
+                        }
+                        else if (_updateInfo.ScriptUpdates.Count > 0)
+                        {
+                            <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.ScriptUpdates", new { count = _updateInfo.ScriptUpdates.Count })</span>
+                        }
+                        else if (_updateInfo.DockerModUpdates.Count > 0)
+                        {
+                            <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.DockerModUpdates", new { count = _updateInfo.DockerModUpdates.Count })</span>
+                        }
+                    }
+                </div>
+            </div>    
+        }
+        break;
+        default:
+        {
+            <div class="sw-status sw-idle">
+                <i class="sw-icon fas fa-hourglass"></i>
+                <span class="label">@Translater.Instant("Pages.Dashboard.Widgets.Status.Idle")</span>
+            </div>
+        }
+        break;
+    }
+</Body>
+</ContainerWidget>

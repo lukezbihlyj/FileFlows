@@ -2,7 +2,7 @@
 
 @if (Visible)
 {
-    <div class="flow-tab @(IsActive() ? "active" : "")">
+    <div class="flow-tab @(IsActive() ? "active" : "") @(ClassName ?? string.Empty)">
         @ChildContent
     </div>
 }

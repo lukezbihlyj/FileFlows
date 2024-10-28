@@ -98,6 +98,8 @@ public class Runner
         {
             NodeName = nodeName,
             NodeUid = part.Type == FlowElementType.Script ? "ScriptNode" : nodeUid,
+            FlowPartUid = part.Uid,
+            
             Output = output,
             ProcessingTime = duration,
             Depth = flowDepth,
@@ -124,6 +126,12 @@ public class Runner
                 if (updated == null)
                     return (false, false); // failed to update
                 var communicator = FlowRunnerCommunicator.Load(runInstance, Info.LibraryFile.Uid);
+                var connected = communicator.InitializeAsync().Result;
+                if (connected == false)
+                {
+                    logger.ELog("Failed to connect to Server via SignalR");
+                    return (false, false);
+                }
                 communicator.OnCancel += Communicator_OnCancel;
                 logger.SetCommunicator(communicator);
                 bool finished = false;
@@ -449,6 +457,7 @@ public class Runner
     /// <param name="logger">the logger used to log messages</param>
     private void RunActual(FlowLogger logger)
     {
+        VariablesHelper.StartedAt = DateTime.Now;
         nodeParameters = new NodeParameters(Info.LibraryFile.Name, logger,
             Info.IsDirectory, Info.LibraryPath, fileService: FileService.Instance)
         {
@@ -588,6 +597,28 @@ public class Runner
         // must be done after GetToolPathActual so we can get the tools
         nodeParameters.ArchiveHelper = new ArchiveHelper(nodeParameters);
         nodeParameters.ImageHelper = new ImageHelper(logger, nodeParameters);
+        nodeParameters.SetTagsFunction = (tagUids, replace) =>
+        {
+            var allowed = tagUids.Where(runInstance.Config.Tags.ContainsKey).ToList();
+            if(replace)
+                Info.LibraryFile.Tags = allowed?.ToList() ?? [];
+            else // must be distinct
+                Info.LibraryFile.Tags = Info.LibraryFile.Tags.Union(allowed).Distinct().ToList();
+            return allowed.Count;
+        };
+        nodeParameters.SetTagsByNameFunction = (tagNames, replace) =>
+        {
+            // lookup tagnames in the runInstance.Config.Tags
+            var tagUids = tagNames.Select(x => runInstance.Config.Tags
+                .FirstOrDefault(y => string.Equals(y.Value, x, StringComparison.InvariantCultureIgnoreCase)).Key)
+                .ToList();
+            
+            if(replace)
+                Info.LibraryFile.Tags = tagUids?.ToList() ?? [];
+            else // must be distinct
+                Info.LibraryFile.Tags = Info.LibraryFile.Tags.Union(tagUids).Distinct().ToList();
+            return tagUids.Count;
+        };
         
         nodeParameters.GetPluginSettingsJson = (pluginSettingsType) =>
         {
@@ -611,16 +642,29 @@ public class Runner
         };
 
         int result = flowExecutor.Execute(nodeParameters);
+        Info.LibraryFile.Additional ??= new();
+        Info.LibraryFile.Additional.Version = Globals.Version;
+        Info.LibraryFile.Additional.ExecutedFlows = ExecutedFlows ?? [];
         
         if(Canceled)
             SetStatus(FileStatus.ProcessingFailed);
         else if (result == RunnerCodes.Completed)
         {
-            if (nodeParameters.ReprocessNode != null)
+            if (nodeParameters.Reprocess is { HoldForMinutes: > 0 })
             {
-                logger.ILog($"Setting ProcessOnNodeUid = '{nodeParameters.ReprocessNode.Uid}'");
-                Info.LibraryFile.ProcessOnNodeUid = nodeParameters.ReprocessNode.Uid;
+                logger.ILog($"Setting Hold For Minutes = {nodeParameters.Reprocess.HoldForMinutes}");
+                Info.LibraryFile.HoldUntil = DateTime.UtcNow.AddMinutes(nodeParameters.Reprocess.HoldForMinutes.Value);
+            }
+
+            if (nodeParameters.Reprocess.ReprocessNode != null)
+            {
+                logger.ILog($"Setting ProcessOnNodeUid = '{nodeParameters.Reprocess.ReprocessNode.Uid}'");
+                Info.LibraryFile.ProcessOnNodeUid = nodeParameters.Reprocess.ReprocessNode.Uid;
                 SetStatus(FileStatus.ReprocessByFlow);
+            }
+            else if (nodeParameters.Reprocess is { HoldForMinutes: > 0 })
+            {
+                SetStatus(FileStatus.Unprocessed);
             }
             else
                 SetStatus(FileStatus.Processed);

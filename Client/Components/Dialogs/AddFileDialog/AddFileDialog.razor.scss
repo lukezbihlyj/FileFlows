@@ -7,9 +7,6 @@
 
 .add-dialog-tabs ::deep
 {
-  .tb-CustomVariables {
-    width:12rem;
-  }
   .flow-tabs-content {
     height: min(20rem, 50vw);
   }
@@ -40,6 +37,8 @@ textarea {
   padding:1px;
   button {
     width:3rem;
+    border-radius: 0 !important;
+    border: none !important;
   }
   input[type=text] {
     flex-grow:1;

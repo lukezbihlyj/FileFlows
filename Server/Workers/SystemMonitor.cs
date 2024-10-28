@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using FileFlows.Server.Hubs;
 using FileFlows.Server.Services;
 using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
@@ -12,12 +13,41 @@ namespace FileFlows.Server.Workers;
 /// </summary>
 public class SystemMonitor:Worker
 {
-    public readonly FixedSizedQueue<SystemValue<float>> CpuUsage = new (2000);
-    public readonly FixedSizedQueue<SystemValue<float>> MemoryUsage = new (2000);
-    public readonly FixedSizedQueue<SystemValue<float>> OpenDatabaseConnections = new (2000);
-    public readonly FixedSizedQueue<SystemValue<long>> TempStorageUsage = new(2000);
-    public readonly FixedSizedQueue<SystemValue<long>> LogStorageUsage = new(2000);
-    private readonly Dictionary<Guid, NodeSystemStatistics> NodeStatistics = new();
+    public static readonly FixedSizedQueue<SystemValue<float>> CpuUsage = new (2000);
+    public static readonly FixedSizedQueue<SystemValue<float>> MemoryUsage = new (2000);
+    public static readonly FixedSizedQueue<SystemValue<float>> OpenDatabaseConnections = new (2000);
+    public static readonly FixedSizedQueue<SystemValue<long>> TempStorageUsage = new(2000);
+    public static readonly FixedSizedQueue<SystemValue<long>> LogStorageUsage = new(2000);
+    private static readonly Dictionary<Guid, NodeSystemStatistics> NodeStatistics = new();
+
+    private NodeService _nodeService;
+    
+    /// <summary>
+    /// Gets the last 30 cpu usage
+    /// </summary>
+    public static float[] LatestCpuUsage 
+    {
+        get
+        {
+            lock (CpuUsage) // Ensure thread safety if CpuUsage can be accessed concurrently
+            {
+                return CpuUsage.Reverse().Take(30).Select(x => x.Value).Reverse().ToArray();
+            }
+        }
+    }
+    /// <summary>
+    /// Gets the last 30 memory usage
+    /// </summary>
+    public static long[] LatestMemoryUsage 
+    {
+        get
+        {
+            lock (MemoryUsage) // Ensure thread safety if CpuUsage can be accessed concurrently
+            {
+                return MemoryUsage.Reverse().Take(30).Select(x => (long)x.Value).Reverse().ToArray();
+            }
+        }
+    }
     
 
     /// <summary>
@@ -26,20 +56,21 @@ public class SystemMonitor:Worker
     public static SystemMonitor Instance { get; private set; }
 
     /// <summary>
-    /// The app settings service
-    /// </summary>
-    private AppSettingsService appSettingsService;
-
-    /// <summary>
     /// Database service
     /// </summary>
     private DatabaseService dbService;
+
+    /// <summary>
+    /// The settings service
+    /// </summary>
+    private SettingsService settingsService;
     
-    public SystemMonitor() : base(ScheduleType.Second, 10)
+    public SystemMonitor() : base(ScheduleType.Second, 3)
     {
         Instance = this;
-        appSettingsService = ServiceLoader.Load<AppSettingsService>();
         dbService = ServiceLoader.Load<DatabaseService>();
+        _nodeService = ServiceLoader.Load<NodeService>();
+        settingsService = (SettingsService)ServiceLoader.Load<ISettingsService>();
     }
 
     protected override void Execute()
@@ -49,9 +80,11 @@ public class SystemMonitor:Worker
         var taskLogStorage = GetLogStorageSize();
         var taskOpenDatabaseConnections = GetOpenDatabaseConnections();
 
+        long memoryUsage = GC.GetTotalMemory(true);
+
         MemoryUsage.Enqueue(new()
         {
-            Value = GC.GetTotalMemory(true)
+            Value = memoryUsage
         });
 
         Task.WaitAll(taskCpu, taskTempStorage, taskOpenDatabaseConnections);
@@ -75,6 +108,26 @@ public class SystemMonitor:Worker
                 Value = taskOpenDatabaseConnections.Result
             });
         }
+
+        var nodes = _nodeService.GetAllAsync().Result;
+
+        var settings = settingsService.Get().Result;
+        ClientServiceManager.Instance.UpdateSystemInfo(new()
+        {
+            CpuUsage = LatestCpuUsage,
+            MemoryUsage = LatestMemoryUsage,
+            IsPaused = settings.IsPaused,
+            PausedUntil = settings.PausedUntil,
+            NodeStatuses = nodes.Select(x => new NodeStatus
+            {
+                Uid = x.Uid,
+                Name = x.Name,
+                Version = x.Version,
+                Enabled = x.Enabled,
+                OutOfSchedule = TimeHelper.InSchedule(x.Schedule) == false,
+                ScheduleResumesAtUtc = TimeHelper.UtcDateUntilInSchedule(x.Schedule)
+            }).ToList()
+        });
     }
 
     private async Task<float> GetCpu()
@@ -133,7 +186,9 @@ public class SystemMonitor:Worker
     }
     private async Task<long> GetTempStorageSize()
     {
-        var node = await new FileFlows.Server.Services.NodeService().GetServerNodeAsync();
+        var node = await ServiceLoader.Load<NodeService>().GetServerNodeAsync();
+        if (node == null)
+            return 0;
         var tempPath = node?.TempPath;
         return GetDirectorySize(tempPath);
     }

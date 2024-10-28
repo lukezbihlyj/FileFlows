@@ -65,9 +65,7 @@ public partial class FlowContextMenu : IDisposable
 
     async Task ShowContextMenu(MouseEventArgs e)
     {
-        Logger.Instance.ILog("About to call preshow");
         await this.PreShow.InvokeAsync();
-        Logger.Instance.ILog("called preshow!");
         if (this.Items?.Any() != true)
             return;
         

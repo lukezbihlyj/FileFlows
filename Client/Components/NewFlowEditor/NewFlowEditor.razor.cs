@@ -92,11 +92,15 @@ public partial class NewFlowEditor : Editor
                         fields.AddRange(OutputPathFields(parameters));
                         continue;
                     }
-                    string efName = field.Label.Dehumanize();
+
+                    string efLabel = field.Label ?? string.Empty;
+                    if (Regex.IsMatch(efLabel, "  [\\d]+$"))
+                        efLabel = efLabel.Substring(0, efLabel.LastIndexOf("  ", StringComparison.Ordinal));
+                    var efName = field.Label.Dehumanize();
                     var ef = new ElementField()
                     {
                         Name = efName,
-                        Label = field.Label,
+                        Label = efLabel,
                         HelpText = field.Help,
                         Parameters = new(),
                         InputType = field.Type switch

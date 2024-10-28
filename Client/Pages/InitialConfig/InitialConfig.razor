@@ -1,136 +1,143 @@
 @namespace FileFlows.Client.Pages
 
 @page "/initial-config"
+@using Humanizer
+
 @layout EmptyLayout
 
-@if (loaded == false)
+<Editor @ref="Editor"></Editor>
+@if (loaded == false || Editor == null)
 {
     <div class="loading-background"></div>
 }
 else
 {
     <div class="initial-config">
-        <FlowWizard FinishDisabled="@(EulaAccepted == false)" OnFinish="@Save">
-            <FlowWizardPage Title="Welcome" Description="Welcome to FileFlows">
-                @if (onlyEula == false)
+        <CascadingValue IsFixed="true" Value="Editor">
+            <FlowWizard @ref="Wizard" FinishDisabled="@(EulaAccepted == false)" OnFinish="@Save">
+                <FlowWizardPage Title="@lblWelcome" Description="@lblWelcomeDescription">
+
+                    <div class="language-dropdown">
+                        <InputDropDown @bind-Value="SelectedLanguage" Options="LanguageOptions" />
+                    </div>
+
+                    @if (onlyEula == false)
+                    {
+                        <div class="pre-text">@lblWelcomeMessage</div>
+                    }
+                    else
+                    {
+                        <div class="pre-text">@lblWelcomeMessageUpdate</div>
+                    }
+                </FlowWizardPage>
+                <FlowWizardPage Title="@lblEula" NextDisabled="@(EulaAccepted == false)" Description="@lblEulaDescription">
+                    <div class="eula-page">
+
+                        <div class="eula">@msEula</div>
+
+                        <div class="switch">
+                            <FlowSwitch @bind-Value=@EulaAccepted/>
+                            <span @onclick="ToggleEulaAccepted">@lblEulaAccept</span>
+                        </div>
+                    </div>
+                </FlowWizardPage>
+                @if (AvailablePlugins?.Any() == true)
                 {
-                    <div class="pre-text">
-                        Welcome to FileFlows! Thank you for choosing our software.
-
-                        This wizard will guide you through the essential setup steps, including accepting the EULA and selecting plugins to add functionality based on your preferences.
-
-                        Choose from a variety of plugins tailored to process different types of files, such as video, audio, and images.
-                    </div>
-                }
-                else
-                {
-                    <div class="pre-text">
-                        We've recently updated our End-User License Agreement (EULA). 
-                        
-                        Please take a moment to review and accept the updated terms before you continue.
-
-                        Your acceptance is required to proceed with using FileFlows.
-
-                        Thank you for choosing FileFlows.
-                    </div>
-                }
-            </FlowWizardPage>
-            <FlowWizardPage Title="EULA" NextDisabled="@(EulaAccepted == false)" Description="End-User License Agreement of FileFlows">
-                <div class="eula-page">
-
-                    <div class="eula">@msEula</div>
-
-                    <div class="switch">
-                        <FlowSwitch @bind-Value=@EulaAccepted/>
-                        <span @onclick="ToggleEulaAccepted">I have read and agree to the terms of the End User License Agreement</span>
-                    </div>
-                </div>
-            </FlowWizardPage>
-            @if (AvailablePlugins?.Any() == true)
-            {
-                <FlowWizardPage Title="Plugins" Disabled="@(EulaAccepted == false)"
-                                Description="Choose which plugins to install">
-                    <FlowTable @ref="PluginTable" Data="AvailablePlugins" TItem="PluginPackageInfo"
-                               HideHead="true" HideToolbar="true" Selection="SelectionMode.Multiple"
-                               TableIdentifier="InitialConfigPlugins" DontClearOnClick="true" ForcedSelection="ForcedPlugins">
-                        <Columns>
-                            <FlowTableColumn TItem="PluginPackageInfo" NoHeight="true">
-                                <Header>
-                                    @Globals.lblName
-                                </Header>
-                                <Cell Context="item">
-                                    <div class="table-item">
-                                        <TableItemIcon Icon="@item.Icon" DefaultIcon="fas fa-puzzle-piece"/>
-                                        <div class="center">
-                                            <span class="name"><span>@item.Name</span></span>
-                                            <span class="description"><span>@item.Description</span></span>
-                                        </div>
-                                        @if (item.Installed)
-                                        {
-                                            <div class="right">
-                                                <span class="top-right">
-                                                    @lblInstalled
-                                                </span>
-                                            </div>
+                    <FlowWizardPage Title="@lblPlugins" Disabled="@(EulaAccepted == false)"
+                                    Description="@lblPluginsDescription">
+                        <FlowTable @ref="PluginTable" Data="AvailablePlugins" TItem="PluginPackageInfo"
+                                   HideHead="true" HideToolbar="true" Selection="SelectionMode.Multiple"
+                                   TableIdentifier="InitialConfigPlugins" DontClearOnClick="true" ForcedSelection="ForcedPlugins">
+                            <Columns>
+                                <FlowTableColumn TItem="PluginPackageInfo" NoHeight="true">
+                                    <Header>
+                                        @Globals.lblName
+                                    </Header>
+                                    <Cell Context="item">
+                                        @{
+                                            string label = Translater.TranslateIfHasTranslation($"Plugins.{item.Package.Replace(".", "")}.Label", item.Name);
+                                            string description = Translater.TranslateIfHasTranslation($"Plugins.{item.Package.Replace(".", "")}.Description", item.Description);
                                         }
-                                    </div>
-
-                                </Cell>
-                            </FlowTableColumn>
-                        </Columns>
-                    </FlowTable>
-                </FlowWizardPage>
-            }
-
-            @if (Profile.ServerOS == OperatingSystemType.Docker && AvailableDockerMods?.Any() == true)
-            {
-                <FlowWizardPage Title="DockerMods" Disabled="@(EulaAccepted == false)"
-                                Description="Choose which DockerMods to install">
-                    <FlowTable @ref="DockerModTable" Data="AvailableDockerMods" TItem="RepositoryObject"
-                               HideHead="true" HideToolbar="true" Selection="SelectionMode.Multiple"
-                               TableIdentifier="InitialConfigDockerMods" DontClearOnClick="true">
-                        <Columns>
-                            <FlowTableColumn TItem="RepositoryObject" NoHeight="true">
-                                <Header>
-                                    @Globals.lblName
-                                </Header>
-                                <Cell Context="item">
-                                    <div class="table-item">
-                                        <TableItemIcon Icon="@item.Icon" DefaultIcon="fab fa-docker"/>
-                                        <div class="center">
-                                            <span class="name"><span>@item.Name</span></span>
-                                            <span class="description"><span>@item.Description</span></span>
+                                        <div class="table-item">
+                                            <TableItemIcon Icon="@item.Icon" DefaultIcon="fas fa-puzzle-piece"/>
+                                            <div class="center">
+                                                <span class="name"><span class="name-actual">@label</span></span>
+                                                <span class="description"><span>@description</span></span>
+                                            </div>
+                                            @if (item.Installed)
+                                            {
+                                                <div class="right">
+                                                    <span class="top-right">
+                                                        @lblInstalled
+                                                    </span>
+                                                </div>
+                                            }
                                         </div>
-                                    </div>
 
-                                </Cell>
-                            </FlowTableColumn>
-                        </Columns>
-                    </FlowTable>
+                                    </Cell>
+                                </FlowTableColumn>
+                            </Columns>
+                        </FlowTable>
+                    </FlowWizardPage>
+                }
+
+                @if (Profile.ServerOS == OperatingSystemType.Docker && AvailableDockerMods?.Any() == true)
+                {
+                    <FlowWizardPage Title="@lblDockerMods" Disabled="@(EulaAccepted == false)"
+                                    Description="@lblDockerModsDescription">
+                        <FlowTable @ref="DockerModTable" Data="AvailableDockerMods" TItem="RepositoryObject"
+                                   HideHead="true" HideToolbar="true" Selection="SelectionMode.Multiple"
+                                   TableIdentifier="InitialConfigDockerMods" DontClearOnClick="true">
+                            <Columns>
+                                <FlowTableColumn TItem="RepositoryObject" NoHeight="true">
+                                    <Header>
+                                        @Globals.lblName
+                                    </Header>
+                                    <Cell Context="item">
+                                        @{
+                                            string key = item.Name.Replace(".", "").Replace("-", "").Dehumanize();
+                                            string label = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Label", item.Name);
+                                            string description = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Description", item.Description);
+                                        }
+                                        <div class="table-item">
+                                            <TableItemIcon Icon="@item.Icon" DefaultIcon="fab fa-docker"/>
+                                            <div class="center">
+                                                <span class="name"><span class="name-actual">@label</span></span>
+                                                <span class="description"><span>@description</span></span>
+                                            </div>
+                                        </div>
+
+                                    </Cell>
+                                </FlowTableColumn>
+                            </Columns>
+                        </FlowTable>
+                    </FlowWizardPage>
+                }
+
+                <FlowWizardPage Title="@lblRunners" Disabled="@(EulaAccepted == false)" Visible="(onlyEula == false)" Description="@lblRunnersDescription">
+
+                    <div class="pre-text">
+                        @lblRunnersTop
+                    </div>
+
+                    <div class="runners">
+                        <InputNumber TItem="int" @bind-Value="Runners" Label="@lblRunners" Min="1" Max="100"/>
+                    </div>
                 </FlowWizardPage>
-            }
+                <FlowWizardPage Title="@lblFinish" Disabled="@(EulaAccepted == false)" Visible="(onlyEula == false)" Description="@lblFinishDescription">
 
-            <FlowWizardPage Title="Finish" Disabled="@(EulaAccepted == false)" Visible="(onlyEula == false)" Description="Initial Configuration Complete">
+                    @lblFinishTop
 
-                You've successfully configured FileFlows to suit your needs. Now it's time to put it to work!
+                    <ol>
+                        <li><span>@lblFinishCreateFirstFlow</span> @lblFinishCreateFirstFlowDescription</li>
+                        <li><span>@lblFinishCreateALibrary</span> @lblFinishCreateALibraryDescription</li>
+                    </ol>
 
-                <ol>
-                    <li><span>Create Your First Flow:</span> Utilize the plugins you've selected to craft your first flow.
-                        Whether it's processing video files, audio tracks, images, or any other type of file, your flow
-                        empowers you to tailor the handling of your files to your specific needs, whether they're simple
-                        or complex.
-                    </li>
-                    <li><span>Create A Library:</span> Establish a library to automate file processing.
-                        Your library will automatically detect and process files based on your specified criteria,
-                        simplifying your workflow without the need for manual intervention.
-                    </li>
-                </ol>
+                    @lblFinishBottom
 
-                <p>With these steps, you're well on your way to maximizing the power of FileFlows.</p>
-                <p>If you have any questions or need assistance along the way, don't hesitate to reach out to our support team.</p>
-
-            </FlowWizardPage>
-        </FlowWizard>
+                </FlowWizardPage>
+            </FlowWizard>
+        </CascadingValue>
 
     </div>
 }

@@ -1,5 +1,6 @@
 @namespace FileFlows.Client.Pages
 @using FileFlows.Shared.Models
+@using Humanizer
 @inherits ListPage<Guid, DockerMod>
 
 @page "/dockermods"
@@ -38,8 +39,13 @@
                         <div class="table-item">
                             <TableItemIcon Icon="@item.Icon" DefaultIcon="fab fa-docker" />
                             <div class="center">
-                                <span class="name"><span>@item.Name</span></span>
-                                <span class="description">@item.Description</span>
+                                @{
+                                    string key = item.Name.Replace(".", "").Replace("-", "").Dehumanize();
+                                    string label = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Label", item.Name);
+                                    string description = Translater.TranslateIfHasTranslation($"DockerMods.{key}.Description", item.Description);
+                                }
+                                <span class="name"><span class="name-actual">@label</span></span>
+                                <span class="description">@description</span>
                                 <div class="info">
                                     @if (item.LatestRevision > item.Revision)
                                     {

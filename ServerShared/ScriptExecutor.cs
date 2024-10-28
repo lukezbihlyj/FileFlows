@@ -12,13 +12,13 @@ namespace FileFlows.ServerShared;
 /// <summary>
 /// A JavaScript code executor
 /// </summary>
-public class ScriptExecutor:IScriptExecutor
+public class ScriptExecutor : IScriptExecutor
 {
     /// <summary>
     /// The HTTP Client used in scripts for requests
     /// </summary>
-    private static HttpClient httpClient = new ();
-    
+    private static HttpClient httpClient = new();
+
     /// <summary>
     /// Delegate used by the executor so log messages can be passed from the javascript code into the flow runner
     /// </summary>
@@ -29,12 +29,12 @@ public class ScriptExecutor:IScriptExecutor
     /// Gets or sets the shared directory 
     /// </summary>
     public string SharedDirectory { get; set; } = null!;
-    
+
     /// <summary>
     /// Gets or sets the URL to the FileFlows server 
     /// </summary>
     public string FileFlowsUrl { get; set; } = null!;
-    
+
     /// <summary>
     /// Gets or sets the plugin method invoker
     /// This allows plugins to expose static functions that can be called from functions/scripts
@@ -57,7 +57,7 @@ public class ScriptExecutor:IScriptExecutor
             _ => ExecuteJavaScript(execArgs)
         };
     }
-    
+
 
     /// <summary>
     /// Executes a PowerShell script
@@ -68,7 +68,7 @@ public class ScriptExecutor:IScriptExecutor
     {
         if (OperatingSystem.IsWindows() == false)
             return Result<int>.Fail("Cannot run a PowerShell file on a non Windows system");
-        
+
         var ps1File = Path.Combine(args.TempPath, Guid.NewGuid() + ".ps1");
 
         try
@@ -99,10 +99,10 @@ public class ScriptExecutor:IScriptExecutor
 
             process.WaitForExit();
             int exitCode = process.ExitCode;
-            
-            if(string.IsNullOrWhiteSpace(standardOutput) == false)
+
+            if (string.IsNullOrWhiteSpace(standardOutput) == false)
                 args.Logger?.ILog($"Standard Output:\n{standardOutput}");
-            if(string.IsNullOrWhiteSpace(standardError) == false)
+            if (string.IsNullOrWhiteSpace(standardError) == false)
                 args.Logger?.WLog($"Standard Error:\n{standardError}");
             args.Logger?.ILog($"Exit Code: {exitCode}");
 
@@ -113,9 +113,9 @@ public class ScriptExecutor:IScriptExecutor
             return Result<int>.Fail("Failed executing PowerShell script: " + ex.Message);
         }
     }
-    
 
-    
+
+
     /// <summary>
     /// Executes a Batch script
     /// </summary>
@@ -125,7 +125,7 @@ public class ScriptExecutor:IScriptExecutor
     {
         if (OperatingSystem.IsWindows() == false)
             return Result<int>.Fail("Cannot run a .bat file on a non Windows system");
-        
+
         var batFile = Path.Combine(args.TempPath, Guid.NewGuid() + ".bat");
 
         try
@@ -136,7 +136,7 @@ public class ScriptExecutor:IScriptExecutor
             args.Logger?.ILog("Executing code: \n" + code);
             File.WriteAllText(batFile, code);
             args.Logger?.ILog($"Temporary bat file created: {batFile}");
-            
+
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = batFile,
@@ -155,10 +155,10 @@ public class ScriptExecutor:IScriptExecutor
 
             process.WaitForExit();
             int exitCode = process.ExitCode;
-            
-            if(string.IsNullOrWhiteSpace(standardOutput) == false)
+
+            if (string.IsNullOrWhiteSpace(standardOutput) == false)
                 args.Logger?.ILog($"Standard Output:\n{standardOutput}");
-            if(string.IsNullOrWhiteSpace(standardError) == false)
+            if (string.IsNullOrWhiteSpace(standardError) == false)
                 args.Logger?.WLog($"Standard Error:\n{standardError}");
             args.Logger?.ILog($"Exit Code: {exitCode}");
 
@@ -194,7 +194,7 @@ public class ScriptExecutor:IScriptExecutor
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = "/bin/bash",
-                ArgumentList = {  shFile },
+                ArgumentList = { shFile },
                 WorkingDirectory = args.TempPath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -224,7 +224,7 @@ public class ScriptExecutor:IScriptExecutor
             return Result<int>.Fail("Failed executing SH script: " + ex.Message);
         }
     }
-    
+
     /// <summary>
     /// Executes javascript
     /// </summary>
@@ -236,7 +236,7 @@ public class ScriptExecutor:IScriptExecutor
             return Result<int>.Fail("No code"); // no code, flow cannot continue doesnt know what to do
 
         var args = execArgs.Args;
-        
+
         Executor executor = new();
         executor.Logger = new ScriptExecution.Logger();
         executor.Logger.ELogAction = (largs) => execArgs.Logger?.ELog(largs);
@@ -249,21 +249,30 @@ public class ScriptExecutor:IScriptExecutor
 
         executor.Variables = args.Variables;
         executor.SharedDirectory = SharedDirectory;
-        
+
         executor.Code = execArgs.Code;
-        if (execArgs.ScriptType == ScriptType.Flow && executor.Code.IndexOf("function Script", StringComparison.Ordinal) < 0)
+        if (execArgs.ScriptType == ScriptType.Flow &&
+            executor.Code.IndexOf("function Script", StringComparison.Ordinal) < 0)
         {
-            executor.Code = "function Script() {\n" + executor.Code + "\n}\n";
-            executor.Code += $"var scriptResult = Script();\nexport const result = scriptResult;";
+            if (executor.Code.IndexOf("await ", StringComparison.Ordinal) >= 0)
+            {
+                executor.Code = "async function Script() {\n" + executor.Code + "\n}\n";
+                executor.Code += $"var scriptResult = await Script();\nexport const result = scriptResult;";
+            }
+            else
+            {
+                executor.Code = "function Script() {\n" + executor.Code + "\n}\n";
+                executor.Code += $"var scriptResult = Script();\nexport const result = scriptResult;";
+            }
         }
-        
+
         executor.ProcessExecutor = new ScriptProcessExecutor(args);
-        foreach (var arg in execArgs.AdditionalArguments ?? new ())
+        foreach (var arg in execArgs.AdditionalArguments ?? new())
             executor.AdditionalArguments.Add(arg.Key, arg.Value);
         executor.AdditionalArguments["Flow"] = args;
 
         executor.AdditionalArguments["PluginMethod"] = PluginMethodInvoker;
-        
+
         executor.SharedDirectory = SharedDirectory;
         try
         {
@@ -288,12 +297,12 @@ public class ScriptExecutor:IScriptExecutor
     {
         if (string.IsNullOrEmpty(execArgs?.Code))
             return Result<int>.Fail("No code"); // no code, flow cannot continue doesnt know what to do
-        
+
         // Get only the assemblies that are not dynamically generated
         var staticAssemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(assembly => !assembly.IsDynamic && assembly.FullName?.Contains('-') != true)
             .ToArray();
-        
+
         // Configure script options
         var scriptOptions = ScriptOptions.Default
             .WithReferences(staticAssemblies) // Add necessary references
@@ -316,8 +325,8 @@ public class ScriptExecutor:IScriptExecutor
             {
                 Logger = execArgs.Logger,
                 Flow = execArgs.Args,
-                Variables = execArgs.Args?.Variables ?? new (),
-                NotificationDelegate = execArgs.NotificationCallback 
+                Variables = execArgs.Args?.Variables ?? new(),
+                NotificationDelegate = execArgs.NotificationCallback
             }).Result;
             if (result.ReturnValue is int iOutput)
                 return iOutput;
@@ -344,10 +353,12 @@ public class ScriptExecutor:IScriptExecutor
         /// Gets or sets the variables
         /// </summary>
         public Dictionary<string, object> Variables { get; set; } = null!;
+
         /// <summary>
         /// Gets or sets the logger
         /// </summary>
         public ILogger Logger { get; set; } = null!;
+
         /// <summary>
         /// Gets or sets the flow
         /// </summary>
@@ -377,7 +388,7 @@ public class ScriptExecutor:IScriptExecutor
             NotificationDelegate?.Invoke(ns, title, message);
         }
     }
-    
+
 
     /// <summary>
     /// Executes code and returns the result
@@ -387,7 +398,8 @@ public class ScriptExecutor:IScriptExecutor
     /// <param name="sharedDirectory">[Optional] the shared script directory to look in</param>
     /// <param name="dontLogCode">If the code should be included in the log if the execution fails</param>
     /// <returns>the result of the execution</returns>
-    public static FileFlowsTaskRun Execute(string code, Dictionary<string, object> variables, string? sharedDirectory = null, bool dontLogCode = false)
+    public static FileFlowsTaskRun Execute(string code, Dictionary<string, object> variables,
+        string? sharedDirectory = null, bool dontLogCode = false)
     {
         Executor executor = new Executor();
         executor.Code = code;
@@ -425,10 +437,10 @@ public class ScriptExecutor:IScriptExecutor
             => sb.ToString()
                 .Replace("\\n", "\n").Trim();
     }
-    
-        
-        
-        
+
+
+
+
     private static void StringBuilderLog(StringBuilder builder, LogType type, params object[] args)
     {
         string typeString = type switch
@@ -453,7 +465,7 @@ public class ScriptExecutor:IScriptExecutor
     class ScriptProcessExecutor : IProcessExecutor
     {
         private NodeParameters NodeParameters;
-        
+
         /// <summary>
         /// Constructs an instance of a Script Process Executor 
         /// </summary>
@@ -462,7 +474,7 @@ public class ScriptExecutor:IScriptExecutor
         {
             this.NodeParameters = nodeParameters;
         }
-        
+
         /// <summary>
         /// Executes the process
         /// </summary>

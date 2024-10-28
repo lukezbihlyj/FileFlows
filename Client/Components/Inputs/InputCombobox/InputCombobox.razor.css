@@ -1,0 +1,51 @@
+input {
+  width: 100%;
+  height: var(--input-height, 2.1875rem);
+  line-height: 1.5;
+  font-size: 1rem;
+  padding: 0.1875rem 0.625rem;
+  max-width: 40rem;
+}
+
+input:read-only {
+  filter: opacity(0.5);
+}
+
+.combobox-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+::deep .combobox-dropdown {
+  position: absolute;
+  top: 100%; /* Place right below the input */
+  left: 0;
+  width: 100%; /* Ensure it matches the width of the input */
+  background-color: var(--input-background);
+  list-style-type: none;
+  margin: 1px 0 0;
+  padding: 0;
+  max-height: 20rem;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+::deep .combobox-option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+::deep .combobox-option.selected {
+  background-color: rgba(var(--accent-rgb), 0.4);
+}
+
+::deep .combobox-option:hover {
+  background-color: rgba(var(--accent-rgb), 0.4);
+}
+
+::deep .combobox-no-options {
+  color: var(--color);
+  text-align: center;
+  padding: 8px;
+}

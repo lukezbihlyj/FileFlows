@@ -25,6 +25,11 @@ public partial class Report : ComponentBase
     [Inject] public NavigationManager NavigationManager { get; set; }
     
     /// <summary>
+    /// Gets or sets the client service
+    /// </summary>
+    [Inject] public ClientService ClientService { get; set; }
+    
+    /// <summary>
     /// Gets or sets the blocker
     /// </summary>
     [CascadingParameter] public Blocker Blocker { get; set; }
@@ -123,10 +128,10 @@ public partial class Report : ComponentBase
         }
 
         var rd = result.Data;
-        ReportName = rd.Name;
-        ReportDescription = rd.Description;
+        ReportName = Translater.Instant($"Reports.{rd.Type}.Name");
+        ReportDescription = Translater.Instant($"Reports.{rd.Type}.Description");;
         ReportIcon = rd.Icon;
-        HelpUrl = $"https://fileflows.com/docs/webconsole/admin/reporting/{rd.Name.Kebaberize()}";
+        HelpUrl = $"https://fileflows.com/docs/webconsole/admin/reporting/{rd.Type.Kebaberize()}";
 
         // clone the fields as they get wiped
         var fields = new List<IFlowField>();
@@ -145,6 +150,8 @@ public partial class Report : ComponentBase
 
             var nodesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/node/basic-list");
             var nodes = nodesResult.Success ? nodesResult.Data ?? new() : new();
+
+            var tags = (await ClientService.GetTags()).ToDictionary(x => x.Uid, x => x.Name);
 
             if (rd.DefaultReportPeriod != null)
             {
@@ -168,6 +175,7 @@ public partial class Report : ComponentBase
             AddSelectField("Flow", flows, rd.FlowSelection, ref fields, model);
             AddSelectField("Library", libraries, rd.LibrarySelection, ref fields, model);
             AddSelectField("Node", nodes, rd.NodeSelection, ref fields, model);
+            AddSelectField("Tags", tags, rd.TagSelection, ref fields, model, anyLabel: "Labels.Any", defaultToAny: true);
 
             if (rd.Direction)
             {
@@ -352,16 +360,20 @@ public partial class Report : ComponentBase
     /// <param name="fields">the fields to update</param>
     /// <param name="model">the model to update</param>
     private void AddSelectField(string title, Dictionary<Guid, string> list, ReportSelection selection,
-        ref List<IFlowField> fields, IDictionary<string, object> model)
+        ref List<IFlowField> fields, IDictionary<string, object> model, string? anyLabel = null, bool defaultToAny = false)
     {
         var listOptions = list.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption() { Label = x.Value, Value = x.Key }).ToList();
+
+        var label = title == "Tags" ? "Pages.Tags.Title" : null;
+        
         switch (selection)
         {
             case ReportSelection.One:
                 fields.Add(new ElementField()
                 {
                     Name = title,
+                    Label = label,
                     InputType = FormInputType.Select,
                     Parameters = new()
                     {
@@ -376,6 +388,7 @@ public partial class Report : ComponentBase
                 fields.Add(new ElementField()
                 {
                     Name = title,
+                    Label = label,
                     InputType = FormInputType.MultiSelect,
                     Parameters = new()
                     {
@@ -387,17 +400,20 @@ public partial class Report : ComponentBase
                 });
                 break;
             case ReportSelection.AnyOrAll:
-                model[title] = listOptions.Select(x => x.Value).ToList();
-                // model[title] = new object[] { null }; // any
+                if(defaultToAny)
+                    model[title] = new object[] { null }; // any
+                else
+                    model[title] = listOptions.Select(x => x.Value).ToList();
                 fields.Add(new ElementField()
                 {
                     Name = title,
+                    Label = label,
                     InputType = FormInputType.MultiSelect,
                     Parameters = new()
                     {
                         { "Options", listOptions },
                         { "AnyOrAll", true },
-                        { "LabelAny", Translater.Instant("Pages.Report.Labels.Combined") }
+                        { "LabelAny", Translater.Instant(anyLabel?.EmptyAsNull() ?? "Pages.Report.Labels.Combined") }
                     }
                 });
                 break;

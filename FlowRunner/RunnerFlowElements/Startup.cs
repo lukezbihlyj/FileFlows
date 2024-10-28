@@ -37,9 +37,28 @@ public class Startup : Node
         args.InitFile(args.WorkingFile);
         
         LogHeader(args, runInstance.ConfigDirectory, runInstance.ProcessingNode);
-        Helpers.RunPreparationHelper.DownloadPlugins(runInstance);
-        Helpers.RunPreparationHelper.DownloadScripts(runInstance);
-        
+        try
+        {
+            Helpers.RunPreparationHelper.DownloadPlugins(runInstance);
+        }
+        catch(Exception ex)
+        {
+            args.FailureReason = "Error downloading plugins: " + ex.Message; 
+            args.Logger?.ELog(args.FailureReason);
+            return -1;
+        }
+
+        try
+        {
+            Helpers.RunPreparationHelper.DownloadScripts(runInstance);
+        }
+        catch (Exception ex)
+        {
+            args.FailureReason = "Error downloading scripts: " + ex.Message; 
+            args.Logger?.ELog(args.FailureReason);
+            return -1;
+        }
+
         return 1;
     }
     

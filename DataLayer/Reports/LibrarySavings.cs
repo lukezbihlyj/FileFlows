@@ -15,10 +15,6 @@ public class LibrarySavings : Report
     /// <inheritdoc />
     public override Guid Uid => new Guid("32099382-eda1-4694-bc74-5a6584e40684");
     /// <inheritdoc />
-    public override string Name => "Library Savings";
-    /// <inheritdoc />
-    public override string Description => "Shows the space savings for your libraries";
-    /// <inheritdoc />
     public override string Icon => "fas fa-hdd";
     /// <inheritdoc />
     public override ReportSelection LibrarySelection => ReportSelection.Any;

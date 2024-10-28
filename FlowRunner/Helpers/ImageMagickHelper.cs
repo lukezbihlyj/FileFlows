@@ -34,7 +34,7 @@ public class ImageMagickHelper
     {
         Logger = logger;
         EXE_CONVERT = args.GetToolPath("convert")?.EmptyAsNull() ??
-                      (OperatingSystem.IsWindows() ? "convert.exe" : "convert");
+                      (OperatingSystem.IsWindows() ? "magick.exe" : "convert");
         EXE_IDENTIFY = args.GetToolPath("identify")?.EmptyAsNull() ??
                        (OperatingSystem.IsWindows() ? "identify.exe" : "identify");
     }
@@ -176,38 +176,49 @@ public class ImageMagickHelper
 
                 // Apply image resizing logic
                 (int newWidth, int newHeight) = ImageHelper.CalculateNewDimensions(width, height, options);
+                Logger.ILog("New Dimensions: " + newWidth + "x" + newHeight);
+                Logger.ILog("Mode: " + options.Mode);
                 
                 switch (options.Mode)
                 {
                     case ResizeMode.Contain:
                         startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}>");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}");
                         break;
+
                     case ResizeMode.Cover:
                         startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}^");
-                        break;
-                    case ResizeMode.Fill:
-                        startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}!");
-                        break;
-                    case ResizeMode.Min:
-                        startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}>");
-                        break;
-                    case ResizeMode.Max:
-                        startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}<");
-                        break;
-                    case ResizeMode.Pad:
-                        startInfo.ArgumentList.Add("-resize");
-                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}");
-                        startInfo.ArgumentList.Add("-background");
-                        startInfo.ArgumentList.Add("#ffffff");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}^"); // Fill the area, cropping if needed
                         startInfo.ArgumentList.Add("-gravity");
                         startInfo.ArgumentList.Add("center");
                         startInfo.ArgumentList.Add("-extent");
                         startInfo.ArgumentList.Add($"{newWidth}x{newHeight}");
+                        break;
+
+                    case ResizeMode.Fill:
+                        startInfo.ArgumentList.Add("-resize");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}!"); // Force exact dimensions, ignoring aspect ratio
+                        break;
+
+                    case ResizeMode.Min:
+                        startInfo.ArgumentList.Add("-resize");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}>"); // Only shrink the image if larger, no upscaling
+                        break;
+                    
+                    case ResizeMode.Max:
+                        startInfo.ArgumentList.Add("-resize");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}^"); // Resize to ensure at least one dimension is at least the target, keeping aspect ratio
+                        break;
+
+                    case ResizeMode.Pad:
+                        startInfo.ArgumentList.Add("-resize");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}"); // Maintain aspect ratio
+                        startInfo.ArgumentList.Add("-background");
+                        startInfo.ArgumentList.Add("#ffffff"); // Assuming white background for padding
+                        startInfo.ArgumentList.Add("-gravity");
+                        startInfo.ArgumentList.Add("center");
+                        startInfo.ArgumentList.Add("-extent");
+                        startInfo.ArgumentList.Add($"{newWidth}x{newHeight}"); // Ensure final size with padding
                         break;
                     default:
                         startInfo.ArgumentList.Add("-resize");
@@ -219,6 +230,8 @@ public class ImageMagickHelper
                     AddQuality(startInfo, destination, options.Quality.Value);
             } 
             startInfo.ArgumentList.Add(destination);
+            
+            Logger.ILog("Arguments: " + string.Join(" ", startInfo.ArgumentList.Select(x => x.Contains(' ') ? $"\"{x}\"" : x)));
             
             using Process? process = Process.Start(startInfo);
             process.WaitForExit();

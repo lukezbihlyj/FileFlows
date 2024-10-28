@@ -139,4 +139,10 @@ public partial class FlowWizardPage : ComponentBase
     /// </summary>
     /// <returns><c>true</c> if the current page is active; otherwise, <c>false</c>.</returns>
     private bool IsActive() => this.Wizard.ActivePage == this;
+
+    /// <summary>
+    /// Triggers state has changed in the tab
+    /// </summary>
+    public void TriggerStateHasChanged()
+        => StateHasChanged();
 }

@@ -1,16 +1,26 @@
 using System.Collections;
 using System.Net;
 using Avalonia;
+using FileFlows.Charting;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Helpers;
 
 namespace FileFlows.Server;
 
+/// <summary>
+/// The main FileFlows server application
+/// </summary>
 public class Application
 {
-
+    /// <summary>
+    /// The Application named used by the appMutex
+    /// </summary>
     const string appName = "FileFlowsServer";
+    
+    /// <summary>
+    /// The application mutex to ensure only one instance of FileFlows can run
+    /// </summary>
     private static Mutex appMutex = null;
 
     /// <summary>
@@ -191,6 +201,10 @@ public class Application
         }
     }
 
+    /// <summary>
+    /// Writes the start log header to indicate FileFlows has started
+    /// </summary>
+    /// <param name="args">the command line arguments</param>
     private void WriteLogHeader(string[] args)
     {
         if (Globals.IsDocker && File.Exists("/app/startup.log"))
@@ -221,6 +235,9 @@ public class Application
         }
 
         Logger.Instance.ILog(new string('=', 100));
+
+        var hardwareInfo = ServiceLoader.Load<HardwareInfoService>().GetHardwareInfo();
+        Logger.Instance.ILog("Hardware Info: " + Environment.NewLine + hardwareInfo);
     }
 
 
@@ -229,7 +246,8 @@ public class Application
     /// </summary>
     private void InitializeLoggers()
     {
-        new ServerShared.FileLogger(DirectoryHelper.LoggingDirectory, "FileFlows");
+        new FileLogger(DirectoryHelper.LoggingDirectory, "FileFlows");
         new ConsoleLogger();
+        ChartHelper.Logger = Logger.Instance;
     }
 }

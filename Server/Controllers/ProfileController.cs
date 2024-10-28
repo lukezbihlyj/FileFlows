@@ -1,3 +1,4 @@
+using FileFlows.Plugin;
 using FileFlows.Server.Authentication;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
@@ -80,7 +81,43 @@ public class ProfileController : Controller
         #if(DEBUG)
         profile.HasDockerInstances = true;
         #endif
+        profile.Language = settings.Language?.ToLowerInvariant() == "en" ? null : settings.Language?.EmptyAsNull(); 
+        profile.LanguageOptions = GetLanguageOptions();
 
         return Ok(profile);
+    }
+    
+    /// <summary>
+    /// Get the language options
+    /// </summary>
+    /// <returns>the language options</returns>
+    private List<ListOption> GetLanguageOptions()
+    {
+        var options = new List<ListOption>();
+        var langPath = Path.Combine(DirectoryHelper.BaseDirectory, "Server", "wwwroot", "i18n");
+#if(DEBUG)
+        var dllDir =
+            System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        dllDir = dllDir[..(dllDir.IndexOf("Server", StringComparison.Ordinal))];
+        langPath = Path.Combine(dllDir, "Client", "wwwroot", "i18n");
+#endif        
+        if (Directory.Exists(langPath) == false)
+            return options;
+        foreach (var file in new DirectoryInfo(langPath).GetFiles("*.json"))
+        {
+            if(file.Name.Contains("Plugins", StringComparison.InvariantCultureIgnoreCase))
+                continue;
+            var parts = file.Name.Split('.');
+            if (parts.Length != 2)
+                continue;
+            var langName = LanguageHelper.GetNativeName(parts[0]);
+            options.Add(new ListOption
+            {
+                Value = parts[0],
+                Label = langName
+            });
+        }
+
+        return options.OrderBy(x => x.Label == "English" ? 0 : 1).ThenBy(x => x.Label.ToLowerInvariant()).ToList();
     }
 }

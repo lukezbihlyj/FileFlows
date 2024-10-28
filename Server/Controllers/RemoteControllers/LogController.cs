@@ -23,7 +23,6 @@ public class LogController : Controller
     /// </summary>
     private static FairSemaphore _semaphoreSlim = new (1);
         
-
     /// <summary>
     /// Logs a message to the server
     /// </summary>
@@ -44,22 +43,22 @@ public class LogController : Controller
                 string name = message.NodeAddress;
                 if (IsValidFileName(name) == false)
                     return;
-                
-                Loggers[message.NodeAddress] = new (DirectoryHelper.LoggingDirectory, "Node-" + name, false);
+
+                Loggers[message.NodeAddress] = new(DirectoryHelper.LoggingDirectory, "Node-" + name, false);
                 logger = Loggers[message.NodeAddress];
             }
 
             await logger.Log(message.Type, message.Arguments);
         }
+        catch (Exception ex)
+        {
+            Logger.Instance.ELog($"Failed logging '{message.NodeAddress} message: " + ex.Message + Environment.NewLine +
+                                 ex.StackTrace);
+        }
         finally
         {
             _semaphoreSlim.Release();
         }
-
-        // if (Logger.Instance.TryGetLogger(out DatabaseLogger logger))
-        // {
-        //     await logger.Log(clientUid, message.Type, message.Arguments);
-        // }
     }
     /// <summary>
     /// Checks if a file name is valid.

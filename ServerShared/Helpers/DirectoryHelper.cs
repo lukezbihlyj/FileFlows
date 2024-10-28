@@ -222,6 +222,11 @@ public class DirectoryHelper
     /// Gets the DockerMods directory
     /// </summary>
     public static string DockerModsDirectory => "/app/DockerMods"; // this directory will not be mapped out, so will be cleaned when new DockerImage is pulled
+
+    /// <summary>
+    /// Gets the common directory used by DockerMods
+    /// </summary>
+    public static string DockerModsCommonDirectory => "/app/common"; // this directory will not be mapped out, so will be cleaned when new DockerImage is pulled
     
     // /// <summary>
     // /// Gets the scripts directory

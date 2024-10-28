@@ -1,0 +1,96 @@
+
+
+.options {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 0.3rem;
+  border: solid 1px var(--border-color);
+  border-radius: var(--container-border-radius);
+  width: fit-content;
+  border-top: none;
+  border-right: none;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: var(--widget-background);
+  .btn-option{
+    + .btn-option {
+      margin-left:0.25rem;
+    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: transparent;
+    border: solid 1px var(--border-color);
+    outline: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--button-border-radius);
+    font-weight: var(--bold, 600);
+    font-size: 0.9rem;
+    color: rgba(var(--color-rgb), 0.3);
+    display: inline-flex;
+    align-items: center;
+    i {
+      margin-right: 0.75rem;
+      font-size: 1.15rem;
+    }
+    &.active,
+    &.has-on-click
+    {
+      background:var(--input-background);
+      color:var(--color);
+      opacity: 0.9;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    &:not(.active):not(.has-on-click):hover {
+      background:#ffffff12;
+    }
+    .bubble {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--color);
+      color: var(--white);
+      font-size: 0.75rem;
+      padding: 0.1rem 0.25rem;
+      border-radius: 0.25rem;
+    }
+    //&.active.color-yellow {
+    //  background: transparent;
+    //  border-color:var(--yellow);
+    //  color:var(--yellow);
+    //}
+    //&.active.color-red {
+    //  background: transparent;
+    //  border-color:var(--red);
+    //  color:var(--red);
+    //}
+    //&.active.color-green {
+    //  background: transparent;
+    //  border-color:var(--green);
+    //  color:var(--green);
+    //}
+    //&.active.color-blue {
+    //  background: transparent;
+    //  border-color:var(--blue);
+    //  color:var(--blue);
+    //}
+
+    &.color-yellow i {
+      color:var(--yellow);
+    }
+    &.color-red i {
+      color:var(--red);
+    }
+    &.color-green i {
+      color:var(--green);
+    }
+    &.color-blue i {
+      color:var(--blue);
+    }
+  }
+}

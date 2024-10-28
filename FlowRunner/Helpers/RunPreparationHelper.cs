@@ -31,6 +31,7 @@ public class RunPreparationHelper
         var dir = Path.Combine(runInstance.ConfigDirectory, "Plugins");
         if (Directory.Exists(dir) == false)
             return;
+        runInstance.Logger?.ILog("Downloading plugins to: " + dir);
         foreach (var sub in new DirectoryInfo(dir).GetDirectories())
         {
             string dest = Path.Combine(runInstance.WorkingDirectory, sub.Name);

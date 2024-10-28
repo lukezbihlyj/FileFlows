@@ -5,6 +5,11 @@ namespace FileFlows.ScriptExecution;
 /// </summary>
 public interface IProcessExecutor
 {
+    /// <summary>
+    /// Executes sync
+    /// </summary>
+    /// <param name="args">the execute arguments</param>
+    /// <returns>the result</returns>
     ProcessExecuteResult Execute(ProcessExecuteArgs args);
 }
 

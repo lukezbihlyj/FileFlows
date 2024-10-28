@@ -20,13 +20,13 @@ public class ReportManager
         {
             var rd = new ReportDefinition();
             rd.Uid = report.Uid;
-            rd.Name = report.Name;
-            rd.Description = report.Description;
+            rd.Type = report.GetType().Name;
             rd.Icon = report.Icon;
             rd.DefaultReportPeriod = report.DefaultReportPeriod;
             rd.FlowSelection = report.FlowSelection;
             rd.LibrarySelection = report.LibrarySelection;
-            rd.NodeSelection = report.NodeSelection;;
+            rd.NodeSelection = report.NodeSelection;
+            rd.TagSelection = report.TagSelection;
             rd.Direction = report.Direction;
             rd.Fields = new();
             var props = report.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -88,5 +88,8 @@ public class ReportManager
     /// <param name="uid">the UID of the reprot</param>
     /// <returns>the reports name, or null if not found</returns>
     public string? GetReportName(Guid uid)
-        => Report.GetReports().FirstOrDefault(x => x.Uid == uid)?.Name;
+    {
+        var report = Report.GetReports().FirstOrDefault(x => x.Uid == uid);
+        return report == null ? null : Translater.Instant($"Report.{report.GetType().Name}.Name");
+    }
 }

@@ -42,7 +42,7 @@ public partial class NavMenu : IDisposable
 
     public NavMenuItem Active { get; private set; }
 
-    private string lblVersion, lblHelp, lblForum, lblDiscord, lblChangePassword, lblLogout;
+    private string lblVersion, lblHelp, lblReddit, lblDiscord, lblChangePassword, lblLogout;
 
     private NavMenuItem nmiFlows, nmiLibraries, nmiPause;
     /// <summary>
@@ -79,7 +79,7 @@ public partial class NavMenu : IDisposable
     {
         lblVersion = Translater.Instant("Labels.Version");
         lblHelp = Translater.Instant("Labels.Help");
-        lblForum = Translater.Instant("Labels.Forum");
+        lblReddit = "Reddit";
         lblDiscord = Translater.Instant("Labels.Discord");
         lblChangePassword = Translater.Instant("Labels.ChangePassword");
         lblLogout = Translater.Instant("Labels.Logout");
@@ -88,7 +88,7 @@ public partial class NavMenu : IDisposable
         
         _ = RefreshBubbles();
         
-        this.ClientService.FileStatusUpdated += ClientServiceOnFileStatusUpdated;
+        ClientService.FileStatusUpdated += ClientServiceOnFileStatusUpdated;
         PausedService.OnPausedLabelChanged += PausedServiceOnOnPausedLabelChanged;
 
         ProfileService.OnRefresh += ProfileServiceOnOnRefresh; 
@@ -154,6 +154,7 @@ public partial class NavMenu : IDisposable
         Processing = data.Where(x => x.Status == FileStatus.Processing).Select(x => x.Count).FirstOrDefault();
         Failed = data.Where(x => x.Status == FileStatus.ProcessingFailed).Select(x => x.Count).FirstOrDefault();
         OnHold = data.Where(x => x.Status == FileStatus.OnHold).Select(x => x.Count).FirstOrDefault();
+        Logger.Instance.ILog($"NavMenu Updated: ({Unprocessed}) ({Processing}) ({Failed}) ({OnHold})");
         this.StateHasChanged();
     }
 
@@ -187,6 +188,7 @@ public partial class NavMenu : IDisposable
         this.MenuItems.Clear();
         nmiPause = Profile.HasRole(UserRole.PauseProcessing) ? new(PausedService.PausedLabel, "far fa-pause-circle", "#pause") : null;
 
+
         MenuItems.Add(new NavMenuGroup
         {
             Name = Translater.Instant("MenuGroups.Overview"),
@@ -194,9 +196,10 @@ public partial class NavMenu : IDisposable
             Items = new List<NavMenuItem>
             {
                 new ("Pages.Dashboard.Title", "fas fa-chart-pie", ""),
+                // newDashboard ? new ("Old Dashboard", "fas fa-chart-pie", "old-dashboard") : null,
                 Profile.HasRole(UserRole.Files) ? new ("Pages.LibraryFiles.Title", "fas fa-copy", "library-files") : null,
                 nmiPause
-            }
+            }.Where(x => x != null).ToList()
         });
 
         nmiFlows = Profile.HasRole(UserRole.Flows) ? new("Pages.Flows.Title", "fas fa-sitemap", "flows") : null;
@@ -210,7 +213,8 @@ public partial class NavMenu : IDisposable
             {
                 nmiFlows,
                 nmiLibraries,
-                Profile.HasRole(UserRole.Nodes) ? new ("Pages.Nodes.Title", "fas fa-desktop", "nodes") : null
+                Profile.HasRole(UserRole.Nodes) ? new ("Pages.Nodes.Title", "fas fa-desktop", "nodes") : null,
+                Profile.HasRole(UserRole.Tags) ? new("Pages.Tags.Title", "fas fa-tags", "tags") : null,
             }
         });
 
@@ -274,7 +278,7 @@ public partial class NavMenu : IDisposable
                 Items = new List<NavMenuItem>
                 {
                     new (lblHelp, "fas fa-question-circle", "https://fileflows.com/docs"), 
-                    new (lblForum, "fas fa-comments", "https://fileflows.com/forum"),
+                    new (lblReddit, "fab fa-reddit-alien", "https://reddit.com/r/FileFlows"),
                     new (lblDiscord, "fab fa-discord", "https://fileflows.com/discord")
                 }
             });
@@ -305,7 +309,7 @@ public partial class NavMenu : IDisposable
         try
         {
             string currentRoute = NavigationManager.Uri[NavigationManager.BaseUri.Length..];
-            Active = MenuItems.SelectMany(x => x.Items).FirstOrDefault(x => x.Url == currentRoute);
+            Active = MenuItems.SelectMany(x => x.Items).FirstOrDefault(x => x?.Url == currentRoute);
             if (Active == null)
             {
                 if (NavigationManager.Uri.Contains("/flows"))

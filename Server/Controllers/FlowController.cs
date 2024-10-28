@@ -502,7 +502,7 @@ public class FlowController : BaseController
     /// <param name="flowUid">the UID of the flow to get elements for</param>
     /// <param name="type">the type of flow to get flow elements for</param>
     /// <returns>all the flow elements</returns>
-    internal static async Task<FlowElement[]> GetFlowElements( Guid flowUid, FlowType? type = null)
+    internal static async Task<FlowElement[]> GetFlowElements(Guid flowUid, FlowType? type = null)
     {
         var plugins = await new PluginController(null).GetAll(includeElements: true);
         var results = plugins.Where(x => x.Enabled && x.Elements != null).SelectMany(x => x.Elements)?.Where(x =>
@@ -855,9 +855,48 @@ public class FlowController : BaseController
         if(nameChanged)
             _ = new ObjectReferenceUpdater().RunAsync();
 
+        await SaveToDisk(model);
+
         return await Get(model.Uid);
     }
+    
+    /// <summary>
+    /// Saves the flow to disk
+    /// </summary>
+    /// <param name="flow">the flow to save</param>
+    private async Task SaveToDisk(Flow flow)
+    {
+        try
+        {
+            var service = ServiceLoader.Load<FlowService>();
+            var allFlows = await service.GetAllAsync();
+            var subFlows = allFlows.Where(x => x.Type == FlowType.SubFlow).ToList();
+            string json = CreateExportJson(flow, subFlows);
+            var dir = Path.Combine(DirectoryHelper.ConfigDirectory, "Flows");
+            if (System.IO.Directory.Exists(dir) == false)
+                System.IO.Directory.CreateDirectory(dir);
 
+            var file = Path.Combine(dir, SanitizeFileName(flow.Name) + ".json");
+            await System.IO.File.WriteAllTextAsync(file, json);
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance.WLog("Failed to save flow to disk: " + ex.Message);
+        }
+    }
+    
+    /// <summary>
+    /// Saves the flow to disk.
+    /// </summary>
+    private string SanitizeFileName(string fileName)
+    {
+        foreach (char c in Path.GetInvalidFileNameChars())
+        {
+            fileName = fileName.Replace(c.ToString(), string.Empty);
+        }
+        return fileName.Replace("..", string.Empty);
+    }
+    
     /// <summary>
     /// Rename a flow
     /// </summary>
@@ -953,6 +992,8 @@ public class FlowController : BaseController
         variables["library.Name"] = "My Library";
         variables["library.Path"] = "/library/path";
         variables["temp"] = "/node-temp";
+        variables["time.processing"] = new TimeSpan(1, 2, 3).ToString();
+        variables["time.now"] = DateTime.Now.ToShortTimeString();
 
         //p.FlowElementUid == FileFlows.VideoNodes.DetectBlackBars
         var flowElements = await GetElements(Guid.Empty, (FlowType)(-1));

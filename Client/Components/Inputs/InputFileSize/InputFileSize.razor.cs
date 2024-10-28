@@ -83,8 +83,8 @@ public partial class InputFileSize : Input<long>
     {
         if (e.Code == "Enter")
             await OnSubmit.InvokeAsync();
-        else if (e.Code == "Escape")
-            await OnClose.InvokeAsync();
+        // else if (e.Code == "Escape")
+        //     await OnClose.InvokeAsync();
     }
     
     

@@ -28,6 +28,11 @@ public class ScriptNode:Node
     /// Gets or sets the Script to execute
     /// </summary>
     public Script? Script { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the UID of the flow element, used to look for variable overwrites
+    /// </summary>
+    public Guid Uid { get; set; }
 
     /// <summary>
     /// Executes the script node
@@ -121,6 +126,8 @@ public class ScriptNode:Node
                 try
                 {
                     var value = dictModel?.TryGetValue(p.Name, out var value1) is true ? value1 : null;
+                    if (args != null && args.Variables.TryGetValue($"{Uid}.{p.Name}", out object? oOverride))
+                        value = oOverride;
                     if (value is JsonElement je)
                     {
                         if (je.ValueKind == JsonValueKind.String)

@@ -26,7 +26,7 @@ public static class ExtensionMethods
     /// <returns>the string or null if empty</returns>
     public static string? EmptyAsNull(this string str)
         => str == string.Empty ? null : str;
-
+    
     /// <summary>
     /// Tries to find a match 
     /// </summary>

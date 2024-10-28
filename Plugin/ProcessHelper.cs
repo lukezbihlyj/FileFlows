@@ -103,6 +103,16 @@ public class ExecuteArgs
     public event OutputRecievedEvent StandardOutput;
     
     /// <summary>
+    /// An event that is called when there is standard output from a process
+    /// </summary>
+    public event Action<string> Output;
+    
+    /// <summary>
+    /// An event that is called when there is error output from a process
+    /// </summary>
+    public event Action<string> Error;
+    
+    /// <summary>
     /// An event that is called when there is error output from a process
     /// </summary>
     public event OutputRecievedEvent ErrorOutput;
@@ -111,13 +121,22 @@ public class ExecuteArgs
     /// Called when there is standard output received and invokes the StandardOutput event
     /// </summary>
     /// <param name="output">the output string received</param>\
-    internal void OnStandardOutput(string output) => StandardOutput?.Invoke(output);
-    
+    internal void OnStandardOutput(string output)
+    {
+        StandardOutput?.Invoke(output);
+        Output?.Invoke(output);
+
+    }
+
     /// <summary>
     /// Called when there is error output received and invokes the ErrorOutput event
     /// </summary>
     /// <param name="output">the error string received</param>
-    internal void OnErrorOutput(string output) => ErrorOutput?.Invoke(output);
+    internal void OnErrorOutput(string output)
+    {
+        ErrorOutput?.Invoke(output);
+        Error?.Invoke(output);
+    }
 }
 
 /// <summary>
@@ -200,7 +219,7 @@ public class ProcessHelper : IProcessHelper
             process.StartInfo.FileName = args.Command;                
             if (args.ArgumentList?.Any() == true)
             {
-                args.Arguments = String.Empty;
+                args.Arguments = string.Empty;
                 foreach (var arg in args.ArgumentList)
                 {
                     process.StartInfo.ArgumentList.Add(arg);

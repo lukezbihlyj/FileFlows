@@ -159,8 +159,10 @@ public class WebServer
             
             options.Filters.Add<TrimStringsFilter>();
         });
-        
-        builder.Services.AddSignalR();
+        builder.Services.AddSignalR(options =>
+        {
+            options.MaximumReceiveMessageSize = 1048576; // Set to 1 MB (1048576 bytes)
+        });
         builder.Services.AddResponseCompression();
         builder.Services.AddControllers().AddJsonOptions(options =>
         {

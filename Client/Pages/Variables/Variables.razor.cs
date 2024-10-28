@@ -7,6 +7,13 @@ public partial class Variables : ListPage<Guid, Variable>
     public override string ApiUrl => "/api/variable";
 
     private Variable EditingItem = null;
+    private string lblValue;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        lblValue = Translater.Instant("Pages.Flows.Fields.VariablesValue");
+    }
 
     private async Task Add()
     {

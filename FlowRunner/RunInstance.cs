@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 using FileFlows.Plugin;
@@ -114,11 +115,19 @@ public class RunInstance
             LogInfo("Docker: " + Globals.IsDocker);
 
             string workingDir = Path.Combine(tempPath, "Runner-" + Uid);
+            #if(DEBUG)
+            if (string.IsNullOrWhiteSpace(parameters.RunnerTempPath) == false)
+                workingDir = Path.Combine(tempPath, parameters.RunnerTempPath);
+            #endif
             WorkingDirectory = workingDir;
             LogInfo("Working Directory: " + workingDir);
             try
             {
-                Directory.CreateDirectory(workingDir);
+                if (Directory.Exists(workingDir) == false)
+                {
+                    Directory.CreateDirectory(workingDir);
+                    LogInfo("Created Directory: " + workingDir);
+                }
             }
             catch (Exception ex) when (Globals.IsDocker)
             {
@@ -128,10 +137,8 @@ public class RunInstance
                     "Failed to create working directory, this is likely caused by the mapped '/temp' directory is missing or has become unavailable from the host machine");
                 LogError(ex.Message);
                 LogError("==========================================================================================");
-                return 1;
+                return (int)FileStatus.ProcessingFailed;
             }
-
-            LogInfo("Created Directory: " + workingDir);
 
             var libfileUid = parameters.LibraryFile;
             HttpHelper.Client = HttpHelper.GetDefaultHttpClient(RemoteService.ServiceBaseUrl);
@@ -422,14 +429,14 @@ public class RunInstance
         if(Logger != null)
             Logger.ILog(message);
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [INFO] -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [INFO] -> " + message);
     }
     internal void LogWarning(string message)
     {
         if(Logger != null)
             Logger.WLog(message);
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [WARN] -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [WARN] -> " + message);
     }
 
     internal void LogError(string message)
@@ -437,6 +444,6 @@ public class RunInstance
         if (Logger != null)
             Logger.ELog(message);
         else
-            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " [ERRR] -> " + message);
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [ERRR] -> " + message);
     }
 }

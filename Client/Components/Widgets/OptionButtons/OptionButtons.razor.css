@@ -1,0 +1,71 @@
+.options {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 0.3rem;
+  border: solid 1px var(--border-color);
+  border-radius: var(--container-border-radius);
+  width: fit-content;
+  border-top: none;
+  border-right: none;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: var(--widget-background);
+}
+.options .btn-option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: transparent;
+  border: solid 1px var(--border-color);
+  outline: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--button-border-radius);
+  font-weight: var(--bold, 600);
+  font-size: 0.9rem;
+  color: rgba(var(--color-rgb), 0.3);
+  display: inline-flex;
+  align-items: center;
+}
+.options .btn-option + .btn-option {
+  margin-left: 0.25rem;
+}
+.options .btn-option i {
+  margin-right: 0.75rem;
+  font-size: 1.15rem;
+}
+.options .btn-option.active, .options .btn-option.has-on-click {
+  background: var(--input-background);
+  color: var(--color);
+  opacity: 0.9;
+}
+.options .btn-option.active:hover, .options .btn-option.has-on-click:hover {
+  opacity: 1;
+}
+.options .btn-option:not(.active):not(.has-on-click):hover {
+  background: rgba(255, 255, 255, 0.0705882353);
+}
+.options .btn-option .bubble {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--color);
+  color: var(--white);
+  font-size: 0.75rem;
+  padding: 0.1rem 0.25rem;
+  border-radius: 0.25rem;
+}
+.options .btn-option.color-yellow i {
+  color: var(--yellow);
+}
+.options .btn-option.color-red i {
+  color: var(--red);
+}
+.options .btn-option.color-green i {
+  color: var(--green);
+}
+.options .btn-option.color-blue i {
+  color: var(--blue);
+}

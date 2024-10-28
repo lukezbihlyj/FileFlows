@@ -1,0 +1,28 @@
+@namespace FileFlows.Client.Components.Inputs
+
+@inherits Input<List<Guid>>
+
+<InputWrapper Input="@this">
+    <div>
+        <ul>
+            
+        @foreach (var tag in Tags)
+        {
+            bool selected = Value?.Contains(tag.Uid) == true;
+            <li>
+                <label>
+                    <input type="checkbox" checked="@selected" @onchange="(e) => ToggleSelection(tag)">
+                    <TableItemIcon Icon="@tag.Icon" DefaultIcon="fas fa-tag" />
+                    <div class="tag-info">
+                        <span class="tag-name">@tag.Name</span>
+                        @if (string.IsNullOrWhiteSpace(tag.Description) == false)
+                        {
+                            <span class="tag-description">@tag.Description</span>
+                        }
+                    </div>
+                </label>
+            </li>
+        }
+        </ul>
+    </div>
+</InputWrapper>

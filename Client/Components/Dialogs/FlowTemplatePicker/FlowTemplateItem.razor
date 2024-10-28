@@ -2,6 +2,7 @@
 
 <div class="template @(Selected ? "selected" : string.Empty) @(Selected ? "expanded" : "collapsed") 
            @(Template.MissingDependencies?.Any() == true ? "missing-dependencies" : "")"
+     x-name="@Template.Name"
      @onclick="HandleOnClick" @ondblclick="HandleOnDoubleClick">
     @if (Template.MissingDependencies?.Any() == true)
     {

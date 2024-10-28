@@ -25,7 +25,7 @@ public class Library : FileFlowObject
     /// <summary>
     /// Gets or sets the filter used to determine what files to add ot the library files
     /// </summary>
-    public string Filter { get; set; }
+    public string[] Filters { get; set; }
 
     /// <summary>
     /// Gets or sets the match range for the file creation date
@@ -76,7 +76,7 @@ public class Library : FileFlowObject
     /// <summary>
     /// Gets or sets filter to determine if a file should be excluded
     /// </summary>
-    public string ExclusionFilter { get; set; }
+    public string[] ExclusionFilters { get; set; }
 
     /// <summary>
     /// Gets or sets the template this library is based on

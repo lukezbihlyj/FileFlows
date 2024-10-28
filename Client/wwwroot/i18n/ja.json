@@ -1,0 +1,1736 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "About": "について",
+    "Add": "追加",
+    "AdminRequired": "インストールを完了するには管理者が必要です。",
+    "Advanced": "詳細",
+    "All": "すべて",
+    "And": "および",
+    "Any": "任意",
+    "Architecture": "アーキテクチャ",
+    "Audit": "監査",
+    "BaseCodeOn": "コードテンプレートを使用",
+    "Browse": "参照",
+    "Cancel": "キャンセル",
+    "CancelItems": "選択した{count, plural, one {アイテム} other {アイテム}}をキャンセルしてもよろしいですか？",
+    "CancelMessage": "キャンセルして保存されていない変更を失ってもよろしいですか？",
+    "ChangePassword": "パスワードを変更",
+    "Clear": "クリア",
+    "Close": "閉じる",
+    "CommunityFlows": "コミュニティフロー",
+    "Confirm": "確認",
+    "CopiedToClipboard": "''{text}''をクリップボードにコピーしました。",
+    "Copy": "コピー",
+    "CopyToClipboard": "クリップボードにコピー",
+    "Decrease": "減少",
+    "Default": "デフォルト",
+    "Delete": "削除",
+    "DeleteItems": "選択した{count, plural, one {アイテム} other {アイテム}}を削除してもよろしいですか？",
+    "DeleteLibraryFiles": "選択した{count, plural, one {ファイル} other {ファイル}}を削除してもよろしいですか？\n\nこれは{count, plural, one {ファイル} other {ファイル}}をディスクから削除するのではなく、FileFlowsデータベースから削除されることに注意してください。",
+    "DeleteLibraryFilesPhysicallyMessage": "選択した{count, plural, one {ファイル} other {ファイル}}を本当に削除してもよろしいですか？\n\nこれはディスクから{count, plural, one {ファイル} other {ファイル}}を完全に削除し、元に戻すことができないことに注意してください。",
+    "DeleteLibraryFilesPhysicallySwitch": "ディスクからファイルを削除",
+    "Deleting": "削除中",
+    "Description": "説明",
+    "Disabled": "無効",
+    "Disconnected": "切断されました",
+    "Discord": "Discord",
+    "Download": "ダウンロード",
+    "DownloadLog": "ログをダウンロード",
+    "DownloadLogShort": "ログ",
+    "Duplicate": "重複",
+    "Edit": "編集",
+    "EditSubFlow": "サブフローを編集",
+    "Enabled": "有効",
+    "Execute": "実行",
+    "Executing": "実行中",
+    "Export": "エクスポート",
+    "Failed": "失敗",
+    "Fields": "フィールド",
+    "Filter": "フィルター",
+    "FilterPlaceholder": "フィルター (/)",
+    "Finish": "完了",
+    "Flow": "フロー",
+    "FlowElement": "フロー要素",
+    "FlowElements": "フロー要素",
+    "ForceProcessing": "強制処理",
+    "Forum": "フォーラム",
+    "Help": "ヘルプ",
+    "Import": "インポート",
+    "Increase": "増加",
+    "Input": "入力",
+    "Installed": "インストール済み",
+    "InternalProcessingNode": "内部処理ノード",
+    "InUse": "使用中",
+    "LastRun": "最後の実行",
+    "LastScanned": "最後にスキャンされた",
+    "License": "ライセンス",
+    "Loading": "読み込み中",
+    "Log": "ログ",
+    "Logout": "ログアウト",
+    "LogPartialNotAvailable": "ノードの部分ログが見つかりません。",
+    "MappingIssue": "マッピングの問題",
+    "Memory": "メモリ",
+    "MissingDependencies": "依存関係が不足しています",
+    "MissingDependenciesMessage": "このテンプレートを使用する前に、次の不足しているプラグインをダウンロードする必要があります：\n\n#LIST#",
+    "MonthShort": "月",
+    "Name": "名前",
+    "Never": "決して",
+    "Next": "次",
+    "No": "いいえ",
+    "NoAuditHistoryAvailable": "監査履歴はありません",
+    "Node": "ノード",
+    "NoFilesCurrentlyProcessing": "現在処理中のファイルはありません",
+    "NoFilesRecentlyFinished": "最近終了したファイルはありません",
+    "None": "なし",
+    "NoUpcomingFiles": "今後のファイルはありません",
+    "Number": "番号",
+    "Ok": "OK",
+    "Open": "開く",
+    "OperatingSystem": "オペレーティングシステム",
+    "Other": "その他",
+    "Output": "出力",
+    "Paste": "貼り付け",
+    "Pause": "処理を一時停止",
+    "Paused": "処理を再開",
+    "PausedWithTime": "に再開",
+    "Percent": "パーセント",
+    "Pixels": "ピクセル",
+    "Plugins": "プラグイン",
+    "PossibilityDisconnected": "接続されていない可能性があります",
+    "Previous": "前へ",
+    "ProcessingPaused": "処理は現在一時停止しています",
+    "Prompt": "プロンプト",
+    "Properties": "プロパティ",
+    "ReadOnly": "読み取り専用",
+    "Redo": "やり直し",
+    "Refresh": "更新",
+    "Remove": "削除",
+    "Repository": "リポジトリ",
+    "Reprocess": "再処理",
+    "Rescan": "再スキャン",
+    "Reset": "リセット",
+    "ResetLayout": "レイアウトをリセット",
+    "Restore": "復元",
+    "RestoredFailedMessage": "{type}の復元に失敗しました",
+    "RestoredMessage": "{type}が復元されました",
+    "Restoring": "復元中",
+    "Resume": "再開",
+    "ReturnCode": "戻り値",
+    "Revisions": "リビジョン",
+    "Run": "実行",
+    "RunAt": "で実行",
+    "RunHistory": "実行履歴",
+    "Running": "実行中",
+    "Save": "保存",
+    "Saving": "保存中",
+    "Savings": "節約",
+    "Schedule": "スケジュール",
+    "Scripts": "スクリプト",
+    "Search": "検索",
+    "Searching": "検索中",
+    "Select": "選択",
+    "SelectOne": "1つを選択",
+    "SetStatusProcessed": "処理済みとしてマーク",
+    "Settings": "設定",
+    "ShowHidden": "隠しを表示",
+    "Size": "サイズ",
+    "SortBy": "並べ替え",
+    "SpaceIncrease": "{size} 増加, {items} アイテム",
+    "SpaceSavings": "{size} 節約, {items} アイテム",
+    "Status": "ステータス",
+    "SubFlow": "サブフロー",
+    "SubFlows": "サブフロー",
+    "Success": "成功",
+    "Tag": "タグ",
+    "Test": "テスト",
+    "Time": "時間",
+    "Total": "合計",
+    "Trigger": "トリガー",
+    "Type": "タイプ",
+    "Undo": "元に戻す",
+    "UnsavedChanges": "保存されていない変更",
+    "Update": "更新",
+    "UpdateAll": "すべて更新",
+    "UpdateAvailable": "新しいバージョンが利用可能です {version}",
+    "UsedBy": "使用者",
+    "Version": "バージョン",
+    "VersionNumber": "バージョン: {version}",
+    "View": "表示",
+    "ViewLog": "ログを表示",
+    "WeekShort": "週",
+    "When": "いつ",
+    "Yes": "はい",
+    "DateRanges": {
+      "AnyTime": "任意の時間",
+      "Last12Months": "過去12ヶ月",
+      "Last24Hours": "過去24時間",
+      "Last31Days": "過去31日",
+      "Last3Days": "過去3日",
+      "Last3Months": "過去3ヶ月",
+      "Last6Months": "過去6ヶ月",
+      "Last7Days": "過去7日",
+      "Live": "ライブ",
+      "Today": "今日",
+      "Yesterday": "昨日"
+    },
+    "ObsoleteConfirm": {
+      "Message": "別のフロー要素に切り替えることをお勧めします。",
+      "Question": "このフロー要素は現在廃止されており、まもなく削除されます。本当にこれを使用してもよろしいですか？",
+      "Title": "廃止されたフロー要素"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' が追加されました",
+    "ChangePassword": "ユーザー ''{User}'' がパスワードを変更しました",
+    "Deleted": "{Type} ''{Name}'' が削除されました",
+    "Login": "ユーザー ''{User}'' がログインしました",
+    "LoginFailed": "ユーザー ''{User}'' のログインに失敗しました",
+    "PasswordReset": "ユーザー ''{User}'' がパスワードをリセットしました",
+    "PasswordResetRequest": "ユーザー ''{User}'' がパスワードリセットを要求しました",
+    "SettingsUpdated": "設定が更新されました",
+    "Updated": "{Type} ''{Name}'' が更新されました"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "処理のために手動でファイルやURLを追加します。",
+      "Title": "ファイルを追加",
+      "Fields": {
+        "AnyNode": "任意のノード",
+        "Flow": "フロー",
+        "List": "リスト",
+        "Mode": "入力モード",
+        "Node": "ノード",
+        "Raw": "バルク入力（テキストブロック）"
+      }
+    },
+    "AuditEntry": {
+      "ViewerTitle": "変更内容",
+      "Columns": {
+        "Field": "フィールド",
+        "Value": "値"
+      }
+    },
+    "ChangePassword": {
+      "Changed": "パスワードが変更されました",
+      "InvalidPassword": "古いパスワードが無効です",
+      "MinimumLength": "新しいパスワードが短すぎます",
+      "NewPassword": "新しいパスワード",
+      "NewPasswordConfirm": "確認",
+      "OldPassword": "古いパスワード",
+      "PasswordMismatch": "パスワードが一致しません。",
+      "Title": "パスワードを変更"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "ディレクトリを選択",
+      "FileTitle": "ファイルを選択"
+    },
+    "FlowTemplatePicker": {
+      "Title": "開始するテンプレートを選択"
+    },
+    "Import": {
+      "Message": "システムにインポートするためにエクスポートされたフローを選択します。",
+      "Title": "フローをインポート"
+    },
+    "ImportScript": {
+      "Title": "スクリプトをインポート",
+      "Messages": {
+        "NoMoreImports": "このスクリプトには追加のインポートはありません"
+      }
+    },
+    "PauseDialog": {
+      "Message": "処理を一時停止する時間を選択します。\n注: 現在のフローは実行を続けますが、他のフローはこの時間が経過するまで実行されません。",
+      "Title": "処理を一時停止"
+    },
+    "ReprocessDialog": {
+      "Description": "次のパラメータを使用して選択したファイルを再処理します",
+      "Title": "再処理",
+      "Fields": {
+        "AnyNode": "任意のノード",
+        "BottomOfQueue": "キューの底",
+        "CustomVariables": "カスタム変数",
+        "CustomVariablesKey": "カスタム変数",
+        "CustomVariablesMode": "カスタム変数",
+        "CustomVariablesValue": "値",
+        "Flow": "フロー",
+        "Merge": "オリジナルとカスタム変数をマージ",
+        "Node": "ノード",
+        "Original": "オリジナルのカスタム変数を使用",
+        "Position": "位置",
+        "Replace": "オリジナルのカスタム変数を置き換え",
+        "SameFlow": "変更なし",
+        "TopOfQueue": "キューの上"
+      },
+      "ProcessOptions": {
+        "Description": "選択したファイルの処理パラメータを変更します",
+        "Title": "処理オプション"
+      }
+    },
+    "ResumeDialog": {
+      "Message": "処理を再開してもよろしいですか？",
+      "Title": "処理を再開"
+    },
+    "ScriptLanguage": {
+      "Title": "スクリプト言語",
+      "Labels": {
+        "BatchDescription": "バッチファイルはWindowsシステムでのみ実行できます。基本的な変数を読み取ることができますが、実行中にFileFlowsオブジェクトを更新したりアクセスすることはできません。",
+        "CSharpDescription": "C#スクリプトはFileFlowsの多くの部分と相互作用でき、最も強力です。FileFlowsと同じ言語を使用することで、より大きなシステム相互作用が可能です。",
+        "FileDisplayName": "ファイル表示名",
+        "FileDisplayNameDescription": "FileFlows Webコンソールでファイル名の表示をカスタマイズする特別なスクリプトです。このスクリプトはファイル自体を変更せず、インターフェース上での表示のみを変更します。",
+        "JavaScriptDescription": "JavaScriptスクリプトはFileFlowsランナー内で実行され、変数の読み取りと書き込み、FileFlows内のすべてのヘルパー関数にアクセスできます。",
+        "PowerShellDescription": "PowerShellスクリプトはWindowsシステムでのみ実行できます。基本的な変数を読み取ることができますが、実行中にFileFlowsオブジェクトを更新したりアクセスすることはできません。",
+        "ShellDescription": "シェルスクリプトはUnixベースのシステム（Linux、MacOS、Docker）で実行されます。基本的な変数を読み取ることができますが、実行中にFileFlowsオブジェクトを更新したりアクセスすることはできません。"
+      }
+    }
+  },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zipは、ファイルを圧縮されたコンテナにまとめるために使用される、無料かつオープンソースのファイルアーカイバです。",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskipは、ビデオファイル内のコマーシャルを検出するためのアプリケーションです。MPEGまたはH.264ファイルを分析し、コマーシャルの位置を含む出力ファイルを生成します。",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Docker内にDockerをインストールします。これにより、兄弟コンテナを起動することができます。",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpegは、ビデオ、オーディオ、その他のマルチメディアファイルやストリームを処理するためのライブラリとプログラムのスイートで構成された、オープンソースのフリーソフトウェアプロジェクトです。その中心には、ビデオおよびオーディオファイルの処理に設計されたコマンドラインツールffmpegがあります。",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Gitは、ソフトウェアパッケージや設定など、さまざまなリソースをリモートリポジトリからダウンロードして管理するプロセスを簡素化し、効率的なファイルやプロジェクトへのアクセスを求めるユーザーにとって不可欠なツールです。",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htopは、Unix系オペレーティングシステム向けのインタラクティブなプロセスビューワーおよびシステムモニターであり、システムリソースを監視し、プロセスを管理するためのユーザーフレンドリーなインターフェースを提供します。",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagickは、コマンドラインから「magick」として呼び出される、ラスタ画像を表示、作成、変換、修正、編集するための、無料でオープンソースのクロスプラットフォームソフトウェアスイートです。",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDKは、Javaプラットフォームのスタンダードエディション（Java SE）のオープンソース実装であり、Javaアプリケーションを作成および実行するための無料かつクロスプラットフォームの開発環境を提供します。",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNixは、Matroska（MKV）ファイルを作成、変更、分割、結合、および検査するためのツールのセットです。",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nanoは、Unix系オペレーティングシステム向けのシンプルでユーザーフレンドリーなテキストエディタであり、ターミナル環境で基本的な編集機能を提供します。",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetchは、Bashシェルスクリプト言語で記述されたシステム情報ツールです。デフォルトでは、左側にASCIIアートで描かれたディストリビューションのロゴが表示されます。",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.jsは、Webブラウザ外でJavaScriptコードを実行する、オープンソースでクロスプラットフォームなJavaScriptランタイム環境であり、開発者がサーバーサイドおよびネットワークアプリケーションを構築できるようにします。",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3は、そのシンプルさ、可読性、汎用性で知られる高級なインタープリタ型プログラミング言語であり、Web開発、データ分析、人工知能、スクリプト作成作業に広く使用されています。",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RARはデータ圧縮に使用されるアーカイブファイル形式であり、UNRARはRARアーカイブからコンテンツを抽出するためのユーティリティです。",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vimは、フリーでオープンソースの画面ベースのテキストエディタプログラムであり、viの改良版です。",
+      "Label": "Vim"
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "追加",
+      "ChangePassword": "パスワード変更",
+      "Deleted": "削除",
+      "Login": "ログイン",
+      "LoginFailed": "ログイン失敗",
+      "PasswordReset": "パスワードリセット",
+      "PasswordResetRequest": "パスワードリセット要求",
+      "Updated": "更新"
+    },
+    "DateCompareMode": {
+      "After": "後",
+      "Any": "任意",
+      "Before": "前",
+      "Between": "間",
+      "GreaterThan": "より大きい",
+      "LessThan": "より小さい",
+      "NotBetween": "間ではない"
+    },
+    "Days": {
+      "Fri": "金",
+      "Friday": "金曜日",
+      "Mon": "月",
+      "Monday": "月曜日",
+      "Sat": "土",
+      "Saturday": "土曜日",
+      "Sun": "日",
+      "Sunday": "日曜日",
+      "Thu": "木",
+      "Thursday": "木曜日",
+      "Tue": "火",
+      "Tuesday": "火曜日",
+      "Wed": "水",
+      "Wednesday": "水曜日"
+    },
+    "FilesSortBy": {
+      "Savings": "貯蓄",
+      "SavingsDesc": "貯蓄 降順",
+      "Size": "サイズ",
+      "SizeDesc": "サイズ 降順",
+      "Time": "時間",
+      "TimeDesc": "時間 降順"
+    },
+    "FileStatus": {
+      "Any": "任意",
+      "Disabled": "無効",
+      "Duplicate": "重複",
+      "FlowNotFound": "フローが見つかりません",
+      "MappingIssue": "マッピングの問題",
+      "MissingLibrary": "ライブラリが不足しています",
+      "OnHold": "保留中",
+      "OutOfSchedule": "スケジュール外",
+      "Processed": "処理済み",
+      "Processing": "処理中",
+      "ProcessingFailed": "処理失敗",
+      "ReprocessByFlow": "フローによる再処理",
+      "Unprocessed": "未処理"
+    },
+    "FlowType": {
+      "Failure": "失敗",
+      "Standard": "標準",
+      "SubFlow": "サブフロー"
+    },
+    "LogType": {
+      "Debug": "デバッグ",
+      "Error": "エラー",
+      "Info": "情報",
+      "Warning": "警告"
+    },
+    "MatchRange": {
+      "After": "後",
+      "Any": "任意",
+      "Before": "前",
+      "Between": "間",
+      "GreaterThan": "より大きい",
+      "LessThan": "より小さい",
+      "NotBetween": "間ではない"
+    },
+    "MathValue": {
+      "Between": "間",
+      "Equals": "等しい",
+      "GreaterThan": "より大きい",
+      "GreaterThanOrEqual": "以上",
+      "LessThan": "より小さい",
+      "LessThanOrEqual": "以下",
+      "NotBetween": "間ではない",
+      "NotEquals": "等しくない"
+    },
+    "Periods": {
+      "Days": "日",
+      "Hours": "時間",
+      "Minutes": "分",
+      "Weeks": "週"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "無効",
+      "HigherPriorityNodeAvailable": "優先度の高いノードが利用可能です",
+      "Idle": "アイドル",
+      "InstallingDockerMods": "DockerModsをインストール中",
+      "MaximumRunnersReached": "最大ランナー数に達しました",
+      "Offline": "オフライン",
+      "OutOfSchedule": "スケジュール外",
+      "Processing": "処理中",
+      "RestrictedByLibrary": "ライブラリによって制限されています",
+      "VersionMismatch": "バージョン不一致"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "アルファベット順",
+      "AsFound": "見つかった順 (デフォルト)",
+      "LargestFirst": "最大サイズ優先",
+      "NewestFirst": "最新優先",
+      "OldestFirst": "最古優先",
+      "Random": "ランダム",
+      "SmallestFirst": "最小サイズ優先"
+    },
+    "ProcessingPriority": {
+      "High": "高",
+      "Highest": "最高",
+      "Low": "低",
+      "Lowest": "最低",
+      "Normal": "通常"
+    },
+    "ReportDirection": {
+      "Inbound": "インバウンド",
+      "Outbound": "アウトバウンド"
+    },
+    "ReportSchedule": {
+      "Daily": "毎日",
+      "Monthly": "毎月",
+      "Weekly": "毎週"
+    },
+    "SecurityMode": {
+      "Local": "ローカルユーザー",
+      "Off": "なし",
+      "OpenIdConnect": "オープンIDコネクト"
+    },
+    "TaskType": {
+      "FileAdded": "ファイルが追加されました",
+      "FileFlowsServerUpdateAvailable": "更新が利用可能",
+      "FileFlowsServerUpdating": "サーバー更新中",
+      "FileProcessed": "ファイル処理済み",
+      "FileProcessFailed": "処理失敗",
+      "FileProcessing": "ファイル処理中",
+      "FileProcessSuccess": "処理成功"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "ファイル",
+      "Flows": "フロー",
+      "Libraries": "ライブラリ",
+      "Log": "ログ",
+      "Nodes": "ノード",
+      "PauseProcessing": "処理を一時停止",
+      "Plugins": "プラグイン",
+      "Revisions": "リビジョン",
+      "Scripts": "スクリプト",
+      "Tasks": "タスク",
+      "Variables": "変数",
+      "Webhooks": "ウェブフック"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "両方の値を入力する必要があります",
+    "CannotDeleteInternalNode": "内部処理ノードを削除することはできません。",
+    "DeleteFailed": "削除に失敗しました",
+    "DuplicatesFound": "重複が見つかりました",
+    "NameInUse": "名前はすでに使用されています",
+    "NameRequired": "名前は必須です",
+    "NoFlowSpecified": "フローが指定されていません。ライブラリを作成するにはフローを選択する必要があります",
+    "NotAllFilesCouldBeDeleted": "すべてのファイルを削除できませんでした。\n詳細はログを参照してください。",
+    "NotFound": "アイテムが見つかりません",
+    "SaveFailed": "保存に失敗しました",
+    "SetFileStatus": "ファイルのステータスを設定できませんでした",
+    "UnexpectedError": "予期しないエラーが発生しました"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "入力ノードが指定されていません。各フローには1つの入力ノードが必要です",
+      "NoParts": "フロー部品が指定されていません。フローを保存するにはいくつかの部品が必要です",
+      "TooManyInputNodes": "入力ノードは1つだけしか持てません"
+    },
+    "Parts": {
+      "Color": "色",
+      "Color-Placeholder": "カスタムカラー",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "拡張子",
+          "Extensions-Help": "一致する拡張子のリストで、最初の出力ノードに出力されます。そうでない場合、2番目の出力ノードが使用されます。"
+        }
+      }
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*より大きい*: 日付が指定された期間よりも古い場合に一致します。\n*より小さい*: 日付が指定された期間よりも新しい場合に一致します。\n*間*: 日付が指定された範囲内にある場合に一致します。\n*前*: 日付が指定された日付よりも前の場合に一致します。\n*後*: 日付が指定された日付よりも後の場合に一致します。"
+    }
+  },
+  "MenuGroups": {
+    "Admin": "管理者",
+    "Configuration": "設定",
+    "Extensions": "拡張機能",
+    "Information": "情報",
+    "Overview": "概要",
+    "Security": "セキュリティ",
+    "System": "システム",
+    "User": "ユーザー"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "アクセス制御エントリ",
+      "Title": "アクセス制御",
+      "Labels": {
+        "Console": "Webコンソール",
+        "Remote": "リモート / 処理ノード"
+      },
+      "Buttons": {
+        "MoveDown": "下に移動",
+        "MoveUp": "上に移動"
+      },
+      "Columns": {
+        "Allow": "許可",
+        "End": "終了",
+        "Start": "開始"
+      },
+      "Fields": {
+        "Allow": "許可",
+        "Allow-Help": "このアクセス制御エントリがシステムにアクセスすることが許可されているかどうか。",
+        "Description": "説明",
+        "Description-Placeholder": "このエントリを説明するための任意の説明",
+        "End": "終了アドレス",
+        "End-Help": "オプションの終了IPアドレス。設定されている場合は開始アドレスより大きく、同じタイプでなければなりません。それ以外の場合、この終了値は無視されます。",
+        "End-Placeholder": "オプションの終了アドレス",
+        "Start": "開始アドレス",
+        "Start-Help": "開始IPアドレスはIPv4またはIPv6のいずれかです"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "終了アドレスは開始アドレスより大きくなければなりません",
+        "FamilyMismatch": "開始IPアドレスと終了IPアドレスは同じタイプでなければなりません",
+        "InvalidIPAddress": "'{address}' は無効なIPアドレスです。",
+        "MoveFailed": "エントリの移動に失敗しました"
+      }
+    },
+    "Audit": {
+      "Title": "監査ログ",
+      "Columns": {
+        "Action": "アクション",
+        "Date": "日付",
+        "IPAddress": "IPアドレス",
+        "Operator": "オペレーター",
+        "Summary": "概要",
+        "Type": "タイプ"
+      }
+    },
+    "Dashboard": {
+      "Title": "ダッシュボード",
+      "Labels": {
+        "AddWidget": "ウィジェットを追加",
+        "CurrentlyPaused": "FileFlowsは現在一時停止中です！",
+        "FinalSize": "最終サイズ",
+        "OriginalSize": "元のサイズ",
+        "Savings": "節約",
+        "ShrinkageTitle": "節約されたストレージ"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "ダッシュボードの作成に失敗しました",
+        "LogFailed": "ワーカーのログを取得できませんでした"
+      },
+      "Fields": {
+        "Current": "現在",
+        "CurrentStep": "ステップ",
+        "File": "ファイル",
+        "Library": "ライブラリ",
+        "Log": "ログ",
+        "Node": "ノード",
+        "Overall": "全体",
+        "ProcessingTime": "処理時間",
+        "RecentlyFinished": "最近終了",
+        "Uid": "UID",
+        "Upcoming": "今後",
+        "WorkingFile": "作業中のファイル"
+      },
+      "Messages": {
+        "CancelMessage": "{RelativeFile}のワーカーをキャンセルしてもよろしいですか？",
+        "DeleteDashboard": "現在のダッシュボードを削除してもよろしいですか？\n\nこれは元に戻せません。",
+        "DeleteWidget": "このウィジェットを削除してもよろしいですか？",
+        "Waiting": "ファイルの処理を待っています"
+      },
+      "Tabs": {
+        "Dashboard": "ダッシュボード",
+        "Savings": "節約",
+        "Statistics": "統計"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} ピーク"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {失敗} other {# 失敗}}",
+          "Finished": "{count, plural, zero {完了} other {# 完了}}",
+          "NoFailedFiles": "失敗したファイルはありません",
+          "NoRecentlyFinishedFiles": "最近完了したファイルはありません",
+          "NoUpcomingFiles": "今後のファイルはありません",
+          "Title": "ファイル",
+          "Upcoming": "{count, plural, zero {今後} other {# 今後}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "処理済みファイル",
+          "PerDay": "{num} 日あたり",
+          "PerHour": "{num} 時間あたり",
+          "StorageSaved": "保存されたストレージ"
+        },
+        "LargestSavings": {
+          "Title": "最大の節約"
+        },
+        "LibrarySavings": {
+          "NoSavings": "節約なし",
+          "Title": "節約"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# ファイル} other {# ファイル}}"
+        },
+        "Status": {
+          "CurrentlyProcessing": "現在 {count, plural, one {# ファイル} other {# ファイル}} を処理中です",
+          "DockerModUpdates": "{count, plural, one {# DockerMod 更新} other {# DockerMod 更新}}",
+          "FileFlowsUpdate": "FileFlows {version} が利用可能です",
+          "Idle": "システムは現在アイドル状態です",
+          "OutOfSchedule": "スケジュール外",
+          "OutOfScheduleDay": "{day} {time} に再開予定",
+          "OutOfScheduleHours": "{hours, plural, one {約1時間後に再開予定} other {# 時間後に再開予定}}",
+          "OutOfScheduleMinutes": "{minutes, plural, one {1分未満で再開予定} other {# 分後に再開予定}}",
+          "PluginUpdates": "{count, plural, one {# プラグイン更新} other {# プラグイン更新}}",
+          "ScriptUpdates": "{count, plural, one {# スクリプト更新} other {# スクリプト更新}}"
+        },
+        "System": {
+          "Runners": "{count, plural, zero {ランナー} one {# ランナー} other {# ランナー}}",
+          "Title": "システム",
+          "Updates": "{count, plural, zero {アップデート} one {# アップデート} other {# アップデート}}"
+        },
+        "Updates": {
+          "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "修正済み",
+          "New": "新規",
+          "Plugins": "{count, plural, zero {プラグイン} one {# プラグイン} other {# プラグイン}}",
+          "Scripts": "{count, plural, zero {スクリプト} one {# スクリプト} other {# スクリプト}}",
+          "Title": "アップデート"
+        }
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMods",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "リビジョン",
+        "UpdateAvailable": "アップデートがあります"
+      },
+      "Fields": {
+        "Code": "コード",
+        "Description": "説明"
+      },
+      "Messages": {
+        "FailedToExport": "エクスポートに失敗しました。",
+        "Updating": "更新中"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "タスク"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "タスク履歴",
+      "Fields": {
+        "RunHistory": "履歴"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "タスク実行",
+      "Fields": {
+        "Log": "ログ",
+        "ReturnValue": "戻り値",
+        "RunAt": "実行時",
+        "Success": "成功"
+      }
+    },
+    "Flow": {
+      "Title": "フロー",
+      "Labels": {
+        "EditFlow": "フロー: {Name}",
+        "FlowProperties": "フローのプロパティ",
+        "OpenScriptBrowser": "スクリプトブラウザを開く",
+        "OpenSubFlowBrowser": "サブフローブラウザを開く",
+        "SubFlowBrowser": "サブフローブラウザ",
+        "SubFlowHelp": "サブフローにカスタムパラメータを渡すための入力フィールドを追加するには、`Fields` タブで作成します。\n\nサブフローには、任意の有効な入力フロー要素（例: `Input File`, `Video File` など）の単一の `Input` が必要です。"
+      },
+      "Fields": {
+        "Author": "作成者",
+        "Author-Help": "このフローの作成者を指定することができます。",
+        "Description": "説明",
+        "MinimumVersion": "最小バージョン",
+        "Outputs": "出力",
+        "Outputs-Help": "このサブフローの出力の数です。このサブフローを他のフローで使用する際に利用可能な出力の数です。",
+        "OutputsKey": "出力",
+        "OutputsValue": "説明",
+        "Tags": "タグ",
+        "Variables": "変数",
+        "VariablesKey": "名前",
+        "VariablesValue": "値",
+        "Field": {
+          "Default": "デフォルト",
+          "DeleteIfEmpty": "空の場合は削除",
+          "DeleteIfEmpty-Help": "ここに値が追加され、ユーザーが「元の削除」を選択した場合、これらの正規表現に一致するファイルがないときにフォルダーも削除されます。",
+          "Description": "このフィールドと共に表示されるオプションの説明です。フィールドに対するヘルプテキストとして使用できます。",
+          "FlowElementField": "要素フィールド",
+          "FlowElementField-Help": "オプションで、'{Uid}.{FieldName}' の形式で設定します。例: ''53a72207-34a2-4b71-b3d8-8b12764a85fe.Force'' でフロー要素のフィールドを直接設定します。詳細はヘルプを参照してください。",
+          "IfName": "もし",
+          "IfName-Help": "他の値がこれらの条件に一致する場合にのみユーザーに表示されるべきです。",
+          "IfNot": "もし違うなら",
+          "IfNot-Help": "値が逆であり、一致しない場合にのみ表示されるべきです。",
+          "IfValue": "値が一致する場合",
+          "IfValue-Help": "一致させる値、正規表現が使用できます。ブール値の場合は true または false を使用します。",
+          "Inverse": "逆",
+          "Inverse-Help": "スライダーの値を逆にして、低い値が右に表示されるべきかどうか。",
+          "Maximum": "最大",
+          "Minimum": "最小",
+          "Options": "オプション",
+          "Options-Help": "ラベルと値を設定するためのリストオプションの配列です。`label|value` のように | 区切りを使用します。",
+          "Required": "必須",
+          "Required-Help": "この値が必須であり、設定される必要があるかどうか。"
+        }
+      },
+      "Messages": {
+        "Close": "本当に離れて未保存の変更を失いますか？",
+        "FailedToLoadFlow": "フローの読み込みに失敗しました。",
+        "LoadingFlow": "フローを読み込んでいます"
+      }
+    },
+    "Flows": {
+      "Title": "フロー",
+      "Labels": {
+        "FailureFlows": "失敗フロー",
+        "StandardFlows": "標準フロー",
+        "SubFlows": "サブフロー"
+      },
+      "Buttons": {
+        "Repository": "リポジトリ"
+      },
+      "Fields": {
+        "Author": "作成者",
+        "Template": "テンプレート"
+      },
+      "Messages": {
+        "DeleteUsed": "使用中のフローは削除できません。",
+        "Duplicated": "フロー ''{name}'' が複製されました。",
+        "FailedToExport": "フローのエクスポートに失敗しました。",
+        "FailureFlowDescription": "これは、いずれかのフローが失敗した場合に実行される特別なフロータイプです。\nファイルフローは、フローが失敗した場合に使用する「デフォルト」失敗フローを検索します。見つからない場合は、処理が即座に停止します。",
+        "FlowImported": "フロー ''{name}'' がインポートされました。",
+        "LoadingTemplates": "テンプレートを読み込んでいます"
+      },
+      "Template": {
+        "Title": "フローを追加",
+        "Fields": {
+          "PageDescription": "フローのベースとなるテンプレートを選択します。これにより、フローの作成を開始できます。",
+          "Template": "テンプレート"
+        }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "エンドユーザーライセンス契約の条件を読み、同意しました",
+        "Language": "言語"
+      },
+      "Messages": {
+        "RunnersTop": "ライブラリ内のファイルを同時に処理できるランナーの数を指定してください。\n\nランナーはライブラリ内のファイルを処理する作業者です。ランナーの数が多いほど、同時に処理できるファイルの数が増えます。\n\nこの設定は、内部処理ノードを編集することでいつでも調整できます。",
+        "Welcome": "FileFlowsへようこそ！当社のソフトウェアをお選びいただき、ありがとうございます。\n\nこのウィザードでは、EULAの承認やプラグインの選択など、基本的なセットアップ手順を案内します。\n\nビデオ、オーディオ、画像など、さまざまなファイルを処理するために特化したプラグインを選択してください。",
+        "WelcomeUpdate": "最近、エンドユーザーライセンス契約（EULA）を更新しました。\n\n続行する前に、更新された条件を確認し、同意してください。\n\nFileFlowsの使用を継続するには、同意が必要です。\n\nFileFlowsをお選びいただき、ありがとうございます。",
+        "Finish": {
+          "Bottom": "これらのステップで、FileFlowsの最大限のパワーを活用するための準備が整いました。\n\nご質問やサポートが必要な場合は、サポートチームまでお気軽にお問い合わせください。",
+          "CreateALibrary": "ライブラリを作成:",
+          "CreateALibraryDescription": "ファイル処理を自動化するためのライブラリを作成します。\nライブラリは、指定した基準に基づいて自動的にファイルを検出し、処理します。\nこれにより、手動の介入が不要になり、ワークフローが簡素化されます。",
+          "CreateFirstFlow": "最初のフローを作成:",
+          "CreateFirstFlowDescription": "選択したプラグインを使用して、最初のフローを作成します。\nビデオファイル、オーディオトラック、画像、またはその他のタイプのファイルを処理する場合でも、フローは\n単純でも複雑でも、特定のニーズに応じてファイルの処理をカスタマイズすることができます。",
+          "Top": "FileFlowsをあなたのニーズに合わせて正常に設定しました。さあ、実行してみましょう！"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "インストールするDockerModsを選択",
+        "Eula": "EULA",
+        "EulaDescription": "FileFlowsのエンドユーザーライセンス契約",
+        "Finish": "完了",
+        "FinishDescription": "初期設定が完了しました",
+        "Plugins": "プラグイン",
+        "PluginsDescription": "インストールするプラグインを選択",
+        "Runners": "ランナー",
+        "RunnersDescription": "ランナーの数を指定",
+        "Welcome": "ようこそ",
+        "WelcomeDescription": "FileFlowsへようこそ"
+      }
+    },
+    "Libraries": {
+      "Title": "ライブラリ",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {ファイル} other {ファイル}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "フローが構成されていません。\nライブラリを追加または更新する前にフローを作成してください。"
+      },
+      "Messages": {
+        "DeleteConfirm": "選択した {count, plural, one {ライブラリ} other {ライブラリ}} を本当に削除しますか？",
+        "KeepLibraryFiles": "統計のためにデータベースにファイルを保持",
+        "Reprocess": {
+          "Message": "選択したライブラリの再処理を進めてよろしいですか？\n\nこのアクションはすべてのファイルを未処理としてマークし、再処理を開始します。このアクションは元に戻すことはできません。",
+          "Title": "選択したライブラリを再処理"
+        },
+        "Reset": {
+          "Message": "選択したライブラリをリセットしてよろしいですか？\n\nこのアクションはすべてのファイルを削除し、再スキャンを開始します。このアクションは元に戻すことはできません。",
+          "Title": "選択したライブラリをリセット"
+        }
+      }
+    },
+    "Library": {
+      "Title": "ライブラリ",
+      "Labels": {
+        "CreationTime": "作成時間",
+        "Duplicated": "ライブラリ「{name}」が複製されました",
+        "FailedToDuplicate": "複製に失敗しました",
+        "LastWriteTime": "最終書き込み時間"
+      },
+      "Fields": {
+        "DetectFileCreation": "ファイル作成",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "ファイル最終書き込み",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "ファイルサイズ",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "ここで、与えられたパターンに一致するファイルのみを検出するライブラリを構成できます。\n\nたとえば、次のようなファイルのみを含めることができます。\n\t- 7日以内に作成されたファイル\n\t- 3日から7日間の間に最終書き込みが行われたファイル\n\t- サイズが1ギガバイトを超えるファイル",
+        "DownloadsDirectory": "ダウンロードディレクトリ",
+        "DownloadsDirectory-Help": "処理が成功したファイルがこのフォルダで再発見されると、そのファイルは自動的に再処理されます。\n再ダウンロードしたファイルに便利です。",
+        "Enabled": "有効",
+        "ExcludeHidden": "隠しファイルを除外",
+        "ExcludeHidden-Help": "有効にすると、隠しファイルとフォルダーはスキャンされません",
+        "ExclusionFilters": "除外",
+        "ExclusionFilters-Help": "ファイルのフルネームに対して実行する除外のオプションリスト。",
+        "Extensions": "拡張子",
+        "Extensions-Help": "このライブラリに含めるファイルのオプションの拡張子リストです。\n空白のままにすると、フィルターまたは除外フィルターが`Advanced`タブで定義されていない限り、すべてのファイルが含まれます。",
+        "FileSizeDetectionInterval": "ファイル検出間隔",
+        "FileSizeDetectionInterval-Help": "ライブラリスキャナー中にファイルサイズを再確認するまでの秒数の待機時間。別のアプリケーションが、例えばPVRアプリケーションが録画の一部を20秒ごとに書き込んでいる場合などに使用します。",
+        "FileSizeDetectionInterval-Suffix": "秒",
+        "Filters": "フィルター",
+        "Filters-Help": "ファイルのフルネームに対して実行するフィルターのオプションリスト。",
+        "Flow": "フロー",
+        "Folders": "フォルダー",
+        "Folders-Help": "このライブラリがファイルの代わりにフォルダーを処理する場合。\nこれはサブフォルダーをスキャンすることを意味するのではなく、ライブラリはすでにこれを行います。\nフォルダーオブジェクトが個々のファイルの代わりに処理されます。",
+        "FullScanDisabled": "フルスキャンを無効にする",
+        "FullScanDisabled-Help": "フルスキャンの目的は、ファイルシステムの監視イベントによって見逃される可能性のあるファイルをキャッチすることです。",
+        "FullScanIntervalMinutes": "フルスキャン間隔",
+        "FullScanIntervalMinutes-Help": "このライブラリのフルスキャンが実行される間隔",
+        "HoldMinutes": "保持時間",
+        "HoldMinutes-Help": "オプションで、このライブラリで見つかったファイルを処理する前に、これらの分だけ保持します。各ファイルはこの時間だけ保持されます。",
+        "HoldMinutes-Suffix": "分",
+        "MaxRunners": "最大実行者数",
+        "MaxRunners-Help": "このライブラリで同時にファイルを処理できる最大実行者数。\n無制限にするには0に設定します。",
+        "Name": "名前",
+        "Path": "パス",
+        "Priority": "優先度",
+        "Priority-Help": "ファイルが処理される優先度。優先度の高いライブラリに処理待ちのファイルがある場合、それらが最初に処理されます。",
+        "ProcessingOrder": "処理順序",
+        "ProcessingOrder-Help": "このライブラリによってファイルが処理される順序。",
+        "ReprocessRecreatedFiles": "再作成されたファイルを再処理",
+        "ReprocessRecreatedFiles-Help": "有効にすると、異なる作成時間で再検出されたファイルは自動的に再処理に設定されます。\nこれは、ダウンロードされたファイルのライブラリで役立ちます。同じファイルを複数回ダウンロードして毎回処理したい場合。",
+        "Scan": "スキャン",
+        "Scan-Help": "スキャンが有効な場合、ライブラリは新しいコンテンツを定期的にスキャンします。\n無効な場合、ライブラリはファイルシステムイベントをリッスンして新しいファイルを検出します。\nファイルが検出されない問題がある場合を除き、これをオフのままにすることをお勧めします。",
+        "ScanInterval": "スキャン間隔",
+        "ScanInterval-Help": "スキャン間隔の最短時間（秒）。他のスキャンが進行中である可能性があるため、毎回この間隔でスキャンされる保証はありません。",
+        "ScanInterval-Suffix": "秒",
+        "Schedule": "スケジュール",
+        "ScheduleDescription": "このライブラリがアクティブになる時期を設定できます。\n\nライブラリスキャナーはこのライブラリに対して実行されず、スケジュール外でファイルが処理されることはありません。",
+        "SkipFileAccessTests": "ファイルアクセステストをスキップ",
+        "SkipFileAccessTests-Help": "有効にすると、ライブラリはファイルをファイルキューに追加する前に読み書きできるかどうかをテストしません。",
+        "Template": "テンプレート",
+        "TopLevelOnly": "トップレベルのみ",
+        "TopLevelOnly-Help": "ディレクトリのルート内のファイルのみをスキャンし、サブフォルダーは検索されません。",
+        "UpdateMovedFiles": "移動したファイルを更新",
+        "UpdateMovedFiles-Help": "有効にすると、ファイルが同じライブラリ内で移動したと検出された場合、元のファイルはこの新しいファイルを指すように更新されます。\n無効の場合、代わりに重複が追加されます。\n\n元のファイルが存在せず、同じシグネチャを持つ新しいファイルが見つかった場合、ファイルは移動したと検出されます。",
+        "UseFingerprinting": "フィンガープリンティングを使用",
+        "UseFingerprinting-Help": "有効にすると、ファイルがインポートされる際およびフローが完了した後にチェックサムが実行されます。一致するチェックサムのファイルは、今後のライブラリインポートからスキップされます。",
+        "WaitTimeSeconds": "待機時間",
+        "WaitTimeSeconds-Help": "このフォルダーに対して最後の変更が書き込まれてからスキャンされるまでに経過する必要がある秒数。",
+        "WaitTimeSeconds-Suffix": "秒"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "作成日",
+        "ExecutedNodes": "実行されたフロー要素",
+        "FailureReason": "失敗理由",
+        "FinalMetadata": "最終メタデータ",
+        "FinalSize": "最終サイズ",
+        "FinalSizeSuffix": "バイト",
+        "Fingerprint": "フィンガープリント",
+        "Flow": "フロー",
+        "Library": "ライブラリ",
+        "Log": "ログ",
+        "Name": "元のファイル",
+        "Node": "処理ノード",
+        "OriginalMetadata": "元のメタデータ",
+        "OriginalSize": "元のサイズ",
+        "OriginalSizeSuffix": "バイト",
+        "OutputPath": "出力パス",
+        "ProcessingTime": "処理時間",
+        "Status": "ステータス"
+      },
+      "Tabs": {
+        "CustomVariables": "カスタム変数",
+        "FinalMetadata": "出力",
+        "OriginalMetadata": "入力"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "ファイル",
+      "Labels": {
+        "ScanTriggered": "すべての有効なライブラリのスキャンがトリガーされました"
+      },
+      "Buttons": {
+        "Ignore": "無視",
+        "MoveToTop": "先頭に移動",
+        "Process": "処理",
+        "ProcessOptions": "処理オプション",
+        "Reprocess": "再処理",
+        "ToggleForce": "強制処理の切り替え",
+        "Unhold": "解除",
+        "View": "表示"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "ログのダウンロードに失敗しました",
+        "FailedToReprocess": "再処理に失敗しました",
+        "ReprocessingFile": "再処理のためにファイルが送信されました"
+      }
+    },
+    "Log": {
+      "Title": "ログ",
+      "Labels": {
+        "AutoRefresh": "自動更新",
+        "FailedToDownloadLog": "ログのダウンロードに失敗しました。",
+        "NoMatchingData": "一致するデータがありません"
+      },
+      "Fields": {
+        "File": "ファイル",
+        "IncludeHigherSeverity": "高い重大度を含む",
+        "Nodes": "ノード",
+        "Severity": "重大度",
+        "Source": "ソース",
+        "Text": "テキスト"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "キャンセル",
+        "ForgotPassword": "パスワードをお忘れですか？",
+        "Login": "ログイン",
+        "Password": "パスワード",
+        "Reset": "リセット",
+        "Username": "ユーザー名",
+        "UsernameOrEmail": "ユーザー名またはメールアドレス"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "無効なユーザー名またはパスワード",
+        "LockedOut": "ログイン試行が多すぎるため、現在ロックされています。",
+        "PasswordReset": "パスワードリセット"
+      }
+    },
+    "Nodes": {
+      "Title": "ノード",
+      "Labels": {
+        "Address": "アドレス",
+        "Disconnected": "切断されました",
+        "DownloadNode": "ダウンロードノード",
+        "FileFlowsServer": "内部処理ノード",
+        "FilesProcessed": "処理されたファイル",
+        "Internal": "内部",
+        "PossiblyDisconnected": "切断されている可能性があります",
+        "Runners": "ランナー",
+        "UpgradeRequired": "アップグレードが必要",
+        "UpgradeRequiredHint": "サーバーとノードは同じバージョンである必要があります",
+        "Version": "バージョン"
+      },
+      "Fields": {
+        "Address": "アドレス",
+        "Enabled": "有効",
+        "FlowRunners": "フローロンナー"
+      }
+    },
+    "Notifications": {
+      "Title": "通知"
+    },
+    "Plugins": {
+      "Single": "プラグイン",
+      "Title": "プラグイン",
+      "Labels": {
+        "PluginBrowser": "プラグインブラウザ"
+      },
+      "Fields": {
+        "Authors": "著者",
+        "Description": "説明",
+        "Elements": "ノード",
+        "Url": "ホームページ",
+        "Version": "バージョン"
+      },
+      "Messages": {
+        "DeletePlugins": "選択した{count, plural, one {プラグイン} other {プラグイン}}を削除してもよろしいですか？",
+        "DeleteUsed": "使用中のプラグインは削除できません",
+        "UpdatingPlugins": "プラグインを更新中"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "ノード",
+      "Fields": {
+        "Address": "アドレス",
+        "Address-Help": "ノードのアドレス（ホスト名またはIPアドレス）。ノードのアドレスを変更した場合を除いて、これを変更しないでください。例えば、処理ノードのコンピュータ名を変更した場合。",
+        "AllLibraries": "すべてのライブラリ",
+        "AllLibraries-Help": "このノードが処理するライブラリ",
+        "CopyMappings": "マッピングをコピー",
+        "DontChangeOwner": "所有者を変更しない",
+        "DontChangeOwner-Help": "チェックされている場合、ノードは新しく作成されたファイルの所有者を環境変数で定義されたPGIDとPUIDに変更します。\nこれらの環境変数が設定されていない場合、所有者は''users:nobody''に変更されます。",
+        "DontSetPermissions": "権限を設定しない",
+        "DontSetPermissions-Help": "チェックされている場合、新しく作成されたファイルの権限が設定されます。",
+        "Enabled": "有効",
+        "FlowRunners": "フローロンナー",
+        "FlowRunners-Help": "フローを実行するために使用できるフローロンナーインスタンスの数。",
+        "InternalProcessingNodeDescription": "これはFileFlows内蔵の処理ノードです。\n\nこのノードを使用すると、リモートシステムに他のノードをインストールすることを心配せずにFileFlowsを実行でき、FileFlowsを自己完結型アプリケーションとして使用できます。\n\nこの内部ノードと追加の処理ノードを引き続き使用することもできますし、このノードを無効にして追加のノードのみを使用することもできます。",
+        "Libraries": "ライブラリ",
+        "Libraries-Help": "このノードが処理できるライブラリを選択",
+        "Mappings": "マッピング",
+        "MappingsDescription": "マッピングを使用すると、サーバーからノード上の場所へのパスをマッピングできます。\n\n例えば、Server:'/usr/local/bin/ffmpeg'をNode:'C:\\Utils\\ffmpeg\\ffmpeg.exe'にマッピングできます。\n\nリモートシステムで実行する必要のあるすべてのライブラリとツールのためにマッピングを追加する必要があります。",
+        "MappingsKey": "サーバー",
+        "MappingsValue": "ノード",
+        "MaxFileSizeMb": "最大ファイルサイズ",
+        "MaxFileSizeMb-Help": "この処理ノードが処理できる最大ファイルサイズ。0に設定すると、制限はありません。",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "ファイル権限",
+        "PermissionsFiles-Help": "新しく作成されたファイルに設定する権限。",
+        "PermissionsFolders": "フォルダー権限",
+        "PermissionsFolders-Help": "新しく作成されたフォルダーに設定する権限。",
+        "PreExecuteScript": "事前実行スクリプト",
+        "PreExecuteScript-Help": "ファイルが処理される前に実行されるスクリプト。このスクリプトの結果は1でなければならず、それ以外の場合はノードはファイルを処理しません。",
+        "Priority": "優先度",
+        "Priority-Help": "数字が高いほど優先度が高くなります。優先度の高いノードは、スケジュールが外れている、無効になっている、最大ランナーに達している場合を除いて、最初に処理するファイルを優先されます。",
+        "ProcessFileCheckInterval": "ファイルチェック間隔",
+        "ProcessFileCheckInterval-Help": "処理ノードで新しいファイルを処理するためにどのくらいの頻度でチェックするか。\n0に設定すると、システム値を使用します。",
+        "ProcessFileCheckInterval-Suffix": "秒",
+        "ProcessingDescription": "これにより、この処理ノードが何を処理できるかを設定できます。\n\n例えば、このノードが低パワーノードである場合、特定のライブラリや最大ファイルサイズのみを処理するように制限できます。",
+        "Schedule": "スケジュール",
+        "Schedule-Help": "このスケジュールはノードのタイムゾーンで実行されます",
+        "ScheduleDescription": "これにより、このノードがアクティブになる時間を設定できます。\n\nこの設定されたスケジュール外でノードはファイルを処理しません。\n",
+        "TempPath": "一時ディレクトリ",
+        "TempPath-Help": "このディレクトリは、フローが処理される際に一時ファイルを作成するために使用されます。このディレクトリは定期的にクリーンアップされるため、重要なものはここに置かないでください。",
+        "Variables": "変数",
+        "VariablesDescription": "変数を使用すると、処理ノードに設定する高度な変数を構成できます。",
+        "VariablesKey": "名前",
+        "VariablesValue": "値"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "結合"
+      },
+      "Buttons": {
+        "Back": "戻る",
+        "Generate": "生成"
+      },
+      "Fields": {
+        "Direction": "方向",
+        "Email": "メール",
+        "Email-Placeholder": "メールアドレスを入力",
+        "Flow": "フロー",
+        "Library": "ライブラリ",
+        "Node": "ノード",
+        "Period": "期間",
+        "Statistic": "統計"
+      },
+      "Messages": {
+        "FailedToFindReport": "レポートが見つかりませんでした。",
+        "FailedToGenerateReport": "レポートの生成に失敗しました。",
+        "NoMatchingData": "一致するデータがありません",
+        "ReportEmailed": "レポートは生成されると''{email}''にメールで送信されます。"
+      }
+    },
+    "Reporting": {
+      "Title": "報告",
+      "Labels": {
+        "Reports": "報告",
+        "ScheduledReports": "スケジュールされた"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "リポジトリオブジェクト",
+      "Fields": {
+        "Author": "著者",
+        "Code": "コード",
+        "Description": "説明",
+        "Revision": "改訂"
+      }
+    },
+    "Revisions": {
+      "Title": "改訂"
+    },
+    "ScheduledReport": {
+      "Title": "スケジュールされた報告",
+      "Labels": {
+        "LastSent": "最終送信",
+        "Never": "送信しない"
+      },
+      "Fields": {
+        "DayOfMonth": "月の日",
+        "DayOfMonth-Help": "この報告を実行する月の日。選択された日がその月の外にある場合（例：2月の31日）、報告はその月の最終日に実行されます。",
+        "DayOfWeek": "週の日",
+        "DayOfWeek-Help": "このスケジュールされた報告を送信する週の日。この日から前の7日間のデータが含まれます。",
+        "Direction": "方向",
+        "Enabled": "有効",
+        "Enabled-Help": "このスケジュールされた報告は有効な場合のみ実行されます。",
+        "Flows": "フロー",
+        "Libraries": "ライブラリ",
+        "Name-Help": "報告の名前。この名前は送信されるメールの件名に表示されます。",
+        "Nodes": "ノード",
+        "Recipients": "受取人",
+        "Recipients-Help": "この報告が実行されると受け取る電子メールアドレスのリスト。",
+        "Report": "報告",
+        "Report-Help": "送信される報告。",
+        "Schedule": "スケジュール",
+        "Schedule-Help": "この報告が生成され、受取人に電子メールで送信される時期。"
+      }
+    },
+    "Script": {
+      "LanguageTitle": "{Language} スクリプト",
+      "Title": "スクリプト",
+      "Fields": {
+        "Code": "コード",
+        "Description": "説明",
+        "Name": "名前",
+        "Outputs": "出力",
+        "OutputsKey": "出力",
+        "OutputsValue": "説明"
+      },
+      "Messages": {
+        "FailedToExport": "エクスポートに失敗しました。"
+      }
+    },
+    "Scripts": {
+      "Title": "スクリプト",
+      "Labels": {
+        "ScriptBrowser": "スクリプトリポジトリ",
+        "UpdateAvailable": "更新可能",
+        "UpdatingScripts": "スクリプトを更新中"
+      },
+      "Buttons": {
+        "ScriptBrowser": "リポジトリ",
+        "UpdateAllScripts": "すべてのスクリプトを更新"
+      },
+      "Fields": {
+        "Code": "コード"
+      },
+      "Messages": {
+        "DeleteSystem": "システムスクリプトを削除することはできません",
+        "DeleteUsed": "使用中のスクリプトを削除することはできません",
+        "Duplicated": "スクリプト ''{name}'' が重複しています",
+        "Imported": "スクリプト ''{name}'' がインポートされました",
+        "NoRepositoryScriptsToUpdate": "更新するリポジトリスクリプトが選択されていません"
+      }
+    },
+    "Settings": {
+      "Title": "設定",
+      "Labels": {
+        "CheckNow": "今すぐ確認",
+        "Database": "データベース",
+        "Email": "メール",
+        "EmailDescription": "これらの設定は任意であり、メールプラグインを使用する場合、またはローカルユーザーセキュリティを使用する場合にのみ必要です。",
+        "FileServer": "ファイルサーバー",
+        "General": "一般",
+        "Logging": "ログ記録",
+        "Restart": "FileFlowsを再起動",
+        "System": "システム",
+        "Updates": "更新"
+      },
+      "Fields": {
+        "AutoUpdate": "自動更新",
+        "AutoUpdate-Help": "有効にすると、FileFlowsは定期的に更新をチェックし、更新が見つかった場合は自動的にダウンロードしてインストールします。",
+        "AutoUpdateNodes": "自動更新ノード",
+        "AutoUpdateNodes-Help": "有効にすると、FileFlowsサーバーが更新されると、外部ノードが自動的に更新されます。これにより、分散環境でFileFlowsサーバーインスタンスのみを更新すれば済みます。",
+        "AutoUpdatePlugins": "自動更新プラグイン",
+        "AutoUpdatePlugins-Help": "有効にすると、プラグインは定期的に更新をチェックし、更新が見つかった場合は自動的にダウンロードされます。",
+        "CheckForUpdateNow": "更新を確認",
+        "CheckForUpdateNow-Help": "今すぐ更新を確認し、見つかった場合はダウンロードして、フローが実行されていないときにインストールします。",
+        "DelayBetweenNextFile": "ファイル間の遅延",
+        "DelayBetweenNextFile-Help": "ファイルを開始してから新しいファイルを要求するまでの遅延（ミリ秒単位）です。この遅延をゼロに設定すると、新しいファイルが即座に要求されます。遅延が短すぎると、ロードバランシングやライブラリランナーの制限などの機能が正しく機能しない可能性があります。ファイルが次のリクエストの前に完全に開始されていない可能性があるためです。",
+        "DelayBetweenNextFile-Suffix": "ミリ秒",
+        "DockerModsOnServer": "サーバー上のDockerMods",
+        "DockerModsOnServer-Help": "DockerModsは、サーバーの起動時または特に有効にされたときに自動的に実行される必要があります。それ以外の場合は、ワークフローが開始されたときにのみ実行されます。",
+        "HideProcessingFinishedNotifications": "処理終了通知を隠す",
+        "HideProcessingFinishedNotifications-Help": "ファイルの処理が完了したときにWebコンソールにトースト通知を表示する必要があるかどうか。",
+        "HideProcessingStartedNotifications": "処理開始通知を隠す",
+        "HideProcessingStartedNotifications-Help": "ファイルの処理が開始されたときにWebコンソールにトースト通知を表示する必要があるかどうか。",
+        "KeepFailedFlowTempFiles": "失敗した一時ファイルを保持",
+        "KeepFailedFlowTempFiles-Help": "このオプションを有効にすると、失敗した場合にフローによって使用された一時ファイルが保持され、自動的に削除されなくなります。\n注意して使用してください。",
+        "Language": "言語",
+        "Language-Help": "システムで使用される言語。\n注意: これらの翻訳はAIによって生成されており、エラーが含まれている可能性があります。エラーがあればサポートチームに報告してください。",
+        "LogEveryRequest": "すべてのリクエストをログ記録",
+        "LogEveryRequest-Help": "サーバーへのすべてのリクエストをログ記録する必要があるかどうか。",
+        "LogFileRetention": "ログファイル保持",
+        "LogFileRetention-Help": "ログファイルが削除されるまでの保持期間。",
+        "LogFileRetention-Suffix": "日",
+        "LoggingPath": "ログ記録ディレクトリ",
+        "LoggingPath-Help": "ここにログファイルが作成されます。",
+        "LogQueueMessages": "キューのメッセージをログ記録",
+        "LogQueueMessages-Help": "これにより、ライブラリウォッチャーでキューに追加または削除されるすべてのファイルのログが過剰に記録されます。\nファイルが表示されない問題がある場合はこれをオンにし、その後は再びオフにして、ログファイルが過剰なログ記録で満たされないようにしてください。",
+        "PluginRepositoryUrls": "プラグインリポジトリ",
+        "PluginRepositoryUrls-Help": "プラグインを検索する際に使用するプラグインリポジトリのURLのリストです。\n順序が重要です。同じプラグインが複数のリポジトリに含まれている場合、最初のリポジトリがそのソースとして使用されます。\nデフォルトのリポジトリは常にこのリストの最後に追加されます。",
+        "ProcessFileCheckInterval": "ファイルチェック間隔",
+        "ProcessFileCheckInterval-Help": "処理ノードで新しいファイルを処理するためにチェックする頻度。",
+        "ProcessFileCheckInterval-Suffix": "秒",
+        "ShowFileAddedNotifications": "ファイル追加通知",
+        "ShowFileAddedNotifications-Help": "ファイルが見つかってキューに追加されたときにWebコンソールにトースト通知を表示する必要があるかどうか。",
+        "Telemetry": "テレメトリ",
+        "Telemetry-Help": "テレメトリは、サポートが必要なデバイス、最も使用されているフロー部分、開発に集中すべき場所を知るのに役立ちます。\nファイルや個人情報についての情報は送信されません。",
+        "Database": {
+          "Description": "ここでFileFlowsが使用するデータベースを構成できます。\n注意: ここでの変更はFileFlowsを再起動する必要があり、データを移行し、必要に応じて新しいデータベースを作成します。",
+          "DontBackupOnUpgrade": "アップグレード時にバックアップしない",
+          "DontBackupOnUpgrade-Help": "データベースのバックアップは、すべてのデータベースデータをSQLiteファイルにコピーすることを含むため、時間がかかる場合があります。外部データベースを他の方法でバックアップしている場合は、このプロセスを無効にすることができます。",
+          "Name": "名前",
+          "Name-Help": "作成するデータベースの名前。空白のままにすると、''FileFlows''が使用されます。",
+          "Password": "パスワード",
+          "Password-Help": "データベースに接続するユーザーのパスワード",
+          "Port": "ポート",
+          "Port-Help": "MySQLのデフォルトポートは3306です。",
+          "Port-Help-MySql": "MySQLのデフォルトポートは3306です。",
+          "Port-Help-Postgres": "Postgresのデフォルトポートは5432です。",
+          "Port-Help-SQLServer": "SQL Serverのデフォルトポートは1433です。",
+          "RecreateDatabase": "データベースを再作成",
+          "RecreateDatabase-Help": "有効にすると、新しいデータベースがすでに存在する場合は、それが削除され再作成されます。無効の場合、データベースがすでに存在する場合は、データは移行されず、新しいデータベースはそのまま使用されます。",
+          "Server": "サーバー",
+          "Server-Help": "データベースサーバーのアドレスと、必要に応じてポートまたは名前付きインスタンス",
+          "Type": "タイプ",
+          "Type-Help": "使用するデータベースのタイプ。デフォルトのタイプはSQLiteで、追加の設定や構成は必要ありません。",
+          "User": "ユーザー",
+          "User-Help": "データベースに接続するために使用されるユーザー"
+        },
+        "FileServer": {
+          "AllowList": "許可されたパス",
+          "AllowList-Help": "公開されたファイルサーバーによってアクセス可能なパスの改行区切りリストです。\nこれらはリモートで読み取り/書き込みできる場所です。\n注意: すべてのライブラリパスは自動的に許可されます。",
+          "AllowList-Placeholder": "空白のままにすると、システムパス以外はすべて許可されます。",
+          "Description": "これにより、外部処理ノードがマッピングなしで処理のためにファイルをダウンロードできるようになります。\n\nこれにより、ネットワーク上でファイルが公開されるため、信頼できないネットワーク上では無効にしてください。",
+          "Enabled": "有効",
+          "FilePermissions": "ファイルの権限",
+          "FilePermissions-Help": "作成または変更されたファイルに付与するオプションの権限。",
+          "FolderPermissions": "フォルダーの権限",
+          "FolderPermissions-Help": "作成または変更されたフォルダーに付与するオプションの権限。",
+          "OwnerGroup": "所有者グループ",
+          "OwnerGroup-Help": "作成または変更されたファイルまたはフォルダーの所有者を変更するために使用するオプションの所有者:グループ。",
+          "OwnerGroup-Placeholder": "users:nobody"
+        },
+        "License": {
+          "Email": "ライセンスメール",
+          "ExpiryDate": "有効期限",
+          "Files": "ファイル",
+          "Flags": "機能",
+          "Key": "ライセンスキー",
+          "Level": "レベル",
+          "ProcessingNodes": "処理ノード",
+          "Status": "ステータス"
+        },
+        "Security": {
+          "AccessToken": "アクセストークン",
+          "AccessToken-Help": "サーバーに接続するために処理ノードによって使用されるアクセストークン",
+          "Authority": "権限",
+          "Authority-Help": "Open ID ConnectプロバイダーのURLを入力してください（例: https://accounts.google.com/）。",
+          "CallbackAddress": "コールバックアドレス",
+          "CallbackAddress-Help": "オプションのコールバックアドレスで、これを使用してクライアントに送信するデフォルトのアドレスをオーバーライドできます。\n例えば、リバースプロキシの背後にいる場合、FileFlowsがHTTPでリッスンしているが、コールバックがHTTPSで発生する必要がある場合です。",
+          "ClientId": "クライアントID",
+          "ClientId-Help": "Open ID Connectプロバイダーに登録されたクライアントID。",
+          "ClientSecret": "クライアントシークレット",
+          "ClientSecret-Help": "Open ID Connectプロバイダーに登録されたクライアントシークレット。",
+          "Description": "ユーザーセキュリティの構成には、ユーザーがログインし、処理ノードが接続するためにアクセストークンを提供する必要があります。\n\n[ユーザー](/users)は、サインインする前に追加する必要があります。または、この機能を使用する前に追加する必要があります。",
+          "LockoutMinutes": "ロックアウト期間",
+          "LockoutMinutes-Help": "ユーザーが再度ログインを試みる前にロックされる期間。",
+          "LockoutMinutes-Suffix": "分",
+          "MaxAttempts": "最大試行回数",
+          "MaxAttempts-Help": "ユーザーが一時的にブロックされる前に許可される最大ログイン試行回数",
+          "Mode": "モード",
+          "Mode-Help": "FileFlowsにアクセスするためのユーザー認証を有効にします。\n有効にすると、ユーザーはログインする必要があり、処理ノードはサーバーにアクセスするためにAPIトークンが必要になります。",
+          "Title": "セキュリティ",
+          "TokenExpiryMinutes": "トークンの有効期限",
+          "TokenExpiryMinutes-Help": "ログイントークンの有効期限が切れるまでの期間。"
+        },
+        "Smtp": {
+          "From": "送信者",
+          "From-Help": "メールが送信されるユーザーの名前",
+          "FromAddress": "送信者アドレス",
+          "FromAddress-Help": "メールが送信されるユーザーのメールアドレス",
+          "Password": "パスワード",
+          "Password-Help": "SMTPユーザーのパスワード",
+          "Port": "ポート",
+          "Port-Help": "メールサーバーのポート",
+          "Security": "セキュリティ",
+          "Security-Help": "メール送信時に使用するセキュリティ",
+          "Server": "サーバー",
+          "Server-Help": "メールサーバー",
+          "User": "ユーザー",
+          "User-Help": "メールを送信するためのオプションのユーザー名"
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "自動データベースバックアップをオフにすると、アプリケーションの更新中にバックアップが取られなくなります。データを保護するために、外部にデータベースをバックアップするための代替手段を用意することが重要です。\n\n本当にこれらのバックアップをオフにしますか？",
+          "NoDatabase": "名前は必須です",
+          "NoPassword": "パスワードは必須です",
+          "NoServer": "サーバーは必須です",
+          "NoUser": "ユーザーは必須です",
+          "TestingDatabase": "データベース接続をテストしています",
+          "TestSuccess": "データベースへの接続に成功しました"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "テレメトリーを無効にしてもよろしいですか？\n\n安心してください、個人情報は記録されません。送信されるデータには、使用中のフロー要素、利用されているプラグイン、および失敗したファイルと処理されたファイルの総数に関する情報が含まれています。\n\nこの情報は、ユーザーの好みを理解し、未使用のフロー要素の廃止に関する決定に役立ちます。",
+          "Title": "テレメトリーを無効にする"
+        },
+        "Restart": {
+          "Message": "FileFlowsを再起動してもよろしいですか？\n\n設定は最初に自動的に保存されます。\n\n注意: 実行中のフローがないことを確認してください。",
+          "Title": "FileFlowsを再起動"
+        },
+        "Update": {
+          "Downloading": "アップグレードをダウンロードしています",
+          "Failed": "更新の確認に失敗しました",
+          "Message": "新しい更新が利用可能です。ダウンロードしてインストールしますか？",
+          "NotAvailable": "更新は利用できません",
+          "Title": "更新が利用可能"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "統計"
+    },
+    "Tags": {
+      "Title": "タグ",
+      "Fields": {
+        "Description": "説明",
+        "Icon": "アイコン"
+      },
+      "Messages": {
+        "DeleteItems": "選択した {count, plural, one {タグ} other {タグ}} を削除してもよろしいですか？\n\n{count, plural, one {この} other {これらの}}ファイルから削除され、この操作は元に戻せません。"
+      }
+    },
+    "Task": {
+      "Title": "タスク",
+      "Fields": {
+        "CustomSchedule": "カスタムスケジュール",
+        "CustomSchedule-Help": "このタスクは、15分ごとのブロックの開始時に1回実行されます",
+        "Schedule": "スケジュール",
+        "Schedule-Help": "このスクリプトが実行される時間",
+        "Script": "スクリプト",
+        "Script-Help": "設定されたスケジュールで実行するスクリプト",
+        "TimeSchedule": "スケジュール",
+        "TimeSchedule-Help": "タスクが実行される時間",
+        "Type": "タイプ",
+        "Type-Help": "このタスクのタイプ。時間ベースのタスクは設定された時間に実行されます。他のタスクはイベントベースです"
+      }
+    },
+    "Tasks": {
+      "Title": "タスク",
+      "Buttons": {
+        "EditScript": "スクリプトを編集"
+      },
+      "Messages": {
+        "NoHistory": "このタスクには実行履歴がありません。",
+        "NoScripts": "タスクを作成するためのスクリプトが見つかりません。"
+      }
+    },
+    "Users": {
+      "Single": "ユーザー",
+      "Title": "ユーザー",
+      "Labels": {
+        "Address": "住所",
+        "Administrator": "管理者",
+        "LastLoggedIn": "最終ログイン",
+        "Never": "未ログイン"
+      },
+      "Fields": {
+        "Email": "メール",
+        "IsAdmin": "管理者",
+        "Password": "パスワード",
+        "Roles": "役割"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "自分自身を削除することはできません。",
+        "EmailInUse": "メールアドレス ''{email}'' は別のユーザー ''{user}'' によって既に使用されています。"
+      }
+    },
+    "Variable": {
+      "Title": "変数"
+    },
+    "Variables": {
+      "Title": "変数"
+    },
+    "Webhook": {
+      "Title": "ウェブフック",
+      "Fields": {
+        "Code": "コード",
+        "Method": "メソッド",
+        "Route": "ルート"
+      }
+    },
+    "Webhooks": {
+      "Title": "ウェブフック",
+      "Columns": {
+        "Method": "メソッド",
+        "Route": "ルート"
+      }
+    },
+    "Widget": {
+      "Title": "ウィジェット",
+      "Fields": {
+        "AudioCodecs": "オーディオコーデック",
+        "AudioContainers": "オーディオコンテナ",
+        "Codecs": "コーデック",
+        "ComicFormats": "コミックフォーマット",
+        "ComicPages": "コミックページ",
+        "CpuUsage": "CPU使用率",
+        "FilesRecentlyFinished": "最近終了したファイル",
+        "FilesUpcoming": "今後のファイル",
+        "ImageFormats": "画像フォーマット",
+        "LibraryProcessingTimes": "ライブラリ処理時間 [メガバイトあたりの秒数]",
+        "LogStorage": "ログストレージ",
+        "MemoryUsage": "メモリ使用率",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "オープンデータベース接続",
+        "Processing": "処理中",
+        "ProcessingNodes": "処理ノード",
+        "ProcessingTimes": "処理時間",
+        "StorageSaved": "保存されたストレージ",
+        "TempStorage": "一時ストレージ",
+        "VideoCodecs": "ビデオコーデック",
+        "VideoContainers": "ビデオコンテナ",
+        "VideoResolution": "ビデオ解像度"
+      }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "Appriseサーバーにメッセージを送信できるプラグインです。",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "オーディオファイルを処理するためのオーディオ関連のフロー要素のコレクション。",
+      "Label": "オーディオ"
+    },
+    "BasicNodes": {
+      "Description": "FileFlowsの基本フロー要素。このプラグインには、ファイル処理のための基本的で共通のフロー要素が含まれています。\nFileFlowsが機能するには、このプラグインが必要です。",
+      "Label": "基本"
+    },
+    "ChecksumNodes": {
+      "Description": "ファイルに対してチェックサムを実行する機能を提供するフロー要素。",
+      "Label": "チェックサム"
+    },
+    "ComicNodes": {
+      "Description": "コミックブックを処理するためのフロー要素（cbr、cbz、pdfなど）",
+      "Label": "コミック"
+    },
+    "DiscordNodes": {
+      "Description": "Discordサーバーにメッセージを送信できるプラグインです。",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "このプラグインを使用すると、フローを実行している間にメールを送信できます。",
+      "Label": "メール"
+    },
+    "Emby": {
+      "Description": "Embyと通信するためのプラグインです。",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Gotifyサーバーにメッセージを送信するためのプラグイン。",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "画像ファイルを処理するためのフロー要素。このプラグインには、画像を変換および操作するためのノードが含まれています。",
+      "Label": "画像"
+    },
+    "MetaNodes": {
+      "Description": "ファイルのメタ情報を検索するために使用されるメタ情報フロー要素を含むプラグインです。",
+      "Label": "メタ"
+    },
+    "Nextcloud": {
+      "Description": "Nextcloudにファイルをアップロードするためのプラグインです。",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Plexと通信するためのプラグイン。",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Pushbulletサーバーにメッセージを送信するためのプラグインです。",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "Pushoverサーバーにメッセージを送信するためのプラグインです。",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Telegramメッセージを送信するためのプラグインです。",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "ビデオファイルの処理のためのプラグインで、ビデオファイルの変換、ビデオファイルの検出、アップスケーリング、ダウンスケーリング、トランスコーディングなどを含みます。",
+      "Label": "ビデオ"
+    },
+    "Web": {
+      "Description": "Web関連のフロー要素を提供するプラグイン。",
+      "Label": "Web"
+    }
+  },
+  "Reports": {
+    "Codecs": {
+      "Description": "FileFlows によって処理されたさまざまなコーデックの概要を提供し、コーデック使用傾向を理解するのに役立ちます。",
+      "Name": "コーデック"
+    },
+    "Files": {
+      "Description": "FileFlows によって処理されたすべてのファイルの詳細なテーブルを表示し、フロー、ライブラリ、サイズに関する洞察を提供します。",
+      "Name": "ファイル",
+      "Columns": {
+        "FinalSize": "最終サイズ",
+        "FlowName": "フロー",
+        "LibraryName": "ライブラリ",
+        "Name": "名前",
+        "NodeName": "ノード",
+        "OriginalSize": "元のサイズ",
+        "Percentage": "パーセンテージ"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "指定された期間に処理されたすべてのファイルに関するレポートを提供し、システムの全体的なスループットを示します。",
+      "Name": "処理されたファイル"
+    },
+    "FlowElementExecution": {
+      "Description": "システムで実行されたフロー要素に関するレポートを表示し、そのパフォーマンスと頻度を分析することができます。",
+      "Name": "フロー要素の実行"
+    },
+    "Languages": {
+      "Description": "ファイルで処理されたさまざまな言語に関する情報を提供し、メディア内の言語の傾向を追跡するのに役立ちます。",
+      "Name": "言語"
+    },
+    "LibrarySavings": {
+      "Description": "さまざまなライブラリでファイルを処理することで節約されたストレージスペースを示し、効率の向上を監視するのに役立ちます。",
+      "Name": "ライブラリ節約"
+    },
+    "ProcessingSummary": {
+      "Description": "ライブラリ、ノード、時間帯ごとに分類された、ファイル処理活動の詳細な概要を提供します。",
+      "Name": "処理の概要"
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "単一の「オーディオファイル」入力フロー要素を持つ空のオーディオテンプレート。",
+        "Name": "オーディオファイル"
+      },
+      "ConvertComic": {
+        "Description": "CBR、CBZ、CB7、PDF、GZ、BZ2からCBZまたはPDFに変換するフロー。",
+        "Name": "コミックを変換"
+      },
+      "ConvertImage": {
+        "Description": "画像を変換するフロー。",
+        "Name": "画像を変換"
+      },
+      "ConvertVideo": {
+        "Description": "ビデオファイルを別の形式に変換するフロー。",
+        "Name": "ビデオを変換"
+      },
+      "FailureFlow": {
+        "Description": "フローが何らかの理由で失敗した場合に実行される基本的な失敗フロー。",
+        "Name": "失敗フロー"
+      },
+      "File": {
+        "Description": "単一の「入力ファイル」入力フロー要素を持つ空のファイルテンプレート。",
+        "Name": "ファイル"
+      },
+      "Folder": {
+        "Description": "単一の「入力フォルダー」入力フロー要素を持つ空のフォルダーテンプレート。\n\n注意: このテンプレートはファイルではなくフォルダーを処理するためにのみ使用してください。フォルダーを処理するには制限があります。フォルダーが処理されているため、フォルダー内のファイルは処理されません。",
+        "Name": "フォルダー"
+      },
+      "ImageFile": {
+        "Description": "単一の「画像ファイル」入力フロー要素を持つ空の画像テンプレート。",
+        "Name": "画像ファイル"
+      },
+      "VideoFile": {
+        "Description": "単一の「ビデオファイル」入力フロー要素を持つ空のビデオテンプレート。",
+        "Name": "ビデオファイル"
+      }
+    },
+    "Groups": {
+      "Books": "書籍",
+      "DownloadClients": "ダウンロードクライアント",
+      "DVR": "DVR",
+      "General": "一般"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "一般的なオーディオブックファイルを検索するオーディオブックライブラリ。",
+        "Name": "オーディオブックライブラリ"
+      },
+      "ComicLibrary": {
+        "Description": "一般的なコミックブックファイルを検索するコミックライブラリ。",
+        "Name": "コミックライブラリ"
+      },
+      "eBookLibrary": {
+        "Description": "一般的なeBookファイルを検索するeBookライブラリ。",
+        "Name": "eBookライブラリ"
+      },
+      "ImageLibrary": {
+        "Description": "一般的な画像ファイルを検索する画像ライブラリ。",
+        "Name": "画像ライブラリ"
+      },
+      "MusicLibrary": {
+        "Description": "一般的な音楽ファイルを検索する音楽ライブラリ。",
+        "Name": "音楽ライブラリ"
+      },
+      "PlexDVR": {
+        "Description": "Plex DVRの録画を監視するライブラリで、録画が完了した後に自動的に変換できます。",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "SABnzbdからの「完了」ダウンロードディレクトリを監視するライブラリ。\n\nこのライブラリはフローを使用して音楽をターゲット形式に変換し、変換した音楽ファイルを宛先フォルダー（例：「converted」）に配置できます。\n\nダウンロードを指示したアプリケーションは、完了したファイルのために「converted」フォルダーを監視できます。",
+        "Name": "SABnzbd音楽"
+      },
+      "SABnzbdVideos": {
+        "Description": "SABnzbdからの「完了」ダウンロードディレクトリを監視するライブラリ。\n\nこのライブラリはフローを使用してビデオをターゲット形式に変換し、変換したビデオを宛先フォルダー（例：「converted」）に配置できます。\n\nダウンロードを指示したアプリケーションは、完了したファイルのために「converted」フォルダーを監視できます。",
+        "Name": "SABnzbdビデオ"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "ディレクトリ内のサンプル、トレーラー、またはプレビューのビデオファイルを見つけ、必要に応じて削除できます。\nメインファイルが処理された後にフォルダーをクリーンに削除できるように、'SABnzbd Videos'ライブラリと一致させるのに便利です。",
+        "Name": "サンプル/トレーラー/プレビュー"
+      },
+      "VideoLibrary": {
+        "Description": "一般的なビデオファイルを検索するビデオライブラリ。",
+        "Name": "ビデオライブラリ"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {日} other {日}} 前",
+    "HoursAgo": "{num} {num, plural, one {時間} other {時間}} 前",
+    "MinutesAgo": "{num} {num, plural, one {分} other {分}} 前",
+    "Never": "決して",
+    "SecondsAgo": "{num} {num, plural, one {秒} other {秒}} 前"
+  },
+  "Validators": {
+    "Pattern": "無効です",
+    "Range": "{Minimum} から {Maximum} の間でなければなりません",
+    "Required": "必須"
+  },
+  "Widgets": {
+    "AudioCodecs": "オーディオコーデック",
+    "AudioContainers": "オーディオコンテナ",
+    "Codecs": "コーデック",
+    "ComicFormats": "コミックフォーマット",
+    "ComicPages": "コミックページ",
+    "CPUUsage": "CPU使用率",
+    "CurrentRevision": "現在のリビジョン",
+    "DatabaseConnections": "データベース接続",
+    "DecoderParameters": "デコーダパラメータ",
+    "Decoders": "デコーダ",
+    "Encoders": "エンコーダ",
+    "ImageFormats": "画像フォーマット",
+    "LibraryProcessingTimes": "ライブラリ処理時間",
+    "LogStorage": "ログストレージ",
+    "MemoryUsage": "メモリ使用量",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "処理中",
+    "ProcessingNodes": "処理ノード",
+    "ProcessingTimes": "処理時間",
+    "RecentlyFinished": "最近完了",
+    "StorageSaved": "保存されたストレージ",
+    "TemporaryFileStorage": "一時ファイルストレージ",
+    "Upcoming": "今後",
+    "VideoCodecs": "ビデオコーデック",
+    "VideoContainers": "ビデオコンテナ",
+    "VideoResolutions": "ビデオ解像度"
+  }
+}

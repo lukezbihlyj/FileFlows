@@ -1,0 +1,1736 @@
+{
+  "ProductName": "FileFlows",
+  "Labels": {
+    "About": "Om",
+    "Add": "Lägg till",
+    "AdminRequired": "Administratör krävs för att slutföra installationen.",
+    "Advanced": "Avancerad",
+    "All": "Alla",
+    "And": "Och",
+    "Any": "Vilken som helst",
+    "Architecture": "Arkitektur",
+    "Audit": "Granskning",
+    "BaseCodeOn": "Använd kodmall",
+    "Browse": "Bläddra",
+    "Cancel": "Avbryt",
+    "CancelItems": "Är du säker på att du vill avbryta de valda {count, plural, one {objektet} other {objekten}}?",
+    "CancelMessage": "Är du säker på att du vill avbryta och förlora alla osparade ändringar?",
+    "ChangePassword": "Ändra lösenord",
+    "Clear": "Rensa",
+    "Close": "Stäng",
+    "CommunityFlows": "Gemenskapsflöden",
+    "Confirm": "Bekräfta",
+    "CopiedToClipboard": "Kopierade ''{text}'' till urklipp.",
+    "Copy": "Kopiera",
+    "CopyToClipboard": "Kopiera till urklipp",
+    "Decrease": "Minska",
+    "Default": "Standard",
+    "Delete": "Ta bort",
+    "DeleteItems": "Är du säker på att du vill ta bort de valda {count, plural, one {objektet} other {objekten}}?",
+    "DeleteLibraryFiles": "Är du säker på att du vill ta bort de valda {count, plural, one {filen} other {filerna}}?\n\nObservera att detta inte kommer att ta bort {count, plural, one {filen} other {filerna}} från disken, {count, plural, one {den} other {de}} kommer bara att tas bort från FileFlows-databasen.",
+    "DeleteLibraryFilesPhysicallyMessage": "Är du säker på att du vill ta bort de valda {count, plural, one {filen} other {filerna}}?\n\nObservera att detta permanent kommer att ta bort {count, plural, one {filen} other {filerna}} från disken och kan inte ångras.",
+    "DeleteLibraryFilesPhysicallySwitch": "Ta bort filer från disken",
+    "Deleting": "Tar bort",
+    "Description": "Beskrivning",
+    "Disabled": "Inaktiverad",
+    "Disconnected": "Frånkopplad",
+    "Discord": "Discord",
+    "Download": "Ladda ner",
+    "DownloadLog": "Ladda ner logg",
+    "DownloadLogShort": "Logg",
+    "Duplicate": "Duplicera",
+    "Edit": "Redigera",
+    "EditSubFlow": "Redigera delflöde",
+    "Enabled": "Aktiverad",
+    "Execute": "Kör",
+    "Executing": "Körs",
+    "Export": "Exportera",
+    "Failed": "Misslyckades",
+    "Fields": "Fält",
+    "Filter": "Filter",
+    "FilterPlaceholder": "Filtrera (/)",
+    "Finish": "Slutför",
+    "Flow": "Flöde",
+    "FlowElement": "Flödeselement",
+    "FlowElements": "Flödeselement",
+    "ForceProcessing": "Tvinga bearbetning",
+    "Forum": "Forum",
+    "Help": "Hjälp",
+    "Import": "Importera",
+    "Increase": "Öka",
+    "Input": "Inmatning",
+    "Installed": "Installerad",
+    "InternalProcessingNode": "Intern bearbetningsnod",
+    "InUse": "I bruk",
+    "LastRun": "Senaste körning",
+    "LastScanned": "Senast skannad",
+    "License": "Licens",
+    "Loading": "Laddar",
+    "Log": "Logg",
+    "Logout": "Logga ut",
+    "LogPartialNotAvailable": "Kunde inte hitta delad logg för nod.",
+    "MappingIssue": "Mappningsproblem",
+    "Memory": "Minne",
+    "MissingDependencies": "Saknade beroenden",
+    "MissingDependenciesMessage": "Följande saknade plugins måste laddas ner innan du använder denna mall:\n\n#LIST#",
+    "MonthShort": "Mån",
+    "Name": "Namn",
+    "Never": "Aldrig",
+    "Next": "Nästa",
+    "No": "Nej",
+    "NoAuditHistoryAvailable": "Ingen granskningshistorik tillgänglig",
+    "Node": "Nod",
+    "NoFilesCurrentlyProcessing": "Inga filer som bearbetas för närvarande",
+    "NoFilesRecentlyFinished": "Inga filer nyligen avslutade",
+    "None": "Ingen",
+    "NoUpcomingFiles": "Inga kommande filer",
+    "Number": "Nummer",
+    "Ok": "OK",
+    "Open": "Öppna",
+    "OperatingSystem": "Operativsystem",
+    "Other": "Annat",
+    "Output": "Utdata",
+    "Paste": "Klistra in",
+    "Pause": "Pausa bearbetning",
+    "Paused": "Återuppta bearbetning",
+    "PausedWithTime": "Återuppta om",
+    "Percent": "Procent",
+    "Pixels": "Pixlar",
+    "Plugins": "Plugins",
+    "PossibilityDisconnected": "Möjligtvis frånkopplad",
+    "Previous": "Föregående",
+    "ProcessingPaused": "Bearbetningen är för närvarande pausad",
+    "Prompt": "Uppmaning",
+    "Properties": "Egenskaper",
+    "ReadOnly": "Skrivskyddad",
+    "Redo": "Gör om",
+    "Refresh": "Uppdatera",
+    "Remove": "Ta bort",
+    "Repository": "Förråd",
+    "Reprocess": "Bearbeta om",
+    "Rescan": "Skanna om",
+    "Reset": "Återställ",
+    "ResetLayout": "Återställ layout",
+    "Restore": "Återställ",
+    "RestoredFailedMessage": "Misslyckades med att återställa {type}",
+    "RestoredMessage": "{type} återställd",
+    "Restoring": "Återställer",
+    "Resume": "Återuppta",
+    "ReturnCode": "Returkod",
+    "Revisions": "Revisioner",
+    "Run": "Kör",
+    "RunAt": "Kör vid",
+    "RunHistory": "Körhistorik",
+    "Running": "Kör",
+    "Save": "Spara",
+    "Saving": "Sparar",
+    "Savings": "Besparingar",
+    "Schedule": "Schema",
+    "Scripts": "Skript",
+    "Search": "Sök",
+    "Searching": "Söker",
+    "Select": "Välj",
+    "SelectOne": "Välj en",
+    "SetStatusProcessed": "Markera som bearbetad",
+    "Settings": "Inställningar",
+    "ShowHidden": "Visa dolda",
+    "Size": "Storlek",
+    "SortBy": "Sortera efter",
+    "SpaceIncrease": "{size} ökning, {items} objekt",
+    "SpaceSavings": "{size} sparat, {items} objekt",
+    "Status": "Status",
+    "SubFlow": "Delflöde",
+    "SubFlows": "Delflöden",
+    "Success": "Lyckades",
+    "Tag": "Tagg",
+    "Test": "Test",
+    "Time": "Tid",
+    "Total": "Totalt",
+    "Trigger": "Utlösa",
+    "Type": "Typ",
+    "Undo": "Ångra",
+    "UnsavedChanges": "Osparade ändringar",
+    "Update": "Uppdatera",
+    "UpdateAll": "Uppdatera alla",
+    "UpdateAvailable": "Ny version tillgänglig {version}",
+    "UsedBy": "Används av",
+    "Version": "Version",
+    "VersionNumber": "Version: {version}",
+    "View": "Visa",
+    "ViewLog": "Visa logg",
+    "WeekShort": "Vecka",
+    "When": "När",
+    "Yes": "Ja",
+    "DateRanges": {
+      "AnyTime": "När som helst",
+      "Last12Months": "Senaste 12 månaderna",
+      "Last24Hours": "Senaste 24 timmarna",
+      "Last31Days": "Senaste 31 dagarna",
+      "Last3Days": "Senaste 3 dagarna",
+      "Last3Months": "Senaste 3 månaderna",
+      "Last6Months": "Senaste 6 månaderna",
+      "Last7Days": "Senaste 7 dagarna",
+      "Live": "Live",
+      "Today": "Idag",
+      "Yesterday": "Igår"
+    },
+    "ObsoleteConfirm": {
+      "Message": "Det rekommenderas att du byter till ett annat flödeselement.",
+      "Question": "Detta flödeselement är nu föråldrat och kommer snart att tas bort. Är du säker på att du vill använda detta?",
+      "Title": "Föråldrat flödeselement"
+    }
+  },
+  "AuditActions": {
+    "Added": "{Type} ''{Name}'' tillagd",
+    "ChangePassword": "Användare ''{User}'' ändrade lösenord",
+    "Deleted": "{Type} ''{Name}'' raderad",
+    "Login": "Användare ''{User}'' loggade in",
+    "LoginFailed": "Inloggning misslyckades för användare ''{User}''",
+    "PasswordReset": "Användare ''{User}'' återställde sitt lösenord",
+    "PasswordResetRequest": "Användare ''{User}'' begärde en återställning av lösenord",
+    "SettingsUpdated": "Inställningar uppdaterade",
+    "Updated": "{Type} ''{Name}'' uppdaterad"
+  },
+  "Dialogs": {
+    "AddFile": {
+      "Description": "Lägg manuellt till filer eller URL:er för behandling.",
+      "Title": "Lägg till fil",
+      "Fields": {
+        "AnyNode": "Vilken nod som helst",
+        "Flow": "Flöde",
+        "List": "Lista",
+        "Mode": "Indata-läge",
+        "Node": "Nod",
+        "Raw": "Bulk Indata (Textblock)"
+      }
+    },
+    "AuditEntry": {
+      "ViewerTitle": "Ändringar",
+      "Columns": {
+        "Field": "Fält",
+        "Value": "Värde"
+      }
+    },
+    "ChangePassword": {
+      "Changed": "Lösenord ändrat",
+      "InvalidPassword": "Gammalt lösenord är ogiltigt",
+      "MinimumLength": "Nytt lösenord är för kort",
+      "NewPassword": "Nytt lösenord",
+      "NewPasswordConfirm": "Bekräfta",
+      "OldPassword": "Gammalt lösenord",
+      "PasswordMismatch": "Lösenorden matchar inte.",
+      "Title": "Ändra lösenord"
+    },
+    "FileBrowser": {
+      "DirectoryTitle": "Välj en katalog",
+      "FileTitle": "Välj en fil"
+    },
+    "FlowTemplatePicker": {
+      "Title": "Välj en mall att utgå ifrån"
+    },
+    "Import": {
+      "Message": "Välj ett exporterad flöde att importera till systemet.",
+      "Title": "Importera flöde"
+    },
+    "ImportScript": {
+      "Title": "Importera skript",
+      "Messages": {
+        "NoMoreImports": "Det finns inga fler importer tillgängliga för detta skript"
+      }
+    },
+    "PauseDialog": {
+      "Message": "Välj hur länge behandlingen ska pausas.\nObs: De aktuella flödena kommer att fortsätta köras, men inga andra flöden kommer att köras tills tiden är slut.",
+      "Title": "Pausa behandling"
+    },
+    "ReprocessDialog": {
+      "Description": "Bearbeta om de valda filerna med följande parametrar",
+      "Title": "Bearbeta om",
+      "Fields": {
+        "AnyNode": "Vilken nod som helst",
+        "BottomOfQueue": "Botten av kön",
+        "CustomVariables": "Anpassade variabler",
+        "CustomVariablesKey": "Anpassad variabel",
+        "CustomVariablesMode": "Anpassade variabler",
+        "CustomVariablesValue": "Värde",
+        "Flow": "Flöde",
+        "Merge": "Sammanfoga anpassade variabler med original",
+        "Node": "Nod",
+        "Original": "Använd original anpassade variabler",
+        "Position": "Position",
+        "Replace": "Ersätt original anpassade variabler",
+        "SameFlow": "Ingen ändring",
+        "TopOfQueue": "Topp av kön"
+      },
+      "ProcessOptions": {
+        "Description": "Ändra behandlingsparametrarna för de valda filerna",
+        "Title": "Behandlingsalternativ"
+      }
+    },
+    "ResumeDialog": {
+      "Message": "Är du säker på att du vill återuppta behandlingen?",
+      "Title": "Återuppta behandling"
+    },
+    "ScriptLanguage": {
+      "Title": "Skript språk",
+      "Labels": {
+        "BatchDescription": "Batchfiler kan endast köras på Windows-system. De kan läsa grundläggande variabler men kan inte uppdatera eller komma åt FileFlows-objekt under körning.",
+        "CSharpDescription": "C#-skript kan interagera med fler delar av FileFlows och är de mest kraftfulla. Genom att använda samma språk som FileFlows, möjliggör de större systeminteraktion.",
+        "FileDisplayName": "Visningsnamn för fil",
+        "FileDisplayNameDescription": "Ett specialiserat skript som anpassar hur filnamn visas i FileFlows webbkonsol. Detta skript ändrar inte de faktiska filerna, bara hur de visas i gränssnittet.",
+        "JavaScriptDescription": "JavaScript-skript körs inom FileFlows-köraren, vilket gör att du kan läsa och skriva variabler samt få tillgång till alla hjälpfunktioner inom FileFlows.",
+        "PowerShellDescription": "PowerShell-skript kan endast köras på Windows-system. De kan läsa grundläggande variabler men kan inte uppdatera eller komma åt FileFlows-objekt under körning.",
+        "ShellDescription": "Shell-skript körs på Unix-baserade system (Linux, MacOS, Docker). De kan läsa grundläggande variabler men kan inte uppdatera eller komma åt FileFlows-objekt under körning."
+      }
+    }
+  },
+  "DockerMods": {
+    "7Zip": {
+      "Description": "7-Zip är en gratis och öppen källkodsfilarkiverare, ett verktyg som används för att placera grupper av filer i komprimerade behållare som kallas \"arkiv\".",
+      "Label": "7-Zip"
+    },
+    "Comskip": {
+      "Description": "Comskip är en applikation som används för kommersiell detektering i videofiler. Den analyserar MPEG- eller H.264-filer och genererar utdatafiler som innehåller platsen för reklamer.",
+      "Label": "comskip"
+    },
+    "Docker": {
+      "Description": "Installerar Docker inuti Docker. Detta gör att du kan starta syskon-Docker-behållare.",
+      "Label": "Docker"
+    },
+    "FFmpeg6": {
+      "Description": "FFmpeg är ett gratis och öppen källkodsprogram som består av ett paket med bibliotek och program för hantering av video, ljud och andra multimediainnehåll. I dess kärna finns kommandoradsverktyget ffmpeg, utformat för att bearbeta video- och ljudfiler.",
+      "Label": "FFmpeg6"
+    },
+    "Git": {
+      "Description": "Git förenklar processen att ladda ner och hantera olika resurser, som programvarupaket eller konfigurationer, från fjärrrepositoryn, vilket gör det till ett viktigt verktyg för användare som söker effektiv åtkomst till filer och projekt.",
+      "Label": "Git"
+    },
+    "Htop": {
+      "Description": "htop är en interaktiv processvisare och systemövervakare för Unix-liknande operativsystem som ger ett användarvänligt gränssnitt för att övervaka systemresurser och hantera processer.",
+      "Label": "htop"
+    },
+    "ImageMagick": {
+      "Description": "ImageMagick, som anropas från kommandoraden som magick, är en gratis och öppen källkodsprogramsvit för att visa, skapa, konvertera, ändra och redigera rasterbilder.",
+      "Label": "ImageMagick"
+    },
+    "Java": {
+      "Description": "OpenJDK är en öppen källkodsimplementation av Java Platform, Standard Edition (Java SE), som tillhandahåller en gratis och plattformsoberoende utvecklingsmiljö för att bygga och köra Java-applikationer.",
+      "Label": "Java"
+    },
+    "MKVToolNix": {
+      "Description": "MKVToolNix är en uppsättning verktyg för att skapa, ändra, dela, slå samman och inspektera Matroska (MKV) filer.",
+      "Label": "MKVToolNix"
+    },
+    "Nano": {
+      "Description": "Nano är en enkel och användarvänlig textredigerare för Unix-liknande operativsystem, som erbjuder grundläggande redigeringsfunktioner i en terminalmiljö.",
+      "Label": "nano"
+    },
+    "Neofetch": {
+      "Description": "Neofetch är ett systeminformationsverktyg skrivet i Bash-skript. Som standard visas en logotyp för distributionen på vänster sida, återgiven i ASCII-konst.",
+      "Label": "Neofetch"
+    },
+    "Nodejs": {
+      "Description": "Node.js är en öppen källkods, plattformsoberoende JavaScript-runtime-miljö som kör JavaScript-kod utanför en webbläsare, vilket gör att utvecklare kan bygga server- och nätverksapplikationer.",
+      "Label": "Node.js"
+    },
+    "Python3": {
+      "Description": "Python 3 är ett högpresterande, tolkad programmeringsspråk känt för sin enkelhet, läsbarhet och mångsidighet, som är allmänt använt för webbapplikationer, dataanalys, artificiell intelligens och skriptuppgifter.",
+      "Label": "Python 3"
+    },
+    "Rar": {
+      "Description": "RAR är ett arkivfilformat som används för datakomprimering, medan UNRAR är en programvara för att extrahera innehåll från RAR-arkiv.",
+      "Label": "rar"
+    },
+    "Vim": {
+      "Description": "Vim är ett gratis och öppet källkodsprogram för textredigering som är baserat på skärm. Det är en förbättrad klon av vi.",
+      "Label": "Vim"
+    }
+  },
+  "Enums": {
+    "AuditAction": {
+      "Added": "Tillagd",
+      "ChangePassword": "Ändra lösenord",
+      "Deleted": "Raderad",
+      "Login": "Inloggning",
+      "LoginFailed": "Inloggning misslyckades",
+      "PasswordReset": "Återställning av lösenord",
+      "PasswordResetRequest": "Begäran om återställning av lösenord",
+      "Updated": "Uppdaterad"
+    },
+    "DateCompareMode": {
+      "After": "Efter",
+      "Any": "Vilken som helst",
+      "Before": "Innan",
+      "Between": "Mellan",
+      "GreaterThan": "Större än",
+      "LessThan": "Mindre än",
+      "NotBetween": "Inte mellan"
+    },
+    "Days": {
+      "Fri": "Fre",
+      "Friday": "Fredag",
+      "Mon": "Mån",
+      "Monday": "Måndag",
+      "Sat": "Lör",
+      "Saturday": "Lördag",
+      "Sun": "Sön",
+      "Sunday": "Söndag",
+      "Thu": "Tor",
+      "Thursday": "Torsdag",
+      "Tue": "Tis",
+      "Tuesday": "Tisdag",
+      "Wed": "Ons",
+      "Wednesday": "Onsdag"
+    },
+    "FilesSortBy": {
+      "Savings": "Besparingar",
+      "SavingsDesc": "Besparingar i fallande ordning",
+      "Size": "Storlek",
+      "SizeDesc": "Storlek i fallande ordning",
+      "Time": "Tid",
+      "TimeDesc": "Tid i fallande ordning"
+    },
+    "FileStatus": {
+      "Any": "Vilken som helst",
+      "Disabled": "Inaktiverad",
+      "Duplicate": "Duplicerad",
+      "FlowNotFound": "Flöde hittades inte",
+      "MappingIssue": "Karta problem",
+      "MissingLibrary": "Saknad bibliotek",
+      "OnHold": "På vänt",
+      "OutOfSchedule": "Utanför schemat",
+      "Processed": "Bearbetad",
+      "Processing": "Bearbetar",
+      "ProcessingFailed": "Bearbetning misslyckades",
+      "ReprocessByFlow": "Bearbeta om genom flöde",
+      "Unprocessed": "Obearbetad"
+    },
+    "FlowType": {
+      "Failure": "Misslyckande",
+      "Standard": "Standard",
+      "SubFlow": "Underflöde"
+    },
+    "LogType": {
+      "Debug": "Felsökning",
+      "Error": "Fel",
+      "Info": "Information",
+      "Warning": "Varning"
+    },
+    "MatchRange": {
+      "After": "Efter",
+      "Any": "Vilken som helst",
+      "Before": "Innan",
+      "Between": "Mellan",
+      "GreaterThan": "Större än",
+      "LessThan": "Mindre än",
+      "NotBetween": "Inte mellan"
+    },
+    "MathValue": {
+      "Between": "Mellan",
+      "Equals": "Lika med",
+      "GreaterThan": "Större än",
+      "GreaterThanOrEqual": "Större eller lika med",
+      "LessThan": "Mindre än",
+      "LessThanOrEqual": "Mindre eller lika med",
+      "NotBetween": "Inte mellan",
+      "NotEquals": "Inte lika med"
+    },
+    "Periods": {
+      "Days": "Dagar",
+      "Hours": "Timmar",
+      "Minutes": "Minuter",
+      "Weeks": "Veckor"
+    },
+    "ProcessingNodeStatus": {
+      "Disabled": "Inaktiverad",
+      "HigherPriorityNodeAvailable": "Högre prioriterad nod tillgänglig",
+      "Idle": "Vila",
+      "InstallingDockerMods": "Installerar DockerMods",
+      "MaximumRunnersReached": "Maximalt antal löpare nått",
+      "Offline": "Offline",
+      "OutOfSchedule": "Utanför schemat",
+      "Processing": "Bearbetar",
+      "RestrictedByLibrary": "Begränsad av bibliotek",
+      "VersionMismatch": "Versionskonflikt"
+    },
+    "ProcessingOrder": {
+      "Alphabetical": "Alfabetisk",
+      "AsFound": "Som funnits (Standard)",
+      "LargestFirst": "Störst först",
+      "NewestFirst": "Nyast först",
+      "OldestFirst": "Äldst först",
+      "Random": "Slumptal",
+      "SmallestFirst": "Minst först"
+    },
+    "ProcessingPriority": {
+      "High": "Hög",
+      "Highest": "Högsta",
+      "Low": "Låg",
+      "Lowest": "Lägsta",
+      "Normal": "Normal"
+    },
+    "ReportDirection": {
+      "Inbound": "Inkommande",
+      "Outbound": "Utgående"
+    },
+    "ReportSchedule": {
+      "Daily": "Dagligen",
+      "Monthly": "Månadsvis",
+      "Weekly": "Veckovis"
+    },
+    "SecurityMode": {
+      "Local": "Lokala användare",
+      "Off": "Ingen",
+      "OpenIdConnect": "Open ID Connect"
+    },
+    "TaskType": {
+      "FileAdded": "Fil tillagd",
+      "FileFlowsServerUpdateAvailable": "Uppdatering tillgänglig",
+      "FileFlowsServerUpdating": "Server uppdaterar",
+      "FileProcessed": "Fil bearbetad",
+      "FileProcessFailed": "Bearbetning misslyckades",
+      "FileProcessing": "Fil bearbetas",
+      "FileProcessSuccess": "Bearbetning lyckades"
+    },
+    "UserRole": {
+      "DockerMods": "DockerMods",
+      "Files": "Filer",
+      "Flows": "Flöden",
+      "Libraries": "Bibliotek",
+      "Log": "Logg",
+      "Nodes": "Noder",
+      "PauseProcessing": "Pausa bearbetning",
+      "Plugins": "Plugins",
+      "Revisions": "Revisioner",
+      "Scripts": "Skript",
+      "Tasks": "Uppgifter",
+      "Variables": "Variabler",
+      "Webhooks": "Webhooks"
+    }
+  },
+  "ErrorMessages": {
+    "BothMathValuesRequired": "Båda värdena måste anges",
+    "CannotDeleteInternalNode": "Du kan inte ta bort den interna bearbetningsnoden.",
+    "DeleteFailed": "Borttagning misslyckades",
+    "DuplicatesFound": "Dubbletter hittades",
+    "NameInUse": "Namnet används redan",
+    "NameRequired": "Namn krävs",
+    "NoFlowSpecified": "Ingen flöde angiven, du måste välja ett flöde för att skapa ett bibliotek",
+    "NotAllFilesCouldBeDeleted": "Inte alla filer kunde raderas.\nSe loggen för mer information.",
+    "NotFound": "Objektet hittades inte",
+    "SaveFailed": "Sparande misslyckades",
+    "SetFileStatus": "Misslyckades med att ställa in filstatus",
+    "UnexpectedError": "Ett oväntat fel inträffade"
+  },
+  "Flow": {
+    "ErrorMessages": {
+      "NoInput": "Ingen ingångsnod specificerad, varje flöde behöver en ingångsnod",
+      "NoParts": "Inga flödesdelar specificerade, du måste ha några delar för att spara ett flöde",
+      "TooManyInputNodes": "Du kan endast ha en ingångsnod"
+    },
+    "Parts": {
+      "Color": "Färg",
+      "Color-Placeholder": "Anpassad färg",
+      "FileExtension": {
+        "Fields": {
+          "Extensions": "Filändelser",
+          "Extensions-Help": "En lista över filändelser som, om de matchar, kommer att matas ut till den första utgångsnoden, annars kommer den andra utgångsnoden att användas."
+        }
+      }
+    }
+  },
+  "Inputs": {
+    "InputDateCompare": {
+      "Help": "*Större än*: Matcha om datumet är äldre än den angivna perioden.\n*Mindre än*: Matcha om datumet är nyare än den angivna perioden.\n*Mellan*: Matchar om datumet ligger inom det angivna intervallet.\n*Innan*: Matcha om datumet är före det angivna datumet.\n*Efter*: Matcha om datumet är efter det angivna datumet."
+    }
+  },
+  "MenuGroups": {
+    "Admin": "Admin",
+    "Configuration": "Konfiguration",
+    "Extensions": "Tillägg",
+    "Information": "Information",
+    "Overview": "Översikt",
+    "Security": "Säkerhet",
+    "System": "System",
+    "User": "Användare"
+  },
+  "Pages": {
+    "AccessControl": {
+      "Single": "Åtkomstkontrollpost",
+      "Title": "Åtkomstkontroll",
+      "Labels": {
+        "Console": "Webbkonsol",
+        "Remote": "Fjärr / Bearbetningsnoder"
+      },
+      "Buttons": {
+        "MoveDown": "Flytta ner",
+        "MoveUp": "Flytta upp"
+      },
+      "Columns": {
+        "Allow": "Tillåt",
+        "End": "Slut",
+        "Start": "Start"
+      },
+      "Fields": {
+        "Allow": "Tillåt",
+        "Allow-Help": "Om denna åtkomstkontrollpost får åtkomst till systemet eller inte.",
+        "Description": "Beskrivning",
+        "Description-Placeholder": "En valfri beskrivning för att beskriva denna post",
+        "End": "Slutadress",
+        "End-Help": "Valfri slut IP-adress, måste vara större än startadressen om den anges och av samma typ. Annars kommer detta slutvärde att ignoreras.",
+        "End-Placeholder": "Valfri slutadress",
+        "Start": "Startadress",
+        "Start-Help": "Start IP-adressen kan vara antingen IPv4 eller IPv6"
+      },
+      "Messages": {
+        "EndMustBeGreaterThan": "Slutadressen måste vara större än startadressen",
+        "FamilyMismatch": "Start- och slut IP-adresserna måste vara av samma typ",
+        "InvalidIPAddress": "'{address}' är inte en giltig IP-adress.",
+        "MoveFailed": "Misslyckades med att flytta poster"
+      }
+    },
+    "Audit": {
+      "Title": "Granskningslogg",
+      "Columns": {
+        "Action": "Åtgärd",
+        "Date": "Datum",
+        "IPAddress": "IP-adress",
+        "Operator": "Operatör",
+        "Summary": "Sammanfattning",
+        "Type": "Typ"
+      }
+    },
+    "Dashboard": {
+      "Title": "Instrumentpanel",
+      "Labels": {
+        "AddWidget": "Lägg till widget",
+        "CurrentlyPaused": "FileFlows är för närvarande pausat!",
+        "FinalSize": "Slutlig storlek",
+        "OriginalSize": "Originalstorlek",
+        "Savings": "Besparingar",
+        "ShrinkageTitle": "Utrymme sparat"
+      },
+      "ErrorMessages": {
+        "FailedToCreate": "Misslyckades med att skapa instrumentpanelen",
+        "LogFailed": "Misslyckades med att hämta logg för arbetare"
+      },
+      "Fields": {
+        "Current": "Aktuell",
+        "CurrentStep": "Steg",
+        "File": "Fil",
+        "Library": "Bibliotek",
+        "Log": "Logg",
+        "Node": "Nod",
+        "Overall": "Totalt",
+        "ProcessingTime": "Bearbetningstid",
+        "RecentlyFinished": "Nyligen avslutad",
+        "Uid": "UID",
+        "Upcoming": "Kommande",
+        "WorkingFile": "Arbetsfil"
+      },
+      "Messages": {
+        "CancelMessage": "Är du säker på att du vill avbryta arbetaren för {RelativeFile}?",
+        "DeleteDashboard": "Är du säker på att du vill radera den aktuella instrumentpanelen?\n\nDetta kan inte ångras.",
+        "DeleteWidget": "Är du säker på att du vill ta bort denna widget?",
+        "Waiting": "Väntar på en fil att bearbeta"
+      },
+      "Tabs": {
+        "Dashboard": "Instrumentbräda",
+        "Savings": "Besparingar",
+        "Statistics": "Statistik"
+      },
+      "Widgets": {
+        "CpuRam": {
+          "Peak": "{num} Topp"
+        },
+        "Files": {
+          "Failed": "{count, plural, zero {Misslyckad} other {# Misslyckade}}",
+          "Finished": "{count, plural, zero {Färdig} other {# Färdiga}}",
+          "NoFailedFiles": "Inga misslyckade filer",
+          "NoRecentlyFinishedFiles": "Inga nyligen avslutade filer",
+          "NoUpcomingFiles": "Inga kommande filer",
+          "Title": "Filer",
+          "Upcoming": "{count, plural, zero {Kommande} other {# Kommande}}"
+        },
+        "FilesOverview": {
+          "FilesProcessed": "Bearbetade filer",
+          "PerDay": "{num} per dag",
+          "PerHour": "{num} per timme",
+          "StorageSaved": "Sparad lagring"
+        },
+        "LargestSavings": {
+          "Title": "Största Besparingarna"
+        },
+        "LibrarySavings": {
+          "NoSavings": "Inga besparingar",
+          "Title": "Besparingar"
+        },
+        "LibrarySavingsSummary": {
+          "Files": "{count, plural, one {# Fil} other {# Filer}}"
+        },
+        "Status": {
+          "CurrentlyProcessing": "Bearbetar för närvarande {count, plural, one {# fil} other {# filer}}",
+          "DockerModUpdates": "{count, plural, one {# DockerMod-uppdatering} other {# DockerMod-uppdateringar}}",
+          "FileFlowsUpdate": "FileFlows {version} tillgänglig",
+          "Idle": "Systemet är för närvarande inaktivt",
+          "OutOfSchedule": "Utanför schemat",
+          "OutOfScheduleDay": "Planerad att återupptas på {day} kl {time}",
+          "OutOfScheduleHours": "Planerad att återupptas om ungefär {hours, plural, one {en timme} other {# timmar}}",
+          "OutOfScheduleMinutes": "Planerad att återupptas om {minutes, plural, one {mindre än en minut} other {# minuter}}",
+          "PluginUpdates": "{count, plural, one {# Pluginuppdatering} other {# Pluginuppdateringar}}",
+          "ScriptUpdates": "{count, plural, one {# Skriptuppdatering} other {# Skriptuppdateringar}}"
+        },
+        "System": {
+          "Runners": "{count, plural, zero {Processorer} one {# Processor} other {# Processorer}}",
+          "Title": "System",
+          "Updates": "{count, plural, zero {Uppdateringar} one {# Uppdatering} other {# Uppdateringar}}"
+        },
+        "Updates": {
+          "DockerMods": "{count, plural, zero {DockerMods} one {# DockerMod} other {# DockerMods}}",
+          "Fixed": "Fixat",
+          "New": "Nytt",
+          "Plugins": "{count, plural, zero {Plugins} one {# Plugin} other {# Plugins}}",
+          "Scripts": "{count, plural, zero {Skript} one {# Skript} other {# Skript}}",
+          "Title": "Uppdateringar"
+        }
+      }
+    },
+    "DockerMod": {
+      "Plural": "DockerMods",
+      "Title": "DockerMod",
+      "Labels": {
+        "Revision": "Revision",
+        "UpdateAvailable": "Uppdatering tillgänglig"
+      },
+      "Fields": {
+        "Code": "Kod",
+        "Description": "Beskrivning"
+      },
+      "Messages": {
+        "FailedToExport": "Misslyckades med att exportera.",
+        "Updating": "Uppdaterar"
+      }
+    },
+    "FileFlowsTask": {
+      "Title": "Uppgift"
+    },
+    "FileFlowsTaskHistory": {
+      "Title": "Uppgiftshistorik",
+      "Fields": {
+        "RunHistory": "Historik"
+      }
+    },
+    "FileFlowsTaskRun": {
+      "Title": "Uppgiftskörning",
+      "Fields": {
+        "Log": "Logg",
+        "ReturnValue": "Returvärde",
+        "RunAt": "Körd vid",
+        "Success": "Framgång"
+      }
+    },
+    "Flow": {
+      "Title": "Flöde",
+      "Labels": {
+        "EditFlow": "Flöde: {Name}",
+        "FlowProperties": "Flödesegenskaper",
+        "OpenScriptBrowser": "Öppna Skriptbläddrare",
+        "OpenSubFlowBrowser": "Öppna Underskriptbläddrare",
+        "SubFlowBrowser": "Underskriptbläddrare",
+        "SubFlowHelp": "För att lägga till indatafält till ett underskript så att du kan skicka in anpassade parametrar till detta underskript, skapa dessa på fliken `Fält`.\n\nEtt underskript måste ha en enda `Indata`, vilket kan vara valfria giltiga indataflödeselement, t.ex. `Indatafil`, `Videofil` osv."
+      },
+      "Fields": {
+        "Author": "Författare",
+        "Author-Help": "Valfritt ange författaren till detta flöde.",
+        "Description": "Beskrivning.",
+        "MinimumVersion": "Minimi version",
+        "Outputs": "Utgångar",
+        "Outputs-Help": "Antalet utgångar detta underskript har. Detta är antalet utgångar som kommer att vara tillgängliga när detta underskript används i ett annat flöde.",
+        "OutputsKey": "Utgång",
+        "OutputsValue": "Beskrivning",
+        "Tags": "Taggar",
+        "Variables": "Variabler",
+        "VariablesKey": "Namn",
+        "VariablesValue": "Värde",
+        "Field": {
+          "Default": "Standard",
+          "DeleteIfEmpty": "Ta bort om tomt",
+          "DeleteIfEmpty-Help": "Om några värden läggs till här och användaren väljer 'Ta bort original' så kommer mappen också att tas bort om ingen fil matchar några av dessa reguljära uttryck.",
+          "Description": "En valfri beskrivning som ska visas med detta fält. Detta kan vara hjältext för fältet.",
+          "FlowElementField": "Elementfält",
+          "FlowElementField-Help": "Valfritt, ange detta i formatet '{Uid}.{FieldName}', t.ex. '53a72207-34a2-4b71-b3d8-8b12764a85fe.Force' för att ställa in ett fält i ett flödeselement direkt. Se hjälp för mer information.",
+          "IfName": "Om",
+          "IfName-Help": "Om detta endast ska visas för användaren om ett annat värde matchar dessa villkor.",
+          "IfNot": "Om inte",
+          "IfNot-Help": "Om värdet ska inverteras och endast visas om värdet inte matchar.",
+          "IfValue": "Om värde",
+          "IfValue-Help": "Värdet att matcha mot, kan vara ett reguljärt uttryck. För booleaner använd true eller false.",
+          "Inverse": "Inverterad",
+          "Inverse-Help": "Om slider-värdena ska inverteras med lägre värden som visas till höger.",
+          "Maximum": "Maximalt",
+          "Minimum": "Minimalt",
+          "Options": "Alternativ",
+          "Options-Help": "En array av listaalternativ, för att ställa in en etikett och ett värde använd en |-separator, t.ex. `etikett|värde`",
+          "Required": "Obligatoriskt",
+          "Required-Help": "Om detta värde är obligatoriskt och måste anges."
+        }
+      },
+      "Messages": {
+        "Close": "Är du säker på att du vill lämna och förlora alla osparade ändringar?",
+        "FailedToLoadFlow": "Misslyckades med att ladda flödet.",
+        "LoadingFlow": "Laddar flöde"
+      }
+    },
+    "Flows": {
+      "Title": "Flöden",
+      "Labels": {
+        "FailureFlows": "Misslyckade flöden",
+        "StandardFlows": "Standardflöden",
+        "SubFlows": "Underskrifter"
+      },
+      "Buttons": {
+        "Repository": "Repository"
+      },
+      "Fields": {
+        "Author": "Författare",
+        "Template": "Mall"
+      },
+      "Messages": {
+        "DeleteUsed": "Du kan inte ta bort ett flöde som är i användning",
+        "Duplicated": "Flöde ''{name}'' duplicerat",
+        "FailedToExport": "Misslyckades med att exportera flöde(r).",
+        "FailureFlowDescription": "Detta är en speciell flödestyp som kommer att köras om något flöde misslyckas.\nFileFlows kommer att söka efter 'Standard' Misslyckande Flöde att använda om ett flöde misslyckas, om det inte hittas kommer bearbetningen omedelbart att stoppas.",
+        "FlowImported": "Flöde ''{name}'' importerat",
+        "LoadingTemplates": "Laddar mallar"
+      },
+      "Template": {
+        "Title": "Lägg till flöde",
+        "Fields": {
+          "PageDescription": "Välj en mall att basera flödet på, detta kommer att hjälpa dig att komma igång med ett flöde.",
+          "Template": "Mall"
+        }
+      }
+    },
+    "InitialConfig": {
+      "Fields": {
+        "EulaAccept": "Jag har läst och godkänner villkoren i slutanvändarlicensavtalet",
+        "Language": "Språk"
+      },
+      "Messages": {
+        "RunnersTop": "Ange antalet processer (runners) som kan bearbeta filer samtidigt i dina bibliotek.\n\nRunners är arbetarna som bearbetar filer i dina bibliotek. Ju fler runners du har, desto fler filer kan bearbetas samtidigt.\n\nDenna inställning kan justeras när som helst genom att redigera den interna bearbetningsnoden.",
+        "Welcome": "Välkommen till FileFlows! Tack för att du valde vår programvara.\n\nDenna guide leder dig genom de nödvändiga inställningsstegen, inklusive att acceptera EULA och välja plugins för att lägga till funktionalitet baserat på dina preferenser.\n\nVälj bland en mängd olika plugins anpassade för att bearbeta olika typer av filer, såsom video, ljud och bilder.",
+        "WelcomeUpdate": "Vi har nyligen uppdaterat vårt slutanvändarlicensavtal (EULA).\n\nTa en stund för att granska och godkänna de uppdaterade villkoren innan du fortsätter.\n\nDitt godkännande krävs för att fortsätta använda FileFlows.\n\nTack för att du valde FileFlows.",
+        "Finish": {
+          "Bottom": "Med dessa steg är du på god väg att maximera potentialen med FileFlows.\n\nOm du har några frågor eller behöver hjälp, tveka inte att kontakta vårt supportteam.",
+          "CreateALibrary": "Skapa ett Bibliotek:",
+          "CreateALibraryDescription": "Skapa ett bibliotek för att automatisera filbehandling.\nDitt bibliotek kommer automatiskt att upptäcka och behandla filer baserat på dina angivna kriterier,\nvilket förenklar ditt arbetsflöde utan behov av manuell inblandning.",
+          "CreateFirstFlow": "Skapa ditt Första Flöde:",
+          "CreateFirstFlowDescription": "Använd de plugins du har valt för att skapa ditt första flöde.\nOavsett om det handlar om att bearbeta videofiler, ljudspår, bilder eller någon annan typ av fil, ger ditt flöde\nmöjlighet att anpassa filhanteringen efter dina specifika behov, oavsett om de är enkla\neller komplexa.",
+          "Top": "Du har framgångsrikt konfigurerat FileFlows efter dina behov. Nu är det dags att sätta det i arbete!"
+        }
+      },
+      "Tabs": {
+        "DockerMods": "DockerMods",
+        "DockerModsDescription": "Välj vilka DockerMods som ska installeras",
+        "Eula": "EULA",
+        "EulaDescription": "Slutanvändarlicensavtal för FileFlows",
+        "Finish": "Avsluta",
+        "FinishDescription": "Initial konfiguration klar",
+        "Plugins": "Plugins",
+        "PluginsDescription": "Välj vilka plugins som ska installeras",
+        "Runners": "Processer",
+        "RunnersDescription": "Ange antalet processer",
+        "Welcome": "Välkommen",
+        "WelcomeDescription": "Välkommen till FileFlows"
+      }
+    },
+    "Libraries": {
+      "Title": "Bibliotek",
+      "Labels": {
+        "Files": "{TotalString} {TotalFiles, plural, one {Fil} other {Filer}}"
+      },
+      "ErrorMessages": {
+        "NoFlows": "Det finns inga konfigurerade flöden.\nSkapa ett flöde innan du lägger till eller uppdaterar ett bibliotek."
+      },
+      "Messages": {
+        "DeleteConfirm": "Är du säker på att du vill ta bort det valda {count, plural, one {bibliotek} other {biblioteken}}?",
+        "KeepLibraryFiles": "Behåll filer i databasen för statistik",
+        "Reprocess": {
+          "Message": "Är du säker på att du vill fortsätta med ombearbetningen av de valda biblioteken?\n\nDenna åtgärd kommer att markera alla filer som obearbetade och initiera deras ombearbetning. Observera att denna åtgärd inte kan ångras.",
+          "Title": "Ombearbeta valda bibliotek"
+        },
+        "Reset": {
+          "Message": "Är du säker på att du vill fortsätta med att återställa de valda biblioteken?\n\nDenna åtgärd kommer att ta bort alla filer och initiera en omscanning. Observera att denna åtgärd inte kan ångras.",
+          "Title": "Återställ valda bibliotek"
+        }
+      }
+    },
+    "Library": {
+      "Title": "Bibliotek",
+      "Labels": {
+        "CreationTime": "Skapelsedatum",
+        "Duplicated": "Biblioteket ''{name}'' duplicerat",
+        "FailedToDuplicate": "Misslyckades att duplicera",
+        "LastWriteTime": "Senast skrivna tid"
+      },
+      "Fields": {
+        "DetectFileCreation": "Filskapelse",
+        "DetectFileCreationDate": "",
+        "DetectFileCreationLower": "",
+        "DetectFileCreationUpper": "",
+        "DetectFileLastWritten": "Fil senast skriven",
+        "DetectFileLastWrittenDate": "",
+        "DetectFileLastWrittenLower": "",
+        "DetectFileLastWrittenUpper": "",
+        "DetectFileSize": "Filstorlek",
+        "DetectFileSizeLower": "",
+        "DetectFileSizeUpper": "",
+        "DetectionDescription": "Här kan du konfigurera ett bibliotek för att endast upptäcka filer som matchar de angivna mönstren.\n\nTill exempel gör detta att du endast kan inkludera filer som är\n\t- Filer som skapades för mindre än 7 dagar sedan\n\t- Filer som senast skrevs till mellan 3 och 7 dagar sedan\n\t- Filstorleken är större än 1 gigabyte",
+        "DownloadsDirectory": "Nedladdningsmapp",
+        "DownloadsDirectory-Help": "En särskild mapp där om en fil som har bearbetats framgångsrikt återupptäckts i denna mapp, kommer den filen automatiskt att bearbetas igen.\nDetta är användbart om du laddar ner en fil igen.",
+        "Enabled": "Aktiverad",
+        "ExcludeHidden": "Exkludera dolda",
+        "ExcludeHidden-Help": "När det är aktiverat kommer dolda filer och mappar inte att skannas",
+        "ExclusionFilters": "Exkluderingar",
+        "ExclusionFilters-Help": "Valfri lista över exkluderingar att köra mot filernas fullständiga namn.",
+        "Extensions": "Filändelser",
+        "Extensions-Help": "En valfri lista över filändelser för filer att inkludera i detta bibliotek.\nOm den lämnas tom kommer alla filer att inkluderas, om inte en filter eller exkluderingsfilter definieras på fliken `Avancerat`.",
+        "FileSizeDetectionInterval": "Filupptäcktsintervall",
+        "FileSizeDetectionInterval-Help": "Den tid i sekunder som ska vänta för att kontrollera filstorleken under biblioteksskannern. Använd detta om en annan applikation kanske skriver till en fil i bitar, t.ex. en PVR-applikation som skriver delar av en inspelning var 20:e sekund.",
+        "FileSizeDetectionInterval-Suffix": "Sekunder",
+        "Filters": "Filter",
+        "Filters-Help": "Valfri lista över filter att köra mot filernas fullständiga namn.",
+        "Flow": "Flöde",
+        "Folders": "Mappar",
+        "Folders-Help": "Om detta bibliotek bearbetar mappar istället för filer.\nDetta betyder inte att underliggande mappar skannas, ett bibliotek gör redan detta.\nDetta innebär att ett mappobjekt kommer att bearbetas istället för individuella filer.",
+        "FullScanDisabled": "Inaktivera fullständig skanning",
+        "FullScanDisabled-Help": "Den fullständiga skanningen syftar till att fånga eventuella filer som kan ha missats av filsystemets övervakningshändelser.",
+        "FullScanIntervalMinutes": "Intervall för fullständig skanning",
+        "FullScanIntervalMinutes-Help": "Intervallet när en fullständig skanning av detta bibliotek ska äga rum",
+        "HoldMinutes": "Håll minuter",
+        "HoldMinutes-Help": "Valfritt håll några filer som finns i detta bibliotek i detta antal minuter innan de bearbetas. Varje fil kommer att hållas under denna tid.",
+        "HoldMinutes-Suffix": "minuter",
+        "MaxRunners": "Max antal körningar",
+        "MaxRunners-Help": "Det maximala antalet körningar som kan bearbeta filer i detta bibliotek samtidigt.\nStäll in till 0 för obegränsat.",
+        "Name": "Namn",
+        "Path": "Sökväg",
+        "Priority": "Prioritet",
+        "Priority-Help": "Prioriteten med vilken filer ska bearbetas. Om ett bibliotek med högre prioritet har filer som väntar på att bearbetas, kommer dessa att göras först.",
+        "ProcessingOrder": "Bearbetningsordning",
+        "ProcessingOrder-Help": "Den ordning i vilken filer kommer att bearbetas av detta bibliotek.",
+        "ReprocessRecreatedFiles": "Bearbeta om återupptäckta filer",
+        "ReprocessRecreatedFiles-Help": "När det är aktiverat, om en fil återupptäckts med en annan skapelsestid än den som är registrerad, kommer filen automatiskt att sättas för att bearbetas igen.\nDetta är användbart i ett bibliotek av nedladdade filer, där du kanske laddar ner samma fil flera gånger och önskar bearbeta den varje gång.",
+        "Scan": "Skanna",
+        "Scan-Help": "När skanning är aktiverad kommer biblioteket rutinmässigt att skannas efter nytt innehåll.\nNär det är inaktiverat kommer biblioteket att lyssna efter filsystemets händelser för att upptäcka nya filer.\nDet är bäst att hålla detta avstängt om du inte har problem med att filer inte upptäcks.",
+        "ScanInterval": "Skanningsintervall",
+        "ScanInterval-Help": "Den kortaste möjliga tiden i sekunder mellan skanningar. Det garanteras inte att skanna vid detta intervall varje gång, eftersom en annan skanning kan pågå.",
+        "ScanInterval-Suffix": "Sekunder",
+        "Schedule": "Schema",
+        "ScheduleDescription": "Detta gör att du kan konfigurera när detta bibliotek kommer att vara aktivt.\n\nBiblioteksskannern kommer inte att köras mot detta bibliotek och inga filer kommer att bearbetas utanför schemat.\n",
+        "SkipFileAccessTests": "Hoppa över filåtkomsttester",
+        "SkipFileAccessTests-Help": "När det är aktiverat kommer biblioteket inte att testa om det kan läsa eller skriva till filen innan den läggs till i filerna i kön.",
+        "Template": "Mall",
+        "TopLevelOnly": "Endast på översta nivån",
+        "TopLevelOnly-Help": "Skanna endast filer i rotmappen och inga underliggande mappar kommer att sökas.",
+        "UpdateMovedFiles": "Uppdatera flyttade filer",
+        "UpdateMovedFiles-Help": "När det är aktiverat, om en fil har upptäckts som flyttad inom samma bibliotek, kommer den ursprungliga filen att uppdateras för att peka på denna nya fil.\nAnnars, när det är inaktiverat, kommer en kopia att läggas till istället.\n\nEn fil kommer att upptäckas som flyttad om den ursprungliga filen inte finns och en ny fil hittas med samma signatur.",
+        "UseFingerprinting": "Använd fingeravtryck",
+        "UseFingerprinting-Help": "När det är aktiverat kommer filer att ha en checksumma kört mot dem när de importeras och efter att ett flöde är slutfört. Eventuella matchande checksummafiler kommer att hoppas över från framtida bibliotekimporter.",
+        "WaitTimeSeconds": "Väntetid",
+        "WaitTimeSeconds-Help": "Antalet sekunder som måste ha passerat sedan den senaste ändringen skrevs till denna mapp för att den ska skannas in i biblioteket.",
+        "WaitTimeSeconds-Suffix": "sekunder"
+      }
+    },
+    "LibraryFile": {
+      "Fields": {
+        "CreationTime": "Skapelsedatum",
+        "ExecutedNodes": "Utförda flödeselement",
+        "FailureReason": "Felorsak",
+        "FinalMetadata": "Slutlig metadata",
+        "FinalSize": "Slutlig storlek",
+        "FinalSizeSuffix": "Byte",
+        "Fingerprint": "Fingeravtryck",
+        "Flow": "Flöde",
+        "Library": "Bibliotek",
+        "Log": "Logg",
+        "Name": "Originalfil",
+        "Node": "Bearbetningsnod",
+        "OriginalMetadata": "Ursprunglig metadata",
+        "OriginalSize": "Ursprunglig storlek",
+        "OriginalSizeSuffix": "Byte",
+        "OutputPath": "Utgångssökväg",
+        "ProcessingTime": "Bearbetningstid",
+        "Status": "Status"
+      },
+      "Tabs": {
+        "CustomVariables": "Anpassade variabler",
+        "FinalMetadata": "Utdata",
+        "OriginalMetadata": "Indata"
+      }
+    },
+    "LibraryFiles": {
+      "Title": "Filer",
+      "Labels": {
+        "ScanTriggered": "Skanning utlöses för alla aktiverade bibliotek"
+      },
+      "Buttons": {
+        "Ignore": "Ignorera",
+        "MoveToTop": "Flytta Till Toppen",
+        "Process": "Bearbeta",
+        "ProcessOptions": "Bearbeta Alternativ",
+        "Reprocess": "Bearbeta Igen",
+        "ToggleForce": "Växla Tvingad Bearbetning",
+        "Unhold": "Frigör",
+        "View": "Visa"
+      },
+      "Messages": {
+        "FailedToDownloadLog": "Misslyckades med att ladda ner logg",
+        "FailedToReprocess": "Misslyckades med att bearbeta igen",
+        "ReprocessingFile": "Fil skickad för bearbetning igen"
+      }
+    },
+    "Log": {
+      "Title": "Logg",
+      "Labels": {
+        "AutoRefresh": "Automatisk Uppdatering",
+        "FailedToDownloadLog": "Misslyckades med att ladda ner logg.",
+        "NoMatchingData": "Ingen matchande data"
+      },
+      "Fields": {
+        "File": "Fil",
+        "IncludeHigherSeverity": "Inkludera Högre Allvarlighetsgrad",
+        "Nodes": "Noder",
+        "Severity": "Allvarlighetsgrad",
+        "Source": "Källa",
+        "Text": "Text"
+      }
+    },
+    "Login": {
+      "Fields": {
+        "Cancel": "Avbryt",
+        "ForgotPassword": "Glömt Lösenord?",
+        "Login": "Logga In",
+        "Password": "Lösenord",
+        "Reset": "Återställ",
+        "Username": "Användarnamn",
+        "UsernameOrEmail": "Användarnamn eller E-post"
+      },
+      "Messages": {
+        "InvalidUsernameOrPassword": "Ogiltigt användarnamn eller lösenord",
+        "LockedOut": "För många felaktiga inloggningsförsök, du är för närvarande låst ute.",
+        "PasswordReset": "Återställning av Lösenord"
+      }
+    },
+    "Nodes": {
+      "Title": "Noder",
+      "Labels": {
+        "Address": "Adress",
+        "Disconnected": "Frånkopplad",
+        "DownloadNode": "Nedladdningsnod",
+        "FileFlowsServer": "Intern Bearbetningsnod",
+        "FilesProcessed": "Bearbetade Filer",
+        "Internal": "Intern",
+        "PossiblyDisconnected": "Möjligen Frånkopplad",
+        "Runners": "Körare",
+        "UpgradeRequired": "Uppgradering Krävs",
+        "UpgradeRequiredHint": "Servern och noderna måste vara på samma version",
+        "Version": "Version"
+      },
+      "Fields": {
+        "Address": "Adress",
+        "Enabled": "Aktiverad",
+        "FlowRunners": "Flödes Körare"
+      }
+    },
+    "Notifications": {
+      "Title": "Notifikationer"
+    },
+    "Plugins": {
+      "Single": "Plugin",
+      "Title": "Plugins",
+      "Labels": {
+        "PluginBrowser": "Plugin-webbläsare"
+      },
+      "Fields": {
+        "Authors": "Författare",
+        "Description": "Beskrivning",
+        "Elements": "Noder",
+        "Url": "Hemsida",
+        "Version": "Version"
+      },
+      "Messages": {
+        "DeletePlugins": "Är du säker på att du vill ta bort den valda {count, plural, one {plugin} other {plugins}}?",
+        "DeleteUsed": "Du kan inte ta bort en plugin som är i bruk",
+        "UpdatingPlugins": "Uppdaterar plugins"
+      }
+    },
+    "ProcessingNode": {
+      "Title": "Nod",
+      "Fields": {
+        "Address": "Adress",
+        "Address-Help": "Adressen (värdnamn eller IP-adress) för noden. Du bör inte ändra detta om du inte har ändrat adressen för noden. Till exempel, om du har ändrat datornamnet för behandlingsnoden.",
+        "AllLibraries": "Alla bibliotek",
+        "AllLibraries-Help": "Vilka bibliotek denna nod kommer att bearbeta",
+        "CopyMappings": "Kopiera mappningar",
+        "DontChangeOwner": "Ändra ägare",
+        "DontChangeOwner-Help": "När det är markerat kommer noden att ändra ägaren av alla nyligen skapade filer till PGID och PUID definierade i de miljövariabler.\nOm dessa miljövariabler inte är inställda kommer ägaren att ändras till ''users:nobody''.",
+        "DontSetPermissions": "Ställ in behörigheter",
+        "DontSetPermissions-Help": "När det är markerat kommer filbehörigheter att ställas in på alla nyligen skapade filer",
+        "Enabled": "Aktiverad",
+        "FlowRunners": "Flödeskörningar",
+        "FlowRunners-Help": "Antalet flödeskörningsinstanser som är tillgängliga för att köra ett flöde.",
+        "InternalProcessingNodeDescription": "Detta är den inbyggda behandlingsnoden i FileFlows.\n\nDenna nod låter dig köra FileFlows utan att behöva installera några andra noder på fjärrsystem och låter dig använda FileFlows som en fristående applikation.\n\nDu kan fortsätta använda denna interna nod och ytterligare behandlingsnoder om du vill, eller så kan du inaktivera denna nod och bara använda ytterligare noder.",
+        "Libraries": "Bibliotek",
+        "Libraries-Help": "Välj vilka bibliotek denna nod kan bearbeta",
+        "Mappings": "Mappningar",
+        "MappingsDescription": "Mappningar låter dig mappa en sökväg från servern till en plats på noden.\n\nTill exempel kan du mappa Server:'/usr/local/bin/ffmpeg' till Nod:'C:\\Utils\\ffmpeg\\ffmpeg.exe'\n\nDu bör lägga till mappningar för alla bibliotek och verktyg som kommer att behövas för att köra på det fjärrsystemet.",
+        "MappingsKey": "Server",
+        "MappingsValue": "Nod",
+        "MaxFileSizeMb": "Max filstorlek",
+        "MaxFileSizeMb-Help": "Den maximala filstorleken som denna behandlingsnod kan bearbeta. Om den är inställd på 0 finns det ingen gräns.",
+        "MaxFileSizeMb-Suffix": "MB",
+        "PermissionsFiles": "Filbehörigheter",
+        "PermissionsFiles-Help": "Behörigheterna som ska ställas in på alla nyligen skapade filer.",
+        "PermissionsFolders": "Mappbehörigheter",
+        "PermissionsFolders-Help": "Behörigheterna som ska ställas in på alla nyligen skapade mappar.",
+        "PreExecuteScript": "För-exekveringsscript",
+        "PreExecuteScript-Help": "Ett skript som kommer att köras innan någon fil bearbetas. Resultatet av detta skript måste vara 1 för att det ska passera, annars kommer noden inte att bearbeta en fil.",
+        "Priority": "Prioritet",
+        "Priority-Help": "Ju högre nummer, desto högre prioritet. Noder med högre prioritet kommer att föredras och få filer att bearbeta först, såvida inte dessa noder är ur schema, inaktiverade eller har maximala körningar.",
+        "ProcessFileCheckInterval": "Filkontrollintervall",
+        "ProcessFileCheckInterval-Help": "Hur ofta kontrollera om en ny fil ska bearbetas i behandlingsnoder.\nStäll in på 0 för att använda systemvärdet.",
+        "ProcessFileCheckInterval-Suffix": "sekunder",
+        "ProcessingDescription": "Detta låter dig konfigurera vad denna behandlingsnod kan bearbeta.\n\nTill exempel, du kan begränsa denna nod till att bara bearbeta vissa bibliotek eller en maximal filstorlek om denna nod är en lågpresterande nod.",
+        "Schedule": "Schema",
+        "Schedule-Help": "Detta schema körs i nodens tidszon",
+        "ScheduleDescription": "Detta låter dig konfigurera när denna nod kommer att vara aktiv.\n\nNoden kommer inte att bearbeta några filer utanför detta konfigurerade schema.\n",
+        "TempPath": "Tempmapp",
+        "TempPath-Help": "Denna mapp kommer att användas av flöden för att skapa temporära filer när flödet bearbetas, denna mapp kommer att städas regelbundet, så spara inget viktigt här.",
+        "Variables": "Variabler",
+        "VariablesDescription": "Variabler låter dig konfigurera avancerade variabler att ställa in på en behandlingsnod.",
+        "VariablesKey": "Namn",
+        "VariablesValue": "Värde"
+      }
+    },
+    "Report": {
+      "Labels": {
+        "Combined": "Kombinerad"
+      },
+      "Buttons": {
+        "Back": "Tillbaka",
+        "Generate": "Generera"
+      },
+      "Fields": {
+        "Direction": "Riktning",
+        "Email": "E-post",
+        "Email-Placeholder": "Ange en e-postadress",
+        "Flow": "Flöde",
+        "Library": "Bibliotek",
+        "Node": "Nod",
+        "Period": "Period",
+        "Statistic": "Statistik"
+      },
+      "Messages": {
+        "FailedToFindReport": "Misslyckades med att hitta rapporten.",
+        "FailedToGenerateReport": "Misslyckades med att generera rapporten.",
+        "NoMatchingData": "Inga matchande data",
+        "ReportEmailed": "Rapporten kommer att e-postas till ''{email}'' när den har genererats."
+      }
+    },
+    "Reporting": {
+      "Title": "Rapportering",
+      "Labels": {
+        "Reports": "Rapporter",
+        "ScheduledReports": "Schemalagda"
+      }
+    },
+    "RepositoryObject": {
+      "Title": "Repository-objekt",
+      "Fields": {
+        "Author": "Författare",
+        "Code": "Kod",
+        "Description": "Beskrivning",
+        "Revision": "Revision"
+      }
+    },
+    "Revisions": {
+      "Title": "Revisioner"
+    },
+    "ScheduledReport": {
+      "Title": "Schemalagd rapport",
+      "Labels": {
+        "LastSent": "Senast skickad",
+        "Never": "Aldrig"
+      },
+      "Fields": {
+        "DayOfMonth": "Dag i månaden",
+        "DayOfMonth-Help": "Den dag i månaden som denna rapport ska köras. Om den valda dagen ligger utanför månaden (t.ex. 31 i februari) kommer rapporten att köras den sista dagen i månaden.",
+        "DayOfWeek": "Dag i veckan",
+        "DayOfWeek-Help": "Den dag i veckan som denna schemalagda rapport ska skickas. Detta kommer att inkludera data för de 7 dagar som föregår denna dag.",
+        "Direction": "Riktning",
+        "Enabled": "Aktiverad",
+        "Enabled-Help": "Denna schemalagda rapport kommer endast att köras om den är aktiverad.",
+        "Flows": "Flöden",
+        "Libraries": "Bibliotek",
+        "Name-Help": "Namnet på rapporten, detta kommer att visas i ämnet för det skickade e-postmeddelandet.",
+        "Nodes": "Noder",
+        "Recipients": "Mottagare",
+        "Recipients-Help": "En lista med e-postadresser som kommer att ta emot denna rapport när den körs.",
+        "Report": "Rapport",
+        "Report-Help": "Den rapport som kommer att skickas.",
+        "Schedule": "Schema",
+        "Schedule-Help": "När denna rapport kommer att genereras och e-postas till mottagarna."
+      }
+    },
+    "Script": {
+      "LanguageTitle": "{Language} Skript",
+      "Title": "Skript",
+      "Fields": {
+        "Code": "Kod",
+        "Description": "Beskrivning",
+        "Name": "Namn",
+        "Outputs": "Utdata",
+        "OutputsKey": "Utdata",
+        "OutputsValue": "Beskrivning"
+      },
+      "Messages": {
+        "FailedToExport": "Export misslyckades."
+      }
+    },
+    "Scripts": {
+      "Title": "Skript",
+      "Labels": {
+        "ScriptBrowser": "Skriptarkiv",
+        "UpdateAvailable": "Uppdatering tillgänglig",
+        "UpdatingScripts": "Uppdaterar skript"
+      },
+      "Buttons": {
+        "ScriptBrowser": "Arkiv",
+        "UpdateAllScripts": "Uppdatera alla skript"
+      },
+      "Fields": {
+        "Code": "Kod"
+      },
+      "Messages": {
+        "DeleteSystem": "Du kan inte radera ett systemskript",
+        "DeleteUsed": "Du kan inte radera ett skript som är i bruk",
+        "Duplicated": "Skript ''{name}'' duplicerat",
+        "Imported": "Skript ''{name}'' importerat",
+        "NoRepositoryScriptsToUpdate": "Inga skript i arkivet valdes för att uppdatera"
+      }
+    },
+    "Settings": {
+      "Title": "Inställningar",
+      "Labels": {
+        "CheckNow": "Kontrollera nu",
+        "Database": "Databas",
+        "Email": "E-post",
+        "EmailDescription": "Dessa inställningar är valfria och behövs endast om du använder e-posttillägget eller lokal användarsäkerhet.",
+        "FileServer": "Filserver",
+        "General": "Allmän",
+        "Logging": "Loggning",
+        "Restart": "Starta om FileFlows",
+        "System": "System",
+        "Updates": "Uppdateringar"
+      },
+      "Fields": {
+        "AutoUpdate": "Automatisk uppdatering",
+        "AutoUpdate-Help": "När detta är aktiverat kommer FileFlows rutinmässigt att kontrolleras för uppdateringar, och om en uppdatering hittas kommer den automatiskt att laddas ner och installeras.",
+        "AutoUpdateNodes": "Automatisk uppdatering av noder",
+        "AutoUpdateNodes-Help": "När detta är aktiverat kommer externa noder automatiskt att uppdateras när FileFlows-servern uppdateras. Det innebär att du endast behöver uppdatera FileFlows-serverinstansen i en distribuerad miljö.",
+        "AutoUpdatePlugins": "Automatisk uppdatering av plugins",
+        "AutoUpdatePlugins-Help": "När detta är aktiverat kommer plugins rutinmässigt att kontrolleras för uppdateringar, och om några uppdateringar hittas kommer de automatiskt att laddas ner.",
+        "CheckForUpdateNow": "Kontrollera uppdatering",
+        "CheckForUpdateNow-Help": "Kontrollerar en uppdatering nu och om den hittas laddas uppdateringen ner och installeras när inga Flows körs.",
+        "DelayBetweenNextFile": "Fördröjning mellan filer",
+        "DelayBetweenNextFile-Help": "Fördröjningen i millisekunder att vänta mellan att starta en fil och begära en ny. Om denna fördröjning sätts till noll betyder det att en ny fil omedelbart begärs. Om fördröjningen är för kort kan funktioner som lastbalansering och bibliotekskörningsgränser kanske inte fungera korrekt, eftersom en fil kanske inte har startat helt innan nästa begäran.",
+        "DelayBetweenNextFile-Suffix": "millisekunder",
+        "DockerModsOnServer": "DockerMods på server",
+        "DockerModsOnServer-Help": "DockerMods ska köras automatiskt vid serverstart eller när de specifikt aktiveras. Annars kommer de endast att köras när ett arbetsflöde initieras.",
+        "HideProcessingFinishedNotifications": "Meddelanden om avslutad bearbetning",
+        "HideProcessingFinishedNotifications-Help": "Om en toast-notifikation ska visas i webbkonsolen när en fil har avslutat bearbetningen",
+        "HideProcessingStartedNotifications": "Meddelanden om påbörjad bearbetning",
+        "HideProcessingStartedNotifications-Help": "Om en toast-notifikation ska visas i webbkonsolen när en fil börjar bearbetas",
+        "KeepFailedFlowTempFiles": "Behåll misslyckade temporära filer",
+        "KeepFailedFlowTempFiles-Help": "Att aktivera detta alternativ kommer att behålla de temporära filer som används av ett flöde vid misslyckande, vilket förhindrar att de tas bort automatiskt.\nAnvänd med försiktighet.",
+        "Language": "Språk",
+        "Language-Help": "Språket som kommer att användas i systemet.\nObs: Dessa översättningar genereras av AI och kan innehålla fel. Rapportera eventuella fel till supportteamet.",
+        "LogEveryRequest": "Logga varje begäran",
+        "LogEveryRequest-Help": "Om varje begäran till servern ska loggas.",
+        "LogFileRetention": "Loggfiler retention",
+        "LogFileRetention-Help": "Hur länge loggfiler ska behållas tills de tas bort.",
+        "LogFileRetention-Suffix": "Dagar",
+        "LoggingPath": "Loggkatalog",
+        "LoggingPath-Help": "Detta är platsen där loggfiler kommer att skapas.",
+        "LogQueueMessages": "Logga kömeddelanden",
+        "LogQueueMessages-Help": "Detta kommer att orsaka överdriven loggning av alla filer som sätts i kö/avköas i biblioteksvaktaren.\nAktivera detta om du har problem med att filer inte visas, stäng av det igen efteråt för att undvika att fylla dina loggfiler med överdriven loggning.",
+        "PluginRepositoryUrls": "Plugin-repositorier",
+        "PluginRepositoryUrls-Help": "En linje-separerad lista över plugin-repository-URL:er som ska användas vid sökning efter plugins.\nOrdningen är viktig; om flera repositorier innehåller samma plugin kommer det första repositoriet att användas som källa.\nDet standardrepoet kommer alltid att läggas till i slutet av denna lista.",
+        "ProcessFileCheckInterval": "Filkontrollintervall",
+        "ProcessFileCheckInterval-Help": "Hur ofta som en ny fil ska kontrolleras för bearbetning i bearbetningsnoderna.",
+        "ProcessFileCheckInterval-Suffix": "sekunder",
+        "ShowFileAddedNotifications": "Meddelanden om tillagd fil",
+        "ShowFileAddedNotifications-Help": "Om en toast-notifikation ska visas i webbkonsolen när en fil har hittats och lagts till i kön.",
+        "Telemetry": "Telemetri",
+        "Telemetry-Help": "Telemetri är användbart för att hjälpa till att veta vilka enheter vi behöver stödja, vilka Flow-delar som används mest och var vi bör fokusera utvecklingen.\nIngen information om dina filer eller identifieringsinformation skickas.",
+        "Database": {
+          "Description": "Här kan du konfigurera vilken databas FileFlows ska använda.\nObs: Eventuella ändringar här kräver att du startar om FileFlows så att det kan migrera dina data och om nödvändigt skapa den nya databasen.",
+          "DontBackupOnUpgrade": "Spara inte säkerhetskopior vid uppgradering",
+          "DontBackupOnUpgrade-Help": "Säkerhetskopior av databasen innebär att alla dina databasdata kopieras till en SQLite-fil, vilket kan ta tid. Om du redan säkerhetskopierar din externa databas på andra sätt kan du välja att inaktivera denna process.",
+          "Name": "Namn",
+          "Name-Help": "Namnet på databasen som ska skapas, om det lämnas tomt används 'FileFlows'",
+          "Password": "Lösenord",
+          "Password-Help": "Lösenordet för användaren som ska ansluta till databasen",
+          "Port": "Port",
+          "Port-Help": "Standardporten för MySQL är 3306",
+          "Port-Help-MySql": "Standardporten för MySQL är 3306",
+          "Port-Help-Postgres": "Standardporten för Postgres är 5432",
+          "Port-Help-SQLServer": "Standardporten för SQL Server är 1433",
+          "RecreateDatabase": "Återskapa databas",
+          "RecreateDatabase-Help": "När det är aktiverat, om den nya databasen redan finns, kommer den att tas bort och återskapas. Annars, om det är avstängt och databasen redan finns, kommer inga data att migreras och den nya databasen kommer bara att användas som den är.",
+          "Server": "Server",
+          "Server-Help": "Adressen till databasservern och porten eller namngiven instans om det behövs",
+          "Type": "Typ",
+          "Type-Help": "Typen av databas som ska användas, standardtypen är SQLite som inte kräver ytterligare installation eller konfiguration",
+          "User": "Användare",
+          "User-Help": "Användaren som används för att ansluta till databasen"
+        },
+        "FileServer": {
+          "AllowList": "Tillåtna vägar",
+          "AllowList-Help": "En lista med nya rader av vägar som får nås av den exponerade filservern.\nDetta är platser som kan läsas/skapas om avlägset.\nObs: Alla biblioteksvägar är automatiskt tillåtna.",
+          "AllowList-Placeholder": "Om det lämnas tomt, kommer alla utom systemvägar att tillåtas.",
+          "Description": "Detta möjliggör för externa bearbetningsnoder att ladda ner en fil för bearbetning utan att mappa.\n\nDetta exponerar dock dina filer över ditt nätverk, så inaktivera det om det inte är på ett betrott nätverk.",
+          "Enabled": "Aktiverad",
+          "FilePermissions": "Filbehörigheter",
+          "FilePermissions-Help": "Valfria behörigheter att ge till skapade eller modifierade filer.",
+          "FolderPermissions": "Mappbehörigheter",
+          "FolderPermissions-Help": "Valfria behörigheter att ge till skapade eller modifierade mappar.",
+          "OwnerGroup": "Ägargrupp",
+          "OwnerGroup-Help": "Valfri ägare:grupp att använda för att ändra ägaren för skapade eller modifierade filer eller mappar",
+          "OwnerGroup-Placeholder": "användare:nobody"
+        },
+        "License": {
+          "Email": "Licens E-post",
+          "ExpiryDate": "Utgångsdatum",
+          "Files": "Filer",
+          "Flags": "Funktioner",
+          "Key": "Licensnyckel",
+          "Level": "Nivå",
+          "ProcessingNodes": "Bearbetningsnoder",
+          "Status": "Status"
+        },
+        "Security": {
+          "AccessToken": "Åtkomsttoken",
+          "AccessToken-Help": "Åtkomsttoken som används av bearbetningsnoder för att ansluta till servern",
+          "Authority": "Behörighet",
+          "Authority-Help": "Ange URL:en för Open ID Connect-leverantören (t.ex. https://accounts.google.com/).",
+          "CallbackAddress": "Återkopplingsadress",
+          "CallbackAddress-Help": "En valfri återkopplingsadress, du kan använda detta för att åsidosätta den standardadress som detta kommer att skicka till klienten.\nTill exempel om du är bakom en omvänd proxy och FileFlows lyssnar på HTTP men återkopplingen ska ske på HTTPS.",
+          "ClientId": "Klient-ID",
+          "ClientId-Help": "Klient-ID registrerat hos Open ID Connect-leverantören.",
+          "ClientSecret": "Klienthemlighet",
+          "ClientSecret-Help": "Klienthemlighet registrerad hos Open ID Connect-leverantören.",
+          "Description": "Att konfigurera användarsäkerhet kommer att kräva att användare loggar in och bearbetningsnoder ger Åtkomsttoken för att ansluta.\n\n[Användare](/users) måste läggas till innan de kan logga in eller innan du kan använda den här funktionen.",
+          "LockoutMinutes": "Låsningstid",
+          "LockoutMinutes-Help": "Den tid användaren kommer att vara låst innan de kan försöka logga in igen.",
+          "LockoutMinutes-Suffix": "minuter",
+          "MaxAttempts": "Max antal försök",
+          "MaxAttempts-Help": "Det maximala antalet inloggningsförsök som användaren får göra innan de tillfälligt blockeras",
+          "Mode": "Läge",
+          "Mode-Help": "Aktivera användarautentisering för att få åtkomst till FileFlows.\nNär detta är aktiverat måste användare logga in och bearbetningsnoder kommer att kräva API-token för att få åtkomst till servern.",
+          "Title": "Säkerhet",
+          "TokenExpiryMinutes": "Tokenens utgång",
+          "TokenExpiryMinutes-Help": "Tiden för inloggningstoken innan den går ut."
+        },
+        "Smtp": {
+          "From": "Från",
+          "From-Help": "Namnet på användaren som e-postmeddelanden skickas från",
+          "FromAddress": "Från adress",
+          "FromAddress-Help": "E-postadressen till användaren som e-postmeddelanden skickas från",
+          "Password": "Lösenord",
+          "Password-Help": "Lösenordet för SMTP-användaren",
+          "Port": "Port",
+          "Port-Help": "E-postserverporten",
+          "Security": "Säkerhet",
+          "Security-Help": "Den säkerhet som ska användas när e-postmeddelanden skickas",
+          "Server": "Server",
+          "Server-Help": "E-postservern",
+          "User": "Användare",
+          "User-Help": "Ett valfritt användarnamn för att skicka e-postmeddelanden"
+        }
+      },
+      "Messages": {
+        "Database": {
+          "DontBackupOnUpgrade": "Att stänga av automatiska databasbackups innebär att ingen backup tas under applikationsuppdateringar. Det är viktigt att säkerställa att du har en alternativ metod för att säkerhetskopiera din databas externt för att skydda dina data.\n\nÄr du säker på att du vill stänga av dessa backups?",
+          "NoDatabase": "Namn krävs",
+          "NoPassword": "Lösenord krävs",
+          "NoServer": "Server krävs",
+          "NoUser": "Användare krävs",
+          "TestingDatabase": "Testar databasanslutning",
+          "TestSuccess": "Lyckades ansluta till databasen"
+        },
+        "DisableTelemetryConfirm": {
+          "Message": "Är du säker på att du vill stänga av telemetri?\n\nVar säker på att ingen personlig information registreras. Den data som skickas inkluderar information om de flödeskomponenter som används, plugins som nyttjas samt det totala antalet filer som misslyckats och bearbetats.\n\nDenna information hjälper oss att förstå användarpreferenser och informerar våra beslut angående avvecklingen av oanvända flödeskomponenter.",
+          "Title": "Stäng av telemetri"
+        },
+        "Restart": {
+          "Message": "Är du säker på att du vill starta om FileFlows?\n\nDina inställningar kommer att sparas automatiskt först.\n\nObservera: Se till att inga flöden körs.",
+          "Title": "Starta om FileFlows"
+        },
+        "Update": {
+          "Downloading": "Uppgradering laddas ner",
+          "Failed": "Misslyckades med att kontrollera uppdatering",
+          "Message": "En ny uppdatering är tillgänglig, vill du ladda ner och installera den?",
+          "NotAvailable": "Ingen uppdatering tillgänglig",
+          "Title": "Uppdatering tillgänglig"
+        }
+      }
+    },
+    "Statistics": {
+      "Title": "Statistik"
+    },
+    "Tags": {
+      "Title": "Taggar",
+      "Fields": {
+        "Description": "Beskrivning",
+        "Icon": "Ikon"
+      },
+      "Messages": {
+        "DeleteItems": "Är du säker på att du vill ta bort den valda {count, plural, one {taggen} other {taggarna}}?\n\n{count, plural, one {Denna} other {Dessa}} kommer att tas bort från alla filer och denna åtgärd kan inte ångras."
+      }
+    },
+    "Task": {
+      "Title": "Uppgift",
+      "Fields": {
+        "CustomSchedule": "Anpassad Schema",
+        "CustomSchedule-Help": "Denna uppgift kommer att köras en gång per 15-minuters block i början av det blocket",
+        "Schedule": "Schema",
+        "Schedule-Help": "När detta skript ska köras",
+        "Script": "Skript",
+        "Script-Help": "Skriptet som ska köras enligt det konfigurerade schemat",
+        "TimeSchedule": "Schema",
+        "TimeSchedule-Help": "När uppgiften kommer att köras",
+        "Type": "Typ",
+        "Type-Help": "Typen av denna uppgift. Tidsbaserade uppgifter kommer att köras vid de konfigurerade tiderna. Andra uppgifter är händelsebaserade"
+      }
+    },
+    "Tasks": {
+      "Title": "Uppgifter",
+      "Buttons": {
+        "EditScript": "Redigera Skript"
+      },
+      "Messages": {
+        "NoHistory": "Denna uppgift har ingen körhistorik tillgänglig.",
+        "NoScripts": "Inga skript hittades för att skapa en uppgift."
+      }
+    },
+    "Users": {
+      "Single": "Användare",
+      "Title": "Användare",
+      "Labels": {
+        "Address": "Adress",
+        "Administrator": "Administratör",
+        "LastLoggedIn": "Senast inloggad",
+        "Never": "Aldrig"
+      },
+      "Fields": {
+        "Email": "E-post",
+        "IsAdmin": "Administratör",
+        "Password": "Lösenord",
+        "Roles": "Roller"
+      },
+      "Messages": {
+        "CannotDeleteYourself": "Du kan inte ta bort dig själv.",
+        "EmailInUse": "E-postadress ''{email}'' används redan av en annan användare ''{user}''."
+      }
+    },
+    "Variable": {
+      "Title": "Variabel"
+    },
+    "Variables": {
+      "Title": "Variabler"
+    },
+    "Webhook": {
+      "Title": "Webhook",
+      "Fields": {
+        "Code": "Kod",
+        "Method": "Metod",
+        "Route": "Rutt"
+      }
+    },
+    "Webhooks": {
+      "Title": "Webhooks",
+      "Columns": {
+        "Method": "Metod",
+        "Route": "Rutt"
+      }
+    },
+    "Widget": {
+      "Title": "Widget",
+      "Fields": {
+        "AudioCodecs": "Ljud Codecs",
+        "AudioContainers": "Ljud Container",
+        "Codecs": "Codecs",
+        "ComicFormats": "Serietidningsformat",
+        "ComicPages": "Serietidningssidor",
+        "CpuUsage": "CPU Användning",
+        "FilesRecentlyFinished": "Nyligen Avslutade",
+        "FilesUpcoming": "Kommande",
+        "ImageFormats": "Bildformat",
+        "LibraryProcessingTimes": "Biblioteksbehandlingstider [Sekunder Per Megabyte]",
+        "LogStorage": "Loggförvaring",
+        "MemoryUsage": "Minne Användning",
+        "NvidiaSmi": "NVIDIA SMI",
+        "OpenDatabaseConnections": "Öppna Databaskopplingar",
+        "Processing": "Behandling",
+        "ProcessingNodes": "Behandlingsnoder",
+        "ProcessingTimes": "Behandlingstider",
+        "StorageSaved": "Sparad Förvaring",
+        "TempStorage": "Tillfällig Förvaring",
+        "VideoCodecs": "Videocodecs",
+        "VideoContainers": "Videoinnehåll",
+        "VideoResolution": "Videoupplösning"
+      }
+    }
+  },
+  "Plugins": {
+    "Apprise": {
+      "Description": "En plugin som låter dig skicka meddelanden till en Apprise-server.",
+      "Label": "Apprise"
+    },
+    "AudioNodes": {
+      "Description": "En samling av ljudrelaterade flödeselement för att hjälpa till att bearbeta ljudfiler.",
+      "Label": "Ljud"
+    },
+    "BasicNodes": {
+      "Description": "Grundläggande flödeselement för FileFlows. Detta plugin innehåller grundläggande och vanliga flödeselement för att bearbeta filer.\nDetta plugin är nödvändigt för att FileFlows ska fungera.",
+      "Label": "Grundläggande"
+    },
+    "ChecksumNodes": {
+      "Description": "Flödeselement som ger möjlighet att köra en kontrollsumma på en fil.",
+      "Label": "Kontrollsumma"
+    },
+    "ComicNodes": {
+      "Description": "Flödeselement för att bearbeta serietidningar (cbr, cbz, pdf osv.)",
+      "Label": "Serier"
+    },
+    "DiscordNodes": {
+      "Description": "Ett plugin som gör att du kan skicka meddelanden till en Discord-server.\n\nWebhook-ID och token kan erhållas från webhook-URL\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
+      "Label": "Discord"
+    },
+    "EmailNodes": {
+      "Description": "Denna plugin gör att du kan skicka ett e-postmeddelande medan ett flöde körs.",
+      "Label": "E-post"
+    },
+    "Emby": {
+      "Description": "En plugin som låter dig kommunicera med Emby.",
+      "Label": "Emby"
+    },
+    "Gotify": {
+      "Description": "Ett plugin som låter dig skicka meddelanden till en Gotify-server.",
+      "Label": "Gotify"
+    },
+    "ImageNodes": {
+      "Description": "Flödeselement för att bearbeta bildfiler. Denna plugin innehåller noder för att konvertera och manipulera bilder.",
+      "Label": "Bild"
+    },
+    "MetaNodes": {
+      "Description": "Ett plugin som innehåller meta-information flödeselement som används för att söka efter meta-information om filer.\n\nInnehåller flödeselement för att hämta filminformation från TheMovieDB och musikinformation från ID3-taggar i filen.",
+      "Label": "Meta"
+    },
+    "Nextcloud": {
+      "Description": "Ett plugin som låter dig ladda upp filer till Nextcloud.",
+      "Label": "Nextcloud"
+    },
+    "Plex": {
+      "Description": "Ett plugin som gör att du kan kommunicera med Plex.",
+      "Label": "Plex"
+    },
+    "Pushbullet": {
+      "Description": "Ett plugin som gör att du kan skicka meddelanden till en Pushbullet-server.",
+      "Label": "Pushbullet"
+    },
+    "Pushover": {
+      "Description": "En plugin som gör att du kan skicka meddelanden till en Pushover-server.",
+      "Label": "Pushover"
+    },
+    "Telegram": {
+      "Description": "Ett plugin som gör att du kan skicka Telegram-meddelanden.",
+      "Label": "Telegram"
+    },
+    "VideoNodes": {
+      "Description": "Plugin för bearbetning av videofiler, inklusive men inte begränsat till videofilkonvertering, videofilavkänning, uppskalning, nedskalning och transkodning.",
+      "Label": "Video"
+    },
+    "Web": {
+      "Description": "Plugin som tillhandahåller webbrelaterade flödeselement.",
+      "Label": "Web"
+    }
+  },
+  "Reports": {
+    "Codecs": {
+      "Description": "Ger en översikt över de olika codecs som bearbetats genom FileFlows, vilket hjälper till att förstå codec-användningstrender.",
+      "Name": "Codecs"
+    },
+    "Files": {
+      "Description": "Visar en detaljerad tabell över alla filer som bearbetats av FileFlows och ger insikter i deras flöde, bibliotek och storlek.",
+      "Name": "Filer",
+      "Columns": {
+        "FinalSize": "Slutstorlek",
+        "FlowName": "Flöde",
+        "LibraryName": "Bibliotek",
+        "Name": "Namn",
+        "NodeName": "Nod",
+        "OriginalSize": "Originalstorlek",
+        "Percentage": "Procent"
+      }
+    },
+    "FilesProcessed": {
+      "Description": "Ger en rapport över alla filer som bearbetats under en viss tidsperiod och visar systemets övergripande prestanda.",
+      "Name": "Bearbetade filer"
+    },
+    "FlowElementExecution": {
+      "Description": "Visar en rapport om de flödeselement som körts i systemet, vilket gör det möjligt att analysera deras prestanda och frekvens.",
+      "Name": "Körning av flödeselement"
+    },
+    "Languages": {
+      "Description": "Ger insikter om de olika språken som bearbetats i filer och hjälper till att följa språkets trender i media.",
+      "Name": "Språk"
+    },
+    "LibrarySavings": {
+      "Description": "Visar hur mycket lagringsutrymme som har sparats genom att bearbeta filer i olika bibliotek och hjälper till att övervaka effektivitetsvinster.",
+      "Name": "Biblioteksbesparingar"
+    },
+    "ProcessingSummary": {
+      "Description": "Ger en omfattande sammanfattning av filbearbetningsaktiviteter, klassificerade efter bibliotek, nod och tid på dagen.",
+      "Name": "Sammanfattning av bearbetning"
+    }
+  },
+  "Templates": {
+    "Flows": {
+      "AudioFile": {
+        "Description": "En tom ljudmall med ett enda ''Ljudfil'' inmatningsflödeselement.",
+        "Name": "Ljudfil"
+      },
+      "ConvertComic": {
+        "Description": "Ett flöde som konverterar serietidningar från CBR, CBZ, CB7, PDF, GZ, BZ2 till antingen CBZ eller PDF.",
+        "Name": "Konvertera Comic"
+      },
+      "ConvertImage": {
+        "Description": "Ett flöde som konverterar bilder.",
+        "Name": "Konvertera Bild"
+      },
+      "ConvertVideo": {
+        "Description": "Ett flöde som konverterar en videofil till ett annat format.",
+        "Name": "Konvertera Video"
+      },
+      "FailureFlow": {
+        "Description": "Grundläggande felflöde som kommer att utföras när ett flöde misslyckas av någon anledning.",
+        "Name": "Fel Flöde"
+      },
+      "File": {
+        "Description": "En tom filmall med ett enda ''Inmatningsfil'' inmatningsflödeselement.",
+        "Name": "Fil"
+      },
+      "Folder": {
+        "Description": "En tom mappmall med ett enda ''Inmatningsmapp'' inmatningsflödeselement.\n\nOBS: Denna mall ska endast användas för att behandla en mapp istället för filer. Behandling av en mapp har begränsningar eftersom mappen behandlas och inte filerna som finns i den mappen.",
+        "Name": "Mapp"
+      },
+      "ImageFile": {
+        "Description": "En tom bildmall med ett enda ''Bildfil'' inmatningsflödeselement.",
+        "Name": "Bildfil"
+      },
+      "VideoFile": {
+        "Description": "En tom bildmall med ett enda ''Videofil'' inmatningsflödeselement.",
+        "Name": "Videofil"
+      }
+    },
+    "Groups": {
+      "Books": "Böcker",
+      "DownloadClients": "Nedladdningsklienter",
+      "DVR": "DVR",
+      "General": "Allmänt"
+    },
+    "Libraries": {
+      "AudioBookLibrary": {
+        "Description": "Ljudboksbibliotek som söker efter vanliga ljudboksfiler",
+        "Name": "Ljudboksbibliotek"
+      },
+      "ComicLibrary": {
+        "Description": "Seriebokbibliotek som söker efter vanliga serietidningsfiler",
+        "Name": "Seriebokbibliotek"
+      },
+      "eBookLibrary": {
+        "Description": "eBook-bibliotek som söker efter vanliga eBook-filer",
+        "Name": "eBook-bibliotek"
+      },
+      "ImageLibrary": {
+        "Description": "Bildbibliotek som söker efter vanliga bildfiler",
+        "Name": "Bildbibliotek"
+      },
+      "MusicLibrary": {
+        "Description": "Musikbibliotek som söker efter vanliga musikfiler",
+        "Name": "Musikbibliotek"
+      },
+      "PlexDVR": {
+        "Description": "Bibliotek för att övervaka Plex DVR-inspelningar så att du automatiskt kan konvertera dem efter att de har avslutats.",
+        "Name": "Plex DVR"
+      },
+      "SABnzbdMusic": {
+        "Description": "Bibliotek för att övervaka en \"komplett\" nedladdningsmapp från SABnzbd.\n\nDetta bibliotek kan sedan använda ett flöde för att konvertera musik till ett målformat och placera dessa musikfiler i destinationsmappen t.ex. \"konverterad\".\n\nApplikationen som instruerade SABnzbd att göra nedladdningen kan övervaka \"konverterad\" mappen för färdiga filer.",
+        "Name": "SABnzbd Musik"
+      },
+      "SABnzbdVideos": {
+        "Description": "Bibliotek för att övervaka en \"komplett\" nedladdningsmapp från SABnzbd.\n\nDetta bibliotek kan sedan använda ett flöde för att konvertera videor till ett målformat och placera dessa videor i destinationsmappen t.ex. \"konverterad\".\n\nApplikationen som instruerade SABnzbd att göra nedladdningen kan övervaka \"konverterad\" mappen för färdiga filer.",
+        "Name": "SABnzbd Videor"
+      },
+      "SamplesTrailersPreviews": {
+        "Description": "Hittar eventuella exempel, trailers eller förhandsgranskningar av videofiler i en mapp så att du kan ta bort dem om det behövs.\nAnvändbart för ett matchande 'SABnzbd Videor' bibliotek så att mappen kan tas bort på ett rent sätt efter att huvudfilen har bearbetats.",
+        "Name": "Exempel/Trailers/Förhandsvisningar"
+      },
+      "VideoLibrary": {
+        "Description": "Videobibliotek som söker efter vanliga videofiler",
+        "Name": "Videobibliotek"
+      }
+    }
+  },
+  "Times": {
+    "DaysAgo": "{num} {num, plural, one {dag} other {dagar}} sedan",
+    "HoursAgo": "{num} {num, plural, one {timme} other {timmar}} sedan",
+    "MinutesAgo": "{num} {num, plural, one {minut} other {minuter}} sedan",
+    "Never": "Aldrig",
+    "SecondsAgo": "{num} {num, plural, one {sekund} other {sekunder}} sedan"
+  },
+  "Validators": {
+    "Pattern": "Är inte giltig",
+    "Range": "Måste vara mellan {Minimum} och {Maximum}",
+    "Required": "Obligatorisk"
+  },
+  "Widgets": {
+    "AudioCodecs": "Ljudcodecs",
+    "AudioContainers": "Ljudcontainrar",
+    "Codecs": "Codecs",
+    "ComicFormats": "Serietidningsformat",
+    "ComicPages": "Serietidningssidor",
+    "CPUUsage": "CPU-användning",
+    "CurrentRevision": "Nuvarande revision",
+    "DatabaseConnections": "Databasanslutningar",
+    "DecoderParameters": "Dekoderparametrar",
+    "Decoders": "Dekodrar",
+    "Encoders": "Kodare",
+    "ImageFormats": "Bildformat",
+    "LibraryProcessingTimes": "Biblioteksbehandlingstider",
+    "LogStorage": "Logglagring",
+    "MemoryUsage": "Minneanvändning",
+    "NVIDIASMI": "NVIDIA SMI",
+    "Processing": "Bearbetning",
+    "ProcessingNodes": "Bearbetningsnoder",
+    "ProcessingTimes": "Bearbetningstider",
+    "RecentlyFinished": "Nyligen avslutad",
+    "StorageSaved": "Lagring sparad",
+    "TemporaryFileStorage": "Tillfällig fillagring",
+    "Upcoming": "Kommande",
+    "VideoCodecs": "Videocodecs",
+    "VideoContainers": "Videcontainrar",
+    "VideoResolutions": "Videoupplösningar"
+  }
+}

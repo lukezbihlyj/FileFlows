@@ -135,6 +135,13 @@ public interface IImageHelper
     /// <param name="images">an array of image file names to add to the PDF</param>
     /// <returns>True if the operation was successful, otherwise false</returns>
     Result<bool> CreatePdfFromImages(string pdf, string[] images);
+
+    /// <summary>
+    /// Calculates the darkness of an image on a scale of 0 to 100.
+    /// </summary>
+    /// <param name="imagePath">The path to the image.</param>
+    /// <returns>A value between 0 and 100 indicating how dark the image is.</returns>
+    Result<int> CalculateImageDarkness(string imagePath);
 }
 
 /// <summary>

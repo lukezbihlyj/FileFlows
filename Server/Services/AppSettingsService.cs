@@ -22,7 +22,8 @@ public class AppSettingsService
             Settings.DatabaseConnection = SqliteHelper.GetConnectionString();
         Save();
  
-        Globals.CustomFileFlowsDotComUrl = Settings.FileFlowsDotComUrl;
+        if(string.IsNullOrWhiteSpace(Settings.FileFlowsDotComUrl) == false)
+            Globals.CustomFileFlowsDotComUrl = Settings.FileFlowsDotComUrl;
     }
 
     /// <summary>

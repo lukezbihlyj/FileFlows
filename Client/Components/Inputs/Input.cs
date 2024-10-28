@@ -17,6 +17,7 @@ public interface IInput
     bool HideLabel { get; set; }
     bool Disabled { get; set; }
     bool Visible { get; set; }
+    string? CustomXID { get; set; }
 
     void Dispose();
 
@@ -56,7 +57,11 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     public string Prefix { get; set; }
 
     protected string LabelOriginal => _LabelOriginal;
-
+    
+    /// <summary>
+    /// Gets or set the custom x-id
+    /// </summary>
+    [Parameter] public string? CustomXID { get; set; }
 
     /// <summary>
     /// Gets or sets the on submit event callback
@@ -216,6 +221,7 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
                     ErrorMessage = ""; // clear the error
 
                 _Value = value;
+                
                 if (Editor?.Loaded != true)
                     return;
                 ValueUpdated();

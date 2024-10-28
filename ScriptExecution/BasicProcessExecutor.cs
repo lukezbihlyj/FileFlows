@@ -79,4 +79,9 @@ class BasicProcessExecutor: IProcessExecutor
 
         return result;
     }
+
+    public Task<ProcessExecuteResult> ExecuteAsync(ProcessExecuteArgs args)
+    {
+        throw new NotImplementedException();
+    }
 }

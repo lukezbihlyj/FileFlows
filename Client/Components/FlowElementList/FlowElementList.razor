@@ -63,7 +63,7 @@
                                                   return 100 + (int)x.Type;
                                               }).ThenBy(x => x.DisplayName[(x.DisplayName.IndexOf(":", StringComparison.Ordinal) + 1)..]))
                                 {
-                                    <div id="@ele.Uid" draggable="true" class="flow-element draggable @ele.Type 
+                                    <div id="@ele.Uid" draggable="true" class="flow-element draggable @ele.Uid.Replace(".", "-") @ele.Type 
                                     @(ele.Obsolete ? "obsolete" : "") @(ele.LicenseLevel == LicenseLevel.Enterprise  ? "enterprise" : "") 
                                     ll-@(ele.LicenseLevel.ToString().ToLowerInvariant())
                                      @(App.Instance.IsMobile && SelectedElement == ele.Uid ? "selected" : "") "

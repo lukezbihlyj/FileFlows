@@ -71,48 +71,14 @@ public class ClientServiceManager
     /// Update executes
     /// </summary>
     /// <param name="executors">the executors</param>
-    public async Task UpdateExecutors(Dictionary<Guid, FlowExecutorInfo> executors)
+    public async Task UpdateExecutors(Dictionary<Guid, FlowExecutorInfoMinified> executors)
     {
         if (await UpdateSemaphore.WaitAsync(50) == false)
             return;
 
         try
         {
-            Dictionary<Guid, FlowExecutorInfoMinified> minified = new();
-            // Make a copy of the keys to avoid modifying the collection during enumeration
-            var keys = new List<Guid>(executors.Keys);
-
-            foreach (var key in keys)
-            {
-                if (executors.TryGetValue(key, out var executor) == false)
-                    continue;
-
-                minified[key] = new()
-                {
-                    Uid = key,
-                    DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(executor.LibraryFile.Name,
-                        executor.LibraryFile.RelativePath,
-                        executor.Library.Name),
-                    LibraryName = executor.Library.Name,
-                    LibraryFileUid = executor.LibraryFile.Uid,
-                    LibraryFileName = executor.LibraryFile.Name,
-                    RelativeFile = executor.RelativeFile,
-                    NodeName = executor.NodeName,
-                    CurrentPartName = executor.CurrentPartName,
-                    StartedAt = executor.StartedAt,
-                    CurrentPart = executor.CurrentPart,
-                    TotalParts = executor.TotalParts,
-                    CurrentPartPercent = executor.CurrentPartPercent,
-                    Additional = executor.AdditionalInfos
-                        ?.Where(x => x.Value.Expired == false)
-                        ?.Select(x => new object[]
-                        {
-                            x.Key, x.Value.Value
-                        })?.ToArray()
-                };
-            }
-
-            await _hubContext.Clients.All.SendAsync("UpdateExecutors", minified);
+            await _hubContext.Clients.All.SendAsync("UpdateExecutors", executors);
             await Task.Delay(500); // creates a 500 ms delay between messages to the client
         }
         catch (Exception ex)
@@ -133,12 +99,29 @@ public class ClientServiceManager
         var status = await ServiceLoader.Load<LibraryFileService>().GetStatus();
         await _hubContext.Clients.All.SendAsync("UpdateFileStatus", status);
     }
+    
+    /// <summary>
+    /// Updates the status summaries of the nodes
+    /// </summary>
+    public async Task UpdateNodeStatusSummaries()
+    {
+        var status = await ServiceLoader.Load<NodeService>().GetStatusSummaries();
+        await _hubContext.Clients.All.SendAsync("UpdateNodeStatusSummaries", status);
+    }
+    
     /// <summary>
     /// Called when a system is paused/unpaused
     /// </summary>
     /// <param name="minutes">how many minutes to pause the system for</param>
     public void SystemPaused(int minutes)
         => _hubContext.Clients.All.SendAsync("SystemPaused", minutes);
+    
+    /// <summary>
+    /// Updates the system info
+    /// </summary>
+    /// <param name="info">the system info</param>
+    public void UpdateSystemInfo(SystemInfo info)
+        => _hubContext.Clients.All.SendAsync("SystemInfo", info);
 
     /// <summary>
     /// Called when a file starts processing
@@ -153,4 +136,25 @@ public class ClientServiceManager
     /// <param name="file">the file that's finished processing</param>
     public void FinishProcessing(LibraryFile file)
         => _hubContext.Clients.All.SendAsync("FinishProcessing", file);
+
+    /// <summary>
+    /// Sends a update to the file overview
+    /// </summary>
+    /// <param name="data">the update data</param>
+    public void FileOverviewUpdate(FileOverviewData data)
+        => _hubContext.Clients.All.SendAsync("FileOverviewUpdate", data);
+
+    /// <summary>
+    /// Sends a update about updates available to the system
+    /// </summary>
+    /// <param name="data">the update data</param>
+    public void UpdatesUpdate(UpdateInfo data)
+        => _hubContext.Clients.All.SendAsync("UpdatesUpdateInfo", data);
+    
+    /// <summary>
+    /// Sends a update about tags available int the system
+    /// </summary>
+    /// <param name="tags">the tags in the system</param>
+    public void TagsUpdated(List<Tag> tags)
+        => _hubContext.Clients.All.SendAsync("TagsUpdated", tags);
 }

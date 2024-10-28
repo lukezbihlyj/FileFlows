@@ -1,0 +1,113 @@
+@using FileFlows.Client.Helpers
+@using Humanizer
+@using FileSizeFormatter = FileFlows.Shared.Formatters.FileSizeFormatter
+@namespace FileFlows.Client.Components.Widgets
+
+@if (Data.Count > 0)
+{
+    foreach (var item in Data.OrderBy(x => x.Enabled ? 0 : 1).ThenByDescending(x => x.Priority).ThenBy(x =>x.Name.ToLowerInvariant()))
+    {
+        <div class="processing-node @(item.Enabled == false ? "disabled" : "")" @key="item.Uid">
+            <span class="icon">
+                @if (item.OperatingSystem == OperatingSystemType.Mac)
+                {
+                    <img class="icon" src="/icons/apple.svg"/>
+                }
+                else if (item.OperatingSystem == OperatingSystemType.Docker)
+                {
+                    <img class="icon" src="/icons/docker.svg"/>
+                }
+                else if (item.HardwareInfo.OperatingSystem?.Contains("ubuntu", StringComparison.InvariantCultureIgnoreCase) == true)
+                {
+                    <img class="icon" src="/icons/distros/ubuntu.svg"/>
+                }
+                else if (item.HardwareInfo.OperatingSystem?.Contains("fedora", StringComparison.InvariantCultureIgnoreCase) == true)
+                {
+                    <img class="icon" src="/icons/distros/fedora.svg"/>
+                }
+                else if (item.HardwareInfo.OperatingSystem?.Contains("pop!", StringComparison.InvariantCultureIgnoreCase) == true)
+                {
+                    <img class="icon" src="/icons/distros/popos.svg"/>
+                }
+                else if (item.HardwareInfo.OperatingSystem?.Contains("debian", StringComparison.InvariantCultureIgnoreCase) == true)
+                {
+                    <img class="icon" src="/icons/distros/debian.svg"/>
+                }
+                else if (item.HardwareInfo.OperatingSystem?.Contains("arch", StringComparison.InvariantCultureIgnoreCase) == true)
+                {
+                    <img class="icon" src="/icons/distros/arch.svg"/>
+                }
+                else if (item.OperatingSystem == OperatingSystemType.Windows)
+                {
+                    <img class="icon" src="/icons/windows.svg"/>
+                }
+                else if (item.OperatingSystem == OperatingSystemType.Linux)
+                {
+                    <img class="icon" src="/icons/linux.svg"/>
+                }
+                <div class="architecture @(item.Architecture is ArchitectureType.Arm32 or ArchitectureType.Arm64 ? "arm" : "")">@item.Architecture</div>
+            </span>
+            <div class="center">
+                <span class="name">
+                    @(item.Name == CommonVariables.InternalNodeName ? lblInternalProcessingNode : item.Name)
+                </span>
+                @if (item.OutOfSchedule)
+                {
+                    <span class="hardware-info-item">
+                        <span class="label">@lblSchedule</span>
+                        <span class="value">@ScheduleHelper.HumanReadable(item.ScheduleResumesAtUtc)</span>
+                    </span>
+                }
+
+                @if (item.HardwareInfo != null)
+                {
+                    <div class="hardware-info">
+                        @if(string.IsNullOrWhiteSpace(item.HardwareInfo.OperatingSystem) == false)
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">@lblOperatingSystem</span>
+                                <span class="value">
+                                    @item.HardwareInfo.OperatingSystem @item.HardwareInfo.OperatingSystemVersion
+                                </span>
+                            </div>
+                        }
+                        <div class="hardware-info-item">
+                            <span class="label">CPU</span>
+                            <span class="value">@item.HardwareInfo.ProcessorVendor @item.HardwareInfo.Processor</span>
+                        </div>
+                        @if (item.HardwareInfo.Memory > 0)
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">@lblMemory</span>
+                                <span class="value">@FileSizeFormatter.Format(item.HardwareInfo.Memory, 0, useBinary: true)</span>
+                            </div>
+                        }
+                        @foreach(var gpu in item.HardwareInfo.Gpus ?? [])
+                        {
+                            <div class="hardware-info-item">
+                                <span class="label">GPU</span>
+                                <span class="value">
+                                    @gpu.Vendor @gpu.Model 
+                                    @(gpu.Memory > 0 ? FileSizeFormatter.Format(gpu.Memory, 0, useBinary: true) : "") 
+                                    @(string.IsNullOrWhiteSpace(gpu.DriverVersion) == false ? $"({gpu.DriverVersion})" : "")
+                                </span>
+                            </div>
+                        }
+                    </div>
+                }
+                <span class="top-right status-@(item.Status.ToString().Kebaberize())">
+                    @Translater.Instant("Enums.ProcessingNodeStatus." + item.Status)
+                </span>
+                @if (item.Priority > 0)
+                {
+                    <span class="priority" title="@lblPriority">@item.Priority</span>
+                }
+                @if (item.FlowRunners > 0)
+                {
+                    <span class="runners" title="@lblRunners"><i class="fas fa-running"></i> @item.FlowRunners</span>
+                }
+            </div>
+
+        </div>
+    }
+}

@@ -1,0 +1,77 @@
+@namespace FileFlows.Client.Components.Inputs
+@using FileFlows.Client.Models
+@inherits Input<object>
+
+<InputWrapper Input="@this">
+    <div class="dropdown" id=@Uid>
+        <button @onclick="ToggleDropdown" class="dropdown-button dd-btn">
+            @if (SelectedOption is IconListOption selectedIconOption)
+            {
+                if (!string.IsNullOrWhiteSpace(selectedIconOption.IconUrl))
+                {
+                    <img src="@selectedIconOption.IconUrl" class="option-image" />
+                }
+                else if (!string.IsNullOrWhiteSpace(selectedIconOption.IconCss))
+                {
+                    <i class="@selectedIconOption.IconCss" />
+                }
+            }
+            <span>@SelectedOption.Label</span>
+            <i class="fas fa-caret-down" />
+        </button>
+        <ul class="dropdown-menu" style="display: @(IsOpen ? "block" : "none")">
+            @if (AllowClear)
+            {
+                <li @onclick="() => SelectOption(null)" class="select-one">
+                    @lblSelectOne
+                </li>
+            }
+            @{
+                foreach (var group in Groups)
+                {
+                    if (group.Key == string.Empty)
+                    {
+                        foreach (var opt in group.Value)
+                        {
+                            <li @onclick="() => SelectOption(opt)" class="@(SelectedOption == opt ? "selected" : "")" x-value="@opt.Value">
+                                @if (opt is IconListOption iconListOption)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(iconListOption.IconUrl))
+                                    {
+                                        <img src="@iconListOption.IconUrl" class="option-image" />
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(iconListOption.IconCss))
+                                    {
+                                        <i class="@iconListOption.IconCss" /> 
+                                    }
+                                }
+                                <span>@opt.Label</span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="optgroup-label">@group.Key</li>
+                        @foreach (var opt in group.Value)
+                        {
+                            <li @onclick="() => SelectOption(opt)" class="@(SelectedOption == opt ? "selected" : "")" x-value="@opt.Value">
+                                @if (opt is IconListOption iconListOption)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(iconListOption.IconUrl))
+                                    {
+                                        <img src="@iconListOption.IconUrl" class="option-image" />
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(iconListOption.IconCss))
+                                    {
+                                        <i class="@iconListOption.IconCss" />
+                                    }
+                                }
+                                <span>@opt.Label</span>
+                            </li>
+                        }
+                    }
+                }
+            }
+        </ul>
+    </div>
+</InputWrapper>

@@ -271,8 +271,13 @@ public abstract class ListPage<U, T> : ComponentBase where T : IUniqueObject<U>
         return EventCallback.Empty;
     }
 
+    /// <summary>
+    /// Gets the delete message
+    /// </summary>
     protected virtual string DeleteMessage => "Labels.DeleteItems";
-    
+    /// <summary>
+    /// Gets the delete URL
+    /// </summary>
     protected virtual string DeleteUrl => ApiUrl;
 
     public virtual async Task Delete()

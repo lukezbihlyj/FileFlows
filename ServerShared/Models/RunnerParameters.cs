@@ -53,4 +53,12 @@ public class RunnerParameters
     /// Gets or sets if is the internal processing node 
     /// </summary>
     public bool IsInternalServerNode { get; set; }
+    
+    #if(DEBUG)
+    /// <summary>
+    /// Gets or sets a forced name for the runner temp path, this is used in debug so we dont have an issue
+    /// loading the DLLs mulitple times.
+    /// </summary>
+    public string? RunnerTempPath { get; set; }
+#endif
 }

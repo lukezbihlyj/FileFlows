@@ -48,3 +48,19 @@ ol li > span {
   white-space: pre-line;
   padding-right: 1rem;
 }
+
+.language-dropdown ::deep .row {
+  width: 50%;
+  margin-left: 25%;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.language-dropdown ::deep .row .input-label {
+  display: none;
+}
+
+.runners ::deep .row {
+  width: calc(100% - 2rem);
+  margin-left: 0rem;
+  margin-top: 4rem;
+}

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Dialogs;
+using FileFlows.Plugin;
 
 namespace FileFlows.Client.Pages;
 
@@ -49,13 +50,13 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 
     private int PageIndex;
 
-    private Guid? SelectedNode, SelectedLibrary, SelectedFlow;
+    private Guid? SelectedNode, SelectedLibrary, SelectedFlow, SelectedTag;
     private FilesSortBy? SelectedSortBy;
 
     private string lblMoveToTop = "";
 
     private int Count;
-    private string lblSearch, lblDeleteSwitch, lblForcedProcessing;
+    private string lblSearch, lblDeleteSwitch, lblForcedProcessing, lblSortBy, lblNode, lblFlow, lblLibrary, lblTag;
 
     private string TableIdentifier => "LibraryFiles_" + this.SelectedStatus; 
 
@@ -73,7 +74,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     private Dictionary<string, NodeInfo> Nodes = new();
     private Dictionary<Guid, string> Libraries = new();
     private Dictionary<Guid, string>  Flows = new();
-    private List<DropDownOption> optionsLibraries, optionsNodes, optionsFlows, optionsSortBy;
+    private List<DropDownOption> optionsLibraries, optionsNodes, optionsFlows, optionsSortBy, optionsTags;
 
     protected override string DeleteMessage => "Labels.DeleteLibraryFiles";
     
@@ -81,7 +82,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     {
         SelectedStatus = status.Value;
         this.PageIndex = 0;
-        Title = lblLibraryFiles + ": " + status.Name;
+        Title = lblLibraryFiles;// + ": " + status.Name;
         await this.Refresh();
         this.StateHasChanged();
     }
@@ -91,7 +92,8 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
                                        (SelectedNode == null ? "" : $"&node={SelectedNode}") + 
                                        (SelectedFlow == null ? "" : $"&flow={SelectedFlow}") + 
                                        (SelectedSortBy == null ? "" : $"&sortBy={(int)SelectedSortBy}") + 
-                                       (SelectedLibrary == null ? "" : $"&library={SelectedLibrary}");
+                                       (SelectedLibrary == null ? "" : $"&library={SelectedLibrary}") +
+                                       (SelectedTag == null ? "" : $"&tag={System.Web.HttpUtility.UrlEncode(SelectedTag.ToString())}");
 
     public override async Task PostLoad()
     {
@@ -105,15 +107,31 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 
     protected async override Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+
         this.SelectedStatus = FileFlows.Shared.Models.FileStatus.Unprocessed;
         lblForcedProcessing = Translater.Instant("Labels.ForceProcessing");
         lblMoveToTop = Translater.Instant("Pages.LibraryFiles.Buttons.MoveToTop");
         lblLibraryFiles = Translater.Instant("Pages.LibraryFiles.Title");
         lblFileFlowsServer = Translater.Instant("Pages.Nodes.Labels.FileFlowsServer");
-        Title = lblLibraryFiles + ": " + Translater.Instant("Enums.FileStatus." + FileStatus.Unprocessed);
+        Title = lblLibraryFiles;// + ": " + Translater.Instant("Enums.FileStatus." + FileStatus.Unprocessed);
         this.lblSearch = Translater.Instant("Labels.Search");
         this.lblDeleteSwitch = Translater.Instant("Labels.DeleteLibraryFilesPhysicallySwitch");
-        base.OnInitialized(true);
+        lblSortBy = Translater.Instant("Labels.SortBy");
+        lblNode = Translater.Instant("Labels.Node");
+        lblFlow = Translater.Instant("Labels.Flow");
+        lblLibrary = Translater.Instant("Pages.Library.Title");
+        lblTag = Translater.Instant("Labels.Tag");
+
+        if (Profile.LicenseLevel != LicenseLevel.Free)
+        {
+            optionsTags = (await ClientService.GetTags()).Select(x => new DropDownOption()
+            {
+                Icon = x.Icon?.EmptyAsNull() ?? "fas fa-tag",
+                Value = x.Uid,
+                Label = x.Name
+            }).ToList();
+        }
         
         optionsSortBy = new ()
         {
@@ -295,7 +313,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
 
     public override async Task<bool> Edit(LibaryFileListModel item)
     {
-        await Helpers.LibraryFileEditor.Open(Blocker, Editor, item.Uid);
+        await Helpers.LibraryFileEditor.Open(Blocker, Editor, item.Uid, Profile);
         return false;
     }
 
@@ -610,26 +628,6 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         }
     }
 
-    /// <summary>
-    /// Gets the image for the file
-    /// </summary>
-    /// <param name="path">the path of the file</param>
-    /// <returns>the image to show</returns>
-    private string GetExtensionImage(string path)
-    {
-        int index = path.LastIndexOf(".", StringComparison.Ordinal);
-        if (index < 0)
-            return "/icons/filetypes/folder.svg";
-        string prefix = "/icon/filetype";
-#if (DEBUG)
-        prefix = "http://localhost:6868/icon/filetype";
-#endif
-        
-        string extension = path[(index + 1)..].ToLowerInvariant();
-        if (Regex.IsMatch(path, "^http(s)?://", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
-            extension = "url";
-        return $"{prefix}/{extension}.svg";
-    }
 
     /// <summary>
     /// Gets the icon to show for the node
@@ -686,13 +684,27 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     {
         if (library is string str)
         {
-            var l = Libraries?.FirstOrDefault(x => x.Value?.ToLowerInvariant() == str.ToLowerInvariant());
+            var l = Libraries?.FirstOrDefault(x => (x.Value?.ToLowerInvariant()).Equals(str, StringComparison.InvariantCultureIgnoreCase));
             if (l == null)
                 return;
             SelectedLibrary = l.Value.Key;
         }
         else
             SelectedLibrary = library as Guid?;
+        _ = Refresh();
+    }
+
+    private void SelectTag(object? tag)
+    {
+        if (tag is string str)
+        {
+            var t = optionsTags?.FirstOrDefault(x => (x.Label?.ToLowerInvariant()).Equals(str, StringComparison.InvariantCultureIgnoreCase));
+            if (t == null)
+                return;
+            SelectedTag = t.Value as Guid?;
+        }
+        else
+            SelectedTag = tag as Guid?;
         _ = Refresh();
     }
 

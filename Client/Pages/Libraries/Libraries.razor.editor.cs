@@ -237,13 +237,13 @@ public partial class Libraries : ListPage<Guid, Library>
         List<IFlowField> fields = new ();
         fields.Add(new ElementField
         {
-            InputType = FormInputType.Text,
-            Name = nameof(library.Filter)
+            InputType = FormInputType.StringArray,
+            Name = nameof(library.Filters)
         });
         fields.Add(new ElementField
         {
-            InputType = FormInputType.Text,
-            Name = nameof(library.ExclusionFilter)
+            InputType = FormInputType.StringArray,
+            Name = nameof(library.ExclusionFilters)
         });
         fields.Add(new ElementField
         {

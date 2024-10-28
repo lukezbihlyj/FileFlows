@@ -9,7 +9,7 @@ namespace FileFlows.Client.Components.Dialogs;
 /// <summary>
 /// Confirm dialog that prompts the user for confirmation 
 /// </summary>
-public partial class Confirm : ComponentBase, IDisposable
+public partial class Confirm : VisibleEscapableComponent
 {
     [Inject] public IJSRuntime jsRuntime { get; set; }
     
@@ -31,25 +31,14 @@ public partial class Confirm : ComponentBase, IDisposable
     private string btnYesUid, btnNoUid; 
 
     private static Confirm Instance { get; set; }
-
-    private bool Visible { get; set; }
+    
     private bool focused = false;
 
     protected override void OnInitialized()
     {
         this.lblYes = Translater.Instant("Labels.Yes");
         this.lblNo = Translater.Instant("Labels.No");
-        App.Instance.OnEscapePushed += InstanceOnOnEscapePushed;
         Instance = this;
-    }
-
-    private void InstanceOnOnEscapePushed(OnEscapeArgs args)
-    {
-        if (Visible)
-        {
-            No();
-            this.StateHasChanged();
-        }
     }
 
     /// <summary>
@@ -68,10 +57,10 @@ public partial class Confirm : ComponentBase, IDisposable
     }
     
     /// <summary>
-    /// Shows a confirm message
+    /// Shows a confirmation message
     /// </summary>
-    /// <param name="title">the title of the confirm message</param>
-    /// <param name="message">the message of the confirm message</param>
+    /// <param name="title">the title of the confirmation message</param>
+    /// <param name="message">the message of the confirmation message</param>
     /// <param name="switchMessage">message to show with an extra switch</param>
     /// <param name="switchState">the switch state</param>
     /// <param name="requireSwitch">if the switch is required to be checked for the YES button to become enabled</param>
@@ -148,23 +137,16 @@ public partial class Confirm : ComponentBase, IDisposable
         }
     }
 
-    private async void No()
+    public override void Cancel()
     {
         this.Visible = false;
         if (ShowSwitch)
         {
             Instance.ShowSwitchTask.TrySetResult((false, SwitchState));
-            await Task.CompletedTask;
         }
         else
         {
             Instance.ShowTask.TrySetResult(false);
-            await Task.CompletedTask;
         }
-    }
-
-    public void Dispose()
-    {
-        App.Instance.OnEscapePushed -= InstanceOnOnEscapePushed;
     }
 }

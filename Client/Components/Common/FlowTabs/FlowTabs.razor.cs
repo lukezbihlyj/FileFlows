@@ -12,6 +12,12 @@ public partial class FlowTabs : ComponentBase
     /// Gets or sets the content of the tabs.
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets the style of the tabs
+    /// </summary>
+    [Parameter]
+    public TabStyle Style { get; set; }
     /// <summary>
     /// Gets or set the active tab
     /// </summary>
@@ -85,12 +91,13 @@ public partial class FlowTabs : ComponentBase
     /// <summary>
     /// Sets the first visible tab as the active tab.
     /// </summary>
+    /// <param name="forced">If we are forcing the first tab to be active</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    public void SelectFirstTab()
+    public void SelectFirstTab(bool forced = false)
     {
         if (DisableChanging) return;
         
-        if (ActiveTab == null)
+        if (ActiveTab == null || forced)
         {
             ActiveTab = Tabs.FirstOrDefault(x => x.Visible);
             OnTabChanged.InvokeAsync(Tabs.IndexOf(ActiveTab));
@@ -98,4 +105,60 @@ public partial class FlowTabs : ComponentBase
         }
     }
 
+    /// <summary>
+    /// Selects a tab by its unique identifier.
+    /// </summary>
+    /// <param name="uid">the tabs UID</param>
+    public void SelectTabByUid(string uid)
+    {
+        if (string.IsNullOrWhiteSpace(uid))
+            return;
+        
+        var tab = Tabs.FirstOrDefault(x => x.Uid == uid);
+        if (tab != null)
+        {
+            SelectTab(tab);
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Triggers the state has changed
+    /// </summary>
+    public void TriggerStateHasChanged()
+    {
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Removes the current tab
+    /// </summary>
+    public void RemoveCurrentTab()
+    {
+        if (ActiveTab != null)
+        {
+            Tabs.Remove(ActiveTab);
+            ActiveTab = null;
+            SelectFirstTab(true);
+        }
+    }
+}
+
+/// <summary>
+/// Tab style
+/// </summary>
+public enum TabStyle
+{
+    /// <summary>
+    /// New style
+    /// </summary>
+    NewStyle = 0,
+    /// <summary>
+    /// Standard style
+    /// </summary>
+    OldStyle = 1,
+    /// <summary>
+    /// Minimal style
+    /// </summary>
+    Minimal = 2
 }
