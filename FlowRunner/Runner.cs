@@ -496,6 +496,8 @@ public class Runner
                 }
             }
         }
+        if(Globals.IsDocker)
+            nodeParameters.Variables["common"] = DirectoryHelper.DockerModsCommonDirectory;
 
         if (Info.LibraryFile.CustomVariables?.Any() == true)
         {
