@@ -14,7 +14,8 @@ RUN apt-get update && \
     add-apt-repository universe && \
     apt-get update && \
     apt-get install -y tzdata wget ca-certificates gnupg curl tar xz-utils libssl-dev apt-transport-https openssl locales libfontconfig1 libfreetype6 pciutils vainfo git \
-        pip python3-full python3-venv python3-setuptools
+        pip python3.10-full python3.10-venv python3-pip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 
 # Install dotnet SDK
