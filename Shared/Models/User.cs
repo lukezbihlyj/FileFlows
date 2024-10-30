@@ -98,6 +98,10 @@ public enum UserRole
     /// </summary>
     Tags = 16384,
     /// <summary>
+    /// Resources
+    /// </summary>
+    Resources = 32768,
+    /// <summary>
     /// Administrator
     /// </summary>
     Admin = 65535

@@ -500,6 +500,7 @@
       "Nodes": "Nodes",
       "PauseProcessing": "Verarbeitung Pausieren",
       "Plugins": "Plugins",
+      "Resources": "Ressourcen",
       "Revisions": "Überarbeitungen",
       "Scripts": "Scripts",
       "Tasks": "Aufgaben",
@@ -1152,6 +1153,13 @@
         "Revision": "Revision"
       }
     },
+    "Resources": {
+      "Singular": "Ressource",
+      "Title": "Ressourcen",
+      "Fields": {
+        "FileData": "Datei"
+      }
+    },
     "Revisions": {
       "Title": "Überarbeitungen"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "Ist nicht gültig",
     "Range": "Muss zwischen {Minimum} und {Maximum} liegen",
-    "Required": "Erforderlich"
+    "Required": "Erforderlich",
+    "SafeName": "Muss mit einem Buchstaben oder Unterstrich beginnen und darf nur Buchstaben, Ziffern oder Unterstriche enthalten. Keine Sonderzeichen oder Leerzeichen erlaubt."
   },
   "Widgets": {
     "AudioCodecs": "Audio-Codecs",

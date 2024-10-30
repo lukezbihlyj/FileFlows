@@ -297,6 +297,14 @@
                                OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
             }
             break;
+        case FormInputType.Binary:
+        {
+            var value = GetValue<FileData>(field.Name);
+            <InputBinary Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                           ValueChanged="@(x => UpdateValue(field, x))" HideLabel=@hideLabel 
+                           OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+        }
+            break;
         case FormInputType.KeyValue:
             {
                 var value = GetValue<List<KeyValuePair<string, string>>>(field.Name);

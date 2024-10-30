@@ -500,6 +500,7 @@
       "Nodes": "Knopen",
       "PauseProcessing": "Verwerking Pauzeren",
       "Plugins": "Plugins",
+      "Resources": "Hulpbronnen",
       "Revisions": "Herzieningen",
       "Scripts": "Scripts",
       "Tasks": "Taken",
@@ -1152,6 +1153,13 @@
         "Revision": "Herziening"
       }
     },
+    "Resources": {
+      "Singular": "Hulpbron",
+      "Title": "Hulpbronnen",
+      "Fields": {
+        "FileData": "Bestand"
+      }
+    },
     "Revisions": {
       "Title": "Herzieningen"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "Is niet geldig",
     "Range": "Moet tussen {Minimum} en {Maximum} liggen",
-    "Required": "Verplicht"
+    "Required": "Verplicht",
+    "SafeName": "Moet beginnen met een letter of onderstreping en mag alleen letters, cijfers of onderstrepingen bevatten. Geen speciale tekens of spaties toegestaan."
   },
   "Widgets": {
     "AudioCodecs": "Audio Codecs",

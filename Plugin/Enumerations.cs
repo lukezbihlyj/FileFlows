@@ -203,7 +203,11 @@ public enum FormInputType
     /// <summary>
     /// Input for selecting tag(s)
     /// </summary>
-    TagSelection = 46
+    TagSelection = 46,
+    /// <summary>
+    /// Input for Binary
+    /// </summary>
+    Binary = 47
 }
 
 

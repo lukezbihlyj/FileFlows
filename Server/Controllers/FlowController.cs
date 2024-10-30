@@ -995,6 +995,12 @@ public class FlowController : BaseController
         variables["time.processing"] = new TimeSpan(1, 2, 3).ToString();
         variables["time.now"] = DateTime.Now.ToShortTimeString();
 
+        var resources = await ServiceLoader.Load<ResourceService>().GetAllAsync();
+        foreach (var resource in resources)
+        {
+            variables[$"resource.{resource.Name}"] = resource.Name;
+        }
+
         //p.FlowElementUid == FileFlows.VideoNodes.DetectBlackBars
         var flowElements = await GetElements(Guid.Empty, (FlowType)(-1));
         flowElements ??= new FlowElement[] { };

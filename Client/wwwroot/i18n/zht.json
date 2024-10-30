@@ -500,6 +500,7 @@
       "Nodes": "節點",
       "PauseProcessing": "暫停處理",
       "Plugins": "插件",
+      "Resources": "文件",
       "Revisions": "版本",
       "Scripts": "腳本",
       "Tasks": "任務",
@@ -1152,6 +1153,13 @@
         "Revision": "修訂"
       }
     },
+    "Resources": {
+      "Singular": "資源",
+      "Title": "資源",
+      "Fields": {
+        "FileData": "文件"
+      }
+    },
     "Revisions": {
       "Title": "修訂"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "無效",
     "Range": "必須在 {Minimum} 和 {Maximum} 之間",
-    "Required": "必填"
+    "Required": "必填",
+    "SafeName": "必須以字母或底線開頭，且只能包含字母、數字或底線。禁止使用特殊字符或空格。"
   },
   "Widgets": {
     "AudioCodecs": "音頻編碼器",

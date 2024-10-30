@@ -500,6 +500,7 @@
       "Nodes": "노드",
       "PauseProcessing": "처리 일시 중지",
       "Plugins": "플러그인",
+      "Resources": "리소스",
       "Revisions": "수정",
       "Scripts": "스크립트",
       "Tasks": "작업",
@@ -1152,6 +1153,13 @@
         "Revision": "개정"
       }
     },
+    "Resources": {
+      "Singular": "리소스",
+      "Title": "리소스",
+      "Fields": {
+        "FileData": "파일"
+      }
+    },
     "Revisions": {
       "Title": "개정"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "유효하지 않습니다",
     "Range": " {Minimum}과 {Maximum} 사이여야 합니다",
-    "Required": "필수"
+    "Required": "필수",
+    "SafeName": "문자 또는 언더스코어로 시작해야 하며, 문자, 숫자 또는 언더스코어만 포함할 수 있습니다. 특수 문자나 공백은 허용되지 않습니다."
   },
   "Widgets": {
     "AudioCodecs": "오디오 코덱",

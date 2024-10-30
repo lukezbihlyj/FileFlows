@@ -500,6 +500,7 @@
       "Nodes": "节点",
       "PauseProcessing": "暂停处理",
       "Plugins": "插件",
+      "Resources": "资源",
       "Revisions": "修订",
       "Scripts": "脚本",
       "Tasks": "任务",
@@ -1152,6 +1153,13 @@
         "Revision": "修订版"
       }
     },
+    "Resources": {
+      "Singular": "资源",
+      "Title": "资源",
+      "Fields": {
+        "FileData": "文件"
+      }
+    },
     "Revisions": {
       "Title": "修订版"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "无效",
     "Range": "必须在 {Minimum} 和 {Maximum} 之间",
-    "Required": "必填"
+    "Required": "必填",
+    "SafeName": "必须以字母或下划线开头，且只能包含字母、数字或下划线。不允许使用特殊字符或空格。"
   },
   "Widgets": {
     "AudioCodecs": "音频编码器",

@@ -500,6 +500,7 @@
       "Nodes": "ノード",
       "PauseProcessing": "処理を一時停止",
       "Plugins": "プラグイン",
+      "Resources": "リソース",
       "Revisions": "リビジョン",
       "Scripts": "スクリプト",
       "Tasks": "タスク",
@@ -1152,6 +1153,13 @@
         "Revision": "改訂"
       }
     },
+    "Resources": {
+      "Singular": "リソース",
+      "Title": "リソース",
+      "Fields": {
+        "FileData": "ファイル"
+      }
+    },
     "Revisions": {
       "Title": "改訂"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "無効です",
     "Range": "{Minimum} から {Maximum} の間でなければなりません",
-    "Required": "必須"
+    "Required": "必須",
+    "SafeName": "文字またはアンダースコアで始まり、文字、数字、アンダースコアのみを含む必要があります。特殊文字やスペースは使用できません。"
   },
   "Widgets": {
     "AudioCodecs": "オーディオコーデック",

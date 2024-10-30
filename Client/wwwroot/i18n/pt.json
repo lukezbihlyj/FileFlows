@@ -500,6 +500,7 @@
       "Nodes": "Nós",
       "PauseProcessing": "Pausar Processamento",
       "Plugins": "Plugins",
+      "Resources": "Recursos",
       "Revisions": "Revisões",
       "Scripts": "Scripts",
       "Tasks": "Tarefas",
@@ -1152,6 +1153,13 @@
         "Revision": "Revisão"
       }
     },
+    "Resources": {
+      "Singular": "Recurso",
+      "Title": "Recursos",
+      "Fields": {
+        "FileData": "Arquivo"
+      }
+    },
     "Revisions": {
       "Title": "Revisões"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "Não é válido",
     "Range": "Deve estar entre {Minimum} e {Maximum}",
-    "Required": "Obrigatório"
+    "Required": "Obrigatório",
+    "SafeName": "Deve começar com uma letra ou um sublinhado e pode conter apenas letras, dígitos ou sublinhados. Nenhum caractere especial ou espaço é permitido."
   },
   "Widgets": {
     "AudioCodecs": "Codecs de Áudio",

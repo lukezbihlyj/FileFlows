@@ -500,6 +500,7 @@
       "Nodes": "Noder",
       "PauseProcessing": "Pausa bearbetning",
       "Plugins": "Plugins",
+      "Resources": "Resurser",
       "Revisions": "Revisioner",
       "Scripts": "Skript",
       "Tasks": "Uppgifter",
@@ -1152,6 +1153,13 @@
         "Revision": "Revision"
       }
     },
+    "Resources": {
+      "Singular": "Resurs",
+      "Title": "Resurser",
+      "Fields": {
+        "FileData": "Fil"
+      }
+    },
     "Revisions": {
       "Title": "Revisioner"
     },
@@ -1703,7 +1711,8 @@
   "Validators": {
     "Pattern": "Är inte giltig",
     "Range": "Måste vara mellan {Minimum} och {Maximum}",
-    "Required": "Obligatorisk"
+    "Required": "Obligatorisk",
+    "SafeName": "Måste börja med en bokstav eller understreck och får endast innehålla bokstäver, siffror eller understreck. Inga specialtecken eller mellanslag är tillåtna."
   },
   "Widgets": {
     "AudioCodecs": "Ljudcodecs",
