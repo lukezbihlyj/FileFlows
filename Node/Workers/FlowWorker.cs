@@ -831,7 +831,7 @@ public class FlowWorker : Worker
             }
 
             mods = mods.OrderBy(x => x.Order).ThenByDescending(x => x.Name.ToLowerInvariant()).ToList();
-            Logger.Instance.ILog("DockerMods: " + string.Join(", " , mods.Select(x => x.Name)));
+            Logger.Instance.ILog("DockerMods: \n" + string.Join("\n", mods.Select(x => $" - {x.Order:0000} - {x.Name} [{x.Revision}] ")));
 
             foreach (var mod in mods)
             {
