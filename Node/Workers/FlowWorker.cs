@@ -830,8 +830,10 @@ public class FlowWorker : Worker
                 return true;
             }
 
+            mods = mods.OrderBy(x => x.Order).ThenByDescending(x => x.Name.ToLowerInvariant()).ToList();
+            Logger.Instance.ILog("DockerMods: " + string.Join(", " , mods.Select(x => x.Name)));
 
-            foreach (var mod in mods.OrderBy(x => x.Order).ThenByDescending(x => x.Name.ToLowerInvariant()))
+            foreach (var mod in mods)
             {
                 var result = DockerModHelper.Execute(mod).Result;
                 if (result.Failed(out string error))
