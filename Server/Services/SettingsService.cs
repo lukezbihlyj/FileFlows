@@ -88,7 +88,9 @@ public class SettingsService : ISettingsService
                     Uid = x.Uid,
                     Name = x.Name,
                     Enabled = x.Enabled,
-                    Code = x.Code
+                    Code = x.Code,
+                    Order = x.Order,
+                    Revision = x.Revision
                 }).ToList();
 
             // Logger.Instance.DLog("Plugin, Flow Elements in Use: \n" + string.Join("\n", flowElementsInUse));
