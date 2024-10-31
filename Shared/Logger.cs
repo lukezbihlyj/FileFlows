@@ -51,6 +51,12 @@ public class Logger : ILogger
     public void ELog(params object[] args) => Log(LogType.Error, args);
 
     /// <summary>
+    /// Logs a raw message
+    /// </summary>
+    /// <param name="args">the arguments for the log message</param>
+    public void LogRaw(params object[] args) => Log(LogType.Raw, args);
+    
+    /// <summary>
     /// Gets the last number of log lines
     /// </summary>
     /// <param name="length">The maximum number of lines to grab</param>

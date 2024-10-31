@@ -57,5 +57,9 @@ public enum LogType
     /// <summary>
     /// A debug message
     /// </summary>
-    Debug
+    Debug,
+    /// <summary>
+    /// A raw message with no prefix
+    /// </summary>
+    Raw
 }

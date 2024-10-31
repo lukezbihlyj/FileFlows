@@ -66,6 +66,8 @@ public static class DockerModHelper
                 UseShellExecute = false
             })!.WaitForExitAsync();
 
+            Logger.Instance.ILog($"Installing DockerMod: {file}");
+            
             // Run the file and capture output to string
             var process = Process.Start(new ProcessStartInfo
             {
@@ -91,6 +93,7 @@ public static class DockerModHelper
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     outputBuilder.AppendLine(e.Data);
+                    Logger.Instance.LogRaw(e.Data);
                     outputCallback?.Invoke(outputBuilder.ToString());
                 }
             };
@@ -100,6 +103,7 @@ public static class DockerModHelper
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     outputBuilder.AppendLine(e.Data);
+                    Logger.Instance.LogRaw(e.Data);
                     outputCallback?.Invoke(outputBuilder.ToString());
                 }
             };
@@ -211,10 +215,12 @@ public static class DockerModHelper
 
                 StringBuilder outputBuilder = new StringBuilder();
 
+                Logger.Instance.ILog($"Uninstalling DockerMod: {name}");
                 process.OutputDataReceived += (sender, e) =>
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
+                        Logger.Instance.LogRaw(e.Data);
                         outputBuilder.AppendLine(e.Data);
                     }
                 };
@@ -223,6 +229,7 @@ public static class DockerModHelper
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
+                        Logger.Instance.LogRaw(e.Data);
                         outputBuilder.AppendLine(e.Data);
                     }
                 };
@@ -235,7 +242,7 @@ public static class DockerModHelper
                 string output = outputBuilder.ToString();
 
                 var totalLength = 120;
-                var modNameLength = unknown.Name.Length;
+                var modNameLength = name.Length;
                 var sideLength =
                     (totalLength - modNameLength - 14) / 2; // Subtracting 14 for the length of " Docker Mod: "
 

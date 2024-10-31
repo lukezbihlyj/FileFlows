@@ -50,13 +50,14 @@ public class FileLogger : ILogWriter
         try
         {
             string logFile = GetLogFilename();
+            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
             string prefix = type switch
             {
-                LogType.Info => " [INFO]",
-                LogType.Error => " [ERRR]",
-                LogType.Warning => " [WARN]",
-                LogType.Debug => " [DBUG]",
-                _ => ""
+                LogType.Info => $"{date} [INFO] -> ",
+                LogType.Error => $"{date} [ERRR] -> ",
+                LogType.Warning => $"{date} [WARN] -> ",
+                LogType.Debug => $"{date} [DBUG] -> ",
+                _ => string.Empty
             };
 
             string text = string.Join(
@@ -84,7 +85,7 @@ public class FileLogger : ILogWriter
                     return JsonSerializer.Serialize(x);
                 }));
 
-            string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + prefix + " -> " + text;
+            string message = prefix + text;
             if (message.IndexOf((char)0) >= 0)
             {
                 message = message.Replace(new string((char)0, 1), string.Empty);

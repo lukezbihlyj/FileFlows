@@ -482,11 +482,14 @@ public class Runner
 
         if (runInstance.Config.Resources?.Any() == true)
         {
+            var resourcesDir = Path.Combine(WorkingDir, "resources");
+            if (Directory.Exists(resourcesDir) == false)
+                Directory.CreateDirectory(resourcesDir);
             foreach (var res in runInstance.Config.Resources)
             {
                 try
                 {
-                    var file = Path.Combine(WorkingDir, res.Name + GetFileExtension(res.MimeType));
+                    var file = Path.Combine(resourcesDir, res.Name + GetFileExtension(res.MimeType));
                     File.WriteAllBytes(file, res.Data);
                     nodeParameters.Variables[$"resource.{res.Name}"] = file;
                 }
