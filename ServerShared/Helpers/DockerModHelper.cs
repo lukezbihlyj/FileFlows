@@ -34,8 +34,6 @@ public static class DockerModHelper
         try
         {
             var directory = DirectoryHelper.DockerModsDirectory;
-            // make mod.Name safe for file name, need to replace all unsafe characters
-            var safeName = FileHelper.RemoveIllegalCharacters(mod.Name);
             
             var file = Path.Combine(directory, GetDockerModFileName(mod));
             
@@ -162,9 +160,7 @@ public static class DockerModHelper
     /// <param name="mod">the DockerMod</param>
     /// <returns>the File name</returns>
     private static string GetDockerModFileName(DockerMod mod)
-    {
-        return FileHelper.RemoveIllegalCharacters(mod.Name + ".sh");
-    }
+        => FileHelper.RemoveIllegalCharacters($"{mod.Order:0000}_{mod.Name.Replace(" ", "")}_[{mod.Revision}].sh");
     
     //
     // /// <summary>

@@ -21,7 +21,8 @@ public class DockerModController : BaseController
     public async Task<IEnumerable<DockerMod>> GetAll()
     {
         var items = (await ServiceLoader.Load<DockerModService>().GetAll())
-            .OrderBy(x => x.Name.ToLowerInvariant());
+            .OrderBy(x => x.Order)
+            .ThenBy(x => x.Name.ToLowerInvariant());
         var repo = await ServiceLoader.Load<RepositoryService>().GetRepository();
         foreach (var item in items)
         {
@@ -94,4 +95,14 @@ public class DockerModController : BaseController
         }
         return Ok(item);
     }
+    
+    /// <summary>
+    /// Moves DockerMods
+    /// </summary>
+    /// <param name="model">A reference model containing UIDs to move</param>
+    /// <param name="up">If the items are being moved up or down</param>
+    /// <returns>an awaited task</returns>
+    [HttpPost("move")]
+    public async Task Move([FromBody] ReferenceModel<Guid> model, [FromQuery] bool up)
+        => await ServiceLoader.Load<DockerModService>().Move(model.Uids, up, await GetAuditDetails());
 }

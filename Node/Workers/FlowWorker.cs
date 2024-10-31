@@ -813,7 +813,6 @@ public class FlowWorker : Worker
     /// <param name="nodeName">the hostname node this is running on</param>
     bool WriteAndRunDockerMods(List<DockerMod> mods, Guid nodeUid, string nodeName)
     {
-        
         var nodeService = ServiceLoader.Load<INodeService>();
         nodeService.SetStatus(nodeUid, ProcessingNodeStatus.InstallingDockerMods).Wait();
         try
@@ -832,7 +831,7 @@ public class FlowWorker : Worker
             }
 
 
-            foreach (var mod in mods)
+            foreach (var mod in mods.OrderBy(x => x.Order).ThenByDescending(x => x.Name.ToLowerInvariant()))
             {
                 var result = DockerModHelper.Execute(mod).Result;
                 if (result.Failed(out string error))

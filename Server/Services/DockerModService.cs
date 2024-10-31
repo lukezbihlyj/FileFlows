@@ -46,7 +46,28 @@ public class DockerModService
     public async Task<Result<DockerMod>> Save(DockerMod mod, AuditDetails? auditDetails)
     {
         mod.Code = mod.Code.Replace("\r\n", "\n");
-        var result = await new DockerModManager().Update(mod, auditDetails);
+
+        var all = (await GetAll()).OrderBy(x => x.Order).ThenBy(x => x.Name.ToLowerInvariant()).ToList();
+
+        var manager = new DockerModManager();
+        for (int i = 0; i < all.Count; i++)
+        {
+            int order = i + 1;
+            var allMod = all[i];
+            
+            if (allMod.Uid == mod.Uid)
+                mod.Order = order;
+            
+            if (allMod.Order == order)
+                continue;
+            allMod.Order = order;
+            await manager.Update(allMod, null);
+        }
+
+        if (mod.Order < 1)
+            mod.Order = all.Max(x => x.Order) + 1;
+        
+        var result = await manager.Update(mod, auditDetails);
         bool isDocker = Globals.IsDocker;
         if (isDocker && result.Success(out DockerMod updated))
         {
@@ -60,7 +81,6 @@ public class DockerModService
         }
         return result;
     }
-
 
     /// <summary>
     /// Exports a DockerMod
@@ -171,4 +191,13 @@ public class DockerModService
     /// <returns>a task to await</returns>
     public Task Delete(Guid[] uids, AuditDetails auditDetails)
         => new DockerModManager().Delete(uids, auditDetails);
+
+    /// <summary>
+    /// Moves DockerMods
+    /// </summary>
+    /// <param name="uids">The UIDs to move</param>
+    /// <param name="up">If the items are being moved up or down</param>
+    /// <param name="auditDetails">the audit details</param>
+    public Task Move(Guid[] uids, bool up, AuditDetails auditDetails)
+        => new DockerModManager().Move(uids, up, auditDetails);
 }

@@ -28,6 +28,11 @@ public class DockerMod : FileFlowObject
     public int Revision { get; set; }
     
     /// <summary>
+    /// Gets or sets the priority of this DockerMod, higher the 
+    /// </summary>
+    public int Order { get; set; }
+    
+    /// <summary>
     /// Gets or sets the Code of this DockerMod
     /// </summary>
     public string Code { get; set; }
