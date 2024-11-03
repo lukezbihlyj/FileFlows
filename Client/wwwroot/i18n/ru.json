@@ -1525,6 +1525,10 @@
       "Description": "Плагин, который позволяет вам отправлять сообщения на сервер Discord.\n\nWebhook ID и токен можно получить из URL вебхука\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "Плагин, который взаимодействует с Docker для обеспечения гибкой интеграции, взаимодействия и управления ресурсами и процессами Docker.",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "Этот плагин позволяет вам отправлять электронные письма во время выполнения потока.",
       "Label": "Электронная почта"

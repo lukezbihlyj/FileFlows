@@ -1525,6 +1525,10 @@
       "Description": "Un plugin qui vous permet d'envoyer des messages à un serveur Discord.\n\nL'ID du Webhook et le token peuvent être obtenus à partir de l'URL du webhook\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "Un plugin qui interagit avec Docker pour permettre une intégration, une interaction et une gestion flexibles des ressources et des processus Docker.",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "Ce plugin vous permet d'envoyer un e-mail lors de l'exécution d'un flux.",
       "Label": "E-mail"

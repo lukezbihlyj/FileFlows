@@ -1525,6 +1525,10 @@
       "Description": "Discordサーバーにメッセージを送信できるプラグインです。",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "Dockerリソースとプロセスの柔軟な統合、操作、および管理を可能にするDockerインターフェースプラグイン。",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "このプラグインを使用すると、フローを実行している間にメールを送信できます。",
       "Label": "メール"

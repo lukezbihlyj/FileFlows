@@ -1525,6 +1525,10 @@
       "Description": "一個允許您向 Discord 伺服器發送消息的插件。\n\nWebhook Id 和令牌可以從 webhook URL 獲取\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "一個與Docker互動的插件，以實現Docker資源和過程的靈活整合、互動和管理。",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "此插件允許您在執行流程時發送電子郵件。",
       "Label": "電子郵件"
