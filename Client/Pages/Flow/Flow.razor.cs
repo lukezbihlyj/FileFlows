@@ -736,6 +736,23 @@ public partial class Flow : ComponentBase, IDisposable
                     outputs = ObjectHelper.GetArrayLength(oMatches) + 1; // add +1 for not matching
                 }
             }
+            else 
+            {
+                foreach (var key in dictNew.Keys)
+                {
+                    // DockerExecute.AdditionalOutputs uses this
+                    if (key.EndsWith("Outputs"))
+                    {
+                        var value = dictNew[key];
+                        var valueOutputs = ObjectHelper.GetArrayLength(value);
+                        if (valueOutputs > 0)
+                        {
+                            outputs = valueOutputs + 1;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         ActiveFlow?.MarkDirty();

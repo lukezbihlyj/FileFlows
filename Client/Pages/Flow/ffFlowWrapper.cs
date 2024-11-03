@@ -160,16 +160,36 @@ public class ffFlowWrapper
                 p.yPos = 50;
             else if (p.yPos > 1780)
                 p.yPos = 1750;
-            
-            if (p.FlowElementUid == "FileFlows.BasicNodes.Functions.Matches" && p.Model is IDictionary<string, object> dict)
+
+            if (p.Model is IDictionary<string, object> dict)
             {
-                // special case, outputs is determine by the "Matches" count
-                if (dict.TryGetValue("MatchConditions", out var oMatches))
+                if (p.FlowElementUid == "FileFlows.BasicNodes.Functions.Matches")
                 {
-                    p.Outputs = ObjectHelper.GetArrayLength(oMatches) + 1; // add +1 for not matching
+                    // special case, outputs is determine by the "Matches" count
+                    if (dict.TryGetValue("MatchConditions", out var oMatches))
+                    {
+                        p.Outputs = ObjectHelper.GetArrayLength(oMatches) + 1; // add +1 for not matching
+                    }
+                }
+                else
+                {
+                    foreach (var key in dict.Keys)
+                    {
+                        // DockerExecute.AdditionalOutputs uses this
+                        if (key.EndsWith("Outputs"))
+                        {
+                            var value = dict[key];
+                            var valueOutputs = ObjectHelper.GetArrayLength(value);
+                            if (valueOutputs > 0)
+                            {
+                                p.Outputs = valueOutputs + 1;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-            
+
             if (string.IsNullOrEmpty(p.Name) == false || string.IsNullOrEmpty(p?.FlowElementUid))
                 continue;
             var type = p.FlowElementUid[(p.FlowElementUid.LastIndexOf('.') + 1)..];
