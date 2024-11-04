@@ -506,6 +506,10 @@ public class LibraryFileController : Controller
         [FromForm] int totalChunks,
         [FromForm] string fileName)
     {
+        if (string.IsNullOrWhiteSpace(DirectoryHelper.ManualLibrary))
+            return BadRequest("Manual Library path not set");
+        if (Directory.Exists(DirectoryHelper.ManualLibrary) == false)
+            return BadRequest("Manual Library path does not exist");
         try
         {
             // Path for the temp file during upload
@@ -536,7 +540,8 @@ public class LibraryFileController : Controller
 
                 // Rename the temp file to the final file path
                 System.IO.File.Move(tempFilePath, finalFilePath);
-                Logger.Instance.WLog("File upload to: " + finalFilePath);
+                Logger.Instance.ILog("File upload to: " + finalFilePath);
+                Logger.Instance.ILog("Manual Library: " + DirectoryHelper.ManualLibrary);
 
                 return Ok(finalFilePath);
             }
