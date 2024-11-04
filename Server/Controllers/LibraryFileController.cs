@@ -541,7 +541,7 @@ public class LibraryFileController : Controller
             }
 
             // Return success for intermediate chunks
-            return Ok("Chunk uploaded successfully");
+            return Ok(tempFilePath);
         }
         catch (Exception ex)
         {

@@ -81,6 +81,7 @@ public partial class FileUploadDialog : IModal
 #endif
         startTime = DateTime.Now;
         isUploading = true;
+        string uploadedFile = string.Empty;
 
         const int chunkSize = 4 * 1024 * 1024; // 4 MB chunk size
         totalBytes = file.Size;
@@ -118,6 +119,7 @@ public partial class FileUploadDialog : IModal
                 return;
             }
 
+
             // Update upload metrics and UI after each chunk
             uploadedBytes += bytesRead;
             UpdateUploadMetrics();
@@ -130,10 +132,11 @@ public partial class FileUploadDialog : IModal
                 isUploading = false;
                 return;
             }
+            uploadedFile = await response.Content.ReadAsStringAsync(cancellationToken);
         }
 
         // Finalize upload completion
-        TaskCompletionSource.TrySetResult("Upload completed successfully");
+        TaskCompletionSource.TrySetResult(uploadedFile);
         isUploading = false;
     }
 
