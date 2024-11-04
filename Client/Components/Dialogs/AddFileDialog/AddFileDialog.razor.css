@@ -49,6 +49,9 @@ textarea {
   align-items: center;
   justify-content: center;
 }
+.drop-area p {
+  text-align: center;
+}
 .drop-area ::deep input {
   opacity: 0;
   position: absolute;
