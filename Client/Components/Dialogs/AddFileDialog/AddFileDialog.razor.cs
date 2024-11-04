@@ -18,6 +18,12 @@ public partial class AddFileDialog : VisibleEscapableComponent
     TaskCompletionSource<bool> ShowTask;
 
     /// <summary>
+    /// Gets or sets the local storage service
+    /// </summary>
+    [Inject]
+    private FFLocalStorageService LocalStorageService { get; set; }
+
+    /// <summary>
     /// Gets or sets the blocker to use
     /// </summary>
     private Blocker? Blocker { get; set; }
@@ -70,9 +76,9 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// The input options
     /// </summary>
     private List<ListOption> ModeOptions, FlowOptions = new (), NodeOptions = new ();
-    
+
     /// <inheritdoc />
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         lblTitle = Translater.Instant("Dialogs.AddFile.Title");
         lblDescription = Translater.Instant("Dialogs.AddFile.Description");
@@ -90,6 +96,8 @@ public partial class AddFileDialog : VisibleEscapableComponent
             new() { Label = lblRaw, Value = 1 },
             new() { Label = "Upload", Value = 2 },
         ];
+
+        Mode = await LocalStorageService.GetItemAsync<int>("FILE_UPLOAD_MODE");
     }
 
     /// <summary>
@@ -146,6 +154,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
         Blocker = blocker;
         Files = new ();
         TextList = string.Empty;
+        file = null;
         CustomVariables = new();
         Visible = true;
         FlowOptions = flows.OrderBy(x => x.Value.ToLowerInvariant())
@@ -156,7 +165,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
             .Select(x => new ListOption { Label = x.Value == "FileFlowsServer" ? "Internal Processing Node" : x.Value, Value = x.Key }).ToList();
 
         NodeOptions.Insert(0, new() { Label = lblAnyNode, Value = Guid.Empty });
-        NodeUid = Guid.Empty;
+        //NodeUid = Guid.Empty;
         StateHasChanged();
 
         ShowTask = new TaskCompletionSource<bool>();
@@ -178,6 +187,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
     private async void Save()
     {
         this.Visible = false;
+        await LocalStorageService.SetItemAsync("FILE_UPLOAD_MODE", Mode);
 
         var dict = new Dictionary<string, object>();
         foreach (var kv in CustomVariables)
@@ -187,28 +197,31 @@ public partial class AddFileDialog : VisibleEscapableComponent
             dict[kv.Key] = ObjectHelper.StringToObject(kv.Value);
         }
         
-        
         Blocker?.Show();
         try
         {
-            object requestData;
-
             if (Mode == 2)
             {
-                // Read the file as a stream for upload
-                var stream = file.OpenReadStream();
-                var fileContent = new byte[stream.Length];
-                var readAsync = await stream.ReadAsync(fileContent, 0, (int)stream.Length);
+                // Prepare form data for file upload (Mode 2)
+                using var formData = new MultipartFormDataContent();
+                const long maxAllowedSize = 10L * 1024 * 1024 * 1024; // 10 GB
+                var stream = file.OpenReadStream(maxAllowedSize);
+                var streamContent = new StreamContent(stream);
+                formData.Add(streamContent, "file", file.Name);
 
-                // Prepare the request data for file upload (Mode 2)
-                requestData = new
+                // Add other parameters
+                formData.Add(new StringContent(FlowUid.ToString()), "flowUid");
+                if (NodeUid != Guid.Empty)
+                    formData.Add(new StringContent(NodeUid.ToString()), "nodeUid");
+
+                // Add custom variables dictionary as form data
+                foreach (var kvp in dict)
                 {
-                    FlowUid,
-                    NodeUid,
-                    CustomVariables = dict,
-                    FileName = file.Name,
-                    FileContent = fileContent // Data contains the file content as a byte array
-                };
+                    formData.Add(new StringContent(kvp.Value.ToString()), $"customVariables[{kvp.Key}]");
+                }
+
+                // Make the HTTP POST request to the new upload endpoint
+                await HttpHelper.Post("/api/library-file/upload", formData);
             }
             else
             {
@@ -217,17 +230,15 @@ public partial class AddFileDialog : VisibleEscapableComponent
                     ? Files 
                     : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList();
 
-                requestData = new
+                // Make the HTTP POST request
+                await HttpHelper.Post("/api/library-file/manually-add", new
                 {
                     FlowUid,
                     NodeUid,
                     CustomVariables = dict,
                     Files = fileEntries // Files contains text entries for Modes 0 and 1
-                };
+                });
             }
-
-            // Make the HTTP POST request
-            await HttpHelper.Post("/api/library-file/manually-add", requestData);
             ShowTask.TrySetResult(true);
         }
         finally

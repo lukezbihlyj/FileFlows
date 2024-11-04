@@ -197,7 +197,12 @@ public class HttpHelper
         {
             Method = method,
             RequestUri = new Uri(url, UriKind.RelativeOrAbsolute),
-            Content = data != null ? AsJson(data) : null
+            Content = data switch
+            {
+                null => null,
+                MultipartFormDataContent multipartData => multipartData, // Use multipart content directly
+                _ => AsJson(data) // Convert other types of data to JSON content
+            }
         };
 
         OnHttpRequestCreated?.Invoke(request);

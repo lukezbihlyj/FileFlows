@@ -872,19 +872,6 @@ public class LibraryFileService
     /// <returns>the files that were added</returns>
     public async Task<Result<string[]>> ManuallyAdd(AddFileModel model)
     {
-        if (model.FileContent != null && string.IsNullOrWhiteSpace(model.FileName) == false)
-        {
-            // manually added file
-            string file = Path.Combine(DirectoryHelper.ManualLibrary,
-                Plugin.Helpers.FileHelper.GetSafeFileName(model.FileName));
-            if(File.Exists(file))
-            {
-                file = Plugin.Helpers.FileHelper.InsertBeforeExtension(file, DateTime.Now.ToString("_hhmmss"));
-            }
-            await File.WriteAllBytesAsync(file, model.FileContent);
-            model.Files = [file];
-        }
-        
         if (model?.Files?.Any() != true)
             return Result<string[]>.Fail("No items");
 

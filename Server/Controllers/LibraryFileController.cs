@@ -483,4 +483,51 @@ public class LibraryFileController : Controller
             return BadRequest(error);
         return Ok();
     }
+    
+    /// <summary>
+    /// Uploads a manual file
+    /// </summary>
+    /// <param name="file">The file being uploaded</param>
+    /// <param name="customVariables">the custom variables for the file</param>
+    /// <param name="flowUid">The UID of the flow to execute</param>
+    /// <param name="nodeUid">The UID of the node</param>
+    /// <returns></returns>
+    [HttpPost("upload")]
+    [DisableRequestSizeLimit]
+    //[RequestFormLimits(BufferBodyLengthLimit = 10_737_418_240, MultipartBodyLengthLimit = 10_737_418_240)] // 10GiB limit
+    [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
+    public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] Dictionary<string, object> customVariables,
+        [FromForm]Guid flowUid, [FromForm]Guid? nodeUid)
+    {
+        try
+        {
+            // manually added file
+            string filePath = Path.Combine(DirectoryHelper.ManualLibrary,
+                Plugin.Helpers.FileHelper.GetSafeFileName(file.FileName));
+            if(System.IO.File.Exists(filePath))
+            {
+                filePath = Plugin.Helpers.FileHelper.InsertBeforeExtension(filePath, DateTime.Now.ToString("_hhmmss"));
+            }
+            
+            using (var straam = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                await file.CopyToAsync(straam);
+            }
+
+            await ManuallyAdd(new()
+            {
+                FlowUid = flowUid,
+                CustomVariables = customVariables,
+                NodeUid = nodeUid,
+                Files = [filePath]
+            });
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            // can throw if aborted
+            Logger.Instance.WLog("File upload failed: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
 }
