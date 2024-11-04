@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
@@ -22,6 +23,11 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// </summary>
     [Inject]
     private FFLocalStorageService LocalStorageService { get; set; }
+
+    /// <summary>
+    /// Gets or sets the modal service
+    /// </summary>
+    [Inject] private IModalService ModalService { get; set; }
 
     /// <summary>
     /// Gets or sets the blocker to use
@@ -70,7 +76,12 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// <summary>
     /// The strings for translations
     /// </summary>
-    private string lblTitle, lblDescription, lblMode, lblFlow, lblNode, lblAnyNode, lblAdd, lblCancel, lblList, lblRaw;
+    private string lblTitle, lblDescription, lblMode, lblFlow, lblNode, lblAnyNode, lblAdd, lblCancel, lblList, lblRaw, lblDropFile;
+
+    private const string LSKEY_FLOW = "FILE_UPLOAD_FLOW";
+    private const string LSKEY_NODE = "FILE_UPLOAD_NODE";
+    private const string LSKEY_MODE = "FILE_UPLOAD_MODE";
+    private const string LSKEY_CUSTOM_VARIABLES = "FILE_UPLOAD_CUSTOM_VARIABLES";
 
     /// <summary>
     /// The input options
@@ -90,14 +101,19 @@ public partial class AddFileDialog : VisibleEscapableComponent
         lblCancel = Translater.Instant("Labels.Cancel");
         lblList = Translater.Instant("Dialogs.AddFile.Fields.List");
         lblRaw = Translater.Instant("Dialogs.AddFile.Fields.Raw");
+        lblDropFile = Translater.Instant("Dialogs.AddFile.Fields.DropFile");
+        var lblUpload = Translater.Instant("Labels.Upload");
         ModeOptions =
         [
             new() { Label = lblList, Value = 0 },
             new() { Label = lblRaw, Value = 1 },
-            new() { Label = "Upload", Value = 2 },
+            new() { Label = lblUpload, Value = 2 },
         ];
 
-        Mode = await LocalStorageService.GetItemAsync<int>("FILE_UPLOAD_MODE");
+        Mode = await LocalStorageService.GetItemAsync<int>(LSKEY_MODE);
+        NodeUid = await LocalStorageService.GetItemAsync<Guid>(LSKEY_NODE);
+        FlowUid = await LocalStorageService.GetItemAsync<Guid>(LSKEY_FLOW);
+        CustomVariables = await LocalStorageService.GetItemAsync<List<KeyValuePair<string, string>>>(LSKEY_CUSTOM_VARIABLES);
     }
 
     /// <summary>
@@ -155,11 +171,11 @@ public partial class AddFileDialog : VisibleEscapableComponent
         Files = new ();
         TextList = string.Empty;
         file = null;
-        CustomVariables = new();
+        CustomVariables ??= new();
         Visible = true;
         FlowOptions = flows.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption { Label = x.Value, Value = x.Key }).ToList();
-        FlowUid = (Guid)FlowOptions.First().Value!;
+        //FlowUid = (Guid)FlowOptions.First().Value!;
         
         NodeOptions = nodes.OrderBy(x => x.Value.ToLowerInvariant())
             .Select(x => new ListOption { Label = x.Value == "FileFlowsServer" ? "Internal Processing Node" : x.Value, Value = x.Key }).ToList();
@@ -187,7 +203,6 @@ public partial class AddFileDialog : VisibleEscapableComponent
     private async void Save()
     {
         this.Visible = false;
-        await LocalStorageService.SetItemAsync("FILE_UPLOAD_MODE", Mode);
 
         var dict = new Dictionary<string, object>();
         foreach (var kv in CustomVariables)
@@ -196,64 +211,31 @@ public partial class AddFileDialog : VisibleEscapableComponent
                 continue;
             dict[kv.Key] = ObjectHelper.StringToObject(kv.Value);
         }
+
+        await LocalStorageService.SetItemAsync(LSKEY_CUSTOM_VARIABLES, CustomVariables);
         
         Blocker?.Show();
         try
         {
-            if (Mode == 2)
+            // Prepare the request data for other modes
+            var fileEntries = Mode is 0 or 2 
+                ? Files 
+                : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList();
+
+            // Make the HTTP POST request
+            await HttpHelper.Post("/api/library-file/manually-add", new
             {
-                // Prepare form data for file upload (Mode 2)
-                using var formData = new MultipartFormDataContent();
-                const long maxAllowedSize = 10L * 1024 * 1024 * 1024; // 10 GB
-                var stream = file.OpenReadStream(maxAllowedSize);
-                var streamContent = new StreamContent(stream);
-                formData.Add(streamContent, "file", file.Name);
-
-                // Add other parameters
-                formData.Add(new StringContent(FlowUid.ToString()), "flowUid");
-                if (NodeUid != Guid.Empty)
-                    formData.Add(new StringContent(NodeUid.ToString()), "nodeUid");
-
-                // Add custom variables dictionary as form data
-                foreach (var kvp in dict)
-                {
-                    formData.Add(new StringContent(kvp.Value.ToString()), $"customVariables[{kvp.Key}]");
-                }
-
-                // Make the HTTP POST request to the new upload endpoint
-                await HttpHelper.Post("/api/library-file/upload", formData);
-            }
-            else
-            {
-                // Prepare the request data for other modes
-                var fileEntries = Mode == 0 
-                    ? Files 
-                    : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList();
-
-                // Make the HTTP POST request
-                await HttpHelper.Post("/api/library-file/manually-add", new
-                {
-                    FlowUid,
-                    NodeUid,
-                    CustomVariables = dict,
-                    Files = fileEntries // Files contains text entries for Modes 0 and 1
-                });
-            }
+                FlowUid,
+                NodeUid,
+                CustomVariables = dict,
+                Files = fileEntries // Files contains text entries for Modes 0 and 1
+            });
             ShowTask.TrySetResult(true);
         }
         finally
         {
             Blocker?.Hide();
         }
-        
-        // ShowTask.TrySetResult(new AddFileModel()
-        // {
-        //     FlowUid = FlowUid,
-        //     NodeUid = NodeUid,
-        //     CustomVariables = dict,
-        //     Files = Mode == 0 ? Files : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList()
-        // });
-        //await Task.CompletedTask;
     }
     
     /// <summary>
@@ -269,6 +251,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
             
             if (Mode == index)
                 return;
+            _ = LocalStorageService.SetItemAsync(LSKEY_MODE, index);
             if (index == 0)
             {
                 Files = TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList();
@@ -290,7 +273,10 @@ public partial class AddFileDialog : VisibleEscapableComponent
         set
         {
             if (value is Guid uid)
+            {
                 FlowUid = uid;
+                _ = LocalStorageService.SetItemAsync(LSKEY_FLOW, uid);
+            }
         }
     }
     
@@ -303,7 +289,10 @@ public partial class AddFileDialog : VisibleEscapableComponent
         set
         {
             if (value is Guid uid)
+            {
                 NodeUid = uid;
+                _ = LocalStorageService.SetItemAsync(LSKEY_NODE, uid);
+            }
         }
     }
 
@@ -316,9 +305,23 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// Handles the input file change
     /// </summary>
     /// <param name="e">The event arguments containing file data.</param>
-    private void FileChanged(InputFileChangeEventArgs e)
+    private async Task FileChanged(InputFileChangeEventArgs e)
     {
-        file = e.File;
+        // show the AddFileDialog
+        Result<string> result = await ModalService.ShowModal<FileUploadDialog, string>(new FileUploadOptions()
+        {
+            File = e.File
+        });
+        if (result.Success(out var uploadedFile))
+        {
+            Files.Add(uploadedFile);
+            file = e.File;
+        }
+        else
+        {
+            // remove the file from the InputFile
+            file = null;
+        }
     }
 
     /// <summary>

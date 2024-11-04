@@ -1,0 +1,10 @@
+.file-upload-dialog .dialog-buttons {
+  margin-top: 20px;
+}
+.file-upload-dialog .dialog-buttons button {
+  margin-right: 10px;
+}
+.file-upload-dialog progress {
+  width: 100%;
+  margin-top: 10px;
+}

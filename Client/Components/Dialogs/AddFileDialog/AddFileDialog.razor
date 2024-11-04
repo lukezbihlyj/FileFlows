@@ -46,13 +46,13 @@
                     <div class="drop-area">
                         @if (file == null)
                         {
-                            <p>Drop files here or click to upload</p>
+                            <p>@lblDropFile</p>
                         }
                         else
                         {
                             <p>@file.Name</p>
                         }
-                        <Microsoft.AspNetCore.Components.Forms.InputFile @ref="FileInput" OnChange="FileChanged"/>
+                        <Microsoft.AspNetCore.Components.Forms.InputFile @ref="FileInput" OnChange="FileChanged" />
                     </div>
                 }
             </FlowTab>

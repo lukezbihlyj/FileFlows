@@ -197,6 +197,7 @@
       "Title": "Aggiungi File",
       "Fields": {
         "AnyNode": "Qualsiasi Nodo",
+        "DropFile": "Trascina un file qui o clicca per caricare",
         "Flow": "Flow",
         "List": "Elenco",
         "Mode": "Modalità Input",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "Seleziona una Directory",
       "FileTitle": "Seleziona un File"
+    },
+    "FileUpload": {
+      "Complete": "Caricamento completato con successo",
+      "ETA": "ETA",
+      "Speed": "Velocità",
+      "UploadedAmount": "Caricato"
     },
     "FlowTemplatePicker": {
       "Title": "Seleziona un modello da cui partire"

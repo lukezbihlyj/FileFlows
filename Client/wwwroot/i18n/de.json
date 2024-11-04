@@ -197,6 +197,7 @@
       "Title": "Datei hinzufügen",
       "Fields": {
         "AnyNode": "Beliebiger Node",
+        "DropFile": "Ziehen Sie eine Datei hierher oder klicken Sie, um hochzuladen",
         "Flow": "Fluss",
         "List": "Liste",
         "Mode": "Modus",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "Ein Verzeichnis wählen",
       "FileTitle": "Eine Datei auswählen"
+    },
+    "FileUpload": {
+      "Complete": "Upload erfolgreich abgeschlossen",
+      "ETA": "Voraussichtliche Ankunftszeit",
+      "Speed": "Geschwindigkeit",
+      "UploadedAmount": "Hochgeladen"
     },
     "FlowTemplatePicker": {
       "Title": "Wählen Sie eine Vorlage aus, mit der Sie beginnen möchten"

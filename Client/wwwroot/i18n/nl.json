@@ -197,6 +197,7 @@
       "Title": "Voeg Bestanden Toe",
       "Fields": {
         "AnyNode": "Elke Knoop",
+        "DropFile": "Sleep een bestand hierheen of klik om te uploaden",
         "Flow": "Stroom",
         "List": "Lijst",
         "Mode": "Invoermodus",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "Selecteer Een Directory",
       "FileTitle": "Selecteer Een Bestand"
+    },
+    "FileUpload": {
+      "Complete": "Upload succesvol voltooid",
+      "ETA": "ETA",
+      "Speed": "Snelheid",
+      "UploadedAmount": "Geüpload"
     },
     "FlowTemplatePicker": {
       "Title": "Selecteer een sjabloon om mee te beginnen"

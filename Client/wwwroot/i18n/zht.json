@@ -197,6 +197,7 @@
       "Title": "添加檔案",
       "Fields": {
         "AnyNode": "任何節點",
+        "DropFile": "將文件拖到此處或單擊上傳",
         "Flow": "流程",
         "List": "清單",
         "Mode": "輸入模式",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "選擇目錄",
       "FileTitle": "選擇檔案"
+    },
+    "FileUpload": {
+      "Complete": "上傳成功完成",
+      "ETA": "預計到達時間",
+      "Speed": "速度",
+      "UploadedAmount": "已上傳"
     },
     "FlowTemplatePicker": {
       "Title": "選擇一個模板作為起點"

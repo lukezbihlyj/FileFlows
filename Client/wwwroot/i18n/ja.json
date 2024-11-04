@@ -197,6 +197,7 @@
       "Title": "ファイルを追加",
       "Fields": {
         "AnyNode": "任意のノード",
+        "DropFile": "ファイルをここにドラッグするか、クリックしてアップロード",
         "Flow": "フロー",
         "List": "リスト",
         "Mode": "入力モード",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "ディレクトリを選択",
       "FileTitle": "ファイルを選択"
+    },
+    "FileUpload": {
+      "Complete": "アップロードが正常に完了しました",
+      "ETA": "推定残り時間",
+      "Speed": "速度",
+      "UploadedAmount": "アップロード済み"
     },
     "FlowTemplatePicker": {
       "Title": "開始するテンプレートを選択"

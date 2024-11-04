@@ -1,0 +1,47 @@
+@namespace FileFlows.Client.Components
+@inject IModalService ModalService
+
+@{
+    var modals = ModalService.GetActiveModals().Select((m, index) => new { Modal = m, Index = index }).ToList();
+    int zIndex = 99; // Starting z-index for the overlay
+}
+
+@if (modals.Count > 0) // Only render if there are active modals
+{
+    // Loop through each modal to render them
+    for (int i = 0; i < modals.Count; i++)
+    {
+        ++zIndex; // Increment z-index for each modal
+        var modal = modals[i];
+
+        // Render the overlay for the topmost modal
+        if (i == modals.Count - 1)
+        {
+            <div class="background-overlay" style="z-index:@(++zIndex)"></div>
+            <!-- Overlay just below the top modal -->
+        }
+
+        <div class="modal-render" style="z-index:@(zIndex);position: absolute">
+            @{
+                var dict = new Dictionary<string, object>
+                {
+                    { nameof(IModal.Options), modal.Modal.Options },
+                    { nameof(IModal.TaskCompletionSource), modal.Modal.TaskCompletionSource }
+                };
+            }
+            <DynamicComponent Type="@modal.Modal.GetType()" Parameters="@dict" />
+        </div>
+    }
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        ModalService.OnModalsChanged += StateHasChanged; // Subscribe to modal changes
+    }
+
+    public void Dispose()
+    {
+        ModalService.OnModalsChanged -= StateHasChanged; // Unsubscribe to avoid memory leaks
+    }
+}

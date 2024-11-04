@@ -197,6 +197,7 @@
       "Title": "Agregar Archivo",
       "Fields": {
         "AnyNode": "Cualquier Nodo",
+        "DropFile": "Suelta un archivo aquí o haz clic para subir",
         "Flow": "Flow",
         "List": "Lista",
         "Mode": "Modo de Entrada",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "Seleccionar un Directorio",
       "FileTitle": "Seleccionar un Archivo"
+    },
+    "FileUpload": {
+      "Complete": "Carga completada con éxito",
+      "ETA": "ETA",
+      "Speed": "Velocidad",
+      "UploadedAmount": "Subido"
     },
     "FlowTemplatePicker": {
       "Title": "Selecciona una plantilla para empezar"

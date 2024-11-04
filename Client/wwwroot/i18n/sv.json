@@ -197,6 +197,7 @@
       "Title": "Lägg till fil",
       "Fields": {
         "AnyNode": "Vilken nod som helst",
+        "DropFile": "Dra en fil hit eller klicka för att ladda upp",
         "Flow": "Flöde",
         "List": "Lista",
         "Mode": "Indata-läge",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "Välj en katalog",
       "FileTitle": "Välj en fil"
+    },
+    "FileUpload": {
+      "Complete": "Uppladdningen slutfördes framgångsrikt",
+      "ETA": "ETA",
+      "Speed": "Hastighet",
+      "UploadedAmount": "Uppladdad"
     },
     "FlowTemplatePicker": {
       "Title": "Välj en mall att utgå ifrån"

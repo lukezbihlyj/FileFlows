@@ -1,0 +1,35 @@
+@namespace FileFlows.Client.Components.Dialogs
+
+<div class="flow-modal" style="width: min(650px, 90vw);">
+    <div class="flow-modal-inner">
+        <div class="flow-modal-title">
+            <span>@lblTitle</span>
+        </div>
+        <div class="flow-modal-body">
+            @if (isUploading)
+            {
+                <div class="progress-container">
+                    <div class="right">
+                        <span class="label">@lblEta: @formattedEta</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: @(uploadedBytes * 100 / totalBytes)%"></div>
+                    </div>
+
+                    <div class="progress-info">
+                        <span class="label">@lblUploaded: @formattedUploaded</span>
+                        <span class="label">@lblSpeed: @formattedSpeed</span>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <p>@lblComplete!</p>
+            }
+        </div>
+        <div class="flow-modal-footer">
+            <button class="btn" @onclick=@Cancel>@lblCancel</button>
+        </div>
+    </div>
+</div>

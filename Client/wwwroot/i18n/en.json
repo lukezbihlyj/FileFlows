@@ -197,6 +197,7 @@
       "Title": "Add File",
       "Fields": {
         "AnyNode": "Any Node",
+        "DropFile": "Drop a file here or click to upload",
         "Flow": "Flow",
         "List": "List",
         "Mode": "Input Mode",
@@ -224,6 +225,12 @@
     "FileBrowser": {
       "DirectoryTitle": "Select A Directory",
       "FileTitle": "Select A File"
+    },
+    "FileUpload": {
+      "Complete": "Upload completed successfully",
+      "ETA": "ETA",
+      "Speed": "Speed",
+      "UploadedAmount": "Uploaded"
     },
     "FlowTemplatePicker": {
       "Title": "Select a template to start from"

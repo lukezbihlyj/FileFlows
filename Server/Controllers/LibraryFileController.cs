@@ -488,16 +488,12 @@ public class LibraryFileController : Controller
     /// Uploads a manual file
     /// </summary>
     /// <param name="file">The file being uploaded</param>
-    /// <param name="customVariables">the custom variables for the file</param>
-    /// <param name="flowUid">The UID of the flow to execute</param>
-    /// <param name="nodeUid">The UID of the node</param>
     /// <returns></returns>
     [HttpPost("upload")]
     [DisableRequestSizeLimit]
     //[RequestFormLimits(BufferBodyLengthLimit = 10_737_418_240, MultipartBodyLengthLimit = 10_737_418_240)] // 10GiB limit
     [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
-    public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] Dictionary<string, object> customVariables,
-        [FromForm]Guid flowUid, [FromForm]Guid? nodeUid)
+    public async Task<IActionResult> Upload([FromForm] IFormFile file)
     {
         try
         {
@@ -513,15 +509,7 @@ public class LibraryFileController : Controller
             {
                 await file.CopyToAsync(straam);
             }
-
-            await ManuallyAdd(new()
-            {
-                FlowUid = flowUid,
-                CustomVariables = customVariables,
-                NodeUid = nodeUid,
-                Files = [filePath]
-            });
-            return Ok();
+            return Ok(filePath);
         }
         catch (Exception ex)
         {
