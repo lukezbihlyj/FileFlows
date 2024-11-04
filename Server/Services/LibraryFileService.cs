@@ -901,6 +901,7 @@ public class LibraryFileService
                 LibraryUid = CommonVariables.ManualLibraryUid,
                 FlowUid = flow.Uid,
                 CustomVariables = model.CustomVariables,
+                RelativePath = x.StartsWith(DirectoryHelper.ManualLibrary) ? x[(DirectoryHelper.ManualLibrary.Length + 1)..] : null,
                 Flow = new()
                 {
                     Name = flow.Name,

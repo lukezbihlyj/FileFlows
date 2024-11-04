@@ -491,7 +491,6 @@ public class LibraryFileController : Controller
     /// <returns></returns>
     [HttpPost("upload")]
     [DisableRequestSizeLimit]
-    //[RequestFormLimits(BufferBodyLengthLimit = 10_737_418_240, MultipartBodyLengthLimit = 10_737_418_240)] // 10GiB limit
     [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
     public async Task<IActionResult> Upload([FromForm] IFormFile file)
     {
@@ -504,8 +503,8 @@ public class LibraryFileController : Controller
             {
                 filePath = Plugin.Helpers.FileHelper.InsertBeforeExtension(filePath, DateTime.Now.ToString("_hhmmss"));
             }
-            
-            using (var straam = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+
+            await using (var straam = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
                 await file.CopyToAsync(straam);
             }
