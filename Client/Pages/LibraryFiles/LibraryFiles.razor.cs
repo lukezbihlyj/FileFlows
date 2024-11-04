@@ -732,18 +732,19 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
     private async Task Add()
     {
         var nodes = Nodes.ToDictionary(x => x.Value.Uid, x => x.Value.Name);
-        var result = await AddDialog.Show(Flows, nodes);
-        if (result.Files?.Any() != true)
-            return;
-        Blocker.Show();
-        try
-        {
-            await HttpHelper.Post(ApiUrl + $"/manually-add", result);
-        }
-        finally
-        {
-            Blocker.Hide();
-        }
-        await Refresh();
+        var result = await AddDialog.Show(Blocker, Flows, nodes);
+        // if (result.Files?.Any() != true)
+        //     return;
+        // Blocker.Show();
+        // try
+        // {
+        //     await HttpHelper.Post(ApiUrl + $"/manually-add", result);
+        // }
+        // finally
+        // {
+        //     Blocker.Hide();
+        // }
+        if(result)
+            await Refresh();
     }
 }

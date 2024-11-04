@@ -333,6 +333,44 @@ public class FileHelper
         return parts[^1]; // Using array index -1 to get the last element
     }
     
+    
+    /// <summary>
+    /// Extracts a safe filename from the provided path, removing any directories and unsafe characters.
+    /// </summary>
+    /// <param name="filename">The full or relative path of the file.</param>
+    /// <returns>A sanitized filename without any unsafe characters or directory paths.</returns>
+    public static string GetSafeFileName(string filename)
+    {
+        // Get only the filename without directory information
+        string safeFileName = Path.GetFileName(filename);
+
+        // Remove unsafe characters (anything not alphanumeric, dot, or underscore)
+        safeFileName = Regex.Replace(safeFileName, @"[^a-zA-Z0-9._]+", "");
+
+        // Ensure filename does not start with dot or dangerous sequences like ".."
+        while (safeFileName.StartsWith(".") || safeFileName.StartsWith(".."))
+        {
+            safeFileName = safeFileName.Substring(1);
+        }
+
+        return safeFileName;
+    }
+    /// <summary>
+    /// Inserts a specified string before the file extension of the provided filename.
+    /// </summary>
+    /// <param name="filename">The original filename.</param>
+    /// <param name="textToInsert">The text to insert before the file extension.</param>
+    /// <returns>A new filename with the specified text inserted before the extension.</returns>
+    public static string InsertBeforeExtension(string filename, string textToInsert)
+    {
+        // Get the file name without extension and the extension separately
+        string nameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
+        string extension = Path.GetExtension(filename);
+
+        // Combine them with the text inserted before the extension
+        return $"{nameWithoutExtension}{textToInsert}{extension}";
+    }
+    
     /// <summary>
     /// Gets the filename without its extension.
     /// </summary>

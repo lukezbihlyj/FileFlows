@@ -1,6 +1,9 @@
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using FileFlows.Plugin;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace FileFlows.Client.Components.Dialogs;
 
@@ -12,8 +15,12 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// <summary>
     /// The task returned when showing the dialog
     /// </summary>
-    TaskCompletionSource<AddFileModel> ShowTask;
+    TaskCompletionSource<bool> ShowTask;
 
+    /// <summary>
+    /// Gets or sets the blocker to use
+    /// </summary>
+    private Blocker? Blocker { get; set; }
     /// <summary>
     /// Gets or sets the files in the list mode
     /// </summary>
@@ -43,9 +50,17 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// </summary>
     private List<KeyValuePair<Guid, string>> Nodes { get; set; }
     /// <summary>
-    /// The entering files mode, 0 = list, 1 = raw text field
+    /// The entering files mode, 0 = list, 1 = raw text field, 2 == file upload
     /// </summary>
     private int Mode = 0;
+    /// <summary>
+    /// The file input for mode 2
+    /// </summary>
+    private Microsoft.AspNetCore.Components.Forms.InputFile FileInput;
+    /// <summary>
+    /// The browser file 
+    /// </summary>
+    private IBrowserFile file;
     /// <summary>
     /// The strings for translations
     /// </summary>
@@ -55,7 +70,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// The input options
     /// </summary>
     private List<ListOption> ModeOptions, FlowOptions = new (), NodeOptions = new ();
-
+    
     /// <inheritdoc />
     protected override void OnInitialized()
     {
@@ -73,6 +88,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
         [
             new() { Label = lblList, Value = 0 },
             new() { Label = lblRaw, Value = 1 },
+            new() { Label = "Upload", Value = 2 },
         ];
     }
 
@@ -121,11 +137,13 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// <summary>
     /// Shows the language picker
     /// </summary>
+    /// <param name="blocker">the blocker to use</param>
     /// <param name="flows">the list of flows</param>
     /// <param name="nodes">the list of nodes</param>
     /// <returns>the task to await</returns>
-    public Task<AddFileModel> Show(Dictionary<Guid, string> flows, Dictionary<Guid, string> nodes)
+    public Task<bool> Show(Blocker blocker, Dictionary<Guid, string> flows, Dictionary<Guid, string> nodes)
     {
+        Blocker = blocker;
         Files = new ();
         TextList = string.Empty;
         CustomVariables = new();
@@ -141,7 +159,7 @@ public partial class AddFileDialog : VisibleEscapableComponent
         NodeUid = Guid.Empty;
         StateHasChanged();
 
-        ShowTask = new TaskCompletionSource<AddFileModel>();
+        ShowTask = new TaskCompletionSource<bool>();
         return ShowTask.Task;
     }
 
@@ -169,14 +187,62 @@ public partial class AddFileDialog : VisibleEscapableComponent
             dict[kv.Key] = ObjectHelper.StringToObject(kv.Value);
         }
         
-        ShowTask.TrySetResult(new AddFileModel()
+        
+        Blocker?.Show();
+        try
         {
-            FlowUid = FlowUid,
-            NodeUid = NodeUid,
-            CustomVariables = dict,
-            Files = Mode == 0 ? Files : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList()
-        });
-        await Task.CompletedTask;
+            object requestData;
+
+            if (Mode == 2)
+            {
+                // Read the file as a stream for upload
+                var stream = file.OpenReadStream();
+                var fileContent = new byte[stream.Length];
+                var readAsync = await stream.ReadAsync(fileContent, 0, (int)stream.Length);
+
+                // Prepare the request data for file upload (Mode 2)
+                requestData = new
+                {
+                    FlowUid,
+                    NodeUid,
+                    CustomVariables = dict,
+                    FileName = file.Name,
+                    FileContent = fileContent // Data contains the file content as a byte array
+                };
+            }
+            else
+            {
+                // Prepare the request data for other modes
+                var fileEntries = Mode == 0 
+                    ? Files 
+                    : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList();
+
+                requestData = new
+                {
+                    FlowUid,
+                    NodeUid,
+                    CustomVariables = dict,
+                    Files = fileEntries // Files contains text entries for Modes 0 and 1
+                };
+            }
+
+            // Make the HTTP POST request
+            await HttpHelper.Post("/api/library-file/manually-add", requestData);
+            ShowTask.TrySetResult(true);
+        }
+        finally
+        {
+            Blocker?.Hide();
+        }
+        
+        // ShowTask.TrySetResult(new AddFileModel()
+        // {
+        //     FlowUid = FlowUid,
+        //     NodeUid = NodeUid,
+        //     CustomVariables = dict,
+        //     Files = Mode == 0 ? Files : TextList.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries).Distinct().ToList()
+        // });
+        //await Task.CompletedTask;
     }
     
     /// <summary>
@@ -234,4 +300,33 @@ public partial class AddFileDialog : VisibleEscapableComponent
     /// Gets or sets the custom variables
     /// </summary>
     private List<KeyValuePair<string, string>> CustomVariables { get; set; } = new();
+
+    /// <summary>
+    /// Handles the input file change
+    /// </summary>
+    /// <param name="e">The event arguments containing file data.</param>
+    private void FileChanged(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+    }
+
+    /// <summary>
+    /// Gets if the Add button is disabled
+    /// </summary>
+    /// <returns>true if disabled</returns>
+    private bool IsDisabled()
+    {
+        switch (Mode)
+        {
+            case 0:
+                return Files.Count == 0;
+            case 1:
+                return string.IsNullOrWhiteSpace(TextList);
+            case 2:
+                return file == null;
+        }
+
+        return false;
+    }
+        
 }

@@ -9,6 +9,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
 using Humanizer;
+using FileHelper = FileFlows.Server.Helpers.FileHelper;
 using ILogger = FileFlows.Plugin.ILogger;
 
 namespace FileFlows.Server.Services;
@@ -871,7 +872,18 @@ public class LibraryFileService
     /// <returns>the files that were added</returns>
     public async Task<Result<string[]>> ManuallyAdd(AddFileModel model)
     {
-        Logger.Instance.ILog("Manually Adding: \n" + JsonSerializer.Serialize(model));
+        if (model.FileContent != null && string.IsNullOrWhiteSpace(model.FileName) == false)
+        {
+            // manually added file
+            string file = Path.Combine(DirectoryHelper.ManualLibrary,
+                Plugin.Helpers.FileHelper.GetSafeFileName(model.FileName));
+            if(File.Exists(file))
+            {
+                file = Plugin.Helpers.FileHelper.InsertBeforeExtension(file, DateTime.Now.ToString("_hhmmss"));
+            }
+            await File.WriteAllBytesAsync(file, model.FileContent);
+            model.Files = [file];
+        }
         
         if (model?.Files?.Any() != true)
             return Result<string[]>.Fail("No items");

@@ -37,9 +37,23 @@
                         </div>
                     </div>
                 }
-                else
+                else if(Mode == 1)
                 {
                     <textarea @bind="TextList"></textarea>
+                }
+                else
+                {
+                    <div class="drop-area">
+                        @if (file == null)
+                        {
+                            <p>Drop files here or click to upload</p>
+                        }
+                        else
+                        {
+                            <p>@file.Name</p>
+                        }
+                        <Microsoft.AspNetCore.Components.Forms.InputFile @ref="FileInput" OnChange="FileChanged"/>
+                    </div>
                 }
             </FlowTab>
             <FlowTab Title="Custom Variables">
@@ -49,7 +63,7 @@
     </div>
     </Body>
     <Footer>
-        <button class="btn" @onclick=@Save disabled="@(Mode == 0 ? (Files.Any() ? null : "") : string.IsNullOrWhiteSpace(TextList) ? "" : null)">@lblAdd</button>
+        <button class="btn" @onclick=@Save disabled="@IsDisabled()">@lblAdd</button>
         <button class="btn" @onclick=@Cancel>@lblCancel</button>
     </Footer>
 </Modal>
