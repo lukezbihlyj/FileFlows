@@ -95,6 +95,12 @@ public partial class TrendWidget : ComponentBase, IAsyncDisposable
         }
     }
 
+    /// <summary>
+    /// Generates a SVG Image
+    /// </summary>
+    /// <param name="values">the values in the trend</param>
+    /// <param name="color">the color</param>
+    /// <returns>the Path svg</returns>
     public string? GenerateSvg(double[] values, string color)
     {
         if (values == null || values.Length < 4 || svgWidth < 1 || svgHeight < 1)
