@@ -363,12 +363,16 @@ public class FileHelper
     /// <returns>A new filename with the specified text inserted before the extension.</returns>
     public static string InsertBeforeExtension(string filename, string textToInsert)
     {
-        // Get the file name without extension and the extension separately
+        // Get the directory (if any) and the filename
+        var directory = Path.GetDirectoryName(filename);
         string nameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
         string extension = Path.GetExtension(filename);
 
-        // Combine them with the text inserted before the extension
-        return $"{nameWithoutExtension}{textToInsert}{extension}";
+        // Construct the new filename with text inserted before the extension
+        string newFileName = $"{nameWithoutExtension}{textToInsert}{extension}";
+
+        // Return the full path by combining the directory and the new filename
+        return Path.Combine(directory ?? string.Empty, newFileName);
     }
     
     /// <summary>

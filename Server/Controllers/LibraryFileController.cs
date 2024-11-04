@@ -541,7 +541,6 @@ public class LibraryFileController : Controller
                 // Rename the temp file to the final file path
                 System.IO.File.Move(tempFilePath, finalFilePath);
                 Logger.Instance.ILog("File upload to: " + finalFilePath);
-                Logger.Instance.ILog("Manual Library: " + DirectoryHelper.ManualLibrary);
 
                 return Ok(finalFilePath);
             }
