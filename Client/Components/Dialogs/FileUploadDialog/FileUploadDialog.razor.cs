@@ -1,3 +1,4 @@
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -68,6 +69,7 @@ public partial class FileUploadDialog : IModal
     {
         TaskCompletionSource.TrySetCanceled(); // Indicate cancellation
     }
+    
     /// <summary>
     /// Uploads the file with progress and cancellation support.
     /// </summary>
@@ -77,33 +79,62 @@ public partial class FileUploadDialog : IModal
 #if (DEBUG)
         url = "http://localhost:6868" + url;
 #endif
-        totalBytes = file.Size;
         startTime = DateTime.Now;
-        
-        var progress = new Progress<long>(bytes =>
-        {
-            uploadedBytes = bytes;
-            UpdateUploadMetrics();
-            InvokeAsync(StateHasChanged);
-        });
-
-        using var stream = file.OpenReadStream(maxAllowedSize: long.MaxValue);
-        var content = new ProgressableStreamContent(stream, progress);
-
-        using var form = new MultipartFormDataContent();
-        form.Add(content, "file", file.Name);
-
         isUploading = true;
-        var response = await HttpHelper.Client.PostAsync(url, form, cancellationToken);
 
-        isUploading = false;
-        if (response.IsSuccessStatusCode)
+        const int chunkSize = 4 * 1024 * 1024; // 4 MB chunk size
+        totalBytes = file.Size;
+        int totalChunks = (int)Math.Ceiling((double)totalBytes / chunkSize);
+        string fileName = file.Name;
+
+        // Open file stream for reading without using Seek
+        using var stream = file.OpenReadStream(maxAllowedSize: long.MaxValue);
+
+        for (int chunkNumber = 0; chunkNumber < totalChunks; chunkNumber++)
         {
-            var uploadedFile = await response.Content.ReadAsStringAsync(cancellationToken);
-            TaskCompletionSource.TrySetResult(uploadedFile);
+            // Calculate the number of bytes to read in this chunk
+            int bytesToRead = (int)Math.Min(chunkSize, totalBytes - (chunkNumber * chunkSize));
+            var buffer = new byte[bytesToRead];
+        
+            // Read the current chunk into the buffer
+            int bytesRead = await stream.ReadAsync(buffer, 0, bytesToRead, cancellationToken);
+
+            // Prepare multipart form data with current chunk and metadata
+            using var form = new MultipartFormDataContent
+            {
+                { new ByteArrayContent(buffer, 0, bytesRead), "file", fileName },
+                { new StringContent(chunkNumber.ToString()), "chunkNumber" },
+                { new StringContent(totalChunks.ToString()), "totalChunks" },
+                { new StringContent(fileName), "fileName" }
+            };
+
+            // Send the chunk to the server
+            var response = await HttpHelper.Client.PostAsync(url, form, cancellationToken);
+        
+            if (!response.IsSuccessStatusCode)
+            {
+                TaskCompletionSource.TrySetResult("Upload Failed");
+                isUploading = false;
+                return;
+            }
+
+            // Update upload metrics and UI after each chunk
+            uploadedBytes += bytesRead;
+            UpdateUploadMetrics();
+            await InvokeAsync(StateHasChanged);
+
+            // Check if upload was canceled
+            if (cancellationToken.IsCancellationRequested)
+            {
+                TaskCompletionSource.TrySetCanceled();
+                isUploading = false;
+                return;
+            }
         }
-        else
-            TaskCompletionSource.TrySetResult("Upload Failed");
+
+        // Finalize upload completion
+        TaskCompletionSource.TrySetResult("Upload completed successfully");
+        isUploading = false;
     }
 
     private void UpdateUploadMetrics()

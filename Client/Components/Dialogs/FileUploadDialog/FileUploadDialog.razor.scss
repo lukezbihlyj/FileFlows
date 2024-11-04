@@ -1,14 +1,11 @@
-.file-upload-dialog {
-  .dialog-buttons {
-    margin-top: 20px;
-
-    button {
-      margin-right: 10px;
-    }
-  }
-
-  progress {
-    width: 100%;
-    margin-top: 10px;
-  }
+.progress {
+  
+}
+.right {
+  text-align: right;
+  margin-bottom:0.5rem;
+  font-weight: var(--bold, 600);
+}
+.progress-info {
+  margin-top:0.5rem;
 }

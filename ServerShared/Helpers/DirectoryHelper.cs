@@ -19,7 +19,11 @@ public class DirectoryHelper
 
         FlowRunnerDirectory = Path.Combine(BaseDirectory, "FlowRunner");
 
+#if(DEBUG)
+        ManualLibrary = Path.Combine("/home/john/temp", "ManuallyAdded");
+#else
         ManualLibrary = Path.Combine(BaseDirectory, "ManuallyAdded");
+#endif
         if (Directory.Exists(ManualLibrary) == false)
             Directory.CreateDirectory(ManualLibrary);
     }

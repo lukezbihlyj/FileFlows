@@ -8,12 +8,14 @@
         <div class="flow-modal-body">
             @if (isUploading)
             {
+                int percent = (int)Math.Round(uploadedBytes * 100d / totalBytes);
                 <div class="progress-container">
                     <div class="right">
                         <span class="label">@lblEta: @formattedEta</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress" style="width: @(uploadedBytes * 100 / totalBytes)%"></div>
+                        <FlowProgress TotalParts="100" CurrentPart="@percent"></FlowProgress>
+                        @* <div class="progress" style="width: @(uploadedBytes * 100 / totalBytes)%"></div> *@
                     </div>
 
                     <div class="progress-info">

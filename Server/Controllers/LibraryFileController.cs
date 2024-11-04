@@ -483,38 +483,72 @@ public class LibraryFileController : Controller
             return BadRequest(error);
         return Ok();
     }
-    
+
     /// <summary>
-    /// Uploads a manual file
+    /// Uploads a file in chunks, saving with a temporary extension until the final chunk is received.
+    /// On the last chunk, renames the file to the final name, adding a timestamp if necessary.
     /// </summary>
-    /// <param name="file">The file being uploaded</param>
-    /// <returns></returns>
+    /// <param name="file">The current file chunk being uploaded.</param>
+    /// <param name="chunkNumber">The sequence number of the current chunk (starting from 0).</param>
+    /// <param name="totalChunks">The total number of chunks for the file.</param>
+    /// <param name="fileName">The original file name for the upload.</param>
+    /// <returns>
+    /// An <see cref="IActionResult"/> indicating the status of the upload.
+    /// Returns the final file path when the last chunk has been uploaded successfully.
+    /// </returns>
     [HttpPost("upload")]
     [DisableRequestSizeLimit]
-    [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240, MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
-    public async Task<IActionResult> Upload([FromForm] IFormFile file)
+    [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240,
+        MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
+    public async Task<IActionResult> Upload(
+        [FromForm] IFormFile file,
+        [FromForm] int chunkNumber,
+        [FromForm] int totalChunks,
+        [FromForm] string fileName)
     {
         try
         {
-            // manually added file
-            string filePath = Path.Combine(DirectoryHelper.ManualLibrary,
-                Plugin.Helpers.FileHelper.GetSafeFileName(file.FileName));
-            if(System.IO.File.Exists(filePath))
+            // Path for the temp file during upload
+            string tempFilePath = Path.Combine(DirectoryHelper.ManualLibrary,
+                Plugin.Helpers.FileHelper.GetSafeFileName(fileName) + ".temp");
+
+            // Set the file mode based on the chunk number
+            var fileMode = chunkNumber == 0 ? FileMode.Create : FileMode.Append;
+
+            // Write the current chunk to the temporary file
+            await using (var stream = new FileStream(tempFilePath, fileMode, FileAccess.Write))
             {
-                filePath = Plugin.Helpers.FileHelper.InsertBeforeExtension(filePath, DateTime.Now.ToString("_hhmmss"));
+                await file.CopyToAsync(stream);
             }
 
-            await using (var straam = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            // If it's the last chunk, rename the file to its final name
+            if (chunkNumber == totalChunks - 1)
             {
-                await file.CopyToAsync(straam);
+                string finalFilePath = Path.Combine(DirectoryHelper.ManualLibrary,
+                    Plugin.Helpers.FileHelper.GetSafeFileName(fileName));
+
+                // Check if the final file already exists, and append timestamp if necessary
+                while (System.IO.File.Exists(finalFilePath))
+                {
+                    finalFilePath = Plugin.Helpers.FileHelper.InsertBeforeExtension(
+                        finalFilePath, DateTime.Now.ToString("_hhmmss"));
+                }
+
+                // Rename the temp file to the final file path
+                System.IO.File.Move(tempFilePath, finalFilePath);
+
+                return Ok(finalFilePath);
             }
-            return Ok(filePath);
+
+            // Return success for intermediate chunks
+            return Ok("Chunk uploaded successfully");
         }
         catch (Exception ex)
         {
-            // can throw if aborted
+            // Log and return an error if an exception occurs during upload
             Logger.Instance.WLog("File upload failed: " + ex.Message);
             return BadRequest(ex.Message);
         }
     }
+
 }

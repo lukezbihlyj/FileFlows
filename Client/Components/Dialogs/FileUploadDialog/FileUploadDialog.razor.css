@@ -1,10 +1,9 @@
-.file-upload-dialog .dialog-buttons {
-  margin-top: 20px;
+.right {
+  text-align: right;
+  margin-bottom: 0.5rem;
+  font-weight: var(--bold, 600);
 }
-.file-upload-dialog .dialog-buttons button {
-  margin-right: 10px;
-}
-.file-upload-dialog progress {
-  width: 100%;
-  margin-top: 10px;
+
+.progress-info {
+  margin-top: 0.5rem;
 }
