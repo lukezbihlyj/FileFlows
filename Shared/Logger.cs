@@ -31,6 +31,9 @@ public class Logger : ILogger
     /// </summary>
     /// <param name="args">the arguments for the log message</param>
     public void ILog(params object[] args) => Log(LogType.Info, args);
+
+    /// <inheritdoc />
+    public void Raw(params object[] args) => Log(LogType.Raw, args);
     
     /// <summary>
     /// Logs a debug message
@@ -49,12 +52,6 @@ public class Logger : ILogger
     /// </summary>
     /// <param name="args">the arguments for the log message</param>
     public void ELog(params object[] args) => Log(LogType.Error, args);
-
-    /// <summary>
-    /// Logs a raw message
-    /// </summary>
-    /// <param name="args">the arguments for the log message</param>
-    public void LogRaw(params object[] args) => Log(LogType.Raw, args);
     
     /// <summary>
     /// Gets the last number of log lines

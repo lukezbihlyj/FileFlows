@@ -91,7 +91,7 @@ public static class DockerModHelper
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     outputBuilder.AppendLine(e.Data);
-                    Logger.Instance.LogRaw(e.Data);
+                    Logger.Instance.Raw(e.Data);
                     outputCallback?.Invoke(outputBuilder.ToString());
                 }
             };
@@ -101,7 +101,7 @@ public static class DockerModHelper
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     outputBuilder.AppendLine(e.Data);
-                    Logger.Instance.LogRaw(e.Data);
+                    Logger.Instance.Raw(e.Data);
                     outputCallback?.Invoke(outputBuilder.ToString());
                 }
             };
@@ -204,7 +204,7 @@ public static class DockerModHelper
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
-                        Logger.Instance.LogRaw(e.Data);
+                        Logger.Instance.Raw(e.Data);
                         outputBuilder.AppendLine(e.Data);
                     }
                 };
@@ -213,7 +213,7 @@ public static class DockerModHelper
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
-                        Logger.Instance.LogRaw(e.Data);
+                        Logger.Instance.Raw(e.Data);
                         outputBuilder.AppendLine(e.Data);
                     }
                 };

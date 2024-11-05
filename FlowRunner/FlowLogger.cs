@@ -19,7 +19,9 @@ public class FlowLogger : ILogger
     /// Gets or sets the log file used by this logger
     /// </summary>
     List<string> log = new List<string>();
-    
+
+    /// <inheritdoc />
+    public void Raw(params object[] args) => Log(LogType.Raw, args);
     /// <summary>
     /// Logs a debug message
     /// </summary>
@@ -138,7 +140,11 @@ public class FlowLogger : ILogger
         /// <summary>
         /// A debug message
         /// </summary>
-        Debug
+        Debug,
+        /// <summary>
+        /// A log message with no prefix
+        /// </summary>
+        Raw
     }
 
     public void SetCommunicator(IFlowRunnerCommunicator communicator)
@@ -159,20 +165,31 @@ public class FlowLogger : ILogger
     {
         if (args == null || args.Length == 0)
             return;
-        string prefix = type switch
-        {
-            LogType.Info => "INFO",
-            LogType.Error => "ERRR",
-            LogType.Warning => "WARN",
-            LogType.Debug => "DBUG",
-            _ => ""
-        };
+        string prefix;
 
-        string message = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [" + prefix + "] -> " +
-            string.Join(", ", args.Select(x =>
-            x == null ? "null" :
-            x.GetType().IsPrimitive || x is string ? x.ToString() :
-            JsonSerializer.Serialize(x)));
+        if (type == LogType.Raw)
+        {
+            prefix = string.Empty;
+        }
+        else
+        {
+            prefix = type switch
+            {
+                LogType.Info => "INFO",
+                LogType.Error => "ERRR",
+                LogType.Warning => "WARN",
+                LogType.Debug => "DBUG",
+                _ => ""
+            };
+            prefix = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture) + " [" + prefix +
+                     "] -> ";
+        }
+
+        string message = prefix +
+                         string.Join(", ", args.Select(x =>
+                             x == null ? "null" :
+                             x.GetType().IsPrimitive || x is string ? x.ToString() :
+                             JsonSerializer.Serialize(x)));
         log.Add(message);
         Console.WriteLine(message);
 

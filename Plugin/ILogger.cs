@@ -12,6 +12,12 @@ public interface ILogger
     void ILog(params object[] args);
     
     /// <summary>
+    /// Logs a message with no prefix
+    /// </summary>
+    /// <param name="args">the arguments for the log message</param>
+    void Raw(params object[] args);
+    
+    /// <summary>
     /// Logs a debug message
     /// </summary>
     /// <param name="args">the arguments for the log message</param>

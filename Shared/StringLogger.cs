@@ -49,6 +49,10 @@ public class StringLogger : ILogger
     public void ELog(params object[] args)
         => Log(LogType.Error, args);
 
+    /// <inheritdoc />
+    public void Raw(params object[] args)
+        => Log(LogType.Raw, args);
+
     /// <summary>
     /// Gets the tail of the log
     /// </summary>
@@ -59,7 +63,7 @@ public class StringLogger : ILogger
             return string.Join(Environment.NewLine, Messages);
         return string.Join(Environment.NewLine, Messages.TakeLast(50));
     }
-
+    
     /// <summary>
     /// Logs a message
     /// </summary>
@@ -67,7 +71,12 @@ public class StringLogger : ILogger
     /// <param name="args">the arguments of the message</param>
     private void Log(LogType type, params object[] args)
     {
-        string prefix = AddPrefix ? type + " -> " : string.Empty;
+        string prefix;
+        if (type == LogType.Raw)
+            prefix = string.Empty;
+        else
+            prefix = AddPrefix ? type + " -> " : string.Empty;
+            
         string message = prefix + string.Join(", ", args.Select(x =>
             x == null ? "null" :
             x.GetType().IsPrimitive ? x.ToString() :

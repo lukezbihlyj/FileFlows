@@ -223,7 +223,7 @@ public class ProcessHelper : IProcessHelper
                 foreach (var arg in args.ArgumentList)
                 {
                     process.StartInfo.ArgumentList.Add(arg);
-                    if (arg.IndexOf(" ") > 0)
+                    if (arg.IndexOf(' ') > 0)
                         args.Arguments += "\"" + arg + "\" ";
                     else
                         args.Arguments += arg + " ";
@@ -361,7 +361,7 @@ public class ProcessHelper : IProcessHelper
             if (ProcessLastOutputLine != line)
             {
                 if (Args?.Silent != true)
-                    Logger?.ILog(line);
+                    Logger?.Raw(line);
                 outputBuilder.AppendLine(line);
             }
             ProcessLastOutputLine = line;
@@ -388,7 +388,7 @@ public class ProcessHelper : IProcessHelper
             if (ProcessLastOutputLine != line)
             {
                 if (Args?.Silent != true)
-                    Logger?.ILog(line);
+                    Logger?.Raw(line);
                 outputBuilder.AppendLine(line);
             }
             ProcessLastOutputLine = line;
