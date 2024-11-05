@@ -524,7 +524,7 @@ public class NodeParameters
                     Logger.ILog("init not done");
                     initDone = true;
                     if (FileName.StartsWith("http", StringComparison.InvariantCultureIgnoreCase) == false 
-                        && FileService.FileInfo(this.FileName).Success(out var fiOriginal))
+                        && FileService.FileInfo(this.FileName).Success(out var fiOriginal) && fiOriginal != null)
                     {
                         UpdateVariables(new Dictionary<string, object>
                         {
