@@ -13,7 +13,7 @@
     <div class="widget-runner table-item @(expandable && expanded ? "expanded" : "collapsed")" @key="runner.Uid" @onclick="() => ToggleExpand(runner)">
         <div class="current-progress" style="width:@(current)%"></div>
         <div class="overall-progress" style="width:@(overall)%"></div>
-        <div class="runner-content">
+        <div class="runner-content" @ondblclick="() => OpenRunner(runner)">
             <div class="actions" @onclick:stopPropagation>
                 <i class="fas fa-times-circle" @onclick="() => Cancel(runner)"></i>
             </div>
