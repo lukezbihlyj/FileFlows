@@ -26,12 +26,12 @@ internal static class DatabaseConnectorLoader
                 return new SqlServerConnector(logger, connectionString);
             case DatabaseType.Postgres:
                 return new PostgresConnector(logger, connectionString);
-            case DatabaseType.SqliteNewConnection:
-                return new SQLiteConnectorNewConnection(logger, connectionString);
-            case DatabaseType.SqliteNonCached:
-                return new SQLiteConnector(logger, connectionString, cached: false);
+            case DatabaseType.SqlitePooledConnection:
+                return new SQLiteConnectorPooledConnection(logger, connectionString);
+            // case DatabaseType.SqliteNonCached:
+            //     return new SQLiteConnect(logger, connectionString, cached: false);
             default:
-                return new SQLiteConnector(logger, connectionString, cached: true);
+                return new SQLiteConnectorNewConnection(logger, connectionString);
         }
     }
 }

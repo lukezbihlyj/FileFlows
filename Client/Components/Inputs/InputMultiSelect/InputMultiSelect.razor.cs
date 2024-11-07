@@ -7,7 +7,7 @@ namespace FileFlows.Client.Components.Inputs;
 /// <summary>
 /// Input multi-select
 /// </summary>
-public partial class InputMultiSelect: Input<List<object?>>
+public partial class InputMultiSelect: Input<List<object>>
 {
     /// <summary>
     /// Gets or sets the options of the checklist
@@ -46,7 +46,7 @@ public partial class InputMultiSelect: Input<List<object?>>
         lblAll = Translater.Instant("Labels.All");
         lblAny =LabelAny?.EmptyAsNull() ??  Translater.Instant("Labels.Any");
         if (Value == null)
-            Value = new List<object?>();
+            Value = new List<object>();
         else if(Options != null)
         {
             var allowed  = this.Value.Select(x =>
@@ -73,7 +73,7 @@ public partial class InputMultiSelect: Input<List<object?>>
             
             this.Value.Clear();
             if(allowed.Count > 0)
-                this.Value.AddRange(allowed);
+                this.Value.AddRange(allowed!);
         }
     }
     

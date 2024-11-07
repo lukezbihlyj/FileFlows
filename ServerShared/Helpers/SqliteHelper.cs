@@ -15,6 +15,10 @@ public class SqliteHelper
         dbFile ??= "FileFlows.sqlite";
         if (PlatformHelper.IsArm)
             return $"Data Source={dbFile}";
+        #if(DEBUG)
+        return $"Data Source={dbFile};Version=3;PRAGMA journal_mode=DELETE;";
+        #else
         return $"Data Source={dbFile};Version=3;PRAGMA journal_mode=WAL;";
+        #endif
     }
 }

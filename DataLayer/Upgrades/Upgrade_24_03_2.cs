@@ -32,7 +32,7 @@ public class Upgrade_24_03_2
     /// <returns>the upgrade result</returns>
     public Result<bool> Run(ILogger logger, DatabaseType dbType, string connectionString)
     {
-        if (dbType is DatabaseType.Sqlite or DatabaseType.SqliteNewConnection or DatabaseType.SqliteNonCached)
+        if ((int)dbType == 0 || (int)dbType >= 10)
             return RunSqlite(logger, connectionString);
         else
             return RunMySql(logger, connectionString);
@@ -170,7 +170,7 @@ public class Upgrade_24_03_2
         {
             string dbFile = Path.Combine(DirectoryHelper.DatabaseDirectory, "FileFlows.sqlite");
             File.Move(dbFile, dbFile);
-            var connector = new SQLiteConnector(logger, SqliteHelper.GetConnectionString(dbFile));
+            var connector = new SQLiteConnectorPooledConnection(logger, SqliteHelper.GetConnectionString(dbFile));
             List<DbObject> dbObjects;
             List<RevisionedObject> revisionObjects;
             List<LibraryFileUpgrade> libFiles;
@@ -238,7 +238,7 @@ public class Upgrade_24_03_2
             creator.CreateDatabase(true);
             creator.CreateDatabaseStructure();
             
-            connector = new SQLiteConnector(logger, connString);
+            connector = new SQLiteConnectorPooledConnection(logger, connString);
             using (var db = connector.GetDb(true).Result)
             {
                 foreach (var dbo in dbObjects)

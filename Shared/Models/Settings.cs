@@ -240,13 +240,13 @@ public enum DatabaseType
     /// </summary>
     SqlServer = 3,
     /// <summary>
-    /// SQLite but with a new connection each time
-    /// </summary>
-    SqliteNewConnection = 10,
-    /// <summary>
     /// SQLite but without a cached connection
     /// </summary>
-    SqliteNonCached = 11
+    SqliteNonCached = 11,
+    /// <summary>
+    /// SQLite but with a new connection each time
+    /// </summary>
+    SqlitePooledConnection = 12,
 }
 
 /// <summary>
