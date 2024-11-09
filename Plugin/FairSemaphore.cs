@@ -68,14 +68,14 @@ public class FairSemaphore
     /// Asynchronously waits to enter the semaphore.
     /// </summary>
     /// <returns>A task representing the asynchronous operation of acquiring the semaphore.</returns>
-    public async Task WaitAsync()
+    public async Task WaitAsync(CancellationToken cancellationToken = default)
     {
         var tcs = new TaskCompletionSource<bool>();
         StackTraces.Enqueue(GetStackTrace());
         while (StackTraces.Count > 5)
             StackTraces.Dequeue();
         queue.Enqueue(tcs);
-        await semaphore.WaitAsync();
+        await semaphore.WaitAsync(cancellationToken);
         if (queue.TryDequeue(out var popped))
             popped.SetResult(true);
     }

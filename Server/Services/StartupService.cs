@@ -108,7 +108,7 @@ public class StartupService
 
             ServiceLoader.Load<LanguageService>().Initialize().Wait();
 
-            LibraryWorker.ResetProcessing(internalOnly: true);
+            new LibraryFileService().ResetProcessingStatus(CommonVariables.InternalNodeUid).Wait();
 
             DataLayerDelegates.Setup();
             

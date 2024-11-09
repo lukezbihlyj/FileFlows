@@ -24,6 +24,9 @@ public class WatchedLibrary:IDisposable
     /// </summary>
     private FileSystemWatcher Watcher;
 
+    /// <summary>
+    /// The string helper instance
+    /// </summary>
     private StringHelper _StringHelper;
     
     /// <summary>
@@ -492,6 +495,11 @@ public class WatchedLibrary:IDisposable
         return (false, fingerprint, null);
     }
 
+    /// <summary>
+    /// Checks if a path exists
+    /// </summary>
+    /// <param name="fullpath">the full path</param>
+    /// <returns>true if exists, otherwise false</returns>
     private bool CheckExists(string fullpath)
     {
         try
@@ -506,6 +514,11 @@ public class WatchedLibrary:IDisposable
         }
     }
 
+    /// <summary>
+    /// Checks if a file is hidden
+    /// </summary>
+    /// <param name="fullpath">the full path to the file</param>
+    /// <returns>true if it is hidden</returns>
     private bool FileIsHidden(string fullpath)
     {
         try
@@ -528,7 +541,7 @@ public class WatchedLibrary:IDisposable
                 return true;
             dir = dir.Parent;
             if (++count > 20)
-                break; // infinite recrusion safety check
+                break; // infinite recursion safety check
         }
         return false;
     }
@@ -574,6 +587,9 @@ public class WatchedLibrary:IDisposable
         }
     }
 
+    /// <summary>
+    /// Disposes of the watcher
+    /// </summary>
     void DisposeWatcher()
     {
         try
@@ -593,6 +609,11 @@ public class WatchedLibrary:IDisposable
         }
     }
 
+    /// <summary>
+    /// Tests a path to see if its allowed based on the filters and extensions
+    /// </summary>
+    /// <param name="input">the input path</param>
+    /// <returns>true if filters/extensions allow this path</returns>
     private bool IsMatch(string input)
     {
         if (Library.ExclusionFilters?.Any() == true)
@@ -635,7 +656,7 @@ public class WatchedLibrary:IDisposable
             var ext = extension.ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(ext))
                 continue;
-            if (ext.StartsWith(".") == false)
+            if (ext.StartsWith('.') == false)
                 ext = "." + ext;
             if (input.ToLowerInvariant().EndsWith(ext))
                 return true;
@@ -826,6 +847,12 @@ public class WatchedLibrary:IDisposable
         }
     }
 
+    /// <summary>
+    /// Checks if the dates on a file are the same as the known file
+    /// </summary>
+    /// <param name="file">the file to check</param>
+    /// <param name="knownFile">the known file</param>
+    /// <returns>true if the dates are the same</returns>
     private bool DatesAreSame(FileInfo file, KnownFileInfo knownFile)
     {
         if (datesSame(
@@ -853,6 +880,12 @@ public class WatchedLibrary:IDisposable
         }
     }
 
+    /// <summary>
+    /// Checks if a file can be accessed
+    /// </summary>
+    /// <param name="file">the file to check</param>
+    /// <param name="fileSizeDetectionInterval">the interval to check if the file size has changed in seconds</param>
+    /// <returns>true if the file can be accessed</returns>
     private async Task<bool> CanAccess(FileInfo file, int fileSizeDetectionInterval)
     {
         DateTime now = DateTime.UtcNow;
@@ -875,7 +908,7 @@ public class WatchedLibrary:IDisposable
 
             checkedAccess = true;
 
-            using (var fs = FileOpenHelper.OpenForCheckingReadWriteAccess(file.FullName))
+            await using (var fs = FileOpenHelper.OpenForCheckingReadWriteAccess(file.FullName))
             {
                 if(fs.CanRead == false)
                 {

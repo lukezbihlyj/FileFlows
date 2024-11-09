@@ -21,6 +21,16 @@ public class LibraryFileService
     private static Logger NextFileLogger;
     
     /// <summary>
+    /// Delegate for file events
+    /// </summary>
+    public delegate void FilesDeletedHandler(Guid[] uids);
+
+    /// <summary>
+    /// Event called when library files are deleted
+    /// </summary>
+    public event FilesDeletedHandler FilesDeleted;
+    
+    /// <summary>
     /// Constructs a next library file result
     /// </summary>
     /// <param name="status">the status of the call</param>
@@ -277,8 +287,11 @@ public class LibraryFileService
         => new LibraryFileManager().Get(uid);
 
     /// <inheritdoc />
-    public Task Delete(params Guid[] uids)
-        => new LibraryFileManager().Delete(uids);
+    public async Task Delete(params Guid[] uids)
+    {
+        await new LibraryFileManager().Delete(uids);
+        FilesDeleted?.Invoke(uids);
+    }
 
     /// <inheritdoc />
     public async Task<LibraryFile> Update(LibraryFile libraryFile)

@@ -61,9 +61,7 @@ public class LibraryWorker : ServerWorker
     public static WatchedLibrary? GetWatchedLibrary(Library library)
     {
         string key =  library.Uid + ":" + library.Path;
-        if (Instance.WatchedLibraries.ContainsKey(key))
-            return Instance.WatchedLibraries[key];
-        return null;
+        return Instance.WatchedLibraries.GetValueOrDefault(key);
     }
     
 
@@ -85,9 +83,8 @@ public class LibraryWorker : ServerWorker
     {
         foreach(string key in keys)
         {
-            if (WatchedLibraries.ContainsKey(key) == false)
+            if (WatchedLibraries.TryGetValue(key, out var watcher) == false)
                 continue;
-            var watcher = WatchedLibraries[key];
             watcher.Dispose();
             WatchedLibraries.Remove(key);
             watcher = null;
@@ -170,15 +167,5 @@ public class LibraryWorker : ServerWorker
                 libwatcher.Scan();
             });
         }
-    }
-
-    /// <summary>
-    /// Resets processing of all library files that are currently marked as Processing to Unprocessed
-    /// </summary>
-    /// <param name="internalOnly">If only the internal processing node should be reset</param>
-    internal static void ResetProcessing(bool internalOnly = true)
-    {
-        var service = new Server.Services.LibraryFileService();
-        service.ResetProcessingStatus(internalOnly ? CommonVariables.InternalNodeUid : null).Wait();
     }
 }
