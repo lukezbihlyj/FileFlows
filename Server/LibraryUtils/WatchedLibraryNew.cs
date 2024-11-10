@@ -157,13 +157,13 @@ public partial class WatchedLibraryNew : IDisposable
                         // check if was processed
                         if (lfExisting.Status != FileStatus.Processed)
                             return;
-                        // file was processed, so this is treated as a new file/new download and will be reproccessed 
-
+                        // file was processed, so this is treated as a new file/new download and will be reprocessed
                         Logger.ILog("Processed file found in download library, reprocessing: " + filePath);
                     }
                     else if (FileUnchanged(fileInfo, lfExisting)) // existing file, check if its changed
                         return;
 
+                    Logger.ILog($"Reprocessing Library '{Library.Name} File: {filePath}");
                     // reprocess the file
                     lfExisting.Status = FileStatus.Unprocessed;
                     if (Library.HoldMinutes < 1)
@@ -188,6 +188,7 @@ public partial class WatchedLibraryNew : IDisposable
             }
                 
             // it's a new file/folder
+            Logger.ILog($"New Library '{Library.Name} File: {filePath}");
             var lf = NewLibraryFile(filePath);
             await LibraryFileService.Insert(lf);
         }
