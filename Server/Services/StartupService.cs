@@ -192,6 +192,9 @@ public class StartupService
             new UpdateWorker()
             //new LibraryFileServiceUpdater()
         );
+
+        // setup the library watches
+        ServiceLoader.Load<LibraryService>().SetupWatches().Wait();
     }
 
     /// <summary>

@@ -254,7 +254,7 @@ public partial class WatchedLibraryNew : IDisposable
         ScanTimer?.Dispose();
 
         // Retrieve the updated interval
-        var scanInterval = TimeSpan.FromMinutes(Library.ScanInterval);
+        var scanInterval = TimeSpan.FromSeconds(Library.ScanInterval);
 
         // Set up the timer with the updated interval
         ScanTimer = new Timer(async _ =>
@@ -304,6 +304,6 @@ public partial class WatchedLibraryNew : IDisposable
     {
         cancellationTokenSource = new();
         SetupWatcher();
-        StartOrResetScanTimer();
+        _ = Scan();
     }
 }

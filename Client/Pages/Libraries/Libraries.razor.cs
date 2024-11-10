@@ -26,7 +26,7 @@ public partial class Libraries : ListPage<Guid, Library>
         await Edit(new ()
         {  
             Enabled = true, 
-            ScanInterval = 60, 
+            ScanInterval = 600, 
             FileSizeDetectionInterval = 5,
             // UseFingerprinting = false,
             // UpdateMovedFiles = true,
