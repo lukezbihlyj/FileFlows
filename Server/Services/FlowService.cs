@@ -64,13 +64,22 @@ public class FlowService : IFlowService
     public Task Delete(Guid[] uids, AuditDetails auditDetails)
         => new FlowManager().Delete(uids, auditDetails);
 
-    
+
     /// <summary>
     /// Gets if there are any flows in the system
     /// </summary>
     /// <returns>true if there are any flows</returns>
-    public Task<bool> HasAny()
-        => new FlowManager().HasAny();
+    public async Task<bool> HasAny()
+    {
+        try
+        {
+            return await new FlowManager().HasAny();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 
     /// <summary>
     /// Checks to see if a name is in use

@@ -48,10 +48,10 @@ public class FlowExecutorInfo
     /// </summary>
     public string LibraryPath { get; set; }
     
-    /// <summary>
-    /// Gets or sets if a fingerprint should be taken of the final file
-    /// </summary>
-    public bool Fingerprint { get; set; }
+    // /// <summary>
+    // /// Gets or sets if a fingerprint should be taken of the final file
+    // /// </summary>
+    // public bool Fingerprint { get; set; }
 
     /// <summary>
     /// Gets or sets the size of the original file being processed

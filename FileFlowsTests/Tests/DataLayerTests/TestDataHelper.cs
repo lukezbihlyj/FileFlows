@@ -24,7 +24,7 @@ internal class TestDataHelper
             DateModified = DateTime.UtcNow,
             Description = "this is a test description",
             Path = "/" + name.ToLowerInvariant(),
-            Scan = true,
+            //Scan = true,
             HoldMinutes = holdMinutes,
             LastScanned = DateTime.UtcNow,
             Schedule = schedule?.EmptyAsNull() ?? new string('1', 672)

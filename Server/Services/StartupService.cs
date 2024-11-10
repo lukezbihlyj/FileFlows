@@ -173,7 +173,7 @@ public class StartupService
             new StartupWorker(),
             new LicenseValidatorWorker(),
             new SystemMonitor(),
-            new LibraryWorker(),
+            //new LibraryWorker(),
             new LogFileCleaner(),
             new FlowWorker(string.Empty, isServer: true),
             new ConfigCleaner(),

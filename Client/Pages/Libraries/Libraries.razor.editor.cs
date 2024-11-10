@@ -269,30 +269,30 @@ public partial class Libraries : ListPage<Guid, Library>
                 new (efFolders, library.Folders, value: false)
             }
         });
-        var efFingerprinting = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.UseFingerprinting),
-            Conditions = new List<Condition>
-            {
-                new(efFolders, library.Folders, value: false)
-            }
-        };
-        fields.Add(efFingerprinting);
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.UpdateMovedFiles),
-            DisabledConditions = new List<Condition>
-            {
-                new (efFingerprinting, library.UseFingerprinting, value: true)
-            }
-        });
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.ReprocessRecreatedFiles)
-        });
+        // var efFingerprinting = new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.UseFingerprinting),
+        //     Conditions = new List<Condition>
+        //     {
+        //         new(efFolders, library.Folders, value: false)
+        //     }
+        // };
+        // fields.Add(efFingerprinting);
+        // fields.Add(new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.UpdateMovedFiles),
+        //     DisabledConditions = new List<Condition>
+        //     {
+        //         new (efFingerprinting, library.UseFingerprinting, value: true)
+        //     }
+        // });
+        // fields.Add(new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.ReprocessRecreatedFiles)
+        // });
         fields.Add(new ElementField
         {
             InputType = FormInputType.Int,
@@ -398,12 +398,12 @@ public partial class Libraries : ListPage<Guid, Library>
     {
         List<IFlowField> fields = new ();
         
-        var fieldScan = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.Scan)
-        };
-        fields.Add(fieldScan);
+        // var fieldScan = new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.Scan)
+        // };
+        // fields.Add(fieldScan);
         
         fields.Add(new ElementField
         {
@@ -414,36 +414,36 @@ public partial class Libraries : ListPage<Guid, Library>
                 { "Max", 24 * 60 * 60 }
             },
             Name = nameof(library.ScanInterval),
-            Conditions = new List<Condition>
-            {
-                new (fieldScan, library.Scan, value: true)
-            }
+            // Conditions = new List<Condition>
+            // {
+            //     new (fieldScan, library.Scan, value: true)
+            // }
         });
-        var efFullScanEnabled = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.FullScanDisabled),
-            Conditions = new List<Condition>
-            {
-                new(fieldScan, library.Scan, value: false)
-            }
-        };
-        fields.Add(efFullScanEnabled);
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Period,
-            Name = nameof(library.FullScanIntervalMinutes),
-            Conditions = new List<Condition>
-            {
-                new (fieldScan, library.Scan, value: false),
-            },
-            DisabledConditions =new List<Condition>
-            {
-                new (efFullScanEnabled, library.FullScanDisabled, value: false),
-            }, 
-        });
-        if (library.FullScanIntervalMinutes < 1)
-            library.FullScanIntervalMinutes = 60;
+        // var efFullScanEnabled = new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.FullScanDisabled),
+        //     Conditions = new List<Condition>
+        //     {
+        //         new(fieldScan, library.Scan, value: false)
+        //     }
+        // };
+        // fields.Add(efFullScanEnabled);
+        // fields.Add(new ElementField
+        // {
+        //     InputType = FormInputType.Period,
+        //     Name = nameof(library.FullScanIntervalMinutes),
+        //     Conditions = new List<Condition>
+        //     {
+        //         new (fieldScan, library.Scan, value: false),
+        //     },
+        //     DisabledConditions =new List<Condition>
+        //     {
+        //         new (efFullScanEnabled, library.FullScanDisabled, value: false),
+        //     }, 
+        // });
+        // if (library.FullScanIntervalMinutes < 1)
+        //     library.FullScanIntervalMinutes = 60;
         
         fields.Add(new ElementField
         {
@@ -454,10 +454,10 @@ public partial class Libraries : ListPage<Guid, Library>
                 { "Max", 300 }
             },
             Name = nameof(library.FileSizeDetectionInterval),
-            Conditions = new List<Condition>
-            {
-                new (fieldScan, library.Scan, value: true)
-            }
+            // Conditions = new List<Condition>
+            // {
+            //     new (fieldScan, library.Scan, value: true)
+            // }
         });
 
         return fields;

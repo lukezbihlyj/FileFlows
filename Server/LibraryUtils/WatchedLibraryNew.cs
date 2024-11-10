@@ -1,8 +1,9 @@
-using System.Timers;
 using FileFlows.Plugin;
 using FileFlows.Plugin.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Models;
+using Humanizer;
+using Timer = System.Threading.Timer;
 
 namespace FileFlows.Server.LibraryUtils;
 
@@ -24,7 +25,7 @@ public partial class WatchedLibraryNew : IDisposable
     /// <summary>
     /// The timer that runs on an interval
     /// </summary>
-    private System.Timers.Timer ScanTimer = new();
+    private Timer? ScanTimer;
     
     /// <summary>
     /// Cancellation token
@@ -41,8 +42,8 @@ public partial class WatchedLibraryNew : IDisposable
     /// </summary>
     private Plugin.ILogger Logger { get; init; }
 
-    private readonly FairSemaphore Semaphore = new(1, 1);
-    private readonly FairSemaphore ScanSemaphore = new(1, 1);
+    private readonly SemaphoreSlim FileSemaphore = new(1, 1);
+    private readonly SemaphoreSlim ScanSemaphore = new(1, 1);
     private LibraryFileService LibraryFileService { get; init; }
     
     /// <summary>
@@ -78,24 +79,22 @@ public partial class WatchedLibraryNew : IDisposable
     }
 
     /// <summary>
-    /// The event called when the scan interval is triggered
-    /// </summary>
-    /// <param name="sender">the sender</param>
-    /// <param name="e">the elapsed event args</param>
-    private void ScanTimerOnElapsed(object? sender, ElapsedEventArgs e)
-    {
-        SetupWatcher();
-        _ = PerformScan();
-    }
-
-    /// <summary>
     /// Performs the full scan of the library
     /// </summary>
-    private async Task PerformScan()
+    public async Task Scan()
     {
-        await ScanSemaphore.WaitAsync(cancellationTokenSource.Token);
         try
         {
+            await ScanSemaphore.WaitAsync(10_000, cancellationTokenSource!.Token);
+            
+            // refresh the library instance
+            var libraryService = ServiceLoader.Load<LibraryService>();
+            Library = await libraryService.GetByUidAsync(Library.Uid) ?? Library;
+            if (Library.Enabled == false)
+                return; // no need to scan
+            
+            Logger.ILog($"Library '{Library.Name}' scanning");
+            DateTime start = DateTime.Now;
             // scan library 
             if (Library.Folders)
             {
@@ -110,10 +109,13 @@ public partial class WatchedLibraryNew : IDisposable
                 foreach (var file in files)
                     await CheckFile(file);
             }
+            Logger.ILog($"Library '{Library.Name}' scan complete in " + (DateTime.Now - start).Humanize());
+            await libraryService.UpdateLastScanned(Library.Uid);
         }
         finally
         {
             ScanSemaphore.Release();
+            StartOrResetScanTimer();
         }
     }
 
@@ -123,7 +125,7 @@ public partial class WatchedLibraryNew : IDisposable
     /// <param name="filePath">the file to check</param>
     private async Task CheckFile(string filePath)
     {
-        await Semaphore.WaitAsync(cancellationTokenSource.Token);
+        await FileSemaphore.WaitAsync(30_000, cancellationTokenSource.Token);
         try
         {
             if (IsMatch(filePath) == false)
@@ -191,7 +193,7 @@ public partial class WatchedLibraryNew : IDisposable
         }
         finally
         {
-            Semaphore.Release();
+            FileSemaphore.Release();
         }
     }
 
@@ -231,19 +233,42 @@ public partial class WatchedLibraryNew : IDisposable
     }
 
     /// <summary>
-    /// Configures the scanner
+    /// Updates the library being watched
     /// </summary>
-    private void ConfigureScanner()
+    /// <param name="updated">the updated library</param>
+    public void UpdateLibrary(Library updated)
     {
-        if (ScanTimer == null)
-            return; // has been disposed
-        if (Math.Abs(ScanTimer.Interval - Library.FullScanIntervalMinutes * 60 * 1000) < 500)
-            return;
-        
-        ScanTimer.Elapsed += ScanTimerOnElapsed;
-        ScanTimer.AutoReset = true;
-        ScanTimer.Interval = Library.FullScanIntervalMinutes * 60 * 1000;
-        ScanTimer.Start();
+        bool resetScanner = updated.ScanInterval != Library.ScanInterval;
+        this.Library = updated;
+        if(resetScanner)
+            StartOrResetScanTimer();
+    }
+
+    /// <summary>
+    /// Initiates or resets the scan timer.
+    /// </summary>
+    private void StartOrResetScanTimer()
+    {
+        cancellationTokenSource ??= new();
+        // Dispose the current timer if it exists
+        ScanTimer?.Dispose();
+
+        // Retrieve the updated interval
+        var scanInterval = TimeSpan.FromMinutes(Library.ScanInterval);
+
+        // Set up the timer with the updated interval
+        ScanTimer = new Timer(async _ =>
+        {
+            try
+            {
+                await Scan();
+            }
+            catch (Exception ex)
+            {
+                Logger.ELog($"Scan '{Library.Name}' failed: {ex.Message}");
+            }
+        }, null, scanInterval, Timeout.InfiniteTimeSpan);
+
     }
 
     /// <summary>
@@ -260,7 +285,7 @@ public partial class WatchedLibraryNew : IDisposable
     public void Stop()
     {
         cancellationTokenSource.Cancel();
-        ScanTimer.Stop();
+        ScanTimer.Change(Timeout.Infinite, Timeout.Infinite);
         ScanTimer.Dispose();
         ScanTimer = null;
         if (Watcher != null)
@@ -279,6 +304,6 @@ public partial class WatchedLibraryNew : IDisposable
     {
         cancellationTokenSource = new();
         SetupWatcher();
-        ConfigureScanner();
+        StartOrResetScanTimer();
     }
 }

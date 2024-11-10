@@ -104,22 +104,22 @@ public class Library : FileFlowObject
     /// </summary>
     public bool SkipFileAccessTests { get; set; }
 
-    /// <summary>
-    /// Gets or sets if this library should be routinely scanned,
-    /// or if false, will listen for file system events.
-    /// If off the library will still be fully scanned every other hour
-    /// </summary>
-    public bool Scan { get; set; }
+    // /// <summary>
+    // /// Gets or sets if this library should be routinely scanned,
+    // /// or if false, will listen for file system events.
+    // /// If off the library will still be fully scanned every other hour
+    // /// </summary>
+    // public bool Scan { get; set; }
 
     /// <summary>
     /// If this library monitors for folders or files
     /// </summary>
     public bool Folders { get; set; }
-
-    /// <summary>
-    /// Gets or sets if this library will use fingerprinting to determine if a file already is known
-    /// </summary>
-    public bool UseFingerprinting { get; set; }
+    
+    // /// <summary>
+    // /// Gets or sets if this library will use fingerprinting to determine if a file already is known
+    // /// </summary>
+    // public bool UseFingerprinting { get; set; }
     
     /// <summary>
     /// Gets or sets the number of seconds that have to pass between changes to the folder for it to be scanned into the library
@@ -141,13 +141,12 @@ public class Library : FileFlowObject
     /// </summary>
     [DontAudit]
     public DateTime LastScanned { get; set; }
-
     
-    /// <summary>
-    /// Gets or sets if recreated files (files with a different creation time) should be automatically reprocessed
-    /// This is helpful if you download the same file multiple times and want to reprocess it again
-    /// </summary>
-    public bool ReprocessRecreatedFiles { get; set; }
+    // /// <summary>
+    // /// Gets or sets if recreated files (files with a different creation time) should be automatically reprocessed
+    // /// This is helpful if you download the same file multiple times and want to reprocess it again
+    // /// </summary>
+    // public bool ReprocessRecreatedFiles { get; set; }
 
 
     /// <summary>
@@ -160,15 +159,15 @@ public class Library : FileFlowObject
     /// </summary>
     public int ScanInterval { get; set; }
     
-    /// <summary>
-    /// Gets or sets if the full scan is disabled
-    /// </summary>
-    public bool FullScanDisabled { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the number of minutes when to run a full scan to scan files
-    /// </summary>
-    public int FullScanIntervalMinutes { get; set; }
+    // /// <summary>
+    // /// Gets or sets if the full scan is disabled
+    // /// </summary>
+    // public bool FullScanDisabled { get; set; }
+    //
+    // /// <summary>
+    // /// Gets or sets the number of minutes when to run a full scan to scan files
+    // /// </summary>
+    // public int FullScanIntervalMinutes { get; set; }
 
     /// <summary>
     /// Gets or sets the number of seconds to wait before checking for file size changes when scanning the library
@@ -190,12 +189,12 @@ public class Library : FileFlowObject
     /// </summary>
     public int HoldMinutes { get; set; }
     
-    /// <summary>
-    /// Gets or sets if a moved/renamed files should have their database entries updated automatically
-    /// during a scan, if set a 'Duplicate' will not be created and the original file will be updated.
-    /// Note: this only happens if the original file no longer exists.  This is also is limited to files in the same library
-    /// </summary>
-    public bool UpdateMovedFiles { get; set; }
+    // /// <summary>
+    // /// Gets or sets if a moved/renamed files should have their database entries updated automatically
+    // /// during a scan, if set a 'Duplicate' will not be created and the original file will be updated.
+    // /// Note: this only happens if the original file no longer exists.  This is also is limited to files in the same library
+    // /// </summary>
+    // public bool UpdateMovedFiles { get; set; }
     
     /// <summary>
     /// Gets or sets the maximum concurrent files that can be processed at one time in this library

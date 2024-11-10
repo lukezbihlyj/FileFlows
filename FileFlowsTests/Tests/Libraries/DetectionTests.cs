@@ -1,4 +1,5 @@
 using System.IO;
+using FileFlows.Server.LibraryUtils;
 using FileFlows.Server.Workers;
 
 namespace FileFlowsTests.Tests.Libraries;
@@ -67,7 +68,7 @@ public class DetectionTests : TestBase
 
         bool Test()
         {
-            return WatchedLibrary.MatchesDetection(lib, info, 100_000);
+            return LibraryMatches.MatchesDetection(lib, info, 100_000);
         }
     }
     
@@ -132,7 +133,7 @@ public class DetectionTests : TestBase
 
         bool Test()
         {
-            return WatchedLibrary.MatchesDetection(lib, info, 100_000);
+            return LibraryMatches.MatchesDetection(lib, info, 100_000);
         }
     }
     
@@ -185,7 +186,7 @@ public class DetectionTests : TestBase
 
         bool Test(long size)
         {
-            return WatchedLibrary.MatchesDetection(lib, info, size);
+            return LibraryMatches.MatchesDetection(lib, info, size);
         }
     }
 }
