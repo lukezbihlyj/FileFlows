@@ -895,9 +895,10 @@ public class NodeParameters
         if (Fake) return filename?.EmptyAsNull() ?? "/mnt/temp/fakefile.mkv";
             
         filename ??= WorkingFile;
-        if (filename.StartsWith(TempPath))
+        var fileInfo = new FileInfo(filename);
+        if (fileInfo.Directory?.FullName == TempPath)
             return filename;
-        string dest = Path.Combine(TempPath, new FileInfo(filename).Name);
+        string dest = Path.Combine(TempPath, fileInfo.Name);
         File.Copy(filename, dest);
         return dest;
     }

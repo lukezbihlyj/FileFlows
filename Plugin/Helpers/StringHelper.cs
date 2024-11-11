@@ -111,7 +111,8 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.StartsWith('*') && matchExpression.EndsWith('*'))
         {
             bool contains = value.Contains(matchExpression[1..^1], StringComparison.InvariantCultureIgnoreCase);
-            _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
+            if(contains)
+                _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !contains : contains;
         }
 
@@ -119,7 +120,8 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.EndsWith('*'))
         {
             bool startsWith = value.StartsWith(matchExpression[..^1], StringComparison.InvariantCultureIgnoreCase);
-            _logger?.ILog($"Match found: '{value}' starts with '{matchExpression}'" + (invert ? " (negated)" : ""));
+            if(startsWith)
+                _logger?.ILog($"Match found: '{value}' starts with '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !startsWith : startsWith;
         }
 
@@ -127,7 +129,8 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.StartsWith('*'))
         {
             bool endsWith = value.EndsWith(matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
-            _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
+            if(endsWith)
+                _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !endsWith : endsWith;
         }
         
