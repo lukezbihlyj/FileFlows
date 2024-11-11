@@ -198,7 +198,7 @@ public partial class WatchedLibraryNew : IDisposable
         }
     }
 
-    private LibraryFile NewLibraryFile(string path, bool isDirectory = false)
+    private LibraryFile NewLibraryFile(string path)
     {
         var lf = new LibraryFile
         {
@@ -206,7 +206,7 @@ public partial class WatchedLibraryNew : IDisposable
             Name = path,
             RelativePath = GetRelativePath(path),
             Status = FileStatus.Unprocessed,
-            IsDirectory = isDirectory,
+            IsDirectory = Library.Folders,
             HoldUntil = Library.HoldMinutes > 0 ? DateTime.UtcNow.AddMinutes(Library.HoldMinutes) : DateTime.MinValue,
             Library = new ObjectReference
             {
@@ -216,7 +216,7 @@ public partial class WatchedLibraryNew : IDisposable
             },
             Order = -1
         };
-        if (isDirectory)
+        if (Library.Folders)
         {
             var dirInfo = new DirectoryInfo(path);
             lf.CreationTime = dirInfo.CreationTime;
