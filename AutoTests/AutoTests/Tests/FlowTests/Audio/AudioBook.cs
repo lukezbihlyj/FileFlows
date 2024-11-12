@@ -4,9 +4,37 @@ namespace FileFlowsTests.Tests.FlowTests.Audio;
 public class AudioBook : AudioTest
 {
     /// <summary>
-    /// Manually creates an audiobook flow and tests it
+    /// Creates a book replacing the original
     /// </summary>
     [Test, Order(1)]
+    public async Task CreateBook_Template_ReplaceOriginal()
+    {
+        // create flow
+        var flowName = RandomName("Audio Book Replace Original");
+        const string BOOK_NAME = "The Book Replacer";
+            
+        string libName = "Library For " + flowName;
+        await CreateFlow(flowName, "Create Audio Book", [
+            new("Output Path", "Replace Original", InputType.Select),
+            new("DeleteSourceFiles1", true, InputType.Toggle)
+        ]);
+    
+        // Create library
+        string libPath = await CreateAudioBookLibrary(BOOK_NAME);
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folders");
+        string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
+        string originalBookPath = libPath + "/" + BOOK_NAME;
+        ClassicAssert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
+        
+        // Test processing
+        await TestBookExists(BOOK_NAME, outputPath);
+        ClassicAssert.IsFalse(Directory.Exists(originalBookPath), "Failed to delete original files: " + originalBookPath);
+    }
+    
+    /// <summary>
+    /// Manually creates an audiobook flow and tests it
+    /// </summary>
+    [Test, Order(2)]
     public async Task CreateBookManually()
     {
         // create flow
@@ -33,35 +61,6 @@ public class AudioBook : AudioTest
         // Test processing
         await TestBookExists(BOOK_NAME, OUTPUT_PATH);
     }
-
-    // /// <summary>
-    // /// Creates a book replacing the original
-    // /// </summary>
-    // [Test, Order(1)]
-    // public async Task CreateBook_Template_ReplaceOriginal()
-    // {
-    //     // create flow
-    //     var flowName = RandomName("Audio Book Replace Original");
-    //     const string BOOK_NAME = "The Book Replacer";
-    //         
-    //     string libName = "Library For " + flowName;
-    //     await CreateFlow(flowName, "Create Audio Book", [
-    //         new("Output Path", "Replace Original", InputType.Select),
-    //         new("DeleteSourceFiles1", true, InputType.Toggle)
-    //     ]);
-    //
-    //     // Create library
-    //     string libPath = await CreateAudioBookLibrary(BOOK_NAME);
-    //     await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Folders");
-    //     string outputPath = $"{libPath}/{BOOK_NAME}.m4b";
-    //     string originalBookPath = libPath + "/" + BOOK_NAME;
-    //     ClassicAssert.IsTrue(Directory.Exists(originalBookPath), "Original book path does not exist: " + originalBookPath);
-    //     
-    //     // Test processing
-    //     await TestBookExists(BOOK_NAME, outputPath);
-    //     ClassicAssert.IsFalse(Directory.Exists(originalBookPath), "Failed to delete original files: " + originalBookPath);
-    // }
-    
 
     /// <summary>
     /// Creates a book replacing the original
