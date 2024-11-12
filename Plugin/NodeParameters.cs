@@ -899,7 +899,7 @@ public class NodeParameters
         if (fileInfo.Directory?.FullName == TempPath)
             return filename;
         string dest = Path.Combine(TempPath, fileInfo.Name);
-        File.Copy(filename, dest);
+        File.Copy(filename, dest, true);
         return dest;
     }
 
