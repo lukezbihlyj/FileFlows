@@ -16,6 +16,7 @@
     margin-right: 1rem; }
     .processing-node span.icon ::deep img {
       height: 4rem;
+      object-fit: contain;
       padding: 0 1rem;
       max-width: 5rem; }
     .processing-node span.icon .architecture {
