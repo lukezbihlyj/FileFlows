@@ -145,6 +145,7 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
             Parameters = new Dictionary<string, object>
             {
                 { nameof(InputIconPicker.IncludeSvgs), true},
+                { nameof(InputIconPicker.AllowClear), true},
             }
         });
 

@@ -118,9 +118,11 @@
         {
             var value = GetValue<string>(field.Name);
             var includeSvgs = GetParameter<bool>(field, "IncludeSvgs");
+            var allowClear = GetParameter<bool>(field, "AllowClear");
             <InputIconPicker Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
                          Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel 
-                         OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText IncludeSvgs="@includeSvgs" />
+                         OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText 
+                         IncludeSvgs="@includeSvgs" AllowClear="@allowClear" />
         }
             break;
         case FormInputType.MathValue:

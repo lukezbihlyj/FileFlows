@@ -68,6 +68,11 @@
     <Footer>
         <div class="icon-picker-modal-footer">
             <button class="btn" @onclick=@Upload>@lblUpload</button>
+            @if (AllowClear)
+            {
+                <button class="btn" @onclick=@Clear>@lblClear</button>
+                
+            }
             <div class="spacer"></div>
             <button class="btn" @onclick="() => DblClick(SelectedIcon, SvgSelected)" disabled="@string.IsNullOrEmpty(SelectedIcon)">@lblSelect</button>
             <button class="btn" @onclick=@Cancel>@lblCancel</button>
