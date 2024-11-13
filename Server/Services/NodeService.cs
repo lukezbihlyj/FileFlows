@@ -235,6 +235,12 @@ public class NodeService //: INodeService
             Address = x.Address,
             FlowRunners = x.FlowRunners,
             Name = x.Name,
+            Icon = string.IsNullOrWhiteSpace(x.Icon) ? null : x.Icon.StartsWith("data:") ?
+                #if(DEBUG)
+                "http://localhost:6868" + 
+                #endif
+                $"/api/dashboard/node/{x.Uid}/icon"
+                : $"data:{x.Icon}",
             OutOfSchedule = TimeHelper.InSchedule(x.Schedule) == false,
             ScheduleResumesAtUtc = TimeHelper.UtcDateUntilInSchedule(x.Schedule),
             Priority = x.Priority,

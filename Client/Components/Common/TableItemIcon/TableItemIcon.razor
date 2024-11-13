@@ -36,7 +36,7 @@ else
         {
             <img src="/icons/@(icon[4..]).svg"/>
         }
-        else if (icon.StartsWith("data:") || icon.EndsWith(".svg"))
+        else if (icon.StartsWith("data:") || icon.EndsWith(".svg") || icon.StartsWith('/') || icon.StartsWith("http:") || icon.StartsWith("https:"))
         {
             <img src="@icon"/>
         }
