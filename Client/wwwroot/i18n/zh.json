@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "选择一个模板开始"
     },
+    "IconPicker": {
+      "Title": "选择图标"
+    },
     "Import": {
       "Message": "选择一个导出的流导入系统。",
       "Title": "导入流"
@@ -1081,6 +1084,7 @@
         "Enabled": "启用",
         "FlowRunners": "流程运行程序",
         "FlowRunners-Help": "可用于执行流程的流程运行程序实例的数量。",
+        "Icon": "自定义图标",
         "InternalProcessingNodeDescription": "这是FileFlows中的内置处理节点。\n\n此节点允许您运行FileFlows，而无需担心在远程系统上安装任何其他节点，并允许您将FileFlows用作自包含的应用程序。\n\n如果愿意，您可以继续使用此内部节点和附加处理节点，或者您可以禁用此节点，仅使用附加节点。",
         "Libraries": "库",
         "Libraries-Help": "选择此节点可以处理哪些库",

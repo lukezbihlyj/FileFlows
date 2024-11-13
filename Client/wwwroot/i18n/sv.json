@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "Välj en mall att utgå ifrån"
     },
+    "IconPicker": {
+      "Title": "Välj ikon"
+    },
     "Import": {
       "Message": "Välj ett exporterad flöde att importera till systemet.",
       "Title": "Importera flöde"
@@ -1081,6 +1084,7 @@
         "Enabled": "Aktiverad",
         "FlowRunners": "Flödeskörningar",
         "FlowRunners-Help": "Antalet flödeskörningsinstanser som är tillgängliga för att köra ett flöde.",
+        "Icon": "Anpassad ikon",
         "InternalProcessingNodeDescription": "Detta är den inbyggda behandlingsnoden i FileFlows.\n\nDenna nod låter dig köra FileFlows utan att behöva installera några andra noder på fjärrsystem och låter dig använda FileFlows som en fristående applikation.\n\nDu kan fortsätta använda denna interna nod och ytterligare behandlingsnoder om du vill, eller så kan du inaktivera denna nod och bara använda ytterligare noder.",
         "Libraries": "Bibliotek",
         "Libraries-Help": "Välj vilka bibliotek denna nod kan bearbeta",

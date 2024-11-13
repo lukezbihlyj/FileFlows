@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "Select a template to start from"
     },
+    "IconPicker": {
+      "Title": "Pick Icon"
+    },
     "Import": {
       "Message": "Select an exported flow to import into the system.",
       "Title": "Import Flow"
@@ -1081,6 +1084,7 @@
         "Enabled": "Enabled",
         "FlowRunners": "Flow Runners",
         "FlowRunners-Help": "The number of flow runner instances available to execute a flow.",
+        "Icon": "Custom Icon",
         "InternalProcessingNodeDescription": "This is the in-built processing node in the FileFlows.\n\nThis node allows you to run FileFlows without worrying about installing any other nodes on remote systems and lets you use FileFlows as a self contained application.\n\nYou can continue to use this internal node and additional processing nodes if you wish, or you can disable this node and only use additional nodes.",
         "Libraries": "Libraries",
         "Libraries-Help": "Select which libraries this node can process",

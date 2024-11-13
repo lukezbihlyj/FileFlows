@@ -439,7 +439,6 @@ public partial class Flow : ComponentBase, IDisposable
             variables[variable.Key] = variable.Value;
         }
 
-
         var flowElement = this.Available.FirstOrDefault(x => x.Uid == part.FlowElementUid);
         if (flowElement == null)
         {
@@ -503,7 +502,6 @@ public partial class Flow : ComponentBase, IDisposable
         {
             InputType = FormInputType.HorizontalRule
         });
-
 
         if (FieldsTabOpened &&
             part.Type != FlowElementType.Output) // output is for sub flow outputs, we dont want to show the UID

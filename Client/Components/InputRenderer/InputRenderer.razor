@@ -117,9 +117,10 @@
         case FormInputType.IconPicker:
         {
             var value = GetValue<string>(field.Name);
+            var includeSvgs = GetParameter<bool>(field, "IncludeSvgs");
             <InputIconPicker Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
                          Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel 
-                         OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText  />
+                         OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText IncludeSvgs="@includeSvgs" />
         }
             break;
         case FormInputType.MathValue:

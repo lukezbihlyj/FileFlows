@@ -145,6 +145,7 @@ public class NodeController : BaseController
                 internalNode.Enabled = node.Enabled;
                 internalNode.Priority = node.Priority;
                 internalNode.TempPath = node.TempPath;
+                internalNode.Icon = node.Icon;
                 internalNode.DontChangeOwner = node.DontChangeOwner;
                 internalNode.DontSetPermissions = node.DontSetPermissions;
                 internalNode.PermissionsFiles = node.PermissionsFiles;

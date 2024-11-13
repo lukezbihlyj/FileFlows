@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "開始するテンプレートを選択"
     },
+    "IconPicker": {
+      "Title": "アイコンを選択"
+    },
     "Import": {
       "Message": "システムにインポートするためにエクスポートされたフローを選択します。",
       "Title": "フローをインポート"
@@ -1081,6 +1084,7 @@
         "Enabled": "有効",
         "FlowRunners": "フローロンナー",
         "FlowRunners-Help": "フローを実行するために使用できるフローロンナーインスタンスの数。",
+        "Icon": "カスタムアイコン",
         "InternalProcessingNodeDescription": "これはFileFlows内蔵の処理ノードです。\n\nこのノードを使用すると、リモートシステムに他のノードをインストールすることを心配せずにFileFlowsを実行でき、FileFlowsを自己完結型アプリケーションとして使用できます。\n\nこの内部ノードと追加の処理ノードを引き続き使用することもできますし、このノードを無効にして追加のノードのみを使用することもできます。",
         "Libraries": "ライブラリ",
         "Libraries-Help": "このノードが処理できるライブラリを選択",

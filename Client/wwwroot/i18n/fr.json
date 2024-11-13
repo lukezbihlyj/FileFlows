@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "Sélectionner un modèle à partir duquel commencer"
     },
+    "IconPicker": {
+      "Title": "Choisir une icône"
+    },
     "Import": {
       "Message": "Sélectionnez un flow exporté à importer dans le système.",
       "Title": "Importer Flow"
@@ -1081,6 +1084,7 @@
         "Enabled": "Activé",
         "FlowRunners": "Exécuteurs de flow",
         "FlowRunners-Help": "Le nombre d'instances d'exécuteurs de flow disponibles pour exécuter un flow.",
+        "Icon": "Icône personnalisée",
         "InternalProcessingNodeDescription": "Ceci est le nœud de traitement intégré dans FileFlows.\n\nCe nœud vous permet d'exécuter FileFlows sans vous soucier de l'installation d'autres nœuds sur des systèmes distants et vous permet d'utiliser FileFlows comme une application autonome.\n\nVous pouvez continuer à utiliser ce nœud interne et des nœuds de traitement supplémentaires si vous le souhaitez, ou vous pouvez désactiver ce nœud et n'utiliser que des nœuds supplémentaires.",
         "Libraries": "Bibliothèques",
         "Libraries-Help": "Sélectionnez les bibliothèques que ce nœud peut traiter",

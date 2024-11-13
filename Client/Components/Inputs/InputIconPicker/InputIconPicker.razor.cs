@@ -19,11 +19,31 @@ public partial class InputIconPicker : Input<string>
     private string Color;
     private string Icon;
     private string IconColor;
+    private string lblPickIcon, lblFilter, lblSelect,lblUpload, lblCancel;
+    
+    /// <summary>
+    /// Gets or sets if the SVGs should be included
+    /// </summary>
+    [Parameter]
+    public bool IncludeSvgs { get; set; }
 
+    private bool SvgSelected = false;
+
+    // the SVG icons
+    private static string[] Svgs =
+    [
+        "amd", "apple", "docker", "dos", "intel", "linux", "nvidia", "windows"
+    ];
+    
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        lblPickIcon = Translater.Instant("Dialogs.IconPicker.Title");
+        lblFilter = Translater.Instant("Labels.Filter");
+        lblCancel = Translater.Instant("Labels.Cancel");
+        lblUpload = Translater.Instant("Labels.Upload");
+        lblSelect = Translater.Instant("Labels.Select");
         if (Value?.StartsWith("data:") != true)
         {
             var parts = (Value ?? string.Empty).Split(':');
@@ -87,12 +107,16 @@ public partial class InputIconPicker : Input<string>
         }
     }
 
-    private void SelectIcon(string icon)
-        => SelectedIcon = icon;
-
-    private void DblClick(string icon)
+    private void SelectIcon(string icon, bool svg = false)
     {
-        this.Value = icon + (string.IsNullOrWhiteSpace(Color) ? string.Empty : ":" + Color);
+        SvgSelected = svg;
+        SelectedIcon = icon;
+    }
+
+    private void DblClick(string icon, bool svg = false)
+    {
+        SvgSelected = svg;
+        this.Value = svg ? $"svg:{icon}" : icon + (string.IsNullOrWhiteSpace(Color) ? string.Empty : ":" + Color);
         ModalOpened = false;
     }
 

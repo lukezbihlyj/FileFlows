@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "Selecteer een sjabloon om mee te beginnen"
     },
+    "IconPicker": {
+      "Title": "Kies pictogram"
+    },
     "Import": {
       "Message": "Selecteer een geëxporteerde stroom om in het systeem te importeren.",
       "Title": "Importeer Stroom"
@@ -1081,6 +1084,7 @@
         "Enabled": "Ingeschakeld",
         "FlowRunners": "Flow Runners",
         "FlowRunners-Help": "Het aantal beschikbare flow runner-instanties om een flow uit te voeren.",
+        "Icon": "Aangepast pictogram",
         "InternalProcessingNodeDescription": "Dit is het ingebouwde verwerkingsknooppunt in FileFlows.\n\nDit knooppunt stelt je in staat om FileFlows uit te voeren zonder je zorgen te maken over het installeren van andere knooppunten op externe systemen en stelt je in staat om FileFlows als een zelfstandige applicatie te gebruiken.\n\nJe kunt dit interne knooppunt blijven gebruiken en extra verwerkingsknooppunten toevoegen als je dat wilt, of je kunt dit knooppunt uitschakelen en alleen gebruik maken van extra knooppunten.",
         "Libraries": "Bibliotheken",
         "Libraries-Help": "Selecteer welke bibliotheken dit knooppunt kan verwerken",

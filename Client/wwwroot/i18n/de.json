@@ -236,6 +236,9 @@
     "FlowTemplatePicker": {
       "Title": "Wählen Sie eine Vorlage aus, mit der Sie beginnen möchten"
     },
+    "IconPicker": {
+      "Title": "Symbol auswählen"
+    },
     "Import": {
       "Message": "Wählen Sie eine exportierten Flow aus, um den Flow in das System zu importieren.",
       "Title": "Import Flow"
@@ -1081,6 +1084,7 @@
         "Enabled": "Aktiviert",
         "FlowRunners": "Flow Runners",
         "FlowRunners-Help": "Die Anzahl der Flow-Runner-Instanzen, die zur Ausführung eines Flows zur Verfügung stehen.",
+        "Icon": "Benutzerdefiniertes Symbol",
         "InternalProcessingNodeDescription": "Dies ist der interne Node in FileFlows. \n\n Mit diesem Knoten können Sie FileFlows ausführen, ohne sich um die Installation anderer Knoten auf entfernten Systemen kümmern zu müssen, und Sie können FileFlows als eigenständige Anwendung verwenden.\n\nSie können diesen internen Knoten und zusätzliche Verarbeitungsknoten verwenden, wenn Sie dies wünschen, oder Sie können diesen Knoten deaktivieren und nur zusätzliche Knoten verwenden.",
         "Libraries": "Bibliotheken",
         "Libraries-Help": "Auswahl der Bibliotheken, die dieser Node verarbeiten kann.",
