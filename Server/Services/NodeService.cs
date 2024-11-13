@@ -240,7 +240,7 @@ public class NodeService //: INodeService
                 "http://localhost:6868" + 
                 #endif
                 $"/api/dashboard/node/{x.Uid}/icon"
-                : $"data:{x.Icon}",
+                : x.Icon,
             OutOfSchedule = TimeHelper.InSchedule(x.Schedule) == false,
             ScheduleResumesAtUtc = TimeHelper.UtcDateUntilInSchedule(x.Schedule),
             Priority = x.Priority,
