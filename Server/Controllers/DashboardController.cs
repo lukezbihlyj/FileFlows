@@ -4,6 +4,7 @@ using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Models;
 using FileFlows.Shared.Widgets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileFlows.Server.Controllers;
@@ -61,6 +62,7 @@ public class DashboardController : BaseController
     /// <param name="uid">the UID of the node</param>
     /// <returns>the icon</returns>
     [HttpGet("node/{uid}/icon")]
+    [AllowAnonymous]
     public async Task<IActionResult> NodeIcon(Guid uid)
     {
         var node = await ServiceLoader.Load<NodeService>().GetByUidAsync(uid);
