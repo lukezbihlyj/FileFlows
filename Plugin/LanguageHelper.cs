@@ -684,7 +684,7 @@ public class LanguageHelper
             }
             
             // Check if comparison starts with a letter and contains only valid characters afterwards
-            if (Regex.IsMatch(comparison, @"^[a-zA-Z][a-zA-Z\-\(\)\{\}]+$") == false)
+            if (Regex.IsMatch(comparison, @"^[a-zA-Z][a-zA-Z\-\(\)\{\}]*$"))
             {
                 comparison = "=" + comparison;
             }
