@@ -15,16 +15,13 @@ public partial class Resources : ListPage<Guid, Resource>
 {
     /// <inheritdoc />
     public override string ApiUrl => "/api/resource";
-
-    private Dictionary<Guid, string> Scripts = new ();
     
     /// <summary>
     /// Gets if they are licensed for this page
     /// </summary>
     /// <returns>if they are licensed for this page</returns>
     protected override bool Licensed()
-        => Profile.LicensedFor(LicenseFlags.Tasks); 
-    
+        => Profile.LicensedFor(LicenseFlags.AutoUpdates); 
     
     /// <summary>
     /// Adds a new task

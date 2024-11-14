@@ -1,4 +1,5 @@
 using FileFlows.Server.Authentication;
+using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,8 @@ public class ResourceController : BaseController
     [HttpGet]
     public async Task<IEnumerable<Resource>> GetAll()
     {
+        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
+            return [];
         var resources = (await ServiceLoader.Load<ResourceService>().GetAllAsync()).
         OrderBy(x => x.Name.ToLowerInvariant()).ToList();
         // don't include data
@@ -39,8 +42,12 @@ public class ResourceController : BaseController
     /// <param name="uid">The UID of the scheduled task to get</param>
     /// <returns>The scheduled task instance</returns>
     [HttpGet("{uid}")]
-    public Task<Resource?> Get(Guid uid) 
-        => ServiceLoader.Load<ResourceService>().GetByUidAsync(uid);
+    public Task<Resource?> Get(Guid uid)
+    {
+        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
+            return null;
+        return ServiceLoader.Load<ResourceService>().GetByUidAsync(uid);
+    }
 
     /// <summary>
     /// Get a resource by its name, case-insensitive
@@ -49,7 +56,11 @@ public class ResourceController : BaseController
     /// <returns>The resource instance if found</returns>
     [HttpGet("name/{name}")]
     public Task<Resource?> GetByName(string name)
-        => ServiceLoader.Load<ResourceService>().GetByNameAsync(name);
+    {
+        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
+            return null;
+        return ServiceLoader.Load<ResourceService>().GetByNameAsync(name);
+    }
 
     /// <summary>
     /// Saves a resource
@@ -59,6 +70,8 @@ public class ResourceController : BaseController
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] Resource resource)
     {
+        if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates) == false)
+            return null;
         var result = await ServiceLoader.Load<ResourceService>().Update(resource, await GetAuditDetails());
         if (result.Failed(out string error))
             return BadRequest(error);

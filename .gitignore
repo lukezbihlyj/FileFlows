@@ -45,3 +45,4 @@ Server/appsettings.development.json
 docs/css/*.css
 
 *.scssc
+Builds/
