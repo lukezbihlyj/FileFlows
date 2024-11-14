@@ -21,6 +21,10 @@ public class MathHelper(ILogger _logger)
             return true;
         if (Regex.IsMatch(comparison, @"^\d+(\.\d+)?<>\d+(\.\d+)?$"))
             return true;
+    
+        // If the string contains letters, it’s not a math operation
+        if (Regex.IsMatch(comparison, @"[a-zA-Z]"))
+            return false;
         
         // Check if the comparison string starts with <=, <, >, >=, ==, or =
         return new[] { "<=", "<", ">", ">=", "==", "=" }.Any(comparison.StartsWith);
