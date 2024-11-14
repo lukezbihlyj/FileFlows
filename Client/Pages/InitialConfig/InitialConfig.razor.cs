@@ -1,5 +1,6 @@
 using FileFlows.Client.Components;
 using FileFlows.Client.Components.Common;
+using FileFlows.Client.Components.Dialogs;
 using FileFlows.Client.Models;
 using Microsoft.AspNetCore.Components;
 
@@ -299,5 +300,22 @@ public partial class InitialConfig : ComponentBase
         lblRunnersTop = Translater.Instant("Pages.InitialConfig.Messages.RunnersTop");
         StateHasChanged();
         Wizard?.TriggerStateHasChanged();
+    }
+    
+    /// <summary>
+    /// Called when the DockerMod page advances
+    /// </summary>
+    /// <returns>true if can advance, otherwise false</returns>
+    private bool OnDockerModPageAdvanced()
+    {
+        var mods = DockerModTable?.GetSelected()?.ToList() ?? [];
+        if (mods.Count < 8)
+            return true; // they didnt go overboard
+        
+        MessageBox.Show(
+            Translater.Instant("Labels.Warning"), 
+            Translater.Instant("Labels.TooManyDockerMods")
+        );
+        return false;
     }
 }

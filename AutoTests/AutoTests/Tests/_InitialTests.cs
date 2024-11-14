@@ -24,10 +24,39 @@ public class InitialTests : TestBase
     }
 
     /// <summary>
-    /// Test the license shows unlicensed
+    /// Test the DockerMods too many error is shown
     /// </summary>
     [Test, Order(1)]
-    public async Task IT_01_InitialConfiguration()
+    public async Task IT_01_InitialConfiguration_TooManyDockerMods()
+    {
+        await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
+        ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.Shown(), "The Initial Configuration should be shown.");
+        ClassicAssert.AreEqual("Welcome to FileFlows", await FileFlows.InitialConfiguration.GetPageTitle());
+        
+        await FileFlows.InitialConfiguration.NextClick(); 
+        await FileFlows.InitialConfiguration.AcceptEula();
+        await FileFlows.InitialConfiguration.NextClick();
+        
+        // next page
+        await FileFlows.InitialConfiguration.NextClick();
+
+        ClassicAssert.AreEqual("Choose which DockerMods to install", await FileFlows.InitialConfiguration.GetPageTitle());
+        var dockerMods = await FileFlows.InitialConfiguration.GetItems();
+        var ffmpeg6 = dockerMods.FirstOrDefault(x => x.Name == "FFmpeg6");
+        ClassicAssert.IsNotNull(ffmpeg6, "FFmpeg6 DockerMod is not found.");
+        ClassicAssert.IsTrue(ffmpeg6!.Checked, "FFmpeg6 DockerMod is not checked by default.");
+        await FileFlows.InitialConfiguration.CheckAllItems(); // we dont want this DockerMod installed
+        await FileFlows.InitialConfiguration.NextClick();
+
+        await FileFlows.MessageBox.Exist("Warning",
+            "You have selected too many DockerMods.");
+    }
+    
+    /// <summary>
+    /// Test the license shows unlicensed
+    /// </summary>
+    [Test, Order(2)]
+    public async Task IT_02_InitialConfiguration()
     {
         await Page.WaitForURLAsync(FileFlows.BaseUrl + "initial-config");
         ClassicAssert.IsTrue(await FileFlows.InitialConfiguration.Shown(), "The Initial Configuration should be shown.");
@@ -82,14 +111,13 @@ public class InitialTests : TestBase
         await FileFlows.WaitForBlockerToDisappear();
         var text = await Page.Locator("div[title='Flow Runners'] span").TextContentAsync() ?? string.Empty;
         ClassicAssert.AreEqual("2", text.Trim(), $"Flow runners expected to be 2, but was {text}");
-
     }
 
     /// <summary>
     /// Sets the FFmpeg paths
     /// </summary>
-    [Test, Order(2)] 
-    public async Task IT_02_SetFFmpegPath()
+    [Test, Order(3)] 
+    public async Task IT_03_SetFFmpegPath()
     {
         await FileFlows.GotoPage("Variables");
         await DoubleClickItem("ffmpeg");
@@ -105,8 +133,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Test the license shows unlicensed
     /// </summary>
-    [Test, Order(3)]
-    public async Task IT_03_LicenseUnlicensed()
+    [Test, Order(4)]
+    public async Task IT_04_LicenseUnlicensed()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("License");
@@ -119,8 +147,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests the tabs in settings are only the expected tabs
     /// </summary>
-    [Test, Order(4)]
-    public async Task IT_04_UnlicensedTabs()
+    [Test, Order(5)]
+    public async Task IT_05_UnlicensedTabs()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Exists("General");
@@ -141,8 +169,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests that if a user tries to add a library before adding a flow, they are stopped with a toast error message
     /// </summary>
-    [Test, Order(5)]
-    public async Task IT_05_LibraryNoFlows()
+    [Test, Order(6)]
+    public async Task IT_06_LibraryNoFlows()
     {
         await FileFlows.GotoPage("Libraries");
         await FileFlows.Table.ButtonClick("Add");
@@ -153,8 +181,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests the pointer is shown for step 1.
     /// </summary>
-    [Test, Order(6)]
-    public async Task IT_06_FlowPointer()
+    [Test, Order(7)]
+    public async Task IT_07_FlowPointer()
     {
         await Expect(Page.Locator(".nav-item.flows .not-configured-pointer")).ToHaveCountAsync(1);
         await FileFlows.GotoPage("Flows");
@@ -164,8 +192,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests creating a flow
     /// </summary>
-    [Test, Order(7)]
-    public async Task IT_07_FlowCreate()
+    [Test, Order(8)]
+    public async Task IT_08_FlowCreate()
     {
         await FileFlows.GotoPage("Flows");
         await FileFlows.Table.ButtonClick("Add");
@@ -187,8 +215,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Creates a library
     /// </summary>
-    [Test, Order(8)]
-    public async Task IT_08_LibraryCreate()
+    [Test, Order(9)]
+    public async Task IT_09_LibraryCreate()
     {
         await FileFlows.GotoPage("Libraries");
         await Expect(Page.Locator(".pointer-add >> text='Add'")).ToHaveCountAsync(1);
@@ -207,8 +235,8 @@ public class InitialTests : TestBase
         await Expect(Page.Locator(".pointer-add >> text='Add'")).ToHaveCountAsync(0);
     }
     
-    [Test, Order(9)]
-    public async Task IT_09_CheckUnLicensedPages()
+    [Test, Order(10)]
+    public async Task IT_10_CheckUnLicensedPages()
     {
         await Expect(Page.Locator("a[href='tasks']")).ToHaveCountAsync(0);
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(0);
@@ -217,8 +245,8 @@ public class InitialTests : TestBase
     /// <summary>
     /// Tests language can be changed
     /// </summary>
-    [Test, Order(10)]
-    public async Task IT_10_ChangeLanguage()
+    [Test, Order(11)]
+    public async Task IT_11_ChangeLanguage()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("General");
@@ -272,8 +300,8 @@ public class InitialTests : TestBase
         }
     }
     
-    [Test, Order(11)]
-    public async Task IT_11_EnterLicense()
+    [Test, Order(12)]
+    public async Task IT_12_EnterLicense()
     {
         await FileFlows.GotoPage("Settings");
         await FileFlows.Tab.Click("License");
@@ -300,16 +328,16 @@ public class InitialTests : TestBase
         await Expect(Page.Locator("a[href='revisions']")).ToHaveCountAsync(1);
     }
     
-    [Test, Order(12)]
-    public async Task IT_12_TasksNoScript()
+    [Test, Order(13)]
+    public async Task IT_13_TasksNoScript()
     {
         await GotoPage("Tasks");
         await TableButtonClick("Add");
         await ToastError("No scripts found to create a task for.");
     }
     
-    [Test, Order(13)]
-    public async Task IT_13_GotifyFileProcessed()
+    [Test, Order(14)]
+    public async Task IT_14_GotifyFileProcessed()
     {
         await GotoPage("Scripts");
         const string name = "Gotify - Notify File Processed";
@@ -339,8 +367,8 @@ public class InitialTests : TestBase
         await ButtonClick("Save");
     }
     
-    [Test, Order(14)]
-    public async Task IT_14_TaskScript()
+    [Test, Order(15)]
+    public async Task IT_15_TaskScript()
     {
         await GotoPage("Tasks");
         await TableButtonClick("Add");

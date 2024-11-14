@@ -6,6 +6,11 @@
     "AdminRequired": "Administratör krävs för att slutföra installationen.",
     "Advanced": "Avancerad",
     "All": "Alla",
+    "Warning": "Varning",
+    "Unlicensed": "Olicensierad",
+    "UnlicensedFlowElement": "En {level}-licens krävs för att använda detta flödeselement.",
+    "TooManyDockerMods": "Du har valt för många DockerMods. Detta kan påverka prestandan och det är sannolikt inte nödvändigt att installera alla dessa DockerMods.",
+
     "And": "Och",
     "Any": "Vilken som helst",
     "Architecture": "Arkitektur",

@@ -147,10 +147,21 @@ public class FlowExecutorInfoMinified
     public string RelativeFile { get; set; }
     
     /// <summary>
-    /// Gets or sets an name of the library
+    /// Gets or sets the current working file
+    /// </summary>
+    public string WorkingFile { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the name of the library
     /// that the library file belongs
     /// </summary>
     public string LibraryName { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the UID fo the library
+    /// that the library file belongs
+    /// </summary>
+    public Guid LibraryUid { get; set; }
 
     /// <summary>
     /// Gets or sets the total parts in the flow that is executing

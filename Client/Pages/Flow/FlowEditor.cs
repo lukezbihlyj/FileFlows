@@ -123,7 +123,10 @@ public class FlowEditor : IDisposable
 
         if (element.LicenseLevel > Profile.LicenseLevel)
         {
-            await MessageBox.Show("Unlicensed", $"You must have an {element.LicenseLevel} license to use this flow element.");
+            await MessageBox.Show(
+                Translater.Instant("Labels.Unlicensed"), 
+                Translater.Instant("Labels.UnlicensedFlowElement", new {level = element.LicenseLevel.ToString()})
+                );
             return null;
         }
 

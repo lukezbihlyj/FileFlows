@@ -2,7 +2,11 @@
   "ProductName": "FileFlows",
   "Labels": {
     "About": "關於",
-    "Add": "新增",
+    "Add": "新增",    "Warning": "警告",
+    "Unlicensed": "未授權",
+    "UnlicensedFlowElement": "使用此流程元素需要{level}級許可證。",
+    "TooManyDockerMods": "您選擇了過多的DockerMods，這可能會影響效能，而且您可能不需要安裝所有這些DockerMods。",
+
     "AdminRequired": "安裝完成需要管理員權限。",
     "Advanced": "進階",
     "All": "所有",

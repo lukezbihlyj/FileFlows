@@ -3,6 +3,7 @@ using FileFlows.Plugin.Helpers;
 using FileFlows.Server.Services;
 using FileFlows.Shared.Models;
 using Humanizer;
+using FileHelper = FileFlows.ServerShared.Helpers.FileHelper;
 using Timer = System.Threading.Timer;
 
 namespace FileFlows.Server.LibraryUtils;
@@ -45,6 +46,11 @@ public partial class WatchedLibraryNew : IDisposable
     private readonly SemaphoreSlim FileSemaphore = new(1, 1);
     private readonly SemaphoreSlim ScanSemaphore = new(1, 1);
     private LibraryFileService LibraryFileService { get; init; }
+
+    /// <summary>
+    /// Tthe flow runner service
+    /// </summary>
+    private readonly FlowRunnerService RunnerService;
     
     /// <summary>
     /// Constructs a instance of a Watched Library
@@ -56,6 +62,7 @@ public partial class WatchedLibraryNew : IDisposable
         this.Logger = logger;
         this.Library = library;
         this.LibraryFileService = ServiceLoader.Load<LibraryFileService>();
+        this.RunnerService = ServiceLoader.Load<FlowRunnerService>();
         this._StringHelper = new(logger);
     }
 
@@ -75,7 +82,25 @@ public partial class WatchedLibraryNew : IDisposable
 
     private void WatcherOnFileChanged(object? sender, FileSystemEventArgs e)
     {
-        _ = CheckFile(e.FullPath);
+        _ = Task.Run(async () =>
+        {
+            var executors = (await this.RunnerService.GetExecutors()).Values;
+            if (executors.Any(x => x.LibraryFileName == e.FullPath || x.WorkingFile == e.FullPath))
+                return; // ignore these files
+            
+            int delay = 5000;
+            string? folder = new FileInfo(e.FullPath).Directory?.FullName;
+            if (folder != null)
+            {
+                bool thisFolder = executors.Any(x => x.LibraryFileName?.StartsWith(folder) == true);
+                if (thisFolder)
+                    delay = 30_000;
+            }
+            // need a delay incase a file is processing and replcae original with new extension
+            // for example is called, this could cause a file to be detected when it will become the output file
+            await Task.Delay(delay);
+            await CheckFile(e.FullPath);
+        });
     }
 
     /// <summary>

@@ -3,6 +3,11 @@
   "Labels": {
     "About": "Over",
     "Add": "Toevoegen",
+    "Warning": "Waarschuwing",
+    "Unlicensed": "Ongelicentieerd",
+    "UnlicensedFlowElement": "Een {level}-licentie is vereist om dit flow-element te gebruiken.",
+    "TooManyDockerMods": "U heeft te veel DockerMods geselecteerd. Dit kan de prestaties beïnvloeden, en het is waarschijnlijk niet nodig om al deze DockerMods te installeren.",
+
     "AdminRequired": "Administrator vereist om installatie te voltooien.",
     "Advanced": "Geavanceerd",
     "All": "Alle",

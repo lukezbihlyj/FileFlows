@@ -2,7 +2,11 @@
   "ProductName": "文件流",
   "Labels": {
     "About": "关于",
-    "Add": "添加",
+    "Add": "添加",     "Warning": "警告",
+    "Unlicensed": "未授权",
+    "UnlicensedFlowElement": "使用此流程元素需要{level}级许可证。",
+    "TooManyDockerMods": "您选择了过多的DockerMods，这可能会影响性能，您可能不需要安装所有这些DockerMods。",
+
     "AdminRequired": "需要管理员完成安装。",
     "Advanced": "高级",
     "All": "全部",

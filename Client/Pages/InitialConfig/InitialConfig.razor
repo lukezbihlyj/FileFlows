@@ -44,7 +44,7 @@ else
                 @if (AvailablePlugins?.Any() == true)
                 {
                     <FlowWizardPage Title="@lblPlugins" Disabled="@(EulaAccepted == false)"
-                                    Description="@lblPluginsDescription">
+                                    Description="@lblPluginsDescription" OnPageAdvanced="OnDockerModPageAdvanced">
                         <FlowTable @ref="PluginTable" Data="AvailablePlugins" TItem="PluginPackageInfo"
                                    HideHead="true" HideToolbar="true" Selection="SelectionMode.Multiple"
                                    TableIdentifier="InitialConfigPlugins" DontClearOnClick="true" ForcedSelection="ForcedPlugins">

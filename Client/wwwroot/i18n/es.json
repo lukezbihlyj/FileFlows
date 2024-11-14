@@ -6,7 +6,12 @@
     "AdminRequired": "Se requiere administrador para completar la instalación.",
     "Advanced": "Avanzado",
     "All": "Todos",
-    "And": "Y",
+    "And": "Y",    
+    "Warning": "Advertencia",
+    "Unlicensed": "Sin licencia",
+    "UnlicensedFlowElement": "Se requiere una licencia {level} para usar este elemento de flujo.",
+    "TooManyDockerMods": "Ha seleccionado demasiados DockerMods. Esto puede afectar el rendimiento y probablemente no sea necesario instalar todos estos DockerMods.",
+
     "Any": "Cualquiera",
     "Architecture": "Arquitectura",
     "Audit": "Auditar",

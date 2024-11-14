@@ -2,6 +2,12 @@
   "ProductName": "FileFlows",
   "Labels": {
     "About": "について",
+
+    "Warning": "警告",
+    "Unlicensed": "未ライセンス",
+    "UnlicensedFlowElement": "{level}ライセンスが必要です。このフロー要素を使用するには。",
+    "TooManyDockerMods": "DockerModsが多すぎます。これにより性能が低下する可能性があり、すべてのDockerModsをインストールする必要はないかもしれません。",
+
     "Add": "追加",
     "AdminRequired": "インストールを完了するには管理者が必要です。",
     "Advanced": "詳細",

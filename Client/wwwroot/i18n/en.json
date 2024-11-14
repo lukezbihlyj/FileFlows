@@ -1,6 +1,10 @@
 {
   "ProductName": "FileFlows",
   "Labels": {
+    "Warning": "Warning",
+    "Unlicensed": "Unlicensed",
+    "UnlicensedFlowElement": "A {level} license is required to use this flow element.",
+    "TooManyDockerMods": "You have selected too many DockerMods. This may impact performance, and it is likely unnecessary to install all of these DockerMods.",
     "About": "About",
     "Add": "Add",
     "AdminRequired": "Administrator required to complete installation.",

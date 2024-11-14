@@ -189,12 +189,46 @@ public class InitialConfiguration(TestBase test) : UiComponent(test)
             var isChecked = await checkbox.IsCheckedAsync();
             if (isChecked == false)
                 continue;
+            await checkbox.ScrollIntoViewIfNeededAsync();
             await checkbox.ClickAsync();
             isChecked = await checkbox.IsCheckedAsync();
             if (isChecked)
                 throw new Exception($"Failed to uncheck '{itemName}'");
         }
     }
+    
+    
+    /// <summary>
+    /// Makes sure all items are checked
+    /// </summary>
+    public async Task CheckAllItems()
+    {
+        List<InitialConfigItem> items = new();
+        var rows = Page.Locator(".flow-wizard-content .flow-page.active .flowtable-data .flowtable-row");
+        await rows.First.WaitForAsync(new LocatorWaitForOptions()
+        {
+            State = WaitForSelectorState.Visible
+        });
+
+        // Get the count of rows and iterate through each row
+        int rowCount = await rows.CountAsync();
+        for (int i = 0; i < rowCount; i++)
+        {
+            var row = rows.Nth(i);
+            var itemName = await row.Locator(".name").TextContentAsync() ?? string.Empty;
+
+            var checkbox = row.Locator("input[type=checkbox]");
+            var isChecked = await checkbox.IsCheckedAsync();
+            if (isChecked )
+                continue;
+            await checkbox.ScrollIntoViewIfNeededAsync();
+            await checkbox.ClickAsync();
+            isChecked = await checkbox.IsCheckedAsync();
+            if (isChecked)
+                throw new Exception($"Failed to check '{itemName}'");
+        }
+    }
+    
     /// <summary>
     /// An initial configuration data list item
     /// </summary>
