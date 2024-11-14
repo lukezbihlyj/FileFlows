@@ -682,6 +682,12 @@ public class LanguageHelper
                 comparison = comparison.Replace("original", origLanguage);
                 comparison = comparison.Replace("orig", origLanguage);
             }
+            
+            // Check if comparison starts with a letter and contains only valid characters afterwards
+            if (Regex.IsMatch(comparison, @"^[a-zA-Z][a-zA-Z\-\(\)\{\}]+$") == false)
+            {
+                comparison = "=" + comparison;
+            }
 
             string iso1 = GetIso1Code(value);
             string iso2 = GetIso2Code(value);
