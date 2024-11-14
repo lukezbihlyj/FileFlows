@@ -309,7 +309,7 @@ public partial class InitialConfig : ComponentBase
     private async Task<bool> OnDockerModPageAdvanced()
     {
         var mods = DockerModTable?.GetSelected()?.ToList() ?? [];
-        if (mods.Count < 8)
+        if (mods.Count < 9)
             return true; // they didnt go overboard
         
         await MessageBox.Show(
