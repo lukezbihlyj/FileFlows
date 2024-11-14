@@ -99,14 +99,14 @@ public class StringHelper(ILogger _logger)
             // _logger?.ILog("Expression is inverted");
             // _logger?.ILog("Match expression: " + matchExpression);
         }
-
-        // Handle exact match
-        if (string.Equals(matchExpression, value, StringComparison.InvariantCultureIgnoreCase))
+        
+        // Handle default which is contains
+        if (value.Contains(matchExpression, StringComparison.InvariantCultureIgnoreCase))
         {
-            _logger?.ILog($"Match found: '{value}' equals '{matchExpression}'" + (invert ? " (negated)" : ""));
+            _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
             return !invert;
         }
-
+        
         // Handle contains
         if (matchExpression.StartsWith('*') && matchExpression.EndsWith('*'))
         {
@@ -134,12 +134,28 @@ public class StringHelper(ILogger _logger)
             return invert ? !endsWith : endsWith;
         }
         
+        // Handle equals
+        if (matchExpression.StartsWith('='))
+        {
+            bool equals = string.Equals(value, matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
+            if(equals)
+                _logger?.ILog($"Match found: '{value}' equals'{matchExpression}'" + (invert ? " (negated)" : ""));
+            return invert ? !equals : equals;
+        }
+        
         if((matchExpression.Equals("false", StringComparison.InvariantCultureIgnoreCase) && value == "0") || 
            (matchExpression.Equals("true", StringComparison.InvariantCultureIgnoreCase) && value == "1") ||
            (matchExpression.Equals("0", StringComparison.InvariantCultureIgnoreCase) && value == "false") || 
            (matchExpression.Equals("1", StringComparison.InvariantCultureIgnoreCase) && value == "true"))
         {
             _logger?.ILog("Boolean match found");
+            return !invert;
+        }
+        
+        // Handle exact match
+        if (string.Equals(matchExpression, value, StringComparison.InvariantCultureIgnoreCase))
+        {
+            _logger?.ILog($"Match found: '{value}' equals '{matchExpression}'" + (invert ? " (negated)" : ""));
             return !invert;
         }
 
