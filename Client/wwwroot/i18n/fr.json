@@ -1,11 +1,6 @@
 {
   "ProductName": "FileFlows",
   "Labels": {
-    "Warning": "Avertissement",
-    "Unlicensed": "Non licencié",
-    "UnlicensedFlowElement": "Une licence {level} est requise pour utiliser cet élément de flux.",
-    "TooManyDockerMods": "Vous avez sélectionné trop de DockerMods. Cela peut affecter les performances, et il est probablement inutile d’installer tous ces DockerMods.",
-
     "About": "À propos",
     "Add": "Ajouter",
     "AdminRequired": "Administrateur requis pour compléter l'installation.",
@@ -150,10 +145,13 @@
     "Tag": "Tag",
     "Test": "Tester",
     "Time": "Temps",
+    "TooManyDockerMods": "Vous avez sélectionné trop de DockerMods. Cela peut affecter les performances, et il est probablement inutile d’installer tous ces DockerMods.",
     "Total": "Total",
     "Trigger": "Déclencher",
     "Type": "Type",
     "Undo": "Annuler",
+    "Unlicensed": "Non licencié",
+    "UnlicensedFlowElement": "Une licence {level} est requise pour utiliser cet élément de flux.",
     "UnsavedChanges": "Modifications non enregistrées",
     "Update": "Mettre à jour",
     "UpdateAll": "Tout mettre à jour",
@@ -164,6 +162,7 @@
     "VersionNumber": "Version: {version}",
     "View": "Voir",
     "ViewLog": "Voir le journal",
+    "Warning": "Avertissement",
     "WeekShort": "Sem",
     "When": "Quand",
     "Yes": "Oui",
