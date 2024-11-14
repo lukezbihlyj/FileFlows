@@ -306,13 +306,13 @@ public partial class InitialConfig : ComponentBase
     /// Called when the DockerMod page advances
     /// </summary>
     /// <returns>true if can advance, otherwise false</returns>
-    private bool OnDockerModPageAdvanced()
+    private async Task<bool> OnDockerModPageAdvanced()
     {
         var mods = DockerModTable?.GetSelected()?.ToList() ?? [];
         if (mods.Count < 8)
             return true; // they didnt go overboard
         
-        MessageBox.Show(
+        await MessageBox.Show(
             Translater.Instant("Labels.Warning"), 
             Translater.Instant("Labels.TooManyDockerMods")
         );
