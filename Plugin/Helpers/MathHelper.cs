@@ -9,6 +9,22 @@ namespace FileFlows.Plugin.Helpers;
 /// <param name="_logger">the logger to use</param>
 public class MathHelper(ILogger _logger)
 {
+    /// <summary>
+    /// A collection of unit multipliers
+    /// </summary>
+    private readonly Dictionary<string, double> _unitMultipliers = new()
+    {
+        { "mbps", 1_000_000 },
+        { "kbps", 1_000 },
+        { "kb", 1_000 },
+        { "mb", 1_000_000 },
+        { "gb", 1_000_000_000 },
+        { "tb", 1_000_000_000_000 },
+        { "kib", 1_024 },
+        { "mib", 1_048_576 },
+        { "gib", 1_073_741_824 },
+        { "tib", 1_099_511_627_776 }
+    };
     
     /// <summary>
     /// Checks if the comparison string represents a mathematical operation.
@@ -17,11 +33,23 @@ public class MathHelper(ILogger _logger)
     /// <returns>True if the comparison is a mathematical operation, otherwise false.</returns>
     public bool IsMathOperation(string comparison)
     {
+        if (string.IsNullOrWhiteSpace(comparison))
+            return false;
+
+        comparison = comparison.Trim();
+        
         if (Regex.IsMatch(comparison, @"^\d+(\.\d+)?><\d+(\.\d+)?$"))
             return true;
         if (Regex.IsMatch(comparison, @"^\d+(\.\d+)?<>\d+(\.\d+)?$"))
             return true;
-    
+
+        // remove the units
+        foreach (var key in _unitMultipliers.Keys)
+        {
+            if(comparison.EndsWith(key, StringComparison.InvariantCultureIgnoreCase))
+                comparison = comparison[..^key.Length].Trim();
+        }
+        
         // If the string contains letters, it’s not a math operation
         if (Regex.IsMatch(comparison, @"[a-zA-Z]"))
             return false;
@@ -172,102 +200,22 @@ public class MathHelper(ILogger _logger)
         if (string.IsNullOrWhiteSpace(comparisonValue))
             return string.Empty;
         
+        if (string.IsNullOrWhiteSpace(comparisonValue))
+            return string.Empty;
+
         string adjustedComparison = comparisonValue.ToLower().Trim();
 
-        // Handle common mistakes in units
-        if (adjustedComparison.EndsWith("mbps"))
+        foreach (var unit in _unitMultipliers)
         {
-            // Make an educated guess for Mbps to kbps conversion
-            return adjustedComparison[..^4] switch
+            if (adjustedComparison.EndsWith(unit.Key))
             {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_000_000)
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("kbps"))
-        {
-            // Make an educated guess for kbps to bps conversion
-            return adjustedComparison[..^4] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_000)
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("kb"))
-        {
-            return adjustedComparison[..^2] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_000 )
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("mb"))
-        {
-            return adjustedComparison[..^2] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_000_000 )
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("gb"))
-        {
-            return adjustedComparison[..^2] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_000_000_000 )
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("tb"))
-        {
-            return adjustedComparison[..^2] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_000_000_000_000)
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
+                string numericPart = adjustedComparison[..^unit.Key.Length];
+                if (double.TryParse(numericPart, out var numericValue))
+                    return (numericValue * unit.Value).ToString(CultureInfo.InvariantCulture);
+                break;
+            }
         }
 
-        if (adjustedComparison.EndsWith("kib"))
-        {
-            return adjustedComparison[..^3] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_024 )
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("mib"))
-        {
-            return adjustedComparison[..^3] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_048_576 )
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("gib"))
-        {
-            return adjustedComparison[..^3] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_073_741_824 )
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
-        if (adjustedComparison.EndsWith("tib"))
-        {
-            return adjustedComparison[..^3] switch
-            {
-                { } value when double.TryParse(value, out var numericValue) => (numericValue * 1_099_511_627_776)
-                    .ToString(CultureInfo.InvariantCulture),
-                _ => comparisonValue
-            };
-        }
         return comparisonValue;
     }
 
