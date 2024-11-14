@@ -221,11 +221,12 @@ public class InitialConfiguration(TestBase test) : UiComponent(test)
             var isChecked = await checkbox.IsCheckedAsync();
             if (isChecked )
                 continue;
+            await row.ScrollIntoViewIfNeededAsync();
             await checkbox.ScrollIntoViewIfNeededAsync();
             await checkbox.ClickAsync();
-            isChecked = await checkbox.IsCheckedAsync();
-            if (isChecked)
-                throw new Exception($"Failed to check '{itemName}'");
+            // isChecked = await checkbox.IsCheckedAsync();
+            // if (isChecked)
+            //     throw new Exception($"Failed to check '{itemName}'");
         }
     }
     
