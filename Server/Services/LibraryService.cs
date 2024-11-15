@@ -26,6 +26,9 @@ public class LibraryService : ILibraryService
         var libraries = await GetAllAsync();
         foreach (var library in libraries)
         {
+            if (library.Uid == CommonVariables.ManualLibraryUid || 
+                library?.Name.Equals(CommonVariables.ManualLibrary, StringComparison.InvariantCulture) == true)
+                continue; // don't watch the manual library
             WatchedLibraries[library.Uid] = new(LibraryLogger, library);
             WatchedLibraries[library.Uid].Start();
         }
@@ -68,7 +71,8 @@ public class LibraryService : ILibraryService
         {
             WatchedLibraries[library.Uid].UpdateLibrary(updated);
         }
-        else
+        else if(library.Uid != CommonVariables.ManualLibraryUid  // don't watch manual, this shouldn't ever be the case, but in case
+                && library.Name?.Equals(CommonVariables.ManualLibrary, StringComparison.InvariantCulture) != true)
         {
             // create it
             WatchedLibraries[library.Uid] = new(LibraryLogger, updated);
