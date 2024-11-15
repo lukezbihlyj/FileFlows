@@ -65,7 +65,7 @@ public class DockerModService
         }
 
         if (mod.Order < 1)
-            mod.Order = all.Max(x => x.Order) + 1;
+            mod.Order = all.Count > 0 ? all.Max(x => x.Order) + 1 : 1;
         
         var result = await manager.Update(mod, auditDetails);
         bool isDocker = Globals.IsDocker;
