@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using FileFlows.Plugin;
 using FileFlows.Plugin.Helpers;
 using FileFlows.Server.Services;
@@ -82,11 +83,27 @@ public partial class WatchedLibraryNew : IDisposable
             Watcher.Start();
         }
     }
+    
+    /// <summary>
+    /// Files currently being checked
+    /// </summary>
+    private readonly ConcurrentDictionary<string, bool> _pendingFiles = new();
 
     private void WatcherOnFileChanged(object? sender, FileSystemEventArgs e)
     {
+        // If the file is already being processed, return early
+        if (_pendingFiles.ContainsKey(e.FullPath) && _pendingFiles[e.FullPath])
+            return;
+        
+        // Mark the file as pending
+        _pendingFiles[e.FullPath] = true;
+        
         _ = Task.Run(async () =>
         {
+            // Wait until the file is stabilized
+            if (!await IsFileStabilized(e.FullPath))
+                return;
+            
             var executors = (await this.RunnerService.GetExecutors()).Values;
             if (executors.Any(x => x.LibraryFileName == e.FullPath || x.WorkingFile == e.FullPath))
                 return; // ignore these files
@@ -106,6 +123,33 @@ public partial class WatchedLibraryNew : IDisposable
         });
     }
 
+    /// <summary>
+    /// Checks if a file is stabilized (i.e., hasn't changed for a given period).
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <param name="stabilizationDelay">The delay to confirm stabilization, in milliseconds.</param>
+    /// <returns>True if the file is stabilized, otherwise false.</returns>
+    private async Task<bool> IsFileStabilized(string filePath, int stabilizationDelay = 10_000)
+    {
+        try
+        {
+            FileInfo fileInfo = new(filePath);
+            DateTime lastWriteTime = fileInfo.LastWriteTime;
+
+            // Wait for the stabilization delay
+            await Task.Delay(stabilizationDelay);
+
+            // Re-fetch the file information to check if it changed
+            fileInfo.Refresh();
+            return fileInfo.LastWriteTime == lastWriteTime;
+        }
+        catch (IOException)
+        {
+            // File is likely in use or not accessible, so not stabilized
+            return false;
+        }
+    }
+    
     /// <summary>
     /// Performs the full scan of the library
     /// </summary>
