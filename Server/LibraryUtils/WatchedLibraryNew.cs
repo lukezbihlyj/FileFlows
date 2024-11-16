@@ -200,7 +200,8 @@ public partial class WatchedLibraryNew : IDisposable
         await FileSemaphore.WaitAsync(30_000, cancellationTokenSource.Token);
         try
         {
-            Logger.ILog($"Checking [{Library.Name}]: " + filePath);
+            Logger.DLog($"Checking [{Library.Name}]: " + filePath);
+            
             if (IsMatch(filePath) == false)
                 return; // doesnt match extension/filters
 

@@ -156,7 +156,7 @@ public partial class WatchedLibraryNew
                     continue;
                 if (_StringHelper.Matches(filter, input))
                 {
-                    Logger.ILog($"Exclusion Filter Match [{filter}]: {input}");
+                    Logger.DLog($"Exclusion Filter Match [{filter}]: {input}");
                     return false;
                 }
             }
@@ -170,7 +170,7 @@ public partial class WatchedLibraryNew
                     continue;
                 if (_StringHelper.Matches(filter, input))
                 {
-                    Logger.ILog($"Inclusion Filter Match [{filter}]: {input}");
+                    Logger.DLog($"Inclusion Filter Match [{filter}]: {input}");
                     return true;
                 }
             }
