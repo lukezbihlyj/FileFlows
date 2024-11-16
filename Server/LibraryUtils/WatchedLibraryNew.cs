@@ -63,7 +63,10 @@ public partial class WatchedLibraryNew : IDisposable
         this.Library = library;
         this.LibraryFileService = ServiceLoader.Load<LibraryFileService>();
         this.RunnerService = ServiceLoader.Load<FlowRunnerService>();
-        this._StringHelper = new(logger);
+        this._StringHelper = new(logger)
+        {
+            Silent = true
+        };
     }
 
     private void SetupWatcher()
@@ -153,6 +156,7 @@ public partial class WatchedLibraryNew : IDisposable
         await FileSemaphore.WaitAsync(30_000, cancellationTokenSource.Token);
         try
         {
+            Logger.ILog($"Checking [{Library.Name}]: " + filePath);
             if (IsMatch(filePath) == false)
                 return; // doesnt match extension/filters
 

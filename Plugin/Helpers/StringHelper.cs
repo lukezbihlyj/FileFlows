@@ -21,6 +21,11 @@ public class StringHelper(ILogger _logger)
     // }
     
     /// <summary>
+    /// Gets or sets if the matching should be silent and not output anything to the log
+    /// </summary>
+    public bool Silent { get; set; }
+    
+    /// <summary>
     /// Matches an object, if value is a boolean then 1 or true will match true, and 0 or false will match false
     /// </summary>
     /// <param name="matchExpression">the match expression</param>
@@ -103,7 +108,8 @@ public class StringHelper(ILogger _logger)
         // Handle default which is contains
         if (value.Contains(matchExpression, StringComparison.InvariantCultureIgnoreCase))
         {
-            _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
+            if(Silent == false)
+                _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
             return !invert;
         }
         
@@ -111,7 +117,7 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.StartsWith('*') && matchExpression.EndsWith('*'))
         {
             bool contains = value.Contains(matchExpression[1..^1], StringComparison.InvariantCultureIgnoreCase);
-            if(contains)
+            if(contains && Silent == false)
                 _logger?.ILog($"Match found: '{value}' contains '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !contains : contains;
         }
@@ -120,7 +126,7 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.EndsWith('*'))
         {
             bool startsWith = value.StartsWith(matchExpression[..^1], StringComparison.InvariantCultureIgnoreCase);
-            if(startsWith)
+            if(startsWith && Silent == false)
                 _logger?.ILog($"Match found: '{value}' starts with '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !startsWith : startsWith;
         }
@@ -129,7 +135,7 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.StartsWith('*'))
         {
             bool endsWith = value.EndsWith(matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
-            if(endsWith)
+            if(endsWith && Silent == false)
                 _logger?.ILog($"Match found: '{value}' ends with '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !endsWith : endsWith;
         }
@@ -138,7 +144,7 @@ public class StringHelper(ILogger _logger)
         if (matchExpression.StartsWith('='))
         {
             bool equals = string.Equals(value, matchExpression[1..], StringComparison.InvariantCultureIgnoreCase);
-            if(equals)
+            if(equals && Silent == false)
                 _logger?.ILog($"Match found: '{value}' equals'{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !equals : equals;
         }
@@ -148,14 +154,16 @@ public class StringHelper(ILogger _logger)
            (matchExpression.Equals("0", StringComparison.InvariantCultureIgnoreCase) && value == "false") || 
            (matchExpression.Equals("1", StringComparison.InvariantCultureIgnoreCase) && value == "true"))
         {
-            _logger?.ILog("Boolean match found");
+            if(Silent == false)
+                _logger?.ILog("Boolean match found");
             return !invert;
         }
         
         // Handle exact match
         if (string.Equals(matchExpression, value, StringComparison.InvariantCultureIgnoreCase))
         {
-            _logger?.ILog($"Match found: '{value}' equals '{matchExpression}'" + (invert ? " (negated)" : ""));
+            if(Silent == false)
+                _logger?.ILog($"Match found: '{value}' equals '{matchExpression}'" + (invert ? " (negated)" : ""));
             return !invert;
         }
 
@@ -170,7 +178,8 @@ public class StringHelper(ILogger _logger)
             
             var rgx = new Regex(matchExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
             bool matchesRegex = rgx.IsMatch(value);
-            _logger?.ILog($"Match found: '{value}' matches pattern '{matchExpression}'" + (invert ? " (negated)" : ""));
+            if(Silent == false)
+                _logger?.ILog($"Match found: '{value}' matches pattern '{matchExpression}'" + (invert ? " (negated)" : ""));
             return invert ? !matchesRegex : matchesRegex;
         }
         catch (Exception)
