@@ -40,7 +40,7 @@ public class VariablesHelper
 
             // Handle missing variables
             if (value == null)
-                value = stripMissing ? string.Empty : variablePath;
+                value = stripMissing ? string.Empty : match.Value;
 
             var format = match.Groups
                 .Cast<Group>()

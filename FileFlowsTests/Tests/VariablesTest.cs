@@ -19,9 +19,9 @@ public class VariablesTest
         Assert.AreEqual("ShowName (2020) {tvdb-123456}", VariablesHelper.ReplaceVariables("ShowName (2020) {tvdb-123456}", variables, stripMissing: true));
         Assert.AreEqual("ShowName (2020) {imdb-123456}", VariablesHelper.ReplaceVariables("ShowName (2020) {imdb-123456}", variables, stripMissing: true));
         
-        Assert.AreEqual("ShowName (2020) {tmdb-123456} missing", VariablesHelper.ReplaceVariables("ShowName (2020) {tmdb-123456} {missing}", variables, stripMissing: false));
-        Assert.AreEqual("ShowName (2020) {tvdb-123456} missing", VariablesHelper.ReplaceVariables("ShowName (2020) {tvdb-123456} {missing}", variables, stripMissing: false));
-        Assert.AreEqual("ShowName (2020) {imdb-123456} missing", VariablesHelper.ReplaceVariables("ShowName (2020) {imdb-123456} {missing}", variables, stripMissing: false));
+        Assert.AreEqual("ShowName (2020) {tmdb-123456} {missing}", VariablesHelper.ReplaceVariables("ShowName (2020) {tmdb-123456} {missing}", variables, stripMissing: false));
+        Assert.AreEqual("ShowName (2020) {tvdb-123456} {missing}", VariablesHelper.ReplaceVariables("ShowName (2020) {tvdb-123456} {missing}", variables, stripMissing: false));
+        Assert.AreEqual("ShowName (2020) {imdb-123456} {missing}", VariablesHelper.ReplaceVariables("ShowName (2020) {imdb-123456} {missing}", variables, stripMissing: false));
         variables.Add("tmdb-123456", "bobby");
         variables.Add("tvdb-123456", "drake");
         variables.Add("imdb-123456", "iceman");
@@ -56,7 +56,7 @@ public class VariablesTest
         variables["value"] = date;
         Assert.AreEqual("Test 29/10/2022", VariablesHelper.ReplaceVariables("Test {value|dd/MM/yyyy}", variables, stripMissing: true));
         Assert.AreEqual("Test 29-10-2022", VariablesHelper.ReplaceVariables("Test {value|dd-MM-yyyy}", variables, stripMissing: true));
-        Assert.AreEqual("Test 29-10-2022 11:41:32.532 AM", VariablesHelper.ReplaceVariables("Test {value|dd-MM-yyyy hh:mm:ss.fff tt}", variables, stripMissing: true));
+        Assert.AreEqual("Test " + date.ToString("dd-MM-yyyy hh:mm:ss.fff tt"), VariablesHelper.ReplaceVariables("Test {value|dd-MM-yyyy hh:mm:ss.fff tt}", variables, stripMissing: true));
         Assert.AreEqual($"Test {date.ToShortTimeString()}", VariablesHelper.ReplaceVariables("Test {value|time}", variables, stripMissing: true));
         variables["value"] = name;
         Assert.AreEqual("Test " + name.ToUpper(), VariablesHelper.ReplaceVariables("Test {value!}", variables, stripMissing: true));
@@ -498,7 +498,7 @@ public class VariablesTest
         Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
         
         string input2 = "Path{missing}";
-        string expected2 = "Pathmissing";
+        string expected2 = "Path{missing}";
         string result2 = VariablesHelper.ReplaceVariables(input2, variables, stripMissing: false);
         Assert.AreEqual(expected2, result2, $"Expected '{expected2}', but got '{result2}'.");
         
@@ -508,8 +508,62 @@ public class VariablesTest
         Assert.AreEqual(expected3, result3, $"Expected '{expected3}', but got '{result3}'.");
         
         string input4 = "Path{null}";
-        string expected4 = "Pathnull";
+        string expected4 = "Path";
         string result4 = VariablesHelper.ReplaceVariables(input4, variables, stripMissing: false);
         Assert.AreEqual(expected4, result4, $"Expected '{expected4}', but got '{result4}'.");
+    }
+
+    /// <summary>
+    /// Tests JSON body data 
+    /// </summary>
+    [TestMethod]
+    public void WebRequestJsonBody()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "pathVariable", "test" },
+            { "null", null}
+        };
+
+        string input = """
+                       { 
+                            "abc": 123,
+                            "def": false,
+                            "ghi": { "jkl": 123 },
+                            "mno": "{pathVariable}"
+                       }
+                       """;
+        string expected = """
+                       { 
+                            "abc": 123,
+                            "def": false,
+                            "ghi": { "jkl": 123 },
+                            "mno": "test"
+                       }
+                       """;
+        string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
+    }
+
+    /// <summary>
+    /// Tests JSON body complex data 
+    /// </summary>
+    [TestMethod]
+    public void WebRequestJsonBodyComplex()
+    {
+        var variables = new Dictionary<string, object>
+        {
+            { "pathVariable", "test" },
+            { "null", null}
+        };
+
+        string input = """
+                       {"query": "mutation {metadataScan(input: {paths: [\"/data\"], rescan: false, scanGenerateCovers: true, scanGeneratePreviews: false, scanGenerateImagePreviews: false, scanGenerateSprites: true, scanGeneratePhashes: true, scanGenerateThumbnails: false, scanGenerateClipPreviews: false})}"}
+                       """;
+        string expected = """
+                          {"query": "mutation {metadataScan(input: {paths: [\"/data\"], rescan: false, scanGenerateCovers: true, scanGeneratePreviews: false, scanGenerateImagePreviews: false, scanGenerateSprites: true, scanGeneratePhashes: true, scanGenerateThumbnails: false, scanGenerateClipPreviews: false})}"}
+                          """;
+        string result = VariablesHelper.ReplaceVariables(input, variables, stripMissing: false);
+        Assert.AreEqual(expected, result, $"Expected '{expected}', but got '{result}'.");
     }
 }
