@@ -23,7 +23,7 @@ public class LibraryService : ILibraryService
     /// </summary>
     public async Task SetupWatches()
     {
-        var libraries = await GetAllAsync();
+        var libraries = (await GetAllAsync()).Select(x => x).ToList();
         foreach (var library in libraries)
         {
             if (library.Uid == CommonVariables.ManualLibraryUid || 
