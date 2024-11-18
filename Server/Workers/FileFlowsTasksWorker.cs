@@ -144,7 +144,7 @@ public class FileFlowsTasksWorker: ServerWorker
         }
         else
         {
-            Logger.ELog($"Error executing task '{task.Name}: " + result.ReturnValue + "\n" + result.Log);
+            Logger.ELog($"Error executing task '{task.Name}': " + result.ReturnValue + "\n" + result.Log);
             
             _ = ServiceLoader.Load<INotificationService>().Record(NotificationSeverity.Warning,
                 $"Error executing task '{task.Name}': " + result.ReturnValue, result.Log);
