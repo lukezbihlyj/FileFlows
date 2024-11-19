@@ -49,8 +49,8 @@ public class NodeParamatersTests: TestBase
         nodeParameters.InitFile(file);
         
         Assert.AreEqual("Path", nodeParameters.ReplaceVariables("Path{missing}", true));
-        Assert.AreEqual("Pathmissing", nodeParameters.ReplaceVariables("Path{missing}", false));
+        Assert.AreEqual("Path{missing}", nodeParameters.ReplaceVariables("Path{missing}", false));
         Assert.AreEqual("", nodeParameters.ReplaceVariables("{missing}", true));
-        Assert.AreEqual("missing", nodeParameters.ReplaceVariables("{missing}", false));
+        Assert.AreEqual("{missing}", nodeParameters.ReplaceVariables("{missing}", false));
     }
 }
