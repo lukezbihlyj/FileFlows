@@ -258,7 +258,31 @@ public partial class WatchedLibraryNew : IDisposable
             {
                 var lfExisting = await LibraryFileService.GetFileIfKnown(filePath, Library.Uid);
                 if (lfExisting != null)
-                    return; // already known
+                {
+                    if (Library.DownloadsDirectory == false)
+                        return;
+
+                    // check if was processed
+                    if (lfExisting.Status != FileStatus.Processed)
+                        return;
+                    // file was processed, so this is treated as a new file/new download and will be reprocessed
+                    Logger.ILog("Processed folder found in download library, reprocessing: " + filePath);
+
+                    // reprocess the file
+                    lfExisting.Status = FileStatus.Unprocessed;
+                    if (Library.HoldMinutes < 1)
+                        await LibraryFileService.SetStatus(FileStatus.Unprocessed, lfExisting.Uid);
+                    else
+                    {
+                        // need to set hold time
+                        lfExisting.HoldUntil = DateTime.UtcNow.AddMinutes(Library.HoldMinutes);
+                        lfExisting.Status =
+                            FileStatus.Unprocessed; // we want unprocessed here, so it's saved as 0 in the DB
+                        await LibraryFileService.Update(lfExisting);
+                    }
+
+                    return;
+                }
             }
                 
             // it's a new file/folder
