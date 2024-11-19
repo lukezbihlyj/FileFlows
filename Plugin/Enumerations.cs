@@ -193,9 +193,9 @@ public enum FormInputType
     /// </summary>
     DropDown = 43,
     /// <summary>
-    /// Flow viewer
+    /// Input for Binary
     /// </summary>
-    Flow = 44,
+    Binary = 44,
     /// <summary>
     /// Executed Flow Elements Renderer
     /// </summary>
@@ -203,11 +203,7 @@ public enum FormInputType
     /// <summary>
     /// Input for selecting tag(s)
     /// </summary>
-    TagSelection = 46,
-    /// <summary>
-    /// Input for Binary
-    /// </summary>
-    Binary = 47
+    TagSelection = 46
 }
 
 
