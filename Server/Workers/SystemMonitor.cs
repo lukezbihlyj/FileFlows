@@ -65,7 +65,7 @@ public class SystemMonitor:Worker
     /// </summary>
     private SettingsService settingsService;
     
-    public SystemMonitor() : base(ScheduleType.Second, 3)
+    public SystemMonitor() : base(ScheduleType.Second, 3, quiet: true)
     {
         Instance = this;
         dbService = ServiceLoader.Load<DatabaseService>();

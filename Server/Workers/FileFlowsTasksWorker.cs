@@ -29,7 +29,7 @@ public class FileFlowsTasksWorker: ServerWorker
     /// <summary>
     /// Creates a new instance of the Scheduled Task Worker
     /// </summary>
-    public FileFlowsTasksWorker() : base(ScheduleType.Minute, 1)
+    public FileFlowsTasksWorker() : base(ScheduleType.Minute, 1, quiet: true)
     {
         Instance = this;
         Logger = new Logger();

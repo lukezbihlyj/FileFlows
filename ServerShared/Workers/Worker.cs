@@ -144,13 +144,14 @@ public abstract class Worker
     /// </summary>
     public void Trigger()
     {
+        if (Executing)
+            return; // dont let run twice
+        
+        string workerName = GetType().Name;
         try
         {
-            if (Executing)
-                return; // dont let run twice
-            
             if(Quiet == false)
-                Logger.Instance.DLog("Triggering worker: " + this.GetType().Name);
+                Logger.Instance.DLog("Triggering worker: " + workerName);
 
             _ = Task.Run(() =>
             {
@@ -162,7 +163,7 @@ public abstract class Worker
                 catch (Exception ex)
                 {
                     Logger.Instance?.ELog(
-                        $"Error in worker '{this.GetType().Name}': {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                        $"Error in worker '{workerName}': {ex.Message}{Environment.NewLine}{ex.StackTrace}");
                 }
                 finally
                 {
@@ -173,7 +174,7 @@ public abstract class Worker
         catch (Exception ex)
         {
             // FF-410 - catch any errors to avoid this call killing the application
-            Logger.Instance.WLog($"Error triggering worker '{this.GetType().Name}': " + ex.Message);
+            Logger.Instance.WLog($"Error triggering worker '{workerName}': " + ex.Message);
         }
     }
 

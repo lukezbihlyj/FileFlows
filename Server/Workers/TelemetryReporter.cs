@@ -13,7 +13,7 @@ namespace FileFlows.Server.Workers;
 
 public class TelemetryReporter : ServerWorker
 {
-    public TelemetryReporter() : base(ScheduleType.Daily, 5)
+    public TelemetryReporter() : base(ScheduleType.Daily, 5, quiet: true)
     {
         Trigger();
     }
