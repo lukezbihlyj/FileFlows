@@ -12,13 +12,10 @@ namespace FileFlows.Node.Workers;
 /// <summary>
 /// Worker that gathers system statistics 
 /// </summary>
-public class SystemStatisticsWorker():Worker(ScheduleType.Second, 10)
+public class SystemStatisticsWorker():Worker(ScheduleType.Second, 10, quiet: true)
 {
     private ProcessingNode? processingNode; 
     
-    /// <inheritdoc />
-    protected override bool Quiet => true;
-
     /// <inheritdoc />
     protected override void Execute()
     {

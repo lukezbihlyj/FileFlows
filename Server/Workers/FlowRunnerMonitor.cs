@@ -16,13 +16,10 @@ public class FlowRunnerMonitor:ServerWorker
     private List<Guid> StartUpRunningFiles;
     private DateTime StartedAt = DateTime.UtcNow;
 
-    /// <inheritdoc />
-    protected override bool Quiet => true;
-
     /// <summary>
     /// Constructs a Flow Runner Monitor worker
     /// </summary>
-    public FlowRunnerMonitor() : base(ScheduleType.Second, 10)
+    public FlowRunnerMonitor() : base(ScheduleType.Second, 10, quiet: true)
     {
         StartUpRunningFiles = FlowRunnerService.ExecutingLibraryFiles().Result;
     }

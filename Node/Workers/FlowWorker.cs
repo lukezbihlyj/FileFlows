@@ -32,9 +32,6 @@ public class FlowWorker : Worker
 
     private readonly string _configKeyDefault = Guid.NewGuid().ToString();
 
-    /// <inheritdoc />
-    protected override bool Quiet => true;
-
     /// <summary>
     /// Gets if the config encryption key 
     /// </summary>
@@ -99,7 +96,7 @@ public class FlowWorker : Worker
     /// </summary>
     /// <param name="hostname">the host name of the processing node</param>
     /// <param name="isServer">if this flow worker is running on the server or an external processing node</param>
-    public FlowWorker(string hostname, bool isServer = false) : base(ScheduleType.Second, DEFAULT_INTERVAL)
+    public FlowWorker(string hostname, bool isServer = false) : base(ScheduleType.Second, DEFAULT_INTERVAL, quiet: true)
     {
         FlowWorker.Instance = this;
         this.isServer = isServer;

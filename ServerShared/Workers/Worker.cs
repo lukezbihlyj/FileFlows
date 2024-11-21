@@ -44,15 +44,17 @@ public abstract class Worker
     /// <summary>
     /// Gets if this worker is quiet and has reduced logging
     /// </summary>
-    protected virtual bool Quiet { get; }
+    protected bool Quiet { get; init; }
 
     /// <summary>
     /// Creates an instance of a worker
     /// </summary>
     /// <param name="schedule">the type of schedule this worker runs at</param>
     /// <param name="interval">the interval of this worker</param>
-    protected Worker(ScheduleType schedule, int interval)
+    /// <param name="quiet">If this worker is quiet and has reduced logging</param>
+    protected Worker(ScheduleType schedule, int interval, bool quiet = false)
     {
+        Quiet = quiet;
         Initialize(schedule, interval);
     }
 
