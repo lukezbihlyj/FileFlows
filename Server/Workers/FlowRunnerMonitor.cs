@@ -16,6 +16,9 @@ public class FlowRunnerMonitor:ServerWorker
     private List<Guid> StartUpRunningFiles;
     private DateTime StartedAt = DateTime.UtcNow;
 
+    /// <inheritdoc />
+    protected override bool Quiet => true;
+
     /// <summary>
     /// Constructs a Flow Runner Monitor worker
     /// </summary>
@@ -24,6 +27,7 @@ public class FlowRunnerMonitor:ServerWorker
         StartUpRunningFiles = FlowRunnerService.ExecutingLibraryFiles().Result;
     }
 
+    /// <inheritdoc />
     protected override void ExecuteActual(Settings settings)
     {
         var service = ServiceLoader.Load<FlowRunnerService>();

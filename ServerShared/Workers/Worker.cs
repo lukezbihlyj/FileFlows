@@ -42,6 +42,11 @@ public abstract class Worker
     protected ScheduleType Schedule { get; set; }
 
     /// <summary>
+    /// Gets if this worker is quiet and has reduced logging
+    /// </summary>
+    protected virtual bool Quiet { get; }
+
+    /// <summary>
     /// Creates an instance of a worker
     /// </summary>
     /// <param name="schedule">the type of schedule this worker runs at</param>
@@ -71,7 +76,8 @@ public abstract class Worker
     /// </summary>
     public virtual void Start()
     {
-        Logger.Instance?.ILog("Starting worker: " + this.GetType().Name);
+        if(Quiet == false)
+            Logger.Instance?.ILog("Starting worker: " + this.GetType().Name);
         if (timer != null)
         {
             if (timer.Enabled)
@@ -95,7 +101,8 @@ public abstract class Worker
     /// </summary>
     public virtual void Stop()
     {
-        Logger.Instance?.ILog("Stopping worker: " + this.GetType().Name);
+        if(Quiet == false)
+            Logger.Instance?.ILog("Stopping worker: " + this.GetType().Name);
         if (timer == null)
             return;
         timer.Stop();
@@ -139,7 +146,9 @@ public abstract class Worker
         {
             if (Executing)
                 return; // dont let run twice
-            Logger.Instance.DLog("Triggering worker: " + this.GetType().Name);
+            
+            if(Quiet == false)
+                Logger.Instance.DLog("Triggering worker: " + this.GetType().Name);
 
             _ = Task.Run(() =>
             {

@@ -12,17 +12,14 @@ namespace FileFlows.Node.Workers;
 /// <summary>
 /// Worker that gathers system statistics 
 /// </summary>
-public class SystemStatisticsWorker:Worker
+public class SystemStatisticsWorker():Worker(ScheduleType.Second, 10)
 {
     private ProcessingNode? processingNode; 
     
-    /// <summary>
-    /// Constructs an instance of hte System Statistics worker
-    /// </summary>
-    public SystemStatisticsWorker() : base(ScheduleType.Second, 10)
-    {
-    }
+    /// <inheritdoc />
+    protected override bool Quiet => true;
 
+    /// <inheritdoc />
     protected override void Execute()
     {
         if(processingNode == null)

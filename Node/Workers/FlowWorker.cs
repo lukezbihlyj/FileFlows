@@ -31,7 +31,10 @@ public class FlowWorker : Worker
     public static ConfigurationRevision? CurrentConfig { get; set; }
 
     private readonly string _configKeyDefault = Guid.NewGuid().ToString();
-    
+
+    /// <inheritdoc />
+    protected override bool Quiet => true;
+
     /// <summary>
     /// Gets if the config encryption key 
     /// </summary>
@@ -205,7 +208,8 @@ public class FlowWorker : Worker
 
         if (node?.Enabled != true)
         {
-            Logger.Instance?.DLog($"Node '{nodeName}' is not enabled");
+            if(node?.Name != CommonVariables.InternalNodeName)
+                Logger.Instance?.DLog($"Node '{nodeName}' is not enabled");
             return false;
         }
 
