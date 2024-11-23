@@ -215,12 +215,6 @@ public partial class WatchedLibraryNew : IDisposable
             if (Library.Folders == false)
             {
                 var fileInfo = new FileInfo(filePath);
-                if (Library.SkipFileAccessTests == false &&
-                    await CanAccess(fileInfo, Library.FileSizeDetectionInterval) == false)
-                {
-                    // can't access the file
-                    return;
-                }
 
                 var lfExisting = await LibraryFileService.GetFileIfKnown(filePath, Library.Uid);
                 //var existing = KnownFiles.FirstOrDefault(x => x.Name == filePath);
@@ -236,6 +230,13 @@ public partial class WatchedLibraryNew : IDisposable
                     }
                     else if (FileUnchanged(fileInfo, lfExisting)) // existing file, check if its changed
                         return;
+                
+                    if (Library.SkipFileAccessTests == false &&
+                        await CanAccess(fileInfo, Library.FileSizeDetectionInterval) == false)
+                    {
+                        // can't access the file
+                        return;
+                    }
 
                     Logger.ILog($"Reprocessing Library '{Library.Name} File: {filePath}");
                     // reprocess the file
@@ -251,6 +252,13 @@ public partial class WatchedLibraryNew : IDisposable
                         await LibraryFileService.Update(lfExisting);
                     }
 
+                    return;
+                }
+                
+                if (Library.SkipFileAccessTests == false &&
+                    await CanAccess(fileInfo, Library.FileSizeDetectionInterval) == false)
+                {
+                    // can't access the file
                     return;
                 }
             }
