@@ -190,11 +190,11 @@ public partial class Libraries : ListPage<Guid, Library>
         });
         fields.Add(new ElementField
         {
-            InputType = FormInputType.Int,
+            InputType = FormInputType.Period,
             Parameters = new Dictionary<string, object>
             {
-                { "Min", 10 },
-                { "Max", 24 * 60 * 60 }
+                { nameof(InputPeriod.ShowWeeks), false },
+                { nameof(InputPeriod.Seconds), true }
             },
             Name = nameof(library.ScanInterval)
         });

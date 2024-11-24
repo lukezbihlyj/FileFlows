@@ -143,8 +143,13 @@
         case FormInputType.Period:
         {
             var value = GetValue<int>(field.Name);
-            <InputPeriod Field=@field Label="@label" Value="@value" ReadOnly=@readOnly ValueChanged="@(x => UpdateValue(field, x))"
-                         Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
+            var showWeeks = GetParameter<bool>(field, nameof(InputPeriod.ShowWeeks));
+            var seconds = GetParameter<bool>(field, nameof(InputPeriod.Seconds));
+            <InputPeriod Field=@field Label="@label" Value="@value" ReadOnly=@readOnly 
+                         ValueChanged="@(x => UpdateValue(field, x))"
+                         ShowWeeks="@showWeeks" Seconds="@seconds"
+                         Validators=@field.Validators Placeholder="@field.Placeholder" HideLabel=@hideLabel 
+                         OnSubmit=@OnSubmit OnClose=@OnClose Help=@field.HelpText />
         }
             break;
         case FormInputType.FileSize:
