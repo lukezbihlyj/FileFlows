@@ -47,6 +47,7 @@ public partial class WatchedLibraryNew : IDisposable
     private readonly SemaphoreSlim FileSemaphore = new(1, 1);
     private readonly SemaphoreSlim ScanSemaphore = new(1, 1);
     private LibraryFileService LibraryFileService { get; init; }
+    private Settings Settings;
 
     /// <summary>
     /// Tthe flow runner service
@@ -64,6 +65,7 @@ public partial class WatchedLibraryNew : IDisposable
         this.Library = library;
         this.LibraryFileService = ServiceLoader.Load<LibraryFileService>();
         this.RunnerService = ServiceLoader.Load<FlowRunnerService>();
+        this.Settings = ServiceLoader.Load<ISettingsService>().Get().Result;
         this._StringHelper = new(logger)
         {
             Silent = true
@@ -166,6 +168,8 @@ public partial class WatchedLibraryNew : IDisposable
                 return; // no need to scan
             
             Logger.ILog($"Library '{Library.Name}' scanning");
+            // refresh the settings
+            this.Settings = await ServiceLoader.Load<ISettingsService>().Get();
             DateTime start = DateTime.Now;
             // scan library 
             if (Library.Folders)
@@ -190,6 +194,7 @@ public partial class WatchedLibraryNew : IDisposable
             StartOrResetScanTimer();
         }
     }
+    
 
     /// <summary>
     /// Checks if a file is new or has been updated and if so adds it/updates it in the library
@@ -200,7 +205,9 @@ public partial class WatchedLibraryNew : IDisposable
         await FileSemaphore.WaitAsync(30_000, cancellationTokenSource.Token);
         try
         {
-            Logger.DLog($"Checking [{Library.Name}]: " + filePath);
+
+            if (Settings?.LogQueueMessages == true)
+                Logger.DLog($"Checking [{Library.Name}]: " + filePath);
             
             if (IsMatch(filePath) == false)
                 return; // doesnt match extension/filters

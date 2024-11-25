@@ -105,7 +105,7 @@ public class Globals
     /// <summary>
     /// The base url for Plugin 
     /// </summary>
-    public static readonly string PluginBaseUrl = FileFlowsDotComUrl + "/api/plugin";
+    public static string PluginBaseUrl => FileFlowsDotComUrl + "/api/plugin";
 
     /// <summary>
     /// The processing time heat map statistic
