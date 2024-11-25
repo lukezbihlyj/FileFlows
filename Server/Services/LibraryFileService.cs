@@ -413,16 +413,16 @@ public class LibraryFileService
         var outOfSchedule = TimeHelper.InSchedule(node.Schedule) == false;
 
         var allLibraries = (await ServiceLoader.Load<LibraryService>().GetAllAsync());
-        if (allLibraries.Any(x => x.Uid == CommonVariables.ManualLibraryUid) == false)
-        {
-            allLibraries.Add(new()
-            {
-                Uid = CommonVariables.ManualLibraryUid,
-                Name = CommonVariables.ManualLibrary,
-                Enabled = true,
-                Schedule = new string ('1', 672)
-            });
-        }
+        // if (allLibraries.Any(x => x.Uid == CommonVariables.ManualLibraryUid) == false)
+        // {
+        //     allLibraries.Add(new()
+        //     {
+        //         Uid = CommonVariables.ManualLibraryUid,
+        //         Name = CommonVariables.ManualLibrary,
+        //         Enabled = true,
+        //         Schedule = new string ('1', 672)
+        //     });
+        // }
 
         bool processingOrderLicensed = LicenseHelper.IsLicensed(LicenseFlags.ProcessingOrder);
         var sysInfo = new LibraryFilterSystemInfo()

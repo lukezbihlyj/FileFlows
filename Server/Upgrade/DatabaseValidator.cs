@@ -36,7 +36,8 @@ public class DatabaseValidator(FileFlows.Plugin.ILogger logger, AppSettingsServi
                 MaxRunners = 1,
                 Enabled = true,
                 ProcessingOrder = ProcessingOrder.AsFound,
-                Priority = ProcessingPriority.Normal
+                Priority = ProcessingPriority.Normal,
+                Schedule = new string ('1', 672)
             }
         ];
         return await UpgradeManager.EnsureDefaultsExist(Logger, DbType, ConnectionString, defaultObjects);

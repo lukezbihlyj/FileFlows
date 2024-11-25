@@ -203,22 +203,22 @@ public class NodeService : RemoteService, INodeService
     }
 
 
-    /// <summary>
-    /// Records the node system statistics to the server
-    /// </summary>
-    /// <param name="args">the node system statistics</param>
-    /// <returns>the task to await</returns>
-    public async Task RecordNodeSystemStatistics(NodeSystemStatistics args)
-    {
-        try
-        {
-            await HttpHelper.Post($"{ServiceBaseUrl}/remote/node/system-statistics", args);
-        }
-        catch (Exception)
-        {
-            // Ignored
-        }
-    }
+    // /// <summary>
+    // /// Records the node system statistics to the server
+    // /// </summary>
+    // /// <param name="args">the node system statistics</param>
+    // /// <returns>the task to await</returns>
+    // public async Task RecordNodeSystemStatistics(NodeSystemStatistics args)
+    // {
+    //     try
+    //     {
+    //         await HttpHelper.Post($"{ServiceBaseUrl}/remote/node/system-statistics", args);
+    //     }
+    //     catch (Exception)
+    //     {
+    //         // Ignored
+    //     }
+    // }
 
     /// <inheritdoc />
     public async Task Pause(int minutes)

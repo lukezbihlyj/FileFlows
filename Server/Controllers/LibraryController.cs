@@ -111,6 +111,14 @@ public class LibraryController : BaseController
             if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
                 library.Schedule = new string('1', 672);
         }
+        else
+        {
+            // ensure these are correctly set
+            library.Schedule = new string('1', 672);
+            library.Enabled = true;
+            library.Name = CommonVariables.ManualLibrary;
+            library.Folders = false;
+        }
 
         var service = ServiceLoader.Load<LibraryService>();
         bool nameUpdated = false;

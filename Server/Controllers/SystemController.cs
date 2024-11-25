@@ -96,53 +96,53 @@ public class SystemController:BaseController
         return EaseData(data);
     }
     
-    /// <summary>
-    /// Gets history of open database connections
-    /// </summary>
-    /// <param name="since">data since a date</param>
-    /// <returns>the open database connections data</returns>
-    [HttpGet("history-data/database-connections")]
-    public IEnumerable<SystemValue<float>> GetOpenDatabaseConnectionsData([FromQuery] DateTime? since = null)
-    {
-        if (SystemMonitor.Instance == null)
-            return new SystemValue<float>[] { };
-        if (since != null)
-            return SystemMonitor.OpenDatabaseConnections.Where(x => x.Time > since);
-        var data = SystemMonitor.OpenDatabaseConnections;
-        return EaseData(data);
-    }
+    // /// <summary>
+    // /// Gets history of open database connections
+    // /// </summary>
+    // /// <param name="since">data since a date</param>
+    // /// <returns>the open database connections data</returns>
+    // [HttpGet("history-data/database-connections")]
+    // public IEnumerable<SystemValue<float>> GetOpenDatabaseConnectionsData([FromQuery] DateTime? since = null)
+    // {
+    //     if (SystemMonitor.Instance == null)
+    //         return new SystemValue<float>[] { };
+    //     if (since != null)
+    //         return SystemMonitor.OpenDatabaseConnections.Where(x => x.Time > since);
+    //     var data = SystemMonitor.OpenDatabaseConnections;
+    //     return EaseData(data);
+    // }
     
-    /// <summary>
-    /// Gets history temporary storage data of system information
-    /// </summary>
-    /// <param name="since">data since a date</param>
-    /// <returns>the history temporary storage data</returns>
-    [HttpGet("history-data/temp-storage")]
-    public IEnumerable<SystemValue<long>> GetTempStorageData([FromQuery] DateTime? since = null)
-    {
-        if (SystemMonitor.Instance == null)
-            return new SystemValue<long>[] { };
-        if (since != null)
-            return SystemMonitor.TempStorageUsage.Where(x => x.Time > since);
-        var data = SystemMonitor.TempStorageUsage;
-        return EaseData(data);
-    }
+    // /// <summary>
+    // /// Gets history temporary storage data of system information
+    // /// </summary>
+    // /// <param name="since">data since a date</param>
+    // /// <returns>the history temporary storage data</returns>
+    // [HttpGet("history-data/temp-storage")]
+    // public IEnumerable<SystemValue<long>> GetTempStorageData([FromQuery] DateTime? since = null)
+    // {
+    //     if (SystemMonitor.Instance == null)
+    //         return new SystemValue<long>[] { };
+    //     if (since != null)
+    //         return SystemMonitor.TempStorageUsage.Where(x => x.Time > since);
+    //     var data = SystemMonitor.TempStorageUsage;
+    //     return EaseData(data);
+    // }
 
-    /// <summary>
-    /// Gets history logging storage data of system information
-    /// </summary>
-    /// <param name="since">data since a date</param>
-    /// <returns>the history logging storage data</returns>
-    [HttpGet("history-data/log-storage")]
-    public IEnumerable<SystemValue<long>> GetLoggingStorageData([FromQuery] DateTime? since = null)
-    {
-        if (SystemMonitor.Instance == null)
-            return new SystemValue<long>[] { };
-        if (since != null)
-            return SystemMonitor.LogStorageUsage.Where(x => x.Time > since);
-        var data = SystemMonitor.LogStorageUsage;
-        return EaseData(data);
-    }
+    // /// <summary>
+    // /// Gets history logging storage data of system information
+    // /// </summary>
+    // /// <param name="since">data since a date</param>
+    // /// <returns>the history logging storage data</returns>
+    // [HttpGet("history-data/log-storage")]
+    // public IEnumerable<SystemValue<long>> GetLoggingStorageData([FromQuery] DateTime? since = null)
+    // {
+    //     if (SystemMonitor.Instance == null)
+    //         return new SystemValue<long>[] { };
+    //     if (since != null)
+    //         return SystemMonitor.LogStorageUsage.Where(x => x.Time > since);
+    //     var data = SystemMonitor.LogStorageUsage;
+    //     return EaseData(data);
+    // }
 
     private IEnumerable<SystemValue<T>> EaseData<T>(IEnumerable<SystemValue<T>> data)
     {
