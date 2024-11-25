@@ -127,6 +127,10 @@ public class LibraryFileWatcher : IDisposable
                 // File is still in use, wait and retry
                 await Task.Delay(_fileAccessRetryDelay);
             }
+            catch (Exception)
+            {
+                return false;
+            }
         }
         return false;
     }
