@@ -1,6 +1,7 @@
 using FileFlows.Managers.InitializationManagers;
 using FileFlows.Plugin;
 using FileFlows.Server.Services;
+using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Upgrade;
 
@@ -20,4 +21,24 @@ public class DatabaseValidator(FileFlows.Plugin.ILogger logger, AppSettingsServi
     /// <returns>the result of the upgrade</returns>
     public async Task<Result<bool>> EnsureColumnsExist()
         => await UpgradeManager.EnsureColumnsExist(Logger, DbType, ConnectionString);
+
+    /// <summary>
+    /// Ensures any default values exist
+    /// </summary>
+    public async Task<Result<bool>> EnsureDefaultsExist()
+    {
+        FileFlowObject[] defaultObjects =
+        [
+            new Library()
+            {
+                Uid = CommonVariables.ManualLibraryUid,
+                Name = CommonVariables.ManualLibrary,
+                MaxRunners = 1,
+                Enabled = true,
+                ProcessingOrder = ProcessingOrder.AsFound,
+                Priority = ProcessingPriority.Normal
+            }
+        ];
+        return await UpgradeManager.EnsureDefaultsExist(Logger, DbType, ConnectionString, defaultObjects);
+    }
 }

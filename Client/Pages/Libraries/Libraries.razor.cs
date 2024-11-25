@@ -42,7 +42,7 @@ public partial class Libraries : ListPage<Guid, Library>
         Blocker.Show();
         try
         {
-            var item = Table.GetSelected()?.FirstOrDefault();
+            var item = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)?.FirstOrDefault();
             if (item == null)
                 return;
             string url = $"/api/library/duplicate/{item.Uid}";
@@ -162,6 +162,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private string TimeSpanToString(Library lib)
     {
+        if (lib.Uid == CommonVariables.ManualLibraryUid)
+            return string.Empty;
         if (lib.LastScanned.Year < 2001)
             return Translater.Instant("Times.Never");
 
@@ -177,7 +179,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private async Task Rescan()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)
+            ?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to rescan
 
@@ -202,7 +205,8 @@ public partial class Libraries : ListPage<Guid, Library>
     /// </summary>
     private async Task Reprocess()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)
+            ?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to rescan
 
@@ -230,7 +234,8 @@ public partial class Libraries : ListPage<Guid, Library>
     /// </summary>
     private async Task Reset()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)
+            ?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to rescan
 
@@ -256,7 +261,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     public override async Task Delete()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)?
+            .Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to delete
         var confirmResult = await Confirm.Show("Labels.Delete",
@@ -331,7 +337,7 @@ public partial class Libraries : ListPage<Guid, Library>
     /// <inheritdoc />
     public override Task PostLoad()
     {
-        Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
+        // Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
         
         if (initialSortOrder == null)
         {

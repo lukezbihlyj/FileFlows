@@ -71,6 +71,9 @@ public class LibraryController : BaseController
     [HttpPost("duplicate/{uid}")]
     public async Task<IActionResult> Duplicate([FromRoute] Guid uid)
     {
+        if (uid == CommonVariables.ManualLibraryUid)
+            return null;
+        
         var service = ServiceLoader.Load<LibraryService>();
         var library = await service.GetByUidAsync(uid);
         if (library == null)
@@ -96,12 +99,18 @@ public class LibraryController : BaseController
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] Library library)
     {
-        if (library?.Flow == null)
-            return BadRequest("ErrorMessages.NoFlowSpecified");
-        if (library.Uid == Guid.Empty)
-            library.LastScanned = DateTime.MinValue; // never scanned
-        if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
-            library.Schedule = new string('1', 672);
+        if(library == null)
+            return BadRequest("No data provided");
+
+        if (library.Uid != CommonVariables.ManualLibraryUid)
+        {
+            if (library.Flow == null)
+                return BadRequest("ErrorMessages.NoFlowSpecified");
+            if (library.Uid == Guid.Empty)
+                library.LastScanned = DateTime.MinValue; // never scanned
+            if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
+                library.Schedule = new string('1', 672);
+        }
 
         var service = ServiceLoader.Load<LibraryService>();
         bool nameUpdated = false;

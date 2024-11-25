@@ -314,28 +314,23 @@ public class StartupService
 
         bool needsUpgrade = upgradeRequired.Value.Required;
 
-        if (needsUpgrade == false)
+        if (needsUpgrade)
         {
-            upgrader.EnsureColumnsExist(appSettingsService);
-            return true;
+            UpdateStatus("Backing up old database...");
+            upgrader.Backup(upgradeRequired.Value.Current, appSettingsService.Settings,
+                (details) => { UpdateStatus("Backing up old database...", details); });
+
+            UpdateStatus("Upgrading Please Wait...");
+            var upgradeResult = upgrader.Run(upgradeRequired.Value.Current, appSettingsService,
+                (details) => { UpdateStatus("Upgrading Please Wait...", details); });
+            if (upgradeResult.Failed(out error))
+                return Result<bool>.Fail(error);
         }
+        
+        
+        upgrader.EnsureColumnsExist(appSettingsService);
+        upgrader.EnsureDefaultsExist(appSettingsService);
 
-
-        UpdateStatus("Backing up old database...");
-        upgrader.Backup(upgradeRequired.Value.Current, appSettingsService.Settings, (details) =>
-        {
-            UpdateStatus("Backing up old database...", details);
-        });
-        
-        UpdateStatus("Upgrading Please Wait...");
-        var upgradeResult = upgrader.Run(upgradeRequired.Value.Current, appSettingsService,(details) =>
-        {
-            UpdateStatus("Upgrading Please Wait...", details);
-        });
-        if(upgradeResult.Failed(out error))
-            return Result<bool>.Fail(error);
-        
-        
         return true;
     }
 

@@ -145,6 +145,7 @@ internal  class FileFlowsObjectManager
                 }
                 catch (Exception)
                 {
+                    // Ignored
                 }
             }
 
@@ -364,4 +365,12 @@ internal  class FileFlowsObjectManager
         result.DateCreated = dbObject.DateCreated;
         return result;
     }
+
+    /// <summary>
+    /// Checks if a object exists with the given UID
+    /// </summary>
+    /// <param name="uid">the objects UID</param>
+    /// <returns>true if exists, otherwise false</returns>
+    public async Task<bool> Exists(Guid uid)
+        => await dbom.Exists(uid);
 }

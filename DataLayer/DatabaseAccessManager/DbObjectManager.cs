@@ -388,6 +388,24 @@ internal  class DbObjectManager : BaseManager
             Logger.ELog($"{ex.Message}: SQL: {sql}");
             return false;
         }
+    }
 
+    /// <summary>
+    /// Checks if a object exists with the given UID
+    /// </summary>
+    /// <param name="uid">the objects UID</param>
+    /// <returns>true if exists, otherwise false</returns>
+    public async Task<bool> Exists(Guid uid)
+    {
+        using var db = await DbConnector.GetDb();
+        try
+        {
+            bool result = db.Db.Exists<DbObject>(uid);
+            return result;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }

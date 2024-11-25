@@ -3,12 +3,23 @@ using FileFlows.Client.Components.Inputs;
 
 namespace FileFlows.Client.Pages;
 
+/// <summary>
+/// Editor for Libraries
+/// </summary>
 public partial class Libraries : ListPage<Guid, Library>
 {
     ElementField efTemplate;
 
+    /// <summary>
+    /// Opens the editor
+    /// </summary>
+    /// <param name="library">the library to edit</param>
+    /// <returns>true if the editor was saved, otherwise false</returns>
     private async Task<bool> OpenEditor(Library library)
     {
+        if (library.Uid == CommonVariables.ManualLibraryUid)
+            return await OpenManualLibraryEditor(library);
+        
         Blocker.Show();
         var flowResult = await GetFlows();
         Blocker.Hide();

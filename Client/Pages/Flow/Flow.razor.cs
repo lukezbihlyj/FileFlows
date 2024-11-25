@@ -674,9 +674,9 @@ public partial class Flow : ComponentBase, IDisposable
                                 var librariesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/library/basic-list");
                                 if (librariesResult.Success)
                                 {
-                                    if (librariesResult.Data.ContainsKey(CommonVariables.ManualLibraryUid) == false)
-                                        librariesResult.Data[CommonVariables.ManualLibraryUid] =
-                                            CommonVariables.ManualLibrary;
+                                    // if (librariesResult.Data.ContainsKey(CommonVariables.ManualLibraryUid) == false)
+                                    //     librariesResult.Data[CommonVariables.ManualLibraryUid] =
+                                    //         CommonVariables.ManualLibrary;
                                     libraryOptions = librariesResult.Data.OrderBy(x => x.Value.ToLowerInvariant()).Select(
                                         x => new ListOption
                                         {
