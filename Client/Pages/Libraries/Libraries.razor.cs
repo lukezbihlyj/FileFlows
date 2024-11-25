@@ -13,6 +13,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private string lblLastScanned, lblFlow, lblSavings;
 
+    private bool HasCreatedLibraries = false;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -338,6 +340,7 @@ public partial class Libraries : ListPage<Guid, Library>
     public override Task PostLoad()
     {
         // Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
+        HasCreatedLibraries = Data?.Any(x => x.Uid != CommonVariables.ManualLibraryUid) == true;
         
         if (initialSortOrder == null)
         {
