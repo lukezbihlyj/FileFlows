@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using FileFlows.Shared.Exceptions;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Shared.Helpers;
@@ -248,6 +249,9 @@ public class HttpHelper
         }
         else
         {
+            if (body.StartsWith("Cannot access protected path:"))
+                throw new ProtectedPathException(body);
+            
             if (body.Contains("An unhandled error has occurred."))
                 body = "An unhandled error has occurred."; // asp.net error
             else if (body.Contains("502 Bad Gateway"))

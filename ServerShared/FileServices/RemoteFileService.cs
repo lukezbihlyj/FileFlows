@@ -1,6 +1,7 @@
 using FileFlows.Plugin;
 using FileFlows.Plugin.Models;
 using FileFlows.Plugin.Services;
+using FileFlows.Shared.Exceptions;
 using FileFlows.Shared.Helpers;
 using FileHelper = FileFlows.Plugin.Helpers.FileHelper;
 
@@ -109,7 +110,7 @@ public class RemoteFileService : IFileService
             }).Result;
             return result.Data ?? new string[] { };
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return new string[] { };
         }
@@ -125,7 +126,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<string[]>(GetUrl("list-directories"), new { path }).Result;
             return result.Data ?? new string[] { };
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return new string[] { };
         }
@@ -141,7 +142,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<bool>(GetUrl("directory/exists"), new { path }).Result;
             return result.Data;
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return false;
         }
@@ -157,7 +158,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<bool>(GetUrl("directory/empty"), new { path, includePatterns }).Result;
             return result.Data;
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return false;
         }
@@ -179,7 +180,7 @@ public class RemoteFileService : IFileService
                 logger.ILog(result.Data);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to delete directory: " + ex.Message);
         }
@@ -209,7 +210,7 @@ public class RemoteFileService : IFileService
                 logger.ILog(result.Data);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to move directory: " + ex.Message);
         }
@@ -227,7 +228,7 @@ public class RemoteFileService : IFileService
                 logger.ILog(result.Data);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to create directory: " + ex.Message);
         }
@@ -245,7 +246,7 @@ public class RemoteFileService : IFileService
                 return Result<DateTime>.Fail(result.Body);
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<DateTime>.Fail(ex.Message);
         }
@@ -263,7 +264,7 @@ public class RemoteFileService : IFileService
                 return Result<DateTime>.Fail(result.Body);
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<DateTime>.Fail(ex.Message);
         }
@@ -279,7 +280,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<bool>(GetUrl("file/exists"), new { path }).Result;
             return result.Data == true;
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return false;
         }
@@ -323,7 +324,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<bool>(GetUrl("touch"), new { path }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed touching file: " + ex.Message);
         }
@@ -339,8 +340,10 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<long>(GetUrl("directory-size"), new { path }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
+            if(ex.Message.StartsWith("Cannot access protected path:"))
+                return Result<long>.Fail(ex.Message);
             return Result<long>.Fail("Failed getting folder size: " + ex.Message);
         }
     }
@@ -355,7 +358,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<FileInformation>(GetUrl("file/info"), new { path }).Result;
             return result.Data!;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<FileInformation>.Fail("Failed to get file information: " + ex.Message);
         }
@@ -373,7 +376,7 @@ public class RemoteFileService : IFileService
                 logger.ILog(result.Data);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to delete file: " + ex.Message);
         }
@@ -389,7 +392,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<long>(GetUrl("file/size"), new { path }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<long>.Fail("Failed to get file size: " + ex.Message);
         }
@@ -405,7 +408,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<DateTime>(GetUrl("file/creation-time-utc"), new { path }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<DateTime>.Fail("Failed to get file creation time (UTC): " + ex.Message);
         }
@@ -421,7 +424,7 @@ public class RemoteFileService : IFileService
             var result = HttpHelper.Post<DateTime>(GetUrl("file/last-write-time-utc"), new { path }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<DateTime>.Fail("Failed to get file last write time (UTC): " + ex.Message);
         }
@@ -465,7 +468,7 @@ public class RemoteFileService : IFileService
                 logger.ILog(result.Data);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to move file: " + ex.Message);
         }
@@ -510,7 +513,7 @@ public class RemoteFileService : IFileService
                 logger.ILog(result.Data);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to copy file: " + ex.Message);
         }
@@ -530,7 +533,7 @@ public class RemoteFileService : IFileService
             }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to append text to file: " + ex.Message);
         }
@@ -550,7 +553,7 @@ public class RemoteFileService : IFileService
             }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to set file creation time (UTC): " + ex.Message);
         }
@@ -570,7 +573,7 @@ public class RemoteFileService : IFileService
             }).Result;
             return result.Data;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not ProtectedPathException)
         {
             return Result<bool>.Fail("Failed to set file last write time (UTC): " + ex.Message);
         }
