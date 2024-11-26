@@ -21,7 +21,9 @@
                 <img class="icon" src="@IconHelper.GetExtensionImage(runner.LibraryFileName?.ToLowerInvariant())"/>
             </span>
             <div class="center">
-                <span class="name path">@runner.RelativeFile</span>
+                <span class="name path">
+                    @(runner.RelativeFile?.EmptyAsNull() ?? runner.LibraryFileName)
+                </span>
                 <div class="info">
                     <div class="current-flow-element">
                         <FlowIconValue Icon="fas fa-puzzle-piece" Color="dark" Value="@runner.CurrentPartName"></FlowIconValue>
