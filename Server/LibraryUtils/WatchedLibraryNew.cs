@@ -227,6 +227,9 @@ public partial class WatchedLibraryNew : IDisposable
                 //var existing = KnownFiles.FirstOrDefault(x => x.Name == filePath);
                 if (lfExisting != null)
                 {
+                    if (lfExisting.Status is FileStatus.Unprocessed or FileStatus.Disabled or FileStatus.OnHold or FileStatus.OutOfSchedule)
+                        return; // not processed yet, no need to do anything
+                    
                     if (Library.DownloadsDirectory)
                     {
                         // check if was processed
