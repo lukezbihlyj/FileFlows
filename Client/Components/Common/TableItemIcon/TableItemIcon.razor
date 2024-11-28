@@ -1,29 +1,29 @@
 @namespace FileFlows.Client.Components.Common
 
+@{
+    var icon = Icon?.EmptyAsNull() ?? DefaultIcon;
+}
+
 @if (Unwrapped)
 {
-    @if (string.IsNullOrWhiteSpace(Icon))
+    @if (icon.StartsWith("svg:"))
     {
-        <i class="@DefaultIcon"></i>
+        <img src="/icons/@(icon[4..]).svg"/>
     }
-    else if (Icon.StartsWith("svg:"))
+    else if (icon.StartsWith("data:") || icon.EndsWith(".svg"))
     {
-        <img src="/icons/@(Icon[4..]).svg"/>
-    }
-    else if (Icon.StartsWith("data:") || Icon.EndsWith(".svg"))
-    {
-        <img src="@Icon"/>
+        <img src="@icon"/>
     }
     else
     {
-        var parts = Icon.Split(':');
+        var parts = icon.Split(':');
         if (parts.Length == 2)
         {
             <i class="@parts[0]" style="color:@parts[1]"></i>
         }
         else
         {
-            <i class="@Icon"></i>
+            <i class="@icon"></i>
         }
     }
     
@@ -32,28 +32,24 @@ else
 {
     <span class="icon">
 
-        @if (string.IsNullOrWhiteSpace(Icon))
+        @if (icon.StartsWith("svg:"))
         {
-            <i class="icon @DefaultIcon"></i>
+            <img src="/icons/@(icon[4..]).svg"/>
         }
-        else if (Icon.StartsWith("svg:"))
+        else if (icon.StartsWith("data:") || icon.EndsWith(".svg") || icon.StartsWith('/') || icon.StartsWith("http:") || icon.StartsWith("https:"))
         {
-            <img src="/icons/@(Icon[4..]).svg"/>
-        }
-        else if (Icon.StartsWith("data:") || Icon.EndsWith(".svg"))
-        {
-            <img src="@Icon"/>
+            <img src="@icon"/>
         }
         else
         {
-            var parts = Icon.Split(':');
+            var parts = icon.Split(':');
             if (parts.Length == 2)
             {
                 <i class="icon @parts[0]" style="color:@parts[1]"></i>
             }
             else
             {
-                <i class="icon @Icon"></i>
+                <i class="icon @icon"></i>
             }
         }
     </span>

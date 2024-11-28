@@ -31,7 +31,7 @@ public class FlowWorker : Worker
     public static ConfigurationRevision? CurrentConfig { get; set; }
 
     private readonly string _configKeyDefault = Guid.NewGuid().ToString();
-    
+
     /// <summary>
     /// Gets if the config encryption key 
     /// </summary>
@@ -96,7 +96,7 @@ public class FlowWorker : Worker
     /// </summary>
     /// <param name="hostname">the host name of the processing node</param>
     /// <param name="isServer">if this flow worker is running on the server or an external processing node</param>
-    public FlowWorker(string hostname, bool isServer = false) : base(ScheduleType.Second, DEFAULT_INTERVAL)
+    public FlowWorker(string hostname, bool isServer = false) : base(ScheduleType.Second, DEFAULT_INTERVAL, quiet: true)
     {
         FlowWorker.Instance = this;
         this.isServer = isServer;
@@ -205,11 +205,12 @@ public class FlowWorker : Worker
 
         if (node?.Enabled != true)
         {
-            Logger.Instance?.DLog($"Node '{nodeName}' is not enabled");
+            if(node?.Name != CommonVariables.InternalNodeName)
+                Logger.Instance?.DLog($"Node '{nodeName}' is not enabled");
             return false;
         }
 
-        if (UpdateConfiguration(node).Result == false)
+        if (UpdateConfiguration(node) == false)
         {
             Logger.Instance?.WLog("Failed to write configuration for Node, pausing system");
             nodeService.Pause(30).Wait();
@@ -661,147 +662,158 @@ public class FlowWorker : Worker
     /// </summary>
     /// <param name="node">the processing node</param>
     /// <returns>an awaited task</returns>
-    private async Task<bool> UpdateConfiguration(ProcessingNode node)
+    private bool UpdateConfiguration(ProcessingNode node)
     {
-        var service = ServiceLoader.Load<ISettingsService>();
-        int revision = await service.GetCurrentConfigurationRevision();
-        if (revision == -1)
-        {
-            Logger.Instance.ELog("Failed to get current configuration revision from server");
-            return false;
-        }
-
-
-        if (revision == CurrentConfig?.Revision)
-            return true;
-
-        var config = await service.GetCurrentConfiguration();
-        if (config == null)
-        {
-            Logger.Instance.ELog("Failed downloading latest configuration from server");
-            return false;
-        }
-
-        string dir = GetConfigurationDirectory(revision);
         try
         {
-            if (Directory.Exists(dir))
-                Directory.Delete(dir, true);
-            
-            Directory.CreateDirectory(dir);
-            Directory.CreateDirectory(Path.Combine(dir, "Scripts"));
-            Directory.CreateDirectory(Path.Combine(dir, "Scripts", "Shared"));
-            Directory.CreateDirectory(Path.Combine(dir, "Scripts", "Flow"));
-            Directory.CreateDirectory(Path.Combine(dir, "Scripts", "System"));
-            Directory.CreateDirectory(Path.Combine(dir, "Plugins"));
-        }
-        catch (Exception ex)
-        {
-            Logger.Instance.ELog($"Failed recreating configuration directory '{dir}': {ex.Message}");
-            return false;
-        }
-
-        foreach (var script in config.FlowScripts)
-            await File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "Flow", script.Uid + ".js"), script.Code);
-        foreach (var script in config.SystemScripts)
-            await File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "System", script.Uid + ".js"), script.Code);
-        foreach (var script in config.SharedScripts)
-            await File.WriteAllTextAsync(Path.Combine(dir, "Scripts", "Shared", script.Name + ".js"), script.Code);
-        
-        bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-        bool macOs = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-        bool is64bit = IntPtr.Size == 8;
-        foreach (var plugin in config.Plugins)
-        {
-            var result = await service.DownloadPlugin(plugin, dir);
-            if (result.Failed(out string error))
+            var service = ServiceLoader.Load<ISettingsService>();
+            int revision = service.GetCurrentConfigurationRevision().Result;
+            if (revision == -1)
             {
-                Logger.Instance?.ELog(error);
+                Logger.Instance.ELog("Failed to get current configuration revision from server");
                 return false;
             }
 
-            var zip = result.Value;
-            string destDir = Path.Combine(dir, "Plugins", plugin);
-            Directory.CreateDirectory(destDir);
-            System.IO.Compression.ZipFile.ExtractToDirectory(zip, destDir);
-            File.Delete(zip);
-            
-            // check if there are runtime specific files that need to be moved
-            foreach (string rdir in windows ? new[] { "win", "win-" + (is64bit ? "x64" : "x86") } : macOs ? new[] { "osx-x64" } : new string[] { "linux-x64", "linux" })
-            {
-                var runtimeDir = new DirectoryInfo(Path.Combine(destDir, "runtimes", rdir));
-                Logger.Instance?.ILog("Searching for runtime directory: " + runtimeDir.FullName);
-                if (runtimeDir.Exists)
-                {
-                    foreach (var rfile in runtimeDir.GetFiles("*.*", SearchOption.AllDirectories))
-                    {
-                        try
-                        {
-                            if (Regex.IsMatch(rfile.Name, @"\.(dll|so)$") == false)
-                                continue;
 
-                            Logger.Instance?.ILog("Trying to move file: \"" + rfile.FullName + "\" to \"" + destDir + "\"");
-                            rfile.MoveTo(Path.Combine(destDir, rfile.Name));
-                            Logger.Instance?.ILog("Moved file: \"" + rfile.FullName + "\" to \"" + destDir + "\"");
-                        }
-                        catch (Exception ex)
+            if (revision == CurrentConfig?.Revision)
+                return true;
+
+            var config = service.GetCurrentConfiguration().Result;
+            if (config == null)
+            {
+                Logger.Instance.ELog("Failed downloading latest configuration from server");
+                return false;
+            }
+
+            string dir = GetConfigurationDirectory(revision);
+            try
+            {
+                if (Directory.Exists(dir))
+                    Directory.Delete(dir, true);
+
+                Directory.CreateDirectory(dir);
+                Directory.CreateDirectory(Path.Combine(dir, "Scripts"));
+                Directory.CreateDirectory(Path.Combine(dir, "Scripts", "Shared"));
+                Directory.CreateDirectory(Path.Combine(dir, "Scripts", "Flow"));
+                Directory.CreateDirectory(Path.Combine(dir, "Scripts", "System"));
+                Directory.CreateDirectory(Path.Combine(dir, "Plugins"));
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.ELog($"Failed recreating configuration directory '{dir}': {ex.Message}");
+                return false;
+            }
+
+            foreach (var script in config.FlowScripts)
+                File.WriteAllText(Path.Combine(dir, "Scripts", "Flow", script.Uid + ".js"), script.Code);
+            foreach (var script in config.SystemScripts)
+                File.WriteAllText(Path.Combine(dir, "Scripts", "System", script.Uid + ".js"), script.Code);
+            foreach (var script in config.SharedScripts)
+                File.WriteAllText(Path.Combine(dir, "Scripts", "Shared", script.Name + ".js"), script.Code);
+
+            bool windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            bool macOs = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+            bool is64bit = IntPtr.Size == 8;
+            foreach (var plugin in config.Plugins)
+            {
+                var result = service.DownloadPlugin(plugin, dir).Result;
+                if (result.Failed(out string error))
+                {
+                    Logger.Instance?.ELog(error);
+                    return false;
+                }
+
+                var zip = result.Value;
+                string destDir = Path.Combine(dir, "Plugins", plugin);
+                Directory.CreateDirectory(destDir);
+                System.IO.Compression.ZipFile.ExtractToDirectory(zip, destDir);
+                File.Delete(zip);
+
+                // check if there are runtime specific files that need to be moved
+                foreach (string rdir in windows ? new[] { "win", "win-" + (is64bit ? "x64" : "x86") } :
+                         macOs ? new[] { "osx-x64" } : new string[] { "linux-x64", "linux" })
+                {
+                    var runtimeDir = new DirectoryInfo(Path.Combine(destDir, "runtimes", rdir));
+                    Logger.Instance?.ILog("Searching for runtime directory: " + runtimeDir.FullName);
+                    if (runtimeDir.Exists)
+                    {
+                        foreach (var rfile in runtimeDir.GetFiles("*.*", SearchOption.AllDirectories))
                         {
-                            Logger.Instance?.ILog("Failed to move file: " + ex.Message);
+                            try
+                            {
+                                if (Regex.IsMatch(rfile.Name, @"\.(dll|so)$") == false)
+                                    continue;
+
+                                Logger.Instance?.ILog("Trying to move file: \"" + rfile.FullName + "\" to \"" +
+                                                      destDir + "\"");
+                                rfile.MoveTo(Path.Combine(destDir, rfile.Name));
+                                Logger.Instance?.ILog("Moved file: \"" + rfile.FullName + "\" to \"" + destDir + "\"");
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Instance?.ILog("Failed to move file: " + ex.Message);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        var variables = config.Variables;
-        if (node.Variables?.Any() == true)
-        {
-            foreach (var v in node.Variables)
+            var variables = config.Variables;
+            if (node.Variables?.Any() == true)
             {
-                variables[v.Key] = v.Value;
+                foreach (var v in node.Variables)
+                {
+                    variables[v.Key] = v.Value;
+                }
             }
+
+            string json = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                config.Revision,
+                config.MaxNodes,
+                config.LicenseLevel,
+                config.AllowRemote,
+                config.Tags,
+                config.Resources,
+                Variables = variables,
+                config.Libraries,
+                config.PluginNames,
+                config.PluginSettings,
+                config.Flows,
+                config.FlowScripts,
+                config.SharedScripts,
+                config.SystemScripts
+            });
+
+            string cfgFile = Path.Combine(dir, "config.json");
+            if (GetConfigNoEncrypt(node))
+            {
+                Logger.Instance?.DLog("Configuration set to no encryption, saving as plain text");
+                File.WriteAllText(cfgFile, json);
+            }
+            else
+            {
+                Logger.Instance?.DLog("Saving encrypted configuration");
+                Utils.ConfigEncrypter.Save(json, GetConfigKey(node), cfgFile);
+            }
+
+            if (Globals.IsDocker)
+            {
+                if (WriteAndRunDockerMods(config.DockerMods ?? new(), node.Uid, node.Name) == false)
+                    return false;
+            }
+
+
+            CurrentConfig = config;
+            CurrentConfigurationKeepFailedFlowFiles = config.KeepFailedFlowTempFiles;
+
+            return true;
         }
-
-        string json = System.Text.Json.JsonSerializer.Serialize(new
+        catch (Exception ex)
         {
-            config.Revision,
-            config.MaxNodes,
-            config.LicenseLevel,
-            config.AllowRemote,
-            config.Tags,
-            Variables = variables,
-            config.Libraries,
-            config.PluginNames,
-            config.PluginSettings,
-            config.Flows,
-            config.FlowScripts,
-            config.SharedScripts,
-            config.SystemScripts
-        });
-
-        string cfgFile = Path.Combine(dir, "config.json");
-        if (GetConfigNoEncrypt(node))
-        {
-            Logger.Instance?.DLog("Configuration set to no encryption, saving as plain text");
-            await File.WriteAllTextAsync(cfgFile, json);
+            Logger.Instance.ELog("Failed getting configuration: " + ex.Message + Environment.NewLine + ex.StackTrace);
+            return false;
         }
-        else
-        {
-            Logger.Instance?.DLog("Saving encrypted configuration");
-            Utils.ConfigEncrypter.Save(json, GetConfigKey(node), cfgFile);
-        }
-
-        if (Globals.IsDocker)
-        {
-            if (WriteAndRunDockerMods(config.DockerMods ?? new(), node.Uid, node.Name) == false)
-                return false;
-        }
-
-
-        CurrentConfig = config;
-        CurrentConfigurationKeepFailedFlowFiles = config.KeepFailedFlowTempFiles;
-
-        return true;
     }
 
     /// <summary>
@@ -812,7 +824,6 @@ public class FlowWorker : Worker
     /// <param name="nodeName">the hostname node this is running on</param>
     bool WriteAndRunDockerMods(List<DockerMod> mods, Guid nodeUid, string nodeName)
     {
-        
         var nodeService = ServiceLoader.Load<INodeService>();
         nodeService.SetStatus(nodeUid, ProcessingNodeStatus.InstallingDockerMods).Wait();
         try
@@ -830,6 +841,8 @@ public class FlowWorker : Worker
                 return true;
             }
 
+            mods = mods.OrderBy(x => x.Order).ThenByDescending(x => x.Name.ToLowerInvariant()).ToList();
+            Logger.Instance.ILog("DockerMods: \n" + string.Join("\n", mods.Select(x => $" - {x.Order:0000} - {x.Name} [{x.Revision}] ")));
 
             foreach (var mod in mods)
             {

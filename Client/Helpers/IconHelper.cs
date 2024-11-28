@@ -31,4 +31,20 @@ public static class IconHelper
             extension = "url";
         return $"{prefix}/{extension}.svg";
     }
+    
+    /// <summary>
+    /// Gets the image for the extension
+    /// </summary>
+    /// <param name="extension">the extension of the file</param>
+    /// <returns>the image to show</returns>
+    public static string GetImage(string extension)
+    {
+        if(string.IsNullOrWhiteSpace(extension))
+            return "/icons/filetypes/folder.svg";
+        string prefix = "/icon/filetype";
+#if (DEBUG)
+        prefix = "http://localhost:6868/icon/filetype";
+#endif
+        return $"{prefix}/{extension}.svg";
+    }
 }

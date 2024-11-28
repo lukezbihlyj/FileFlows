@@ -175,7 +175,10 @@ public class LibraryFileController : Controller
             return new
             {
                 x.Uid,
-                DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(x.Name, x.RelativePath, x.LibraryName)?.EmptyAsNull() ?? x.RelativePath?.EmptyAsNull() ?? x.Name,
+                DisplayName = 
+                    Regex.IsMatch(x.OutputPath, @"^[\w\d]{2,}:") ? x.OutputPath : // special case for uploaded files e.g. nc: for next cloud
+                    ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(x.Name, x.RelativePath, x.LibraryName)?.EmptyAsNull() ?? 
+                              x.RelativePath?.EmptyAsNull() ?? x.Name,
                 x.RelativePath,
                 x.ProcessingEnded,
                 When = when,
@@ -428,47 +431,47 @@ public class LibraryFileController : Controller
         return File(stream, "application/octet-stream", fileInfo.Name);
     }
 
-    /// <summary>
-    /// Processes a file or adds it to the queue to add to the system
-    /// </summary>
-    /// <param name="filename">the filename of the file to process</param>
-    /// <param name="libraryUid">[Optional] the UID of the library the file is in, if not passed in then the first file with the name will be used</param>
-    /// <returns>the HTTP response, 200 for an ok, otherwise bad request</returns>
-    [HttpPost("process-file")]
-    public async Task<IActionResult> ProcessFile([FromQuery] string filename, [FromQuery] Guid? libraryUid)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(filename))
-                return BadRequest("Filename not set");
-
-            var service = ServiceLoader.Load<LibraryFileService>();
-            var file = await service.GetFileIfKnown(filename, libraryUid);
-            if (file != null)
-            {
-                if ((int)file.Status < 2)
-                    return Ok(); // already in the queue or processing
-                await service.Reprocess(file.Uid);
-                return Ok();
-            }
-
-            // file not known, add to the queue
-            var library = (await ServiceLoader.Load<LibraryService>().GetAllAsync()).Where(x => x.Enabled)
-                .FirstOrDefault(x => filename.StartsWith(x.Path));
-            if (library == null)
-                return BadRequest("No library found for file: " + filename);
-            var watchedLibraray = LibraryWorker.GetWatchedLibrary(library);
-            if (watchedLibraray == null)
-                return BadRequest("Library is not currently watched");
-
-            watchedLibraray.QueueItem(filename);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
+    // /// <summary>
+    // /// Processes a file or adds it to the queue to add to the system
+    // /// </summary>
+    // /// <param name="filename">the filename of the file to process</param>
+    // /// <param name="libraryUid">[Optional] the UID of the library the file is in, if not passed in then the first file with the name will be used</param>
+    // /// <returns>the HTTP response, 200 for an ok, otherwise bad request</returns>
+    // [HttpPost("process-file")]
+    // public async Task<IActionResult> ProcessFile([FromQuery] string filename, [FromQuery] Guid? libraryUid)
+    // {
+    //     try
+    //     {
+    //         if (string.IsNullOrWhiteSpace(filename))
+    //             return BadRequest("Filename not set");
+    //
+    //         var service = ServiceLoader.Load<LibraryFileService>();
+    //         var file = await service.GetFileIfKnown(filename, libraryUid);
+    //         if (file != null)
+    //         {
+    //             if ((int)file.Status < 2)
+    //                 return Ok(); // already in the queue or processing
+    //             await service.Reprocess(file.Uid);
+    //             return Ok();
+    //         }
+    //
+    //         // file not known, add to the queue
+    //         var library = (await ServiceLoader.Load<LibraryService>().GetAllAsync()).Where(x => x.Enabled)
+    //             .FirstOrDefault(x => filename.StartsWith(x.Path));
+    //         if (library == null)
+    //             return BadRequest("No library found for file: " + filename);
+    //         var watchedLibraray = LibraryWorker.GetWatchedLibrary(library);
+    //         if (watchedLibraray == null)
+    //             return BadRequest("Library is not currently watched");
+    //
+    //         watchedLibraray.QueueItem(filename);
+    //         return Ok();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest(ex.Message);
+    //     }
+    // }
 
 
     /// <summary>
@@ -483,4 +486,77 @@ public class LibraryFileController : Controller
             return BadRequest(error);
         return Ok();
     }
+
+    /// <summary>
+    /// Uploads a file in chunks, saving with a temporary extension until the final chunk is received.
+    /// On the last chunk, renames the file to the final name, adding a timestamp if necessary.
+    /// </summary>
+    /// <param name="file">The current file chunk being uploaded.</param>
+    /// <param name="chunkNumber">The sequence number of the current chunk (starting from 0).</param>
+    /// <param name="totalChunks">The total number of chunks for the file.</param>
+    /// <param name="fileName">The original file name for the upload.</param>
+    /// <returns>
+    /// An <see cref="IActionResult"/> indicating the status of the upload.
+    /// Returns the final file path when the last chunk has been uploaded successfully.
+    /// </returns>
+    [HttpPost("upload")]
+    [DisableRequestSizeLimit]
+    [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240,
+        MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
+    public async Task<IActionResult> Upload(
+        [FromForm] IFormFile file,
+        [FromForm] int chunkNumber,
+        [FromForm] int totalChunks,
+        [FromForm] string fileName)
+    {
+        if (string.IsNullOrWhiteSpace(DirectoryHelper.ManualLibrary))
+            return BadRequest("Manual Library path not set");
+        if (Directory.Exists(DirectoryHelper.ManualLibrary) == false)
+            return BadRequest("Manual Library path does not exist");
+        try
+        {
+            // Path for the temp file during upload
+            string tempFilePath = Path.Combine(DirectoryHelper.ManualLibrary,
+                Plugin.Helpers.FileHelper.GetSafeFileName(fileName) + ".temp");
+
+            // Set the file mode based on the chunk number
+            var fileMode = chunkNumber == 0 ? FileMode.Create : FileMode.Append;
+
+            // Write the current chunk to the temporary file
+            await using (var stream = new FileStream(tempFilePath, fileMode, FileAccess.Write))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // If it's the last chunk, rename the file to its final name
+            if (chunkNumber == totalChunks - 1)
+            {
+                string finalFilePath = Path.Combine(DirectoryHelper.ManualLibrary,
+                    Plugin.Helpers.FileHelper.GetSafeFileName(fileName));
+
+                // Check if the final file already exists, and append timestamp if necessary
+                while (System.IO.File.Exists(finalFilePath))
+                {
+                    finalFilePath = Plugin.Helpers.FileHelper.InsertBeforeExtension(
+                        finalFilePath, DateTime.Now.ToString("_hhmmss"));
+                }
+
+                // Rename the temp file to the final file path
+                System.IO.File.Move(tempFilePath, finalFilePath);
+                Logger.Instance.ILog("File upload to: " + finalFilePath);
+
+                return Ok(finalFilePath);
+            }
+
+            // Return success for intermediate chunks
+            return Ok(tempFilePath);
+        }
+        catch (Exception ex)
+        {
+            // Log and return an error if an exception occurs during upload
+            Logger.Instance.WLog("File upload failed: " + ex.Message);
+            return BadRequest(ex.Message);
+        }
+    }
+
 }

@@ -57,7 +57,7 @@ public class ConfigurationController : Controller
         if (file.Exists == false)
             return NotFound(); // Plugin file not found
 
-        var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        var stream = FileOpenHelper.OpenRead_NoLocks(file.FullName);
         return File(stream, "application/octet-stream");
     }
 

@@ -42,12 +42,19 @@ public abstract class Worker
     protected ScheduleType Schedule { get; set; }
 
     /// <summary>
+    /// Gets if this worker is quiet and has reduced logging
+    /// </summary>
+    protected bool Quiet { get; init; }
+
+    /// <summary>
     /// Creates an instance of a worker
     /// </summary>
     /// <param name="schedule">the type of schedule this worker runs at</param>
     /// <param name="interval">the interval of this worker</param>
-    protected Worker(ScheduleType schedule, int interval)
+    /// <param name="quiet">If this worker is quiet and has reduced logging</param>
+    protected Worker(ScheduleType schedule, int interval, bool quiet = false)
     {
+        Quiet = quiet;
         Initialize(schedule, interval);
     }
 
@@ -71,7 +78,8 @@ public abstract class Worker
     /// </summary>
     public virtual void Start()
     {
-        Logger.Instance?.ILog("Starting worker: " + this.GetType().Name);
+        if(Quiet == false)
+            Logger.Instance?.ILog("Starting worker: " + this.GetType().Name);
         if (timer != null)
         {
             if (timer.Enabled)
@@ -95,7 +103,8 @@ public abstract class Worker
     /// </summary>
     public virtual void Stop()
     {
-        Logger.Instance?.ILog("Stopping worker: " + this.GetType().Name);
+        if(Quiet == false)
+            Logger.Instance?.ILog("Stopping worker: " + this.GetType().Name);
         if (timer == null)
             return;
         timer.Stop();
@@ -135,11 +144,14 @@ public abstract class Worker
     /// </summary>
     public void Trigger()
     {
+        if (Executing)
+            return; // dont let run twice
+        
+        string workerName = GetType().Name;
         try
         {
-            if (Executing)
-                return; // dont let run twice
-            Logger.Instance.DLog("Triggering worker: " + this.GetType().Name);
+            if(Quiet == false)
+                Logger.Instance.DLog("Triggering worker: " + workerName);
 
             _ = Task.Run(() =>
             {
@@ -151,7 +163,7 @@ public abstract class Worker
                 catch (Exception ex)
                 {
                     Logger.Instance?.ELog(
-                        $"Error in worker '{this.GetType().Name}': {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                        $"Error in worker '{workerName}': {ex.Message}{Environment.NewLine}{ex.StackTrace}");
                 }
                 finally
                 {
@@ -162,7 +174,7 @@ public abstract class Worker
         catch (Exception ex)
         {
             // FF-410 - catch any errors to avoid this call killing the application
-            Logger.Instance.WLog($"Error triggering worker '{this.GetType().Name}': " + ex.Message);
+            Logger.Instance.WLog($"Error triggering worker '{workerName}': " + ex.Message);
         }
     }
 

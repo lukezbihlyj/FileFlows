@@ -4,6 +4,7 @@ using FileFlows.Server.Helpers;
 using FileFlows.Server.Hubs;
 using FileFlows.Server.Controllers;
 using FileFlows.Shared.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace FileFlows.Server.Services;
 
@@ -72,7 +73,9 @@ public class FlowRunnerService : IFlowRunnerService
                 DisplayName = ServiceLoader.Load<FileDisplayNameService>().GetDisplayName(executor.LibraryFile.Name,
                     executor.LibraryFile.RelativePath,
                     executor.Library.Name),
+                WorkingFile = executor.WorkingFile,
                 LibraryName = executor.Library.Name,
+                LibraryUid = executor.Library.Uid,
                 LibraryFileUid = executor.LibraryFile.Uid,
                 LibraryFileName = executor.LibraryFile.Name,
                 RelativeFile = executor.RelativeFile,
@@ -299,7 +302,9 @@ public class FlowRunnerService : IFlowRunnerService
             existing.ProcessOnNodeUid = updated.ProcessOnNodeUid;
             
             await lfService.Update(existing);
-            var library = await ServiceLoader.Load<LibraryService>().GetByUidAsync(existing.Library.Uid);
+            var library = existing.Library.Uid == CommonVariables.ManualLibraryUid
+                ? new Library() { Uid = CommonVariables.ManualLibraryUid, Name = CommonVariables.ManualLibrary }
+                : await ServiceLoader.Load<LibraryService>().GetByUidAsync(existing.Library.Uid);
             
             if (existing.Status == FileStatus.ProcessingFailed)
             {
@@ -317,9 +322,12 @@ public class FlowRunnerService : IFlowRunnerService
 
             SystemEvents.TriggerLibraryFileProcessed(existing, library);
 
-            await ServiceLoader.Load<StatisticService>()
-                .RecordStorageSaved(library.Name, existing.OriginalSize, existing.FinalSize);
-            
+            if (string.IsNullOrWhiteSpace(library?.Name) == false)
+            {
+                await ServiceLoader.Load<StatisticService>()
+                    .RecordStorageSaved(library.Name, existing.OriginalSize, existing.FinalSize);
+            }
+
             if(existing.Status == FileStatus.Processed)
                 _ = ServiceLoader.Load<DashboardFileOverviewService>().UpdateFileDataAsync(existing);
         }

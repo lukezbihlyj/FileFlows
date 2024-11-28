@@ -19,17 +19,54 @@ public partial class InputIconPicker : Input<string>
     private string Color;
     private string Icon;
     private string IconColor;
+    private string lblPickIcon, lblFilter, lblSelect,lblUpload, lblCancel, lblClear;
+    
+    /// <summary>
+    /// Gets or sets if the SVGs should be included
+    /// </summary>
+    [Parameter]
+    public bool IncludeSvgs { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if the icon can be cleared
+    /// </summary>
+    [Parameter]
+    public bool AllowClear { get; set; }
 
+
+    private bool SvgSelected = false;
+
+    // the SVG icons
+    private static string[] Svgs =
+    [
+        "amd", "apple", "docker", "dos", "intel", "linux", "nvidia", "windows"
+    ];
+    
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        lblPickIcon = Translater.Instant("Dialogs.IconPicker.Title");
+        lblFilter = Translater.Instant("Labels.Filter");
+        lblCancel = Translater.Instant("Labels.Cancel");
+        lblUpload = Translater.Instant("Labels.Upload");
+        lblSelect = Translater.Instant("Labels.Select");
+        lblClear = Translater.Instant("Labels.Clear");
         if (Value?.StartsWith("data:") != true)
         {
             var parts = (Value ?? string.Empty).Split(':');
-            Icon = parts.FirstOrDefault();
-            IconColor = parts.Length > 1 ? parts[1] : string.Empty;
-            Color = IconColor;
+            if (parts[0] == "svg")
+            {
+                Icon = parts[1];
+                SvgSelected = true;
+            }
+            else
+            {
+                
+                Icon = parts.FirstOrDefault();
+                IconColor = parts.Length > 1 ? parts[1] : string.Empty;
+                Color = IconColor;
+            }
         }
     }
 
@@ -62,7 +99,15 @@ public partial class InputIconPicker : Input<string>
     {    
         // Programmatically trigger the file input dialog using JSInterop
         await jsRuntime.InvokeVoidAsync("eval", "document.getElementById('fileInput').click()");
+    }
 
+    /// <summary>
+    /// Clears the icon
+    /// </summary>
+    void Clear()
+    {
+        this.Value = null;
+        this.ModalOpened = false;
     }
 
     async Task HandleFileSelected(InputFileChangeEventArgs e)
@@ -87,12 +132,16 @@ public partial class InputIconPicker : Input<string>
         }
     }
 
-    private void SelectIcon(string icon)
-        => SelectedIcon = icon;
-
-    private void DblClick(string icon)
+    private void SelectIcon(string icon, bool svg = false)
     {
-        this.Value = icon + (string.IsNullOrWhiteSpace(Color) ? string.Empty : ":" + Color);
+        SvgSelected = svg;
+        SelectedIcon = icon;
+    }
+
+    private void DblClick(string icon, bool svg = false)
+    {
+        SvgSelected = svg;
+        this.Value = svg ? $"svg:{icon}" : icon + (string.IsNullOrWhiteSpace(Color) ? string.Empty : ":" + Color);
         ModalOpened = false;
     }
 

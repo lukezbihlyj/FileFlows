@@ -145,19 +145,24 @@
     "Tag": "Tag",
     "Test": "Test",
     "Time": "Zeit",
+    "TooManyDockerMods": "Sie haben zu viele DockerMods ausgewählt. Dies kann die Leistung beeinträchtigen, und es ist wahrscheinlich nicht notwendig, alle diese DockerMods zu installieren.",
     "Total": "Total",
     "Trigger": "Auslöser",
     "Type": "Typ",
     "Undo": "Rückgängig",
+    "Unlicensed": "Nicht lizenziert",
+    "UnlicensedFlowElement": "Eine {level}-Lizenz ist erforderlich, um dieses Flow-Element zu verwenden.",
     "UnsavedChanges": "Nicht gespeicherte Änderungen",
     "Update": "Update",
     "UpdateAll": "Alle aktualisieren",
     "UpdateAvailable": "Neue Version verfügbar! {version}",
+    "Upload": "Hochladen",
     "UsedBy": "Verwendet von",
     "Version": "Version",
     "VersionNumber": "Version: {version}",
     "View": "View",
     "ViewLog": "Log betrachten",
+    "Warning": "Warnung",
     "WeekShort": "Woche",
     "When": "Wann",
     "Yes": "Ja",
@@ -197,6 +202,7 @@
       "Title": "Datei hinzufügen",
       "Fields": {
         "AnyNode": "Beliebiger Node",
+        "DropFile": "Ziehen Sie eine Datei hierher oder klicken Sie, um hochzuladen",
         "Flow": "Fluss",
         "List": "Liste",
         "Mode": "Modus",
@@ -225,8 +231,17 @@
       "DirectoryTitle": "Ein Verzeichnis wählen",
       "FileTitle": "Eine Datei auswählen"
     },
+    "FileUpload": {
+      "Complete": "Upload erfolgreich abgeschlossen",
+      "ETA": "Voraussichtliche Ankunftszeit",
+      "Speed": "Geschwindigkeit",
+      "UploadedAmount": "Hochgeladen"
+    },
     "FlowTemplatePicker": {
       "Title": "Wählen Sie eine Vorlage aus, mit der Sie beginnen möchten"
+    },
+    "IconPicker": {
+      "Title": "Symbol auswählen"
     },
     "Import": {
       "Message": "Wählen Sie eine exportierten Flow aus, um den Flow in das System zu importieren.",
@@ -500,6 +515,7 @@
       "Nodes": "Nodes",
       "PauseProcessing": "Verarbeitung Pausieren",
       "Plugins": "Plugins",
+      "Resources": "Ressourcen",
       "Revisions": "Überarbeitungen",
       "Scripts": "Scripts",
       "Tasks": "Aufgaben",
@@ -902,10 +918,6 @@
         "Flow": "Flow",
         "Folders": "Ordner",
         "Folders-Help": "Wenn diese Bibliothek Ordner statt Dateien verarbeitet, bedeutet dies nicht, dass Unterordner gescannt werden, da eine Bibliothek dies bereits tut. Es bedeutet, dass ein Ordnerobjekt statt einzelner Dateien verarbeitet wird.",
-        "FullScanDisabled": "Vollständigen Scan deaktivieren",
-        "FullScanDisabled-Help": "Der Zweck der vollständigen Überprüfung ist es, alle Dateien abzufangen, die bei der Überwachung des Dateisystems übersehen wurden.",
-        "FullScanIntervalMinutes": "Vollständiger Scan-Intervall",
-        "FullScanIntervalMinutes-Help": "Das Intervall, in dem eine vollständige Überprüfung dieser Bibliothek stattfinden soll.",
         "HoldMinutes": "Minuten warten",
         "HoldMinutes-Help": "Halten Sie optional alle in dieser Bibliothek gefundenen Dateien für diese Anzahl von Minuten zurück, bevor Sie sie verarbeiten.  Jede Datei wird für diese Zeitspanne zurückgehalten.",
         "HoldMinutes-Suffix": "Minuten",
@@ -919,11 +931,8 @@
         "ProcessingOrder-Help": "Die Reihenfolge, in der die Dateien von dieser Bibliothek verarbeitet werden.",
         "ReprocessRecreatedFiles": "Neu erstellte Dateien wiederverarbeiten",
         "ReprocessRecreatedFiles-Help": "Wenn diese Option aktiviert ist und eine Datei mit einem anderen Erstellungszeitpunkt als dem aufgezeichneten erkannt wird, wird die Datei automatisch zur erneuten Verarbeitung freigegeben. Dies ist bei einer Bibliothek mit heruntergeladenen Dateien hilfreich, wenn Sie dieselbe Datei mehrmals herunterladen und jedes Mal verarbeiten möchten.",
-        "Scan": "Scannen",
-        "Scan-Help": "Wenn Scan aktiviert ist, wird die Bibliothek routinemäßig nach neuen Inhalten durchsucht. Wenn deaktiviert, wartet die Bibliothek auf Dateisystemereignisse, um neue Dateien zu erkennen.",
         "ScanInterval": "Scan-Intervall",
-        "ScanInterval-Help": "The shortest possible time in seconds between scans.  It is not guaranteed to scan at this interval each time, as another scan might be in progress.",
-        "ScanInterval-Suffix": "Sekunden",
+        "ScanInterval-Help": "Das Zeitintervall, in dem ein Bibliotheksscan ausgelöst wird. Dateisystemereignisse werden überwacht, um Änderungen in Echtzeit zu erkennen, aber ein geplanter Scan stellt sicher, dass die gesamte Bibliothek gescannt wird, falls Dateisystemereignisse übersehen werden.",
         "Schedule": "Zeitplan",
         "ScheduleDescription": "Damit können Sie konfigurieren, wann diese Bibliothek aktiv sein soll.\n\n Der Bibliotheksscanner wird nicht gegen diese Bibliothek laufen und es werden auch keine Dateien außerhalb des Zeitplans verarbeitet.\n",
         "SkipFileAccessTests": "Dateizugriffstests überspringen",
@@ -1078,6 +1087,7 @@
         "Enabled": "Aktiviert",
         "FlowRunners": "Flow Runners",
         "FlowRunners-Help": "Die Anzahl der Flow-Runner-Instanzen, die zur Ausführung eines Flows zur Verfügung stehen.",
+        "Icon": "Benutzerdefiniertes Symbol",
         "InternalProcessingNodeDescription": "Dies ist der interne Node in FileFlows. \n\n Mit diesem Knoten können Sie FileFlows ausführen, ohne sich um die Installation anderer Knoten auf entfernten Systemen kümmern zu müssen, und Sie können FileFlows als eigenständige Anwendung verwenden.\n\nSie können diesen internen Knoten und zusätzliche Verarbeitungsknoten verwenden, wenn Sie dies wünschen, oder Sie können diesen Knoten deaktivieren und nur zusätzliche Knoten verwenden.",
         "Libraries": "Bibliotheken",
         "Libraries-Help": "Auswahl der Bibliotheken, die dieser Node verarbeiten kann.",
@@ -1150,6 +1160,13 @@
         "Code": "Code",
         "Description": "Beschreibung",
         "Revision": "Revision"
+      }
+    },
+    "Resources": {
+      "Singular": "Ressource",
+      "Title": "Ressourcen",
+      "Fields": {
+        "FileData": "Datei"
       }
     },
     "Revisions": {
@@ -1517,6 +1534,10 @@
       "Description": "Mit diesem Plugin können Sie Nachrichten an Discord senden.\n\nDie Webhook Id und der  Token kann aus der URL entnommen werden.\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "Ein Plugin, das mit Docker interagiert, um flexible Integration, Interaktion und Verwaltung von Docker-Ressourcen und -Prozessen zu ermöglichen.",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "Dieses Plugin ermöglicht es Ihnen, während der Ausführung eines Flows eine E-Mail zu senden.",
       "Label": "E-Mail"
@@ -1703,7 +1724,8 @@
   "Validators": {
     "Pattern": "Ist nicht gültig",
     "Range": "Muss zwischen {Minimum} und {Maximum} liegen",
-    "Required": "Erforderlich"
+    "Required": "Erforderlich",
+    "SafeName": "Muss mit einem Buchstaben oder Unterstrich beginnen und darf nur Buchstaben, Ziffern oder Unterstriche enthalten. Keine Sonderzeichen oder Leerzeichen erlaubt."
   },
   "Widgets": {
     "AudioCodecs": "Audio-Codecs",

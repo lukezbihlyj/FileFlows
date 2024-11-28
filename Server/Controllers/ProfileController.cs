@@ -39,8 +39,9 @@ public class ProfileController : Controller
         }
 
         profile.ServerOS = PlatformHelper.GetOperatingSystemType();
-        
-        bool libs = await ServiceLoader.Load<LibraryService>().HasAny();
+
+        bool libs = (await ServiceLoader.Load<LibraryService>().GetAllAsync()).Any(x =>
+            x.Uid != CommonVariables.ManualLibraryUid);
         bool flows = await ServiceLoader.Load<FlowService>().HasAny();
         bool users = await ServiceLoader.Load<UserService>().HasAny();
 

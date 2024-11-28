@@ -9,6 +9,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Models;
 using Humanizer;
+using FileHelper = FileFlows.Server.Helpers.FileHelper;
 using ILogger = FileFlows.Plugin.ILogger;
 
 namespace FileFlows.Server.Services;
@@ -18,6 +19,16 @@ public class LibraryFileService
     private static FairSemaphore NextFileSemaphore = new (1);
 
     private static Logger NextFileLogger;
+    
+    /// <summary>
+    /// Delegate for file events
+    /// </summary>
+    public delegate void FilesDeletedHandler(Guid[] uids);
+
+    /// <summary>
+    /// Event called when library files are deleted
+    /// </summary>
+    public event FilesDeletedHandler FilesDeleted;
     
     /// <summary>
     /// Constructs a next library file result
@@ -276,8 +287,11 @@ public class LibraryFileService
         => new LibraryFileManager().Get(uid);
 
     /// <inheritdoc />
-    public Task Delete(params Guid[] uids)
-        => new LibraryFileManager().Delete(uids);
+    public async Task Delete(params Guid[] uids)
+    {
+        await new LibraryFileManager().Delete(uids);
+        FilesDeleted?.Invoke(uids);
+    }
 
     /// <inheritdoc />
     public async Task<LibraryFile> Update(LibraryFile libraryFile)
@@ -399,16 +413,16 @@ public class LibraryFileService
         var outOfSchedule = TimeHelper.InSchedule(node.Schedule) == false;
 
         var allLibraries = (await ServiceLoader.Load<LibraryService>().GetAllAsync());
-        if (allLibraries.Any(x => x.Uid == CommonVariables.ManualLibraryUid) == false)
-        {
-            allLibraries.Add(new()
-            {
-                Uid = CommonVariables.ManualLibraryUid,
-                Name = CommonVariables.ManualLibrary,
-                Enabled = true,
-                Schedule = new string ('1', 672)
-            });
-        }
+        // if (allLibraries.Any(x => x.Uid == CommonVariables.ManualLibraryUid) == false)
+        // {
+        //     allLibraries.Add(new()
+        //     {
+        //         Uid = CommonVariables.ManualLibraryUid,
+        //         Name = CommonVariables.ManualLibrary,
+        //         Enabled = true,
+        //         Schedule = new string ('1', 672)
+        //     });
+        // }
 
         bool processingOrderLicensed = LicenseHelper.IsLicensed(LicenseFlags.ProcessingOrder);
         var sysInfo = new LibraryFilterSystemInfo()
@@ -871,8 +885,6 @@ public class LibraryFileService
     /// <returns>the files that were added</returns>
     public async Task<Result<string[]>> ManuallyAdd(AddFileModel model)
     {
-        Logger.Instance.ILog("Manually Adding: \n" + JsonSerializer.Serialize(model));
-        
         if (model?.Files?.Any() != true)
             return Result<string[]>.Fail("No items");
 
@@ -902,6 +914,7 @@ public class LibraryFileService
                 LibraryUid = CommonVariables.ManualLibraryUid,
                 FlowUid = flow.Uid,
                 CustomVariables = model.CustomVariables,
+                RelativePath = x.StartsWith(DirectoryHelper.ManualLibrary) ? x[(DirectoryHelper.ManualLibrary.Length + 1)..] : null,
                 Flow = new()
                 {
                     Name = flow.Name,

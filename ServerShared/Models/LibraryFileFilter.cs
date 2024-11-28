@@ -112,6 +112,16 @@ public class LibraryFileFilter
                 if(file.HoldUntil < DateTime.UtcNow)
                     return false;
             }
+            else if (Status == FileStatus.OutOfSchedule)
+            {
+                if (file.Status != FileStatus.Unprocessed)
+                    return false;
+                if(file.LibraryUid == null || SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) == false || lib?.Enabled != true)
+                    return false;
+                if (TimeHelper.InSchedule(lib.Schedule) == true)
+                    return false;
+                return true;
+            }
             else if (Status == FileStatus.Unprocessed && file.Status == FileStatus.Unprocessed)
             {
                 // need to check that it isn't actually disabled

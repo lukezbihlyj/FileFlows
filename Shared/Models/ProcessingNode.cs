@@ -17,6 +17,11 @@ public class ProcessingNode: FileFlowObject
     /// Gets or sets the address this node is located at, hostname or ip address
     /// </summary>
     public string Address { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the Icon of the Node
+    /// </summary>
+    public string Icon { get; set; }
 
     /// <summary>
     /// Gets or sets when the node was last seen

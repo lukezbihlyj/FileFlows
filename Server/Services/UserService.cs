@@ -32,13 +32,22 @@ public class UserService
     /// <returns>The user</returns>
     public Task<User?> GetByName(string name)
         => new UserManager().GetByName(name);
-    
+
     /// <summary>
     /// Gets if there are any users in the system
     /// </summary>
     /// <returns>true if there are any users</returns>
-    public Task<bool> HasAny()
-        => new UserManager().HasAny();
+    public async Task<bool> HasAny()
+    {
+        try
+        {
+            return await new UserManager().HasAny();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 
     /// <summary>
     /// Finds a user by their username or email address

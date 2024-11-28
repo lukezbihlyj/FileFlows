@@ -62,31 +62,41 @@ public class XYChart: ImageChart
 
         for (int i = 0; i <= yAxisLabelFrequency; i++)
         {
-            double value = (maxValue / yAxisLabelFrequency) * i;
-            int y = chartStartY + chartHeight - (int)((value / maxValue) * yAxisHeight);
+            try
+            {
+                double value = (maxValue / yAxisLabelFrequency) * i;
+                int y = chartStartY + chartHeight - (int)((value / maxValue) * yAxisHeight);
 
-            // Draw grid line
-            ctx.DrawLine(LineColor, 1 * Scale, new PointF(chartStartX, y), new PointF(chartStartX + chartWidth, y));
+                // Draw grid line
+                ctx.DrawLine(LineColor, 1 * Scale, new PointF(chartStartX, y), new PointF(chartStartX + chartWidth, y));
 
-            if (i == 0)
-                continue; // don't draw the first y-axis label it overlaps the x tick label
+                if (i == 0)
+                    continue; // don't draw the first y-axis label it overlaps the x tick label
 
-            // Draw y-axis tick
-            ctx.DrawLine(LineColor, 1 * Scale, new PointF(chartStartX - 5, y), new PointF(chartStartX, y));
-            
-            // Format y-axis label
-            object yValue = string.IsNullOrWhiteSpace(yAxisFormatter) ? (object)Convert.ToInt64(value) : (object)value;
-            string yLabel = ChartFormatter.Format(yValue, yAxisFormatter, axis: true);
+                // Draw y-axis tick
+                ctx.DrawLine(LineColor, 1 * Scale, new PointF(chartStartX - 5, y), new PointF(chartStartX, y));
 
-            // Measure the size of the text
-            var textOptions = new TextOptions(Font);
-            var textSize = TextMeasurer.MeasureSize(yLabel, textOptions);
+                // Format y-axis label
+                object yValue = string.IsNullOrWhiteSpace(yAxisFormatter)
+                    ? (object)Convert.ToInt64(value)
+                    : (object)value;
+                string yLabel = ChartFormatter.Format(yValue, yAxisFormatter, axis: true);
 
-            // Calculate the position for right-aligned text
-            var labelPosition = new PointF(chartStartX - yAxisLabelOffset - textSize.Width, y - textSize.Height / 2 - 2);
-            
-            // Draw y-axis label
-            ctx.DrawText(yLabel, Font, TextBrush, TextPen, labelPosition);
+                // Measure the size of the text
+                var textOptions = new TextOptions(Font);
+                var textSize = TextMeasurer.MeasureSize(yLabel, textOptions);
+
+                // Calculate the position for right-aligned text
+                var labelPosition = new PointF(chartStartX - yAxisLabelOffset - textSize.Width,
+                    y - textSize.Height / 2 - 2);
+
+                // Draw y-axis label
+                ctx.DrawText(yLabel, Font, TextBrush, TextPen, labelPosition);
+            }
+            catch (Exception)
+            {
+                // Ignored   
+            }
         }
         // Draw y-axis main label if provided
         // if (!string.IsNullOrEmpty(chartData.YAxisLabel))

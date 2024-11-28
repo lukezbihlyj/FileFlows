@@ -19,12 +19,12 @@ namespace FileFlows.DataLayer.Upgrades;
 public class DatabaseValidator
 {
     /// <summary>
-    /// Run the upgrade
+    /// Ensures columns exist in the database
     /// </summary>
     /// <param name="logger">the logger</param>
     /// <param name="dbType">the database type</param>
     /// <param name="connectionString">the database connection string</param>
-    /// <returns>the upgrade result</returns>
+    /// <returns>true if successful, otherwise false</returns>
     public async Task<Result<bool>> EnsureColumnsExist(ILogger logger, DatabaseType dbType, string connectionString)
     {
         var connector = DatabaseConnectorLoader.LoadConnector(logger, dbType, connectionString);
@@ -44,6 +44,39 @@ public class DatabaseValidator
                     logger.ILog("Adding LibraryFile.FailureReason column");
                     await connector.CreateColumn(column.Item1, column.Item2, column.Item3, column.Item4);
                 }
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.ELog("Failed ensuring columns exist: " + ex.Message + Environment.NewLine + ex.StackTrace);
+            return Result<bool>.Fail(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Ensures default values exist in the database
+    /// </summary>
+    /// <param name="logger">the logger</param>
+    /// <param name="dbType">the database type</param>
+    /// <param name="connectionString">the database connection string</param>
+    /// <param name="objects">the objects to ensure exist</param>
+    /// <returns>true if successful, otherwise false</returns>
+    internal async Task<Result<bool>> EnsureDefaultsExist(ILogger logger, DatabaseType dbType, string connectionString, FileFlowObject[] objects)
+    {
+        try
+        {
+            var connector = DatabaseConnectorLoader.LoadConnector(logger, dbType, connectionString);
+            var dbom = new DbObjectManager(logger, dbType, connector);
+            var manager = new FileFlowsObjectManager(dbom);
+            
+            foreach (var obj in objects)
+            {
+                if(await manager.Exists(obj.Uid))
+                    continue;
+
+                await manager.AddOrUpdateObject(obj, null);
             }
 
             return true;

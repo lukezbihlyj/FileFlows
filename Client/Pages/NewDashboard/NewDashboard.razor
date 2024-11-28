@@ -6,7 +6,7 @@
 @if (loaded)
 {
     <div class="dashboard-wrapper">
-
+        <CascadingValue Value="Profile" IsFixed="true">
         <FlowTabs @ref="Tabs" Style="TabStyle.NewStyle" TitleOnlyOnActive="App.Instance.IsSmallMobile">
             @if (App.Instance.IsMobile)
             {
@@ -88,6 +88,6 @@
 
             </FlowTab>
         </FlowTabs>
-
+        </CascadingValue>
     </div>
 }

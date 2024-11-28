@@ -137,6 +137,17 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
                 }
             });
         }
+        
+        fields.Add(new ElementField()
+        {
+            Name = nameof(node.Icon),
+            InputType = FormInputType.IconPicker,
+            Parameters = new Dictionary<string, object>
+            {
+                { nameof(InputIconPicker.IncludeSvgs), true},
+                { nameof(InputIconPicker.AllowClear), true},
+            }
+        });
 
         return fields;
     }

@@ -79,22 +79,7 @@
                         
                         <div class="table-item">
                             <span class="icon">
-                                @if (item.OperatingSystem == OperatingSystemType.Mac)
-                                {
-                                    <img class="icon" src="/icons/apple.svg"/>
-                                }
-                                else if (item.OperatingSystem == OperatingSystemType.Docker)
-                                {
-                                    <img class="icon" src="/icons/docker.svg"/>
-                                }
-                                else if (item.OperatingSystem == OperatingSystemType.Windows)
-                                {
-                                    <img class="icon" src="/icons/windows.svg"/>
-                                }
-                                else if (item.OperatingSystem == OperatingSystemType.Linux)
-                                {
-                                    <img class="icon" src="/icons/linux.svg"/>
-                                }
+                                <TableItemIcon Icon="@item.Icon" DefaultIcon="@GetDefaultIcon(item)" />
                                 <div class="architecture @(item.Architecture is ArchitectureType.Arm32 or ArchitectureType.Arm64 ? "arm" : "")">@item.Architecture</div>
                             </span>
                             <div class="center">

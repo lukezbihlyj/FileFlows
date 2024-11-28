@@ -50,9 +50,11 @@
                                     <span class="page">@item.Path</span>
                                 </span>
                                 <div class="info">
-                                    <IconValue Icon="fas fa-sitemap" Color="IconValueColor.Blue" 
-                                               Value="@item.Flow?.Name" OnClick="() => OpenFlow(item.Flow?.Uid)"
-                                               />
+                                    @if (item.Uid != CommonVariables.ManualLibraryUid)
+                                    {
+                                        <IconValue Icon="fas fa-sitemap" Color="IconValueColor.Blue"
+                                                   Value="@item.Flow?.Name" OnClick="() => OpenFlow(item.Flow?.Uid)"/>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -71,14 +73,26 @@
                         @Globals.lblEnabled
                     </Header>
                     <Cell Context="item">
-                        <FlowSwitch Value="@item.Enabled" ValueChanged="@(args => { item.Enabled = args; Enable(args, item); })"  />
+                        @if (item.Uid == CommonVariables.ManualLibraryUid)
+                        {
+                            <FlowSwitch Value="true" ReadOnly="true" />
+                        }
+                        else
+                        {
+                            <FlowSwitch Value="@item.Enabled" ValueChanged="@(args =>
+                                                                            {
+                                                                                item.Enabled = args;
+                                                                                Enable(args, item);
+                                                                            })"/>
+                        }
+
                     </Cell>
                 </FlowTableColumn>
                 <FlowTableColumn TItem="Library" Width="16rem" MobileWidth="0" NoHeight="true">
                     <Header>
                     </Header>
                     <Cell Context="item">
-                        @if (GetStorageSaved(item.Name, out StorageSavedData saved) && saved.OriginalSize > 0)
+                        @if (item.Uid != CommonVariables.ManualLibraryUid && GetStorageSaved(item.Name, out StorageSavedData saved) && saved.OriginalSize > 0)
                         {
                             <span class="top-right">@Translater.Instant("Pages.Libraries.Labels.Files", new { saved.TotalFiles, TotalString = saved.TotalFiles.ToString("#,##0") })</span>
                             <div class="savings-bar">
@@ -94,7 +108,7 @@
 
 </PageView>
 
-@if(Loaded && HasData == false)
+@if(Loaded && HasCreatedLibraries == false)
 {
     <div class="pointer-add">Add</div>
 }

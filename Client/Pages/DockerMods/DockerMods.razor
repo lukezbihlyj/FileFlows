@@ -20,6 +20,9 @@
                 <FlowTableButton Clicked=Delete SelectedOneOrMore="true" Icon="fas fa-trash" Label="Labels.Delete" />
                 <FlowTableButton Clicked=Export SelectedOne="true" Icon="fas fa-file-export" Label="Labels.Export" Area="ButtonArea.ContextMenu" />
                 <FlowTableButtonSeparator />
+                <FlowTableButton Clicked=MoveUp Icon="fas fa-arrow-up" Label="Pages.AccessControl.Buttons.MoveUp" SelectedOneOrMore="true" />
+                <FlowTableButton Clicked=MoveDown Icon="fas fa-arrow-down" Label="Pages.AccessControl.Buttons.MoveDown" SelectedOneOrMore="true" />
+                <FlowTableButtonSeparator />
                 <FlowTableButton Clicked=OpenBrowser Icon="fas fa-code-branch" Label="Labels.Repository"/>
                 <FlowTableButton Clicked=Update SelectedOneOrMore="true" Icon="fas fa-cloud-download-alt" Label="Labels.Update" />
                 @if (Profile != null && Profile.LicensedFor(LicenseFlags.Auditing) && Profile.HasRole(UserRole.Admin))

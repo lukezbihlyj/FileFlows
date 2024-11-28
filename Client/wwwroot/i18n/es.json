@@ -145,19 +145,24 @@
     "Tag": "Etiqueta",
     "Test": "Probar",
     "Time": "Tiempo",
+    "TooManyDockerMods": "Ha seleccionado demasiados DockerMods. Esto puede afectar el rendimiento y probablemente no sea necesario instalar todos estos DockerMods.",
     "Total": "Total",
     "Trigger": "Disparar",
     "Type": "Tipo",
     "Undo": "Deshacer",
+    "Unlicensed": "Sin licencia",
+    "UnlicensedFlowElement": "Se requiere una licencia {level} para usar este elemento de flujo.",
     "UnsavedChanges": "Cambios No Guardados",
     "Update": "Actualizar",
     "UpdateAll": "Actualizar todo",
     "UpdateAvailable": "Nueva versión disponible {version}",
+    "Upload": "Subir",
     "UsedBy": "Usado Por",
     "Version": "Versión",
     "VersionNumber": "Versión: {version}",
     "View": "Ver",
     "ViewLog": "Ver Registro",
+    "Warning": "Advertencia",
     "WeekShort": "Sem",
     "When": "Cuándo",
     "Yes": "Sí",
@@ -197,6 +202,7 @@
       "Title": "Agregar Archivo",
       "Fields": {
         "AnyNode": "Cualquier Nodo",
+        "DropFile": "Suelta un archivo aquí o haz clic para subir",
         "Flow": "Flow",
         "List": "Lista",
         "Mode": "Modo de Entrada",
@@ -225,8 +231,17 @@
       "DirectoryTitle": "Seleccionar un Directorio",
       "FileTitle": "Seleccionar un Archivo"
     },
+    "FileUpload": {
+      "Complete": "Carga completada con éxito",
+      "ETA": "ETA",
+      "Speed": "Velocidad",
+      "UploadedAmount": "Subido"
+    },
     "FlowTemplatePicker": {
       "Title": "Selecciona una plantilla para empezar"
+    },
+    "IconPicker": {
+      "Title": "Elegir icono"
     },
     "Import": {
       "Message": "Selecciona un flow exportado para importar en el sistema.",
@@ -500,6 +515,7 @@
       "Nodes": "Nodos",
       "PauseProcessing": "Pausar Procesamiento",
       "Plugins": "Complementos",
+      "Resources": "Recursos",
       "Revisions": "Revisiones",
       "Scripts": "Scripts",
       "Tasks": "Tareas",
@@ -902,10 +918,6 @@
         "Flow": "Flow",
         "Folders": "Carpetas",
         "Folders-Help": "Si esta biblioteca procesa Carpetas en lugar de Archivos.\nEsto no significa escanear subcarpetas, una biblioteca ya lo hará.\nEsto significa que se procesará un objeto Carpeta en lugar de archivos individuales.",
-        "FullScanDisabled": "Deshabilitar Escaneo Completo",
-        "FullScanDisabled-Help": "El propósito del escaneo completo es detectar cualquier archivo que pueda ser omitido por los eventos de observación del sistema de archivos.",
-        "FullScanIntervalMinutes": "Intervalo de Escaneo Completo",
-        "FullScanIntervalMinutes-Help": "El intervalo en el que debe realizarse un escaneo completo de esta biblioteca",
         "HoldMinutes": "Minutos de Retención",
         "HoldMinutes-Help": "Opcionalmente retener cualquier archivo encontrado en esta biblioteca durante esta cantidad de minutos antes de procesarlos. Cada archivo se retendrá durante esta cantidad de tiempo.",
         "HoldMinutes-Suffix": "minutos",
@@ -919,11 +931,8 @@
         "ProcessingOrder-Help": "El orden en que se procesarán los archivos en esta biblioteca.",
         "ReprocessRecreatedFiles": "Reprocesar Archivos Recreados",
         "ReprocessRecreatedFiles-Help": "Cuando está habilitado, si se detecta un archivo con una hora de creación diferente a la registrada, el archivo se configurará automáticamente para reprocesarse.\nEsto es útil en una biblioteca de archivos descargados, donde puede descargar el mismo archivo varias veces y desea procesarlo cada vez.",
-        "Scan": "Escanear",
-        "Scan-Help": "Cuando el escaneo está habilitado, la biblioteca se escaneará rutinariamente en busca de nuevo contenido.\nCuando está deshabilitado, la biblioteca escuchará eventos del sistema de archivos para detectar nuevos archivos.\nEs mejor dejar esto desactivado a menos que tenga problemas con archivos que no se detectan.",
         "ScanInterval": "Intervalo de Escaneo",
-        "ScanInterval-Help": "El tiempo más corto posible en segundos entre escaneos. No se garantiza escanear en este intervalo cada vez, ya que otro escaneo podría estar en progreso.",
-        "ScanInterval-Suffix": "Segundos",
+        "ScanInterval-Help": "El intervalo de tiempo en el que se activará un escaneo de la biblioteca. Los eventos del sistema de archivos se monitorean para detectar cambios en tiempo real, pero un escaneo programado garantiza un escaneo completo de la biblioteca en caso de que se pierdan eventos del sistema de archivos.",
         "Schedule": "Horario",
         "ScheduleDescription": "Esto le permite configurar cuándo estará activa esta biblioteca.\n\nEl escáner de la biblioteca no se ejecutará contra esta biblioteca ni se procesarán archivos fuera del horario.\n",
         "SkipFileAccessTests": "Omitir Pruebas de Acceso a Archivos",
@@ -1078,6 +1087,7 @@
         "Enabled": "Habilitado",
         "FlowRunners": "Ejecutores de Flow",
         "FlowRunners-Help": "El número de instancias de ejecutores de flow disponibles para ejecutar un flow.",
+        "Icon": "Icono personalizado",
         "InternalProcessingNodeDescription": "Este es el nodo de procesamiento incorporado en FileFlows.\n\nEste nodo te permite ejecutar FileFlows sin preocuparte por instalar otros nodos en sistemas remotos y te permite usar FileFlows como una aplicación autónoma.\n\nPuedes continuar usando este nodo interno y nodos de procesamiento adicionales si lo deseas, o puedes deshabilitar este nodo y usar solo nodos adicionales.",
         "Libraries": "Bibliotecas",
         "Libraries-Help": "Selecciona qué bibliotecas puede procesar este nodo",
@@ -1150,6 +1160,13 @@
         "Code": "Código",
         "Description": "Descripción",
         "Revision": "Revisión"
+      }
+    },
+    "Resources": {
+      "Singular": "Recurso",
+      "Title": "Recursos",
+      "Fields": {
+        "FileData": "Archivo"
       }
     },
     "Revisions": {
@@ -1517,6 +1534,10 @@
       "Description": "Un plugin que te permite enviar mensajes a un servidor de Discord.\n\nEl ID del Webhook y el token se pueden obtener de la URL del webhook\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "Un plugin que interactúa con Docker para permitir una integración, interacción y gestión flexible de recursos y procesos de Docker.",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "Este complemento te permite enviar un correo electrónico mientras se ejecuta un flujo.",
       "Label": "Correo electrónico"
@@ -1703,7 +1724,8 @@
   "Validators": {
     "Pattern": "No es válido",
     "Range": "Debe estar entre {Minimum} y {Maximum}",
-    "Required": "Requerido"
+    "Required": "Requerido",
+    "SafeName": "Debe comenzar con una letra o un guion bajo y solo puede contener letras, dígitos o guiones bajos. No se permiten caracteres especiales ni espacios."
   },
   "Widgets": {
     "AudioCodecs": "Códecs de Audio",

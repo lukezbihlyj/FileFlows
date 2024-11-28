@@ -37,6 +37,7 @@ public static class ServiceLoader
             .AddSingleton<UserService>()
             .AddSingleton<VariableService>()
             .AddSingleton<RevisionService>()
+            .AddSingleton<ResourceService>()
             .AddSingleton<AccessControlService>()
             .AddSingleton<FlowRunnerService>()
             .AddSingleton<ScriptService>()

@@ -3,12 +3,23 @@ using FileFlows.Client.Components.Inputs;
 
 namespace FileFlows.Client.Pages;
 
+/// <summary>
+/// Editor for Libraries
+/// </summary>
 public partial class Libraries : ListPage<Guid, Library>
 {
     ElementField efTemplate;
 
+    /// <summary>
+    /// Opens the editor
+    /// </summary>
+    /// <param name="library">the library to edit</param>
+    /// <returns>true if the editor was saved, otherwise false</returns>
     private async Task<bool> OpenEditor(Library library)
     {
+        if (library.Uid == CommonVariables.ManualLibraryUid)
+            return await OpenManualLibraryEditor(library);
+        
         Blocker.Show();
         var flowResult = await GetFlows();
         Blocker.Hide();
@@ -33,7 +44,7 @@ public partial class Libraries : ListPage<Guid, Library>
         tabs.Add("General", tabGeneral);
         tabs.Add("Schedule", TabSchedule(library));
         tabs.Add("Detection", TabDetection(library));
-        tabs.Add("Scan", TabScan(library));
+        //tabs.Add("Scan", TabScan(library));
         tabs.Add("Advanced", TabAdvanced(library, efFolders));
         await Editor.Open(new()
         {
@@ -190,6 +201,16 @@ public partial class Libraries : ListPage<Guid, Library>
         });
         fields.Add(new ElementField
         {
+            InputType = FormInputType.Period,
+            Parameters = new Dictionary<string, object>
+            {
+                { nameof(InputPeriod.ShowWeeks), false },
+                { nameof(InputPeriod.Seconds), true }
+            },
+            Name = nameof(library.ScanInterval)
+        });
+        fields.Add(new ElementField
+        {
             InputType = FormInputType.Int,
             Name = nameof(library.HoldMinutes)
         });
@@ -247,6 +268,16 @@ public partial class Libraries : ListPage<Guid, Library>
         });
         fields.Add(new ElementField
         {
+            InputType = FormInputType.Int,
+            Parameters = new Dictionary<string, object>
+            {
+                { "Min", 0 },
+                { "Max", 300 }
+            },
+            Name = nameof(library.FileSizeDetectionInterval)
+        });
+        fields.Add(new ElementField
+        {
             InputType = FormInputType.Switch,
             Name = nameof(library.ExcludeHidden)
         });
@@ -269,30 +300,30 @@ public partial class Libraries : ListPage<Guid, Library>
                 new (efFolders, library.Folders, value: false)
             }
         });
-        var efFingerprinting = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.UseFingerprinting),
-            Conditions = new List<Condition>
-            {
-                new(efFolders, library.Folders, value: false)
-            }
-        };
-        fields.Add(efFingerprinting);
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.UpdateMovedFiles),
-            DisabledConditions = new List<Condition>
-            {
-                new (efFingerprinting, library.UseFingerprinting, value: true)
-            }
-        });
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.ReprocessRecreatedFiles)
-        });
+        // var efFingerprinting = new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.UseFingerprinting),
+        //     Conditions = new List<Condition>
+        //     {
+        //         new(efFolders, library.Folders, value: false)
+        //     }
+        // };
+        // fields.Add(efFingerprinting);
+        // fields.Add(new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.UpdateMovedFiles),
+        //     DisabledConditions = new List<Condition>
+        //     {
+        //         new (efFingerprinting, library.UseFingerprinting, value: true)
+        //     }
+        // });
+        // fields.Add(new ElementField
+        // {
+        //     InputType = FormInputType.Switch,
+        //     Name = nameof(library.ReprocessRecreatedFiles)
+        // });
         fields.Add(new ElementField
         {
             InputType = FormInputType.Int,
@@ -394,72 +425,72 @@ public partial class Libraries : ListPage<Guid, Library>
     }
     
     
-    private List<IFlowField> TabScan(Library library)
-    {
-        List<IFlowField> fields = new ();
-        
-        var fieldScan = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.Scan)
-        };
-        fields.Add(fieldScan);
-        
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Int,
-            Parameters = new Dictionary<string, object>
-            {
-                { "Min", 10 },
-                { "Max", 24 * 60 * 60 }
-            },
-            Name = nameof(library.ScanInterval),
-            Conditions = new List<Condition>
-            {
-                new (fieldScan, library.Scan, value: true)
-            }
-        });
-        var efFullScanEnabled = new ElementField
-        {
-            InputType = FormInputType.Switch,
-            Name = nameof(library.FullScanDisabled),
-            Conditions = new List<Condition>
-            {
-                new(fieldScan, library.Scan, value: false)
-            }
-        };
-        fields.Add(efFullScanEnabled);
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Period,
-            Name = nameof(library.FullScanIntervalMinutes),
-            Conditions = new List<Condition>
-            {
-                new (fieldScan, library.Scan, value: false),
-            },
-            DisabledConditions =new List<Condition>
-            {
-                new (efFullScanEnabled, library.FullScanDisabled, value: false),
-            }, 
-        });
-        if (library.FullScanIntervalMinutes < 1)
-            library.FullScanIntervalMinutes = 60;
-        
-        fields.Add(new ElementField
-        {
-            InputType = FormInputType.Int,
-            Parameters = new Dictionary<string, object>
-            {
-                { "Min", 0 },
-                { "Max", 300 }
-            },
-            Name = nameof(library.FileSizeDetectionInterval),
-            Conditions = new List<Condition>
-            {
-                new (fieldScan, library.Scan, value: true)
-            }
-        });
-
-        return fields;
-    }
+    // private List<IFlowField> TabScan(Library library)
+    // {
+    //     List<IFlowField> fields = new ();
+    //     
+    //     // var fieldScan = new ElementField
+    //     // {
+    //     //     InputType = FormInputType.Switch,
+    //     //     Name = nameof(library.Scan)
+    //     // };
+    //     // fields.Add(fieldScan);
+    //     
+    //     // fields.Add(new ElementField
+    //     // {
+    //     //     InputType = FormInputType.Int,
+    //     //     Parameters = new Dictionary<string, object>
+    //     //     {
+    //     //         { "Min", 10 },
+    //     //         { "Max", 24 * 60 * 60 }
+    //     //     },
+    //     //     Name = nameof(library.ScanInterval),
+    //     //     // Conditions = new List<Condition>
+    //     //     // {
+    //     //     //     new (fieldScan, library.Scan, value: true)
+    //     //     // }
+    //     // });
+    //     // var efFullScanEnabled = new ElementField
+    //     // {
+    //     //     InputType = FormInputType.Switch,
+    //     //     Name = nameof(library.FullScanDisabled),
+    //     //     Conditions = new List<Condition>
+    //     //     {
+    //     //         new(fieldScan, library.Scan, value: false)
+    //     //     }
+    //     // };
+    //     // fields.Add(efFullScanEnabled);
+    //     // fields.Add(new ElementField
+    //     // {
+    //     //     InputType = FormInputType.Period,
+    //     //     Name = nameof(library.FullScanIntervalMinutes),
+    //     //     Conditions = new List<Condition>
+    //     //     {
+    //     //         new (fieldScan, library.Scan, value: false),
+    //     //     },
+    //     //     DisabledConditions =new List<Condition>
+    //     //     {
+    //     //         new (efFullScanEnabled, library.FullScanDisabled, value: false),
+    //     //     }, 
+    //     // });
+    //     // if (library.FullScanIntervalMinutes < 1)
+    //     //     library.FullScanIntervalMinutes = 60;
+    //     
+    //     fields.Add(new ElementField
+    //     {
+    //         InputType = FormInputType.Int,
+    //         Parameters = new Dictionary<string, object>
+    //         {
+    //             { "Min", 0 },
+    //             { "Max", 300 }
+    //         },
+    //         Name = nameof(library.FileSizeDetectionInterval),
+    //         // Conditions = new List<Condition>
+    //         // {
+    //         //     new (fieldScan, library.Scan, value: true)
+    //         // }
+    //     });
+    //
+    //     return fields;
+    // }
 }

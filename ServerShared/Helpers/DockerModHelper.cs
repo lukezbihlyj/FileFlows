@@ -34,8 +34,6 @@ public static class DockerModHelper
         try
         {
             var directory = DirectoryHelper.DockerModsDirectory;
-            // make mod.Name safe for file name, need to replace all unsafe characters
-            var safeName = FileHelper.RemoveIllegalCharacters(mod.Name);
             
             var file = Path.Combine(directory, GetDockerModFileName(mod));
             
@@ -68,23 +66,23 @@ public static class DockerModHelper
                 UseShellExecute = false
             })!.WaitForExitAsync();
 
-            // Run the file and capture output to string
-            var process = Process.Start(new ProcessStartInfo
+            Logger.Instance.ILog($"Installing DockerMod: {file}");
+            
+            
+            // Initialize the process with configuration
+            var processStartInfo = new ProcessStartInfo
             {
-                //FileName = "/bin/bash",
                 FileName = "/bin/su",
                 ArgumentList = { "-c", $"\"{file}\"" },
                 RedirectStandardOutput = true,
-                RedirectStandardError = true, // Redirect standard error stream
+                RedirectStandardError = true,
                 UseShellExecute = false,
                 WorkingDirectory = DirectoryHelper.DockerModsDirectory
-            });
+            };
 
-            if (process == null)
-            {
-                Logger.Instance.WLog($"Failed Running DockerMod '{mod.Name}': Failed to start the process.");
-                return Result<bool>.Fail($"Failed Running DockerMod '{mod.Name}': Failed to start the process.");
-            }
+            // Run the process
+            using var process = new Process();
+            process.StartInfo = processStartInfo;
 
             StringBuilder outputBuilder = new StringBuilder();
 
@@ -93,6 +91,7 @@ public static class DockerModHelper
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     outputBuilder.AppendLine(e.Data);
+                    Logger.Instance.Raw(e.Data);
                     outputCallback?.Invoke(outputBuilder.ToString());
                 }
             };
@@ -102,10 +101,12 @@ public static class DockerModHelper
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     outputBuilder.AppendLine(e.Data);
+                    Logger.Instance.Raw(e.Data);
                     outputCallback?.Invoke(outputBuilder.ToString());
                 }
             };
 
+            process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine(); // Begin reading standard error stream asynchronously
 
@@ -162,22 +163,8 @@ public static class DockerModHelper
     /// <param name="mod">the DockerMod</param>
     /// <returns>the File name</returns>
     private static string GetDockerModFileName(DockerMod mod)
-    {
-        return FileHelper.RemoveIllegalCharacters(mod.Name + ".sh");
-    }
+        => FileHelper.RemoveIllegalCharacters($"{mod.Order:0000}_{mod.Name.Replace(" ", "")}_[{mod.Revision}].sh");
     
-    //
-    // /// <summary>
-    // /// Deletes a DockerMod from disk
-    // /// </summary>
-    // /// <param name="mod">the DockerMod to delete</param>
-    // public static void DeleteFromDisk(DockerMod mod)
-    // {
-    //     var file = Path.Combine(DirectoryHelper.DockerModsDirectory, mod.Name + ".sh");
-    //     if(File.Exists(file))
-    //         File.Delete(file);
-    // }
-
     /// <summary>
     /// Uninstalls any DockerMod that is not know
     /// </summary>
@@ -195,30 +182,29 @@ public static class DockerModHelper
             try
             {
                 Logger.Instance.WLog($"About to uninstall DockerMod '{name}'");
-
-                // Run the file and capture output to string
-                var process = Process.Start(new ProcessStartInfo
+                // Initialize the process start info
+                var processStartInfo = new ProcessStartInfo
                 {
                     FileName = "/bin/su",
-                    ArgumentList = { "-c", "\"" + unknown.FullName + "\" --uninstall" },
+                    ArgumentList = { "-c", $"\"{unknown.FullName}\" --uninstall" },
                     RedirectStandardOutput = true,
-                    RedirectStandardError = true, // Redirect standard error stream
+                    RedirectStandardError = true,
                     UseShellExecute = false,
                     WorkingDirectory = DirectoryHelper.DockerModsDirectory
-                });
+                };
 
-                if (process == null)
-                {
-                    Logger.Instance.WLog($"Failed Uninstalling DockerMod '{name}': Failed to start the process.");
-                    continue;
-                }
+                // Create the process with the configured start info
+                using var process = new Process();
+                process.StartInfo = processStartInfo;
 
-                StringBuilder outputBuilder = new StringBuilder();
+                StringBuilder outputBuilder = new ();
 
+                Logger.Instance.ILog($"Uninstalling DockerMod: {name}");
                 process.OutputDataReceived += (sender, e) =>
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
+                        Logger.Instance.Raw(e.Data);
                         outputBuilder.AppendLine(e.Data);
                     }
                 };
@@ -227,10 +213,12 @@ public static class DockerModHelper
                 {
                     if (!string.IsNullOrEmpty(e.Data))
                     {
+                        Logger.Instance.Raw(e.Data);
                         outputBuilder.AppendLine(e.Data);
                     }
                 };
 
+                process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine(); // Begin reading standard error stream asynchronously
 
@@ -239,7 +227,7 @@ public static class DockerModHelper
                 string output = outputBuilder.ToString();
 
                 var totalLength = 120;
-                var modNameLength = unknown.Name.Length;
+                var modNameLength = name.Length;
                 var sideLength =
                     (totalLength - modNameLength - 14) / 2; // Subtracting 14 for the length of " Docker Mod: "
 

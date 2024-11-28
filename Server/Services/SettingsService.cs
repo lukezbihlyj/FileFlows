@@ -73,6 +73,10 @@ public class SettingsService : ISettingsService
             cfg.PluginSettings = await new PluginService().GetAllPluginSettings();
             cfg.MaxNodes = LicenseHelper.IsLicensed() ? 250 : 30;
             cfg.KeepFailedFlowTempFiles = settings.KeepFailedFlowTempFiles;
+            
+            if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates))
+                cfg.Resources = (await ServiceLoader.Load<ResourceService>().GetAllAsync());
+            
             var pluginInfos = (await ServiceLoader.Load<PluginService>().GetPluginInfoModels(true))
                 .Where(x => x.Enabled)
                 .ToDictionary(x => x.PackageName + ".ffplugin", x => x);
@@ -87,7 +91,9 @@ public class SettingsService : ISettingsService
                     Uid = x.Uid,
                     Name = x.Name,
                     Enabled = x.Enabled,
-                    Code = x.Code
+                    Code = x.Code,
+                    Order = x.Order,
+                    Revision = x.Revision
                 }).ToList();
 
             // Logger.Instance.DLog("Plugin, Flow Elements in Use: \n" + string.Join("\n", flowElementsInUse));

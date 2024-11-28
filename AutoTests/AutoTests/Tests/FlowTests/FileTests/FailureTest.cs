@@ -51,7 +51,7 @@ return 1");
         
         // Create library
         string libPath = await CreateFileLibrary($"fail-file-{Guid.NewGuid()}.txt");
-        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Custom", fingerprinting: true);
+        await CreateBasicLibrary(libName, flowName, libPath: libPath, scan: true, template: "Custom");
 
         int count = 0;
         while (count < 30 * 4)

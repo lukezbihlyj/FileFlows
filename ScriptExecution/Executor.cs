@@ -105,7 +105,10 @@ public class Executor
             AdjustVariables(Variables);
             
             // replace Variables. with dictionary notation
-            string tcode = Code;
+            string tcode = Code
+                .Replace("Variables.Resource.", "Variables.resource.")
+                .Replace("Variables.Resources.", "Variables.resource.")
+                .Replace("Variables.resources.", "Variables.resource.");
             foreach (string k in Variables.Keys.OrderByDescending(x => x.Length))
             {
                 // replace Variables.Key or Variables?.Key?.Subkey etc to just the variable

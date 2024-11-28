@@ -128,6 +128,30 @@ public class StringHelperTests : TestBase
         Assert.IsTrue(_stringHelper.Matches("*bobby drake*", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
         Assert.IsTrue(_stringHelper.Matches("!*robert drake*", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
         Assert.IsTrue(_stringHelper.Matches("/.*batman.*/", "Superman vs Batman (2017)"));
-            
+    }
+
+
+    /// <summary>
+    /// Test method equals
+    /// </summary>
+    [TestMethod]
+    public void Matches_Equals_ReturnsTrue()
+    {
+        Assert.IsTrue(_stringHelper.Matches("=abc", "abc"));
+        Assert.IsFalse(_stringHelper.Matches("=def", "abc"));
+        
+        Assert.IsFalse(_stringHelper.Matches("!=abc", "abc"));
+        Assert.IsTrue(_stringHelper.Matches("!=def", "abc"));
+    }
+    
+    /// <summary>
+    /// Test method for regex negation.
+    /// </summary>
+    [TestMethod]
+    public void Matches_Default()
+    {
+        Assert.IsTrue(_stringHelper.Matches("bob", "Batman\n/bobby/i\n/Bobby Drake/\n")); 
+        Assert.IsTrue(_stringHelper.Matches("bat", "Batman\n/bobby/i\n/Bobby Drake/\n"));
+        Assert.IsTrue(_stringHelper.Matches("!cat", "Batman\n/bobby/i\n/Bobby Drake/\n"));
     }
 }

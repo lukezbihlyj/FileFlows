@@ -31,7 +31,7 @@ public class StatisticService : IStatisticService
     /// <param name="name">Optional. The name for which DbStatistics should be cleared.</param>
     public async Task Clear(string? name = null)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(name) == false)
             CachedData.Remove(name);
         else
             CachedData.Clear();

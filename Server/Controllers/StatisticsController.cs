@@ -125,8 +125,9 @@ public class StatisticsController : Controller
             await new StatisticService().Clear(name);
             return Ok();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Logger.Instance.WLog("Failed clearing statistics: " + ex.Message);
             return BadRequest();
         }
     }

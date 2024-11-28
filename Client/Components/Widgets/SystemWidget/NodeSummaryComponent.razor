@@ -9,42 +9,7 @@
     {
         <div class="processing-node @(item.Enabled == false ? "disabled" : "")" @key="item.Uid">
             <span class="icon">
-                @if (item.OperatingSystem == OperatingSystemType.Mac)
-                {
-                    <img class="icon" src="/icons/apple.svg"/>
-                }
-                else if (item.OperatingSystem == OperatingSystemType.Docker)
-                {
-                    <img class="icon" src="/icons/docker.svg"/>
-                }
-                else if (item.HardwareInfo.OperatingSystem?.Contains("ubuntu", StringComparison.InvariantCultureIgnoreCase) == true)
-                {
-                    <img class="icon" src="/icons/distros/ubuntu.svg"/>
-                }
-                else if (item.HardwareInfo.OperatingSystem?.Contains("fedora", StringComparison.InvariantCultureIgnoreCase) == true)
-                {
-                    <img class="icon" src="/icons/distros/fedora.svg"/>
-                }
-                else if (item.HardwareInfo.OperatingSystem?.Contains("pop!", StringComparison.InvariantCultureIgnoreCase) == true)
-                {
-                    <img class="icon" src="/icons/distros/popos.svg"/>
-                }
-                else if (item.HardwareInfo.OperatingSystem?.Contains("debian", StringComparison.InvariantCultureIgnoreCase) == true)
-                {
-                    <img class="icon" src="/icons/distros/debian.svg"/>
-                }
-                else if (item.HardwareInfo.OperatingSystem?.Contains("arch", StringComparison.InvariantCultureIgnoreCase) == true)
-                {
-                    <img class="icon" src="/icons/distros/arch.svg"/>
-                }
-                else if (item.OperatingSystem == OperatingSystemType.Windows)
-                {
-                    <img class="icon" src="/icons/windows.svg"/>
-                }
-                else if (item.OperatingSystem == OperatingSystemType.Linux)
-                {
-                    <img class="icon" src="/icons/linux.svg"/>
-                }
+                <TableItemIcon Icon="@item.Icon" DefaultIcon="@GetDefaultIcon(item)" />
                 <div class="architecture @(item.Architecture is ArchitectureType.Arm32 or ArchitectureType.Arm64 ? "arm" : "")">@item.Architecture</div>
             </span>
             <div class="center">

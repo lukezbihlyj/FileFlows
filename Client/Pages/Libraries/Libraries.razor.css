@@ -5,6 +5,11 @@
   padding: 1.5rem 0.5rem;
 }
 
+.table-item {
+  min-height: 5.5rem;
+  align-items: center;
+}
+
 @media screen and (max-width: 578px) {
   .savings-bar {
     display: none;

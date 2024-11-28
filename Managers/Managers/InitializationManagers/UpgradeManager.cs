@@ -169,4 +169,15 @@ public class UpgradeManager
         /// </summary>
         public string Version { get; set; } = string.Empty;
     }
+
+    /// <summary>
+    /// Ensures any default values exist
+    /// </summary>
+    /// <param name="logger">the logger</param>
+    /// <param name="dbType">the database type</param>
+    /// <param name="connectionString">the database connection string</param>
+    /// <param name="objects">the objects to ensure exist</param>
+    /// <returns>true if successful, otherwise false</returns>
+    public async Task<Result<bool>> EnsureDefaultsExist(ILogger logger, DatabaseType dbType, string connectionString, FileFlowObject[] objects)
+        => await new DatabaseValidator().EnsureDefaultsExist(logger, dbType, connectionString, objects);
 }

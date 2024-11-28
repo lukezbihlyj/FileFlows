@@ -193,9 +193,9 @@ public enum FormInputType
     /// </summary>
     DropDown = 43,
     /// <summary>
-    /// Flow viewer
+    /// Input for Binary
     /// </summary>
-    Flow = 44,
+    Binary = 44,
     /// <summary>
     /// Executed Flow Elements Renderer
     /// </summary>

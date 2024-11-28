@@ -26,6 +26,12 @@ public partial class InputPeriod : Input<int>
     /// </summary>
     [Parameter]
     public bool ShowWeeks { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets if the is using seconds
+    /// </summary>
+    [Parameter]
+    public bool Seconds { get; set; } = true;
     
     /// <inheritdoc />
     protected override void OnInitialized()
@@ -33,16 +39,17 @@ public partial class InputPeriod : Input<int>
         base.OnInitialized();
 
         this.Period = 1440;
+        var v = Value / (Seconds ? 60 : 1);
 
-        if (Value > 0)
+        if (v > 0)
         {
             var ranges = ShowWeeks ? new[] { 10080, 1440, 60, 1 } : new[] { 1440, 60, 1 };
             foreach (int p in ranges)
             {
-                if (Value % p == 0)
+                if (v % p == 0)
                 {
                     // weeks
-                    Number = Value / p;
+                    Number = v / p;
                     Period = p;
                     break;
                 }
@@ -78,7 +85,7 @@ public partial class InputPeriod : Input<int>
         else if (value < 1)
             value = 1;
         this.Number = value;
-        this.Value = this.Number * this.Period;
+        this.Value = this.Number * this.Period * (Seconds ? 60 : 1);
         this.ClearError();
     }
 
@@ -103,7 +110,7 @@ public partial class InputPeriod : Input<int>
         if (int.TryParse(args?.Value?.ToString(), out int index))
         {
             Period = index;
-            Value = Number * Period;
+            Value = Number * Period * (Seconds ? 60 : 1);
         }
         else
             Logger.Instance.DLog("Unable to find index of: ",  args?.Value);

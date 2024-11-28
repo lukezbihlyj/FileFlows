@@ -155,18 +155,18 @@ public class NodeController : BaseController
 
         return GetNodeUpdater(windows);
     }
-
-    /// <summary>
-    /// Records the node system statistics to the server
-    /// </summary>
-    /// <param name="args">the node system statistics</param>
-    [HttpPost("system-statistics")]
-    public async Task RecordNodeSystemStatistics([FromBody] NodeSystemStatistics args)
-    {
-        await ServiceLoader.Load<NodeService>()?.UpdateLastSeen(args.Uid);
-        SystemMonitor.Instance?.Record(args);
-    }
-    
+    //
+    // /// <summary>
+    // /// Records the node system statistics to the server
+    // /// </summary>
+    // /// <param name="args">the node system statistics</param>
+    // [HttpPost("system-statistics")]
+    // public async Task RecordNodeSystemStatistics([FromBody] NodeSystemStatistics args)
+    // {
+    //     await ServiceLoader.Load<NodeService>()?.UpdateLastSeen(args.Uid);
+    //     SystemMonitor.Instance?.Record(args);
+    // }
+    //
     /// <summary>
     /// Gets if nodes should auto update
     /// </summary>

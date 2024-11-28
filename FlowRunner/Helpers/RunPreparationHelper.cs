@@ -35,7 +35,18 @@ public class RunPreparationHelper
         foreach (var sub in new DirectoryInfo(dir).GetDirectories())
         {
             string dest = Path.Combine(runInstance.WorkingDirectory, sub.Name);
+            #if(DEBUG)
+            try
+            {
+                DirectoryHelper.CopyDirectory(sub.FullName, dest);
+            }
+            catch(Exception ex) when (ex.Message.Contains("another process"))
+            {
+                // Ignored
+            }
+            #else
             DirectoryHelper.CopyDirectory(sub.FullName, dest);
+            #endif
         }
     }
 }

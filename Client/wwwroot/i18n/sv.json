@@ -145,19 +145,24 @@
     "Tag": "Tagg",
     "Test": "Test",
     "Time": "Tid",
+    "TooManyDockerMods": "Du har valt för många DockerMods. Detta kan påverka prestandan och det är sannolikt inte nödvändigt att installera alla dessa DockerMods.",
     "Total": "Totalt",
     "Trigger": "Utlösa",
     "Type": "Typ",
     "Undo": "Ångra",
+    "Unlicensed": "Olicensierad",
+    "UnlicensedFlowElement": "En {level}-licens krävs för att använda detta flödeselement.",
     "UnsavedChanges": "Osparade ändringar",
     "Update": "Uppdatera",
     "UpdateAll": "Uppdatera alla",
     "UpdateAvailable": "Ny version tillgänglig {version}",
+    "Upload": "Ladda upp",
     "UsedBy": "Används av",
     "Version": "Version",
     "VersionNumber": "Version: {version}",
     "View": "Visa",
     "ViewLog": "Visa logg",
+    "Warning": "Varning",
     "WeekShort": "Vecka",
     "When": "När",
     "Yes": "Ja",
@@ -197,6 +202,7 @@
       "Title": "Lägg till fil",
       "Fields": {
         "AnyNode": "Vilken nod som helst",
+        "DropFile": "Dra en fil hit eller klicka för att ladda upp",
         "Flow": "Flöde",
         "List": "Lista",
         "Mode": "Indata-läge",
@@ -225,8 +231,17 @@
       "DirectoryTitle": "Välj en katalog",
       "FileTitle": "Välj en fil"
     },
+    "FileUpload": {
+      "Complete": "Uppladdningen slutfördes framgångsrikt",
+      "ETA": "ETA",
+      "Speed": "Hastighet",
+      "UploadedAmount": "Uppladdad"
+    },
     "FlowTemplatePicker": {
       "Title": "Välj en mall att utgå ifrån"
+    },
+    "IconPicker": {
+      "Title": "Välj ikon"
     },
     "Import": {
       "Message": "Välj ett exporterad flöde att importera till systemet.",
@@ -500,6 +515,7 @@
       "Nodes": "Noder",
       "PauseProcessing": "Pausa bearbetning",
       "Plugins": "Plugins",
+      "Resources": "Resurser",
       "Revisions": "Revisioner",
       "Scripts": "Skript",
       "Tasks": "Uppgifter",
@@ -902,10 +918,6 @@
         "Flow": "Flöde",
         "Folders": "Mappar",
         "Folders-Help": "Om detta bibliotek bearbetar mappar istället för filer.\nDetta betyder inte att underliggande mappar skannas, ett bibliotek gör redan detta.\nDetta innebär att ett mappobjekt kommer att bearbetas istället för individuella filer.",
-        "FullScanDisabled": "Inaktivera fullständig skanning",
-        "FullScanDisabled-Help": "Den fullständiga skanningen syftar till att fånga eventuella filer som kan ha missats av filsystemets övervakningshändelser.",
-        "FullScanIntervalMinutes": "Intervall för fullständig skanning",
-        "FullScanIntervalMinutes-Help": "Intervallet när en fullständig skanning av detta bibliotek ska äga rum",
         "HoldMinutes": "Håll minuter",
         "HoldMinutes-Help": "Valfritt håll några filer som finns i detta bibliotek i detta antal minuter innan de bearbetas. Varje fil kommer att hållas under denna tid.",
         "HoldMinutes-Suffix": "minuter",
@@ -919,11 +931,8 @@
         "ProcessingOrder-Help": "Den ordning i vilken filer kommer att bearbetas av detta bibliotek.",
         "ReprocessRecreatedFiles": "Bearbeta om återupptäckta filer",
         "ReprocessRecreatedFiles-Help": "När det är aktiverat, om en fil återupptäckts med en annan skapelsestid än den som är registrerad, kommer filen automatiskt att sättas för att bearbetas igen.\nDetta är användbart i ett bibliotek av nedladdade filer, där du kanske laddar ner samma fil flera gånger och önskar bearbeta den varje gång.",
-        "Scan": "Skanna",
-        "Scan-Help": "När skanning är aktiverad kommer biblioteket rutinmässigt att skannas efter nytt innehåll.\nNär det är inaktiverat kommer biblioteket att lyssna efter filsystemets händelser för att upptäcka nya filer.\nDet är bäst att hålla detta avstängt om du inte har problem med att filer inte upptäcks.",
         "ScanInterval": "Skanningsintervall",
-        "ScanInterval-Help": "Den kortaste möjliga tiden i sekunder mellan skanningar. Det garanteras inte att skanna vid detta intervall varje gång, eftersom en annan skanning kan pågå.",
-        "ScanInterval-Suffix": "Sekunder",
+        "ScanInterval-Help": "Tidsintervallet vid vilket ett bibliotekssökning utlöses. Filsystemhändelser övervakas för att upptäcka ändringar i realtid, men en schemalagd genomsökning säkerställer en fullständig genomsökning av biblioteket om några filsystemhändelser missas.",
         "Schedule": "Schema",
         "ScheduleDescription": "Detta gör att du kan konfigurera när detta bibliotek kommer att vara aktivt.\n\nBiblioteksskannern kommer inte att köras mot detta bibliotek och inga filer kommer att bearbetas utanför schemat.\n",
         "SkipFileAccessTests": "Hoppa över filåtkomsttester",
@@ -1078,6 +1087,7 @@
         "Enabled": "Aktiverad",
         "FlowRunners": "Flödeskörningar",
         "FlowRunners-Help": "Antalet flödeskörningsinstanser som är tillgängliga för att köra ett flöde.",
+        "Icon": "Anpassad ikon",
         "InternalProcessingNodeDescription": "Detta är den inbyggda behandlingsnoden i FileFlows.\n\nDenna nod låter dig köra FileFlows utan att behöva installera några andra noder på fjärrsystem och låter dig använda FileFlows som en fristående applikation.\n\nDu kan fortsätta använda denna interna nod och ytterligare behandlingsnoder om du vill, eller så kan du inaktivera denna nod och bara använda ytterligare noder.",
         "Libraries": "Bibliotek",
         "Libraries-Help": "Välj vilka bibliotek denna nod kan bearbeta",
@@ -1150,6 +1160,13 @@
         "Code": "Kod",
         "Description": "Beskrivning",
         "Revision": "Revision"
+      }
+    },
+    "Resources": {
+      "Singular": "Resurs",
+      "Title": "Resurser",
+      "Fields": {
+        "FileData": "Fil"
       }
     },
     "Revisions": {
@@ -1517,6 +1534,10 @@
       "Description": "Ett plugin som gör att du kan skicka meddelanden till en Discord-server.\n\nWebhook-ID och token kan erhållas från webhook-URL\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "En plugin som interagerar med Docker för att möjliggöra flexibel integration, interaktion och hantering av Docker-resurser och processer.",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "Denna plugin gör att du kan skicka ett e-postmeddelande medan ett flöde körs.",
       "Label": "E-post"
@@ -1703,7 +1724,8 @@
   "Validators": {
     "Pattern": "Är inte giltig",
     "Range": "Måste vara mellan {Minimum} och {Maximum}",
-    "Required": "Obligatorisk"
+    "Required": "Obligatorisk",
+    "SafeName": "Måste börja med en bokstav eller understreck och får endast innehålla bokstäver, siffror eller understreck. Inga specialtecken eller mellanslag är tillåtna."
   },
   "Widgets": {
     "AudioCodecs": "Ljudcodecs",

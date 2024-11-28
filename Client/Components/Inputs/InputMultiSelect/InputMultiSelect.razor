@@ -1,5 +1,5 @@
 @namespace FileFlows.Client.Components.Inputs
-@inherits Input<List<object?>>
+@inherits Input<List<object>>
 
 <InputWrapper Input="@this">
     <div id="@Uid" class="input-multiselect-wrapper @(dropdownOpen ? "dd-opened" : "") @(string.IsNullOrEmpty(ErrorMessage) ? "" : "has-error")">

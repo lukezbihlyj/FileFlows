@@ -71,6 +71,9 @@ public class LibraryController : BaseController
     [HttpPost("duplicate/{uid}")]
     public async Task<IActionResult> Duplicate([FromRoute] Guid uid)
     {
+        if (uid == CommonVariables.ManualLibraryUid)
+            return null;
+        
         var service = ServiceLoader.Load<LibraryService>();
         var library = await service.GetByUidAsync(uid);
         if (library == null)
@@ -96,12 +99,26 @@ public class LibraryController : BaseController
     [HttpPost]
     public async Task<IActionResult> Save([FromBody] Library library)
     {
-        if (library?.Flow == null)
-            return BadRequest("ErrorMessages.NoFlowSpecified");
-        if (library.Uid == Guid.Empty)
-            library.LastScanned = DateTime.MinValue; // never scanned
-        if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
+        if(library == null)
+            return BadRequest("No data provided");
+
+        if (library.Uid != CommonVariables.ManualLibraryUid)
+        {
+            if (library.Flow == null)
+                return BadRequest("ErrorMessages.NoFlowSpecified");
+            if (library.Uid == Guid.Empty)
+                library.LastScanned = DateTime.MinValue; // never scanned
+            if (Regex.IsMatch(library.Schedule, "^[01]{672}$") == false)
+                library.Schedule = new string('1', 672);
+        }
+        else
+        {
+            // ensure these are correctly set
             library.Schedule = new string('1', 672);
+            library.Enabled = true;
+            library.Name = CommonVariables.ManualLibrary;
+            library.Folders = false;
+        }
 
         var service = ServiceLoader.Load<LibraryService>();
         bool nameUpdated = false;
@@ -125,22 +142,22 @@ public class LibraryController : BaseController
             if (nameUpdated)
                 await new ObjectReferenceUpdater().RunAsync();
 
-            RefreshCaches();
+            //RefreshCaches();
 
             if (newLib)
-                _ = Rescan(new() { Uids = new[] { library.Uid } });
+                Rescan(new() { Uids = new[] { library.Uid } });
         });
         
         return Ok(library);
     }
-
-    /// <summary>
-    /// Refresh the caches where libraries are stored in memory
-    /// </summary>
-    private void RefreshCaches()
-    {
-        LibraryWorker.UpdateLibraries();
-    }
+    
+    // /// <summary>
+    // /// Refresh the caches where libraries are stored in memory
+    // /// </summary>
+    // private void RefreshCaches()
+    // {
+    //     LibraryWorker.UpdateLibraries();
+    // }
 
     /// <summary>
     /// Set the enable state for a library
@@ -160,7 +177,7 @@ public class LibraryController : BaseController
         {
             library.Enabled = enable;
             library = await service.Update(library, await GetAuditDetails());
-            RefreshCaches();
+            //RefreshCaches();
         }
         return library;
     }
@@ -181,7 +198,7 @@ public class LibraryController : BaseController
         await ServiceLoader.Load<LibraryService>().Delete(model.Uids, await GetAuditDetails());
 
         await UpdateHasLibraries();
-        RefreshCaches();
+        //RefreshCaches();
     }
 
     /// <summary>
@@ -190,24 +207,25 @@ public class LibraryController : BaseController
     /// <param name="model">A reference model containing UIDs to rescan</param>
     /// <returns>an awaited task</returns>
     [HttpPut("rescan")]
-    public async Task Rescan([FromBody] ReferenceModel<Guid> model)
+    public void Rescan([FromBody] ReferenceModel<Guid> model)
     {
         var service = ServiceLoader.Load<LibraryService>();
-        foreach(var uid in model.Uids)
-        {
-            var item = await service.GetByUidAsync(uid);
-            if (item == null)
-                continue;
-            item.LastScanned = DateTime.MinValue;
-            await service.Update(item, await GetAuditDetails());
-        }
-
-        _ = Task.Run(async () =>
-        {
-            await Task.Delay(1);
-            RefreshCaches();
-            LibraryWorker.ScanNow();
-        });
+        service.Rescan(model.Uids);
+        // foreach(var uid in model.Uids)
+        // {
+        //     var item = await service.GetByUidAsync(uid);
+        //     if (item == null)
+        //         continue;
+        //     item.LastScanned = DateTime.MinValue;
+        //     await service.Update(item, await GetAuditDetails());
+        // }
+        //
+        // _ = Task.Run(async () =>
+        // {
+        //     await Task.Delay(1);
+        //     RefreshCaches();
+        //     LibraryWorker.ScanNow();
+        // });
     }
 
     /// <summary>
@@ -230,7 +248,7 @@ public class LibraryController : BaseController
     public async Task Reset([FromBody] ReferenceModel<Guid> model)
     {
         await ServiceLoader.Load<LibraryFileService>().DeleteByLibrary(model.Uids);
-        await Rescan(model);
+        Rescan(model);
         await ClientServiceManager.Instance.UpdateFileStatus();
     }
 
@@ -284,15 +302,15 @@ public class LibraryController : BaseController
                     Filters = jst.Filters?.Any() == true ? jst.Filters : string.IsNullOrWhiteSpace(jst.Filter) == false ? [jst.Filter] : [],
                     ExclusionFilters = jst.ExclusionFilters?.Any() == true ? jst.ExclusionFilters : string.IsNullOrWhiteSpace(jst.ExclusionFilter) == false ? [jst.ExclusionFilter] : [],
                     Extensions = jst.Extensions?.OrderBy(x => x.ToLowerInvariant())?.ToList(),
-                    UseFingerprinting = jst.UseFingerprint,
+                    //UseFingerprinting = jst.UseFingerprint,
                     Name = name,
                     Description = description,
                     Path = jst.Path,
                     Priority = jst.Priority,
                     ScanInterval = jst.ScanInterval,
-                    ReprocessRecreatedFiles = jst.ReprocessRecreatedFiles,
+                    //ReprocessRecreatedFiles = jst.ReprocessRecreatedFiles,
                     Folders = jst.Folders,
-                    UpdateMovedFiles = jst.DontUpdateMovedFiles == false
+                    //UpdateMovedFiles = jst.DontUpdateMovedFiles == false
                 };
                 if (group == generalGroup)
                     lstGeneral.Add(library);
@@ -337,6 +355,6 @@ public class LibraryController : BaseController
     {
         var service = ServiceLoader.Load<LibraryService>();
         var libs = (await service.GetAllAsync()).Where(x => x.Enabled).Select(x => x.Uid).ToArray();
-        await Rescan(new ReferenceModel<Guid> { Uids = libs });
+        Rescan(new ReferenceModel<Guid> { Uids = libs });
     }
 }

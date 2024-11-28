@@ -10,6 +10,10 @@ namespace FileFlows.ServerShared.Models;
 public class KnownFileInfo
 {
     /// <summary>
+    /// Gets or sets the UID of the known file
+    /// </summary>
+    public Guid Uid { get; set; }
+    /// <summary>
     /// Gets or sets the filename
     /// </summary>
     public string Name { get; set; } = null!;

@@ -43,6 +43,11 @@ public class NodeStatusSummary
     /// Gets or sets the FileFlows version of this node
     /// </summary>
     public string Version { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the icon
+    /// </summary>
+    public string Icon { get; set; }
 
     /// <summary>
     /// Gets or sets if this node is enabled

@@ -47,7 +47,7 @@ internal class DbMigrator
             if(destExternal == false)
             {
                 // move the db if it exists so we can create a new one
-                SQLiteConnector.MoveFileFromConnectionString(destinationInfo.ConnectionString);
+                SQLiteConnectorPooledConnection.MoveFileFromConnectionString(destinationInfo.ConnectionString);
             }
 
             var destCreator = DatabaseCreator.Get(Logger!, dest.Type, destinationInfo.ConnectionString);

@@ -439,7 +439,6 @@ public partial class Flow : ComponentBase, IDisposable
             variables[variable.Key] = variable.Value;
         }
 
-
         var flowElement = this.Available.FirstOrDefault(x => x.Uid == part.FlowElementUid);
         if (flowElement == null)
         {
@@ -503,7 +502,6 @@ public partial class Flow : ComponentBase, IDisposable
         {
             InputType = FormInputType.HorizontalRule
         });
-
 
         if (FieldsTabOpened &&
             part.Type != FlowElementType.Output) // output is for sub flow outputs, we dont want to show the UID
@@ -676,9 +674,9 @@ public partial class Flow : ComponentBase, IDisposable
                                 var librariesResult = await HttpHelper.Get<Dictionary<Guid, string>>($"/api/library/basic-list");
                                 if (librariesResult.Success)
                                 {
-                                    if (librariesResult.Data.ContainsKey(CommonVariables.ManualLibraryUid) == false)
-                                        librariesResult.Data[CommonVariables.ManualLibraryUid] =
-                                            CommonVariables.ManualLibrary;
+                                    // if (librariesResult.Data.ContainsKey(CommonVariables.ManualLibraryUid) == false)
+                                    //     librariesResult.Data[CommonVariables.ManualLibraryUid] =
+                                    //         CommonVariables.ManualLibrary;
                                     libraryOptions = librariesResult.Data.OrderBy(x => x.Value.ToLowerInvariant()).Select(
                                         x => new ListOption
                                         {
@@ -734,6 +732,23 @@ public partial class Flow : ComponentBase, IDisposable
                 if (dictNew?.TryGetValue("MatchConditions", out var oMatches) == true)
                 {
                     outputs = ObjectHelper.GetArrayLength(oMatches) + 1; // add +1 for not matching
+                }
+            }
+            else 
+            {
+                foreach (var key in dictNew.Keys)
+                {
+                    // DockerExecute.AdditionalOutputs uses this
+                    if (key.EndsWith("Outputs"))
+                    {
+                        var value = dictNew[key];
+                        var valueOutputs = ObjectHelper.GetArrayLength(value);
+                        if (valueOutputs > 0)
+                        {
+                            outputs = valueOutputs + 1;
+                            break;
+                        }
+                    }
                 }
             }
         }

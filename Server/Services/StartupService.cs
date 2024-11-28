@@ -108,7 +108,7 @@ public class StartupService
 
             ServiceLoader.Load<LanguageService>().Initialize().Wait();
 
-            LibraryWorker.ResetProcessing(internalOnly: true);
+            new LibraryFileService().ResetProcessingStatus(CommonVariables.InternalNodeUid).Wait();
 
             DataLayerDelegates.Setup();
             
@@ -173,7 +173,7 @@ public class StartupService
             new StartupWorker(),
             new LicenseValidatorWorker(),
             new SystemMonitor(),
-            new LibraryWorker(),
+            //new LibraryWorker(),
             new LogFileCleaner(),
             new FlowWorker(string.Empty, isServer: true),
             new ConfigCleaner(),
@@ -192,6 +192,9 @@ public class StartupService
             new UpdateWorker()
             //new LibraryFileServiceUpdater()
         );
+
+        // setup the library watches
+        ServiceLoader.Load<LibraryService>().SetupWatches().Wait();
     }
 
     /// <summary>
@@ -246,7 +249,7 @@ public class StartupService
     /// </summary>
     private void BackupSqlite()
     {
-        if (appSettingsService.Settings.DatabaseType is DatabaseType.Sqlite or DatabaseType.SqliteNewConnection == false)
+        if (appSettingsService.Settings.DatabaseType is DatabaseType.Sqlite or DatabaseType.SqlitePooledConnection == false)
             return;
         if (appSettingsService.Settings.DatabaseMigrateType != null)
             return;
@@ -311,28 +314,23 @@ public class StartupService
 
         bool needsUpgrade = upgradeRequired.Value.Required;
 
-        if (needsUpgrade == false)
+        if (needsUpgrade)
         {
-            upgrader.EnsureColumnsExist(appSettingsService);
-            return true;
+            UpdateStatus("Backing up old database...");
+            upgrader.Backup(upgradeRequired.Value.Current, appSettingsService.Settings,
+                (details) => { UpdateStatus("Backing up old database...", details); });
+
+            UpdateStatus("Upgrading Please Wait...");
+            var upgradeResult = upgrader.Run(upgradeRequired.Value.Current, appSettingsService,
+                (details) => { UpdateStatus("Upgrading Please Wait...", details); });
+            if (upgradeResult.Failed(out error))
+                return Result<bool>.Fail(error);
         }
+        
+        
+        upgrader.EnsureColumnsExist(appSettingsService);
+        upgrader.EnsureDefaultsExist(appSettingsService);
 
-
-        UpdateStatus("Backing up old database...");
-        upgrader.Backup(upgradeRequired.Value.Current, appSettingsService.Settings, (details) =>
-        {
-            UpdateStatus("Backing up old database...", details);
-        });
-        
-        UpdateStatus("Upgrading Please Wait...");
-        var upgradeResult = upgrader.Run(upgradeRequired.Value.Current, appSettingsService,(details) =>
-        {
-            UpdateStatus("Upgrading Please Wait...", details);
-        });
-        if(upgradeResult.Failed(out error))
-            return Result<bool>.Fail(error);
-        
-        
         return true;
     }
 

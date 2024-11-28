@@ -6,8 +6,10 @@
 public class FlowManager : CachedManager<Flow>
 {
     static FlowManager()
-        => new FlowManager().Refresh().Wait();
-    
+    {
+        new FlowManager().Refresh().Wait();
+    }
+
     /// <inheritdoc />
     protected override bool SaveRevisions => true;
 

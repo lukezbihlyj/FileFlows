@@ -15,8 +15,9 @@
     position: relative;
     align-self: center;
     margin-right:1rem;
-    img {
+    ::deep img {
       height: 4rem;
+      object-fit: contain;
       padding: 0 1rem;
       max-width: 5rem;
     }

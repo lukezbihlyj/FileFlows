@@ -145,19 +145,24 @@
     "Tag": "標籤",
     "Test": "測試",
     "Time": "時間",
+    "TooManyDockerMods": "您選擇了過多的DockerMods，這可能會影響效能，而且您可能不需要安裝所有這些DockerMods。",
     "Total": "總計",
     "Trigger": "觸發",
     "Type": "類型",
     "Undo": "撤銷",
+    "Unlicensed": "未授權",
+    "UnlicensedFlowElement": "使用此流程元素需要{level}級許可證。",
     "UnsavedChanges": "未儲存的變更",
     "Update": "更新",
     "UpdateAll": "全部更新",
     "UpdateAvailable": "有新版本可用 {version}",
+    "Upload": "上傳",
     "UsedBy": "被使用者",
     "Version": "版本",
     "VersionNumber": "版本： {version}",
     "View": "查看",
     "ViewLog": "查看日誌",
+    "Warning": "警告",
     "WeekShort": "週",
     "When": "當",
     "Yes": "是",
@@ -197,6 +202,7 @@
       "Title": "添加檔案",
       "Fields": {
         "AnyNode": "任何節點",
+        "DropFile": "將文件拖到此處或單擊上傳",
         "Flow": "流程",
         "List": "清單",
         "Mode": "輸入模式",
@@ -225,8 +231,17 @@
       "DirectoryTitle": "選擇目錄",
       "FileTitle": "選擇檔案"
     },
+    "FileUpload": {
+      "Complete": "上傳成功完成",
+      "ETA": "預計到達時間",
+      "Speed": "速度",
+      "UploadedAmount": "已上傳"
+    },
     "FlowTemplatePicker": {
       "Title": "選擇一個模板作為起點"
+    },
+    "IconPicker": {
+      "Title": "選擇圖標"
     },
     "Import": {
       "Message": "選擇一個已導出的流程以導入系統。",
@@ -500,6 +515,7 @@
       "Nodes": "節點",
       "PauseProcessing": "暫停處理",
       "Plugins": "插件",
+      "Resources": "文件",
       "Revisions": "版本",
       "Scripts": "腳本",
       "Tasks": "任務",
@@ -902,10 +918,6 @@
         "Flow": "流程",
         "Folders": "資料夾",
         "Folders-Help": "如果此資料庫處理的是資料夾而不是檔案。\n這並不意味著要掃描子資料夾，資料庫已經會這麼做。\n這意味著會處理資料夾對象而非個別檔案。",
-        "FullScanDisabled": "禁用全掃描",
-        "FullScanDisabled-Help": "全掃描的目的是捕獲任何可能被檔案系統觀察事件遺漏的檔案。",
-        "FullScanIntervalMinutes": "全掃描間隔",
-        "FullScanIntervalMinutes-Help": "設置此資料庫應進行全掃描的間隔時間",
         "HoldMinutes": "等待分鐘數",
         "HoldMinutes-Help": "可選地將找到的檔案在處理前保留此時間段。\n每個檔案將保留此時間段。",
         "HoldMinutes-Suffix": "分鐘",
@@ -919,11 +931,8 @@
         "ProcessingOrder-Help": "資料庫檔案的處理順序。",
         "ReprocessRecreatedFiles": "重新處理重建檔案",
         "ReprocessRecreatedFiles-Help": "啟用後，如果檔案重新檢測到的創建時間與記錄的不一致，將自動重新處理該檔案。\n這在下載的檔案資料庫中很有幫助，您可能多次下載相同的檔案並希望每次處理它。",
-        "Scan": "掃描",
-        "Scan-Help": "啟用掃描時，資料庫將定期掃描新內容。\n停用掃描時，資料庫將監聽檔案系統事件以檢測新檔案。\n除非遇到檔案未被檢測到的問題，否則最好將此選項關閉。",
         "ScanInterval": "掃描間隔",
-        "ScanInterval-Help": "兩次掃描之間的最短可能時間（以秒為單位）。不保證每次都會按此間隔掃描，因為另一掃描可能正在進行中。",
-        "ScanInterval-Suffix": "秒",
+        "ScanInterval-Help": "觸發資料庫掃描的時間間隔。檔案系統事件會被監控以即時檢測變更，但排程掃描可確保即使遺漏檔案系統事件，也能對資料庫進行完整掃描。",
         "Schedule": "排程",
         "ScheduleDescription": "這允許您設定此資料庫的活動時間。\n\n在排程之外，資料庫掃描器將不會針對此資料庫運行，也不會處理任何檔案。",
         "SkipFileAccessTests": "跳過檔案訪問測試",
@@ -1078,6 +1087,7 @@
         "Enabled": "啟用",
         "FlowRunners": "流程執行者",
         "FlowRunners-Help": "可用於執行流程的流程執行者實例數量。",
+        "Icon": "自訂圖標",
         "InternalProcessingNodeDescription": "這是FileFlows內建的處理節點。\n\n此節點允許您在不需要在遠程系統上安裝任何其他節點的情況下運行FileFlows，並將FileFlows作為自包含的應用程式使用。\n\n您可以繼續使用此內部節點以及額外的處理節點，或者您可以禁用此節點並僅使用其他節點。",
         "Libraries": "資料庫",
         "Libraries-Help": "選擇此節點可以處理的資料庫",
@@ -1150,6 +1160,13 @@
         "Code": "代碼",
         "Description": "描述",
         "Revision": "修訂"
+      }
+    },
+    "Resources": {
+      "Singular": "資源",
+      "Title": "資源",
+      "Fields": {
+        "FileData": "文件"
       }
     },
     "Revisions": {
@@ -1517,6 +1534,10 @@
       "Description": "一個允許您向 Discord 伺服器發送消息的插件。\n\nWebhook Id 和令牌可以從 webhook URL 獲取\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "一個與Docker互動的插件，以實現Docker資源和過程的靈活整合、互動和管理。",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "此插件允許您在執行流程時發送電子郵件。",
       "Label": "電子郵件"
@@ -1703,7 +1724,8 @@
   "Validators": {
     "Pattern": "無效",
     "Range": "必須在 {Minimum} 和 {Maximum} 之間",
-    "Required": "必填"
+    "Required": "必填",
+    "SafeName": "必須以字母或底線開頭，且只能包含字母、數字或底線。禁止使用特殊字符或空格。"
   },
   "Widgets": {
     "AudioCodecs": "音頻編碼器",

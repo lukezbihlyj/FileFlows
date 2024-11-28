@@ -524,7 +524,7 @@ public class NodeParameters
                     Logger.ILog("init not done");
                     initDone = true;
                     if (FileName.StartsWith("http", StringComparison.InvariantCultureIgnoreCase) == false 
-                        && FileService.FileInfo(this.FileName).Success(out var fiOriginal))
+                        && FileService.FileInfo(this.FileName).Success(out var fiOriginal) && fiOriginal != null)
                     {
                         UpdateVariables(new Dictionary<string, object>
                         {
@@ -621,11 +621,13 @@ public class NodeParameters
     public void SetWorkingFile(string filename, bool dontDelete = false)
     {
         if (Fake) return;
-
-        bool isDirectory = Directory.Exists(filename);
+        // special case eg nc: for next cloud, where the file wont be accessible so we just set it so it appears nicely in the UI but its gone
+        bool fakeFile = Regex.IsMatch(filename, @"^[\w\d]{2,}:");
+        
+        bool isDirectory =fakeFile ? false : Directory.Exists(filename);
         Logger?.ILog("Setting working file to: " + filename);
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == false)
+        if (fakeFile == false && RuntimeInformation.IsOSPlatform(OSPlatform.Windows) == false)
         {
             if (filename?.ToLower().StartsWith(TempPath.ToLower()) == true)
             {
@@ -675,7 +677,8 @@ public class NodeParameters
         }
         this.IsDirectory = IsDirectory;
         this.WorkingFile = filename;
-        InitFile(filename);
+        if(fakeFile == false)
+            InitFile(filename);
     }
 
     
@@ -892,10 +895,11 @@ public class NodeParameters
         if (Fake) return filename?.EmptyAsNull() ?? "/mnt/temp/fakefile.mkv";
             
         filename ??= WorkingFile;
-        if (filename.StartsWith(TempPath))
+        var fileInfo = new FileInfo(filename);
+        if (fileInfo.Directory?.FullName == TempPath)
             return filename;
-        string dest = Path.Combine(TempPath, new FileInfo(filename).Name);
-        File.Copy(filename, dest);
+        string dest = Path.Combine(TempPath, fileInfo.Name);
+        File.Copy(filename, dest, true);
         return dest;
     }
 

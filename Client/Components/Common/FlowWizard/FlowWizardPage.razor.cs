@@ -22,6 +22,11 @@ public partial class FlowWizardPage : ComponentBase
     /// Gets or sets the content of the page.
     /// </summary>
     [Parameter] public RenderFragment ChildContent { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a method to call to check if this page can be advanced
+    /// </summary>
+    [Parameter] public Func<Task<bool>>? OnPageAdvanced { get; set; }
 
 
 #pragma warning disable BL0007

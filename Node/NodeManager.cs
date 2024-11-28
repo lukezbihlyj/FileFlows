@@ -116,7 +116,7 @@ public class NodeManager
             //new RestApiWorker(), // is this used?
             new LogFileCleaner(),
             new TempFileCleaner(AppSettings.Instance.HostName), 
-            new SystemStatisticsWorker(),
+            //new SystemStatisticsWorker(),
             new ConfigCleaner()
         );
     }

@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using FileFlows.Plugin;
-using FileFlows.Shared;
 
 namespace FileFlows.ServerShared;
 
@@ -20,6 +18,10 @@ public class TemporaryLogger : ILogger
     /// <param name="args">the log parameters</param>
     public void ILog(params object[] args)
         => Log(LogType.Info, args);
+
+    /// <inheridoc />
+    public void Raw(params object[] args)
+        => Log(LogType.Raw, args);
 
     /// <summary>
     /// Writes an debug log message
@@ -86,6 +88,9 @@ public class TemporaryLogger : ILogger
                     break;
                 case LogType.Error:
                     other.ELog(msg.Message);
+                    break;
+                case LogType.Raw:
+                    other.Raw(msg.Message);
                     break;
             }
         }

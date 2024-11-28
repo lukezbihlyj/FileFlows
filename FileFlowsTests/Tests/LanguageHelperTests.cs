@@ -111,4 +111,31 @@ public class LanguageHelperTests: TestBase
         Assert.IsTrue(LanguageHelper.Matches(args, "!/fre|eng/", "deu"));
         Assert.IsFalse(LanguageHelper.Matches(args, "!/orig|eng/", "eng"));
     }
+
+    /// <summary>
+    /// Test method for German languages
+    /// </summary>
+    [TestMethod]
+    public void Matches_German()
+    {
+        args.Variables["OriginalLanguage"] = "deu";
+        Assert.IsTrue(LanguageHelper.Matches(args, "German", "deu"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "German", "de"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "German", "ger"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "German", "Deutsch"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "German", "allemand"));
+        
+        Assert.IsTrue(LanguageHelper.Matches(args, "deu", "deu"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "deu", "de"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "deu", "ger"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "deu", "Deutsch"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "deu", "allemand"));
+        
+        Assert.IsTrue(LanguageHelper.Matches(args, "de", "deu"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "de", "de"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "de", "ger"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "de", "Deutsch"));
+        Assert.IsTrue(LanguageHelper.Matches(args, "de", "allemand"));
+        
+    }
 }

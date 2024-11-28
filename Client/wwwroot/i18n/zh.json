@@ -145,19 +145,24 @@
     "Tag": "标签",
     "Test": "测试",
     "Time": "时间",
+    "TooManyDockerMods": "您选择了过多的DockerMods，这可能会影响性能，您可能不需要安装所有这些DockerMods。",
     "Total": "总计",
     "Trigger": "触发",
     "Type": "类型",
     "Undo": "撤销",
+    "Unlicensed": "未授权",
+    "UnlicensedFlowElement": "使用此流程元素需要{level}级许可证。",
     "UnsavedChanges": "未保存的更改",
     "Update": "更新",
     "UpdateAll": "更新全部",
     "UpdateAvailable": "新版本可用 {version}",
+    "Upload": "上传",
     "UsedBy": "使用者",
     "Version": "版本",
     "VersionNumber": "版本：{version}",
     "View": "查看",
     "ViewLog": "查看日志",
+    "Warning": "警告",
     "WeekShort": "周",
     "When": "时间",
     "Yes": "是",
@@ -197,6 +202,7 @@
       "Title": "添加文件",
       "Fields": {
         "AnyNode": "任何节点",
+        "DropFile": "将文件拖到此处或单击上传",
         "Flow": "流程",
         "List": "列表",
         "Mode": "输入模式",
@@ -225,8 +231,17 @@
       "DirectoryTitle": "选择目录",
       "FileTitle": "选择文件"
     },
+    "FileUpload": {
+      "Complete": "上传成功完成",
+      "ETA": "预计到达时间",
+      "Speed": "速度",
+      "UploadedAmount": "已上传"
+    },
     "FlowTemplatePicker": {
       "Title": "选择一个模板开始"
+    },
+    "IconPicker": {
+      "Title": "选择图标"
     },
     "Import": {
       "Message": "选择一个导出的流导入系统。",
@@ -500,6 +515,7 @@
       "Nodes": "节点",
       "PauseProcessing": "暂停处理",
       "Plugins": "插件",
+      "Resources": "资源",
       "Revisions": "修订",
       "Scripts": "脚本",
       "Tasks": "任务",
@@ -902,10 +918,6 @@
         "Flow": "流",
         "Folders": "文件夹",
         "Folders-Help": "如果此库处理文件夹而不是文件。\n这并不意味着要扫描子文件夹，库会自动执行此操作。\n这意味着将处理文件夹对象，而不是单个文件。",
-        "FullScanDisabled": "禁用完整扫描",
-        "FullScanDisabled-Help": "完整扫描的预期目的是捕获文件系统监视事件可能遗漏的任何文件。",
-        "FullScanIntervalMinutes": "完整扫描间隔",
-        "FullScanIntervalMinutes-Help": "应该进行此库完整扫描的间隔",
         "HoldMinutes": "保留分钟数",
         "HoldMinutes-Help": "可选地将在此库中找到的任何文件保留此分钟数，然后再处理它们。每个文件将保留此时间。",
         "HoldMinutes-Suffix": "分钟",
@@ -919,11 +931,8 @@
         "ProcessingOrder-Help": "此库将处理文件的顺序。",
         "ReprocessRecreatedFiles": "重新处理重新创建的文件",
         "ReprocessRecreatedFiles-Help": "启用时，如果一个文件在被重新检测到时与记录的创建时间不同，则该文件将自动设置为重新处理。\n这在下载文件的库中非常有用，您可能会多次下载相同的文件并希望每次都处理它。",
-        "Scan": "扫描",
-        "Scan-Help": "启用扫描时，库将定期扫描以获取新内容。\n禁用时，库将监听文件系统事件以检测新文件。\n除非您遇到未检测到文件的问题，否则最好保持关闭状态。",
         "ScanInterval": "扫描间隔",
-        "ScanInterval-Help": "扫描之间的最短时间（以秒为单位）。不能保证每次都在此间隔扫描，因为可能正在进行其他扫描。",
-        "ScanInterval-Suffix": "秒",
+        "ScanInterval-Help": "触发库扫描的时间间隔。文件系统事件会被监控以实时检测更改，但计划扫描可确保在错过文件系统事件的情况下对库进行完整扫描。",
         "Schedule": "计划",
         "ScheduleDescription": "这允许您配置此库的活动时间。\n\n库扫描程序将不会对该库运行，也不会在计划外处理任何文件。\n",
         "SkipFileAccessTests": "跳过文件访问测试",
@@ -1078,6 +1087,7 @@
         "Enabled": "启用",
         "FlowRunners": "流程运行程序",
         "FlowRunners-Help": "可用于执行流程的流程运行程序实例的数量。",
+        "Icon": "自定义图标",
         "InternalProcessingNodeDescription": "这是FileFlows中的内置处理节点。\n\n此节点允许您运行FileFlows，而无需担心在远程系统上安装任何其他节点，并允许您将FileFlows用作自包含的应用程序。\n\n如果愿意，您可以继续使用此内部节点和附加处理节点，或者您可以禁用此节点，仅使用附加节点。",
         "Libraries": "库",
         "Libraries-Help": "选择此节点可以处理哪些库",
@@ -1150,6 +1160,13 @@
         "Code": "代码",
         "Description": "描述",
         "Revision": "修订版"
+      }
+    },
+    "Resources": {
+      "Singular": "资源",
+      "Title": "资源",
+      "Fields": {
+        "FileData": "文件"
       }
     },
     "Revisions": {
@@ -1517,6 +1534,10 @@
       "Description": "一个插件，允许您向Discord服务器发送消息。\n\nWebhook ID和令牌可以从Webhook URL中获取\n https://discord.com/api/webhooks/[webhookid]/[webhooktoken]",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "一个与Docker交互的插件，以实现Docker资源和过程的灵活集成、交互和管理。",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "此插件允许您在执行流程时发送电子邮件。",
       "Label": "电子邮件"
@@ -1703,7 +1724,8 @@
   "Validators": {
     "Pattern": "无效",
     "Range": "必须在 {Minimum} 和 {Maximum} 之间",
-    "Required": "必填"
+    "Required": "必填",
+    "SafeName": "必须以字母或下划线开头，且只能包含字母、数字或下划线。不允许使用特殊字符或空格。"
   },
   "Widgets": {
     "AudioCodecs": "音频编码器",

@@ -189,4 +189,21 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         return va == vb;
     }
 
+    /// <summary>
+    /// Gets the default icon for a node
+    /// </summary>
+    /// <param name="node">the node</param>
+    /// <returns>the default icon</returns>
+    private string GetDefaultIcon(ProcessingNode node)
+    {
+        if (node.OperatingSystem == OperatingSystemType.Mac)
+            return "svg:apple";
+        if (node.OperatingSystem == OperatingSystemType.Docker)
+            return "svg:docker";
+        if (node.OperatingSystem == OperatingSystemType.Windows)
+            return "svg:windows";
+        if (node.OperatingSystem == OperatingSystemType.Linux)
+            return "svg:linux";
+        return "fas fa-desktop";
+    }
 }

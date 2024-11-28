@@ -1,0 +1,25 @@
+.input-file-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview {
+  margin-bottom: 1rem;
+}
+.preview img {
+  max-width: 100%;
+}
+.preview i {
+  font-size: 3rem;
+}
+.preview pre {
+  color: var(--color);
+  max-width: 100%;
+  overflow: auto;
+  max-height: 30rem;
+  white-space: pre-wrap;
+}
+
+.btn {
+  max-width: 10rem;
+}

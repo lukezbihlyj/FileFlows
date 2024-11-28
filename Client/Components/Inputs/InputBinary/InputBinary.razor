@@ -1,0 +1,49 @@
+@namespace FileFlows.Client.Components.Inputs
+@inherits Input<FileData>
+
+<InputWrapper Input="@this">
+    <div class="input-file-wrapper">
+        @if (!string.IsNullOrWhiteSpace(Value?.MimeType))
+        {
+        <div class="preview">
+            @* Determine the MIME type category *@
+            @{
+            string mimeTypeCategory = Value.MimeType.Split('/')[0];
+            bool isTruncated = false;
+            string textContent = string.Empty;
+            }
+
+            @* Handle different MIME types *@
+            @if (mimeTypeCategory == "image")
+            {
+                <img src="data:@(Value.MimeType);base64,@(Convert.ToBase64String(Value.Content))" alt="Uploaded Image" />
+            }
+            else if (mimeTypeCategory == "text")
+            {
+                const int maxLength = 10 * 1024; // 10 KB limit
+                isTruncated = Value.Content.Length > maxLength;
+
+                // Get the first 10 KB of content if necessary
+                byte[] truncatedContent = isTruncated
+                ? Value.Content[..maxLength]
+                : Value.Content;
+
+                // Convert to string
+                textContent = System.Text.Encoding.UTF8.GetString(truncatedContent);
+
+                <pre>@textContent</pre>
+
+                @if (isTruncated)
+                {
+                    <span>...</span>
+                }
+            }
+            else
+            {
+                <i class="fas fa-file"></i>
+            }
+        </div>
+        }
+        <button class="btn" @onclick="Browse">@lblBrowse</button>
+    </div>
+</InputWrapper>

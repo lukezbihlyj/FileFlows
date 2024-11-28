@@ -15,7 +15,6 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
             Timeout = 5000,
             State = WaitForSelectorState.Visible
         });
-        await btn.HighlightAsync();
         await btn.ClickAsync();
     }
 
@@ -63,7 +62,6 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
         // get the parent of the locator whose class is .flowtable-row
         // Use XPath to find the nearest ancestor with the class .flowtable-row
         // var flowtableRowLocator = locator.First.Locator("xpath=ancestor::div[contains(@class, 'flowtable-row')]");
-        // await flowtableRowLocator.HighlightAsync();
         var checkbox = locator.Locator(".flowtable-select input[type=checkbox]").First;
 
         var chk = await checkbox.IsCheckedAsync();
@@ -132,7 +130,6 @@ public class Table(TestBase test, ILogger logger) : UiComponent(test)
     public async Task DoubleClick(string name)
     {
         var item = ItemLocator(name, false);
-        await item.HighlightAsync();
         await item.DblClickAsync();
     }
 }

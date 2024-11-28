@@ -10,9 +10,9 @@ using DatabaseType = FileFlows.Shared.Models.DatabaseType;
 namespace FileFlows.DataLayer.DatabaseConnectors;
 
 /// <summary>
-/// Connector for SQLite
+/// Connector for SQLite Pooled Connectiion
 /// </summary>
-public class SQLiteConnector : IDatabaseConnector
+public class SQLiteConnectorPooledConnection : IDatabaseConnector
 {
     private DatabaseConnection dbConnectionWrite;
     private FairSemaphore writeSemaphore = new(1);
@@ -49,7 +49,7 @@ public class SQLiteConnector : IDatabaseConnector
     /// <param name="logger">the logger to use</param>
     /// <param name="connectionString">the connection string</param>
     /// <param name="cached">if the connectino is cached or not</param>
-    public SQLiteConnector(ILogger logger, string connectionString, bool cached = false)
+    public SQLiteConnectorPooledConnection(ILogger logger, string connectionString, bool cached = false)
     {
         Cached = cached;
         Logger = logger;

@@ -145,19 +145,24 @@
     "Tag": "タグ",
     "Test": "テスト",
     "Time": "時間",
+    "TooManyDockerMods": "DockerModsが多すぎます。これにより性能が低下する可能性があり、すべてのDockerModsをインストールする必要はないかもしれません。",
     "Total": "合計",
     "Trigger": "トリガー",
     "Type": "タイプ",
     "Undo": "元に戻す",
+    "Unlicensed": "未ライセンス",
+    "UnlicensedFlowElement": "{level}ライセンスが必要です。このフロー要素を使用するには。",
     "UnsavedChanges": "保存されていない変更",
     "Update": "更新",
     "UpdateAll": "すべて更新",
     "UpdateAvailable": "新しいバージョンが利用可能です {version}",
+    "Upload": "アップロード",
     "UsedBy": "使用者",
     "Version": "バージョン",
     "VersionNumber": "バージョン: {version}",
     "View": "表示",
     "ViewLog": "ログを表示",
+    "Warning": "警告",
     "WeekShort": "週",
     "When": "いつ",
     "Yes": "はい",
@@ -197,6 +202,7 @@
       "Title": "ファイルを追加",
       "Fields": {
         "AnyNode": "任意のノード",
+        "DropFile": "ファイルをここにドラッグするか、クリックしてアップロード",
         "Flow": "フロー",
         "List": "リスト",
         "Mode": "入力モード",
@@ -225,8 +231,17 @@
       "DirectoryTitle": "ディレクトリを選択",
       "FileTitle": "ファイルを選択"
     },
+    "FileUpload": {
+      "Complete": "アップロードが正常に完了しました",
+      "ETA": "推定残り時間",
+      "Speed": "速度",
+      "UploadedAmount": "アップロード済み"
+    },
     "FlowTemplatePicker": {
       "Title": "開始するテンプレートを選択"
+    },
+    "IconPicker": {
+      "Title": "アイコンを選択"
     },
     "Import": {
       "Message": "システムにインポートするためにエクスポートされたフローを選択します。",
@@ -500,6 +515,7 @@
       "Nodes": "ノード",
       "PauseProcessing": "処理を一時停止",
       "Plugins": "プラグイン",
+      "Resources": "リソース",
       "Revisions": "リビジョン",
       "Scripts": "スクリプト",
       "Tasks": "タスク",
@@ -902,10 +918,6 @@
         "Flow": "フロー",
         "Folders": "フォルダー",
         "Folders-Help": "このライブラリがファイルの代わりにフォルダーを処理する場合。\nこれはサブフォルダーをスキャンすることを意味するのではなく、ライブラリはすでにこれを行います。\nフォルダーオブジェクトが個々のファイルの代わりに処理されます。",
-        "FullScanDisabled": "フルスキャンを無効にする",
-        "FullScanDisabled-Help": "フルスキャンの目的は、ファイルシステムの監視イベントによって見逃される可能性のあるファイルをキャッチすることです。",
-        "FullScanIntervalMinutes": "フルスキャン間隔",
-        "FullScanIntervalMinutes-Help": "このライブラリのフルスキャンが実行される間隔",
         "HoldMinutes": "保持時間",
         "HoldMinutes-Help": "オプションで、このライブラリで見つかったファイルを処理する前に、これらの分だけ保持します。各ファイルはこの時間だけ保持されます。",
         "HoldMinutes-Suffix": "分",
@@ -919,11 +931,8 @@
         "ProcessingOrder-Help": "このライブラリによってファイルが処理される順序。",
         "ReprocessRecreatedFiles": "再作成されたファイルを再処理",
         "ReprocessRecreatedFiles-Help": "有効にすると、異なる作成時間で再検出されたファイルは自動的に再処理に設定されます。\nこれは、ダウンロードされたファイルのライブラリで役立ちます。同じファイルを複数回ダウンロードして毎回処理したい場合。",
-        "Scan": "スキャン",
-        "Scan-Help": "スキャンが有効な場合、ライブラリは新しいコンテンツを定期的にスキャンします。\n無効な場合、ライブラリはファイルシステムイベントをリッスンして新しいファイルを検出します。\nファイルが検出されない問題がある場合を除き、これをオフのままにすることをお勧めします。",
         "ScanInterval": "スキャン間隔",
-        "ScanInterval-Help": "スキャン間隔の最短時間（秒）。他のスキャンが進行中である可能性があるため、毎回この間隔でスキャンされる保証はありません。",
-        "ScanInterval-Suffix": "秒",
+        "ScanInterval-Help": "ライブラリのスキャンがトリガーされる時間間隔です。ファイルシステムのイベントはリアルタイムでの変更を検出するために監視されますが、スケジュールされたスキャンは、ファイルシステムイベントが見逃された場合でもライブラリ全体をスキャンすることを保証します。",
         "Schedule": "スケジュール",
         "ScheduleDescription": "このライブラリがアクティブになる時期を設定できます。\n\nライブラリスキャナーはこのライブラリに対して実行されず、スケジュール外でファイルが処理されることはありません。",
         "SkipFileAccessTests": "ファイルアクセステストをスキップ",
@@ -1078,6 +1087,7 @@
         "Enabled": "有効",
         "FlowRunners": "フローロンナー",
         "FlowRunners-Help": "フローを実行するために使用できるフローロンナーインスタンスの数。",
+        "Icon": "カスタムアイコン",
         "InternalProcessingNodeDescription": "これはFileFlows内蔵の処理ノードです。\n\nこのノードを使用すると、リモートシステムに他のノードをインストールすることを心配せずにFileFlowsを実行でき、FileFlowsを自己完結型アプリケーションとして使用できます。\n\nこの内部ノードと追加の処理ノードを引き続き使用することもできますし、このノードを無効にして追加のノードのみを使用することもできます。",
         "Libraries": "ライブラリ",
         "Libraries-Help": "このノードが処理できるライブラリを選択",
@@ -1150,6 +1160,13 @@
         "Code": "コード",
         "Description": "説明",
         "Revision": "改訂"
+      }
+    },
+    "Resources": {
+      "Singular": "リソース",
+      "Title": "リソース",
+      "Fields": {
+        "FileData": "ファイル"
       }
     },
     "Revisions": {
@@ -1517,6 +1534,10 @@
       "Description": "Discordサーバーにメッセージを送信できるプラグインです。",
       "Label": "Discord"
     },
+    "Docker": {
+      "Description": "Dockerリソースとプロセスの柔軟な統合、操作、および管理を可能にするDockerインターフェースプラグイン。",
+      "Label": "Docker"
+    },
     "EmailNodes": {
       "Description": "このプラグインを使用すると、フローを実行している間にメールを送信できます。",
       "Label": "メール"
@@ -1703,7 +1724,8 @@
   "Validators": {
     "Pattern": "無効です",
     "Range": "{Minimum} から {Maximum} の間でなければなりません",
-    "Required": "必須"
+    "Required": "必須",
+    "SafeName": "文字またはアンダースコアで始まり、文字、数字、アンダースコアのみを含む必要があります。特殊文字やスペースは使用できません。"
   },
   "Widgets": {
     "AudioCodecs": "オーディオコーデック",

@@ -12,6 +12,10 @@ public class CliLogger : Plugin.ILogger
         => Log(LogType.Info, args);
 
     /// <inheritdoc />
+    public void Raw(params object[] args)
+        => Log(LogType.Raw, args);
+
+    /// <inheritdoc />
     public void DLog(params object[] args)
         => Log(LogType.Debug, args);
     
@@ -34,7 +38,7 @@ public class CliLogger : Plugin.ILogger
     /// <param name="args">the arguments of the message</param>
     private void Log(LogType type, params object[] args)
     {
-        string prefix = type is LogType.Info or LogType.Debug ? string.Empty : type + ": ";
+        string prefix = type is LogType.Info or LogType.Debug or LogType.Raw ? string.Empty : type + ": ";
         
         string message = prefix + string.Join(", ", args.Select(x =>
             x == null ? "null" :

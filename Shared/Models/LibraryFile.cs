@@ -337,12 +337,6 @@ public class LibraryFileAdditional
     /// Gets or sets the version of FileFlows this file was processed on
     /// </summary>
     public string? Version { get; set; } = null;
-
-    /// <summary>
-    /// Gets or sets the list of flows that were executed
-    /// </summary>
-    public List<Flow>? ExecutedFlows { get; set; } = null;
-
 }
 
 /// <summary>

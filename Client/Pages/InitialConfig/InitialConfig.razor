@@ -84,7 +84,7 @@ else
                 @if (Profile.ServerOS == OperatingSystemType.Docker && AvailableDockerMods?.Any() == true)
                 {
                     <FlowWizardPage Title="@lblDockerMods" Disabled="@(EulaAccepted == false)"
-                                    Description="@lblDockerModsDescription">
+                                    Description="@lblDockerModsDescription" OnPageAdvanced="OnDockerModPageAdvanced">
                         <FlowTable @ref="DockerModTable" Data="AvailableDockerMods" TItem="RepositoryObject"
                                    HideHead="true" HideToolbar="true" Selection="SelectionMode.Multiple"
                                    TableIdentifier="InitialConfigDockerMods" DontClearOnClick="true">
@@ -141,3 +141,5 @@ else
 
     </div>
 }
+
+<FileFlows.Client.Components.Dialogs.MessageBox />

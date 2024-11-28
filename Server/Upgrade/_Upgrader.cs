@@ -229,9 +229,20 @@ public class Upgrader
     /// <summary>
     /// Ensures the expected columns exist
     /// </summary>
+    /// <param name="appSettingsService">the app settings service</param>
     public void EnsureColumnsExist(AppSettingsService appSettingsService)
     {
         var manager = GetUpgradeManager(appSettingsService.Settings);
         new DatabaseValidator(Logger.Instance, appSettingsService, manager).EnsureColumnsExist().Wait();
+    }
+
+    /// <summary>
+    /// Ensures any default values exist
+    /// </summary>
+    /// <param name="appSettingsService">the app settings service</param>
+    public void EnsureDefaultsExist(AppSettingsService appSettingsService)
+    {
+        var manager = GetUpgradeManager(appSettingsService.Settings);
+        new DatabaseValidator(Logger.Instance, appSettingsService, manager).EnsureDefaultsExist().Wait();
     }
 }

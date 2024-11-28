@@ -60,11 +60,32 @@ public partial class FlowWizard : ComponentBase
     /// Selects a page
     /// </summary>
     /// <param name="page">The page to select.</param>
-    private void SelectPage(FlowWizardPage page)
+    private async Task SelectPage(FlowWizardPage page)
     {
         if (DisableChanging || page.Disabled) return;
+        if (await CheckAdvancing(page) == false)
+            return;
+        
         ActivePage = page;
-        OnPageChanged.InvokeAsync(Pages.IndexOf(page));
+        await OnPageChanged.InvokeAsync(Pages.IndexOf(page));
+        StateHasChanged();
+    }
+ 
+    /// <summary>
+    /// Checks if the page is allowed to be advanced
+    /// </summary>
+    /// <param name="page">the page we are advancing to</param>
+    /// <returns>true if can go to this page</returns>
+    private async Task<bool> CheckAdvancing(FlowWizardPage page)
+    {
+        if (page == null || ActivePage == null)
+            return true;
+        if (ActivePage?.OnPageAdvanced == null)
+            return true;
+        bool advancing = Pages.IndexOf(page) > Pages.IndexOf(ActivePage);
+        if (advancing == false)
+            return true;
+        return await ActivePage.OnPageAdvanced.Invoke();
     }
 
     /// <summary>
@@ -112,7 +133,7 @@ public partial class FlowWizard : ComponentBase
                 break;
         }
         
-        SelectPage(Pages[index]);
+        _ = SelectPage(Pages[index]);
     }
     
     /// <summary>
@@ -132,7 +153,7 @@ public partial class FlowWizard : ComponentBase
             if (Pages[index].Visible)
                 break;
         }
-        SelectPage(Pages[index]);
+        _ = SelectPage(Pages[index]);
     }
 
     /// <summary>

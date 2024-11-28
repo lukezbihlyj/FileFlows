@@ -373,7 +373,7 @@ public class RunInstance
             WorkingFile = workingFile,
             IsDirectory = lib.Folders,
             LibraryPath = lib.Path, 
-            Fingerprint = lib.UseFingerprinting,
+            //Fingerprint = lib.UseFingerprinting,
             InitialSize = initialSize,
             AdditionalInfos = new ()
         };

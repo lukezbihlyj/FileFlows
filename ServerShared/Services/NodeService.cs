@@ -75,12 +75,12 @@ public interface INodeService
     /// <returns></returns>
     Task<byte[]> GetNodeUpdater();
 
-    /// <summary>
-    /// Records the node system statistics to the server
-    /// </summary>
-    /// <param name="args">the node system statistics</param>
-    /// <returns>the task to await</returns>
-    Task RecordNodeSystemStatistics(NodeSystemStatistics args);
+    // /// <summary>
+    // /// Records the node system statistics to the server
+    // /// </summary>
+    // /// <param name="args">the node system statistics</param>
+    // /// <returns>the task to await</returns>
+    // Task RecordNodeSystemStatistics(NodeSystemStatistics args);
 
     /// <summary>
     /// Pauses the system for the given time

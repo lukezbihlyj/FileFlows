@@ -84,29 +84,6 @@ public partial class DockerMods : ListPage<Guid, DockerMod>
             this.StateHasChanged();
         }
     }
-    
-    /// <summary>
-    /// we only want to do the sort the first time, otherwise the list will jump around for the user
-    /// </summary>
-    private List<Guid> initialSortOrder;
-    
-    /// <inheritdoc />
-    public override Task PostLoad()
-    {
-        if (initialSortOrder == null)
-        {
-            Data = Data?.OrderByDescending(x => x.Enabled)?.ThenBy(x => x.Name)
-                ?.ToList();
-            initialSortOrder = Data?.Select(x => x.Uid)?.ToList();
-        }
-        else
-        {
-            Data = Data?.OrderBy(x => initialSortOrder.Contains(x.Uid) ? initialSortOrder.IndexOf(x.Uid) : 1000000)
-                .ThenBy(x => x.Name)
-                ?.ToList();
-        }
-        return base.PostLoad();
-    }
 
     /// <summary>
     /// Exports a DockerHub command
@@ -129,5 +106,53 @@ public partial class DockerMods : ListPage<Guid, DockerMod>
         }
 
         await jsRuntime.InvokeVoidAsync("ff.saveTextAsFile", item.Name  + ".sh", result.Body);
+    }
+
+    /// <summary>
+    /// Moves the items down
+    /// </summary>
+    /// <returns>a task to await</returns>
+    Task MoveUp() => Move(true);
+
+    /// <summary>
+    /// Moves the items down
+    /// </summary>
+    /// <returns>a task to await</returns>
+    Task MoveDown() => Move(false);
+
+    /// <summary>
+    /// Moves the items up or down
+    /// </summary>
+    /// <param name="up">if moving up</param>
+    async Task Move(bool up)
+    {
+        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new Guid[] { };
+        if (uids.Length == 0)
+            return; // nothing to move
+
+        Blocker.Show();
+        this.StateHasChanged();
+
+        try
+        {
+            var result = await HttpHelper.Post($"{ApiUrl}/move?up={up}", new ReferenceModel<Guid> { Uids = uids });
+            if (result.Success == false)
+            {
+                if(Translater.NeedsTranslating(result.Body))
+                    Toast.ShowError( Translater.Instant(result.Body));
+                else
+                    Toast.ShowError( Translater.Instant("Pages.DockerMods.Messages.MoveFailed"));
+                return;
+            }
+
+            await Refresh();
+            var selected = Data.Where(x => uids.Contains(x.Uid)).ToList();
+            Table.SetSelected(selected);
+        }
+        finally
+        {
+            Blocker.Hide();
+            this.StateHasChanged();
+        }
     }
 }

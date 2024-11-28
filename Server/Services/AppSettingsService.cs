@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using FileFlows.DataLayer.DatabaseConnectors;
 using FileFlows.Shared.Models;
 
 namespace FileFlows.Server.Services;
@@ -81,6 +82,9 @@ public class AppSettingsService
             };
             var settings = JsonSerializer.Deserialize<AppSettings>(json, options);
             result = settings ?? new();
+
+            if ((int)settings.DatabaseType == 10)
+                settings.DatabaseType = DatabaseType.Sqlite;
         }
         catch (Exception ex)
         {

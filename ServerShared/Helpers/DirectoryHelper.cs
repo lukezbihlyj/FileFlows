@@ -18,6 +18,13 @@ public class DirectoryHelper
         InitTemplatesDirectory();
 
         FlowRunnerDirectory = Path.Combine(BaseDirectory, "FlowRunner");
+
+        ManualLibrary = Path.Combine(BaseDirectory, "ManuallyAdded");
+#if(DEBUG)
+        ManualLibrary = Path.Combine("/home/john/temp", "ManuallyAdded");
+#endif
+        if (Directory.Exists(ManualLibrary) == false)
+            Directory.CreateDirectory(ManualLibrary);
     }
 
     private static void InitPluginsDirectory()
@@ -161,6 +168,11 @@ public class DirectoryHelper
     /// Gets the data directory
     /// </summary>
     public static string DataDirectory { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the directory where manually added files will be stored
+    /// </summary>
+    public static string ManualLibrary { get; private set; } = null!;
     
     /// <summary>
     /// Gets the directory containing the cached configurations

@@ -10,6 +10,10 @@
             {
                 <img src="@Value" @onclick="@Choose" />
             }
+            else if (Value.StartsWith("svg:"))
+            {
+                <img src="/icons/@(Value[4..]).svg" @onclick="@Choose" />
+            }
             else
             {
                 <i class="icon @Icon" style="color: @IconColor" @onclick="@Choose"></i>
@@ -23,17 +27,29 @@
     </div>
 </InputWrapper>
 
-<Modal Title="Pick Icon" Visible="@ModalOpened">
+<Modal Title="@lblPickIcon" Visible="@ModalOpened">
 
     <Body>
     <div class="icon-picker-modal-body">
         <div class="icon-picker-modal-body-top">
             <div class="filter">
-                <input type="text" @bind-value="@Filter" @bind-value:event="oninput" placeholder="Filter..."/>
+                <input type="text" @bind-value="@Filter" @bind-value:event="oninput" placeholder="@lblFilter" />
             </div>
-            <FlowColorPicker @bind-Value="@Color"></FlowColorPicker>
+            <div class="@(SvgSelected ? "hide" : "")">
+                <FlowColorPicker @bind-Value="@Color"></FlowColorPicker>
+            </div>
         </div>
         <ul class="icon-list" style="color:@Color">
+            @if (IncludeSvgs)
+            {
+                foreach (var svg in Svgs)
+                {
+                    <li @onclick="() => SelectIcon(svg, true)" @ondblclick="() => DblClick(svg, true)"
+                        class="@(svg == SelectedIcon ? "selected" : "")">
+                        <img src="/icons/@(svg).svg" />
+                    </li>
+                }
+            }
             @foreach (var icon in Icons)
             {
                 if (string.IsNullOrEmpty(Filter) == false && icon.Contains(Filter.ToLowerInvariant()) == false)
@@ -51,10 +67,15 @@
     </Body>
     <Footer>
         <div class="icon-picker-modal-footer">
-            <button class="btn" @onclick=@Upload>Upload</button>
+            <button class="btn" @onclick=@Upload>@lblUpload</button>
+            @if (AllowClear)
+            {
+                <button class="btn" @onclick=@Clear>@lblClear</button>
+                
+            }
             <div class="spacer"></div>
-            <button class="btn" @onclick="() => DblClick(SelectedIcon)" disabled="@string.IsNullOrEmpty(SelectedIcon)">Select</button>
-            <button class="btn" @onclick=@Cancel>Cancel</button>
+            <button class="btn" @onclick="() => DblClick(SelectedIcon, SvgSelected)" disabled="@string.IsNullOrEmpty(SelectedIcon)">@lblSelect</button>
+            <button class="btn" @onclick=@Cancel>@lblCancel</button>
         </div>
     </Footer>
 </Modal>

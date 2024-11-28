@@ -17,8 +17,13 @@ span.icon {
   min-width:5rem;
   display: flex;
   justify-content: center;
-  img {
-    margin-right:0;
+  ::deep
+  {
+    img {
+      width: 4rem;
+      min-width: 4rem;
+      margin-right: 0;
+    }
   }
   .architecture
   {

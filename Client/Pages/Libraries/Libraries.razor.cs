@@ -13,6 +13,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private string lblLastScanned, lblFlow, lblSavings;
 
+    private bool HasCreatedLibraries = false;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -26,10 +28,10 @@ public partial class Libraries : ListPage<Guid, Library>
         await Edit(new ()
         {  
             Enabled = true, 
-            ScanInterval = 60, 
+            ScanInterval = 3 * 60 * 60, 
             FileSizeDetectionInterval = 5,
-            UseFingerprinting = false,
-            UpdateMovedFiles = true,
+            // UseFingerprinting = false,
+            // UpdateMovedFiles = true,
             Schedule = new string('1', 672)
         });
     }
@@ -42,7 +44,7 @@ public partial class Libraries : ListPage<Guid, Library>
         Blocker.Show();
         try
         {
-            var item = Table.GetSelected()?.FirstOrDefault();
+            var item = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)?.FirstOrDefault();
             if (item == null)
                 return;
             string url = $"/api/library/duplicate/{item.Uid}";
@@ -106,14 +108,14 @@ public partial class Libraries : ListPage<Guid, Library>
         SetModelProperty(nameof(template.FileSizeDetectionInterval), template.FileSizeDetectionInterval);
         SetModelProperty(nameof(template.Filters), template.Filters);
         SetModelProperty(nameof(template.Extensions), template.Extensions?.ToArray() ?? new string[] { });
-        SetModelProperty(nameof(template.UseFingerprinting), template.UseFingerprinting);
+        //SetModelProperty(nameof(template.UseFingerprinting), template.UseFingerprinting);
         SetModelProperty(nameof(template.ExclusionFilters), template.ExclusionFilters);
         SetModelProperty(nameof(template.Path), template.Path);
         SetModelProperty(nameof(template.Priority), template.Priority);
         SetModelProperty(nameof(template.ScanInterval), template.ScanInterval);
-        SetModelProperty(nameof(template.ReprocessRecreatedFiles), template.ReprocessRecreatedFiles);
+        //SetModelProperty(nameof(template.ReprocessRecreatedFiles), template.ReprocessRecreatedFiles);
         SetModelProperty(nameof(template.Folders), template.Folders);
-        SetModelProperty(nameof(template.UpdateMovedFiles), template.UpdateMovedFiles);
+        //SetModelProperty(nameof(template.UpdateMovedFiles), template.UpdateMovedFiles);
 
         editor.TriggerStateHasChanged();
         void SetModelProperty(string property, object value)
@@ -162,6 +164,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private string TimeSpanToString(Library lib)
     {
+        if (lib.Uid == CommonVariables.ManualLibraryUid)
+            return string.Empty;
         if (lib.LastScanned.Year < 2001)
             return Translater.Instant("Times.Never");
 
@@ -177,7 +181,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     private async Task Rescan()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)
+            ?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to rescan
 
@@ -202,7 +207,8 @@ public partial class Libraries : ListPage<Guid, Library>
     /// </summary>
     private async Task Reprocess()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)
+            ?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to rescan
 
@@ -230,7 +236,8 @@ public partial class Libraries : ListPage<Guid, Library>
     /// </summary>
     private async Task Reset()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)
+            ?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to rescan
 
@@ -256,7 +263,8 @@ public partial class Libraries : ListPage<Guid, Library>
 
     public override async Task Delete()
     {
-        var uids = Table.GetSelected()?.Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
+        var uids = Table.GetSelected()?.Where(x => x.Uid != CommonVariables.ManualLibraryUid)?
+            .Select(x => x.Uid)?.ToArray() ?? new System.Guid[] { };
         if (uids.Length == 0)
             return; // nothing to delete
         var confirmResult = await Confirm.Show("Labels.Delete",
@@ -331,7 +339,8 @@ public partial class Libraries : ListPage<Guid, Library>
     /// <inheritdoc />
     public override Task PostLoad()
     {
-        Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
+        // Data.RemoveAll(x => x.Uid == CommonVariables.ManualLibraryUid);
+        HasCreatedLibraries = Data?.Any(x => x.Uid != CommonVariables.ManualLibraryUid) == true;
         
         if (initialSortOrder == null)
         {
