@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "À quelle fréquence vérifier un nouveau fichier à traiter dans les nœuds de traitement.\nRéglez sur 0 pour utiliser la valeur système.",
         "ProcessFileCheckInterval-Suffix": "secondes",
         "ProcessingDescription": "Cela vous permet de configurer ce que ce nœud de traitement peut traiter.\n\nPar exemple, vous pourriez limiter ce nœud à traiter uniquement certaines bibliothèques ou une taille de fichier maximale si ce nœud est moins puissant.",
+        "ProcessingOrder": "Ordre de Traitement",
+        "ProcessingOrder-Help": "Spécifie l'ordre dans lequel les fichiers sont traités par ce Nœud. Ce paramètre remplace l'ordre de traitement par défaut de la bibliothèque. Réglez sur 'Par défaut' pour utiliser l'ordre de traitement de la bibliothèque.",
         "Schedule": "Horaire",
         "Schedule-Help": "Cet horaire fonctionne dans le fuseau horaire du nœud",
         "ScheduleDescription": "Cela vous permet de configurer quand ce nœud sera actif.\n\nLe nœud ne traitera aucun fichier en dehors de cet horaire configuré.\n",

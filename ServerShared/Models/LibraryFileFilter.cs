@@ -57,6 +57,11 @@ public class LibraryFileFilter
     public Guid? NodeUid { get; set; }
     
     /// <summary>
+    /// Gets or sets an optional override for node processing order
+    /// </summary>
+    public ProcessingOrder? NodeProcessingOrder { get; set; }
+    
+    /// <summary>
     /// Gets or sets a Node UID of the processing node requesting this file
     /// </summary>
     public Guid? ProcessingNodeUid { get; set; }

@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "处理节点中检查新文件的频率。\n设置为0以使用系统值。",
         "ProcessFileCheckInterval-Suffix": "秒",
         "ProcessingDescription": "这允许您配置此处理节点可以处理的内容。\n\n例如，如果此节点是低功耗节点，您可以限制此节点仅处理某些库或最大文件大小。",
+        "ProcessingOrder": "处理顺序",
+        "ProcessingOrder-Help": "指定此节点处理文件的顺序。此设置将覆盖库的默认处理顺序。设置为“默认”以使用库的处理顺序。",
         "Schedule": "计划",
         "Schedule-Help": "此计划在节点的时区运行",
         "ScheduleDescription": "这允许您配置此节点的活动时间。\n\n节点在此配置的计划之外将不会处理任何文件。\n",

@@ -120,6 +120,8 @@ public class NodeController : BaseController
         var service = ServiceLoader.Load<NodeService>();
         if (node.PreExecuteScript == Guid.Empty)
             node.PreExecuteScript = null; // null it out
+        if (node.ProcessingOrder != null && (int)node.ProcessingOrder == 1000)
+            node.ProcessingOrder = null;
         
         if(node.Libraries?.Any() == true)
         {
@@ -155,6 +157,7 @@ public class NodeController : BaseController
                 internalNode.Variables = node.Variables ?? new();
                 internalNode.ProcessFileCheckInterval = node.ProcessFileCheckInterval;
                 internalNode.PreExecuteScript = node.PreExecuteScript;
+                internalNode.ProcessingOrder = node.ProcessingOrder;
                 
                 internalNode.Libraries = node.Libraries;
                 internalNode = await service.Update(internalNode, await GetAuditDetails());

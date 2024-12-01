@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "Hoe vaak er gecontroleerd moet worden op een nieuw bestand om te verwerken in de verwerkingsknooppunten.\nStel in op 0 om de systeewaarde te gebruiken.",
         "ProcessFileCheckInterval-Suffix": "seconden",
         "ProcessingDescription": "Dit stelt je in staat om te configureren wat dit Verwerkingsknooppunt kan verwerken.\n\nBijvoorbeeld, je kunt dit knooppunt beperken tot alleen bepaalde bibliotheken of een maximale bestandsgrootte als dit knooppunt een minder krachtige knooppunt is.",
+        "ProcessingOrder": "Verwerkingsvolgorde",
+        "ProcessingOrder-Help": "Geeft de volgorde aan waarin bestanden door deze Node worden verwerkt. Deze instelling overschrijft de standaardverwerkingsvolgorde van de bibliotheek. Stel in op 'Standaard' om de verwerkingsvolgorde van de bibliotheek te gebruiken.",
         "Schedule": "Schema",
         "Schedule-Help": "Dit schema draait in de tijdzone van het knooppunt",
         "ScheduleDescription": "Dit stelt je in staat om te configureren wanneer dit knooppunt actief zal zijn.\n\nHet knooppunt verwerkt geen bestanden buiten dit geconfigureerde schema.",

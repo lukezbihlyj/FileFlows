@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "多久檢查一次處理節點中的新檔案。\n設置為0以使用系統值。",
         "ProcessFileCheckInterval-Suffix": "秒",
         "ProcessingDescription": "這允許您配置該處理節點可以處理的內容。\n\n例如，如果這是一個較低功率的節點，您可以將其限制為僅處理某些資料庫或最大檔案大小。",
+        "ProcessingOrder": "處理順序",
+        "ProcessingOrder-Help": "指定此節點處理文件的順序。此設置將覆蓋庫的默認處理順序。設置為“默認”以使用庫的處理順序。",
         "Schedule": "排程",
         "Schedule-Help": "此排程在節點的時區內運行",
         "ScheduleDescription": "這允許您配置該節點何時啟用。\n\n節點將在此配置的排程之外不處理任何檔案。",

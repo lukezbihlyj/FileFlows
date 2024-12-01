@@ -17,6 +17,8 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
         bool isServerProcessingNode = node.Address == FileFlowsServer;
         node.Mappings ??= new();
         this.EditingItem = node;
+        if (node.ProcessingOrder == null)
+            node.ProcessingOrder = (ProcessingOrder)1000;
 
         Dictionary<Guid, string> scripts;
         var tabs = new Dictionary<string, List<IFlowField>>();
@@ -297,6 +299,28 @@ public partial class Nodes : ListPage<Guid, ProcessingNode>
             InputType = FormInputType.Int,
             Name = nameof(node.ProcessFileCheckInterval)
         });
+
+        if(Profile.LicensedFor(LicenseFlags.ProcessingOrder))
+        {
+            fields.Add(new ElementField
+            {
+                InputType = FormInputType.Select,
+                Name = nameof(ProcessingNode.ProcessingOrder),
+                Parameters = new Dictionary<string, object>{
+                    { "Options", new List<ListOption> {
+                        new () { Value = (ProcessingOrder)1000, Label = $"Labels.Default" },
+                        new () { Value = ProcessingOrder.AsFound, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.AsFound)}" },
+                        new () { Value = ProcessingOrder.Alphabetical, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.Alphabetical)}" },
+                        new () { Value = ProcessingOrder.SmallestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.SmallestFirst)}" },
+                        new () { Value = ProcessingOrder.LargestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.LargestFirst)}" },
+                        new () { Value = ProcessingOrder.NewestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.NewestFirst)}" },
+                        new () { Value = ProcessingOrder.OldestFirst, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.OldestFirst)}" },
+                        new () { Value = ProcessingOrder.Random, Label = $"Enums.{nameof(ProcessingOrder)}.{nameof(ProcessingOrder.Random)}" },
+                    } }
+                }
+            });
+        }
+        
         return fields;
     }
 

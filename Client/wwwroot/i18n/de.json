@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "Wie oft wird geprüft, ob eine neue Datei für die Verarbeitung in den Verarbeitungsknoten vorliegt.\nSetzen Sie den Wert auf 0, um den Systemwert zu verwenden.",
         "ProcessFileCheckInterval-Suffix": "Sekunden",
         "ProcessingDescription": "Damit können Sie konfigurieren, was dieser Node verarbeiten kann. Beispielsweise können Sie diesen Node darauf beschränken, nur bestimmte Bibliotheken oder eine maximale Dateigröße zu verarbeiten, wenn es sich um einen Node mit geringerer Leistung handelt.",
+        "ProcessingOrder": "Verarbeitungsreihenfolge",
+        "ProcessingOrder-Help": "Legt die Reihenfolge fest, in der Dateien von diesem Knoten verarbeitet werden. Diese Einstellung überschreibt die Standardverarbeitungsreihenfolge der Bibliothek. Stellen Sie 'Standard' ein, um die Verarbeitungsreihenfolge der Bibliothek zu verwenden.",
         "Schedule": "Zeitplan",
         "Schedule-Help": "Dieser Zeitplan läuft in der Zeitzone des Node",
         "ScheduleDescription": "Damit können Sie konfigurieren, wann dieser Node aktiv sein wird.\n\n Der Node wird keine Dateien außerhalb dieses konfigurierten Zeitplans verarbeiten.\n",

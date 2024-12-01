@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "Com que frequência verificar se há um novo arquivo para processamento nos nodes de processamento. Defina como 0 para usar o valor do sistema.",
         "ProcessFileCheckInterval-Suffix": "segundos",
         "ProcessingDescription": "Isso permite que você configure o que este Node de Processamento pode processar. Por exemplo, você pode limitar este node a processar apenas certas bibliotecas ou um tamanho máximo de arquivo se este node for de menor potência.",
+        "ProcessingOrder": "Ordem de Processamento",
+        "ProcessingOrder-Help": "Especifica a ordem em que os arquivos serão processados por este Nó. Esta configuração substitui a ordem de processamento padrão da biblioteca. Defina como 'Padrão' para usar a ordem de processamento da biblioteca.",
         "Schedule": "Cronograma",
         "Schedule-Help": "Este cronograma é executado no fuso horário do node",
         "ScheduleDescription": "Isso permite que você configure quando este node estará ativo. O node não processará nenhum arquivo fora deste cronograma configurado.",

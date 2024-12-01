@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "Con quale frequenza controllare un nuovo file da elaborare nei nodi di elaborazione.\nImposta a 0 per utilizzare il valore di sistema.",
         "ProcessFileCheckInterval-Suffix": "secondi",
         "ProcessingDescription": "Questo ti consente di configurare cosa può elaborare questo nodo di elaborazione.\n\nAd esempio, potresti limitare questo nodo a elaborare solo determinate librerie o una dimensione massima del file se questo nodo è un nodo a bassa potenza.",
+        "ProcessingOrder": "Ordine di Elaborazione",
+        "ProcessingOrder-Help": "Specifica l'ordine in cui i file vengono elaborati da questo Nodo. Questa impostazione sovrascrive l'ordine di elaborazione predefinito della libreria. Impostare su 'Predefinito' per utilizzare l'ordine di elaborazione della libreria.",
         "Schedule": "Programma",
         "Schedule-Help": "Questo programma funziona nel fuso orario del nodo",
         "ScheduleDescription": "Questo ti consente di configurare quando questo nodo sarà attivo.\n\nIl nodo non elaborerà alcun file al di fuori di questo programma configurato.\n",

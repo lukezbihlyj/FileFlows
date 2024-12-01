@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "How often to check for a new file to processing in the processing nodes.\nSet to 0 to use the system value.",
         "ProcessFileCheckInterval-Suffix": "seconds",
         "ProcessingDescription": "This allows you to configure what this Processing Node can process.\n\nFor example, you could limit this node to only process certain libraries or a maximum file size if this node is a lower powered node.",
+        "ProcessingOrder": "Processing Order",
+        "ProcessingOrder-Help": "Specifies the order in which files are processed by this Node. This setting overrides the library's default processing order. Set to 'Default' to use the library's processing order.",
         "Schedule": "Schedule",
         "Schedule-Help": "This schedule runs in the Time Zone of the node",
         "ScheduleDescription": "This allows you to configure when this node will be active.\n\nThe node will not process any files outside of this configured schedule.\n",

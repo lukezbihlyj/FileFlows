@@ -1110,6 +1110,8 @@
         "ProcessFileCheckInterval-Help": "Hur ofta kontrollera om en ny fil ska bearbetas i behandlingsnoder.\nStäll in på 0 för att använda systemvärdet.",
         "ProcessFileCheckInterval-Suffix": "sekunder",
         "ProcessingDescription": "Detta låter dig konfigurera vad denna behandlingsnod kan bearbeta.\n\nTill exempel, du kan begränsa denna nod till att bara bearbeta vissa bibliotek eller en maximal filstorlek om denna nod är en lågpresterande nod.",
+        "ProcessingOrder": "处理顺序",
+        "ProcessingOrder-Help": "指定此节点处理文件的顺序。此设置将覆盖库的默认处理顺序。设置为“默认”以使用库的处理顺序。",
         "Schedule": "Schema",
         "Schedule-Help": "Detta schema körs i nodens tidszon",
         "ScheduleDescription": "Detta låter dig konfigurera när denna nod kommer att vara aktiv.\n\nNoden kommer inte att bearbeta några filer utanför detta konfigurerade schema.\n",

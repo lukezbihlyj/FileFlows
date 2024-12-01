@@ -465,7 +465,7 @@ public class LibraryFileService
             {
                 Status = FileStatus.Unprocessed, Skip = 0, Rows = 1, AllowedLibraries = canProcess,
                 MaxSizeMBs = node.MaxFileSizeMb, ExclusionUids = executing, ForcedOnly = outOfSchedule,
-                ProcessingNodeUid = node.Uid,
+                ProcessingNodeUid = node.Uid, NodeProcessingOrder = processingOrderLicensed ? node.ProcessingOrder : null,
                 SysInfo = sysInfo
             }
         )).FirstOrDefault();
