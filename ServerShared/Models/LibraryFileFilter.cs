@@ -127,8 +127,15 @@ public class LibraryFileFilter
                 // need to check that it isn't actually disabled
                 if (file.IsForcedProcessing)
                     return true; // its forced to process
-                if (file.LibraryUid != null && SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib) && lib?.Enabled == false)
-                    return false; // its actually disabled
+                if (file.LibraryUid != null && SysInfo.AllLibraries.TryGetValue(file.LibraryUid.Value, out var lib))
+                {
+                    if (lib.Enabled == false)
+                        return false; // its actually disabled
+                    if (string.IsNullOrWhiteSpace(lib.Schedule) == false &&
+                        TimeHelper.InSchedule(lib.Schedule) == false)
+                        return false; // not in schedule
+                }
+
                 if(file.HoldUntil > DateTime.UtcNow)
                     return false; // its on hold
             }
