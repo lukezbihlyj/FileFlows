@@ -160,13 +160,13 @@ public partial class WatchedLibraryNew : IDisposable
         try
         {
             await ScanSemaphore.WaitAsync(10_000, cancellationTokenSource!.Token);
-            
+
             // refresh the library instance
             var libraryService = ServiceLoader.Load<LibraryService>();
             Library = await libraryService.GetByUidAsync(Library.Uid) ?? Library;
             if (Library.Enabled == false)
                 return; // no need to scan
-            
+
             Logger.ILog($"Library '{Library.Name}' scanning");
             // refresh the settings
             this.Settings = await ServiceLoader.Load<ISettingsService>().Get();
@@ -185,8 +185,13 @@ public partial class WatchedLibraryNew : IDisposable
                 foreach (var file in files)
                     await CheckFile(file);
             }
+
             Logger.ILog($"Library '{Library.Name}' scan complete in " + (DateTime.Now - start).Humanize());
             await libraryService.UpdateLastScanned(Library.Uid);
+        }
+        catch (Exception ex)
+        {
+            Logger.ELog($"Scan '{Library.Name}' failed: {ex.Message}");
         }
         finally
         {

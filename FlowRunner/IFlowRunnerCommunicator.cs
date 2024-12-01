@@ -179,6 +179,8 @@ public class FlowRunnerCommunicator : IFlowRunnerCommunicator, IAsyncDisposable
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("disposed object"))
+                    return;
                 runInstance.LogError($"Reconnection attempt {retryCount + 1} failed: {ex.Message}");
                 retryCount++;
                 retryDelay = TimeSpan.FromSeconds(Math.Pow(2, retryCount)); // Exponential backoff
