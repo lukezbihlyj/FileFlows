@@ -1129,7 +1129,7 @@ internal class DbLibraryFileManager : BaseManager
     /// <param name="processingOrder">the processing order</param>
     /// <param name="libraryUid">An optional UID of a library that must match</param>
     /// <returns>the sorted files</returns>
-    private IOrderedEnumerable<LibraryFile>  SortByProcessingOrder(IOrderedEnumerable<LibraryFile> sortedFiles,
+    private IOrderedEnumerable<LibraryFile> SortByProcessingOrder(IOrderedEnumerable<LibraryFile> sortedFiles,
         ProcessingOrder processingOrder, Guid? libraryUid)
     {
         switch (processingOrder)
@@ -1316,7 +1316,6 @@ internal class DbLibraryFileManager : BaseManager
                 return ReturnWithOrderBy();
             }
 
-
             var disabled = args.SysInfo.AllLibraries.Values.Where(x => x.Enabled == false)
                 .Select(x => x.Uid).ToList();
             if (args.Status == FileStatus.Disabled)
@@ -1427,6 +1426,7 @@ internal class DbLibraryFileManager : BaseManager
 
             if (args.NodeProcessingOrder == null)
             {
+                Logger.ILog($"Node {args.NodeUid} processing order is NULL");
                 orderBys.Add(OrderByLibraryPriority());
                 if (possibleComplexSortingLibraries.Any() == false || args.SysInfo.LicensedForProcessingOrder == false)
                 {
@@ -1448,6 +1448,10 @@ internal class DbLibraryFileManager : BaseManager
                     orderBys.Add($"{Wrap(nameof(LibraryFile.DateCreated))}");
                     return ReturnWithOrderBy();
                 }
+            }
+            else
+            {
+                Logger.ILog($"Node {args.NodeUid} processing order is NOT NULL");
             }
 
             switch (DbType)
@@ -1521,7 +1525,9 @@ end ");
 
             orderBys.Add($"{Wrap(nameof(LibraryFile.DateCreated))}");
 
-            return ReturnWithOrderBy();
+            var fullSql = ReturnWithOrderBy();
+            Logger.ILog("fullSql: " + fullSql);
+            return fullSql;
         }
         catch (Exception ex)
         {
