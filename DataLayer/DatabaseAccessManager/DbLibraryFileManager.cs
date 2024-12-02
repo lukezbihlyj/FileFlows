@@ -1426,7 +1426,6 @@ internal class DbLibraryFileManager : BaseManager
 
             if (args.NodeProcessingOrder != null)
             {
-                Logger.ILog($"Node {args.NodeUid} processing order is NOT NULL");
                 switch (args.NodeProcessingOrder.Value)
                 {
                     case ProcessingOrder.Alphabetical:
@@ -1469,7 +1468,6 @@ internal class DbLibraryFileManager : BaseManager
             }
             else
             {
-                Logger.ILog($"Node {args.NodeUid} processing order is NULL");
                 orderBys.Add(OrderByLibraryPriority());
                 if (possibleComplexSortingLibraries.Any() == false || args.SysInfo.LicensedForProcessingOrder == false)
                 {
@@ -1565,7 +1563,6 @@ end ");
             orderBys.Add($"{Wrap(nameof(LibraryFile.DateCreated))}");
 
             var fullSql = ReturnWithOrderBy();
-            Logger.ILog("fullSql: " + fullSql);
             return fullSql;
         }
         catch (Exception ex)
