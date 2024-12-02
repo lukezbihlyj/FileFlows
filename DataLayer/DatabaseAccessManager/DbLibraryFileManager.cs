@@ -1429,10 +1429,10 @@ internal class DbLibraryFileManager : BaseManager
                 switch (args.NodeProcessingOrder.Value)
                 {
                     case ProcessingOrder.Alphabetical:
-                        orderBys.Add($"{Wrap(nameof(LibraryFile.Name))} desc");
+                        orderBys.Add($"{Wrap(nameof(LibraryFile.Name))}");
                         break;
                     case ProcessingOrder.AsFound:
-                        orderBys.Add($"{Wrap(nameof(LibraryFile.DateCreated))} desc");
+                        orderBys.Add($"{Wrap(nameof(LibraryFile.DateCreated))}");
                         break;
                     case ProcessingOrder.Random:
                         switch (DbConnector.Type)
