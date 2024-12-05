@@ -2,6 +2,7 @@
 using System.Net.WebSockets;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace FileFlows.Server.Controllers;
 
@@ -19,6 +20,7 @@ public class WebSocketController : ControllerBase
     /// </summary>
     /// <returns>A task representing the WebSocket connection.</returns>
     [HttpGet]
+    [SwaggerIgnore]
     public async Task Get()
     {
         if (HttpContext.WebSockets.IsWebSocketRequest)

@@ -5,6 +5,7 @@ using FileFlows.Server.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using FileFlows.Server.Services;
 using System.Text.Json.Serialization;
+using Swashbuckle.AspNetCore.Annotations;
 using HttpMethod = System.Net.Http.HttpMethod;
 
 namespace FileFlows.Server.Controllers;
@@ -31,6 +32,7 @@ public class OpenIDController : Controller
     /// Action to initiate the authentication process.
     /// </summary>
     [HttpGet]
+    [SwaggerIgnore]
     public async Task<IActionResult> Login(string returnUrl = "/")
     {
         // Check if the user is already authenticated
@@ -64,6 +66,7 @@ public class OpenIDController : Controller
     /// Action to handle the authentication callback from the OpenID provider.
     /// </summary>
     [HttpGet("callback")]
+    [SwaggerIgnore]
     public async Task<IActionResult> Callback()
     {
         var oidcConfig = await GetWellKnownConfig();

@@ -11,6 +11,7 @@ using FileFlows.ServerShared.Models;
 using FileFlows.Shared.Helpers;
 using Humanizer;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Swashbuckle.AspNetCore.Annotations;
 using LibraryFileService = FileFlows.Server.Services.LibraryFileService;
 using LibraryService = FileFlows.Server.Services.LibraryService;
 using NodeService = FileFlows.Server.Services.NodeService;
@@ -501,6 +502,7 @@ public class LibraryFileController : Controller
     /// </returns>
     [HttpPost("upload")]
     [DisableRequestSizeLimit]
+    [SwaggerIgnore]
     [RequestFormLimits(BufferBodyLengthLimit = 14_737_418_240,
         MultipartBodyLengthLimit = 14_737_418_240)] // 10GiB limit
     public async Task<IActionResult> Upload(
