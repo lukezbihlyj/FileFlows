@@ -46,19 +46,27 @@ public class ConfigurationController : Controller
     [HttpGet("download-plugin/{name}")]
     public IActionResult DownloadPlugin(string name)
     {
-        Logger.Instance?.ILog("DownloadPlugin: " + name);
-        if (Regex.IsMatch(name, @"^[a-zA-Z][a-zA-Z0-9\-\._+]+\.ffplugin$", RegexOptions.CultureInvariant) == false)
+        try
         {
-            Logger.Instance?.WLog("DownloadPlugin.Invalid Plugin: " + name);
-            return BadRequest("Invalid plugin: " + name);
+            Logger.Instance?.ILog("DownloadPlugin: " + name);
+            if (Regex.IsMatch(name, @"^[a-zA-Z][a-zA-Z0-9\-\._+]+\.ffplugin$", RegexOptions.CultureInvariant) == false)
+            {
+                Logger.Instance?.WLog("DownloadPlugin.Invalid Plugin: " + name);
+                return BadRequest("Invalid plugin: " + name);
+            }
+
+            var file = new FileInfo(Path.Combine(DirectoryHelper.PluginsDirectory, name));
+            if (file.Exists == false)
+                return NotFound(); // Plugin file not found
+
+            var stream = FileOpenHelper.OpenRead_NoLocks(file.FullName);
+            return File(stream, "application/octet-stream");
         }
-
-        var file = new FileInfo(Path.Combine(DirectoryHelper.PluginsDirectory, name));
-        if (file.Exists == false)
-            return NotFound(); // Plugin file not found
-
-        var stream = FileOpenHelper.OpenRead_NoLocks(file.FullName);
-        return File(stream, "application/octet-stream");
+        catch (Exception ex)
+        {
+            Logger.Instance.ELog($"Failed to download plugin '{name}': {ex.Message}{Environment.NewLine}{ex.StackTrace}");
+            return BadRequest(ex.Message);
+        }
     }
 
 }
