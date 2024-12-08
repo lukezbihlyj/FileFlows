@@ -93,6 +93,9 @@ public partial class WatchedLibraryNew : IDisposable
 
     private void WatcherOnFileChanged(object? sender, FileSystemEventArgs e)
     {
+        if(e.FullPath.EndsWith(".fftemp"))
+            return; // we ignore .fftemp files
+        
         Logger.DLog("WatcherOnFileChanged: " + e.FullPath);
         // If the file is already being processed, return early
         if (_pendingFiles.ContainsKey(e.FullPath) && _pendingFiles[e.FullPath])
@@ -212,6 +215,9 @@ public partial class WatchedLibraryNew : IDisposable
     /// <param name="filePath">the file to check</param>
     private async Task CheckFile(string filePath)
     {
+        if (filePath.EndsWith(".fftemp"))
+            return; // we ignore fftemp files
+        
         await FileSemaphore.WaitAsync(30_000, cancellationTokenSource.Token);
         try
         {
