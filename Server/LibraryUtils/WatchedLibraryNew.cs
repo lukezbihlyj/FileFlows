@@ -80,8 +80,8 @@ public partial class WatchedLibraryNew : IDisposable
         if (Directory.Exists(Library.Path))
         {
             Watcher = new(Library.Path, Library.Folders);
-            Watcher.FileChanged += WatcherOnFileChanged;
-            Watcher.FileRenamed += WatcherOnFileChanged;
+            Watcher.FileChanged += HandleFileEventDebounced;
+            Watcher.FileRenamed += HandleFileEventDebounced;
             Watcher.Start();
         }
     }
@@ -90,14 +90,47 @@ public partial class WatchedLibraryNew : IDisposable
     /// Files currently being checked
     /// </summary>
     private readonly ConcurrentDictionary<string, bool> _pendingFiles = new();
-
+    /// <summary>
+    /// File timers to stop multiple calls for file system events 
+    /// </summary>
+    private readonly ConcurrentDictionary<string, Timer> _fileTimers = new();
+    /// <summary>
+    /// Intermediary method to debounce file events before passing them to the processing logic.
+    /// </summary>
+    private void HandleFileEventDebounced(object? sender, FileSystemEventArgs e)
+    {
+        if (Library.DisableFileSystemEvents == true)
+            return;
+        if (e.FullPath.EndsWith(".fftemp"))
+            return; // Ignore .fftemp files
+    
+        
+        // Use ConcurrentDictionary methods for thread-safe operations
+        _fileTimers.AddOrUpdate(
+            e.FullPath,
+            key =>
+            {
+                // Create a new timer if it doesn't exist
+                return new Timer(_ =>
+                {
+                    // Safely remove the timer from the dictionary
+                    if (_fileTimers.TryRemove(key, out var timer))
+                    {
+                        timer.Dispose(); // Dispose of the timer to release resources
+                    }
+                    WatcherOnFileChanged(sender, e); // Process the debounced event
+                }, null, 10_000, Timeout.Infinite);
+            },
+            (key, existingTimer) =>
+            {
+                // Reset the existing timer
+                existingTimer.Change(10_000, Timeout.Infinite);
+                return existingTimer;
+            });
+    }
+    
     private void WatcherOnFileChanged(object? sender, FileSystemEventArgs e)
     {
-        if(Library.DisableFileSystemEvents == true)
-            return;
-        if(e.FullPath.EndsWith(".fftemp"))
-            return; // we ignore .fftemp files
-        
         if (Settings?.LogQueueMessages == true)
             Logger.DLog("WatcherOnFileChanged: " + e.FullPath);
         // If the file is already being processed, return early
