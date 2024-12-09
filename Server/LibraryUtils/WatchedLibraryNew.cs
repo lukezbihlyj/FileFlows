@@ -93,10 +93,13 @@ public partial class WatchedLibraryNew : IDisposable
 
     private void WatcherOnFileChanged(object? sender, FileSystemEventArgs e)
     {
+        if(Library.DisableFileSystemEvents == true)
+            return;
         if(e.FullPath.EndsWith(".fftemp"))
             return; // we ignore .fftemp files
         
-        Logger.DLog("WatcherOnFileChanged: " + e.FullPath);
+        if (Settings?.LogQueueMessages == true)
+            Logger.DLog("WatcherOnFileChanged: " + e.FullPath);
         // If the file is already being processed, return early
         if (_pendingFiles.ContainsKey(e.FullPath) && _pendingFiles[e.FullPath])
             return;
@@ -109,7 +112,8 @@ public partial class WatchedLibraryNew : IDisposable
             // Wait until the file is stabilized
             if (!await IsFileStabilized(e.FullPath))
             {
-                Logger.DLog("WatcherOnFileChanged.NotStablized: " + e.FullPath);
+                if (Settings?.LogQueueMessages == true)
+                    Logger.DLog("WatcherOnFileChanged.NotStablized: " + e.FullPath);
                 return;
             }
 
@@ -128,7 +132,8 @@ public partial class WatchedLibraryNew : IDisposable
             // need a delay incase a file is processing and replcae original with new extension
             // for example is called, this could cause a file to be detected when it will become the output file
             await Task.Delay(delay);
-            Logger.DLog("WatcherOnFileChanged.CheckFile: " + e.FullPath);
+            if (Settings?.LogQueueMessages == true)
+                Logger.DLog("WatcherOnFileChanged.CheckFile: " + e.FullPath);
             await CheckFile(e.FullPath);
         });
     }

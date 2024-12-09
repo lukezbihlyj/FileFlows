@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "在这里，您可以配置一个库，以仅检测与给定模式匹配的文件。\n\n例如，这允许您仅包含以下文件\n\t- 在 7 天内创建的文件\n\t- 在 3 到 7 天之间最后写入的文件\n\t- 文件大小大于 1 GB",
+        "DisableFileSystemEvents": "文件系统事件",
+        "DisableFileSystemEvents-Help": "指定是否监控文件系统事件。如果启用，系统将监控文件创建和修改事件，检查文件是否符合库设置，并将其添加到库中进行处理。",
         "DownloadsDirectory": "下载目录",
         "DownloadsDirectory-Help": "一个特殊目录，如果在此文件夹中重新发现一个已经成功处理的文件，该文件将自动重新处理。\n这在您重新下载文件时非常有用。",
         "Enabled": "启用",

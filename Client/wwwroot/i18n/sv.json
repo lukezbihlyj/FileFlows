@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Här kan du konfigurera ett bibliotek för att endast upptäcka filer som matchar de angivna mönstren.\n\nTill exempel gör detta att du endast kan inkludera filer som är\n\t- Filer som skapades för mindre än 7 dagar sedan\n\t- Filer som senast skrevs till mellan 3 och 7 dagar sedan\n\t- Filstorleken är större än 1 gigabyte",
+        "DisableFileSystemEvents": "Filsystemhändelser",
+        "DisableFileSystemEvents-Help": "Anger om filsystemhändelser ska övervakas. Om aktiverat kommer systemet att övervaka händelser för skapande och ändring av filer, kontrollera om filerna matchar bibliotekets inställningar och lägga till dem för bearbetning.",
         "DownloadsDirectory": "Nedladdningsmapp",
         "DownloadsDirectory-Help": "En särskild mapp där om en fil som har bearbetats framgångsrikt återupptäckts i denna mapp, kommer den filen automatiskt att bearbetas igen.\nDetta är användbart om du laddar ner en fil igen.",
         "Enabled": "Aktiverad",

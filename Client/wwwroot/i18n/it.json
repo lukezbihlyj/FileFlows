@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Qui puoi configurare una biblioteca per rilevare solo i file che corrispondono ai modelli specificati.\n\nAd esempio, questo ti consente di includere solo i file che sono\n\t- File creati meno di 7 giorni fa\n\t- File che sono stati scritti per l'ultima volta tra 3 e 7 giorni fa\n\t- La dimensione del file è superiore a 1 gigabyte",
+        "DisableFileSystemEvents": "Eventi del File System",
+        "DisableFileSystemEvents-Help": "Specifica se monitorare gli eventi del file system. Se abilitato, il sistema controllerà la creazione e la modifica dei file, verificando se corrispondono alle impostazioni della libreria e aggiungendoli per l'elaborazione.",
         "DownloadsDirectory": "Cartella Download",
         "DownloadsDirectory-Help": "Una cartella speciale in cui se un file che è stato elaborato con successo viene riscoperto in questa cartella, quel file verrà automaticamente rielaborato.\nQuesto è utile se riscarichi un file.",
         "Enabled": "Abilitato",

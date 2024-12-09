@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Here you can configure a library to only detect files that match the given patterns.\n\nFor example, this allows you to only include files that are\n\t- Files that were created less than 7 days ago\n\t- Files that were last written to between 3 and 7 days ago\n\t- File size is greater than 1 gigabyte",
+        "DisableFileSystemEvents": "File System Events",
+        "DisableFileSystemEvents-Help": "Specifies whether to monitor file system events. If enabled, the system will watch for file creation and modification events, checking if the files match library settings and adding them to the library for processing.",
         "DownloadsDirectory": "Downloads Directory",
         "DownloadsDirectory-Help": "A special directory where if a file that has been successfully processed is rediscovered in this folder, that file will automatically be reprocessed.\nThis is helpful if you re-download a file.",
         "Enabled": "Enabled",

@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Hier können Sie eine Bibliothek so konfigurieren, dass sie nur Dateien erkennt, die den angegebenen Mustern entsprechen. So können Sie beispielsweise nur Dateien einbeziehen, die vor weniger als 7 Tagen erstellt wurden, Dateien, die zuletzt vor 3 bis 7 Tagen beschrieben wurden und deren Größe größer als 1 Gigabyte ist.",
+        "DisableFileSystemEvents": "Dateisystemereignisse",
+        "DisableFileSystemEvents-Help": "Legt fest, ob Dateisystemereignisse überwacht werden sollen. Wenn aktiviert, überwacht das System Ereignisse für Dateierstellung und -änderung, prüft, ob die Dateien den Bibliothekseinstellungen entsprechen, und fügt sie zur Verarbeitung der Bibliothek hinzu.",
         "DownloadsDirectory": "Downloads Ordner",
         "DownloadsDirectory-Help": "Ein spezielles Verzeichnis, in dem eine erfolgreich verarbeitete Datei automatisch erneut verarbeitet wird, wenn sie in diesem Ordner wiedergefunden wird. Dies ist hilfreich, wenn Sie eine Datei erneut herunterladen.",
         "Enabled": "Aktiviert",

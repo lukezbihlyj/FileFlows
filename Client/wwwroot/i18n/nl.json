@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Hier kunt u een bibliotheek configureren om alleen bestanden te detecteren die aan de gegeven patronen voldoen.\n\nBijvoorbeeld, hiermee kunt u alleen bestanden opnemen die\n\t- Bestanden zijn die minder dan 7 dagen geleden zijn aangemaakt\n\t- Bestanden die tussen 3 en 7 dagen geleden zijn geschreven\n\t- Bestandsgrootte groter dan 1 gigabyte",
+        "DisableFileSystemEvents": "Bestandssysteemevenementen",
+        "DisableFileSystemEvents-Help": "Geeft aan of bestandssysteemevenementen moeten worden gecontroleerd. Als dit is ingeschakeld, controleert het systeem op bestandaanmaak- en wijzigingsevenementen, controleert het of de bestanden overeenkomen met de bibliotheekinstellingen en voegt ze toe voor verwerking.",
         "DownloadsDirectory": "Downloadmap",
         "DownloadsDirectory-Help": "Een speciale map waarin als een bestand dat succesvol is verwerkt opnieuw wordt ontdekt in deze map, dat bestand automatisch opnieuw zal worden verwerkt.\nDit is handig als u een bestand opnieuw downloadt.",
         "Enabled": "Ingeschakeld",

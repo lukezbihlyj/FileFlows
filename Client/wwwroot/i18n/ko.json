@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "여기에서 주어진 패턴과 일치하는 파일만 감지하도록 라이브러리를 구성할 수 있습니다.\n\n예를 들어, 다음과 같은 파일만 포함할 수 있습니다.\n\t- 생성된 지 7일이 되지 않은 파일\n\t- 마지막으로 작성된 지 3일에서 7일 사이인 파일\n\t- 파일 크기가 1기가바이트를 초과하는 파일",
+        "DisableFileSystemEvents": "파일 시스템 이벤트",
+        "DisableFileSystemEvents-Help": "파일 시스템 이벤트를 모니터링할지 여부를 지정합니다. 활성화되면 시스템은 파일 생성 및 수정 이벤트를 감시하고 파일이 라이브러리 설정과 일치하는지 확인하여 처리할 라이브러리에 추가합니다.",
         "DownloadsDirectory": "다운로드 디렉토리",
         "DownloadsDirectory-Help": "성공적으로 처리된 파일이 이 폴더에서 재발견되면 해당 파일이 자동으로 재처리됩니다.\n파일을 다시 다운로드할 경우 유용합니다.",
         "Enabled": "활성화",

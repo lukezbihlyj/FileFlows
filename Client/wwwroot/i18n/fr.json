@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Ici, vous pouvez configurer une bibliothèque pour ne détecter que les fichiers qui correspondent aux modèles donnés.\n\nPar exemple, cela vous permet d'inclure uniquement les fichiers qui sont\n\t- Fichiers créés il y a moins de 7 jours\n\t- Fichiers qui ont été écrits entre 3 et 7 jours\n\t- Taille du fichier supérieure à 1 gigaoctet",
+        "DisableFileSystemEvents": "Événements du Système de Fichiers",
+        "DisableFileSystemEvents-Help": "Indique si les événements du système de fichiers doivent être surveillés. Si activé, le système surveillera les créations et modifications de fichiers, vérifiera s'ils correspondent aux paramètres de la bibliothèque et les ajoutera pour traitement.",
         "DownloadsDirectory": "Répertoire de Téléchargements",
         "DownloadsDirectory-Help": "Un répertoire spécial où, si un fichier qui a été traité avec succès est redécouvert dans ce dossier, ce fichier sera automatiquement retraité.\nCeci est utile si vous re-téléchargez un fichier.",
         "Enabled": "Activé",

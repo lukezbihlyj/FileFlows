@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "在此您可以設定資料庫只檢測符合指定模式的檔案。\n\n例如，這允許您只包含以下檔案：\n\t- 建立於 7 天內的檔案\n\t- 最後寫入於 3 到 7 天前的檔案\n\t- 大小超過 1GB 的檔案",
+        "DisableFileSystemEvents": "檔案系統事件",
+        "DisableFileSystemEvents-Help": "指定是否監控檔案系統事件。如果啟用，系統將監控檔案創建和修改事件，檢查檔案是否符合庫設定，並將其添加到庫中進行處理。",
         "DownloadsDirectory": "下載目錄",
         "DownloadsDirectory-Help": "一個特殊目錄，若成功處理的檔案在此目錄中被重新發現，該檔案將自動重新處理。\n這對於重新下載檔案很有幫助。",
         "Enabled": "啟用",

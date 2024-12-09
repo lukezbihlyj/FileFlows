@@ -901,6 +901,8 @@
         "DetectFileSizeLower": "",
         "DetectFileSizeUpper": "",
         "DetectionDescription": "Aquí puede configurar una biblioteca para detectar solo archivos que coincidan con los patrones dados.\n\nPor ejemplo, esto le permite incluir solo archivos que son\n\t- Archivos que se crearon hace menos de 7 días\n\t- Archivos que se escribieron por última vez entre 3 y 7 días atrás\n\t- Tamaño de archivo mayor a 1 gigabyte",
+        "DisableFileSystemEvents": "Eventos del Sistema de Archivos",
+        "DisableFileSystemEvents-Help": "Especifica si se deben monitorizar los eventos del sistema de archivos. Si está habilitado, el sistema supervisará los eventos de creación y modificación de archivos, verificará si los archivos coinciden con la configuración de la biblioteca y los añadirá para su procesamiento.",
         "DownloadsDirectory": "Directorio de Descargas",
         "DownloadsDirectory-Help": "Un directorio especial donde si se redescubre un archivo que se ha procesado con éxito en esta carpeta, ese archivo se reprocesará automáticamente.\nEsto es útil si vuelve a descargar un archivo.",
         "Enabled": "Habilitado",
