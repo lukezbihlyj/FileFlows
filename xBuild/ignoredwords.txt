@@ -209,3 +209,4 @@ categorized
 jpg
 AniList
 JSON
+fftemp
