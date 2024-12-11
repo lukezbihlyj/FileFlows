@@ -1267,6 +1267,8 @@
         "DelayBetweenNextFile-Suffix": "milliseconden",
         "DockerModsOnServer": "DockerMods Op Server",
         "DockerModsOnServer-Help": "DockerMods moeten automatisch draaien bij het opstarten van de server of wanneer specifiek ingeschakeld. Anders worden ze alleen uitgevoerd wanneer een workflow wordt geïnitieerd.",
+        "DontUseTempFilesWhenMovingOrCopying": "Tijdelijke bestanden voor Verplaatsen/Kopiëren",
+        "DontUseTempFilesWhenMovingOrCopying-Help": "Gebruik .fftemp-bestanden om vroege detectie bij verplaatsen/kopiëren te voorkomen.",
         "HideProcessingFinishedNotifications": "Verwerken Voltooid Meldingen",
         "HideProcessingFinishedNotifications-Help": "Als er een toastmelding moet worden weergegeven in de webconsole wanneer een bestand is voltooid met verwerken.",
         "HideProcessingStartedNotifications": "Verwerken Gestart Meldingen",

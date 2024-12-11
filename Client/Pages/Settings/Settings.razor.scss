@@ -15,7 +15,11 @@
                 }
             }
         }
-        
+        .input-label {
+            width:18rem !important;
+            min-width: 18rem !important;;
+        }
+                
         .row + .row {
             margin-top: 1rem;
         }

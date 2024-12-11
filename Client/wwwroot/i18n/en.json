@@ -1267,6 +1267,8 @@
         "DelayBetweenNextFile-Suffix": "milliseconds",
         "DockerModsOnServer": "DockerMods On Server",
         "DockerModsOnServer-Help": "DockerMods should run automatically upon server startup or when specifically enabled. Otherwise, they will only execute when a workflow is initiated.",
+        "DontUseTempFilesWhenMovingOrCopying": "Temp Files for Moving/Copying",
+        "DontUseTempFilesWhenMovingOrCopying-Help": "Use .fftemp files to avoid premature detection during move/copy.",
         "HideProcessingFinishedNotifications": "Processing Finished Notifications",
         "HideProcessingFinishedNotifications-Help": "If a toast notification should be shown in the web console when a file finishes processing",
         "HideProcessingStartedNotifications": "Processing Started Notifications",

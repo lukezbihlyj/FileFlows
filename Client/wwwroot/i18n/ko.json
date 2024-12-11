@@ -1267,6 +1267,8 @@
         "DelayBetweenNextFile-Suffix": "밀리초",
         "DockerModsOnServer": "서버의 DockerMods",
         "DockerModsOnServer-Help": "DockerMods는 서버 시작 시 자동으로 실행되거나 특정하게 활성화될 때 실행되어야 합니다. 그렇지 않으면 워크플로가 시작될 때만 실행됩니다.",
+        "DontUseTempFilesWhenMovingOrCopying": "이동/복사용 임시 파일",
+        "DontUseTempFilesWhenMovingOrCopying-Help": ".fftemp 파일을 사용하여 이동/복사 중 조기 감지를 방지합니다.",
         "HideProcessingFinishedNotifications": "처리 완료 알림",
         "HideProcessingFinishedNotifications-Help": "파일 처리가 완료될 때 웹 콘솔에 토스트 알림을 표시해야 하는지 여부입니다.",
         "HideProcessingStartedNotifications": "처리 시작 알림",

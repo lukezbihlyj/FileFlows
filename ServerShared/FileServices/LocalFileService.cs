@@ -8,7 +8,8 @@ namespace FileFlows.ServerShared.FileServices;
 /// <summary>
 /// Local file service
 /// </summary>
-public class LocalFileService : IFileService
+/// <param name="dontUseTemporaryFilesForMoveCopy">If temporary files should not be used for move/copy</param>
+public class LocalFileService(bool dontUseTemporaryFilesForMoveCopy) : IFileService
 {
     /// <summary>
     /// Gets or sets the path separator for the file system
@@ -406,12 +407,38 @@ public class LocalFileService : IFileService
             var destDir = new FileInfo(destination).Directory;
             Logger?.ILog("Checking destination exists: " + destDir);
             CreateDirectoryIfNotExists(destDir?.FullName!);
-            var tempDest = destination + ".fftemp";
+            if (File.Exists(destination))
+            {
+                if (overwrite == false)
+                {
+                    Logger?.ILog("File already exists: " + destination);
+                    return false;
+                }
 
-            if (DoMove(fileInfo.FullName, tempDest, true) == false)
-                return Result<bool>.Fail("Failed to move file to temp file");
-            if (DoMove(tempDest, destination, overwrite) == false)
-                return Result<bool>.Fail("Failed to move temp file to final file");
+                try
+                {
+                    File.Delete(destination);
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
+            }
+
+            if (dontUseTemporaryFilesForMoveCopy)
+            {
+                if (DoMove(fileInfo.FullName, destination, overwrite) == false)
+                    return Result<bool>.Fail("Failed to move file to final file");
+            }
+            else
+            {
+                var tempDest = destination + ".fftemp";
+
+                if (DoMove(fileInfo.FullName, tempDest, true) == false)
+                    return Result<bool>.Fail("Failed to move file to temp file");
+                if (DoMove(tempDest, destination, overwrite) == false)
+                    return Result<bool>.Fail("Failed to move temp file to final file");
+            }
 
             SetPermissions(destination);
             return true;
@@ -520,12 +547,39 @@ public class LocalFileService : IFileService
             
             var destDir = new FileInfo(destination).Directory;
             CreateDirectoryIfNotExists(destDir?.FullName!);
+            
+            if (File.Exists(destination))
+            {
+                if (overwrite == false)
+                {
+                    Logger?.ILog("File already exists: " + destination);
+                    return false;
+                }
 
-            var tempDest = destination + ".fftemp";
-            if (DoCopy(fileInfo.FullName, tempDest, true) == false)
-                return Result<bool>.Fail("Failed to copy file to temp file");
-            if (DoCopy(tempDest, destination, overwrite, move: true) == false)
-                return Result<bool>.Fail("Failed to copy temp file to final file");
+                try
+                {
+                    File.Delete(destination);
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
+            }
+
+            if (dontUseTemporaryFilesForMoveCopy)
+            {
+                if (DoCopy(fileInfo.FullName, destination, overwrite, move: true) == false)
+                    return Result<bool>.Fail("Failed to copy file to final file");
+            }
+            else
+            {
+
+                var tempDest = destination + ".fftemp";
+                if (DoCopy(fileInfo.FullName, tempDest, true) == false)
+                    return Result<bool>.Fail("Failed to copy file to temp file");
+                if (DoCopy(tempDest, destination, overwrite, move: true) == false)
+                    return Result<bool>.Fail("Failed to copy temp file to final file");
+            }
 
             SetPermissions(destination);
             return true;

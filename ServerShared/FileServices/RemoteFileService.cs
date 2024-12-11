@@ -49,7 +49,8 @@ public class RemoteFileService : IFileService
     /// <param name="pathSeparator">the path separator</param>
     /// <param name="accessToken">the API token to use</param>
     /// <param name="remoteNodeUid">the UID of the remote node</param>
-    public RemoteFileService(Guid executorUid, string serverUrl, string tempPath, ILogger logger, char pathSeparator, string accessToken, Guid remoteNodeUid)
+    /// <param name="dontUseTemporaryFilesForMoveCopy">If temporary files should not be used for move/copy</param>
+    public RemoteFileService(Guid executorUid, string serverUrl, string tempPath, ILogger logger, char pathSeparator, string accessToken, Guid remoteNodeUid, bool dontUseTemporaryFilesForMoveCopy)
     {
         this.executorUid = executorUid;
         this.serverUrl = serverUrl;
@@ -58,7 +59,7 @@ public class RemoteFileService : IFileService
         this.AccessToken = accessToken;
         this.RemoteNodeUid = remoteNodeUid;
         this.PathSeparator = pathSeparator;
-        this._localFileService = new();
+        this._localFileService = new(dontUseTemporaryFilesForMoveCopy);
         HttpHelper.OnHttpRequestCreated = OnHttpRequestCreated;
     }
 

@@ -1267,6 +1267,8 @@
         "DelayBetweenNextFile-Suffix": "millisecondi",
         "DockerModsOnServer": "DockerMods sul Server",
         "DockerModsOnServer-Help": "I DockerMods devono essere eseguiti automaticamente all'avvio del server o quando specificamente abilitati. Altrimenti, verranno eseguiti solo quando viene avviato un flow di lavoro.",
+        "DontUseTempFilesWhenMovingOrCopying": "File Temporanei per Spostare/Copiare",
+        "DontUseTempFilesWhenMovingOrCopying-Help": "Usa file .fftemp per evitare rilevamenti prematuri durante lo spostamento/la copia.",
         "HideProcessingFinishedNotifications": "Notifiche di Elaborazione Completata",
         "HideProcessingFinishedNotifications-Help": "Se deve essere mostrata una notifica toast nella console web quando un file ha terminato l'elaborazione",
         "HideProcessingStartedNotifications": "Notifiche di Elaborazione Iniziata",

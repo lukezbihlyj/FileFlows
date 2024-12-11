@@ -73,6 +73,7 @@ public class SettingsService : ISettingsService
             cfg.PluginSettings = await new PluginService().GetAllPluginSettings();
             cfg.MaxNodes = LicenseHelper.IsLicensed() ? 250 : 30;
             cfg.KeepFailedFlowTempFiles = settings.KeepFailedFlowTempFiles;
+            cfg.DontUseTempFilesWhenMovingOrCopying = settings.DontUseTempFilesWhenMovingOrCopying;
             
             if (LicenseHelper.IsLicensed(LicenseFlags.AutoUpdates))
                 cfg.Resources = (await ServiceLoader.Load<ResourceService>().GetAllAsync());

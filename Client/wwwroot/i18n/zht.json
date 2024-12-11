@@ -1267,6 +1267,8 @@
         "DelayBetweenNextFile-Suffix": "毫秒",
         "DockerModsOnServer": "伺服器上的 DockerMods",
         "DockerModsOnServer-Help": "DockerMods 應在伺服器啟動時自動運行或在特別啟用時運行。否則，它們將僅在啟動工作流時執行。",
+        "DontUseTempFilesWhenMovingOrCopying": "用於移動/複製的臨時文件",
+        "DontUseTempFilesWhenMovingOrCopying-Help": "使用 .fftemp 文件以避免移動/複製時被過早檢測到。",
         "HideProcessingFinishedNotifications": "處理完成通知",
         "HideProcessingFinishedNotifications-Help": "在文件處理完成時是否應在網頁控制台顯示 toast 通知",
         "HideProcessingStartedNotifications": "處理開始通知",

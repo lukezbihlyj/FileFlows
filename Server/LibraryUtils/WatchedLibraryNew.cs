@@ -101,7 +101,7 @@ public partial class WatchedLibraryNew : IDisposable
     {
         if (Library.DisableFileSystemEvents == true)
             return;
-        if (e.FullPath.EndsWith(".fftemp"))
+        if (e.FullPath.EndsWith(".fftemp", StringComparison.InvariantCultureIgnoreCase))
             return; // Ignore .fftemp files
     
         
@@ -253,7 +253,7 @@ public partial class WatchedLibraryNew : IDisposable
     /// <param name="filePath">the file to check</param>
     private async Task CheckFile(string filePath)
     {
-        if (filePath.EndsWith(".fftemp"))
+        if (filePath.EndsWith(".fftemp", StringComparison.InvariantCultureIgnoreCase))
             return; // we ignore fftemp files
         
         await FileSemaphore.WaitAsync(30_000, cancellationTokenSource.Token);

@@ -1267,6 +1267,8 @@
         "DelayBetweenNextFile-Suffix": "millisekunder",
         "DockerModsOnServer": "DockerMods på server",
         "DockerModsOnServer-Help": "DockerMods ska köras automatiskt vid serverstart eller när de specifikt aktiveras. Annars kommer de endast att köras när ett arbetsflöde initieras.",
+        "DontUseTempFilesWhenMovingOrCopying": "Tempfiler för Flytt/Kopiering",
+        "DontUseTempFilesWhenMovingOrCopying-Help": "Använd .fftemp-filer för att undvika tidig upptäckt vid flytt/kopiering.",
         "HideProcessingFinishedNotifications": "Meddelanden om avslutad bearbetning",
         "HideProcessingFinishedNotifications-Help": "Om en toast-notifikation ska visas i webbkonsolen när en fil har avslutat bearbetningen",
         "HideProcessingStartedNotifications": "Meddelanden om påbörjad bearbetning",

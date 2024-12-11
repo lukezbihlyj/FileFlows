@@ -293,7 +293,8 @@ public Result<bool> ValidateScript(string code)
                 JsonSerializer.Serialize(x)));
         };
         executor.Variables = variables ?? new ();
-        executor.AdditionalArguments.Add("Flow", new NodeParameters(null, Logger.Instance, false, null, fileService: new LocalFileService())
+        executor.AdditionalArguments.Add("Flow", new NodeParameters(null, Logger.Instance, false, null, 
+            fileService: new LocalFileService(false))
         {
             AdditionalInfoRecorder = (s, o, arg3, arg4) => { }
         });

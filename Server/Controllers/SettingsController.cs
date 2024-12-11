@@ -185,6 +185,7 @@ public class SettingsController : BaseController
             AutoUpdatePlugins = model.AutoUpdatePlugins,
             LogQueueMessages = model.LogQueueMessages,
             KeepFailedFlowTempFiles = model.KeepFailedFlowTempFiles,
+            DontUseTempFilesWhenMovingOrCopying = model.DontUseTempFilesWhenMovingOrCopying,
             ShowFileAddedNotifications = model.ShowFileAddedNotifications,
             HideProcessingStartedNotifications = model.HideProcessingStartedNotifications,
             HideProcessingFinishedNotifications = model.HideProcessingFinishedNotifications,

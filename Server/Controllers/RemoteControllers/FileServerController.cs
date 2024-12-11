@@ -64,7 +64,7 @@ public class FileServerController : Controller
             AllowedPaths = allowedPaths;
 
         lfsLogger = new StringLogger();
-        _localFileService = new LocalFileService()
+        _localFileService = new LocalFileService(settings.DontUseTempFilesWhenMovingOrCopying)
         {
             AllowedPaths = allowedPaths,
             CheckProtectivePaths = true,
@@ -709,7 +709,7 @@ public class FileServerController : Controller
         if (result.Failed(out string error))
             return Result<string>.Fail("Failed creating directory: " + error);
 
-        string outFile = Path.Combine(dirPath, fileInfo.Name + ".FFTEMP");
+        string outFile = Path.Combine(dirPath, fileInfo.Name + ".fftemp");
         log.AppendLine("Writing file to temporary filename: " + outFile);
 
         await using (var fileStream = new FileStream(outFile, FileMode.Create))

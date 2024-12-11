@@ -38,6 +38,11 @@ public class ConfigurationRevision
     public bool KeepFailedFlowTempFiles { get; set; }
     
     /// <summary>
+    /// Gets or sets if temporary files should be used when moving or copying files
+    /// </summary>
+    public bool DontUseTempFilesWhenMovingOrCopying { get; set; }
+    
+    /// <summary>
     /// Gets or sets the resources 
     /// </summary>
     public List<Resource> Resources { get; set; }
