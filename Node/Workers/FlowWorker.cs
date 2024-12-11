@@ -775,6 +775,7 @@ public class FlowWorker : Worker
                 config.AllowRemote,
                 config.Tags,
                 config.Resources,
+                config.DontUseTempFilesWhenMovingOrCopying,
                 Variables = variables,
                 config.Libraries,
                 config.PluginNames,
