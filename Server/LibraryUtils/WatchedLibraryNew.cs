@@ -48,6 +48,7 @@ public partial class WatchedLibraryNew : IDisposable
     private readonly SemaphoreSlim ScanSemaphore = new(1, 1);
     private LibraryFileService LibraryFileService { get; init; }
     private Settings Settings;
+    private PausedService pausedService;
 
     /// <summary>
     /// Tthe flow runner service
@@ -63,6 +64,7 @@ public partial class WatchedLibraryNew : IDisposable
     {
         this.Logger = logger;
         this.Library = library;
+        this.pausedService = ServiceLoader.Load<PausedService>();
         this.LibraryFileService = ServiceLoader.Load<LibraryFileService>();
         this.RunnerService = ServiceLoader.Load<FlowRunnerService>();
         this.Settings = ServiceLoader.Load<ISettingsService>().Get().Result;
@@ -103,6 +105,9 @@ public partial class WatchedLibraryNew : IDisposable
             return;
         if (e.FullPath.EndsWith(".fftemp", StringComparison.InvariantCultureIgnoreCase))
             return; // Ignore .fftemp files
+
+        if (pausedService.IsPaused)
+            return;
     
         
         // Use ConcurrentDictionary methods for thread-safe operations
@@ -205,6 +210,9 @@ public partial class WatchedLibraryNew : IDisposable
     {
         try
         {
+            if (pausedService.IsPaused)
+                return;
+            
             await ScanSemaphore.WaitAsync(10_000, cancellationTokenSource!.Token);
 
             // refresh the library instance
