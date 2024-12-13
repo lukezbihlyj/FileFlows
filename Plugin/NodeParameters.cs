@@ -420,6 +420,19 @@ public class NodeParameters
             return path;
         return PathUnMapper(path);
     }
+
+    /// <summary>
+    /// Fails a flow
+    /// </summary>
+    /// <param name="reason">the reason for failing</param>
+    /// <returns>the return code</returns>
+    public int Fail(string reason)
+    {
+        FailureReason = reason;
+        if(Logger != null)
+            Logger.ELog(reason);
+        return -1;
+    }
     
     /// <summary>
     /// Checks if a plugin is available

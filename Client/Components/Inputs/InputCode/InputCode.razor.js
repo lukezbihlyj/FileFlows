@@ -189,6 +189,14 @@ export class InputCode
  */
 CreateDirectoryIfNotExists: function (path:string) { },
 /**
+ * Fails the flow with the given reason.
+ *
+ * Example usage: return Flow.Fail('File not found');
+ * @param {string} reason - The reason to fail the flow
+ * @returns {number} - The error return code, return this from the function/script
+ */
+Fail: function(reason:string):number {},
+/**
  * Gets the size of a directory in bytes
  * @param {string} path - The path of the directory
  * @returns {number} - The size of the directory in bytes
