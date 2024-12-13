@@ -213,6 +213,14 @@ HasPlugin: function(name:string):boolean { },
  */
 MapPath: function (path:string) { }, 
 /**
+ * Unmaps a path to the original FileFlows Server path.
+ *
+ * Note: It is safe to unmap a path multiple times as this should not effect its value
+ * @param {string} path - The path to unmap
+ * @returns {string} - The unmapped path as it appears on the server<
+ */
+UnMapPath: function (path:string) { }, 
+/**
  * Moves a file to a destination path
  * @param {string} destination - The destination path
  */
