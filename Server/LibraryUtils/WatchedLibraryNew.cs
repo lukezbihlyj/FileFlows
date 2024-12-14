@@ -156,7 +156,10 @@ public partial class WatchedLibraryNew : IDisposable
             }
 
             var executors = (await this.RunnerService.GetExecutors()).Values;
-            if (executors.Any(x => x.LibraryFileName == e.FullPath || x.WorkingFile == e.FullPath))
+            
+            // Determines if the file should be ignored based on its path and extension.
+            if (executors.Any(x => IsSameFileIgnoringExtension(x.LibraryFileName, e.FullPath) || 
+                                   IsSameFileIgnoringExtension(x.WorkingFile, e.FullPath)))
                 return; // ignore these files
             
             int delay = 5000;
@@ -167,7 +170,7 @@ public partial class WatchedLibraryNew : IDisposable
                 if (thisFolder)
                     delay = 30_000;
             }
-            // need a delay incase a file is processing and replcae original with new extension
+            // need a delay in-case a file is processing and replcae original with new extension
             // for example is called, this could cause a file to be detected when it will become the output file
             await Task.Delay(delay);
             if (Settings?.LogQueueMessages == true)
@@ -176,6 +179,27 @@ public partial class WatchedLibraryNew : IDisposable
         });
     }
 
+    /// <summary>
+    /// Compares two file paths to determine if they refer to the same file, ignoring the file extensions.
+    /// </summary>
+    /// <param name="filePath1">The first file path to compare.</param>
+    /// <param name="filePath2">The second file path to compare.</param>
+    /// <returns>
+    /// <c>true</c> if the file paths refer to the same file (ignoring extensions); otherwise, <c>false</c>.
+    /// </returns>
+    private static bool IsSameFileIgnoringExtension(string filePath1, string filePath2)
+    {
+        if (string.IsNullOrEmpty(filePath1) || string.IsNullOrEmpty(filePath2))
+            return false;
+
+        return Path.GetFileNameWithoutExtension(filePath1).Equals(
+                   Path.GetFileNameWithoutExtension(filePath2), 
+                   StringComparison.OrdinalIgnoreCase) &&
+               Path.GetDirectoryName(filePath1).Equals(
+                   Path.GetDirectoryName(filePath2), 
+                   StringComparison.OrdinalIgnoreCase);
+    }
+    
     /// <summary>
     /// Checks if a file is stabilized (i.e., hasn't changed for a given period).
     /// </summary>
