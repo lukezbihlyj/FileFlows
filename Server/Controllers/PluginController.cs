@@ -208,12 +208,62 @@ public class PluginController : BaseController
         {
             return File(FileOpenHelper.OpenRead_NoLocks(file), "application/octet-stream");
         }
+        catch (IOException ex)
+        {
+            Logger.Instance?.ELog($"Download Package Error: File locked, falling back to copy => {ex.Message}");
+            return StreamFromCopy(file); // Use the fallback method if there's a file locking issue
+        }
         catch(Exception ex)
         {
             Logger.Instance?.ELog("Download Package Error: Failed to read data => " + ex.Message); ;
             throw;
         }
     }
+    
+    /// <summary>
+    /// Copies the specified file to a temporary location and streams the copied file.
+    /// Ensures the temporary file is deleted after the download completes.
+    /// </summary>
+    /// <param name="sourceFile">The original file to copy</param>
+    /// <returns>A FileStreamResult for the copied file</returns>
+    private FileStreamResult StreamFromCopy(string sourceFile)
+    {
+        // Generate a completely unique temp file name
+        string tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + Path.GetExtension(sourceFile));
+
+        try
+        {
+            // Copy the file to a temporary location
+            System.IO.File.Copy(sourceFile, tempFile, true);
+
+            var fileStream = new FileStream(tempFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            // Setup cleanup logic only after the fallback succeeds
+            HttpContext.Response.OnCompleted(() =>
+            {
+                try
+                {
+                    if (System.IO.File.Exists(tempFile))
+                        System.IO.File.Delete(tempFile);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Instance?.ELog($"Error deleting temporary file '{tempFile}': {ex.Message}");
+                }
+                return Task.CompletedTask;
+            });
+
+            HttpContext.Response.Headers.ContentDisposition =
+                $"attachment; filename=\"{Path.GetFileName(sourceFile)}\"";
+            return File(fileStream, "application/octet-stream");
+        }
+        catch (Exception ex)
+        {
+            Logger.Instance?.ELog($"StreamFromCopy Error: Failed to handle temp file => {ex.Message}");
+            throw;
+        }
+    }
+    
 
     /// <summary>
     /// Gets the json plugin settings for a plugin
