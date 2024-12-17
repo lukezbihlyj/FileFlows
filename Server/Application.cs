@@ -123,6 +123,7 @@ public class Application
 
             if (Docker || noGui)
             {
+                StartResellerApp();
                 Console.WriteLine("Starting FileFlows Server...");
                 WebServer.Start(args);
             }
@@ -199,6 +200,19 @@ public class Application
 
             Console.WriteLine("Error: " + ex.Message + Environment.NewLine + ex.StackTrace);
         }
+    }
+
+    /// <summary>
+    /// Starts the reseller application
+    /// </summary>
+    private void StartResellerApp()
+    {
+        #if(!DEBUG)
+        if (LicenseHelper.IsLicensed(LicenseFlags.Reseller) == false)
+            return;
+        #endif
+        Console.WriteLine("Starting Reseller App...");
+        new ResellerApp.ResellerWebService().Start();
     }
 
     /// <summary>

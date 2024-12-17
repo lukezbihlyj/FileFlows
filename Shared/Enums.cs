@@ -330,7 +330,11 @@ public enum LicenseFlags
     /// <summary>
     /// Reporting
     /// </summary>
-    Reporting = 8192
+    Reporting = 8192,
+    /// <summary>
+    /// Reseller license
+    /// </summary>
+    Reseller = 16384,
 }
 
 /// <summary>
