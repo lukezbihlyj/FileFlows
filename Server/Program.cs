@@ -1,5 +1,5 @@
 using FileFlows.Server.Cli;
-using FileFlows.Server.Services;
+using FileFlows.Services;
 using FileFlows.Shared.Helpers;
 
 namespace FileFlows.Server;
@@ -31,8 +31,8 @@ public class Program
         
         if (CommandLine.Process(args))
             return;
-        
-        Application app = ServiceLoader.Provider.GetRequiredService<Application>();
+
+        Application app = new Application();
         ServerShared.Services.SharedServiceLoader.Loader = type => ServiceLoader.Provider.GetRequiredService(type);
         app.Run(args);
     }

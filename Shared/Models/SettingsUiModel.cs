@@ -29,7 +29,7 @@ public class SettingsUiModel:Settings
     /// <summary>
     /// Gets the license level for the user
     /// </summary>
-    public LicenseLevel LicenseLevel { get; set; }
+    public FileFlows.Common.LicenseLevel LicenseLevel { get; set; }
     /// <summary>
     /// Gets the license expiry date for the user
     /// </summary>

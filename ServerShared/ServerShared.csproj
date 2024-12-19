@@ -10,6 +10,7 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FileFlowsAdditional\Helpers\Helpers.csproj" />
     <ProjectReference Include="..\Plugin\Plugin.csproj" />
     <ProjectReference Include="..\ScriptExecution\ScriptExecution.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />

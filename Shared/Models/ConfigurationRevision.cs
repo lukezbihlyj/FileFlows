@@ -25,7 +25,7 @@ public class ConfigurationRevision
     /// <summary>
     /// Gets or sets if this is a license level
     /// </summary>
-    public LicenseLevel LicenseLevel { get; set; }
+    public FileFlows.Common.LicenseLevel LicenseLevel { get; set; }
     
     /// <summary>
     /// Gets or sets if remote files are allowed

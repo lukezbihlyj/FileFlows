@@ -1,4 +1,4 @@
-using FileFlows.Plugin;
+using FileFlows.Common;
 
 namespace FileFlows.Charting;
 

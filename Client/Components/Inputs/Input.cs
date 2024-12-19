@@ -167,7 +167,7 @@ public abstract class Input<T> : ComponentBase, IInput, IDisposable
     /// <summary>
     /// Gets or sets the validators text
     /// </summary>
-    [Parameter] public List<FileFlows.Shared.Validators.Validator> Validators { get; set; }
+    [Parameter] public List<Validator> Validators { get; set; }
 
     /// <summary>
     /// Gets or sets the error message

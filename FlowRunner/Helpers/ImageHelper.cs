@@ -69,7 +69,7 @@ public class ImageHelper : IImageHelper
 
             var dateTakenResult = GetDateTaken(imagePath);
 
-            var format = FileHelper.GetExtension(imagePath)?.TrimStart('.');
+            var format = Plugin.Helpers.FileHelper.GetExtension(imagePath)?.TrimStart('.');
             ImageType? type = null;
             if (Enum.TryParse<ImageType>(format ?? string.Empty, out ImageType typeResult))
                 type = typeResult;

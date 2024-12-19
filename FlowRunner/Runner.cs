@@ -16,6 +16,7 @@ using FileFlows.Shared.Helpers;
 using Humanizer;
 using Microsoft.VisualBasic;
 using FlowHelper = FileFlows.FlowRunner.Helpers.FlowHelper;
+using LicenseLevel = FileFlows.Plugin.LicenseLevel;
 
 namespace FileFlows.FlowRunner;
 
@@ -243,10 +244,10 @@ public class Runner
         if (nodeParameters?.Metadata != null)
             Info.LibraryFile.FinalMetadata = nodeParameters.Metadata;
         // calculates the final fingerprint
-        if (string.IsNullOrWhiteSpace(Info.LibraryFile.OutputPath) == false)
-        {
-            Info.LibraryFile.FinalFingerprint = FileHelper.CalculateFingerprint(Info.LibraryFile.OutputPath);
-        }
+        // if (string.IsNullOrWhiteSpace(Info.LibraryFile.OutputPath) == false)
+        // {
+        //     Info.LibraryFile.FinalFingerprint = Plugin.Helpers.FileHelper.CalculateFingerprint(Info.LibraryFile.OutputPath);
+        // }
 
         await Complete(log);
         OnFlowCompleted?.Invoke(this, Info.LibraryFile.Status == FileStatus.Processed);
@@ -467,7 +468,7 @@ public class Runner
                 Name = Info.LibraryFile.Name, 
                 Type = typeof(Library).FullName
             },
-            LicenseLevel = runInstance.Config.LicenseLevel,
+            LicenseLevel = (LicenseLevel)(int) runInstance.Config.LicenseLevel,
             LibraryFileName = Info.LibraryFile.Name,
             IsRemote = Info.IsRemote,
             LogImageActual = logger.Image,
@@ -590,7 +591,7 @@ public class Runner
         nodeParameters.TempPathName = new DirectoryInfo(WorkingDir).Name;
         nodeParameters.RelativeFile = Info.LibraryFile.RelativePath;
         nodeParameters.PartPercentageUpdate = UpdatePartPercentage;
-        Shared.Helpers.HttpHelper.Logger = nodeParameters.Logger;
+        HttpHelper.Logger = nodeParameters.Logger;
 
         nodeParameters.Result = NodeResult.Success;
         nodeParameters.GetToolPathActual = (name) =>

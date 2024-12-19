@@ -1,13 +1,13 @@
 ﻿using System.Runtime.InteropServices;
 using FileFlows.Server.Helpers;
-using FileFlows.Server.Services;
+using FileFlows.Services;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Shared.Helpers;
 using FileFlows.Shared.Models;
-using FlowService = FileFlows.Server.Services.FlowService;
-using LibraryFileService = FileFlows.Server.Services.LibraryFileService;
-using LibraryService = FileFlows.Server.Services.LibraryService;
-using NodeService = FileFlows.Server.Services.NodeService;
+using FlowService = FileFlows.Services.FlowService;
+using LibraryFileService = FileFlows.Services.LibraryFileService;
+using LibraryService = FileFlows.Services.LibraryService;
+using NodeService = FileFlows.Services.NodeService;
 
 namespace FileFlows.Server.Workers;
 
@@ -26,7 +26,7 @@ public class TelemetryReporter : ServerWorker
 // #if (DEBUG && false)
 //             return;
 // #else
-            if (settings.DisableTelemetry == true && LicenseHelper.IsLicensed())
+            if (settings.DisableTelemetry == true && LicenseService.IsLicensed())
                 return; // they have turned it off, dont report anything
 
             bool isDocker = Application.Docker;

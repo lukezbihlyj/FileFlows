@@ -36,7 +36,7 @@ public class Profile
     /// <summary>
     /// Gets or sets the license level
     /// </summary>
-    public LicenseLevel LicenseLevel { get; set; }
+    public FileFlows.Common.LicenseLevel LicenseLevel { get; set; }
     
     /// <summary>
     /// Gets or sets if in a webview

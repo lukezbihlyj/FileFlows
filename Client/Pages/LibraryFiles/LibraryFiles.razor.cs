@@ -123,7 +123,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         lblLibrary = Translater.Instant("Pages.Library.Title");
         lblTag = Translater.Instant("Labels.Tag");
 
-        if (Profile.LicenseLevel != LicenseLevel.Free)
+        if (Profile.LicenseLevel != FileFlows.Common.LicenseLevel.Free)
         {
             optionsTags = (await ClientService.GetTags()).Select(x => new DropDownOption()
             {

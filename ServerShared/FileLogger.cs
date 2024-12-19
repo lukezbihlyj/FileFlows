@@ -116,7 +116,7 @@ public class FileLogger : ILogWriter
     /// </summary>
     /// <param name="length">The number of lines to fetch</param>
     /// <returns>a tail of the log</returns>
-    public string GetTail(int length = 50) => GetTail(length, Plugin.LogType.Info);
+    public string GetTail(int length = 50) => GetTail(length, LogType.Info);
 
     /// <summary>
     /// Gets a tail of the log
@@ -124,7 +124,7 @@ public class FileLogger : ILogWriter
     /// <param name="length">The number of lines to fetch</param>
     /// <param name="logLevel">the log level</param>
     /// <returns>a tail of the log</returns>
-    public string GetTail(int length = 50, Plugin.LogType logLevel = Plugin.LogType.Info)
+    public string GetTail(int length = 50, LogType logLevel = LogType.Info)
     {
         if (length <= 0 || length > 1000)
             length = 1000;
@@ -140,7 +140,7 @@ public class FileLogger : ILogWriter
         }
     }
 
-    private string GetTailActual(int length, Plugin.LogType logLevel)
+    private string GetTailActual(int length, LogType logLevel)
     {
         string logFile = GetLogFilename();
         if (string.IsNullOrEmpty(logFile) || File.Exists(logFile) == false)
@@ -149,7 +149,7 @@ public class FileLogger : ILogWriter
         reader.BaseStream.Seek(0, SeekOrigin.End);
         int count = 0;
         int max = length;
-        if (logLevel != Plugin.LogType.Debug)
+        if (logLevel != LogType.Debug)
             max = 5000;
         while ((count < max) && (reader.BaseStream.Position > 0))
         {
@@ -164,17 +164,17 @@ public class FileLogger : ILogWriter
         }
 
         string str = reader.ReadToEnd();
-        if (logLevel == Plugin.LogType.Debug)
+        if (logLevel == LogType.Debug)
             return str;
         
         string[] arr = str.Replace("\r", "").Split('\n');
         arr = arr.Where(x =>
         {
-            if (logLevel < Plugin.LogType.Debug && x.Contains("DBUG"))
+            if (logLevel < LogType.Debug && x.Contains("DBUG"))
                 return false;
-            if (logLevel < Plugin.LogType.Info && x.Contains("INFO"))
+            if (logLevel < LogType.Info && x.Contains("INFO"))
                 return false;
-            if (logLevel < Plugin.LogType.Warning && x.Contains("WARN"))
+            if (logLevel < LogType.Warning && x.Contains("WARN"))
                 return false;
             return true;
         }).Take(length).ToArray();

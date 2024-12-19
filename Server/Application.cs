@@ -2,9 +2,12 @@ using System.Collections;
 using System.Net;
 using Avalonia;
 using FileFlows.Charting;
+using FileFlows.Server.DefaultTemplates;
 using FileFlows.Server.Helpers;
 using FileFlows.Server.Services;
+using FileFlows.Services;
 using FileFlows.Shared.Helpers;
+using FileFlows.WebServer;
 
 namespace FileFlows.Server;
 
@@ -31,7 +34,7 @@ public class Application
     /// <summary>
     /// Gets if this is running inside a docker container
     /// </summary>
-    public static bool Docker => ServerShared.Globals.IsDocker;
+    public static bool Docker => Globals.IsDocker;
 
 
     /// <summary>
@@ -45,20 +48,10 @@ public class Application
     public static bool ShowGui { get; set; }
 
     /// <summary>
-    /// Gets or sets the server url
-    /// </summary>
-    public static string ServerUrl { get; set; }
-
-    /// <summary>
     /// Gets the running UID which will be used to verify remote requests come from this running instance
     /// We cant use the InternalNodeUid as thats fixed across all installs
     /// </summary>
     internal static readonly Guid RunningUid = Guid.NewGuid();
-
-    /// <summary>
-    /// Gets or sets if using a web view
-    /// </summary>
-    public static bool UsingWebView { get; private set; }
 
     /// <summary>
     /// Runst the application
@@ -117,6 +110,8 @@ public class Application
 
             InitializeLoggers();
 
+            RegisterServerServices();
+            
             WriteLogHeader(args);
 
             HttpHelper.Client = HttpHelper.GetDefaultHttpClient(string.Empty);
@@ -125,11 +120,11 @@ public class Application
             {
                 StartResellerApp();
                 Console.WriteLine("Starting FileFlows Server...");
-                WebServer.Start(args);
+                WebServerApp.Start(args);
             }
             else if (ShowGui)
             {
-                UsingWebView = true;
+                Globals.UsingWebView = true;
 
                 var webview = new Gui.Photino.WebView();
                 _ = Task.Run(async () =>
@@ -143,7 +138,7 @@ public class Application
                     try
                     {
                         Logger.Instance.ILog("Starting FileFlows Server...");
-                        WebServer.Start(args);
+                        WebServerApp.Start(args);
                     }
                     catch (Exception ex)
                     {
@@ -156,13 +151,13 @@ public class Application
             else if (ShowMinimalGui)
             {
                 // do this first, to populate the Port so the Minimal UI shows the correct url
-                string serverUrl = WebServer.GetServerUrl(args);
+                string serverUrl = WebServerApp.GetServerUrl(args);
                 _ = Task.Run(() =>
                 {
                     try
                     {
                         Logger.Instance.ILog("Starting FileFlows Server...");
-                        WebServer.Start(args);
+                        WebServerApp.Start(args);
                     }
                     catch (Exception ex)
                     {
@@ -185,7 +180,7 @@ public class Application
                 }
             }
 
-            _ = WebServer.Stop();
+            _ = WebServerApp.Stop();
             Console.WriteLine("Exiting FileFlows Server...");
         }
         catch (Exception ex)
@@ -203,16 +198,27 @@ public class Application
     }
 
     /// <summary>
+    /// Registers any special sevices
+    /// </summary>
+    private void RegisterServerServices()
+    {
+        FileFlows.Services.ServiceLoader.AddSpecialCase<IStartupService>(new StartupService());
+        FileFlows.Services.ServiceLoader.AddSpecialCase<IPluginScanner>(new PluginScanner());
+        FileFlows.Services.ServiceLoader.AddSpecialCase<ITemplateService>(new TemplateLoader());
+        FileFlows.Services.ServiceLoader.AddSpecialCase<ISystemEventsService>(new SystemEvents());
+    }
+
+    /// <summary>
     /// Starts the reseller application
     /// </summary>
     private void StartResellerApp()
     {
         #if(!DEBUG)
-        if (LicenseHelper.IsLicensed(LicenseFlags.Reseller) == false)
+        if (LicenseService.IsLicensed(LicenseFlags.Reseller) == false)
             return;
         #endif
         Console.WriteLine("Starting Reseller App...");
-        new ResellerApp.ResellerWebService().Start();
+        new FileFlows.ResellerApp.ResellerWebService().Start();
     }
 
     /// <summary>

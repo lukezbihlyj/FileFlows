@@ -1,19 +1,12 @@
 using System.Text;
 using FileFlows.Client.Models;
-
-namespace FileFlows.Client.Pages;
-
 using FileFlows.Client.Components.Dialogs;
-using FileFlows.Client.Helpers;
-using FileFlows.Shared.Helpers;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using FileFlows.Shared;
 using FileFlows.Client.Components;
-using System.Collections.Generic;
-using FileFlows.Shared.Validators;
 using Microsoft.JSInterop;
 using FileFlows.Plugin;
+
+namespace FileFlows.Client.Pages;
 
 /// <summary>
 /// Page for system settings
