@@ -682,7 +682,10 @@ public class LanguageHelper
                 comparison = comparison.Replace("original", origLanguage);
                 comparison = comparison.Replace("orig", origLanguage);
             }
-            
+
+            var strMatch = comparison.Equals(value, StringComparison.InvariantCultureIgnoreCase);
+            if (strMatch)
+                return true;
             // Check if comparison starts with a letter and contains only valid characters afterwards
             if (Regex.IsMatch(comparison, @"^[a-zA-Z][a-zA-Z\-\(\)\{\}]*$"))
             {
