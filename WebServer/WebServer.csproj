@@ -8,7 +8,7 @@
         <RootNamespace>FileFlows.WebServer</RootNamespace>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <OutputType>Library</OutputType>
-<!--        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+        <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>

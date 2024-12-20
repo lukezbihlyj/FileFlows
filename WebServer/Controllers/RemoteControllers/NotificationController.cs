@@ -1,9 +1,3 @@
-using FileFlows.WebServer.Authentication;
-using FileFlows.Services;
-using FileFlows.ServerShared.Services;
-using FileFlows.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
-
 namespace FileFlows.WebServer.Controllers.RemoteControllers;
 
 /// <summary>
@@ -34,10 +28,11 @@ public class NotificationController
         /// Gets the notification severity
         /// </summary>
         public NotificationSeverity Severity { get; init; }
+
         /// <summary>
         /// Gets the notification title
         /// </summary>
-        public string Title { get; init; }
+        public string Title { get; init; } = string.Empty;
         /// <summary>
         /// Gets the notification message
         /// </summary>

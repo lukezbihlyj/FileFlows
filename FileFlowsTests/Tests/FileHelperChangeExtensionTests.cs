@@ -1,4 +1,3 @@
-using System.IO;
 using FileHelper = FileFlows.Plugin.Helpers.FileHelper;
 
 namespace FileFlowsTests.Tests;
@@ -117,7 +116,7 @@ public class FileHelperChangeExtensionTests
     /// Tests that the ChangeExtension method throws ArgumentNullException when the file name is null.
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(System.ArgumentNullException))]
+    [ExpectedException(typeof(ArgumentNullException))]
     public void ChangeExtension_NullFileName_ThrowsArgumentNullException()
     {
         // Arrange
@@ -125,6 +124,6 @@ public class FileHelperChangeExtensionTests
         string newExtension = "csv";
 
         // Act
-        string result = FileHelper.ChangeExtension(fileName, newExtension);
+        FileHelper.ChangeExtension(fileName!, newExtension);
     }
 }

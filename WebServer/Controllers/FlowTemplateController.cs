@@ -1,12 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using FileFlows.WebServer.Authentication;
-using FileFlows.Server.Helpers;
-using FileFlows.Services;
-using FileFlows.ServerShared.Helpers;
-using FileFlows.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
-
-namespace FileFlows.WebServer.Controllers;
+﻿namespace FileFlows.WebServer.Controllers;
 
 
 /// <summary>
@@ -235,8 +227,8 @@ public class FlowTemplateController : Controller
         }
 
         
-        model.Fields = FlowFieldToTemplateField(flow);
-        model.Flow = flow;
+        model.Fields = FlowFieldToTemplateField(flow!);
+        model.Flow = flow!;
         return Ok(model);
     }
     
@@ -295,7 +287,7 @@ public class FlowTemplateController : Controller
 
             if (string.IsNullOrWhiteSpace(field.IfName))
                 continue;
-            var other = flow.Properties.Fields.FirstOrDefault(x => x.Name == field.IfName);
+            var other = flow.Properties?.Fields?.FirstOrDefault(x => x.Name == field.IfName);
             if (other == null)
                 continue;
 
@@ -306,7 +298,7 @@ public class FlowTemplateController : Controller
             else if (other.Type == FlowFieldType.Number && int.TryParse(field.IfValue?.Trim(), out int iOther))
                 condition.Value = iOther;
             else
-                condition.Value = field.IfValue;
+                condition.Value = field.IfValue!;
             condition.IsNot = field.IfNot;
             tf.Conditions ??= new();
             tf.Conditions.Add(condition);

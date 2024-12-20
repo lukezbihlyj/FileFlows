@@ -21,7 +21,6 @@ public class LibraryController : BaseController
                 UpdateHasLibraries().Wait();
             return _HasLibraries == true;
         }
-        private set => _HasLibraries = value;
     }
     private static async Task UpdateHasLibraries()
         => _HasLibraries = await ServiceLoader.Load<LibraryService>().HasAny();
@@ -62,7 +61,7 @@ public class LibraryController : BaseController
     /// <param name="uid">The UID of the library</param>
     /// <returns>The duplicated library</returns>
     [HttpPost("duplicate/{uid}")]
-    public async Task<IActionResult> Duplicate([FromRoute] Guid uid)
+    public async Task<IActionResult?> Duplicate([FromRoute] Guid uid)
     {
         if (uid == CommonVariables.ManualLibraryUid)
             return null;
@@ -77,6 +76,8 @@ public class LibraryController : BaseController
             WriteIndented = true
         });
         library = JsonSerializer.Deserialize<Library>(json);
+        if (library == null)
+            return null;
         library.Uid = Guid.Empty;
         library.Name = await service.GetNewUniqueName(library.Name);
         library.LastScanned = DateTime.MinValue;
@@ -274,12 +275,12 @@ public class LibraryController : BaseController
                     AllowTrailingCommas = true,
                     PropertyNameCaseInsensitive = true
                 });
-                string group = jst.Group ?? string.Empty;
+                string group = jst?.Group ?? string.Empty;
                 group = Translater.Instant("Templates.Groups." + CleanForJsonKey(group));
-                if (string.IsNullOrWhiteSpace(group) || group == CleanForJsonKey(jst.Group))
-                    group = jst.Group ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(group) || group == CleanForJsonKey(jst!.Group))
+                    group = jst?.Group ?? string.Empty;
 
-                string name = jst.Name;
+                string name = jst!.Name;
                 string prefix = "Templates.Libraries." + CleanForJsonKey(jst.Name) + ".";
                 string translateName = Translater.Instant(prefix + "Name");
                 if (string.IsNullOrWhiteSpace(translateName) == false && translateName != "Name")
@@ -295,7 +296,7 @@ public class LibraryController : BaseController
                     FileSizeDetectionInterval = jst.FileSizeDetectionInterval,
                     Filters = jst.Filters?.Any() == true ? jst.Filters : string.IsNullOrWhiteSpace(jst.Filter) == false ? [jst.Filter] : [],
                     ExclusionFilters = jst.ExclusionFilters?.Any() == true ? jst.ExclusionFilters : string.IsNullOrWhiteSpace(jst.ExclusionFilter) == false ? [jst.ExclusionFilter] : [],
-                    Extensions = jst.Extensions?.OrderBy(x => x.ToLowerInvariant())?.ToList(),
+                    Extensions = jst.Extensions?.OrderBy(x => x.ToLowerInvariant())?.ToList() ?? [],
                     //UseFingerprinting = jst.UseFingerprint,
                     Name = name,
                     Description = description,

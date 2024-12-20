@@ -198,7 +198,7 @@ public class LibraryFileController : Controller
     /// <param name="uid">The UID of the library file</param>
     /// <returns>the library file instance</returns>
     [HttpGet("{uid}")]
-    public async Task<LibraryFile> Get(Guid uid)
+    public async Task<LibraryFile?> Get(Guid uid)
     {
         // first see if the file is currently processing, if it is, return that in memory 
         var file = await ServiceLoader.Load<FlowRunnerService>().TryGetFile(uid) ?? 
@@ -234,7 +234,7 @@ public class LibraryFileController : Controller
     /// <param name="html">if the log should be html if possible</param>
     /// <returns>The log of the library file</returns>
     [HttpGet("{uid}/log")]
-    public string GetLog([FromRoute] Guid uid, [FromQuery] int lines = 0, [FromQuery] bool html = true)
+    public string GetLog([FromRoute] Guid uid, [FromQuery] int lines, [FromQuery] bool html = true)
     {
         try
         {
@@ -268,7 +268,7 @@ public class LibraryFileController : Controller
     /// <returns>an awaited task</returns>
     [HttpDelete]
     public Task Delete([FromBody] ReferenceModel<Guid> model)
-        => ServiceLoader.Load<LibraryFileService>().Delete(model?.Uids);
+        => ServiceLoader.Load<LibraryFileService>().Delete(model?.Uids ?? []);
 
     /// <summary>
     /// Delete library files from disk
@@ -283,6 +283,8 @@ public class LibraryFileController : Controller
         foreach (var uid in model.Uids)
         {
             var lf = await Get(uid);
+            if(lf == null)
+                continue;
             if (System.IO.File.Exists(lf.Name) == false)
                 continue;
             if (DeleteFile(lf.Name) == false)
@@ -341,7 +343,7 @@ public class LibraryFileController : Controller
     /// <returns>an awaited task</returns>
     [HttpPost("unhold")]
     public Task Unhold([FromBody] ReferenceModel<Guid> model)
-        => ServiceLoader.Load<LibraryFileService>().Unhold(model?.Uids ?? new Guid[]{});
+        => ServiceLoader.Load<LibraryFileService>().Unhold(model?.Uids ?? []);
 
     /// <summary>
     /// Toggles force processing 
@@ -350,7 +352,7 @@ public class LibraryFileController : Controller
     /// <returns>an awaited task</returns>
     [HttpPost("toggle-force")]
     public Task ToggleForce([FromBody] ReferenceModel<Guid> model)
-        => ServiceLoader.Load<LibraryFileService>().ToggleForce(model?.Uids ?? new Guid[]{});
+        => ServiceLoader.Load<LibraryFileService>().ToggleForce(model?.Uids ??[]);
     
 
     /// <summary>
@@ -361,7 +363,7 @@ public class LibraryFileController : Controller
     /// <returns>an awaited task</returns>
     [HttpPost("force-processing")]
     public Task ForceProcessing([FromBody] ReferenceModel<Guid> model)
-        => ServiceLoader.Load<LibraryFileService>().ForceProcessing(model?.Uids ?? new Guid[]{});
+        => ServiceLoader.Load<LibraryFileService>().ForceProcessing(model?.Uids ?? []);
 
 
     /// <summary>
@@ -372,7 +374,7 @@ public class LibraryFileController : Controller
     /// <returns>an awaited task</returns>
     [HttpPost("set-status/{status}")]
     public Task SetStatus([FromRoute] FileStatus status, [FromBody] ReferenceModel<Guid> model)
-        => ServiceLoader.Load<LibraryFileService>().SetStatus(status, model?.Uids ?? new Guid[]{});
+        => ServiceLoader.Load<LibraryFileService>().SetStatus(status, model?.Uids ?? []);
 
 
     /// <summary>

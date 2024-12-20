@@ -119,11 +119,11 @@ public class NodeController : BaseController
         {
             // remove any removed libraries and update any names
             var libraries = (await ServiceLoader.Load<LibraryService>().GetAllAsync()).ToDictionary(x => x.Uid, x => x.Name);
-            node.Libraries = node.Libraries.Where(x => libraries.ContainsKey(x.Uid)).Select(x => new Plugin.ObjectReference
+            node.Libraries = node.Libraries.Where(x => libraries.ContainsKey(x.Uid)).Select(x => new ObjectReference
             {
                 Uid = x.Uid,
                 Name = libraries[x.Uid],
-                Type = typeof(Library).FullName
+                Type = typeof(Library).FullName!
             }).DistinctBy(x => x.Uid).ToList();
         }
         
@@ -152,7 +152,7 @@ public class NodeController : BaseController
                 internalNode.PreExecuteScript = node.PreExecuteScript;
                 internalNode.ProcessingOrder = node.ProcessingOrder;
                 
-                internalNode.Libraries = node.Libraries;
+                internalNode.Libraries = node.Libraries ?? [];
                 internalNode = await service.Update(internalNode, await GetAuditDetails());
                 await CheckLicensedNodes(internalNode.Uid, internalNode.Enabled);
                 _ = clientService?.UpdateNodeStatusSummaries();
@@ -165,7 +165,7 @@ public class NodeController : BaseController
             node.Address = CommonVariables.InternalNodeName;
             node.Name = CommonVariables.InternalNodeName;
             node.AllLibraries = ProcessingLibraries.All;
-            node.Mappings = null; // no mappings for internal
+            node.Mappings = []; // no mappings for internal
             node.Variables ??= new();
             node = await service.Update(node, await GetAuditDetails());
             await CheckLicensedNodes(node.Uid, node.Enabled);
@@ -244,7 +244,7 @@ public class NodeController : BaseController
     /// <param name="version">The version of the node</param>
     /// <returns>If found, the processing node</returns>
     [HttpGet("by-address/{address}")]
-    public async Task<ProcessingNode> GetByAddress([FromRoute] string address, [FromQuery] string version)
+    public async Task<ProcessingNode?> GetByAddress([FromRoute] string address, [FromQuery] string version)
     {
         if (string.IsNullOrWhiteSpace(address))
             throw new ArgumentNullException(nameof(address));
@@ -304,10 +304,10 @@ public class NodeController : BaseController
             AllLibraries = ProcessingLibraries.All,
             Schedule = new string('1', 672),
             Mappings = isSystem
-                ? null
-                : variables.Select(x => new
+                ? []
+                : variables?.Select(x => new
                     KeyValuePair<string, string>(x.Value, string.Empty)
-                ).ToList()
+                ).ToList() ?? []
         };
         node = await service.Update(node, await GetAuditDetails());
         node.SignalrUrl = "flow";
