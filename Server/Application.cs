@@ -213,10 +213,8 @@ public class Application
     /// </summary>
     private void StartResellerApp()
     {
-        #if(!DEBUG)
         if (LicenseService.IsLicensed(LicenseFlags.Reseller) == false)
             return;
-        #endif
         Console.WriteLine("Starting Reseller App...");
         new FileFlows.ResellerApp.ResellerWebService().Start();
     }
