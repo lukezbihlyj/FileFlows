@@ -73,11 +73,18 @@ public class SettingsController : BaseController
         var settings = await Get();
         var licenseService = ServiceLoader.Load<LicenseService>();
         var license = licenseService.GetLicense();
-        if ((license == null || license.Status == LicenseStatus.Unlicensed) && string.IsNullOrWhiteSpace(Settings.LicenseKey) == false)
+        if ((license == null || license.Status == LicenseStatus.Unlicensed) &&
+            string.IsNullOrWhiteSpace(Settings.LicenseKey) == false)
+        {
+            license = new();
             license.Status = LicenseStatus.Invalid;
+        }
+
+        license ??= new();
+
         // clone it so we can remove some properties we dont want passed to the UI
         string json = JsonSerializer.Serialize(settings);
-        var uiModel = JsonSerializer.Deserialize<SettingsUiModel>(json);
+        var uiModel = JsonSerializer.Deserialize<SettingsUiModel>(json) ?? new ();
         if (string.IsNullOrWhiteSpace(settings.SmtpPassword) == false)
             uiModel.SmtpPassword = DUMMY_PASSWORD;
         
@@ -103,7 +110,7 @@ public class SettingsController : BaseController
             uiModel.LoginLockoutMinutes = 20;
         if (uiModel.LoginMaxAttempts < 1)
             uiModel.LoginMaxAttempts = 10;
-        uiModel.OidcCallbackAddressPlaceholder = Url.Action(nameof(HomeController.Index), "Home", null, Request.Scheme);
+        uiModel.OidcCallbackAddressPlaceholder = Url.Action(nameof(HomeController.Index), "Home", null, Request.Scheme) ?? string.Empty;
         
         return uiModel;
     }
@@ -116,11 +123,11 @@ public class SettingsController : BaseController
     [HttpGet]
     public async Task<Settings> Get()
     {
-        var settings = await ServiceLoader.Load<ISettingsService>().Get();
+        var settings = await ServiceLoader.Load<ISettingsService>().Get() ?? new ();
         if (string.IsNullOrWhiteSpace(settings.SmtpPassword) == false)
         {
             string json = JsonSerializer.Serialize(settings);
-            settings = JsonSerializer.Deserialize<Settings>(json);
+            settings = JsonSerializer.Deserialize<Settings>(json) ?? new ();
             settings.SmtpPassword = DUMMY_PASSWORD;
         }
         return settings;
@@ -151,7 +158,7 @@ public class SettingsController : BaseController
         if (model == null)
             return;
 
-        var existing = await ServiceLoader.Load<ISettingsService>().Get();
+        var existing = await ServiceLoader.Load<ISettingsService>().Get() ?? new ();
         if (model.SmtpPassword == DUMMY_PASSWORD)
         {
             // need to get the existing password
@@ -161,8 +168,8 @@ public class SettingsController : BaseController
         bool langChanged = existing.Language != model.Language;
         
         // validate license it
-        Settings.LicenseKey = model.LicenseKey?.Trim();
-        Settings.LicenseEmail = model.LicenseEmail?.Trim();
+        Settings.LicenseKey = model.LicenseKey?.Trim() ?? string.Empty;
+        Settings.LicenseEmail = model.LicenseEmail?.Trim() ?? string.Empty;
         var licenseService = ServiceLoader.Load<LicenseService>();
         await licenseService.Update();
 
@@ -191,7 +198,7 @@ public class SettingsController : BaseController
             FileServerOwnerGroup = model.FileServerOwnerGroup,
             FileServerFilePermissions = model.FileServerFilePermissions,
             FileServerFolderPermissions = model.FileServerFolderPermissions,
-            FileServerAllowedPaths = model.FileServerAllowedPathsString?.Split(new [] { "\r\n", "\r", "\n"}, StringSplitOptions.RemoveEmptyEntries),
+            FileServerAllowedPaths = model.FileServerAllowedPathsString?.Split(["\r\n", "\r", "\n"], StringSplitOptions.RemoveEmptyEntries) ?? [],
             AccessToken = model.AccessToken ?? string.Empty,
             
             SmtpFrom = model.SmtpFrom ?? string.Empty,
@@ -247,7 +254,7 @@ public class SettingsController : BaseController
     /// <param name="model">the system settings to save</param>
     /// <param name="auditDetails">the audit details</param>
     /// <returns>The saved system settings</returns>
-    internal async Task Save(Settings model, AuditDetails auditDetails)
+    internal async Task Save(Settings model, AuditDetails? auditDetails)
     {
         if (model == null)
             return;
@@ -466,7 +473,7 @@ public class SettingsController : BaseController
             var repoService = ServiceLoader.Load<RepositoryService>();
             foreach (var dm in model.DockerMods)
             {
-                var content = await repoService.GetContent(dm.Path);
+                var content = await repoService.GetContent(dm.Path!);
                 if (content.IsFailed == false)
                     await dmService.ImportFromRepository(dm, content.Value, null);
             }
@@ -483,19 +490,20 @@ public class SettingsController : BaseController
         /// <summary>
         /// Gets or sets the plugins to download
         /// </summary>
-        public List<PluginPackageInfo> Plugins { get; set; }
+        public List<PluginPackageInfo> Plugins { get; set; } = null!;
         /// <summary>
         /// Gets or sets if the EULA was accepted
         /// </summary>
         public bool EulaAccepted { get; set; }
+
         /// <summary>
         /// Gets or sets the DockerMods to install
         /// </summary>
-        public List<RepositoryObject> DockerMods { get; set; }
+        public List<RepositoryObject> DockerMods { get; set; } = null!;
         /// <summary>
         /// Gets or sets the language
         /// </summary>
-        public string Language { get; set; }
+        public string Language { get; set; } = null!;
         /// <summary>
         /// Gets or sets the flow runners
         /// </summary>
