@@ -1,11 +1,5 @@
-using FileFlows.Plugin;
-using FileFlows.WebServer.Authentication;
 using FileFlows.ServerModels;
-using FileFlows.Services;
 using FileFlows.ServerShared.Models;
-using FileFlows.ServerShared.Services;
-using FileFlows.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FileFlows.WebServer.Controllers;
 
@@ -52,7 +46,7 @@ public class RepositoryController : BaseController
             };
 
             if(known?.Any() == true)
-                objects = objects.Where(x => known.Contains(x.Path) == false && known.Contains(x.Name) == false).ToList();
+                objects = objects.Where(x => x.Path != null && known.Contains(x.Path) == false && known.Contains(x.Name) == false).ToList();
         }
         return objects;
     }
@@ -69,7 +63,7 @@ public class RepositoryController : BaseController
         if (objects?.Any() != true)
             return Ok(); // nothing to download
 
-        Func<RepositoryObject, string, AuditDetails, Task<Result<bool>>>? processor = null;
+        Func<RepositoryObject, string, AuditDetails?, Task<Result<bool>>>? processor = null;
 
         switch (type.ToLowerInvariant())
         {
@@ -130,12 +124,15 @@ public class RepositoryController : BaseController
         var auditDetails = await GetAuditDetails();
         foreach (var ro in objects)
         {
-            var result = await service.GetContent(ro.Path);
-             if (result.Failed(out string error))
-                return BadRequest(error);
-            var rr = await processor(ro, result.Value, auditDetails);
-            if (rr.Failed(out error))
-                return BadRequest(error);
+            if (ro.Path != null)
+            {
+                var result = await service.GetContent(ro.Path);
+                if (result.Failed(out string error))
+                    return BadRequest(error);
+                var rr = await processor(ro, result.Value, auditDetails);
+                if (rr.Failed(out error))
+                    return BadRequest(error);
+            }
         }
 
         return Ok();
@@ -150,7 +147,7 @@ public class RepositoryController : BaseController
     [HttpPost("{type}/fields")]
     public async Task<IActionResult> GetFields([FromRoute] string type, [FromBody] RepositoryObject ro)
     {
-        if (ro == null)
+        if (string.IsNullOrWhiteSpace(ro.Path))
             return BadRequest("No object passed in"); // nothing to download
         
         var service = ServiceLoader.Load<RepositoryService>();
@@ -201,7 +198,7 @@ public class RepositoryController : BaseController
         return BadRequest("Invalid Type");
 
         
-        List<ElementField> GetElementFields(string code = null, string language = null)
+        List<ElementField> GetElementFields(string? code = null, string? language = null)
         {
             var fields = new List<ElementField>
             {
@@ -239,7 +236,7 @@ public class RepositoryController : BaseController
                     InputType = FormInputType.Code,
                     Parameters = new Dictionary<string, object>
                     {
-                        { "Language", language }
+                        { "Language", language! }
                     }
                 });
             }
@@ -274,7 +271,7 @@ public class RepositoryController : BaseController
                 toUpdate = (await dmService.GetAll()).Select(x =>
                 {
                     if (x.Repository == false) return null;
-                    if (model.Uids.Contains(x.Uid) == false) 
+                    if (model?.Uids?.Contains(x.Uid) != true) 
                         return null;
                     var repoObject = repo.DockerMods.FirstOrDefault(y => y.Name.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
                     if (repoObject == null || repoObject.Revision <= x.Revision)
@@ -291,10 +288,13 @@ public class RepositoryController : BaseController
         var auditDetails = await GetAuditDetails();
         foreach (var ro in toUpdate)
         {
-            var cResult = await service.GetContent(ro.Path);
-            if (cResult.IsFailed)
-                continue;
-            await updater(ro, cResult.Value, auditDetails);
+            if (ro.Path != null)
+            {
+                var cResult = await service.GetContent(ro.Path);
+                if (cResult.IsFailed)
+                    continue;
+                await updater(ro, cResult.Value, auditDetails);
+            }
         }
 
         _ = ServiceLoader.Load<UpdateService>().Trigger();
@@ -518,6 +518,6 @@ public class RepositoryController : BaseController
         /// <summary>
         /// A list of plugin packages to download
         /// </summary>
-        public List<string> Scripts { get; init; }
+        public List<string> Scripts { get; init; } = [];
     }
 }

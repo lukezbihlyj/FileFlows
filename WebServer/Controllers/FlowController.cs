@@ -26,7 +26,6 @@ public class FlowController : BaseController
                 UpdateHasFlows().Wait();
             return _HasFlows == true;
         }
-        private set => _HasFlows = value;
     }
     
     /// <summary>
@@ -101,6 +100,7 @@ public class FlowController : BaseController
                 }
                 catch (Exception)
                 {
+                    // Ignored
                 }
             }
         }
@@ -130,7 +130,7 @@ public class FlowController : BaseController
 
     private class GotoFlowModel
     {
-        public ObjectReference Flow { get; set; }
+        public ObjectReference Flow { get; set; } = null!;
     }
 
     /// <summary>
@@ -179,7 +179,6 @@ public class FlowController : BaseController
             await using var streamWriter = new StreamWriter(entryStream);
             await streamWriter.WriteAsync(json);
         }
-        zip.Dispose();
 
         ms.Seek(0, SeekOrigin.Begin);
         return File(ms.ToArray(), "application/octet-stream", "Flows.zip");
@@ -257,7 +256,7 @@ public class FlowController : BaseController
 
         // reparse with new UIDs
         var service = ServiceLoader.Load<FlowService>();
-        flow = JsonSerializer.Deserialize<Flow>(json);
+        flow = JsonSerializer.Deserialize<Flow>(json)!;
         if(flow.Type != FlowType.SubFlow || await service.UidInUse(flow.Uid))
             flow.Uid = Guid.Empty;
         
@@ -276,7 +275,7 @@ public class FlowController : BaseController
     /// <param name="uid">The UID of the flow</param>
     /// <returns>The duplicated flow</returns>
     [HttpGet("duplicate/{uid}")]
-    public async Task<Flow> Duplicate([FromRoute] Guid uid)
+    public async Task<Flow?> Duplicate([FromRoute] Guid uid)
     { 
         var flow = await ServiceLoader.Load<FlowService>().GetByUidAsync(uid);
         if (flow == null)
@@ -367,7 +366,7 @@ public class FlowController : BaseController
     /// <param name="uid">The Flow UID</param>
     /// <returns>The flow instance</returns>
     [HttpGet("{uid}")]
-    public async Task<Flow> Get(Guid uid)
+    public async Task<Flow?> Get(Guid uid)
     {
         if (uid != Guid.Empty)
         {
@@ -517,7 +516,7 @@ public class FlowController : BaseController
             }
 
             return true;
-        })?.ToList();
+        })?.ToList() ?? [];
 
         if (type == FlowType.SubFlow || type == null || (int)type == -1)
             results.InsertRange(0, GetSubFlowFlowElements());
@@ -527,7 +526,7 @@ public class FlowController : BaseController
             var subflows = (await ServiceLoader.Load<FlowService>().GetAllAsync()).Where(x => x.Type == FlowType.SubFlow && x.Uid != flowUid)
                 .OrderBy(x => x.Name)
                 .Select(SubFlowToElement);
-            results.AddRange(subflows);
+            results.AddRange(subflows!);
         }
 
         // get scripts 
@@ -535,10 +534,10 @@ public class FlowController : BaseController
             .Where(x => x.Type == ScriptType.Flow)
             .Select(x => ScriptToFlowElement(x))
             .Where(x => x != null)
-            .OrderBy(x => x.Name); // can be null if failed to parse
-        results.AddRange(scripts);
+            .OrderBy(x => x!.Name); // can be null if failed to parse
+        results.AddRange(scripts!);
 
-        return results?.ToArray() ?? new FlowElement[] { };
+        return results.ToArray();
         
     }
 
@@ -547,7 +546,7 @@ public class FlowController : BaseController
     /// </summary>
     /// <param name="script"></param>
     /// <returns></returns>
-    private static FlowElement ScriptToFlowElement(Script script)
+    private static FlowElement? ScriptToFlowElement(Script script)
     {
         try
         {
@@ -580,7 +579,7 @@ public class FlowController : BaseController
                 ele.Group = "Scripts";
             
             ele.Inputs = 1;
-            ele.Description = script.Description;
+            ele.Description = script.Description ?? string.Empty;
             //ele.OutputLabels = script.Outputs.Select(x => x.Description).ToList();
             ele.OutputLabels = script.Outputs.Select(x => x.Value).ToList();
             int count = 0;
@@ -635,7 +634,7 @@ public class FlowController : BaseController
         eleInput.Description = "Sub Flow Input";
         eleInput.ReadOnly = true;
         eleInput.Group = "Sub Flow";
-        eleInput.Model = new ExpandoObject()!;
+        eleInput.Model = new ExpandoObject();
         eleInput.Type = FlowElementType.Input;
         elements.Add(eleInput);
 
@@ -688,7 +687,7 @@ public class FlowController : BaseController
     /// Converts a sub flow to a flow element to be used in flow editor
     /// </summary>
     /// <returns>the flow element</returns>
-    private static FlowElement SubFlowToElement(Flow flow)
+    private static FlowElement? SubFlowToElement(Flow flow)
     {
         if (flow.Type != FlowType.SubFlow)
             return null;
@@ -705,7 +704,7 @@ public class FlowController : BaseController
         IDictionary<string, object> model = new ExpandoObject()!;
         model.Add("Output", 1);
         ele.Fields = new List<ElementField>();
-        foreach(var field in flow.Properties.Fields)
+        foreach(var field in flow.Properties?.Fields ?? [])
         {
             if (string.IsNullOrWhiteSpace(field.Name))
                 continue;
@@ -768,10 +767,10 @@ public class FlowController : BaseController
             model.Add(field.Name, field.DefaultValue );
             
             ele.Fields.Add(f);
-        };
+        }
         ele.Group = "Sub Flows";
         ele.Type = FlowElementType.SubFlow;
-        ele.Model = model as ExpandoObject;
+        ele.Model = (model as ExpandoObject)!;
         return ele;
     }
     
@@ -810,7 +809,7 @@ public class FlowController : BaseController
 
         foreach (var p in model.Parts)
         {
-            if (Guid.TryParse(p.Name, out Guid guid))
+            if (Guid.TryParse(p.Name, out _))
                 p.Name = string.Empty; // fixes issue with Scripts being saved as the Guids
             if (string.IsNullOrEmpty(p.Name))
                 continue;
@@ -848,7 +847,7 @@ public class FlowController : BaseController
 
         await SaveToDisk(model);
 
-        return await Get(model.Uid);
+        return (await Get(model.Uid))!;
     }
     
     /// <summary>
@@ -864,8 +863,8 @@ public class FlowController : BaseController
             var subFlows = allFlows.Where(x => x.Type == FlowType.SubFlow).ToList();
             string json = CreateExportJson(flow, subFlows);
             var dir = Path.Combine(DirectoryHelper.ConfigDirectory, "Flows");
-            if (System.IO.Directory.Exists(dir) == false)
-                System.IO.Directory.CreateDirectory(dir);
+            if (Directory.Exists(dir) == false)
+                Directory.CreateDirectory(dir);
 
             var file = Path.Combine(dir, SanitizeFileName(flow.Name) + ".json");
             await System.IO.File.WriteAllTextAsync(file, json);
@@ -1042,7 +1041,7 @@ public class FlowController : BaseController
 
         return variables;
 
-        List<FlowPart> FindParts(FlowPart part, int depth)
+        List<FlowPart> FindParts(FlowPart partInner, int depth)
         {
             List<FlowPart> results = new List<FlowPart>();
             if (depth > 30)
@@ -1050,7 +1049,7 @@ public class FlowController : BaseController
 
             foreach (var p in flowParts ?? new List<FlowPart>())
             {
-                if (checkedParts.Contains(p) || p == part)
+                if (checkedParts.Contains(p) || p == partInner)
                     continue;
 
                 if (p.OutputConnections?.Any() != true)
@@ -1059,7 +1058,7 @@ public class FlowController : BaseController
                     continue;
                 }
 
-                if (p.OutputConnections.Any(x => x.InputNode == part.Uid))
+                if (p.OutputConnections.Any(x => x.InputNode == partInner.Uid))
                 {
                     results.Add(p);
                     if (checkedParts.Contains(p))
