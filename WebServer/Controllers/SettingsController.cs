@@ -81,8 +81,6 @@ public class SettingsController : BaseController
         }
 
         license ??= new() { Status = LicenseStatus.Unlicensed };
-        if (license.Level == LicenseLevel.Free)
-            license.Status = LicenseStatus.Unlicensed;
 
         // clone it so we can remove some properties we dont want passed to the UI
         string json = JsonSerializer.Serialize(settings);
