@@ -17,7 +17,7 @@ public class NodeController : BaseController
     /// <param name="version">The version of the node</param>
     /// <returns>If found, the processing node</returns>
     [HttpGet("by-address/{address}")]
-    public async Task<ProcessingNode> GetByAddress([FromRoute] string address, [FromQuery] string version)
+    public async Task<ProcessingNode?> GetByAddress([FromRoute] string address, [FromQuery] string version)
     {
         if (string.IsNullOrWhiteSpace(address))
             throw new ArgumentNullException(nameof(address));
@@ -105,7 +105,7 @@ public class NodeController : BaseController
     {
         if (LicenseService.IsLicensed(LicenseFlags.AutoUpdates) == false)
             return string.Empty;
-        return Globals.Version.ToString();
+        return Globals.Version;
     }
     
     /// <summary>
@@ -240,7 +240,7 @@ public class NodeController : BaseController
 
         if(model.Mappings?.Any() == true)
         {
-            var ffmpegTool = variables.FirstOrDefault(x => x.Name.ToLower() == "ffmpeg");
+            var ffmpegTool = variables?.FirstOrDefault(x => x.Name.Equals("ffmpeg", StringComparison.CurrentCultureIgnoreCase));
             if (ffmpegTool != null)
             {
                 // update ffmpeg with actual location
@@ -275,7 +275,7 @@ public class NodeController : BaseController
         var result = await service.Update(node, await GetAuditDetails());
         if (result.Failed(out string error))
         {
-            Logger.Instance?.ELog("Failed registering node: " + error);
+            Logger.Instance.ELog("Failed registering node: " + error);
             throw new Exception(error);
         }
 

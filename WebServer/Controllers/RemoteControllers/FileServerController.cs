@@ -1,18 +1,9 @@
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Text;
-using FileFlows.Plugin;
-using FileFlows.WebServer.Authentication;
-using FileFlows.Server.Helpers;
-using FileFlows.Services;
-using FileFlows.ServerShared;
 using FileFlows.ServerShared.FileServices;
-using FileFlows.ServerShared.Helpers;
-using FileFlows.ServerShared.Services;
-using Microsoft.AspNetCore.Mvc;
 using FileHelper = FileFlows.Plugin.Helpers.FileHelper;
 
-namespace FileFlows.WebServer.Controllers;
+namespace FileFlows.WebServer.Controllers.RemoteControllers;
 
 /// <summary>
 /// Controller responsible for managing file-related operations.
@@ -32,14 +23,14 @@ public class FileServerController : Controller
     /// </summary>
     private readonly LocalFileService _localFileService;
 
-    private StringLogger lfsLogger;
+    private readonly StringLogger lfsLogger;
 
     /// <summary>
     /// The logger used for the file server
     /// </summary>
-    private static Logger Logger;
+    private static readonly Logger Logger;
 
-    private static string[] AllowedPaths;
+    private static string[] AllowedPaths = [];
 
     /// <summary>
     /// Static consturctor
@@ -93,7 +84,7 @@ public class FileServerController : Controller
     /// <returns></returns>
     private bool ValidateRequest(out string message)
     {
-        message = null;
+        message = string.Empty;
 #if(DEBUG == false)
         if (HttpContext.Request.Headers.TryGetValue("x-executor", out var executorHeaderValue) == false)
         {
@@ -573,8 +564,8 @@ public class FileServerController : Controller
                 RangeHeaderValue.TryParse(Request.Headers["Range"], out var rangeHeader))
             {
                 var range = rangeHeader.Ranges.FirstOrDefault();
-                var startIndex = range.From ?? 0;
-                var endIndex = range.To ?? totalLength - 1;
+                var startIndex = range?.From ?? 0;
+                var endIndex = range?.To ?? totalLength - 1;
                 var contentRange = new ContentRangeHeaderValue(startIndex, endIndex, totalLength);
                 Response.Headers.Append("Accept-Ranges", "bytes");
                 Response.Headers.Append("Content-Range", contentRange.ToString());
@@ -723,20 +714,20 @@ public class FileServerController : Controller
         return outFile;
     }
 
-    /// <summary>
-    /// Validates the integrity of the file by comparing the provided hash with the computed hash of the file data.
-    /// </summary>
-    /// <param name="data">The byte array representing the file data.</param>
-    /// <param name="expectedFileHash">The base64-encoded SHA256 hash expected to match the computed hash of the file data.</param>
-    /// <returns>True if the computed hash matches the expected hash, indicating file integrity; otherwise, false.</returns>
-    private bool ValidateFileHash(byte[] data, string expectedFileHash)
-    {
-        using var sha256 = SHA256.Create();
-        var actualHash = sha256.ComputeHash(data);
-        var base64ActualHash = Convert.ToBase64String(actualHash);
-
-        return base64ActualHash.Equals(expectedFileHash);
-    }
+    // /// <summary>
+    // /// Validates the integrity of the file by comparing the provided hash with the computed hash of the file data.
+    // /// </summary>
+    // /// <param name="data">The byte array representing the file data.</param>
+    // /// <param name="expectedFileHash">The base64-encoded SHA256 hash expected to match the computed hash of the file data.</param>
+    // /// <returns>True if the computed hash matches the expected hash, indicating file integrity; otherwise, false.</returns>
+    // private bool ValidateFileHash(byte[] data, string expectedFileHash)
+    // {
+    //     using var sha256 = SHA256.Create();
+    //     var actualHash = sha256.ComputeHash(data);
+    //     var base64ActualHash = Convert.ToBase64String(actualHash);
+    //
+    //     return base64ActualHash.Equals(expectedFileHash);
+    // }
 
     // /// <summary>
     // /// Deletes a remote file or folder
@@ -877,7 +868,7 @@ public class FileServerController : Controller
         /// <summary>
         /// the path to the item to delete
         /// </summary>
-        public string Path { get; init; }
+        public string Path { get; init; } = string.Empty;
 
         /// <summary>
         /// if the path is a directory, only delete the directory if it is empty
@@ -888,7 +879,7 @@ public class FileServerController : Controller
         /// the patterns to include for files to determine if the directory is empty
         /// eg [mkv, avi, mpg, etc] will treat the directory as empty if none of those files are found
         /// </summary>
-        public string[] IncludePatterns { get; init; }
+        public string[] IncludePatterns { get; init; } = [];
     }
 
 
@@ -901,7 +892,7 @@ public class FileServerController : Controller
         /// <summary>
         /// The directory path.
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
         /// <summary>
         /// Indicates whether the operation should be recursive.
@@ -922,7 +913,7 @@ public class FileServerController : Controller
             //                        ?.Replace(@"\\", System.IO.Path.PathSeparator.ToString());
         }
 
-        private string _Path;
+        private string _Path = string.Empty;
 
         /// <summary>
         /// The directory path.
@@ -947,7 +938,7 @@ public class FileServerController : Controller
     /// </summary>
     public class DestinationRequest : PathRequest
     {
-        private string _Destination;
+        private string _Destination = string.Empty;
 
         /// <summary>
         /// The destination path.
@@ -969,7 +960,7 @@ public class FileServerController : Controller
         /// <summary>
         /// The search pattern for filtering files.
         /// </summary>
-        public string SearchPattern { get; set; }
+        public string SearchPattern { get; set; } = string.Empty;
 
         /// <summary>
         /// Indicates if the search should be recursive.
@@ -996,7 +987,7 @@ public class FileServerController : Controller
         /// <summary>
         /// Text to append.
         /// </summary>
-        public string Text { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 
     /// <summary>

@@ -1,9 +1,3 @@
-using FileFlows.WebServer.Authentication;
-using FileFlows.Server.Helpers;
-using FileFlows.Services;
-using FileFlows.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
-
 namespace FileFlows.WebServer.Controllers;
 
 /// <summary>
@@ -45,7 +39,7 @@ public class ResourceController : BaseController
     public Task<Resource?> Get(Guid uid)
     {
         if (LicenseService.IsLicensed(LicenseFlags.AutoUpdates) == false)
-            return null;
+            return null!;
         return ServiceLoader.Load<ResourceService>().GetByUidAsync(uid);
     }
 
@@ -58,7 +52,7 @@ public class ResourceController : BaseController
     public Task<Resource?> GetByName(string name)
     {
         if (LicenseService.IsLicensed(LicenseFlags.AutoUpdates) == false)
-            return null;
+            return null!;
         return ServiceLoader.Load<ResourceService>().GetByNameAsync(name);
     }
 
@@ -71,7 +65,7 @@ public class ResourceController : BaseController
     public async Task<IActionResult> Save([FromBody] Resource resource)
     {
         if (LicenseService.IsLicensed(LicenseFlags.AutoUpdates) == false)
-            return null;
+            return null!;
         var result = await ServiceLoader.Load<ResourceService>().Update(resource, await GetAuditDetails());
         if (result.Failed(out string error))
             return BadRequest(error);

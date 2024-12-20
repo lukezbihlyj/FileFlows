@@ -36,13 +36,13 @@ public class EmailModel
     /// <summary>
     /// Gets who the email will be sent to
     /// </summary>
-    public string[] To { get; init; }
+    public string[] To { get; init; } = [];
     /// <summary>
     /// Gets the subject of the email
     /// </summary>
-    public string Subject { get; init; }
+    public string Subject { get; init; } = string.Empty;
     /// <summary>
     /// Gets the body of the email
     /// </summary>
-    public string Body { get; init; }
+    public string Body { get; init; } = string.Empty;
 }

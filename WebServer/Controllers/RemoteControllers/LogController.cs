@@ -1,11 +1,3 @@
-using System.Text.RegularExpressions;
-using FileFlows.Plugin;
-using FileFlows.WebServer.Authentication;
-using FileFlows.ServerShared;
-using FileFlows.ServerShared.Helpers;
-using FileFlows.ServerShared.Services;
-using Microsoft.AspNetCore.Mvc;
-
 namespace FileFlows.WebServer.Controllers.RemoteControllers;
 
 /// <summary>
@@ -51,7 +43,7 @@ public class LogController : Controller
                 logger = Loggers[message.NodeAddress];
             }
 
-            await logger.Log(message.Type, message.Arguments);
+            await logger.Log(message.Type, message.Arguments ?? []);
         }
         catch (Exception ex)
         {

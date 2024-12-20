@@ -1,9 +1,4 @@
-using FileFlows.WebServer.Authentication;
-using FileFlows.Server.Helpers;
-using FileFlows.Services;
 using FileFlows.ServerShared.Models;
-using FileFlows.Shared.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FileFlows.WebServer.Controllers.RemoteControllers;
 
@@ -36,7 +31,7 @@ public class LibraryFileController : Controller
     /// <param name="uid">The UID of the library file</param>
     /// <returns>the library file instance</returns>
     [HttpGet("{uid}")]
-    public async Task<LibraryFile> GetLibraryFile(Guid uid)
+    public async Task<LibraryFile?> GetLibraryFile(Guid uid)
     {
         // first see if the file is currently processing, if it is, return that in memory 
         var file = await ServiceLoader.Load<FlowRunnerService>().TryGetFile(uid) ?? 
@@ -115,7 +110,7 @@ public class LibraryFileController : Controller
         
         if (System.IO.File.Exists(lf.Name))
         {
-            if (DeleteFile(lf.Name) == false)
+            if (DeleteFileInner(lf.Name) == false)
             {
                 failed = true;
             }
@@ -125,7 +120,7 @@ public class LibraryFileController : Controller
 
         return failed ? Translater.Instant("ErrorMessages.NotAllFilesCouldBeDeleted") : string.Empty;
 
-        bool DeleteFile(string file)
+        bool DeleteFileInner(string file)
         {
             try
             {

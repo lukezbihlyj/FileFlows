@@ -180,7 +180,7 @@ public class ScriptController : BaseController
             return BadRequest(error);
         
         var script = result.Value;
-        script.Name = name = await service.GetNewUniqueName(script.Name);
+        script.Name = await service.GetNewUniqueName(script.Name);
         script.Repository = false;
         script.Path = null;
         script.Uid = Guid.Empty;
@@ -196,10 +196,10 @@ public class ScriptController : BaseController
     /// <param name="uid">The uid of the script to duplicate</param>
     /// <returns>The duplicated script</returns>
     [HttpGet("duplicate/{uid}")]
-    public async Task<Script> Duplicate([FromRoute] Guid uid)
+    public async Task<Script?> Duplicate([FromRoute] Guid uid)
     {
         var service = ServiceLoader.Load<ScriptService>();
-        var script = await service.Get(uid);;
+        var script = await service.Get(uid);
         if (script == null)
             return null;
 
@@ -218,7 +218,7 @@ public class ScriptController : BaseController
         /// <summary>
         /// Gets or sets the code to validate
         /// </summary>
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets if this is a function being validated
@@ -228,6 +228,6 @@ public class ScriptController : BaseController
         /// <summary>
         /// Gets or sets optional variables to use when validating a script
         /// </summary>
-        public Dictionary<string, object> Variables { get; set; }
+        public Dictionary<string, object> Variables { get; set; } = [];
     }
 }
