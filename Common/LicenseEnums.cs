@@ -2,7 +2,6 @@ namespace FileFlows.Common;
 
 /// <summary>
 /// License levels
-/// NOTE This must be in Sync with Common.Enums and Plugin.Enumerations
 /// </summary>
 public enum LicenseLevel
 {
