@@ -603,7 +603,7 @@ public class FlowController : BaseController
                     ScriptArgumentType.Bool => false,
                     ScriptArgumentType.Int => 0,
                     ScriptArgumentType.String => string.Empty,
-                    _ => null
+                    _ => null!
                 });
                 return ef;
             }).ToList();

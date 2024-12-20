@@ -121,7 +121,7 @@ public class FileHelperChangeExtensionTests
     public void ChangeExtension_NullFileName_ThrowsArgumentNullException()
     {
         // Arrange
-        string fileName = null;
+        string? fileName = null;
         string newExtension = "csv";
 
         // Act

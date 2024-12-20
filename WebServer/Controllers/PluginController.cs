@@ -22,7 +22,7 @@ public class PluginController : BaseController
         if(Regex.IsMatch(langCode, "^[a-zA-Z]{2,3}$") == false)
             return new JsonResult(new {});
         string file = $"i18n/plugins.{langCode}.json";
-        if(System.IO.File.Exists(Path.Combine(_hostingEnvironment.WebRootPath, file)))
+        if(System.IO.File.Exists(Path.Combine(_hostingEnvironment!.WebRootPath, file)))
             return File(file, "text/json");
         return new JsonResult(new {});
     }
@@ -30,13 +30,13 @@ public class PluginController : BaseController
     /// <summary>
     /// Represents the hosting environment of the application.
     /// </summary>
-    private readonly IWebHostEnvironment _hostingEnvironment;
+    private readonly IWebHostEnvironment? _hostingEnvironment;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PluginController"/> class.
     /// </summary>
     /// <param name="hostingEnvironment">The hosting environment.</param>
-    public PluginController(IWebHostEnvironment hostingEnvironment)
+    public PluginController(IWebHostEnvironment? hostingEnvironment)
     {
         _hostingEnvironment = hostingEnvironment;
     }

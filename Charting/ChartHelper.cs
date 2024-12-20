@@ -10,5 +10,5 @@ public class ChartHelper
     /// <summary>
     /// Gets or sets the logger to use
     /// </summary>
-    public static ILogger Logger { get; set; }
+    public static ILogger Logger { get; set; } = null!;
 }

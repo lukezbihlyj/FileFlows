@@ -259,7 +259,7 @@ internal  class FileFlowsObjectManager
     /// </summary>
     /// <param name="uids">the UIDs of the items to delete</param>
     /// <param name="auditDetails">The audit details</param>
-    public Task Delete(Guid[] uids, AuditDetails auditDetails) => dbom.Delete(uids, auditDetails);
+    public Task Delete(Guid[] uids, AuditDetails? auditDetails) => dbom.Delete(uids, auditDetails);
 
 
 
