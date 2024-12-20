@@ -80,7 +80,9 @@ public class SettingsController : BaseController
             license.Status = LicenseStatus.Invalid;
         }
 
-        license ??= new();
+        license ??= new() { Status = LicenseStatus.Unlicensed };
+        if (license.Level == LicenseLevel.Free)
+            license.Status = LicenseStatus.Unlicensed;
 
         // clone it so we can remove some properties we dont want passed to the UI
         string json = JsonSerializer.Serialize(settings);
@@ -139,8 +141,8 @@ public class SettingsController : BaseController
         settings.LicenseEmail  = Settings.LicenseEmail;
         settings.LicenseFiles = license == null ? string.Empty :
             license.Files >= 1_000_000_000 ? "Unlimited" : license.Files.ToString();
-        settings.LicenseFlags = license == null ? 0 : license.Flags;
-        settings.LicenseLevel = license == null ? 0 : license.Level;
+        settings.LicenseFlags = license?.Flags ?? 0;
+        settings.LicenseLevel = license?.Level ?? 0;
         var licenseService = ServiceLoader.Load<LicenseService>();
         settings.LicenseProcessingNodes = licenseService.GetLicensedProcessingNodes();
         settings.LicenseExpiryDate = license == null ? DateTime.MinValue : license.ExpirationDateUtc.ToLocalTime();
