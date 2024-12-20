@@ -1,12 +1,6 @@
 using System.Web;
 using System.Net.Http.Headers;
-using FileFlows.Shared.Models;
-using FileFlows.Server.Helpers;
-using Microsoft.AspNetCore.Mvc;
-using FileFlows.Services;
 using System.Text.Json.Serialization;
-using FileFlows.Server;
-using FileFlows.ServerShared.Services;
 using FileFlows.WebServer.Helpers;
 using Swashbuckle.AspNetCore.Annotations;
 using HttpMethod = System.Net.Http.HttpMethod;
@@ -28,7 +22,7 @@ public class OpenIDController : Controller
     /// <param name="settingsService">the settings service</param>
     public OpenIDController(SettingsService settingsService)
     {
-        _settings = settingsService.Get().Result;
+        _settings = settingsService.Get().Result!;
     }
 
     /// <summary>
@@ -59,9 +53,9 @@ public class OpenIDController : Controller
 
     private string GetRedirectUrl()
     {
-        var redirectUri = Url.Action("Callback", "OpenID", null, Request.Scheme); // Callback URL
+        var redirectUri = Url.Action("Callback", "OpenID", null, Request.Scheme) ?? string.Empty; // Callback URL
         if (string.IsNullOrWhiteSpace(_settings.OidcCallbackAddress) == false)
-            redirectUri = _settings.OidcCallbackAddress.TrimEnd('/') + redirectUri[redirectUri.IndexOf("/oidc")..];
+            redirectUri = _settings.OidcCallbackAddress.TrimEnd('/') + redirectUri[redirectUri.IndexOf("/oidc", StringComparison.Ordinal)..];
         return redirectUri;
     }
 
@@ -87,7 +81,7 @@ public class OpenIDController : Controller
             var tokenRequestContent = new FormUrlEncodedContent(new KeyValuePair<string, string>[]
             {
                 new ("grant_type", "authorization_code"),
-                new ("code", code),
+                new ("code", code!),
                 new ("redirect_uri", redirectUri),
                 new ("client_id", _settings.OidcClientId),
                 new ("client_secret", _settings.OidcClientSecret)
@@ -109,7 +103,7 @@ public class OpenIDController : Controller
             var request = new HttpRequestMessage(HttpMethod.Get, userInfoEndpoint);
 
             // Set the Authorization header for this request
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult.AccessToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult!.AccessToken);
 
             // Send the request using the static HttpClient instance
             HttpResponseMessage userInfoResponse = await _httpClient.SendAsync(request);
@@ -121,13 +115,13 @@ public class OpenIDController : Controller
             var oidcUser = JsonSerializer.Deserialize<OidcUserInfo>(userInfoResponseContent);
 
             var service = ServiceLoader.Load<UserService>();
-            string lookupName = oidcUser.Email?.EmptyAsNull() ?? oidcUser.Name;
+            string lookupName = oidcUser?.Email?.EmptyAsNull() ?? oidcUser?.Name ?? string.Empty;
             var user = await service.FindUser(lookupName);
             if (user == null)
                 return ErrorPage("Unable to find user: " + lookupName);
 
             var settings = await ServiceLoader.Load<ISettingsService>().Get();
-            var jwt = AuthenticationHelper.CreateJwtToken(user, Request.GetActualIP(), settings.TokenExpiryMinutes);
+            var jwt = AuthenticationHelper.CreateJwtToken(user, Request.GetActualIP(), settings?.TokenExpiryMinutes ?? 120);
 
             return AuthRedirectPage(jwt);
         }
@@ -243,6 +237,7 @@ public class OpenIDController : Controller
         }
         catch (Exception)
         {
+            // Ignored
         }
         return null;
     }
@@ -257,79 +252,79 @@ public class OpenIDConnectConfiguration
     /// Gets or sets the issuer URL of the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("issuer")]
-    public string Issuer { get; set; }
+    public string Issuer { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the authorization endpoint URL of the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("authorization_endpoint")]
-    public string AuthorizationEndpoint { get; set; }
+    public string AuthorizationEndpoint { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the token endpoint URL of the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("token_endpoint")]
-    public string TokenEndpoint { get; set; }
+    public string TokenEndpoint { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the userinfo endpoint URL of the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("userinfo_endpoint")]
-    public string UserInfoEndpoint { get; set; }
+    public string UserInfoEndpoint { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the JWKS (JSON Web Key Set) endpoint URL of the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("jwks_uri")]
-    public string JwksUri { get; set; }
+    public string JwksUri { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the registration endpoint URL of the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("registration_endpoint")]
-    public string RegistrationEndpoint { get; set; }
+    public string RegistrationEndpoint { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported scopes by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("scopes_supported")]
-    public string[] ScopesSupported { get; set; }
+    public string[] ScopesSupported { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported response types by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("response_types_supported")]
-    public string[] ResponseTypesSupported { get; set; }
+    public string[] ResponseTypesSupported { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported grant types by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("grant_types_supported")]
-    public string[] GrantTypesSupported { get; set; }
+    public string[] GrantTypesSupported { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported response modes by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("response_modes_supported")]
-    public string[] ResponseModesSupported { get; set; }
+    public string[] ResponseModesSupported { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported token endpoint authentication methods by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("token_endpoint_auth_methods_supported")]
-    public string[] TokenEndpointAuthMethodsSupported { get; set; }
+    public string[] TokenEndpointAuthMethodsSupported { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported subject types by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("subject_types_supported")]
-    public string[] SubjectTypesSupported { get; set; }
+    public string[] SubjectTypesSupported { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the supported ID token signing algorithms by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("id_token_signing_alg_values_supported")]
-    public string[] IdTokenSigningAlgValuesSupported { get; set; }
+    public string[] IdTokenSigningAlgValuesSupported { get; set; } = null!;
 }
 
 /// <summary>
@@ -341,25 +336,25 @@ public class OidcTokenResult
     /// Gets or sets the access token issued by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("access_token")]
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the type of token issued (e.g., Bearer).
     /// </summary>
     [JsonPropertyName("token_type")]
-    public string TokenType { get; set; }
+    public string TokenType { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the ID token issued by the OpenID Connect provider.
     /// </summary>
     [JsonPropertyName("id_token")]
-    public string IdToken { get; set; }
+    public string IdToken { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the scope of the access token.
     /// </summary>
     [JsonPropertyName("scope")]
-    public string Scope { get; set; }
+    public string Scope { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the lifetime of the access token in seconds.
@@ -377,17 +372,17 @@ public class OidcUserInfo
     /// Gets or sets the user's full name.
     /// </summary>
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the user's given (first) name.
     /// </summary>
     [JsonPropertyName("given_name")]
-    public string GivenName { get; set; }
+    public string GivenName { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the user's email address.
     /// </summary>
     [JsonPropertyName("email")]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
 }
