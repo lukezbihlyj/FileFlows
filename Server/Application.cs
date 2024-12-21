@@ -216,6 +216,7 @@ public class Application
         if (LicenseService.IsLicensed(LicenseFlags.Reseller) == false)
             return;
         Console.WriteLine("Starting Reseller App...");
+        Logger.Instance?.ILog("Starting Reseller App...");
         new FileFlows.ResellerApp.ResellerWebService().Start();
     }
 
