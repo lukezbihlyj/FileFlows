@@ -3,7 +3,7 @@ namespace FileFlows.Shared.Models;
 /// <summary>
 /// Reseller Settings
 /// </summary>
-public class ResellerSettings
+public class ResellerSettings : FileFlowObject
 {
     /// <summary>
     /// Gets or sets the custom port to run the reseller app on
