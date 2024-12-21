@@ -109,6 +109,8 @@ public class StartupService : IStartupService
 
             // Start workers right at the end, so the ServerUrl is set in case the worker needs BaseServerUrl
             StartupWorkers();
+
+            StartResellerServer();
             
             WebServerApp.FullyStarted = true;
             return true;
@@ -123,6 +125,16 @@ public class StartupService : IStartupService
             #endif
             return Result<bool>.Fail(ex.Message);
         }
+    }
+
+    private void StartResellerServer()
+    {
+#if(!DEBUG)
+        if (LicenseService.IsLicensed(LicenseFlags.Reseller) == false)
+            return;
+#endif
+        Logger.Instance?.ILog("Starting Reseller App...");
+        new FileFlows.ResellerApp.ResellerWebService().Start();
     }
 
     /// <summary>

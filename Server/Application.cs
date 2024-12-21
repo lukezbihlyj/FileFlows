@@ -118,7 +118,6 @@ public class Application
 
             if (Docker || noGui)
             {
-                StartResellerApp();
                 Console.WriteLine("Starting FileFlows Server...");
                 WebServerApp.Start(args);
             }
@@ -206,20 +205,6 @@ public class Application
         FileFlows.Services.ServiceLoader.AddSpecialCase<IPluginScanner>(new PluginScanner());
         FileFlows.Services.ServiceLoader.AddSpecialCase<ITemplateService>(new TemplateLoader());
         FileFlows.Services.ServiceLoader.AddSpecialCase<ISystemEventsService>(new SystemEvents());
-    }
-
-    /// <summary>
-    /// Starts the reseller application
-    /// </summary>
-    private void StartResellerApp()
-    {
-        #if(!DEBUG)
-        if (LicenseService.IsLicensed(LicenseFlags.Reseller) == false)
-            return;
-        #endif
-        Console.WriteLine("Starting Reseller App...");
-        Logger.Instance?.ILog("Starting Reseller App...");
-        new FileFlows.ResellerApp.ResellerWebService().Start();
     }
 
     /// <summary>
