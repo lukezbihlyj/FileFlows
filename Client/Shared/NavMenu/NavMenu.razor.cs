@@ -252,7 +252,8 @@ public partial class NavMenu : IDisposable
                 Items = new List<NavMenuItem>
                 {
                     new ("Pages.Settings.Title", "fas fa-cogs", "settings"),
-                    Profile.LicensedFor(LicenseFlags.Reporting) ? new ("Pages.Reporting.Title", "fas fa-chart-pie", "reporting") : null, 
+                    Profile.LicensedFor(LicenseFlags.Reseller) ? new ("Reseller Settings", "fas fa-people-carry", "reseller-settings") : null,
+                    Profile.LicensedFor(LicenseFlags.Reporting) ? new ("Pages.Reporting.Title", "fas fa-chart-pie", "reporting") : null,
                     new ("Pages.Notifications.Title", "fas fa-bullhorn", "notifications")
                 }
             });

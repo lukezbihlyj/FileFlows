@@ -17,6 +17,7 @@ public partial class Settings : InputRegister
     /// Gets or sets blocker instance
     /// </summary>
     [CascadingParameter] Blocker Blocker { get; set; }
+    
     /// <summary>
     /// Gets or sets the javascript runtime used
     /// </summary>
@@ -261,7 +262,10 @@ public partial class Settings : InputRegister
         base.OnAfterRender(firstRender);
     }
 
-    
+    /// <summary>
+    /// Loads the settings
+    /// </summary>
+    /// <param name="blocker">if the blocker should be shown or not</param>
     private async Task Refresh(bool blocker = true)
     {
         if(blocker)
@@ -345,10 +349,11 @@ public partial class Settings : InputRegister
         }
     }
 
+    /// <summary>
+    /// Opens the help page
+    /// </summary>
     private void OpenHelp()
-    {
-        _ = App.Instance.OpenHelp("https://fileflows.com/docs/webconsole/admin/settings");
-    }
+        => _ = App.Instance.OpenHelp("https://fileflows.com/docs/webconsole/admin/settings");
 
     private async Task TestDbConnection()
     {
