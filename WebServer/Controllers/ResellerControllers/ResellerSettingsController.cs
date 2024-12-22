@@ -40,6 +40,10 @@ public class ResellerSettingsController : BaseController
 
         var service = ServiceLoader.Load<ResellerSettingsService>();
         await service.Save(model, await GetAuditDetails());
+        
+        if(ServiceLoader.TryLoad<IResellerWebServerService>(out var webService))
+            webService.Restart();
+        
         return Ok();
     }
 

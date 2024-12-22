@@ -4,6 +4,7 @@ using FileFlows.Server.Helpers;
 using FileFlows.Server.Workers;
 using FileFlows.ServerShared.Workers;
 using FileFlows.Services;
+using FileFlows.Services.ResellerServices;
 using FileFlows.Shared.Models;
 using FileFlows.WebServer;
 using LibraryFileService = FileFlows.RemoteServices.LibraryFileService;
@@ -133,8 +134,11 @@ public class StartupService : IStartupService
         if (LicenseService.IsLicensed(LicenseFlags.Reseller) == false)
             return;
 #endif
+        var service = new FileFlows.ResellerApp.ResellerWebService();
+        ServiceLoader.AddSpecialCase<IResellerWebServerService>(service);
         Logger.Instance?.ILog("Starting Reseller App...");
-        new FileFlows.ResellerApp.ResellerWebService().Start();
+        
+        service.Start();
     }
 
     /// <summary>
