@@ -48,9 +48,4 @@ public class ResellerSettings : FileFlowObject
     /// </summary>
     [Encrypted]
     public string? CustomProviderClientSecret { get; set; }
-    /// <summary>
-    /// Gets or sets the custom authentication response type
-    /// </summary>
-    [Encrypted]
-    public string? CustomProviderResponseType { get; set; }
 }
