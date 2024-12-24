@@ -23,6 +23,9 @@ public partial class Libraries : ListPage<Guid, Library>
         lblSavings = Translater.Instant("Labels.Savings");
     }
 
+    /// <summary>
+    /// Adds an item
+    /// </summary>
     private async Task Add()
     {
         await Edit(new ()
@@ -69,6 +72,10 @@ public partial class Libraries : ListPage<Guid, Library>
         }
     }
     
+    /// <summary>
+    /// Gets the flows
+    /// </summary>
+    /// <returns>the list of flows</returns>
     private Task<RequestResult<Dictionary<Guid, string>>> GetFlows()
         => HttpHelper.Get<Dictionary<Guid, string>>("/api/flow/basic-list?type=Standard");
 

@@ -5,7 +5,7 @@ namespace FileFlows.WebServer.Controllers.ResellerControllers;
 /// <summary>
 /// Reseller Settings Controller
 /// </summary>
-[Route("/api/reseller-settings")]
+[Route("/api/reseller/settings")]
 [FileFlowsAuthorize(UserRole.Admin)]
 public class ResellerSettingsController : BaseController
 {

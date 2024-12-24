@@ -1031,7 +1031,11 @@ internal class DbLibraryFileManager : BaseManager
             // use cache, also use filter.Skip and filter.Rows
             var cachedFiles = Cache.Values.Where(filter.Matches).ToList();
             var sortedFiles = SortLibraryFiles(cachedFiles, filter);
-            return sortedFiles.Skip(filter.Skip).Take(filter.Rows).ToList();
+            if(filter.Skip > 0)
+                sortedFiles = sortedFiles.Skip(filter.Skip).Take(filter.Rows).ToList();
+            if(filter.Rows > 0)
+                sortedFiles= sortedFiles.Take(filter.Rows);
+            return sortedFiles.ToList();
         }
         
         var sql = await ConstructQuery(filter);

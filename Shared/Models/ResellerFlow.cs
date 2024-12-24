@@ -2,7 +2,6 @@ using FileFlows.Plugin;
 
 namespace FileFlows.Shared.Models;
 
-
 /// <summary>
 /// A reseller flow
 /// </summary>
@@ -37,4 +36,9 @@ public class ResellerFlow : FileFlowObject
     /// Gets or sets how many tokens this cost to run
     /// </summary>
     public int Tokens { get; set; }
+    
+    /// <summary>
+    /// Gets or sets if this flow is enabled
+    /// </summary>
+    public bool Enabled { get; set; }
 }

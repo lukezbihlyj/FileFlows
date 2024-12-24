@@ -1,7 +1,7 @@
 using FileFlows.Client.Components;
 using Microsoft.AspNetCore.Components;
 
-namespace FileFlows.Client.Pages;
+namespace FileFlows.Client.Pages.Reseller;
 
 /// <summary>
 /// Reseller settings
@@ -66,7 +66,7 @@ public partial class ResellerSettings
         if(blocker)
             Blocker.Show();
         
-        var response = await HttpHelper.Get<FileFlows.Shared.Models.ResellerSettings>("/api/reseller-settings");
+        var response = await HttpHelper.Get<FileFlows.Shared.Models.ResellerSettings>("/api/reseller/settings");
         if (response.Success)
         {
             this.Model = response.Data;
@@ -92,7 +92,7 @@ public partial class ResellerSettings
             if (valid == false)
                 return;
             
-            await HttpHelper.Put<string>("/api/reseller-settings", this.Model);
+            await HttpHelper.Put<string>("/api/reseller/settings", this.Model);
 
             await ProfileService.Refresh();
         }

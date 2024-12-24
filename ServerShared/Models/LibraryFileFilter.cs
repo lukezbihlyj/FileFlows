@@ -90,6 +90,16 @@ public class LibraryFileFilter
     /// Gets or sets the system info
     /// </summary>
     public LibraryFilterSystemInfo SysInfo { get; set; } = new();
+    
+    /// <summary>
+    /// Gets or sets a UID of a reseller user who this file belongs to
+    /// </summary>
+    public Guid? ResellerUserUid { get; set; }
+    
+    /// <summary>
+    /// Gets or sets a UID of a reseller flow who this file belongs to
+    /// </summary>
+    public Guid? ResellerFlowUid { get; set; }
 
     /// <summary>
     /// Tests if a file matches the filter
@@ -168,6 +178,10 @@ public class LibraryFileFilter
         if (FlowUid != null && file.FlowUid != FlowUid)
             return false;
         if (TagUid != null && file.Tags?.Contains(TagUid.Value) != true)
+            return false;
+        if (ResellerUserUid != null && file.Additional?.ResellerUserUid != ResellerUserUid)
+            return false;
+        if (ResellerFlowUid != null && file.Additional?.ResellerFlowUid != ResellerFlowUid)
             return false;
 
         return true;
