@@ -1229,7 +1229,53 @@ internal class DbLibraryFileManager : BaseManager
             
             if (args.TagUid != null)
                 sql += $" and {Wrap(nameof(LibraryFile.Tags))} LIKE '%{args.TagUid.Value}%'";
-            
+
+
+            if (args.ResellerUserUid != null && args.ResellerUserUid != Guid.Empty)
+            {
+                switch (DbConnector.Type)
+                {
+                    case DatabaseType.MySql:
+                        sql +=
+                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                        break;
+                    case DatabaseType.Postgres:
+                        sql +=
+                            $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}, '{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                        break;
+                    case DatabaseType.Sqlite:
+                        sql +=
+                            $" and json_extract({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                        break;
+                    case DatabaseType.SqlServer:
+                        sql +=
+                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                        break;
+                }
+            }
+
+            if (args.ResellerFlowUid != null && args.ResellerFlowUid != Guid.Empty)
+            {
+                switch (DbConnector.Type)
+                {
+                    case DatabaseType.MySql:
+                        sql +=
+                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                        break;
+                    case DatabaseType.Postgres:
+                        sql +=
+                            $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}, '{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                        break;
+                    case DatabaseType.Sqlite:
+                        sql +=
+                            $" and json_extract({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                        break;
+                    case DatabaseType.SqlServer:
+                        sql +=
+                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                        break;
+                }
+            }
             if (iStatus > 0)
             {
                 if (args.SortBy != null)
