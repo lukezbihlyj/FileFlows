@@ -28,11 +28,11 @@ public class LogController : Controller
     /// </summary>
     /// <returns>the system log</returns>
     [HttpGet]
-    public string Get([FromQuery] LogType logLevel = LogType.Info)
+    public async Task<string> Get([FromQuery] LogType logLevel = LogType.Info)
     {
         if (Logger.Instance.TryGetLogger(out FileLogger logger))
         {
-            string log = logger.GetTail(1000, logLevel);
+            string log = await logger.GetTail(1000, logLevel);
             string html = LogToHtml.Convert(log);
             return FixLog(html);
         }
