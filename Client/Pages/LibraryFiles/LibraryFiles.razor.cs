@@ -595,7 +595,7 @@ public partial class LibraryFiles : ListPage<Guid, LibaryFileListModel>, IDispos
         }
         
         string name = file.Name.Replace("\\", "/");
-        name = name.Substring(name.LastIndexOf("/", StringComparison.Ordinal) + 1);
+        name = name[(name.LastIndexOf('/') + 1)..];
         await jsRuntime.InvokeVoidAsync("ff.downloadFile", url, name);
     }
 
