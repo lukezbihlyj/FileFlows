@@ -102,9 +102,10 @@ window.ff = {
         document.body.appendChild(tag);
     },
     downloadFile: function (url, filename) {
-        let auth = localStorage.getItem('ACCESS_TOKEN');
-        if(auth)
+        let authToken = localStorage.getItem('ACCESS_TOKEN');
+        if(authToken)
         {
+            console.log('downloading with auth');
             // Make a fetch request to the server, including the Authorization header
             fetch(url, {
                 method: 'GET',
