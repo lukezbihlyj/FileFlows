@@ -1236,7 +1236,7 @@ internal class DbLibraryFileManager : BaseManager
             if (args.ResellerUserUid != null && args.ResellerUserUid != Guid.Empty)
             {
                 sql += $" and {Wrap(nameof(LibraryFile.Additional))} <> '' ";
-                string col = $"{Wrap(nameof(LibraryFile))},{Wrap(nameof(LibraryFile.Additional))}";
+                string col = $"{Wrap(nameof(LibraryFile))}.{Wrap(nameof(LibraryFile.Additional))}";
                 switch (DbConnector.Type)
                 {
                     case DatabaseType.MySql:
@@ -1244,7 +1244,7 @@ internal class DbLibraryFileManager : BaseManager
                             $" and json_value({col}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.Postgres:
-                        sql += $" and {col}::jsonb->>'{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
+                        sql += $" and {col}::jsonb->>'{nameof(LibraryFile.Additional.ResellerUserUid)}' = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
@@ -1260,7 +1260,7 @@ internal class DbLibraryFileManager : BaseManager
             if (args.ResellerFlowUid != null && args.ResellerFlowUid != Guid.Empty)
             {
                 sql += $" and {Wrap(nameof(LibraryFile.Additional))} <> '' ";
-                string col = $"{Wrap(nameof(LibraryFile))},{Wrap(nameof(LibraryFile.Additional))}";
+                string col = $"{Wrap(nameof(LibraryFile))}.{Wrap(nameof(LibraryFile.Additional))}";
                 switch (DbConnector.Type)
                 {
                     case DatabaseType.MySql:
@@ -1268,7 +1268,7 @@ internal class DbLibraryFileManager : BaseManager
                             $" and json_value({col}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
                         break;
                     case DatabaseType.Postgres:
-                        sql += $" and {col}::jsonb->>'{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                        sql += $" and {col}::jsonb->>'{nameof(LibraryFile.Additional.ResellerFlowUid)}' = '{args.ResellerFlowUid}'";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
@@ -1387,7 +1387,8 @@ internal class DbLibraryFileManager : BaseManager
 
             int quarter = TimeHelper.GetCurrentQuarter();
             var outOfSchedule = args.SysInfo.AllLibraries.Values
-                .Where(x => x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
+                .Where(x => x.Uid != CommonVariables.ManualLibraryUid &&
+                    (x.Schedule?.Length != 672 || x.Schedule[quarter] == '0'))
                 .Select(x => x.Uid).Where(x => disabled.Contains(x) == false).ToList();
             if (args.Status == FileStatus.OutOfSchedule)
             {
@@ -1437,7 +1438,8 @@ internal class DbLibraryFileManager : BaseManager
                 sql += $" and {Wrap(nameof(LibraryFile.LibraryUid))} in ({alllowedLibraries}) ";
             }
 
-            sql += $" and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)} ";
+            if(args.Status != null)
+                sql += $" and {Wrap(nameof(LibraryFile.HoldUntil))} <= {Date(DateTime.UtcNow)} ";
 
             if (args.MaxSizeMBs is > 0)
                 sql += $" and {Wrap(nameof(LibraryFile.OriginalSize))} < " + args.MaxSizeMBs * 1_000_000 + " ";
@@ -1662,7 +1664,7 @@ end ");
         List<Guid> libraryUids = libraries.Select(x => x.Uid).ToList();
         int quarter = TimeHelper.GetCurrentQuarter();
         var outOfSchedule = libraries
-            .Where(x => disabled.Contains(x.Uid) == false && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
+            .Where(x => disabled.Contains(x.Uid) == false && x.Uid != CommonVariables.ManualLibraryUid && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
             .Select(x => x.Uid)
             .ToList();
         
