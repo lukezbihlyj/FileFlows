@@ -1053,6 +1053,8 @@ internal class DbLibraryFileManager : BaseManager
             };
         }
         
+        Logger.ILog("SQL: " + sql);
+        
         using var db = await DbConnector.GetDb();
         return await db.Db.FetchAsync<LibraryFile>(sql);
     }
@@ -1237,19 +1239,19 @@ internal class DbLibraryFileManager : BaseManager
                 {
                     case DatabaseType.MySql:
                         sql +=
-                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.Postgres:
                         sql +=
-                            sql += $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}::jsonb, '{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                            sql += $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}::jsonb, '{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
-                            $" and json_extract({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                            $" and json_extract({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.SqlServer:
                         sql +=
-                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                 }
             }
