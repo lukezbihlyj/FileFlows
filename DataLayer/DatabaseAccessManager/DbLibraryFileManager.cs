@@ -1241,7 +1241,7 @@ internal class DbLibraryFileManager : BaseManager
                         break;
                     case DatabaseType.Postgres:
                         sql +=
-                            $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}, '{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
+                            sql += $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}::jsonb, '{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}'";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
@@ -1264,7 +1264,7 @@ internal class DbLibraryFileManager : BaseManager
                         break;
                     case DatabaseType.Postgres:
                         sql +=
-                            $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}, '{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                            sql += $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}::jsonb, '{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
