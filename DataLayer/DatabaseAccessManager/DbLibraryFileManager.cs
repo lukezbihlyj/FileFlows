@@ -1235,45 +1235,48 @@ internal class DbLibraryFileManager : BaseManager
 
             if (args.ResellerUserUid != null && args.ResellerUserUid != Guid.Empty)
             {
+                sql += $" and {Wrap(nameof(LibraryFile.Additional))} <> '' ";
+                string col = $"{Wrap(nameof(LibraryFile))},{Wrap(nameof(LibraryFile.Additional))}";
                 switch (DbConnector.Type)
                 {
                     case DatabaseType.MySql:
                         sql +=
-                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
+                            $" and json_value({col}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.Postgres:
-                        sql += $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}::jsonb, '{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
+                        sql += $" and {col}::jsonb->>'{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
-                            $" and json_extract({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
+                            $" and json_extract({col}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                     case DatabaseType.SqlServer:
                         sql +=
-                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
+                            $" and json_value({col}, '$.{nameof(LibraryFile.Additional.ResellerUserUid)}') = '{args.ResellerUserUid}' ";
                         break;
                 }
             }
 
             if (args.ResellerFlowUid != null && args.ResellerFlowUid != Guid.Empty)
             {
+                sql += $" and {Wrap(nameof(LibraryFile.Additional))} <> '' ";
+                string col = $"{Wrap(nameof(LibraryFile))},{Wrap(nameof(LibraryFile.Additional))}";
                 switch (DbConnector.Type)
                 {
                     case DatabaseType.MySql:
                         sql +=
-                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                            $" and json_value({col}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
                         break;
                     case DatabaseType.Postgres:
-                        sql +=
-                            sql += $" and jsonb_extract_path_text({Wrap(nameof(LibraryFile.Additional))}::jsonb, '{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                        sql += $" and {col}::jsonb->>'{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
                         break;
                     case DatabaseType.Sqlite:
                         sql +=
-                            $" and json_extract({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                            $" and json_extract({col}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
                         break;
                     case DatabaseType.SqlServer:
                         sql +=
-                            $" and json_value({Wrap(nameof(LibraryFile.Additional))}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
+                            $" and json_value({col}, '$.{nameof(LibraryFile.Additional.ResellerFlowUid)}') = '{args.ResellerFlowUid}'";
                         break;
                 }
             }
