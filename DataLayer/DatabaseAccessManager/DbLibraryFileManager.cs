@@ -1664,7 +1664,9 @@ end ");
         List<Guid> libraryUids = libraries.Select(x => x.Uid).ToList();
         int quarter = TimeHelper.GetCurrentQuarter();
         var outOfSchedule = libraries
-            .Where(x => disabled.Contains(x.Uid) == false && x.Uid != CommonVariables.ManualLibraryUid && x.Schedule?.Length != 672 || x.Schedule[quarter] == '0')
+            .Where(x => disabled.Contains(x.Uid) == false && 
+                x.Uid != CommonVariables.ManualLibraryUid 
+                && (x.Schedule?.Length != 672 || x.Schedule[quarter] == '0'))
             .Select(x => x.Uid)
             .ToList();
         
