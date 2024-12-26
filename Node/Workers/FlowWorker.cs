@@ -777,6 +777,7 @@ public class FlowWorker : Worker
                 config.Resources,
                 config.DontUseTempFilesWhenMovingOrCopying,
                 Variables = variables,
+                config.ManualLibraryPath,
                 config.Libraries,
                 config.PluginNames,
                 config.PluginSettings,

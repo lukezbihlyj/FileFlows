@@ -480,7 +480,11 @@ public class Runner
         {
             var uid = Info.LibraryFile.Additional.ResellerUserUid;
             nodeParameters.Variables["ResellerUserUid"] = uid.ToString();
-            nodeParameters.Variables["ResellerUserOutputDir"] = Path.Combine(DirectoryHelper.ManualLibrary, "reseller-users", uid.ToString(), "processed");
+            nodeParameters.Variables["rUserUid"] = uid.ToString();
+            nodeParameters.Variables["ResellerUserOutputDir"] 
+                = Path.Combine(runInstance.Config.ManualLibraryPath, "reseller-users", uid.ToString(), "processed");
+            nodeParameters.Variables["ruOutput"] 
+                = Path.Combine(runInstance.Config.ManualLibraryPath, "reseller-users", uid.ToString(), "processed");
         }
 
         if(Info.LibraryFile.Additional?.ResellerFlowUid != null && Info.LibraryFile.Additional?.ResellerFlowUid != Guid.Empty)

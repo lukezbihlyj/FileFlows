@@ -62,6 +62,11 @@ public class ConfigurationRevision
         get => _Tags; 
         set => _Tags = value ?? [];
     } 
+    
+    /// <summary>
+    /// Gets or sets the path to the manual library
+    /// </summary>
+    public string ManualLibraryPath { get; set; }
 
     /// <summary>
     /// Gets or sets the shared Scripts
