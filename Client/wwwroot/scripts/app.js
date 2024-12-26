@@ -105,7 +105,6 @@ window.ff = {
         let authToken = ff.getAccessToken();
         if(authToken)
         {            
-            console.log('downloading with auth');
             // Make a fetch request to the server, including the Authorization header
             fetch(url, {
                 method: 'GET',

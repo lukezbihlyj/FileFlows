@@ -347,6 +347,11 @@ public class LibraryFileAdditional
     /// Gets or sets a UID of a reseller flow who this file belongs to
     /// </summary>
     public Guid? ResellerFlowUid { get; set; }
+    /// <summary>
+    /// Gets or sets the original short name of a file.
+    /// This is only used for reseller files to display to reseller users.
+    /// </summary>
+    public string? ShortName { get; set; }
 }
 
 /// <summary>
