@@ -124,7 +124,9 @@ public class PluginController : BaseController
                 continue;
             }
 
-            var dlResult = await pluginDownloader.Download(Version.Parse(ppi.Version), ppi.Package);
+            var dlResult = await pluginDownloader.Download(Version.Parse(ppi.Version), 
+                ppi.Package, 
+                PluginService.GetXCode());
             if (dlResult.Success == false)
             {
                 Logger.Instance.WLog("PluginUpdate: Failed to download plugin");

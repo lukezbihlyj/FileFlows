@@ -50,7 +50,9 @@ public class PluginUpdaterWorker : ServerWorker
                     continue;
                 }
 
-                var dlResult = pluginDownloader.Download(Version.Parse(package.Version), package.Package).Result;
+                var dlResult = pluginDownloader.Download(Version.Parse(package.Version), 
+                    package.Package, PluginService.GetXCode()
+                    ).Result;
 
                 if (dlResult.Success == false)
                 {
