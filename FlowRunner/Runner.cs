@@ -474,6 +474,11 @@ public class Runner
         
         nodeParameters.Variables["library.Name"] = Info.Library.Name;
         nodeParameters.Variables["library.Path"] = Info.LibraryPath;
+        
+        if(Info.LibraryFile.Additional?.ResellerUserUid != null && Info.LibraryFile.Additional?.ResellerUserUid != Guid.Empty)
+            nodeParameters.Variables["ResellerUserUid"] = Info.LibraryFile.Additional.ResellerUserUid;
+        if(Info.LibraryFile.Additional?.ResellerFlowUid != null && Info.LibraryFile.Additional?.ResellerFlowUid != Guid.Empty)
+            nodeParameters.Variables["ResellerFlowUid"] = Info.LibraryFile.Additional.ResellerFlowUid;
 
         if (runInstance.Config.Resources?.Any() == true)
         {

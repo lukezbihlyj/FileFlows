@@ -41,4 +41,16 @@ public partial class ResellerFlows : ListPage<Guid, ResellerFlow>
         // this.EditingItem = library;
         return await OpenEditor(item);
     }
+
+    /// <summary>
+    /// Opens the flow in the editor
+    /// </summary>
+    /// <param name="flowUid">the UID of the flow</param>
+    private void OpenFlow(Guid? flowUid)
+    {
+        if (flowUid == null || Profile.HasRole(UserRole.Flows) == false)
+            return;
+
+        NavigationManager.NavigateTo($"/flows/{flowUid}");
+    }
 }

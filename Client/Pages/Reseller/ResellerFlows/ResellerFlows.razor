@@ -43,8 +43,17 @@
                                     <span class="description">@item.Description</span>
                                 </span>
                                 <div class="info">
-                                    <IconValue Icon="fas fa-sitemap" Color="IconValueColor.Blue"
-                                               Value="@item.Flow.Name" />
+                                    @if (Profile.HasRole(UserRole.Flows))
+                                    {
+                                        <IconValue Icon="fas fa-sitemap" Color="IconValueColor.Blue"
+                                                   Value="@item.Flow.Name" OnClick="() => OpenFlow(item.Flow?.Uid)"/>
+                                    }
+                                    else
+                                    {
+                                        <IconValue Icon="fas fa-sitemap" Color="IconValueColor.Blue"
+                                                   Value="@item.Flow.Name" />
+                                        
+                                    }
                                 </div>
                             </div>
 
