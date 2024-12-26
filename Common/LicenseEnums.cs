@@ -28,5 +28,9 @@ public enum LicenseLevel
     /// <summary>
     /// Enterprise
     /// </summary>
-    Enterprise = 100
+    Enterprise = 100,
+    /// <summary>
+    /// Reseller license
+    /// </summary>
+    Reseller = 1000
 }
