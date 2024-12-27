@@ -49,6 +49,7 @@ public class FileServerController : Controller
         var settings = settingsService.Get().Result;
         var allowedPaths = ServiceLoader.Load<LibraryService>().GetAllAsync().Result.Select(x => x.Path)
             .Union(settings.FileServerAllowedPaths ?? new string[] { })
+            .Union([DirectoryHelper.ManualLibrary])
             .Where(x => string.IsNullOrWhiteSpace(x) == false)
             .Distinct()
             .ToArray();
