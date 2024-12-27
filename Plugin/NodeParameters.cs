@@ -176,6 +176,11 @@ public class NodeParameters
     public Func<string, string>? PathUnMapper { get; set; }
     
     /// <summary>
+    /// Gets or sets the action responsible for setting the mime type
+    /// </summary>
+    public Action<string>? MimeTypeUpdater { get; set; }
+    
+    /// <summary>
     /// Gets or sets the function responsible for uploading a file
     /// </summary>
     public Func<string, string, (bool Success, string Error)>? UploadFile { get; set; }

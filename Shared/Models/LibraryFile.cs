@@ -352,6 +352,11 @@ public class LibraryFileAdditional
     /// This is only used for reseller files to display to reseller users.
     /// </summary>
     public string? ShortName { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the mime/type
+    /// </summary>
+    public string? MimeType { get; set; }
 }
 
 /// <summary>

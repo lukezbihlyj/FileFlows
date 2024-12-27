@@ -199,7 +199,8 @@ public class StartupService : IStartupService
             new RepositoryUpdaterWorker(),
             new ScheduledReportWorker(),
             new StatisticSyncer(),
-            new UpdateWorker()
+            new UpdateWorker(),
+            new ResellerWorker()
             //new LibraryFileServiceUpdater()
         );
 

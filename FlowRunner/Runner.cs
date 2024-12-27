@@ -482,9 +482,9 @@ public class Runner
             nodeParameters.Variables["ResellerUserUid"] = uid.ToString();
             nodeParameters.Variables["rUserUid"] = uid.ToString();
             nodeParameters.Variables["ResellerUserOutputDir"] 
-                = Path.Combine(runInstance.Config.ManualLibraryPath, "reseller-users", uid.ToString(), "processed");
+                = Path.Combine(runInstance.Config.ManualLibraryPath, "reseller-users", uid.ToString(), "processed", Info.LibraryFile.Uid.ToString());
             nodeParameters.Variables["ruOutput"] 
-                = Path.Combine(runInstance.Config.ManualLibraryPath, "reseller-users", uid.ToString(), "processed");
+                = Path.Combine(runInstance.Config.ManualLibraryPath, "reseller-users", uid.ToString(), "processed", Info.LibraryFile.Uid.ToString());
         }
 
         if(Info.LibraryFile.Additional?.ResellerFlowUid != null && Info.LibraryFile.Additional?.ResellerFlowUid != Guid.Empty)
@@ -563,6 +563,11 @@ public class Runner
         nodeParameters.IsArm = Globals.IsArm;
         nodeParameters.PathMapper = (path) => Node.Map(path);
         nodeParameters.PathUnMapper = (path) => Node.UnMap(path);
+        nodeParameters.MimeTypeUpdater = (mimeType) =>
+        {
+            Info.LibraryFile.Additional ??= new();
+            Info.LibraryFile.Additional.MimeType = mimeType;
+        };
         nodeParameters.ScriptExecutor = new ScriptExecutor()
         {
             SharedDirectory = Path.Combine(runInstance.ConfigDirectory, "Scripts", "Shared"),
