@@ -41,4 +41,24 @@ public class ResellerFlow : FileFlowObject
     /// Gets or sets if this flow is enabled
     /// </summary>
     public bool Enabled { get; set; }
+    
+    /// <summary>
+    /// Preview mode 
+    /// </summary>
+    public ResellerPreviewMode PreviewMode { get; set; }
+}
+
+/// <summary>
+/// Reseller preview mode
+/// </summary>
+public enum ResellerPreviewMode
+{
+    /// <summary>
+    /// Standard list
+    /// </summary>
+    List = 0,
+    /// <summary>
+    /// Image list
+    /// </summary>
+    Images = 1,
 }

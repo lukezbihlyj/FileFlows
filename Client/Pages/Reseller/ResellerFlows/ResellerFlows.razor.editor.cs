@@ -89,6 +89,24 @@ public partial class ResellerFlows : ListPage<Guid, ResellerFlow>
             Name = nameof(item.Extensions),
             InputType = FormInputType.StringArray
         });
+        fields.Add(new ElementField
+        {
+            InputType = FormInputType.Select,
+            Name = nameof(item.PreviewMode),
+            Parameters = new Dictionary<string, object>{
+                { 
+                    "Options", new List<ListOption>
+                    {
+                        new () { Label = "List", Value = ResellerPreviewMode.List },
+                        new () { Label = "Images", Value = ResellerPreviewMode.Images },   
+                    }
+                }
+            },
+            Validators = new List<Validator>
+            {
+                new Required()
+            }
+        });
 
         
         await Editor.Open(new()
