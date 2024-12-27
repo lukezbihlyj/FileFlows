@@ -318,6 +318,16 @@ public class NodeParameters
         else
             Metadata = metadata;
     }
+
+
+    /// <summary>
+    /// Sets the mime/type of the current file
+    /// </summary>
+    /// <param name="mimeType">the mime type</param>
+    public void SetMimeType(string mimeType)
+    {
+        MimeTypeUpdater?.Invoke(mimeType);
+    }
     
     /// <summary>
     /// Gets or sets the file service to use
